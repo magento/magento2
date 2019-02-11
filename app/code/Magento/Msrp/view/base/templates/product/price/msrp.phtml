@@ -20,7 +20,21 @@ $priceType = $block->getPrice();
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $block->getSaleableItem();
 $productId = $product->getId();
-$amount = $product->getMsrp() ?: $product->getTypeInstance()->getChildrenMsrp($product);
+
+$amount = 0;
+if ($product->getMsrp()) {
+    $amount = $product->getMsrp();
+} elseif ($product->getTypeId() === \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
+    $amount = $product->getTypeInstance()->getChildrenMsrp($product);
+} elseif ($product->getTypeId() === \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
+    foreach ($product->getTypeInstance()->getUsedProducts($product) as $item) {
+        if ($item->getMsrp() !== null) {
+            $prices[] = $item->getMsrp();
+        }
+    }
+    $amount = $prices ? max($prices) : 0;
+}
+
 $msrpPrice = $block->renderAmount(
     $priceType->getCustomAmount($amount),
     [

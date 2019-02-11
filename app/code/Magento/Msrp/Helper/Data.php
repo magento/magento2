@@ -11,6 +11,7 @@ use Magento\Msrp\Model\Product\Attribute\Source\Type;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * Msrp data helper
@@ -158,11 +159,19 @@ class Data extends AbstractHelper
         $msrp = $product->getMsrp();
         $price = $product->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE);
         if ($msrp === null) {
-            if ($product->getTypeId()       !== \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
-                && $product->getTypeId() !== \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
-                return false;
-            } else {
+            if ($product->getTypeId() === \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
                 $msrp = $product->getTypeInstance()->getChildrenMsrp($product);
+            } elseif ($product->getTypeId() === Configurable::TYPE_CODE) {
+                $prices = [];
+                foreach ($product->getTypeInstance()->getUsedProducts($product) as $item) {
+                    if ($item->getMsrp() !== null) {
+                        $prices[] = $item->getMsrp();
+                    }
+                }
+
+                $msrp = $prices ? max($prices) : 0;
+            } else {
+                return false;
             }
         }
         if ($msrp) {
