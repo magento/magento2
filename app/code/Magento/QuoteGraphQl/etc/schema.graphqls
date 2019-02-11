@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    getAvailableShippingMethodsOnCart(input: AvailableShippingMethodsOnCartInput): AvailableShippingMethodsOnCartOutput @doc(description:"Returns available shipping methods for cart by address/address_id")
+    Cart(cart_id: String!): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Returns information about shopping cart")
 }
 
 type Mutation {
@@ -82,10 +82,6 @@ input AvailableShippingMethodsOnCartInput {
     cart_id: String!
     customer_address_id: Int
     address: CartAddressInput
-}
-
-type AvailableShippingMethodsOnCartOutput {
-    available_shipping_methods: [CheckoutShippingMethod]
 }
 
 input ApplyCouponToCartInput {
