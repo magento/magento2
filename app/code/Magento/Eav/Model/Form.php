@@ -323,6 +323,8 @@ abstract class Form
         if ($this->_attributes === null) {
             $this->_attributes = [];
             $this->_userAttributes = [];
+            $this->_systemAttributes = [];
+            $this->_allowedAttributes = [];
             /** @var $attribute \Magento\Eav\Model\Attribute */
             foreach ($this->_getFilteredFormAttributeCollection() as $attribute) {
                 $this->_attributes[$attribute->getAttributeCode()] = $attribute;
