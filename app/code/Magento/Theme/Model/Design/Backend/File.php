@@ -101,23 +101,7 @@ class File extends BackendFile
             return $this;
         }
 
-        $filename = basename($file);
-        $relativeMediaUrl = $this->getRelativeMediaPath($value['url']);
-        $tmpMediaPath = $this->_mediaDirectory->isFile($relativeMediaUrl) ?
-            $relativeMediaUrl : $this->getTmpMediaPath($filename);
-        $result = $this->_mediaDirectory->copyFile(
-            $tmpMediaPath,
-            $this->_getUploadDir() . '/' . $filename
-        );
-        if ($result) {
-            $this->_mediaDirectory->delete($tmpMediaPath);
-            if ($this->_addWhetherScopeInfo()) {
-                $filename = $this->_prependScopeInfo($filename);
-            }
-            $this->setValue($filename);
-        } else {
-            $this->unsValue();
-        }
+        $this->saveFile($value, $file);
 
         return $this;
     }
@@ -251,6 +235,41 @@ class File extends BackendFile
      */
     private function getRelativeMediaPath(string $path): string
     {
-        return str_replace('/pub/media', '', $path);
+        return str_replace('/pub/media/', '', $path);
+    }
+
+    /**
+     * Save file to the media directory in the correct location
+     *
+     * @param array $value
+     * @param string $file
+     * @throws LocalizedException
+     */
+    private function saveFile(array $value, string $file)
+    {
+        $filename = basename($file);
+        $relativeMediaPath = $this->getRelativeMediaPath($value['url']);
+        $tmpMediaPath = $this->getTmpMediaPath($filename);
+        $mediaPath = $this->_mediaDirectory->isFile($relativeMediaPath) ? $relativeMediaPath : $tmpMediaPath;
+        $destinationMediaPath = $this->_getUploadDir() . '/' . $filename;
+
+        $result = $mediaPath === $destinationMediaPath;
+        if (!$result) {
+            $result = $this->_mediaDirectory->copyFile(
+                $mediaPath,
+                $destinationMediaPath
+            );
+        }
+        if ($result) {
+            if ($mediaPath === $tmpMediaPath) {
+                $this->_mediaDirectory->delete($mediaPath);
+            }
+            if ($this->_addWhetherScopeInfo()) {
+                $filename = $this->_prependScopeInfo($filename);
+            }
+            $this->setValue($filename);
+        } else {
+            $this->unsValue();
+        }
     }
 }
