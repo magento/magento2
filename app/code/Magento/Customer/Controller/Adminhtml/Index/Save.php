@@ -508,7 +508,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      */
     private function retrieveFormattedFormData(): array
     {
-        $originalRequestData = $originalRequestData = $this->getRequest()->getPostValue();
+        $originalRequestData = $this->getRequest()->getPostValue();
 
         /* Customer data filtration */
         if (isset($originalRequestData['customer'])) {
