@@ -109,6 +109,8 @@ class ProductViewCounter extends Template
      *
      * @return string {JSON encoded data}
      * @since 101.1.0
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getCurrentProductData()
     {
