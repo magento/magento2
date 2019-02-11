@@ -36,7 +36,6 @@
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
             <createData entity="DisablePaymentMethodsSettingConfig" stepKey="disablePaymentMethodsSettingConfig"/>
-            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
             <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="simpleproduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
@@ -99,5 +98,6 @@
 
         <!--Verify that Created order is in Processing status-->
         <see selector="{{AdminShipmentOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="seeShipmentOrderStatus"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
     </test>
 </tests>
