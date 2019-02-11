@@ -236,9 +236,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         ) {
             $this->_indexerEavProcessor->markIndexerAsInvalid();
         }
-        if ($this->_source !== null) {
-            $this->_source->clearOptions();
-        }
+        
+        $this->_source = null;
 
         return parent::afterSave();
     }
