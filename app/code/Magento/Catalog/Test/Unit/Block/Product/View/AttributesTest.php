@@ -144,7 +144,7 @@ class AttributesTest extends TestCase
      *
      * @return array
      */
-    public function noValue()
+    public function noValue(): array
     {
         return [[' '], ['']];
     }
