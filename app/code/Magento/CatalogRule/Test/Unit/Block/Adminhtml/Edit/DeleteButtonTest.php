@@ -58,7 +58,7 @@ class DeleteButtonTest extends \PHPUnit\Framework\TestCase
             'class' => 'delete',
             'on_click' => 'deleteConfirm(\'' . __(
                 'Are you sure you want to do this?'
-            ) . '\', \'' . $deleteUrl . '\')',
+            ) . '\', \'' . $deleteUrl . '\', {data: {}})',
             'sort_order' => 20,
         ];
 

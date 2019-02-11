@@ -137,12 +137,9 @@ class MassOnTheFlyTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\TestFramework\Unit\Helper\ObjectManager::class,
             ['get']
         );
-        $this->request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
-            ['getParam', 'getRequest'],
-            '',
-            false
-        );
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->setMethods(['getParam', 'getRequest', 'isPost'])
+            ->getMockForAbstractClass();
 
         $this->response->expects($this->any())->method("setRedirect")->willReturn(1);
         $this->page = $this->createMock(\Magento\Framework\View\Result\Page::class);
@@ -181,6 +178,7 @@ class MassOnTheFlyTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->any())
             ->method('getParam')->with('indexer_ids')
             ->will($this->returnValue($indexerIds));
+        $this->request->expects($this->any())->method('isPost')->willReturn(true);
 
         if (!is_array($indexerIds)) {
             $this->messageManager->expects($this->once())

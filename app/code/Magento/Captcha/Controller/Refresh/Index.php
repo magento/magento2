@@ -40,10 +40,15 @@ class Index extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new \Magento\Framework\Exception\NotFoundException(__('Page not found.'));
+        }
+
         $formId = $this->_request->getPost('formId');
         if (null === $formId) {
             $params = [];
@@ -51,7 +56,7 @@ class Index extends \Magento\Framework\App\Action\Action
             if ($content) {
                 $params = $this->serializer->unserialize($content);
             }
-            $formId = isset($params['formId']) ? $params['formId'] : null;
+            $formId = $params['formId'] ?? null;
         }
         $captchaModel = $this->captchaHelper->getCaptcha($formId);
         $captchaModel->generate();

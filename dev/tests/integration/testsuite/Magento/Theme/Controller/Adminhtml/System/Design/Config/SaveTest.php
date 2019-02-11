@@ -8,6 +8,7 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Config;
 
 use Magento\Framework\Data\Form\FormKey;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use Magento\Framework\App\Request\Http;
 
 /**
  * Class SaveTest @covers \Magento\Theme\Controller\Adminhtml\Design\Config\Save
@@ -23,6 +24,11 @@ class SaveTest extends AbstractBackendController
      * @inheritdoc
      */
     protected $uri = 'backend/theme/design_config/save';
+
+    /**
+     * @var string
+     */
+    protected $httpMethod = Http::METHOD_POST;
 
     /**
      * Test design configuration save valid values.
