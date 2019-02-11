@@ -19,7 +19,7 @@ class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $customerId = (int)$this->getRequest()->getParam('customer_id', 0);
-        if (!$this->getRequest()->isPost() || !$customerId) {
+        if (!$customerId) {
             $resultRedirect->setPath('customer/index');
             return $resultRedirect;
         }

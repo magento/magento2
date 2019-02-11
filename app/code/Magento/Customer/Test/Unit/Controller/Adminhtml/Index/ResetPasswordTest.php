@@ -97,7 +97,6 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
         $this->_request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_request->expects($this->any())->method('isPost')->willReturn(true);
 
         $this->_response = $this->getMockBuilder(
             \Magento\Framework\App\Response\Http::class
