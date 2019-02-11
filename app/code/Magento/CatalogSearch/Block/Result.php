@@ -140,10 +140,6 @@ class Result extends Template
 
         $this->getListBlock()->setAvailableOrders(
             $availableOrders
-        )->setDefaultDirection(
-            'desc'
-        )->setDefaultSortBy(
-            'relevance'
         );
 
         return $this;
