@@ -206,14 +206,6 @@
         <data key="discountAmount">0</data>
     </entity>
 
-    <entity name="PriceRuleWithCondition" type="SalesRule">
-        <data key="name" unique="suffix">SalesRule</data>
-        <data key="websites">Main Website</data>
-        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
-        <data key="apply">Fixed amount discount for whole cart</data>
-        <data key="discountAmount">0</data>
-    </entity>
-
     <entity name="SalesRuleNoCouponWithFixedDiscount" extends="ApiCartRule">
         <data key="simple_action">by_fixed</data>
     </entity>
