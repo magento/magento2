@@ -84,6 +84,7 @@ define([
             }
             $(this.options.cartButtonId).on('click', this._addToCartSubmit.bind(this));
             $(document).on('updateMsrpPriceBlock', this.onUpdateMsrpPrice.bind(this));
+            $(this.options.cartForm).on('submit', this._onSubmitForm.bind(this));
         },
 
         /**
@@ -268,8 +269,10 @@ define([
 
         /**
          * Handler for addToCart action
+         *
+         * @param {Object} e
          */
-        _addToCartSubmit: function () {
+        _addToCartSubmit: function (e) {
             this.element.trigger('addToCart', this.element);
 
             if (this.element.data('stop-processing')) {
@@ -285,8 +288,9 @@ define([
             if (this.options.addToCartUrl) {
                 $('.mage-dropdown-dialog > .ui-dialog-content').dropdownDialog('close');
             }
-            $(this.options.cartForm).submit();
 
+            e.preventDefault();
+            $(this.options.cartForm).submit();
         },
 
         /**
@@ -371,6 +375,17 @@ define([
             $(this.options.displayPriceContainer).hide();
             $(this.options.mapInfoLinks).hide();
             $(this.options.fallbackPriceContainer).show();
+        },
+
+        /**
+         * Handler for submit form
+         *
+         * @private
+         */
+        _onSubmitForm: function () {
+            if ($(this.options.cartForm).valid()) {
+                $(this.options.cartButtonId).prop('disabled', true);
+            }
         }
 
     });

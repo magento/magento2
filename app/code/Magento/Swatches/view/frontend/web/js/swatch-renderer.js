@@ -1236,7 +1236,10 @@ define([
                 }
 
                 imagesToUpdate = this._setImageIndex(imagesToUpdate);
-                gallery.updateData(imagesToUpdate);
+
+                if (!_.isUndefined(gallery)) {
+                    gallery.updateData(imagesToUpdate);
+                }
 
                 if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
