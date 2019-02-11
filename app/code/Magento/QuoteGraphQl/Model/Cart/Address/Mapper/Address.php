@@ -1,7 +1,7 @@
 <?php
 /**
- * @author Atwix Team
- * @copyright Copyright (c) 2018 Atwix (https://www.atwix.com/)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,6 @@ use Magento\Quote\Model\Quote\Address as QuoteAddress;
  */
 class Address
 {
-
     /**
      * Converts Address model data to nested array
      *
