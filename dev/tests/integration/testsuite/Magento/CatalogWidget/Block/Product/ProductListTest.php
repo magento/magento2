@@ -83,7 +83,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
     {
         $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,' .
             '`aggregator`:`all`,`value`:`1`,`new_child`:``^],`1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule|' .
-            '|Condition||Product`,`attribute`:`sku`,`operator`:`==`,`value`:`simple1, simple2`^]^]';
+            '|Condition||Product`,`attribute`:`sku`,`operator`:`()`,`value`:`simple1, simple2`^]^]';
         $this->block->setData('conditions_encoded', $encodedConditions);
         $this->performAssertions(2);
     }
