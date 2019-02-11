@@ -425,8 +425,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $this->getSearchResultApplier($this->searchResult)->apply();
         parent::_renderFiltersBefore();
-
-        $this->_eventManager->dispatch('catalog_search_collection_render_filters_before', ['collection' => $this]);
     }
 
     /**

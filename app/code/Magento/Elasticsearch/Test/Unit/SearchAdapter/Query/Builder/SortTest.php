@@ -207,6 +207,29 @@ class SortTest extends \PHPUnit\Framework\TestCase
                         ]
                     ]
                 ]
+            ],
+            [
+                [
+                    [
+                        'field' => 'entity_id',
+                        'direction' => 'DESC'
+                    ],
+                    [
+                        'field' => 'not_eav_attribute',
+                        'direction' => 'DESC'
+                    ],
+                ],
+                false,
+                false,
+                false,
+                'not_eav_attribute',
+                [
+                    [
+                        'not_eav_attribute' => [
+                            'order' => 'desc'
+                        ]
+                    ]
+                ]
             ]
         ];
     }
