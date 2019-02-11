@@ -71,7 +71,9 @@ define([
 
                         dataPost().postData({
                             action: self.options.deleteUrlPrefix + addressId,
-                            data: {form_key: $.mage.cookies.get('form_key')}
+                            data: {
+                                form_key: $.mage.cookies.get('form_key')
+                            }
                         });
                     }
                 }
