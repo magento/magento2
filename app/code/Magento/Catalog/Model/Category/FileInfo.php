@@ -76,7 +76,7 @@ class FileInfo
     private function getBaseDirectory()
     {
         if (!isset($this->baseDirectory)) {
-            $this->baseDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
+            $this->baseDirectory = $this->filesystem->getDirectoryRead(DirectoryList::PUB);
         }
 
         return $this->baseDirectory;
