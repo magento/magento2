@@ -11,6 +11,9 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Model\ItemCarrier;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Action Add All to Cart
+ */
 class Allcart extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
