@@ -15,6 +15,7 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
 /**
  * Downloadable Products Download Helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Download extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -263,9 +264,9 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
         */
         if ($linkType === self::LINK_TYPE_URL) {
             $headers = array_change_key_case(get_headers($this->_resourceFile, 1), CASE_LOWER);
-            if(isset($headers['location'])){
-                $this->_resourceFile  = is_array($headers['location']) ? current($headers['location']): 
-                                        $headers['location'];
+            if (isset($headers['location'])) {
+                $this->_resourceFile  = is_array($headers['location']) ? current($headers['location'])
+                    : $headers['location'];
             }
         }
         
