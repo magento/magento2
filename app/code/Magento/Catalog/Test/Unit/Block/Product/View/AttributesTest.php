@@ -129,7 +129,7 @@ class AttributesTest extends TestCase
      *
      * @param string $phrase
      * @return void
-     * @dataProvider noValue
+     * @dataProvider noValueProvider
      */
     public function testGetAttributeNoValue(string $phrase)
     {
@@ -144,7 +144,7 @@ class AttributesTest extends TestCase
      *
      * @return array
      */
-    public function noValue(): array
+    public function noValueProvider(): array
     {
         return [[' '], ['']];
     }
