@@ -77,6 +77,13 @@
                 <dataType>text</dataType>
             </settings>
         </field>
+        <field name="level" formElement="hidden">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">category</item>
+                </item>
+            </argument>
+        </field>
         <field name="store_id" formElement="hidden">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -331,7 +338,6 @@
                 <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
                     <item name="breakLine" xsi:type="boolean">true</item>
-                    <item name="required" xsi:type="boolean">true</item>
                 </item>
             </argument>
             <field name="filter_price_range" formElement="input">
@@ -341,6 +347,9 @@
                     </item>
                 </argument>
                 <settings>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
                     <additionalClasses>
                         <class name="admin__field-small">true</class>
                     </additionalClasses>

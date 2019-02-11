@@ -166,6 +166,16 @@ define([
                 },
 
                 /** @inheritdoc */
+                error: function (res) {
+                    $(document).trigger('ajax:addToCart:error', {
+                        'sku': form.data().productSku,
+                        'productIds': productIds,
+                        'form': form,
+                        'response': res
+                    });
+                },
+
+                /** @inheritdoc */
                 complete: function (res) {
                     if (res.state() === 'rejected') {
                         location.reload();

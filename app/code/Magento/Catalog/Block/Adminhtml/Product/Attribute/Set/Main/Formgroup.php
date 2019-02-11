@@ -11,6 +11,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
 
 use Magento\Backend\Block\Widget\Form;
 
+/**
+ * Form group for attribute set
+ */
 class Formgroup extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -37,6 +40,8 @@ class Formgroup extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Prepare form elements
+     *
      * @return void
      */
     protected function _prepareForm()
@@ -77,13 +82,15 @@ class Formgroup extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Returns set id
+     *
      * @return int
      */
     protected function _getSetId()
     {
-        return intval(
+        return (int)(
             $this->getRequest()->getParam('id')
-        ) > 0 ? intval(
+        ) > 0 ? (int)(
             $this->getRequest()->getParam('id')
         ) : $this->_typeFactory->create()->load(
             $this->_coreRegistry->registry('entityType')

@@ -72,11 +72,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     const STORE_ID = 'store_id';
 
     /**
-     * Product Url path.
-     */
-    const URL_PATH = 'url_path';
-
-    /**
      * @var string
      */
     protected $_cacheTag = self::CACHE_TAG;
@@ -512,13 +507,17 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected function getCustomAttributesCodes()
     {
         if ($this->customAttributesCodes === null) {
-            $this->customAttributesCodes = array_keys($this->eavConfig->getEntityAttributes(
-                self::ENTITY,
-                $this
-            ));
-
-            $this->customAttributesCodes = $this->filterCustomAttribute->execute($this->customAttributesCodes);
-            $this->customAttributesCodes = array_diff($this->customAttributesCodes, ProductInterface::ATTRIBUTES);
+            $this->customAttributesCodes = array_diff(
+                array_keys(
+                    $this->filterCustomAttribute->execute(
+                        $this->eavConfig->getEntityAttributes(
+                            self::ENTITY,
+                            $this
+                        )
+                    )
+                ),
+                ProductInterface::ATTRIBUTES
+            );
         }
 
         return $this->customAttributesCodes;
@@ -596,7 +595,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @see \Magento\Catalog\Model\Product\Visibility
      *
      * @return int
-     * @codeCoverageIgnoreStart
      */
     public function getVisibility()
     {
@@ -724,7 +722,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getCategoryId()
     {
         $category = $this->_registry->registry('current_category');
-        if ($category) {
+        if ($category && in_array($category->getId(), $this->getCategoryIds())) {
             return $category->getId();
         }
         return false;
@@ -1053,7 +1051,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * Register indexing event before delete product
      *
-     * @return $this
+     * @return \Magento\Catalog\Model\Product
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeDelete()
@@ -1567,6 +1565,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param bool $move if true, it will move source file
      * @param bool $exclude mark image as disabled in product page view
      * @return \Magento\Catalog\Model\Product
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addImageToMediaGallery($file, $mediaAttribute = null, $move = false, $exclude = true)
     {
@@ -1818,7 +1817,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Save current attribute with code $code and assign new value
      *
-     * @param string $code Attribute code
+     * @param string $code  Attribute code
      * @param mixed $value New attribute value
      * @param int $store Store ID
      * @return void
@@ -2230,9 +2229,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Prepare product custom options
+     * Prepare product custom options.
      *
-     * To be sure that all product custom options does not has ID and has product instance.
+     * To be sure that all product custom options does not has ID and has product instance
      *
      * @return \Magento\Catalog\Model\Product
      */
@@ -2568,7 +2567,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @inheritdoc
      *
-     * @return \Magento\Catalog\Api\Data\ProductExtensionInterface
+     * @return \Magento\Framework\Api\ExtensionAttributesInterface
      */
     public function getExtensionAttributes()
     {
@@ -2609,7 +2608,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Returns media gallery entries
+     * Get media gallery entries
      *
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]|null
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -2671,7 +2670,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Returns link repository instance
+     * Get link repository
      *
      * @return ProductLinkRepositoryInterface
      */
@@ -2685,7 +2684,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Returns media gallery processor instance
+     * Get media gallery processor
      *
      * @return Product\Gallery\Processor
      */

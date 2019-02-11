@@ -16,9 +16,7 @@
             <description value="Admin should be able to add image to WYSIWYG content of Block"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84376"/>
-            <skip>
-                <issueId value="MQE-1187" />
-            </skip>
+            <group value="WYSIWYGDisabled" />
         </annotations>
         <before>
             <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
