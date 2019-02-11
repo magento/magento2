@@ -1446,22 +1446,4 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         return array_unique(array_merge($productAttributes, $requiredAttributes, $usedAttributes));
     }
-
-    /**
-     * Returns msrp for children products
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return int
-     */
-    public function getChildrenMsrp(\Magento\Catalog\Model\Product $product)
-    {
-        $prices = [];
-        foreach ($this->getUsedProducts($product) as $item) {
-            if ($item->getMsrp() !== null) {
-                $prices[] = $item->getMsrp();
-            }
-        }
-        return $prices ? max($prices) : 0;
-    }
-
 }
