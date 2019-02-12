@@ -227,12 +227,12 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         $codes = [
             'condition_name' => [
                 'package_weight' => __('Weight vs. Destination'),
-                'package_value' => __('Price vs. Destination'),
+                'package_value_with_discount' => __('Price vs. Destination'),
                 'package_qty' => __('# of Items vs. Destination'),
             ],
             'condition_name_short' => [
                 'package_weight' => __('Weight (and above)'),
-                'package_value' => __('Order Subtotal (and above)'),
+                'package_value_with_discount' => __('Order Subtotal (and above)'),
                 'package_qty' => __('# of Items (and above)'),
             ],
         ];

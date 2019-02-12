@@ -21,7 +21,7 @@ class ExtractDataFromCategoryTree
     private $categoryHydrator;
 
     /**
-     * @var CategoryInterface;
+     * @var CategoryInterface
      */
     private $iteratingCategory;
 
@@ -52,12 +52,10 @@ class ExtractDataFromCategoryTree
             /** @var CategoryInterface $category */
             $category = $iterator->current();
             $iterator->next();
-
             $pathElements = explode("/", $category->getPath());
             if (empty($tree)) {
                 $this->startCategoryFetchLevel = count($pathElements) - 1;
             }
-
             $this->iteratingCategory = $category;
             $currentLevelTree = $this->explodePathToArray($pathElements, $this->startCategoryFetchLevel);
             if (empty($tree)) {
@@ -65,7 +63,6 @@ class ExtractDataFromCategoryTree
             }
             $tree = $this->mergeCategoriesTrees($currentLevelTree, $tree);
         }
-
         return $tree;
     }
 

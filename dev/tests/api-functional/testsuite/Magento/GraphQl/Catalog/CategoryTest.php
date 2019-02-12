@@ -70,14 +70,12 @@ class CategoryTest extends GraphQlAbstract
     }
 }
 QUERY;
-
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
             \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $customerToken = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
-
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
         $responseDataObject = new DataObject($response);
@@ -128,14 +126,12 @@ QUERY;
   }
 }
 QUERY;
-
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
             \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $customerToken = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
-
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
         $responseDataObject = new DataObject($response);
@@ -297,17 +293,14 @@ QUERY;
   }
 }
 QUERY;
-
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('products', $response['category']);
         $this->assertArrayHasKey('total_count', $response['category']['products']);
         $this->assertGreaterThanOrEqual(1, $response['category']['products']['total_count']);
         $this->assertEquals(1, $response['category']['products']['page_info']['current_page']);
         $this->assertEquals(20, $response['category']['products']['page_info']['page_size']);
-
         $this->assertArrayHasKey('sku', $response['category']['products']['items'][0]);
         $firstProductSku = $response['category']['products']['items'][0]['sku'];
-
         /**
          * @var ProductRepositoryInterface $productRepository
          */
@@ -317,7 +310,6 @@ QUERY;
         $this->assertAttributes($response['category']['products']['items'][0]);
         $this->assertWebsites($firstProduct, $response['category']['products']['items'][0]['websites']);
     }
-
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
@@ -329,9 +321,7 @@ QUERY;
         /** @var CategoryInterface $category */
         $category = $categoryCollection->getFirstItem();
         $categoryId = $category->getId();
-
         $this->assertNotEmpty($categoryId, "Preconditions failed: category is not available.");
-
         $query = <<<QUERY
 {
   category(id: {$categoryId}) {
@@ -345,7 +335,6 @@ QUERY;
   }
 }
 QUERY;
-
         $response = $this->graphQlQuery($query);
         $expectedResponse = [
             'category' => [
@@ -369,7 +358,6 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
@@ -403,7 +391,6 @@ QUERY;
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
             ['response_field' => 'updated_at', 'expected_value' => $product->getUpdatedAt()],
         ];
-
         $this->assertResponseFields($actualResponse, $assertionMap);
     }
 
@@ -423,7 +410,6 @@ QUERY;
                 'is_default' => true,
             ]
         ];
-
         $this->assertEquals($actualResponse, $assertionMap);
     }
 
@@ -448,7 +434,6 @@ QUERY;
             'special_from_date',
             'special_to_date',
         ];
-
         foreach ($eavAttributes as $eavAttribute) {
             $this->assertArrayHasKey($eavAttribute, $actualResponse);
         }
