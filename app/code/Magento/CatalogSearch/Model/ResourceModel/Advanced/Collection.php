@@ -21,6 +21,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
  *
  * This collection should be refactored to not have dependencies on MySQL-specific implementation.
  *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -296,7 +297,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Get fielter builder.
+     * Get filter builder.
      *
      * @return FilterBuilder
      */
