@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Image;
+namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Image\Placeholder;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;

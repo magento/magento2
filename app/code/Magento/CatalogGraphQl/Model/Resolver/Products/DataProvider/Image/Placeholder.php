@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Image;
 
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Image\Placeholder\Theme;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
 
