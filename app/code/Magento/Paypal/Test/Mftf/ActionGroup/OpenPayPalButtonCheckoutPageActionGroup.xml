@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="OpenPayPalButtonCheckoutPage">
+        <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn}}" stepKey="clickPayPalConfigureBtn"/>
+        <waitForElementVisible selector="{{PayPalAdvancedSettingConfigSection.advancedSettingTab}}" stepKey="waitForAdvancedSettingTab"/>
+        <click selector="{{PayPalAdvancedSettingConfigSection.advancedSettingTab}}" stepKey="openAdvancedSettingTab"/>
+        <waitForElementVisible selector="{{PayPalAdvancedSettingConfigSection.frontendExperienceSettingsTab}}" stepKey="waitForFrontendExperienceSettingsTab"/>
+        <click selector="{{PayPalAdvancedSettingConfigSection.frontendExperienceSettingsTab}}" stepKey="openFrontendExperienceSettingsTab"/>
+        <waitForElementVisible selector="{{PayPalAdvancedSettingConfigSection.checkoutPageTab}}" stepKey="waitForCheckoutPageTab"/>
+        <click selector="{{PayPalAdvancedSettingConfigSection.checkoutPageTab}}" stepKey="openCheckoutPageTab"/>
+    </actionGroup>
+</actionGroups>
