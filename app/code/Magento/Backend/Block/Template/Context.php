@@ -17,6 +17,7 @@ namespace Magento\Backend\Block\Template;
  * the classes they were introduced for.
  *
  * @api
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */

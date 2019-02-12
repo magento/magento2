@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\DriverPool;
  * @method string getPath()
  * @method string getName()
  * @method string getTime()
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
