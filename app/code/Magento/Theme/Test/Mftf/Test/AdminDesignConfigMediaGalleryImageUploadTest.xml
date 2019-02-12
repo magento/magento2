@@ -35,11 +35,11 @@
         <!--Upload Image-->
         <comment userInput="Upload Image" stepKey="uploadImageComment"/>
         <click selector="{{AdminDesignConfigSection.selectFromGalleryByFieldsetName('Head')}}" stepKey="openMediaGallery"/>
-        <actionGroup ref="VerifyMediaGalleryStorageActions" stepKey="VerifyMediaGalleryStorageBtn"/>
-        <actionGroup ref="NavigateToFaviconMediaFolderActionGroup" stepKey="NavigateToFolder">
-            <argument name="StoreFolder" value="{{AdminDesignConfigSection.storeLink}}"/>
+        <actionGroup ref="VerifyMediaGalleryStorageActions" stepKey="verifyMediaGalleryStorageBtn"/>
+        <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToFolder">
+            <argument name="FolderName" value="Storage Root"/>
         </actionGroup>
-        <actionGroup ref="attachImage" stepKey="SelectImageFromMediaStorage">
+        <actionGroup ref="attachImage" stepKey="selectImageFromMediaStorage">
             <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="saveImage" stepKey="insertImage"/>
@@ -59,13 +59,19 @@
         <click selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="saveConfiguration2"/>
         <waitForElementVisible selector="{{AdminDesignConfigSection.successNotification}}" stepKey="waitForSuccessNotification2"/>
         <waitForPageLoad stepKey="waitForPageloadSuccess2"/>
-        <!--Delete Image-->
+        <!--Delete Image: will be in both root and favicon-->
         <comment userInput="Delete Image" stepKey="deleteImageComment"/>
         <actionGroup ref="navigateToMediaGallery" stepKey="navigateToMediaGallery"/>
-        <actionGroup ref="NavigateToFaviconMediaFolderActionGroup" stepKey="NavigateToFolder2">
+        <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToFolder2">
+            <argument name="FolderName" value="Storage Root"/>
+        </actionGroup>
+        <actionGroup ref="DeleteImageFromStorageActionGroup" stepKey="deleteImageFromStorage">
+            <argument name="Image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="NavigateToFaviconMediaFolderActionGroup" stepKey="navigateToFolder3">
             <argument name="StoreFolder" value="{{AdminDesignConfigSection.storeLink}}"/>
         </actionGroup>
-        <actionGroup ref="DeleteImageFromStorageActionGroup" stepKey="DeleteImageFromStorage">
+        <actionGroup ref="DeleteImageFromStorageActionGroup" stepKey="deleteImageFromStorage2">
             <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
     </test>

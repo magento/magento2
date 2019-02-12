@@ -90,6 +90,8 @@ class File extends BackendFile
     {
         $values = $this->getValue();
         $value = reset($values) ?: [];
+
+        // Need to check name when it is uploaded in the media gallary
         $file = $value['file'] ?? $value['name'] ?? null;
         if (!isset($file)) {
             throw new LocalizedException(
@@ -101,7 +103,7 @@ class File extends BackendFile
             return $this;
         }
 
-        $this->saveFile($value, $file);
+        $this->updateMediaDirectory(basename($file), $value['url']);
 
         return $this;
     }
@@ -239,16 +241,15 @@ class File extends BackendFile
     }
 
     /**
-     * Save file to the media directory in the correct location
+     * Move file to the correct media directory
      *
-     * @param array $value
-     * @param string $file
+     * @param string $filename
+     * @param string $url
      * @throws LocalizedException
      */
-    private function saveFile(array $value, string $file)
+    private function updateMediaDirectory(string $filename, string $url)
     {
-        $filename = basename($file);
-        $relativeMediaPath = $this->getRelativeMediaPath($value['url']);
+        $relativeMediaPath = $this->getRelativeMediaPath($url);
         $tmpMediaPath = $this->getTmpMediaPath($filename);
         $mediaPath = $this->_mediaDirectory->isFile($relativeMediaPath) ? $relativeMediaPath : $tmpMediaPath;
         $destinationMediaPath = $this->_getUploadDir() . '/' . $filename;
