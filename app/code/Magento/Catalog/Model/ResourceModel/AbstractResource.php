@@ -10,6 +10,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 
 /**
  * Catalog entity abstract model
@@ -40,16 +41,18 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param array $data
+     * @param UniqueValidationInterface|null $uniqueValidator
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
-        $data = []
+        $data = [],
+        UniqueValidationInterface $uniqueValidator = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_modelFactory = $modelFactory;
-        parent::__construct($context, $data);
+        parent::__construct($context, $data, $uniqueValidator);
     }
 
     /**

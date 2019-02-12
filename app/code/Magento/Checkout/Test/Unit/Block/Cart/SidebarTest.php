@@ -144,7 +144,8 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             'baseUrl' => $baseUrl,
             'minicartMaxItemsVisible' => 3,
             'websiteId' => 100,
-            'maxItemsToDisplay' => 8
+            'maxItemsToDisplay' => 8,
+            'storeId' => null
         ];
 
         $valueMap = [
@@ -161,7 +162,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilderMock->expects($this->exactly(4))
             ->method('getUrl')
             ->willReturnMap($valueMap);
-        $this->storeManagerMock->expects($this->exactly(2))->method('getStore')->willReturn($storeMock);
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
 
         $this->scopeConfigMock->expects($this->at(0))

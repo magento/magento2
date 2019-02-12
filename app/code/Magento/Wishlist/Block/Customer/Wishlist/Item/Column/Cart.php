@@ -6,8 +6,6 @@
 
 namespace Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
 
-use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
-
 /**
  * Wishlist block customer item cart column
  *
@@ -36,29 +34,5 @@ class Cart extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
     public function getProductItem()
     {
         return $this->getItem()->getProduct();
-    }
-
-    /**
-     * Get min and max qty for wishlist form.
-     *
-     * @return array
-     */
-    public function getMinMaxQty()
-    {
-        $stockItem = $this->stockRegistry->getStockItem(
-            $this->getItem()->getProduct()->getId(),
-            $this->getItem()->getProduct()->getStore()->getWebsiteId()
-        );
-
-        $params = [];
-
-        $params['minAllowed'] = (float)$stockItem->getMinSaleQty();
-        if ($stockItem->getMaxSaleQty()) {
-            $params['maxAllowed'] = (float)$stockItem->getMaxSaleQty();
-        } else {
-            $params['maxAllowed'] = (float)StockDataFilter::MAX_QTY_VALUE;
-        }
-
-        return $params;
     }
 }
