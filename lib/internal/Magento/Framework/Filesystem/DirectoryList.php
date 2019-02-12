@@ -97,6 +97,10 @@ class DirectoryList
         $this->root = $this->normalizePath($root);
         $this->directories = static::getDefaultConfig();
         $this->directories[self::SYS_TMP] = [self::PATH => realpath(sys_get_temp_dir())];
+        $uploadTmpDir = ini_get('upload_tmp_dir');
+        if ($uploadTmpDir) {
+            $this->directories[self::SYS_TMP] = [self::PATH => realpath($uploadTmpDir)];
+        }
 
         // inject custom values from constructor
         foreach ($this->directories as $code => $dir) {
