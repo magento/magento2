@@ -14,5 +14,6 @@
         <element name="updateQty" type="button" selector=".order-invoice-tables tfoot button[data-ui-id='order-items-update-button']"/>
         <element name="updateQtyEnabled" type="button" selector=".order-invoice-tables tfoot button[data-ui-id='order-items-update-button'][class='action-default scalable update-button']"/>
         <element name="productColumn" type="text" selector="//*[contains(@class,'order-invoice-tables')]//td[@class = 'col-product']//div[contains(text(),'{{productName}}')]" parameterized="true"/>
+        <element name="itemQtyToInvoiceBySku" type="input" selector="//div[contains(@class,'product-sku-block') and contains(., '{{productSku}}')]/ancestor::tr//td[contains(@class,'col-qty-invoice')]//input" parameterized="true"/>
     </section>
 </sections>
