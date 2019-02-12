@@ -30,13 +30,14 @@ define([
         getShippingMethodTitle: function () {
             var shippingMethod = quote.shippingMethod();
 
-            var shippingMethodTitle, shippingTitle = '';
+            var shippingMethodTitle = '';
+            var shippingTitle = '';
 
             if (typeof shippingMethod['method_title'] !== 'undefined' && shippingMethod['method_title'].trim().length != 0) {
                 shippingMethodTitle = shippingMethod['method_title'];
             }
 
-            if(typeof shippingMethod['carrier_title'] !== 'undefined' &&  shippingMethod['carrier_title'].trim().length != 0){
+            if (typeof shippingMethod['carrier_title'] !== 'undefined' &&  shippingMethod['carrier_title'].trim().length != 0) {
                 shippingTitle = shippingMethod['carrier_title'] + ' - ';
             }
 
