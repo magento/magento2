@@ -1629,7 +1629,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $uploadedImages = [];
             $previousType = null;
             $prevAttributeSet = null;
+            $importDir = $this->_mediaDirectory->getAbsolutePath($this->getImportDir());
+
             $existingImages = $this->getExistingImages($bunch);
+
+            $this->addImageHashes($existingImages);
 
             foreach ($bunch as $rowNum => $rowData) {
                 // reset category processor's failed categories array
@@ -1791,17 +1795,37 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $position = 0;
                 foreach ($rowImages as $column => $columnImages) {
                     foreach ($columnImages as $columnImageKey => $columnImage) {
-                        if (!isset($uploadedImages[$columnImage])) {
-                            $uploadedFile = $this->uploadMediaFiles($columnImage);
-                            $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
-                            if ($uploadedFile) {
-                                $uploadedImages[$columnImage] = $uploadedFile;
-                            } else {
-                                unset($rowData[$column]);
-                                $this->skipRow($rowNum, ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE);
-                            }
+                        $hash = md5_file($importDir . DIRECTORY_SEPARATOR . $columnImage);
+
+                        if (!isset($existingImages[$rowSku])) {
+                            $imageAlreadyExists = false;
                         } else {
-                            $uploadedFile = $uploadedImages[$columnImage];
+                            $imageAlreadyExists = array_reduce($existingImages[$rowSku], function ($exists, $file) use ($hash) {
+                                if ($exists) {
+                                    return $exists;
+                                }
+                                if ($file['hash'] === $hash) {
+                                    return $file['value'];
+                                }
+                                return $exists;
+                            }, '');
+                        }
+
+                        if ($imageAlreadyExists) {
+                            $uploadedFile = $imageAlreadyExists;
+                        } else {
+                            if (!isset($uploadedImages[$columnImage])) {
+                                $uploadedFile = $this->uploadMediaFiles($columnImage);
+                                $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
+                                if ($uploadedFile) {
+                                    $uploadedImages[$columnImage] = $uploadedFile;
+                                } else {
+                                    unset($rowData[$column]);
+                                    $this->skipRow($rowNum, ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE);
+                                }
+                            } else {
+                                $uploadedFile = $uploadedImages[$columnImage];
+                            }
                         }
 
                         if ($uploadedFile && $column !== self::COL_MEDIA_IMAGE) {
@@ -1976,6 +2000,23 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Generate md5 hashes for existing images for comparison with newly uploaded images.
+     *
+     * @param array $images
+     */
+    public function addImageHashes(&$images) {
+        $dirConfig = DirectoryList::getDefaultConfig();
+        $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
+        $productPath = $this->_mediaDirectory->getAbsolutePath($dirAddon . '/catalog/product');
+
+        foreach ($images as $sku => $files) {
+            foreach ($files as $path => $file) {
+                $images[$sku][$path]['hash'] = md5_file($productPath . $file['value']);
+            }
+        }
+    }
+
+    /**
      * Prepare array with image states (visible or hidden from product page)
      *
      * @param array $rowData
@@ -2111,6 +2152,24 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Returns the import directory if specified or a default import directory (media/import).
+     *
+     * @return string
+     */
+    protected function getImportDir()
+    {
+        $dirConfig = DirectoryList::getDefaultConfig();
+        $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
+
+        if (!empty($this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR])) {
+            $tmpPath = $this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR];
+        } else {
+            $tmpPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath('import');
+        }
+        return $tmpPath;
+    }
+
+    /**
      * Returns an object for upload a media files
      *
      * @return \Magento\CatalogImportExport\Model\Import\Uploader
@@ -2126,11 +2185,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $dirConfig = DirectoryList::getDefaultConfig();
             $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
 
-            if (!empty($this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR])) {
-                $tmpPath = $this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR];
-            } else {
-                $tmpPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath('import');
-            }
+            $tmpPath = $this->getImportDir();
 
             if (!$this->_fileUploader->setTmpDir($tmpPath)) {
                 throw new LocalizedException(
