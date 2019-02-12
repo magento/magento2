@@ -284,6 +284,20 @@
         <checkOption selector="{{ProductInWebsitesSection.website(website)}}" stepKey="selectWebsite"/>
     </actionGroup>
 
+    <actionGroup name="AdminProductAddSpecialPrice">
+        <arguments>
+            <argument name="specialPrice" type="string"/>
+        </arguments>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink1"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitSpecialPrice1"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.useDefaultPrice}}" stepKey="checkUseDefault"/>
+        <fillField userInput="{{specialPrice}}" selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="fillSpecialPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDone"/>
+        <waitForElementNotVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitForCloseModalWindow"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+    </actionGroup>
+
     <!--Switch to New Store view-->
     <actionGroup name="SwitchToTheNewStoreView">
         <arguments>
@@ -323,9 +337,7 @@
             <argument name="website"/>
             <argument name="product"/>
         </arguments>
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="navigateToProductPage"/>
-        <waitForPageLoad stepKey="waitForProductsList"/>
-        <click stepKey="openProduct" selector="{{AdminProductGridActionSection.productName(product.name)}}"/>
+        <click stepKey="openProduct" selector="{{AdminProductGridActionSection.productName(product.sku)}}"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ScrollToWebsites"/>
         <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openWebsitesList"/>
