@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
+use Magento\Framework\Escaper;
+
 class MultiselectTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -15,7 +17,13 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $testHelper->getObject(\Magento\Framework\Data\Form\Element\Editablemultiselect::class);
+        $escaper = new Escaper();
+        $this->_model = $testHelper->getObject(
+            \Magento\Framework\Data\Form\Element\Editablemultiselect::class,
+            [
+                '_escaper' => $escaper
+            ]
+        );
         $this->_model->setForm(new \Magento\Framework\DataObject());
     }
 
