@@ -282,13 +282,15 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $optionsData = [];
         $expectedOptionsLabels = [];
         for ($i = 0; $i < $optionsCount; $i++) {
-            $order = $i + 1;
-            $expectedOptionLabelOnStoreView = "value_{$i}_store_1";
+            $expectedOptionLabelOnStoreView = 'value_' . $i . '_store_1';
             $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
-            $optionsData []= "option[order][option_{$i}]={$order}";
-            $optionsData []= "option[value][option_{$i}][0]=value_{$i}_admin";
-            $optionsData []= "option[value][option_{$i}][1]={$expectedOptionLabelOnStoreView}";
-            $optionsData []= "option[delete][option_{$i}=";
+            $optionId = 'option_' . $i;
+            $optionRowData = [];
+            $optionRowData['option']['order'][$optionId] = $i + 1;
+            $optionRowData['option']['value'][$optionId][0] = 'value_' . $i . '_admin';
+            $optionRowData['option']['value'][$optionId][1] = $expectedOptionLabelOnStoreView;
+            $optionRowData['option']['delete'][$optionId] = '';
+            $optionsData[] = http_build_query($optionRowData);
         }
         $attributeData['serialized_options'] = json_encode($optionsData);
         $this->getRequest()->setPostValue($attributeData);

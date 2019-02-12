@@ -64,7 +64,7 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
         )->setValue(
             'general/country/allow',
             'US',
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $quote = $this->objectManager->create(Quote::class);
         $quote->load('quote123', 'reserved_order_id');

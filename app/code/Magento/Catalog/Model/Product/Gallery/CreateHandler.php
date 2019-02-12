@@ -314,7 +314,7 @@ class CreateHandler implements ExtensionInterface
 
         $this->resourceModel->duplicate(
             $this->getAttribute()->getAttributeId(),
-            isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
+            $mediaGalleryData['duplicate'] ?? [],
             $product->getOriginalLinkId(),
             $product->getData($this->metadata->getLinkField())
         );

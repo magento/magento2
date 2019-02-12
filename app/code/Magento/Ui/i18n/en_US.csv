@@ -58,6 +58,7 @@ Keyword,Keyword
 "Letters, numbers, spaces or underscores only please","Letters, numbers, spaces or underscores only please"
 "Letters only please","Letters only please"
 "No white space please","No white space please"
+"No marginal white space please","No marginal white space please"
 "Your ZIP-code must be in the range 902xx-xxxx to 905-xx-xxxx","Your ZIP-code must be in the range 902xx-xxxx to 905-xx-xxxx"
 "A positive or negative non-decimal number please","A positive or negative non-decimal number please"
 "The specified vehicle identification number (VIN) is invalid.","The specified vehicle identification number (VIN) is invalid."
@@ -201,3 +202,4 @@ CSV,CSV
 "Please enter at least {0} characters.","Please enter at least {0} characters."
 "Please enter a value between {0} and {1} characters long.","Please enter a value between {0} and {1} characters long."
 "Please enter a value between {0} and {1}.","Please enter a value between {0} and {1}."
+"The file upload field is disabled.","The file upload field is disabled."

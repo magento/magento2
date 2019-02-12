@@ -2544,6 +2544,8 @@
     .order-summary:after,
     .order-methods:before,
     .order-methods:after,
+    .payment-methods:before,
+    .payment-methods:after,
     .grid-actions:before,
     .grid-actions:after,
     .fieldset-wrapper-title:before,
@@ -2559,6 +2561,7 @@
     .order-addresses:after,
     .order-summary:after,
     .order-methods:after,
+    .payment-methods:after,
     .grid-actions:after,
     .fieldset-wrapper-title:after {
         clear: both;
@@ -2735,7 +2738,8 @@
     //  ---------------------------------------------
 
     #widget_instace_tabs_properties_section_content .widget-option-label {
-        margin-top: 6px;
+        margin-top: 7px;
+        display: inline-block;
     }
 
     //
@@ -2898,6 +2902,7 @@
         .style28();
     }
 
+    #order-billing-method-summary a,
     #order-shipping-method-summary a {
         .style3();
     }
@@ -2936,7 +2941,8 @@
         margin: 0 0 0 20px;
     }
 
-    #order-data .order-methods ul {
+    #order-data .order-methods ul,
+    #order-data .payment-methods ul {
         list-style: none;
         margin: 0;
         padding: 0;
@@ -3840,6 +3846,26 @@
 
     .rule-param-edit .element {
         display: inline;
+        position: relative;
+    }
+
+    .rule-param-edit .element input.input-date,
+    .rule-param-edit .element input.input-date[readonly] {
+        background-color: @color-white;
+        min-width: 140px;
+        width: 140px !important;
+        cursor: pointer;
+        text-align: center;
+        opacity: 1;
+        margin-right: 10px;
+        padding-right: 40px;
+
+        + .ui-datepicker-trigger {
+            position: absolute;
+            width: 140px;
+            text-align: right;
+            left: 0;
+        }
     }
 
     .rule-param-edit .element .addafter {
@@ -4806,6 +4832,9 @@
                 .mage-error {
                     margin-bottom: @indent__m;
                     margin-top: -@indent__xl;
+                }
+                select + .mage-error {
+                    margin-top: 0;
                 }
             }
         }

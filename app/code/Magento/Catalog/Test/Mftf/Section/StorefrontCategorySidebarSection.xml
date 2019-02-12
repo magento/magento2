@@ -13,5 +13,6 @@
         <element name="filterOptions" type="text" selector=".filter-options-content .items"/>
         <element name="filterOption" type="text" selector=".filter-options-content .item"/>
         <element name="optionQty" type="text" selector=".filter-options-content .item .count"/>
+        <element name="filterByName" type="text" selector="//*[contains(text(), '{{arg}}')]" parameterized="true"/>
     </section>
 </sections>

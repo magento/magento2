@@ -615,6 +615,9 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
             // date format intentionally hard-coded
             $elementParams['input_format'] = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
             $elementParams['date_format'] = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
+            $elementParams['placeholder'] = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
+            $elementParams['autocomplete'] = 'off';
+            $elementParams['readonly'] = 'true';
         }
         return $this->getForm()->addField(
             $this->getPrefix() . '__' . $this->getId() . '__value',

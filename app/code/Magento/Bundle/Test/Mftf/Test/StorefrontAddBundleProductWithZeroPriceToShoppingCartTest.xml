@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontAddBundleProductWithZeroPriceToShoppingCartTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Add Bundle product with zero price to shopping cart"/>
+            <title value="Add Bundle product with zero price to shopping cart"/>
+            <description value="Add Bundle product with zero price to shopping cart"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-83535"/>
+            <group value="bundle"/>
+        </annotations>
+        <before>
+            <!--Enable freeShipping-->
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
+            <!--Create category-->
+            <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
+            <!--Create simple with zero price product-->
+            <createData entity="ApiProductWithDescription" stepKey="apiSimple">
+                <field key="price">0</field>
+            </createData>
+            <!--Create Bundle product-->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="apiBundleProduct">
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <!--Create Attribute-->
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
+                <requiredEntity createDataKey="apiBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink">
+                <requiredEntity createDataKey="apiBundleProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="apiSimple"/>
+            </createData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        </before>
+        <after>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
+            <deleteData createDataKey="apiSimple" stepKey="deleteSimple"/>
+            <deleteData createDataKey="apiBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createSubCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Open category page-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.custom_attributes[url_key]$$)}}" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <!--Add bundle product to cart-->
+        <actionGroup ref="StorefrontAddCategoryBundleProductToCartActionGroup" stepKey="addBundleProductToCart">
+            <argument name="product" value="$$apiBundleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <!--Place order-->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Free Shipping"/>
+        </actionGroup>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <!--Check subtotal in created order-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <scrollTo selector="{{AdminOrderTotalSection.subTotal}}" stepKey="scrollToOrderTotalSection"/>
+        <see selector="{{AdminOrderTotalSection.subTotal}}"  userInput="$0.00" stepKey="checkSubtotal"/>
+    </test>
+</tests>

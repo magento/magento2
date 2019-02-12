@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+        <!--Filter order grid by order id field-->
+        <actionGroup name="filterOrderGridById">
+            <arguments>
+                <argument name="orderId" type="string"/>
+            </arguments>
+            <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridPage"/>
+            <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+            <click selector="{{AdminOrdersGridSection.filters}}" stepKey="openOrderGridFilters"/>
+            <fillField selector="{{AdminOrdersGridSection.idFilter}}" userInput="{{orderId}}" stepKey="fillOrderIdFilter"/>
+            <click selector="{{AdminOrdersGridSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        </actionGroup>
+        <actionGroup name="AdminOrdersGridClearFiltersActionGroup">
+            <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToGridOrdersPage"/>
+            <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.enabledFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        </actionGroup>
+        <actionGroup name="openOrderById" extends="filterOrderGridById">
+            <click selector="{{AdminDataGridTableSection.firstRow}}" after="clickOrderApplyFilters" stepKey="openOrderViewPage"/>
+            <waitForPageLoad after="openOrderViewPage" stepKey="waitForOrderViewPageOpened"/>
+        </actionGroup>
+</actionGroups>

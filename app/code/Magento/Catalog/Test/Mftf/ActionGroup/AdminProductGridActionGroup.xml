@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Filter the product grid by new from date filter-->
     <actionGroup name="filterProductGridBySetNewFromDate">
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
@@ -33,6 +33,7 @@
     <actionGroup name="deleteProductUsingProductGrid">
         <arguments>
             <argument name="product"/>
+            <argument name="productCount" type="string" defaultValue="1"/>
         </arguments>
         <!--TODO use other action group for filtering grid when MQE-539 is implemented -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
@@ -48,7 +49,47 @@
         <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) have been deleted." stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="A total of {{productCount}} record(s) have been deleted." stepKey="seeSuccessMessage"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
+    </actionGroup>
+
+    <actionGroup name="DeleteProductByName" extends="deleteProductUsingProductGrid">
+        <arguments>
+            <argument name="product" type="string"/>
+        </arguments>
+        <remove keyForRemoval="fillProductSkuFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{product}}" stepKey="fillProductSkuFilter" after="openProductFilters"/>
+        <remove keyForRemoval="seeProductSkuInGrid"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{product}}"  stepKey="seeProductNameInGrid" after="clickApplyFilters"/>
+    </actionGroup>
+
+    <!--Disabled a product by filtering grid and using change status action-->
+    <actionGroup name="ChangeStatusProductUsingProductGridActionGroup">
+        <arguments>
+            <argument name="product"/>
+            <argument name="status" defaultValue="Enable" type="string" />
+        </arguments>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoadInitial"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{product.sku}}"  stepKey="seeProductSkuInGrid"/>
+        <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
+        <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid"/>
+
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Change status')}}" stepKey="clickChangeStatusAction"/>
+        <click selector="{{AdminProductGridSection.changeStatus('status')}}" stepKey="clickChangeStatusDisabled" parameterized="true"/>
+        <waitForPageLoad stepKey="waitForStatusToBeChanged"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) have been updated." stepKey="seeSuccessMessage"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
+    </actionGroup>
+
+    <!-- Sort products by ID descending -->
+    <actionGroup name="sortProductsByIdDescending">
+        <conditionalClick selector="{{AdminProductGridTableHeaderSection.id('ascend')}}" dependentSelector="{{AdminProductGridTableHeaderSection.id('descend')}}" visible="false" stepKey="sortById"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
