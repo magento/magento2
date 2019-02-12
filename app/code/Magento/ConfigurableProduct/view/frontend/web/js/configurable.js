@@ -609,6 +609,13 @@ define([
             } else {
                 $(this.options.slyOldPriceSelector).hide();
             }
+
+            $(document).trigger('updateMsrpPriceBlock',
+                [
+                    optionId,
+                    this.options.spConfig.optionPrices
+                ]
+            );
         },
 
         /**
