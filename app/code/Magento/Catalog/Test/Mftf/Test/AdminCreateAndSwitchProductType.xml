@@ -67,7 +67,7 @@
             <title value="Admin should be able to switch a new product from virtual to simple"/>
             <description value="After selecting a virtual product when adding Admin should be switch to simple implicitly"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-10925"/>
+            <testCaseId value="MC-10928"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>

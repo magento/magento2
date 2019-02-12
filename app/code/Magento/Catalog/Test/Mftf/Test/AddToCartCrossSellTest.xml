@@ -15,7 +15,7 @@
             <title value="Admin should be able to add cross-sell to products."/>
             <description value="Create products, add products to cross sells, and check that they appear in the Shopping Cart page."/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-113"/>
+            <testCaseId value="MC-9143"/>
             <group value="Catalog"/>
         </annotations>
         <before>

@@ -15,7 +15,7 @@
             <title value="Admin should be able to switch a new product from downloadable to simple"/>
             <description value="After selecting a downloadable product when adding Admin should be switch to simple implicitly"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-10925"/>
+            <testCaseId value="MC-10929"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
