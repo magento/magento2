@@ -64,8 +64,7 @@
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearWebsitesGridFilters"/>
 
-            <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearOrdersGridFilters"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFilter"/>
 
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
@@ -191,11 +190,9 @@
 
         <!-- Open Order -->
 
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearOrdersGridFilters"/>
-        <fillField selector="{{OrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="fillOrderNum"/>
-        <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
+        <actionGroup ref="filterOrderGridById" stepKey="openOrdersGrid">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
         <click selector="{{OrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
 
@@ -212,7 +209,7 @@
             <argument name="storeView" value="customStoreFR"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProduct2Page"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnProduct2Page"/>
 
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownTitle('FR Custom Options 1')}}" stepKey="seeProductFrOptionDropDownTitle"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('FR Custom Options 1', 'FR option1')}}" stepKey="productFrOptionDropDownOptionTitle1"/>
@@ -302,7 +299,7 @@
 
         <!--Go to Product Page-->
 
-        <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProduct2Page2"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnProduct2Page2"/>
 
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownTitle('Custom Options 1')}}" stepKey="seeProductOptionDropDownTitle1"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('Custom Options 1', 'option1')}}" stepKey="seeProductOptionDropDownOptionTitle3"/>
