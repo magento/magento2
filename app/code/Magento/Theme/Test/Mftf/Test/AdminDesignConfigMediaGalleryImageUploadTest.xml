@@ -36,6 +36,9 @@
         <comment userInput="Upload Image" stepKey="uploadImageComment"/>
         <click selector="{{AdminDesignConfigSection.selectFromGalleryByFieldsetName('Head')}}" stepKey="openMediaGallery"/>
         <actionGroup ref="VerifyMediaGalleryStorageActions" stepKey="VerifyMediaGalleryStorageBtn"/>
+        <actionGroup ref="NavigateToFaviconMediaFolderActionGroup" stepKey="NavigateToFolder">
+            <argument name="StoreFolder" value="{{AdminDesignConfigSection.storeLink}}"/>
+        </actionGroup>
         <actionGroup ref="attachImage" stepKey="SelectImageFromMediaStorage">
             <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
@@ -56,5 +59,14 @@
         <click selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="saveConfiguration2"/>
         <waitForElementVisible selector="{{AdminDesignConfigSection.successNotification}}" stepKey="waitForSuccessNotification2"/>
         <waitForPageLoad stepKey="waitForPageloadSuccess2"/>
+        <!--Delete Image-->
+        <comment userInput="Delete Image" stepKey="deleteImageComment"/>
+        <actionGroup ref="navigateToMediaGallery" stepKey="navigateToMediaGallery"/>
+        <actionGroup ref="NavigateToFaviconMediaFolderActionGroup" stepKey="NavigateToFolder2">
+            <argument name="StoreFolder" value="{{AdminDesignConfigSection.storeLink}}"/>
+        </actionGroup>
+        <actionGroup ref="DeleteImageFromStorageActionGroup" stepKey="DeleteImageFromStorage">
+            <argument name="Image" value="ImageUpload3"/>
+        </actionGroup>
     </test>
 </tests>

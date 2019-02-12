@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="NavigateToFaviconMediaFolderActionGroup">
+        <arguments>
+            <argument name="StoreFolder" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{MediaGallerySection.StorageRootArrow}}" dependentSelector="{{MediaGallerySection.checkIfArrowExpand}}" stepKey="clickArrowIfClosed" visible="true"/>
+        <waitForElement selector="{{AdminDesignConfigSection.faviconArrow}}" stepKey="waitForFaviconFolder"/>
+        <conditionalClick selector="{{AdminDesignConfigSection.faviconArrow}}" dependentSelector="{{AdminDesignConfigSection.checkIfFaviconArrowExpand}}" stepKey="clickFaviconArrowIfClosed" visible="true"/>
+        <waitForElement selector="{{AdminDesignConfigSection.storesArrow}}" stepKey="waitForStoresFolder"/>
+        <conditionalClick selector="{{AdminDesignConfigSection.storesArrow}}" dependentSelector="{{AdminDesignConfigSection.checkIfStoresArrowExpand}}" stepKey="clickStoresArrowIfClosed" visible="true"/>
+        <waitForElement selector="{{StoreFolder}}" stepKey="waitForStoreFolder"/>
+        <click selector="{{StoreFolder}}" stepKey="clickOnCreatedFolder"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+    </actionGroup>
+</actionGroups>
