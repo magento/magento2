@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StoresConfigurationListSection">
+        <element name="sales" type="button" selector="#system_config_tabs > div:nth-child(4) > div"/>
+        <element name="salesPaymentMethods" type="button" selector="//a[contains(@class, 'item-nav')]//span[text()='Payment Methods']"/>
+    </section>
+</sections>
