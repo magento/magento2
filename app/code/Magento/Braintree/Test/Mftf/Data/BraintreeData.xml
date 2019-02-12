@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="SampleBraintreeConfig" type="braintree_config_state">
         <requiredEntity type="title">SampleTitle</requiredEntity>
         <requiredEntity type="payment_action">SamplePaymentAction</requiredEntity>
@@ -113,5 +113,4 @@
         <data key="exp_year">20</data>
         <data key="cvv">113</data>
     </entity>
-
 </entities>

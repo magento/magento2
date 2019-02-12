@@ -13,6 +13,8 @@
         <element name="refundShipping" type="input" selector=".order-subtotal-table tbody input[name='creditmemo[shipping_amount]']"/>
         <element name="updateTotals" type="button" selector=".update-totals-button" timeout="30"/>
         <element name="submitRefundOffline" type="button" selector=".order-totals-actions button[title='Refund Offline']" timeout="30"/>
-        <element name="submitRefundOfflineEnabled" type="button" selector=".order-totals-actions button[data-ui-id='order-items-submit-button'][class='action-default scalable save submit-button primary']" timeout="30"/>
+        <element name="submitRefundOfflineEnabled" type="button" selector=".order-totals-actions button[data-ui-id='order-items-submit-button'].action-default.scalable.save.submit-button.primary']" timeout="30"/>
+        <element name="adjustmentRefund" type="input" selector=".order-subtotal-table tbody input[name='creditmemo[adjustment_positive]']"/>
+        <element name="submitRefundOfflineDisabled" type="button" selector="//*[@class='order-totals-actions']//button[@title='Refund Offline' and contains(@class, 'disabled')]" timeout="30"/>
     </section>
 </sections>
