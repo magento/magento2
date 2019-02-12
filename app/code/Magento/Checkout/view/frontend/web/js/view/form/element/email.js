@@ -33,6 +33,9 @@ define([
             listens: {
                 email: 'emailHasChanged',
                 emailFocused: 'validateEmail'
+            },
+            ignoreTmpls: {
+                email: true
             }
         },
         checkDelay: 2000,

@@ -121,6 +121,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
 
         $product = $this->productRepository->get($sku);
         $quote = $this->getQuote();
+        self::expectExceptionMessage('Product that you are trying to add is not available.');
         $quote->addProduct($product, $this->getByRequest($product, $qty));
         $this->cartRepository->save($quote);
         $orderId = $this->cartManagement->placeOrder($quote->getId());
@@ -152,9 +153,9 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/disable_config_use_manage_stock.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoConfigFixture current_store cataloginventory/item_options/manage_stock 0
      */
     public function testPlaceOrderWithOutOffStockProductAndManageStockTurnedOff()
     {

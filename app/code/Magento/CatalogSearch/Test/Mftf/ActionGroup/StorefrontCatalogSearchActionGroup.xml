@@ -16,6 +16,7 @@
         <submitForm selector="#search_mini_form" parameterArray="['q' => '{{phrase}}']" stepKey="fillQuickSearch" />
         <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
         <seeInTitle userInput="Search results for: '{{phrase}}'" stepKey="assertQuickSearchTitle"/>
+        <dontSeeInCurrentUrl url="form_key=" stepKey="checkUrlFormKey"/>
         <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
     </actionGroup>
 

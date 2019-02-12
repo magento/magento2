@@ -201,15 +201,20 @@ class BulkInventoryTransfer
     ): void {
         $connection = $this->resourceConnection->getConnection();
         $types = $this->getProductTypesBySkus->execute($skus);
+        $processedSkus = [];
 
         $connection->beginTransaction();
         foreach ($types as $sku => $type) {
             if ($this->isSourceItemManagementAllowedForProductType->execute($type)) {
-                $this->transferInventory($sku, $originSource, $destinationSource);
+                $this->transferInventory((string)$sku, $originSource, $destinationSource);
+                $processedSkus[] = $sku;
             }
         }
 
-        $this->clearSource($skus, $originSource, $unassignFromOrigin);
+        if (!empty($processedSkus)) {
+            $this->clearSource($processedSkus, $originSource, $unassignFromOrigin);
+        }
+
         $connection->commit();
     }
 }

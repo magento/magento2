@@ -18,11 +18,11 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid" />
         </variation>
         <variation name="MassOrdersUpdateTestVariation2">
-            <data name="description" xsi:type="string">try to cancel orders in status Complete, Canceled</data>
+            <data name="description" xsi:type="string">try to cancel orders in status Complete, Closed</data>
             <data name="steps" xsi:type="string">invoice, shipment|invoice, credit memo</data>
             <data name="action" xsi:type="string">Cancel</data>
             <data name="ordersCount" xsi:type="string">2</data>
-            <data name="resultStatuses" xsi:type="string">Complete,Canceled</data>
+            <data name="resultStatuses" xsi:type="string">Complete,Closed</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelMassActionPartialFailMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid" />
         </variation>
@@ -31,7 +31,7 @@
             <data name="steps" xsi:type="string">invoice|invoice, credit memo</data>
             <data name="action" xsi:type="string">Cancel</data>
             <data name="ordersCount" xsi:type="string">2</data>
-            <data name="resultStatuses" xsi:type="string">Processing,Canceled</data>
+            <data name="resultStatuses" xsi:type="string">Processing,Closed</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelMassActionPartialFailMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid" />
         </variation>

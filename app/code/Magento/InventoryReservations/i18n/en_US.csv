@@ -1,0 +1,7 @@
+"Input data is empty","Input data is empty"
+"Cannot update Reservation %reservation","Cannot update Reservation %reservation"
+"Could not append Reservation","Could not append Reservation"
+"Validation error","Validation error"
+"""%field"" is expected to be a number.","""%field"" is expected to be a number."
+"""%field"" can not be empty.","""%field"" can not be empty."
+"""%field"" can not be null.","""%field"" can not be null."

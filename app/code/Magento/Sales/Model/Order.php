@@ -547,12 +547,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             }
         }
 
-        $allRefunded = true;
-        foreach ($this->getAllItems() as $orderItem) {
-            $allRefunded = $allRefunded && ((float)$orderItem->getQtyRefunded() == (float)$orderItem->getQtyInvoiced());
-        }
-
-        if ($allInvoiced && !$allRefunded) {
+        if ($allInvoiced) {
             return false;
         }
 

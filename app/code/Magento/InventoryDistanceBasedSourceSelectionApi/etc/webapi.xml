@@ -1,0 +1,29 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/inventory/get-distance-provider-code" method="GET">
+        <service class="Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetDistanceProviderCodeInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
+
+    <route url="/V1/inventory/get-distance" method="GET">
+        <service class="Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetDistanceInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
+
+    <route url="/V1/inventory/get-latlng-from-address" method="GET">
+        <service class="Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetLatLngFromAddressInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
+</routes>

@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminUpdateSimpleProductQuantityInSingleStockModeViaTheAdminTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Update Product"/>
             <title value="Quantity of the Virtual product updated from product page in single stock mode by Admin user"/>
             <description value="You should be able to update the Quantity for a Virtual Product via the Admin."/>
-            <testCaseId value="1612"/>
+            <testCaseId value="MSI-1612"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>
