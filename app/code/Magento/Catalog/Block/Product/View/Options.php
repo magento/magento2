@@ -4,17 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product options block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option\Value;
 
 /**
+ * Product options block
+ *
+ * @author Magento Core Team <core@magentocommerce.com>
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -122,6 +120,8 @@ class Options extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get group of option.
+     *
      * @param string $type
      * @return string
      */
@@ -143,6 +143,8 @@ class Options extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Check if block has options.
+     *
      * @return bool
      */
     public function hasOptions()
@@ -162,7 +164,7 @@ class Options extends \Magento\Framework\View\Element\Template
     protected function _getPriceConfiguration($option)
     {
         $optionPrice = $option->getPrice(true);
-        if($option->getPriceType() != Value::TYPE_PERCENT) {
+        if ($option->getPriceType() !== Value::TYPE_PERCENT) {
             $optionPrice = $this->pricingHelper->currency($optionPrice, false, false);
         }
         $data = [
