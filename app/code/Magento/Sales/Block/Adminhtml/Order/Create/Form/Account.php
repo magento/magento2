@@ -203,7 +203,7 @@ class Account extends AbstractForm
             if (isset($defaultValue) && !isset($formValues[$code])) {
                 $formValues[$code] = $defaultValue;
             }
-            if ($code === 'group_id' && empty($defaultValue)) {
+            if ($code === 'group_id' && empty($formValues[$code])) {
                 $formValues[$code] = $this->getDefaultCustomerGroup($storeId);
             }
         }
