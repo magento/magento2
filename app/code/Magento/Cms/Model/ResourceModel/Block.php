@@ -200,7 +200,7 @@ class Block extends AbstractDb
                 'cb.' . $linkField . ' = cbs.' . $linkField,
                 []
             )
-            ->where('cb.identifier = ? ', $object->getData('identifier'));
+            ->where('cb.identifier = ?', $object->getData('identifier'));
 
         if (!$isDefaultStore) {
             $select->where('cbs.store_id IN (?)', $stores);
