@@ -21,11 +21,11 @@
     </actionGroup>
     <actionGroup name="DeleteCmsBlockActionGroup">
         <arguments>
-            <argument name="cmsBlockIdentifier" type="string" defaultValue="{{DefaultCmsBlock.identifier}}"/>
+            <argument name="identifier" type="string" defaultValue="{{DefaultCmsBlock.identifier}}"/>
         </arguments>
         <amOnPage url="{{AdminCmsBlockGridPage.url}}" stepKey="navigateToCmsBlockListingPage"/>
-        <click selector="{{CmsPagesPageActionsSection.select(cmsBlockIdentifier)}}" stepKey="clickOnSelect"/>
-        <click selector="{{CmsPagesPageActionsSection.delete(cmsBlockIdentifier)}}" stepKey="clickOnDelete"/>
+        <click selector="{{CmsPagesPageActionsSection.select(identifier)}}" stepKey="clickOnSelect"/>
+        <click selector="{{CmsPagesPageActionsSection.delete(identifier)}}" stepKey="clickOnDelete"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirm"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the block." stepKey="verifyBlockIsDeleted"/>

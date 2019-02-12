@@ -45,7 +45,7 @@
         <actionGroup ref="NavigateToCreateCmsBlockActionGroup" stepKey="navigateToCreateCmsBlock"/>
         <actionGroup ref="FillCmsBlockForm" stepKey="fillCmsBlockForm"/>
         <actionGroup ref="SaveCmsBlockActionGroup" stepKey="saveCmsBlock"/>
-        <actionGroup ref="NavigateToCreateCmsBlockActionGroup" stepKey="navigateToCreateCmsBlock1"/>
+        <actionGroup ref="NavigateToCreateCmsBlockActionGroup" stepKey="navigateToCreateDuplicateCmsBlock"/>
         <actionGroup ref="FillCmsBlockForm" stepKey="fillDuplicateCmsBlockForm">
             <argument name="store" value="[{{_defaultStore.name}},{{SecondStoreUnique.name}}]"/>
         </actionGroup>
