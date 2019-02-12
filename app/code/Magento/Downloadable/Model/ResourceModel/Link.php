@@ -216,6 +216,8 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Get Currency model.
+     *
      * @return \Magento\Directory\Model\Currency
      */
     protected function _createCurrency()
