@@ -60,12 +60,25 @@ QUERY;
             url
             label
         }
+        small_image {
+            url
+            label
+        }
     }
   }    
 }
 QUERY;
         $response = $this->graphQlQuery($query);
         self::assertEquals('Simple Product', $response['products']['items'][0]['image']['label']);
+        self::assertStringEndsWith(
+            'images/product/placeholder/image.jpg',
+            $response['products']['items'][0]['image']['url']
+        );
+        self::assertEquals('Simple Product', $response['products']['items'][0]['small_image']['label']);
+        self::assertStringEndsWith(
+            'images/product/placeholder/small_image.jpg',
+            $response['products']['items'][0]['small_image']['url']
+        );
     }
 
     /**

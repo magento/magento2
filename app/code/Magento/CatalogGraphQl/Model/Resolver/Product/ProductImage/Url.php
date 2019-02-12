@@ -27,20 +27,18 @@ class Url implements ResolverInterface
     /**
      * @var PlaceholderProvider
      */
-    private $_placeholderProvider;
+    private $placeholderProvider;
 
     /**
-     * Url constructor.
      * @param ImageFactory $productImageFactory
      * @param PlaceholderProvider $placeholderProvider
      */
     public function __construct(
         ImageFactory $productImageFactory,
         PlaceholderProvider $placeholderProvider
-
     ) {
         $this->productImageFactory = $productImageFactory;
-        $this->_placeholderProvider = $placeholderProvider;
+        $this->placeholderProvider = $placeholderProvider;
     }
 
     /**
@@ -83,7 +81,7 @@ class Url implements ResolverInterface
             ->setBaseFile($imagePath);
 
         if ($image->isBaseFilePlaceholder()) {
-            return $this->_placeholderProvider->getPlaceholder($imageType);
+            return $this->placeholderProvider->getPlaceholder($imageType);
         }
 
         return $image->getUrl();
