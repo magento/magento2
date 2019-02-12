@@ -144,7 +144,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
             ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => ''
         ];
         $this->assertEquals(
-            ['Invalid encryption key'],
+            ['Invalid encryption key. Encryption key must be 32 character string without any white space.'],
             $this->object->validate($options, $this->deploymentConfig)
         );
     }

@@ -17,14 +17,14 @@ use Magento\Framework\Search\Request\NonExistingRequestNameException;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
- * Collection Advanced
+ * Advanced search collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * This collection should be refactored to not have dependencies on MySQL-specific implementation.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -41,6 +41,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
+     * @deprecated There must be no dependencies on specific adapter in generic search implementation
      */
     private $temporaryStorageFactory;
 
@@ -207,6 +208,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get attribute code.
+     *
      * @param string $attributeCode
      * @return string
      */
@@ -266,6 +269,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get search.
+     *
      * @return \Magento\Search\Api\SearchInterface
      */
     private function getSearch()
@@ -278,6 +283,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get search criteria builder.
+     *
      * @return SearchCriteriaBuilder
      */
     private function getSearchCriteriaBuilder()
@@ -290,6 +297,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get filter builder.
+     *
      * @return FilterBuilder
      */
     private function getFilterBuilder()

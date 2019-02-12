@@ -84,6 +84,8 @@ class Widget
     }
 
     /**
+     * Get math random
+     *
      * @return \Magento\Framework\Math\Random
      *
      * @deprecated 100.1.0
@@ -149,8 +151,8 @@ class Widget
         $widget = $this->getAsCanonicalArray($widget);
 
         // Save all nodes to object data
-        $object->setType($type);
         $object->setData($widget);
+        $object->setType($type);
 
         // Correct widget parameters and convert its data to objects
         $newParams = $this->prepareWidgetParameters($object);
@@ -315,7 +317,7 @@ class Widget
                 }
             }
             if (isset($value)) {
-                $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeQuote($value));
+                $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeHtmlAttr($value, false));
             }
         }
 
@@ -339,6 +341,8 @@ class Widget
     }
 
     /**
+     * Get widget page varname
+     *
      * @param array $params
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException

@@ -48,10 +48,7 @@ class AdminPathConfig implements PathConfigInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @return string
+     * @inheritdoc
      */
     public function getCurrentSecureUrl(\Magento\Framework\App\RequestInterface $request)
     {
@@ -59,28 +56,29 @@ class AdminPathConfig implements PathConfigInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param string $path
-     * @return bool
+     * @inheritdoc
      */
     public function shouldBeSecure($path)
     {
-        return parse_url(
-            (string)$this->coreConfig->getValue(Store::XML_PATH_UNSECURE_BASE_URL, 'default'),
-            PHP_URL_SCHEME
-        ) === 'https'
-        || $this->backendConfig->isSetFlag(Store::XML_PATH_SECURE_IN_ADMINHTML)
-        && parse_url(
-            (string)$this->coreConfig->getValue(Store::XML_PATH_SECURE_BASE_URL, 'default'),
-            PHP_URL_SCHEME
-        ) === 'https';
+        $baseUrl = (string)$this->coreConfig->getValue(Store::XML_PATH_UNSECURE_BASE_URL, 'default');
+        if (parse_url($baseUrl, PHP_URL_SCHEME) === 'https') {
+            return true;
+        }
+
+        if ($this->backendConfig->isSetFlag(Store::XML_PATH_SECURE_IN_ADMINHTML)) {
+            if ($this->backendConfig->isSetFlag('admin/url/use_custom')) {
+                $adminBaseUrl = (string)$this->coreConfig->getValue('admin/url/custom', 'default');
+            } else {
+                $adminBaseUrl = (string)$this->coreConfig->getValue(Store::XML_PATH_SECURE_BASE_URL, 'default');
+            }
+            return parse_url($adminBaseUrl, PHP_URL_SCHEME) === 'https';
+        }
+
+        return false;
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getDefaultPath()
     {

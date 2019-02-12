@@ -117,25 +117,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     public function testIsValidGrandTotalGrandTotal()
     {
         $this->creditmemo->setGrandTotal(0);
-        $this->creditmemo->isAllowZeroGrandTotal(true);
         $this->assertFalse($this->creditmemo->isValidGrandTotal());
-    }
-
-    /**
-     * Test for isAllowZeroGrandTotal method.
-     *
-     * @return void
-     */
-    public function testIsAllowZeroGrandTotal()
-    {
-        $isAllowed = 0;
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with(
-                'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )->willReturn($isAllowed);
-        $this->assertEquals($isAllowed, $this->creditmemo->isAllowZeroGrandTotal());
     }
 
     public function testIsValidGrandTotal()
