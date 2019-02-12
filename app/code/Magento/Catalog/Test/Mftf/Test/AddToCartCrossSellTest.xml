@@ -29,15 +29,17 @@
             <createData entity="_defaultProduct" stepKey="simpleProduct3">
                 <requiredEntity createDataKey="category1"/>
             </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="logInAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimp1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimp2"/>
             <deleteData createDataKey="simpleProduct3" stepKey="deleteSimp3"/>
             <deleteData createDataKey="category1" stepKey="deleteCategory"/>
         </after>
-
-        <actionGroup ref="LoginAsAdmin" stepKey="logInAsAdmin"/>
 
         <!-- Go to simpleProduct1, add simpleProduct2 and simpleProduct3 as cross-sell-->
         <amOnPage url="{{AdminProductEditPage.url($simpleProduct1.id$)}}" stepKey="goToProduct1"/>
@@ -50,7 +52,7 @@
             <argument name="sku" value="$simpleProduct3.sku$"/>
         </actionGroup>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForProductPageSave"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
 
         <!-- Go to simpleProduct3, add simpleProduct1 and simpleProduct2 as cross-sell-->
         <amOnPage url="{{AdminProductEditPage.url($simpleProduct3.id$)}}" stepKey="goToProduct3"/>
@@ -63,7 +65,7 @@
             <argument name="sku" value="$simpleProduct2.sku$"/>
         </actionGroup>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave2"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForProductPageSave2"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
 
         <!-- Go to frontend, add simpleProduct1 to cart-->
         <actionGroup ref="AddSimpleProductToCart" stepKey="addSimp1ToCart">
