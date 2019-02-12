@@ -15,6 +15,9 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
+/**
+ * Class for getting category list.
+ */
 class CategoryList implements CategoryListInterface
 {
     /**
@@ -64,7 +67,7 @@ class CategoryList implements CategoryListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -73,10 +76,11 @@ class CategoryList implements CategoryListInterface
         $this->extensionAttributesJoinProcessor->process($collection);
 
         $this->collectionProcessor->process($searchCriteria, $collection);
+        $collection->load();
 
         $items = [];
-        foreach ($collection->getAllIds() as $id) {
-            $items[] = $this->categoryRepository->get($id);
+        foreach ($collection->getItems() as $category) {
+            $items[] = $this->categoryRepository->get($category->getId());
         }
 
         /** @var CategorySearchResultsInterface $searchResult */
