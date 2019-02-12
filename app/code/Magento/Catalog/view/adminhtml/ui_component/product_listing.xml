@@ -132,6 +132,7 @@
             <settings>
                 <addField>true</addField>
                 <filter>text</filter>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
                 <label translate="true">Name</label>
             </settings>
         </column>
