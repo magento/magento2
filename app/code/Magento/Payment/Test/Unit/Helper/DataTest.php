@@ -19,6 +19,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private $scopeConfig;
 
     /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    private $paymentConfig;
+
+    /**  @var \PHPUnit_Framework_MockObject_MockObject */
     private $initialConfig;
 
     /**  @var \PHPUnit_Framework_MockObject_MockObject */
@@ -48,6 +51,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->methodFactory = $arguments['paymentMethodFactory'];
         $this->appEmulation = $arguments['appEmulation'];
+        $this->paymentConfig = $arguments['paymentConfig'];
         $this->initialConfig = $arguments['initialConfig'];
 
         $this->helper = $objectManagerHelper->getObject($className, $arguments);
@@ -254,6 +258,56 @@ class DataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param bool $sorted
+     * @param bool $asLabelValue
+     * @param bool $withGroups
+     * @param string|null $configTitle
+     * @param array $paymentMethod
+     * @param array $expectedPaymentMethodList
+     * @return void
+     *
+     * @dataProvider paymentMethodListDataProvider
+     */
+    public function testGetPaymentMethodList(
+        bool $sorted,
+        bool $asLabelValue,
+        bool $withGroups,
+        $configTitle,
+        array $paymentMethod,
+        array $expectedPaymentMethodList
+    ) {
+        $groups = ['group' => 'Group Title'];
+
+        $this->initialConfig->method('getData')
+            ->with('default')
+            ->willReturn(
+                [
+                    Data::XML_PATH_PAYMENT_METHODS => [
+                        $paymentMethod['code'] => $paymentMethod['data'],
+                    ],
+                ]
+            );
+
+        $this->scopeConfig->method('getValue')
+            ->with(sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, $paymentMethod['code']))
+            ->willReturn(\Magento\Payment\Model\Method\AbstractMethod::class);
+
+        $methodInstanceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+            ->getMockForAbstractClass();
+        $methodInstanceMock->method('getConfigData')
+            ->with('title', null)
+            ->willReturn($configTitle);
+        $this->methodFactory->method('create')
+            ->willReturn($methodInstanceMock);
+
+        $this->paymentConfig->method('getGroups')
+            ->willReturn($groups);
+
+        $paymentMethodList = $this->helper->getPaymentMethodList($sorted, $asLabelValue, $withGroups);
+        $this->assertEquals($expectedPaymentMethodList, $paymentMethodList);
+    }
+
+    /**
      * @return array
      */
     public function getSortMethodsDataProvider()
@@ -267,6 +321,91 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ['code' => 'methodA', 'data' => ['sort_order' => 2]],
                 ['code' => 'methodB', 'data' => ['sort_order' => 1]],
             ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function paymentMethodListDataProvider(): array
+    {
+        return [
+            'Payment method with changed title' =>
+                [
+                    true,
+                    false,
+                    false,
+                    'Config Payment Title',
+                    [
+                        'code' => 'payment_method',
+                        'data' => [
+                            'active' => 1,
+                            'title' => 'Payment Title',
+                        ],
+                    ],
+                    ['payment_method' => 'Config Payment Title'],
+                ],
+            'Payment method with default title' =>
+                [
+                    true,
+                    false,
+                    false,
+                    null,
+                    [
+                        'code' => 'payment_method',
+                        'data' => [
+                            'active' => 1,
+                            'title' => 'Payment Title',
+                        ],
+                    ],
+                    ['payment_method' => 'Payment Title'],
+                ],
+            'Payment method as value => label' =>
+                [
+                    true,
+                    true,
+                    false,
+                    null,
+                    [
+                        'code' => 'payment_method',
+                        'data' => [
+                            'active' => 1,
+                            'title' => 'Payment Title',
+                        ],
+                    ],
+                    [
+                        'payment_method' => [
+                            'value' => 'payment_method',
+                            'label' => 'Payment Title',
+                        ],
+                    ],
+                ],
+            'Payment method with group' =>
+                [
+                    true,
+                    true,
+                    true,
+                    null,
+                    [
+                        'code' => 'payment_method',
+                        'data' => [
+                            'active' => 1,
+                            'title' => 'Payment Title',
+                            'group' => 'group',
+                        ],
+                    ],
+                    [
+                        'group' => [
+                            'label' => 'Group Title',
+                            'value' => [
+                                'payment_method' => [
+                                    'value' => 'payment_method',
+                                    'label' => 'Payment Title',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
         ];
     }
 }
