@@ -5,10 +5,10 @@
  */
 namespace Magento\SalesRule\Model\Rule;
 
+use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\SalesRule\Model\Rule;
-use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * Class DataProvider
@@ -36,7 +36,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @var \Magento\SalesRule\Model\Rule\Metadata\ValueProvider
      */
     protected $metadataValueProvider;
-    
+
     /**
      * @var DataPersistorInterface
      */
@@ -51,9 +51,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param CollectionFactory $collectionFactory
      * @param \Magento\Framework\Registry $registry
      * @param Metadata\ValueProvider $metadataValueProvider
-     * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
+     * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
         $name,
@@ -62,9 +62,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         CollectionFactory $collectionFactory,
         \Magento\Framework\Registry $registry,
         \Magento\SalesRule\Model\Rule\Metadata\ValueProvider $metadataValueProvider,
-        DataPersistorInterface $dataPersistor = null,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        DataPersistorInterface $dataPersistor = null
     ) {
         $this->collection = $collectionFactory->create();
         $this->coreRegistry = $registry;
@@ -88,7 +88,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData()
     {

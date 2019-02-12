@@ -7,8 +7,8 @@
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * SalesRule save controller
@@ -84,12 +84,8 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                     $data
                 );
                 $data = $inputFilter->getUnescaped();
-                $id = $this->getRequest()->getParam('rule_id');
-                if ($id) {
-                    $model->load($id);
-                    if ($id != $model->getId()) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__('The wrong rule is specified.'));
-                    }
+                if (!$this->checkRuleExists($model)) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('The wrong rule is specified.'));
                 }
 
                 $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
@@ -158,5 +154,23 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
             }
         }
         $this->_redirect('sales_rule/*/');
+    }
+
+    /**
+     * Check if Cart Price Rule with provided id exists.
+     *
+     * @param \Magento\SalesRule\Model\Rule $model
+     * @return bool
+     */
+    private function checkRuleExists(\Magento\SalesRule\Model\Rule $model): bool
+    {
+        $id = $this->getRequest()->getParam('rule_id');
+        if ($id) {
+            $model->load($id);
+            if ($model->getId() != $id) {
+                return false;
+            }
+        }
+        return true;
     }
 }
