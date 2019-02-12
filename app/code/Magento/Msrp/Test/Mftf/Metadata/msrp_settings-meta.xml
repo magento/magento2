@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="MsrpSettingsConfig" dataType="msrp_settings_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/sales/" method="POST">
+        <object key="groups" dataType="msrp_settings_config">
+            <object key="msrp" dataType="msrp_settings_config">
+                <object key="fields" dataType="msrp_settings_config">
+                    <object key="enabled" dataType="enabled">
+                        <field key="value">string</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>
