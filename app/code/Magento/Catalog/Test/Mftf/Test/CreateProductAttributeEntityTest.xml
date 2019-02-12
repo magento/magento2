@@ -179,7 +179,7 @@
             <title value="Admin should be able to create a Dropdown product attribute"/>
             <description value="Admin should be able to create a Dropdown product attribute"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-10894"/>
+            <testCaseId value="MC-10896"/>
             <group value="Catalog"/>
         </annotations>
         <before>
