@@ -100,12 +100,8 @@ require(['prototype'], function(){
 </div>
 <script>
     require(["Magento_Sales/order/create/form"], function(){
-
         order.overlay('shipping-method-overlay', <?php if ($block->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
         order.overlay('address-shipping-overlay', <?php if ($block->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
-
-        <?php if ($block->getQuote()->isVirtual()): ?>
-            order.isOnlyVirtualProduct = true;
-        <?php endif; ?>
+        order.isOnlyVirtualProduct = <?= /* @noEscape */ $block->getQuote()->isVirtual() ? 'true' : 'false'; ?>;
     });
 </script>

@@ -1375,14 +1375,13 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      *
      * @param bool $useCache
      * @return  \Magento\Eav\Model\Entity\Collection\AbstractCollection
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getItemsCollection($useCache = true)
     {
-        if ($this->hasItemsCollection()) {
+        if ($this->hasItemsCollection() && $useCache) {
             return $this->getData('items_collection');
         }
-        if (null === $this->_items) {
+        if (null === $this->_items || !$useCache) {
             $this->_items = $this->_quoteItemCollectionFactory->create();
             $this->extensionAttributesJoinProcessor->process($this->_items);
             $this->_items->setQuote($this);
@@ -1399,7 +1398,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $items = [];
         foreach ($this->getItemsCollection() as $item) {
-            /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $item */
+            /** @var \Magento\Quote\Model\Quote\Item $item */
             if (!$item->isDeleted()) {
                 $items[] = $item;
             }
@@ -2246,6 +2245,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if (!$minOrderActive) {
             return true;
         }
+        $includeDiscount = $this->_scopeConfig->getValue(
+            'sales/minimum_order/include_discount_amount',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
         $minOrderMulti = $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/multi_address',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -2279,7 +2283,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 $taxes = ($taxInclude) ? $address->getBaseTaxAmount() : 0;
                 foreach ($address->getQuote()->getItemsCollection() as $item) {
                     /** @var \Magento\Quote\Model\Quote\Item $item */
-                    $amount = $item->getBaseRowTotal() - $item->getBaseDiscountAmount() + $taxes;
+                    $amount = $includeDiscount ?
+                        $item->getBaseRowTotal() - $item->getBaseDiscountAmount() + $taxes :
+                        $item->getBaseRowTotal() + $taxes;
+
                     if ($amount < $minAmount) {
                         return false;
                     }
@@ -2289,7 +2296,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $baseTotal = 0;
             foreach ($addresses as $address) {
                 $taxes = ($taxInclude) ? $address->getBaseTaxAmount() : 0;
-                $baseTotal += $address->getBaseSubtotalWithDiscount() + $taxes;
+                $baseTotal += $includeDiscount ?
+                    $address->getBaseSubtotalWithDiscount() + $taxes :
+                    $address->getBaseSubtotal() + $taxes;
             }
             if ($baseTotal < $minAmount) {
                 return false;
