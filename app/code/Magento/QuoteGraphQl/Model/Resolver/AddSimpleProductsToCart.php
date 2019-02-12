@@ -81,6 +81,7 @@ class AddSimpleProductsToCart implements ResolverInterface
 
         $this->addProductsToCart->execute($cart, $cartItems);
         $cartData = $this->extractDataFromCart->execute($cart);
+        $cartData["cart_id"] = $cartHash;
 
         return [
             'cart' => $cartData,
