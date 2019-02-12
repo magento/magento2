@@ -11,21 +11,21 @@
         <arguments>
             <argument name="title" type="string" defaultValue="{{DefaultCmsBlock.title}}"/>
             <argument name="identifier" type="string" defaultValue="{{DefaultCmsBlock.identifier}}"/>
-            <argument name="store" type="string" defaultValue="All Store View"/>
+            <argument name="store" type="string" defaultValue="[All Store View]"/>
             <argument name="content" type="string" defaultValue="{{DefaultCmsBlock.content}}"/>
         </arguments>
         <fillField selector="{{AdminCmsBlockContentSection.title}}" userInput="{{title}}" stepKey="fillFieldTitle"/>
         <fillField selector="{{AdminCmsBlockContentSection.identifier}}" userInput="{{identifier}}" stepKey="fillFieldIdentifier"/>
-        <selectOption selector="{{AdminCmsBlockContentSection.storeView}}" userInput="{{store}}" stepKey="selectStore" />
+        <selectOption selector="{{AdminCmsBlockContentSection.storeView}}" parameterArray="{{store}}" stepKey="selectStore" />
         <fillField selector="{{AdminCmsBlockContentSection.content}}" userInput="{{content}}" stepKey="fillContentField"/>
     </actionGroup>
     <actionGroup name="DeleteCmsBlockActionGroup">
         <arguments>
-            <argument name="cmsBlockTitle" type="string" defaultValue="{{DefaultCmsBlock.title}}"/>
+            <argument name="cmsBlockIdentifier" type="string" defaultValue="{{DefaultCmsBlock.identifier}}"/>
         </arguments>
         <amOnPage url="{{AdminCmsBlockGridPage.url}}" stepKey="navigateToCmsBlockListingPage"/>
-        <click selector="{{CmsPagesPageActionsSection.select(cmsBlockTitle)}}" stepKey="clickOnSelect"/>
-        <click selector="{{CmsPagesPageActionsSection.delete(cmsBlockTitle)}}" stepKey="clickOnDelete"/>
+        <click selector="{{CmsPagesPageActionsSection.select(cmsBlockIdentifier)}}" stepKey="clickOnSelect"/>
+        <click selector="{{CmsPagesPageActionsSection.delete(cmsBlockIdentifier)}}" stepKey="clickOnDelete"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirm"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the block." stepKey="verifyBlockIsDeleted"/>
@@ -34,6 +34,7 @@
         <amOnPage url="{{AdminCmsBlockNewPage.url}}" stepKey="navigateToCreateCmsBlockPage"/>
     </actionGroup>
     <actionGroup name="SaveCmsBlockActionGroup">
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveBlockButton"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the block." stepKey="verifyMessage"/>
     </actionGroup>
