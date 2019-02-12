@@ -8,7 +8,7 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="StorefrontCreateNewReturnPage" url="rma/guest/create/order_id/" area="guest" module="Magento_Sales">
-        <section name="StorefrontCreateNewReturnMainSection"/>
+    <page name="AdminEditTaxRatePage" url="tax/rate/edit/rate/{{var1}}/" module="Magento_Tax" area="admin" parameterized="true">
+        <section name="AdminTaxRateFormSection"/>
     </page>
 </pages>
