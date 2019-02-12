@@ -5,6 +5,13 @@
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
+/**
+ * Class SamplesTest
+ *
+ * @package Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable
+ * @deprecated
+ * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Samples
+ */
 class SamplesTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetUploadButtonsHtml()

@@ -22,5 +22,6 @@
         <element name="nthChooseColor" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatch_row_name.colorpicker_handler" parameterized="true"/>
         <element name="nthUploadFile" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatch_row_name.btn_choose_file_upload" parameterized="true"/>
         <element name="nthDelete" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) button.delete-option" parameterized="true"/>
+        <element name="deleteBtn" type="button" selector="#manage-options-panel:nth-of-type({{var}}) button.delete-option" parameterized="true"/>
     </section>
 </sections>

@@ -23,7 +23,9 @@ class RevokeCustomerTokenTest extends GraphQlAbstract
     {
         $query = <<<QUERY
             mutation {
-                revokeCustomerToken
+                revokeCustomerToken {
+                    result
+                }
             }
 QUERY;
 
@@ -35,7 +37,7 @@ QUERY;
 
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
-        $this->assertTrue($response['revokeCustomerToken']);
+        $this->assertTrue($response['revokeCustomerToken']['result']);
     }
 
     /**
@@ -46,7 +48,9 @@ QUERY;
     {
         $query = <<<QUERY
             mutation {
-                revokeCustomerToken
+                revokeCustomerToken {
+                    result
+                }
             }
 QUERY;
         $this->graphQlQuery($query, [], '');

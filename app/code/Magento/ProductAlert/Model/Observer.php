@@ -218,6 +218,7 @@ class Observer
             $previousCustomer = null;
             $email->setWebsite($website);
             foreach ($collection as $alert) {
+                $this->setAlertStoreId($alert, $email);
                 try {
                     if (!$previousCustomer || $previousCustomer->getId() != $alert->getCustomerId()) {
                         $customer = $this->customerRepository->getById($alert->getCustomerId());
@@ -311,6 +312,7 @@ class Observer
             $previousCustomer = null;
             $email->setWebsite($website);
             foreach ($collection as $alert) {
+                $this->setAlertStoreId($alert, $email);
                 try {
                     if (!$previousCustomer || $previousCustomer->getId() != $alert->getCustomerId()) {
                         $customer = $this->customerRepository->getById($alert->getCustomerId());
@@ -424,6 +426,23 @@ class Observer
         $this->_processPrice($email);
         $this->_processStock($email);
         $this->_sendErrorEmail();
+
+        return $this;
+    }
+
+    /**
+     * Set alert store id.
+     *
+     * @param \Magento\ProductAlert\Model\Price|\Magento\ProductAlert\Model\Stock $alert
+     * @param Email $email
+     * @return Observer
+     */
+    private function setAlertStoreId($alert, \Magento\ProductAlert\Model\Email $email) : Observer
+    {
+        $alertStoreId = $alert->getStoreId();
+        if ($alertStoreId) {
+            $email->setStoreId((int)$alertStoreId);
+        }
 
         return $this;
     }

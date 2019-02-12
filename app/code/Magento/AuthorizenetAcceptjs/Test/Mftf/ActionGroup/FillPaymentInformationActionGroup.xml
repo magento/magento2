@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FillPaymentInformation">
+        <click stepKey="clickOnAuthorizenetToggle" selector="{{AuthorizenetCheckoutSection.selectAuthorizenet}}"/>
+        <waitForPageLoad stepKey="waitForCardDataSection"/>
+        <fillField stepKey="fillCardNumber" selector="{{AuthorizenetCheckoutSection.cardInput}}" userInput="{{PaymentAndShippingInfo.cardNumber}}"/>
+        <selectOption stepKey="fillExpMonth" selector="{{AuthorizenetCheckoutSection.expMonth}}" userInput="{{PaymentAndShippingInfo.month}}"/>
+        <selectOption stepKey="fillExpYear" selector="{{AuthorizenetCheckoutSection.expYear}}" userInput="20{{PaymentAndShippingInfo.year}}"/>
+        <fillField stepKey="fillCvv" selector="{{AuthorizenetCheckoutSection.cvv}}" userInput="123"/>
+        <click stepKey="checkoutButton" selector="{{AuthorizenetCheckoutSection.checkoutButton}}"/>
+        <waitForPageLoad stepKey="waitForCheckout"/>
+    </actionGroup>
+
+    <!-- Guest checkout Authorizenet fill billing address -->
+    <actionGroup name="GuestCheckoutAuthorizenetFillBillingAddress">
+        <arguments>
+            <argument name="customer"/>
+            <argument name="customerAddress"/>
+        </arguments>
+        <fillField selector="{{GuestAuthorizenetCheckoutSection.firstName}}" userInput="{{customer.firstName}}" stepKey="fillFirstName"/>
+        <fillField selector="{{GuestAuthorizenetCheckoutSection.lastName}}" userInput="{{customer.lastName}}" stepKey="fillLastName"/>
+        <fillField selector="{{GuestAuthorizenetCheckoutSection.street}}" userInput="{{customerAddress.street[0]}}" stepKey="fillStreet"/>
+        <fillField selector="{{GuestAuthorizenetCheckoutSection.city}}" userInput="{{customerAddress.city}}" stepKey="fillCity"/>
+        <selectOption selector="{{GuestAuthorizenetCheckoutSection.state}}" userInput="{{customerAddress.state}}" stepKey="selectState"/>
+        <fillField selector="{{GuestAuthorizenetCheckoutSection.postcode}}" userInput="{{customerAddress.postcode}}" stepKey="fillPostCode"/>
+        <fillField selector="{{GuestAuthorizenetCheckoutSection.telephone}}" userInput="{{customerAddress.telephone}}" stepKey="fillTelephone"/>
+        <click selector="{{GuestAuthorizenetCheckoutSection.update}}" stepKey="updateAddress"/>
+        <waitForPageLoad stepKey="waitForUpdate"/>
+    </actionGroup>
+</actionGroups>

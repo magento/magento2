@@ -396,6 +396,10 @@
             <event value="0" name="deactivate-in-context-api"/>
             <event value="1" name="activate-in-context-api"/>
         </events>
+        <events selector="[data-enable='disable-funding-options']">
+            <event value="CREDIT" include="true" name="remove-option"/>
+            <event value="CREDIT" include="false" name="add-option"/>
+        </events>
         <relation target="wps_express">
             <rule type="disable" event="activate-rule"/>
         </relation>
@@ -433,6 +437,9 @@
                 <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
                 <argument name="payflow_link_us">payflow_link_us</argument>
             </rule>
+            <rule type="removeCreditOption" event="remove-option"/>
+            <rule type="addCreditOption" event="add-option"/>
+            <rule type="removeCreditOptionConditional" event=":load"/>
         </relation>
     </payment>
 </rules>
