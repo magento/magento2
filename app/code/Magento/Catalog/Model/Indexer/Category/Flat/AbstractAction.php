@@ -8,6 +8,9 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat;
 
 use Magento\Framework\App\ResourceConnection;
 
+/**
+ * Abstract action class for category flat indexers.
+ */
 class AbstractAction
 {
     /**
@@ -496,6 +499,8 @@ class AbstractAction
     }
 
     /**
+     * Get category metadata instance.
+     *
      * @return \Magento\Framework\EntityManager\EntityMetadata
      */
     private function getCategoryMetadata()
@@ -509,6 +514,8 @@ class AbstractAction
     }
 
     /**
+     * Get skip static columns instance.
+     *
      * @return array
      */
     private function getSkipStaticColumns()
