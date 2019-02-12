@@ -67,6 +67,8 @@
         <waitForElement selector="{{AdminNewCatalogPriceRuleConditions.targetEllipsisValue('1', targetValue)}}" stepKey="waitForIsTarget"/>
         <click selector="{{AdminNewCatalogPriceRuleConditions.targetEllipsisValue('1', 'is')}}" stepKey="clickOnIs"/>
         <selectOption selector="{{AdminNewCatalogPriceRuleConditions.targetSelect('1')}}" userInput="{{targetSelectValue}}" stepKey="selectTargetCondition"/>
+        <click selector="{{AdminNewCatalogPriceRule.fromDateButton}}" stepKey="clickFromCalender"/>
+        <click selector="{{AdminNewCatalogPriceRule.todayDate}}" stepKey="clickFromToday"/>
     </actionGroup>
 
     <!-- Apply all of the saved catalog price rules -->
