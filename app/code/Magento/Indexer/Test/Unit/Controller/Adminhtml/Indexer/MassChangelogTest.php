@@ -134,12 +134,10 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\TestFramework\Unit\Helper\ObjectManager::class,
             ['get']
         );
-        $this->request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
-            ['getParam', 'getRequest'],
-            '',
-            false
-        );
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->setMethods(['getParam', 'getRequest', 'isPost'])
+            ->getMockForAbstractClass();
+        $this->request->expects($this->any())->method('isPost')->willReturn(true);
 
         $this->response->expects($this->any())->method("setRedirect")->willReturn(1);
         $this->page = $this->createMock(\Magento\Framework\View\Result\Page::class);
@@ -147,7 +145,7 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
         $this->title = $this->createMock(\Magento\Framework\View\Page\Title::class);
         $this->messageManager = $this->getMockForAbstractClass(
             \Magento\Framework\Message\ManagerInterface::class,
-            ['addError', 'addSuccess'],
+            ['addErrorMessage', 'addSuccessMessage'],
             '',
             false
         );
@@ -181,7 +179,7 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
 
         if (!is_array($indexerIds)) {
             $this->messageManager->expects($this->once())
-                ->method('addError')->with(__('Please select indexers.'))
+                ->method('addErrorMessage')->with(__('Please select indexers.'))
                 ->will($this->returnValue(1));
         } else {
             $this->objectManager->expects($this->any())
@@ -210,10 +208,10 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
             if ($exception !== null) {
                 $this->messageManager
                     ->expects($this->exactly($expectsExceptionValues[2]))
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with($exception->getMessage());
                 $this->messageManager->expects($this->exactly($expectsExceptionValues[1]))
-                    ->method('addException')
+                    ->method('addExceptionMessage')
                     ->with($exception, "We couldn't change indexer(s)' mode because of an error.");
             }
         }

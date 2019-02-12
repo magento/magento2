@@ -115,6 +115,7 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->requestMock->expects($this->any())->method('isPost')->willReturn(true);
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();

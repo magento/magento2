@@ -6,6 +6,7 @@
 namespace Magento\Paypal\Test\Unit\Controller\Transparent;
 
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\Session\SessionManager;
@@ -67,6 +68,11 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $requestMock = $this->createMock(Http::class);
+        $requestMock->expects($this->any())->method('isPost')->willReturn(true);
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($requestMock);
+
         $this->resultJsonFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\JsonFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()

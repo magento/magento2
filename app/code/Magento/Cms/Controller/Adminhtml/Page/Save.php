@@ -44,8 +44,8 @@ class Save extends \Magento\Backend\App\Action
      * @param Action\Context $context
      * @param PostDataProcessor $dataProcessor
      * @param DataPersistorInterface $dataPersistor
-     * @param \Magento\Cms\Model\PageFactory $pageFactory
-     * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
+     * @param \Magento\Cms\Model\PageFactory|null $pageFactory
+     * @param \Magento\Cms\Api\PageRepositoryInterface|null $pageRepository
      */
     public function __construct(
         Action\Context $context,

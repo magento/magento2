@@ -50,6 +50,9 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
      */
     private $actionMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->priceProcessorMock = $this->getMockBuilder(Processor::class)
@@ -111,6 +114,7 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
         ];
         /** @var \Magento\Backend\App\Action\Context $context */
         $context = $this->initContext($additionalParams, [[Action::class, $this->actionMock]]);
+        $this->request->expects($this->any())->method('isPost')->willReturn(true);
 
         $this->action = new \Magento\Catalog\Controller\Adminhtml\Product\MassStatus(
             $context,

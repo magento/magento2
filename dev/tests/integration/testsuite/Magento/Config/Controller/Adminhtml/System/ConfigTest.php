@@ -9,6 +9,7 @@
 namespace Magento\Config\Controller\Adminhtml\System;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
@@ -22,6 +23,8 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     }
 
     /**
+     * Test redirect after changing base URL.
+     *
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
@@ -31,20 +34,22 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $newHost = 'm2test123.loc';
         $request = $this->getRequest();
         $request->setPostValue(
-            ['groups' =>
-                ['unsecure' =>
-                    ['fields' =>
-                        ['base_url' =>
-                            ['value' => 'http://' . $newHost . '/']
+            [
+                'groups' =>
+                    ['unsecure' =>
+                        ['fields' =>
+                            ['base_url' =>
+                                ['value' => 'http://' . $newHost . '/']
+                            ]
                         ]
-                    ]
-                ],
-            'config_state' =>
-                ['web_unsecure' => 1]
+                    ],
+                    'config_state' => ['web_unsecure' => 1]
             ]
         )->setParam(
             'section',
             'web'
+        )->setMethod(
+            HttpRequest::METHOD_POST
         );
         $this->dispatch('backend/admin/system_config/save');
 
@@ -62,14 +67,16 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     }
 
     /**
-     * Reset test framework default base url
+     * Reset test framework default base url.
+     *
+     * @param string $defaultHost
      */
     protected function resetBaseUrl($defaultHost)
     {
         $baseUrlData = [
             'section' => 'web',
-            'website' => NULL,
-            'store' => NULL,
+            'website' => null,
+            'store' => null,
             'groups' => [
                 'unsecure' => [
                     'fields' => [

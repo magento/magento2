@@ -15,7 +15,7 @@ class Delete extends \Magento\Checkout\Controller\Cart
      */
     public function execute()
     {
-        if (!$this->_formKeyValidator->validate($this->getRequest())) {
+        if (!$this->getRequest()->isPost() || !$this->_formKeyValidator->validate($this->getRequest())) {
             return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
 

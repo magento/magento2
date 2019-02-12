@@ -89,8 +89,8 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
+        $this->requestMock->expects($this->any())->method('isPost')->willReturn(true);
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -191,14 +191,13 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
         $invoiceData = ['comment_text' => 'test'];
         $response = 'test data';
 
-        $this->requestMock->expects($this->at(0))
-            ->method('getParam')
-            ->with('order_id')
-            ->will($this->returnValue($orderId));
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('invoice', [])
-            ->will($this->returnValue($invoiceData));
+        $this->requestMock->expects($this->any())->method('getParam')
+            ->willReturnMap(
+                [
+                    ['order_id', null, $orderId],
+                    ['invoice', [], $invoiceData],
+                ]
+            );
 
         $invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()

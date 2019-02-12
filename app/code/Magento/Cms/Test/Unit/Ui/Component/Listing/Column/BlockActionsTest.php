@@ -95,6 +95,7 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
                             'title' => __('Delete %1', $title),
                             'message' => __('Are you sure you want to delete a %1 record?', $title)
                         ],
+                        'post' => true
                     ]
                 ],
             ]
