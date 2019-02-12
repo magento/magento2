@@ -18,9 +18,11 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
 
 /**
+ * Add cart item to wishlist and remove from cart controller.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex
+class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
 {
     /**
      * @var WishlistProviderInterface
