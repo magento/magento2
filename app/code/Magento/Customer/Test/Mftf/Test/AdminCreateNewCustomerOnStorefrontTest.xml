@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateNewCustomerOnStorefrontTest">
+        <annotations>
+            <stories value="Create New Customer"/>
+            <title value="Create New Customer on Storefront"/>
+            <description value="Test log in to Create New Customer and Create New Customer on Storefront"/>
+            <testCaseId value="MC-10915"/>
+            <severity value="CRITICAL"/>
+            <group value="customer"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteNewCustomerByEmailActionGroup" stepKey="deleteNewUser">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create new customer on storefront-->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <seeInCurrentUrl url="{{StorefrontCustomerDashboardPage.url}}" stepKey="seeAssertInCurrentUrl"/>
+    </test>
+</tests>
