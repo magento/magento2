@@ -9,11 +9,11 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Fill order information fields and click continue-->
-    <actionGroup name="StorefrontFillOrderInformationActionGroup">
+    <actionGroup name="StorefrontSearchGuestOrderActionGroup">
         <arguments>
             <argument name="orderId" type="string"/>
-            <argument name="orderLastName"/>
-            <argument name="orderEmail"/>
+            <argument name="orderLastName" type="string"/>
+            <argument name="orderEmail" type="string"/>
         </arguments>
         <amOnPage url="{{StorefrontOrdersAndReturnsPage.url}}" stepKey="navigateToOrderAndReturnPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
@@ -23,14 +23,5 @@
         <click selector="{{StorefrontOrderAndReturnInformationSection.continueButton}}" stepKey="clickContinue"/>
         <waitForPageLoad stepKey="waitForOrderInformationPageLoad"/>
         <seeInCurrentUrl url="{{StorefrontOrderInformationPage.url}}" stepKey="seeOrderInformationUrl"/>
-    </actionGroup>
-
-    <!--Enter quantity to return and submit-->
-    <actionGroup name="StorefrontFillQuantityToReturnActionGroup">
-        <click selector="{{StorefrontOrderInformationMainSection.return}}" stepKey="gotToCreateNewReturnPage"/>
-        <waitForPageLoad stepKey="waitForReturnPageLoad"/>
-        <fillField selector="{{StorefrontCreateNewReturnMainSection.quantityToReturn}}" userInput="1" stepKey="fillQuantityToReturn"/>
-        <click selector="{{StorefrontCreateNewReturnMainSection.submit}}" stepKey="clickSubmit"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
