@@ -1230,13 +1230,13 @@ define([
 
                 imagesToUpdate = this._setImageIndex(imagesToUpdate);
 
-                if (typeof gallery === 'undefined') {
+                if (!_.isUndefined(gallery)) {
+                    gallery.updateData(imagesToUpdate);
+                } else {
                     context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
                         loadedGallery = context.find(this.options.mediaGallerySelector).data('gallery');
                         loadedGallery.updateData(imagesToUpdate);
                     }.bind(this));
-                } else {
-                    gallery.updateData(imagesToUpdate);
                 }
 
                 if (isInitial) {
