@@ -143,6 +143,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\ProductOption">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Bundle\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Bundle\Ui\DataProvider\Product\Listing\Collector\BundlePrice">
         <arguments>
             <argument name="excludeAdjustments" xsi:type="array">

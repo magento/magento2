@@ -332,6 +332,14 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $destCountry = self::GUAM_COUNTRY_ID;
         }
 
+        // For UPS, Las Palmas and Santa Cruz de Tenerife will be represented by Canary Islands country
+        if ($destCountry === 'ES' &&
+            ($request->getDestRegionCode() === 'Las Palmas'
+                || $request->getDestRegionCode() === 'Santa Cruz de Tenerife')
+        ) {
+            $destCountry = 'IC';
+        }
+
         $country = $this->_countryFactory->create()->load($destCountry);
         $rowRequest->setDestCountry($country->getData('iso2_code') ?: $destCountry);
 
@@ -1700,6 +1708,7 @@ XMLAuth;
 
     /**
      * Get delivery confirmation level based on origin/destination
+     *
      * Return null if delivery confirmation is not acceptable
      *
      * @param string|null $countyDestination

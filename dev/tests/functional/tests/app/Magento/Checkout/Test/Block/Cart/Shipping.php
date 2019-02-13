@@ -73,6 +73,13 @@ class Shipping extends Form
     protected $commonShippingPriceSelector = '.totals.shipping .price';
 
     /**
+     * Estimate shipping and tax form locator.
+     *
+     * @var string
+     */
+    private $estimateShippingForm = '#shipping-zip-form';
+
+    /**
      * Open estimate shipping and tax form.
      *
      * @return void
@@ -249,5 +256,52 @@ class Shipping extends Form
     public function waitForCommonShippingPriceBlock()
     {
         $this->waitForElementVisible($this->commonShippingPriceSelector, Locator::SELECTOR_CSS);
+    }
+
+    /**
+     * Wait until estimation form to appear.
+     *
+     * @return void
+     */
+    public function waitForEstimateShippingAndTaxForm()
+    {
+        $browser = $this->browser;
+        $selector = $this->estimateShippingForm;
+
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $element = $browser->find($selector);
+                return $element->isPresent() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Wait for shipping method form.
+     *
+     * @return void
+     */
+    public function waitForShippingMethodForm()
+    {
+        $browser = $this->browser;
+        $selector = $this->shippingMethodForm;
+
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $element = $browser->find($selector);
+                return $element->isPresent() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Wait for summary block to be loaded.
+     *
+     * @return void
+     */
+    public function waitForSummaryBlock()
+    {
+        $this->waitForEstimateShippingAndTaxForm();
+        $this->waitForShippingMethodForm();
     }
 }
