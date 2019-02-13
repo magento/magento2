@@ -7,13 +7,18 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontBraintreeSelectPaymentMethodActionGroup">
+        <click selector="{{StorefrontBraintreePaymentConfigurationSection.creditCardBraintreePaymentMethod}}" stepKey="selectBraintreePaymentMethod"/>
+    </actionGroup>
+
     <actionGroup name="StorefrontBraintreeFillCardDataActionGroup">
         <arguments>
             <argument name="cardData" defaultValue="BraintreeCard"/>
         </arguments>
+        <scrollTo selector="{{StorefrontBraintreePaymentConfigurationSection.creditCardBraintreePaymentMethod}}" stepKey="scrollToCreditCardSection"/>
         <switchToIFrame selector="{{StorefrontBraintreePaymentConfigurationSection.cardFrame}}" stepKey="switchToIframe"/>
-        <waitForElementVisible selector="{{StorefrontBraintreePaymentConfigurationSection.cardCode}}" stepKey="waitCardCodeElement"/>
-        <fillField selector="{{StorefrontBraintreePaymentConfigurationSection.cardCode}}" userInput="{{cardData.card_number}}" stepKey="setCardCode"/>
+        <waitForElementVisible selector="{{StorefrontBraintreePaymentConfigurationSection.cardNumber}}" stepKey="waitCardNumberElement"/>
+        <fillField selector="{{StorefrontBraintreePaymentConfigurationSection.cardNumber}}" userInput="{{cardData.card_number}}" stepKey="setCardNumber"/>
         <switchToIFrame stepKey="switchBack"/>
         <switchToIFrame selector="{{StorefrontBraintreePaymentConfigurationSection.monthFrame}}" stepKey="switchToIframe1"/>
         <waitForElementVisible selector="{{StorefrontBraintreePaymentConfigurationSection.month}}" stepKey="waitMonthElement"/>
