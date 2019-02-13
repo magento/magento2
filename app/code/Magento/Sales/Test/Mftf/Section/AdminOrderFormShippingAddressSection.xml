@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderFormShippingAddressSection">
+        <element name="firstName" type="input" selector="#order-shipping_address_firstname" timeout="30"/>
+        <element name="lastName" type="input" selector="#order-shipping_address_lastname" timeout="30"/>
+        <element name="streetLine1" type="input" selector="#order-shipping_address_street0" timeout="30"/>
+        <element name="city" type="input" selector="#order-shipping_address_city" timeout="30"/>
+        <element name="country" type="select" selector="#order-shipping_address_country_id" timeout="30"/>
+        <element name="state" type="select" selector="#order-shipping_address_region_id" timeout="30"/>
+        <element name="postalCode" type="input" selector="#order-shipping_address_postcode" timeout="30"/>
+        <element name="phone" type="input" selector="#order-shipping_address_telephone" timeout="30"/>
+        <element name="saveAddress" type="checkbox" selector="#order-shipping_address_save_in_address_book"/>
+        <element name="sameAsBilling" type="checkbox" selector="#order-shipping_same_as_billing"/>
+    </section>
+</sections>
