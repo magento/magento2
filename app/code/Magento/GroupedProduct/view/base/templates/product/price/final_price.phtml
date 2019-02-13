@@ -22,11 +22,11 @@ if ($minProduct) {
             $minProduct->getPriceInfo()->getPrice('final_price')->getAmount(),
             $minProduct,
             $minProduct->getPriceInfo()->getPrice('final_price'),
-            ['include_container' => true]
+            ['include_container' => true, 'schema' => true]
         );
 }
 ?>
-<div class="price-box" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+<div class="price-box">
     <?php if ($minProduct && \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW != $block->getZone()): ?>
     <p class="minimal-price">
         <span class="price-label"><?= /* @escapeNotVerified */ __('Starting at') ?></span><?= $amountRender->toHtml() ?>
