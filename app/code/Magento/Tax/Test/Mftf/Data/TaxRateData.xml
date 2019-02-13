@@ -106,4 +106,8 @@
         <data key="zip_is_range">0</data>
         <data key="rate">0.1</data>
     </entity>
+    <entity name="taxRateForPensylvannia" extends="defaultTaxRate">
+        <data key="tax_region_id">51</data>
+        <data key="rate">6</data>
+    </entity>
 </entities>

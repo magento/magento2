@@ -7,6 +7,10 @@
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 
 /**
  * Catalog entity abstract model
@@ -37,16 +41,18 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param array $data
+     * @param UniqueValidationInterface|null $uniqueValidator
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
-        $data = []
+        $data = [],
+        UniqueValidationInterface $uniqueValidator = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_modelFactory = $modelFactory;
-        parent::__construct($context, $data);
+        parent::__construct($context, $data, $uniqueValidator);
     }
 
     /**
@@ -86,9 +92,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Check whether attribute instance (attribute, backend, frontend or source) has method and applicable
      *
-     * @param AbstractAttribute|\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
-     * |\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
-     * |\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource $instance
+     * @param AbstractAttribute|AbstractBackend|AbstractFrontend|AbstractSource $instance
      * @param string $method
      * @param array $args array of arguments
      * @return boolean
@@ -112,6 +116,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 
     /**
      * Retrieve select object for loading entity attributes values
+     *
      * Join attribute store value
      *
      * @param \Magento\Framework\DataObject $object
@@ -244,6 +249,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 
     /**
      * Check if attribute present for non default Store View.
+     *
      * Prevent "delete" query locking in a case when nothing to delete
      *
      * @param AbstractAttribute $attribute

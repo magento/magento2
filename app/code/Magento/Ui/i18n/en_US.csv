@@ -191,3 +191,4 @@ CSV,CSV
 "Please enter a value between {0} and {1} characters long.","Please enter a value between {0} and {1} characters long."
 "Please enter a value between {0} and {1}.","Please enter a value between {0} and {1}."
 "was not uploaded","was not uploaded"
+"The file upload field is disabled.","The file upload field is disabled."
