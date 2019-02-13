@@ -101,7 +101,7 @@ class CronCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->maintenanceModeMock->expects($this->once())
             ->method('isOn')
-            ->willReturn(false);
+            ->willReturn(true);
         $this->objectManagerFactory->expects($this->never())
             ->method('create');
         $this->deploymentConfigMock->expects($this->never())
