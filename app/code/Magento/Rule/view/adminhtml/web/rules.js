@@ -101,6 +101,9 @@ define([
 
                     if (!elem.multiple) {
                         Event.observe(elem, 'change', this.hideParamInputField.bind(this, container));
+
+                        this.changeVisibilityForValueRuleParam(elem);
+
                     }
                     Event.observe(elem, 'blur', this.hideParamInputField.bind(this, container));
                 }
@@ -220,6 +223,8 @@ define([
 
             var elem = Element.down(elemContainer, 'input.input-text');
 
+            jQuery(elem).trigger('contentUpdated');
+
             if (elem) {
                 elem.focus();
 
@@ -260,6 +265,8 @@ define([
                     label.innerHTML = str != '' ? str : '...';
                 }
 
+                this.changeVisibilityForValueRuleParam(elem);
+
                 elem = Element.down(container, 'input.input-text');
 
                 if (elem) {
@@ -289,6 +296,23 @@ define([
             }
 
             this.shownElement = null;
+        },
+
+        changeVisibilityForValueRuleParam: function(elem) {
+            let parsedElementId = elem.id.split('__');
+            if (parsedElementId[2] != 'operator') {
+                return false;
+            }
+
+            let valueElement = jQuery('#' + parsedElementId[0] + '__' + parsedElementId[1] + '__value');
+
+            if(elem.value == '<=>') {
+                valueElement.closest('.rule-param').hide();
+            } else {
+                valueElement.closest('.rule-param').show();
+            }
+
+            return true;
         },
 
         addRuleNewChild: function (elem) {

@@ -141,12 +141,6 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $this->request->expects($this->once())
-            ->method('getPost')
-            ->willReturn([
-                '_template_' => null,
-                'address_index' => null
-            ]);
         $customerEntityId = 2;
         $this->request->expects($this->once())
             ->method('getParam')
@@ -161,11 +155,6 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
         $this->form->expects($this->once())->method('setInvisibleIgnored');
         $this->form->expects($this->atLeastOnce())->method('extractData')->willReturn([]);
-
-        $error = $this->createMock(\Magento\Framework\Message\Error::class);
-        $this->form->expects($this->once())
-            ->method('validateData')
-            ->willReturn([$error]);
 
         $validationResult = $this->getMockForAbstractClass(
             \Magento\Customer\Api\Data\ValidationResultsInterface::class,
@@ -188,9 +177,6 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteWithoutAddresses()
     {
-        $this->request->expects($this->once())
-            ->method('getPost')
-            ->willReturn(null);
         $this->form->expects($this->once())
             ->method('setInvisibleIgnored');
         $this->form->expects($this->atLeastOnce())
@@ -223,9 +209,6 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteWithException()
     {
-        $this->request->expects($this->once())
-            ->method('getPost')
-            ->willReturn(null);
         $this->form->expects($this->once())
             ->method('setInvisibleIgnored');
         $this->form->expects($this->atLeastOnce())
@@ -266,12 +249,6 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithNewCustomerAndNoEntityId()
     {
         $this->request->expects($this->once())
-            ->method('getPost')
-            ->willReturn([
-                '_template_' => null,
-                'address_index' => null
-            ]);
-        $this->request->expects($this->once())
             ->method('getParam')
             ->with('customer')
             ->willReturn([]);
@@ -281,11 +258,6 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
         $this->form->expects($this->once())->method('setInvisibleIgnored');
         $this->form->expects($this->atLeastOnce())->method('extractData')->willReturn([]);
-
-        $error = $this->createMock(\Magento\Framework\Message\Error::class);
-        $this->form->expects($this->once())
-            ->method('validateData')
-            ->willReturn([$error]);
 
         $validationResult = $this->getMockForAbstractClass(
             \Magento\Customer\Api\Data\ValidationResultsInterface::class,
