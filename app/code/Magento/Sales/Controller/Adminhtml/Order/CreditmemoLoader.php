@@ -7,10 +7,10 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\DataObject;
-use Magento\Sales\Api\CreditmemoRepositoryInterface;
-use \Magento\Sales\Model\Order\CreditmemoFactory;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sales\Api\CreditmemoRepositoryInterface;
+use Magento\Sales\Model\Order\CreditmemoFactory;
 
 /**
  * Class CreditmemoLoader
@@ -131,6 +131,7 @@ class CreditmemoLoader extends DataObject
 
     /**
      * Check if creditmeno can be created for order
+     *
      * @param \Magento\Sales\Model\Order $order
      * @return bool
      */
@@ -155,6 +156,8 @@ class CreditmemoLoader extends DataObject
     }
 
     /**
+     * Initialize Invoice
+     *
      * @param \Magento\Sales\Model\Order $order
      * @return $this|bool
      */
@@ -185,13 +188,13 @@ class CreditmemoLoader extends DataObject
         if ($creditmemoId) {
             try {
                 $creditmemo = $this->creditmemoRepository->get($creditmemoId);
-            } catch (NoSuchEntityException $e) {      
-                $this->messageManager->addErrorMessage(__('This creditmemo no longer exists.'));
+            } catch (NoSuchEntityException $e) {
+                $this->messageManager->addErrorMessage(__('This credit memo no longer exists.'));
                 return false;
             } catch (InputException $e) {
-                $this->messageManager->addErrorMessage(__('This creditmemo no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This credit memo no longer exists.'));
                 return false;
-            } 
+            }
         } elseif ($orderId) {
             $data = $this->getCreditmemo();
             $order = $this->orderFactory->create()->load($orderId);

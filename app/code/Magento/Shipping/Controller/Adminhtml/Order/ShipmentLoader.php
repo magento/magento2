@@ -6,18 +6,18 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
+use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
+use Magento\Sales\Api\Data\ShipmentItemCreationInterfaceFactory;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterfaceFactory;
-use Magento\Sales\Api\Data\ShipmentItemCreationInterfaceFactory;
-use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory;
-use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\InputException;
 
 /**
  * Class ShipmentLoader
@@ -114,7 +114,7 @@ class ShipmentLoader extends DataObject
         if ($shipmentId) {
             try {
                 $shipment = $this->shipmentRepository->get($shipmentId);
-            } catch (NoSuchEntityException $e) {     
+            } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(__('This shipment no longer exists.'));
                 return false;
             } catch (InputException $e) {

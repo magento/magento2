@@ -104,14 +104,14 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
-        		\Magento\Backend\Model\View\Result\RedirectFactory::class
+            \Magento\Backend\Model\View\Result\RedirectFactory::class
         )
-        ->disableOriginalConstructor()
-        ->setMethods(['create'])
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->resultPageMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,7 +142,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
                 'context' => $this->context,
                 'shipmentLoader' => $this->shipmentLoaderMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
-        	'resultRedirectFactory' => $this->resultRedirectFactoryMock
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
     }
@@ -251,15 +251,16 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->willReturn($returnShipment);
     }
+
     /**
      * @param string $path
      * @param array $params
      */
     protected function setPath($path, $params = [])
     {
-    	$this->resultRedirectMock->expects($this->once())
-    	->method('setPath')
-    	->with($path, $params)
-    	->willReturnSelf();
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with($path, $params)
+            ->willReturnSelf();
     }
 }

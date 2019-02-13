@@ -106,10 +106,12 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultRedirectMock;
+
     /**
      * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultRedirectFactoryMock;
+
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -167,14 +169,14 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
-        		\Magento\Backend\Model\View\Result\RedirectFactory::class
+            \Magento\Backend\Model\View\Result\RedirectFactory::class
         )
-        ->disableOriginalConstructor()
-        ->setMethods(['create'])
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -246,11 +248,10 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->loaderMock->expects($this->once())
             ->method('load')
             ->willReturn(false);
-      
         $this->resultRedirectFactoryMock->expects($this->once())
-        ->method('create')
-        ->willReturn($this->resultRedirectMock);
-        
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
+
         $this->setPath('sales/creditmemo');
         
         $this->assertSame(
@@ -315,15 +316,16 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             [$this->invoiceMock]
         ];
     }
+
     /**
      * @param string $path
      * @param array $params
      */
     protected function setPath($path, $params = [])
     {
-    	$this->resultRedirectMock->expects($this->once())
-    	->method('setPath')
-    	->with($path, $params)
-    	->willReturnSelf();
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with($path, $params)
+            ->willReturnSelf();
     }
 }

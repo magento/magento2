@@ -50,7 +50,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $invoiceLoaderMock;
-    
+
     /**
      * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -128,8 +128,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             \Magento\Backend\Model\View\Result\RedirectFactory::class
         )
@@ -141,7 +141,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->pageTitleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
-            ->getMock();      
+            ->getMock();
         $contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -206,7 +206,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
                 'context' => $contextMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
                 'resultForwardFactory' => $this->resultForwardFactoryMock,
-        	 'resultRedirectFactory' => $this->resultRedirectFactoryMock
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
 
@@ -302,15 +302,16 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             $this->controller->execute()
         );
     }
+
     /**
      * @param string $path
      * @param array $params
      */
     protected function setPath($path, $params = [])
     {
-    	$this->resultRedirectMock->expects($this->once())
-    	->method('setPath')
-    	->with($path, $params)
-    	->willReturnSelf();
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with($path, $params)
+            ->willReturnSelf();
     }
 }

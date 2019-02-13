@@ -8,6 +8,9 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Shipment View Action
+ */
 class View extends \Magento\Backend\App\Action
 {
     /**
@@ -45,7 +48,8 @@ class View extends \Magento\Backend\App\Action
     /**
      * Shipment information page
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
