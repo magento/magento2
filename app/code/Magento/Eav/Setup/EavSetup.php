@@ -786,21 +786,6 @@ class EavSetup
     }
 
     /**
-     * Validate attribute data before insert into table
-     *
-     * @param  array $data
-     * @return true
-     * @throws LocalizedException
-     */
-    private function _validateAttributeData($data)
-    {
-        $attributeCode = isset($data['attribute_code']) ? $data['attribute_code'] : '';
-        $this->attributeCodeValidator->isValid($attributeCode);
-
-        return true;
-    }
-
-    /**
      * Add attribute to an entity type
      *
      * If attribute is system will add to all existing attribute sets
@@ -809,6 +794,7 @@ class EavSetup
      * @param string $code
      * @param array $attr
      * @return $this
+     * @throws LocalizedException
      */
     public function addAttribute($entityTypeId, $code, array $attr)
     {
@@ -819,7 +805,12 @@ class EavSetup
             $this->attributeMapper->map($attr, $entityTypeId)
         );
 
-        $this->_validateAttributeData($data);
+        $attributeCode = isset($data['attribute_code']) ? $data['attribute_code'] : '';
+        if (!$this->attributeCodeValidator->isValid($attributeCode)) {
+            $errorMessage = implode("\n", $this->attributeCodeValidator->getMessages());
+
+            throw new LocalizedException(__($errorMessage));
+        }
 
         $sortOrder = isset($attr['sort_order']) ? $attr['sort_order'] : null;
         $attributeId = $this->getAttribute($entityTypeId, $code, 'attribute_id');

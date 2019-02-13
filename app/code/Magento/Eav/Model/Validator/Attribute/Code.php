@@ -17,29 +17,33 @@ use Zend_Validate;
  *
  * Validation EAV attribute code
  */
-class Code  extends AbstractValidator
+class Code extends AbstractValidator
 {
+    /**
+     * Validation pattern for attribute code
+     */
+    const VALIDATION_RULE_PATTERN = '/^[a-zA-Z]+[a-zA-Z0-9_]*$/u';
+
     /**
      * Validates the correctness of the attribute code
      *
      * @param string $attributeCode
      * @return bool
-     * @throws LocalizedException
+     * @throws \Zend_Validate_Exception
      */
     public function isValid($attributeCode): bool
     {
+        $errorMessages = [];
         /**
          * Check attribute_code for allowed characters
          */
         if (trim($attributeCode)
-            && !preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]*$/', trim($attributeCode))
+            && !preg_match(self::VALIDATION_RULE_PATTERN, trim($attributeCode))
         ) {
-            throw new LocalizedException(
-                __(
-                    'Attribute code "%1" is invalid. Please use only letters (a-z), ' .
-                    'numbers (0-9) or underscore(_) in this field, first character should be a letter.',
-                    $attributeCode
-                )
+            $errorMessages[] = __(
+                'Attribute code "%1" is invalid. Please use only letters (a-z or A-Z), ' .
+                'numbers (0-9) or underscore (_) in this field, and the first character should be a letter.',
+                $attributeCode
             );
         }
 
@@ -54,13 +58,15 @@ class Code  extends AbstractValidator
             ['min' => $minLength, 'max' => $maxLength]
         );
         if (!$isAllowedLength) {
-            throw new LocalizedException(__(
+            $errorMessages[] = __(
                 'An attribute code must not be less than %1 and more than %2 characters.',
                 $minLength,
                 $maxLength
-            ));
+            );
         }
 
-        return true;
+        $this->_addMessages($errorMessages);
+
+        return !$this->hasMessages();
     }
 }

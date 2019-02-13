@@ -157,7 +157,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $message = $messages->getItemsByType('error')[0];
         $this->assertEquals(
             'Attribute code "_()&&&?" is invalid. Please use only letters (a-z or A-Z),'
-            . ' numbers (0-9) or underscore(_) in this field, first character should be a letter.',
+            . ' numbers (0-9) or underscore (_) in this field, and the first character should be a letter.',
             $message->getText()
         );
     }

@@ -97,7 +97,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider addInvalidAttributeThrowExceptionDataProvider
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please use only letters (a-z), numbers (0-9) or underscore(_) in this field, first char
+     * @expectedExceptionMessage Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field,
      */
     public function testAddInvalidAttributeThrowException($attributeCode)
     {

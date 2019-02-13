@@ -195,44 +195,6 @@ class Save extends Attribute implements HttpPostActionInterface
                 ? $model->getAttributeCode()
                 : $this->getRequest()->getParam('attribute_code');
             $attributeCode = $attributeCode ?: $this->generateCode($this->getRequest()->getParam('frontend_label')[0]);
-            if (strlen($attributeCode) > 0) {
-                $attributeCodeIsValid = true;
-                $minLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MIN_LENGTH;
-                $maxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
-
-                if (strlen($attributeCode) < $minLength || strlen($attributeCode) > $maxLength) {
-                    $this->messageManager->addErrorMessage(
-                        __(
-                            'An attribute code must not be less than %1 and more than %2 characters.',
-                            $minLength,
-                            $maxLength
-                        )
-                    );
-                    $attributeCodeIsValid = false;
-                }
-
-                $validatorAttrCode = new \Zend_Validate_Regex(
-                    ['pattern' => '/^[a-zA-Z]+[a-zA-Z0-9_]*$/u']
-                );
-                if (!$validatorAttrCode->isValid($attributeCode)) {
-                    $this->messageManager->addErrorMessage(
-                        __(
-                            'Attribute code "%1" is invalid. Please use only letters (a-z or A-Z), ' .
-                            'numbers (0-9) or underscore(_) in this field, first character should be a letter.',
-                            $attributeCode
-                        )
-                    );
-                    $attributeCodeIsValid = false;
-                }
-
-                if (!$attributeCodeIsValid) {
-                    return $this->returnResult(
-                        'catalog/*/edit',
-                        ['attribute_id' => $attributeId, '_current' => true],
-                        ['error' => true]
-                    );
-                }
-            }
             $data['attribute_code'] = $attributeCode;
 
             //validate frontend_input

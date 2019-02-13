@@ -242,8 +242,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function beforeSave()
     {
-        if (isset($this->_data['attribute_code'])) {
-            $this->attributeCodeValidator->isValid($this->_data['attribute_code']);
+        if (isset($this->_data['attribute_code'])
+            && !$this->attributeCodeValidator->isValid($this->_data['attribute_code'])
+        ) {
+            $errorMessages = implode("\n", $this->attributeCodeValidator->getMessages());
+            throw new LocalizedException(__($errorMessages));
         }
 
         // prevent overriding product data
