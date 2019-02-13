@@ -16,4 +16,12 @@
         <fillField  stepKey="fillPassword" userInput="{{Customer.password}}" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
         <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
     </actionGroup>
+    <actionGroup name="StoreFrontPasswordAutoCompleteOffActionGroup">
+        <amOnPage stepKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>
+        <assertElementContainsAttribute selector="{{StorefrontCustomerSignInFormSection.passwordField}}" attribute="autocomplete" expectedValue="off" stepKey="assertSignInPasswordAutocompleteOff"/>
+    </actionGroup>
+    <actionGroup name="AuthorizationPopUpPasswordAutoCompleteOffActionGroup">
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.password}}" stepKey="waitPasswordFieldVisible"/>
+        <assertElementContainsAttribute selector="{{StorefrontCustomerSignInPopupFormSection.password}}" attribute="autocomplete" expectedValue="off" stepKey="assertAuthorizationPopupPasswordAutocompleteOff"/>
+    </actionGroup>
 </actionGroups>
