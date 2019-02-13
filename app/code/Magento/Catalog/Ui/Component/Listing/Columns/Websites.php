@@ -50,13 +50,14 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         StoreManagerInterface $storeManager,
-        Helper $resourceHelper,
+        Helper $resourceHelper = null,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->storeManager = $storeManager;
-        $this->_resourceHelper = $resourceHelper;
+        $this->_resourceHelper = $resourceHelper ?: $objectManager->get(Helper::class);
     }
 
     /**
