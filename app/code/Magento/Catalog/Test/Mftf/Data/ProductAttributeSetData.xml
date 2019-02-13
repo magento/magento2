@@ -14,4 +14,10 @@
         <data key="attributeGroupId">7</data>
         <data key="sortOrder">0</data>
     </entity>
+    <entity name="AddToDefaultSetSortOrder1" type="ProductAttributeSet">
+        <var key="attributeCode" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="attributeSetId">4</data>
+        <data key="attributeGroupId">7</data>
+        <data key="sortOrder">1</data>
+    </entity>
 </entities>
