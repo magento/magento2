@@ -6,12 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
-
 /**
  * Save design action.
  */
-class Save extends \Magento\Backend\Controller\Adminhtml\System\Design implements HttpPostActionInterface
+class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
 {
     /**
      * Filtering posted data. Converting localized data if needed
