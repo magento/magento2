@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Wishlist\Test\TestCase\ShareWishlistEntityTest" summary="Share wishlist" ticketId="MAGETWO-23394">
+        <variation name="ShareWishlistEntityTestVariation1">
+            <data name="sharingInfo/emails" xsi:type="string">JohnDoe123456789@example.com,JohnDoe987654321@example.com,JohnDoe123456abc@example.com</data>
+            <data name="sharingInfo/message" xsi:type="string">Sharing message.</data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistShareMessage" />
+        </variation>
+    </testCase>
+</config>
