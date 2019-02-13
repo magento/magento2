@@ -46,18 +46,17 @@ class AddProductsToCart
      * @param array $cartItems
      * @throws GraphQlInputException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
      */
     public function execute(Quote $cart, array $cartItems): void
     {
         foreach ($cartItems as $cartItemData) {
-            $this->addProductToCart->execute($cart, $cartItemData);
-        }
-
-        if ($cart->getData('has_error')) {
-            throw new GraphQlInputException(
-                __('Shopping cart error: %message', ['message' => $this->getCartErrors($cart)])
-            );
+            try {
+                $this->addProductToCart->execute($cart, $cartItemData);
+            } catch (\Exception $error) {
+                throw new GraphQlInputException(
+                    __('Shopping cart error: %message', ['message' => $error->getMessage()])
+                );
+            }
         }
 
         $this->cartRepository->save($cart);
