@@ -124,7 +124,7 @@ define([
                     dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
                     shiftedValue = moment(value, dateFormat);
                 }
-                
+
                 if (!shiftedValue.isValid()) {
                     shiftedValue = moment(value, this.inputDateFormat);
                 }
