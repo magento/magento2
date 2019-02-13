@@ -8,7 +8,7 @@ namespace Magento\Catalog\Ui\Component\Listing\Columns;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use \Magento\Framework\DB\Helper;
+use Magento\Framework\DB\Helper;
 
 /**
  * @api
@@ -42,17 +42,17 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param StoreManagerInterface $storeManager
-     * @param Helper $resourceHelper
      * @param array $components
      * @param array $data
+     * @param Helper $resourceHelper
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         StoreManagerInterface $storeManager,
-        Helper $resourceHelper = null,
         array $components = [],
-        array $data = []
+        array $data = [],
+        Helper $resourceHelper = null
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
