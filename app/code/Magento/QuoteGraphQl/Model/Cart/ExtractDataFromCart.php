@@ -57,9 +57,12 @@ class ExtractDataFromCart
             ];
         }
 
+        $appliedCoupon = $cart->getCouponCode();
+
         return [
             'cart_id' => $this->quoteIdToMaskedQuoteId->execute((int)$cart->getId()),
-            'items' => $items
+            'items' => $items,
+            'applied_coupon' => $appliedCoupon ? ['code' => $appliedCoupon] : null
         ];
     }
 }
