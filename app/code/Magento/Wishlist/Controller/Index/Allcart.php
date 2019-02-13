@@ -5,6 +5,7 @@
  */
 namespace Magento\Wishlist\Controller\Index;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\App\Action\Context;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
@@ -14,7 +15,7 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Action Add All to Cart
  */
-class Allcart extends \Magento\Wishlist\Controller\AbstractIndex
+class Allcart extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPostActionInterface
 {
     /**
      * @var WishlistProviderInterface
