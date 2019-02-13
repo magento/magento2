@@ -368,8 +368,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             $this->_cachedSkuToDelete = null;
         }
         $listSku = [];
+        $tierPrices = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            $tierPrices = [];
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->validateRow($rowData, $rowNum)) {
                     $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
@@ -397,15 +397,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                     ];
                 }
             }
-            if (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $behavior) {
-                if ($listSku) {
-                    $this->processCountNewPrices($tierPrices);
-                    if ($this->deleteProductTierPrices(array_unique($listSku), self::TABLE_TIER_PRICE)) {
-                        $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE);
-                        $this->setUpdatedAt($listSku);
-                    }
-                }
-            } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND == $behavior) {
+
+            if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND == $behavior) {
                 $this->processCountExistingPrices($tierPrices, self::TABLE_TIER_PRICE)
                     ->processCountNewPrices($tierPrices);
                 $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE);
@@ -414,6 +407,17 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 }
             }
         }
+
+        if (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $behavior) {
+            if ($listSku) {
+                $this->processCountNewPrices($tierPrices);
+                if ($this->deleteProductTierPrices(array_unique($listSku), self::TABLE_TIER_PRICE)) {
+                    $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE);
+                    $this->setUpdatedAt($listSku);
+                }
+            }
+        }
+
         return $this;
     }
 
