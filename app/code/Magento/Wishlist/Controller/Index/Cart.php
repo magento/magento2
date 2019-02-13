@@ -3,16 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Wishlist\Controller\Index;
 
-use Magento\Framework\App\Action;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Framework\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
+ * Add wishlist item to shopping cart and remove from wishlist controller.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Cart extends \Magento\Wishlist\Controller\AbstractIndex
+class Cart extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
