@@ -30,5 +30,10 @@
         <element name="customerAddressRow" type="input" selector="//tbody//tr//td//div[contains(., '{{var1}}')]" parameterized="true"/>
         <element name="deleteButton" type="button" selector="//button[@id='delete']"/>
         <element name="ok" type="button" selector="//button[@data-role='action']//span[text()='OK']"/>
+        <element name="streetRequiredMessage" type="text" selector="//input[@name='street[0]']/../label[contains(.,'This is a required field.')]"/>
+        <element name="cityRequiredMessage" type="text" selector="//input[@name='city']/../label[contains(.,'This is a required field.')]"/>
+        <element name="countryRequiredMessage" type="text" selector="//select[@name='country_id']/../label[contains(.,'This is a required field.')]"/>
+        <element name="postcodeRequiredMessage" type="text" selector="//input[@name='postcode']/../label[contains(.,'This is a required field.')]"/>
+        <element name="phoneNumberRequiredMessage" type="text" selector="//input[@name='telephone']/../label[contains(.,'This is a required field.')]"/>
     </section>
 </sections>

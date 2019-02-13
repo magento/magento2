@@ -11,5 +11,6 @@
     <section name="AdminEditCustomerInformationSection">
         <element name="orders" type="button" selector="#tab_orders_content" timeout="30"/>
         <element name="addresses" type="button" selector="//a[@id='tab_address']" timeout="30"/>
+        <element name="customerTitle" type="text" selector="h1.page-title"/>
     </section>
 </sections>
