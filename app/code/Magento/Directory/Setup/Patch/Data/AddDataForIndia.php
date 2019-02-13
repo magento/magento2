@@ -29,7 +29,7 @@ class AddDataForIndia implements DataPatchInterface, PatchVersionInterface
     private $dataInstallerFactory;
 
     /**
-     * AddDataForCroatia constructor.
+     * AddDataForIndia constructor.
      *
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
