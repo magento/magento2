@@ -34,7 +34,6 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-
         <!--Open Created product-->
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="openProductEditPage"/>
         <!--Switch to Default Store view-->
