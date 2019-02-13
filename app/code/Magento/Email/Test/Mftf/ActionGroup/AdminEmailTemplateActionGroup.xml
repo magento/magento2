@@ -35,7 +35,8 @@
             <argument name="emailTemplate" defaultValue="EmailTemplate"/>
         </arguments>
         <seeInCurrentUrl url="email_template/edit/id" stepKey="seeCreatedTemplateUrl"/>
-        <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickDeleteTemplateButton"/>
+        <!--Do not change it to use element from AdminMainActionsSection. Refer to AdminEmailTemplateEditSection comment -->
+        <click selector="{{AdminEmailTemplateEditSection.delete}}" stepKey="clickDeleteTemplateButton"/>
         <acceptPopup stepKey="acceptDeletingTemplatePopUp"/>
         <see userInput="You deleted the email template." stepKey="seeSuccessfulMessage"/>
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickResetFilterButton"/>
