@@ -18,6 +18,7 @@
             <testCaseId value="MC-13912"/>
             <useCaseId value="MAGETWO-86215"/>
             <group value="cms"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
