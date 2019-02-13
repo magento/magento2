@@ -32,7 +32,7 @@
             <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
-            <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccess" />
+            <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccessWithError" />
         </variation>
     </testCase>
 </config>
