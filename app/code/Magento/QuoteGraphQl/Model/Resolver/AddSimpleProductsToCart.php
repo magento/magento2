@@ -79,7 +79,12 @@ class AddSimpleProductsToCart implements ResolverInterface
         $currentUserId = $context->getUserId();
         $cart = $this->getCartForUser->execute((string)$cartHash, $currentUserId);
 
-        $this->addProductsToCart->execute($cart, $cartItems);
+        try {
+            $this->addProductsToCart->execute($cart, $cartItems);
+        } catch (\Exception $exception) {
+            throw new GraphQlInputException(__($exception->getMessage()));
+        }
+
         $cartData = $this->extractDataFromCart->execute($cart);
 
         return [
