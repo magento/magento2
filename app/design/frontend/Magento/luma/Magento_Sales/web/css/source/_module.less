@@ -346,12 +346,14 @@
             float: left;
             width: calc(100% - 20px);
         }
-        .product-item::after{
-            clear: both;
-            content: "";
-            display: table;
-        }
+
         .product-item {
+            &:after {
+                content: '';
+                clear: both;
+                display: table;
+            }
+            
             .label {
                 &:extend(.abs-visually-hidden all);
             }
