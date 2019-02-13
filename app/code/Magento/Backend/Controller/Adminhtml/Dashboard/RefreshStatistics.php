@@ -6,7 +6,13 @@
 
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
-class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Reports\Controller\Adminhtml\Report\Statistics;
+
+/**
+ * Refresh Dashboard statistics action.
+ */
+class RefreshStatistics extends Statistics implements HttpPostActionInterface
 {
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -25,6 +31,8 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sta
     }
 
     /**
+     * Refresh statistics.
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
