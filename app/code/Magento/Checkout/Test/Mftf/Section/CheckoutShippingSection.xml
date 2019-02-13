@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutShippingSection">
         <element name="isShippingStep" type="text" selector="//*[@class='opc-progress-bar']/li[contains(@class, '_active') and span[contains(.,'Shipping')]]"/>
         <element name="email" type="input" selector="#customer-email"/>
@@ -19,18 +19,19 @@
         <element name="postcode" type="input" selector="input[name=postcode]"/>
         <element name="country" type="select" selector="select[name=country_id]"/>
         <element name="telephone" type="input" selector="input[name=telephone]"/>
-        <element name="firstShippingMethod" type="radio" selector="#checkout-shipping-method-load input[type='radio']"/>
+        <element name="firstShippingMethod" type="radio" selector="#checkout-shipping-method-load input[type='radio']" timeout="30"/>
         <element name="selectedShippingAddress" type="text" selector=".shipping-address-item.selected-item"/>
         <element name="newAddressButton" type="button" selector="#checkout-step-shipping button"/>
         <element name="next" type="button" selector="[data-role='opc-continue']"/>
         <element name="stateInput" type="input" selector="input[name=region]"/>
-        <element name="newAdress" type="button" selector="button.action.action-show-popup"/>
+        <element name="newAdress" type="button" selector="button.action.action-show-popup" timeout="30"/>
         <element name="addStreet" type="input" selector="#shipping-new-address-form input[name='street[0]']"/>
         <element name="addCity" type="input" selector="#shipping-new-address-form input[name='city']"/>
         <element name="addState" type="select" selector="#shipping-new-address-form select[name='region_id']"/>
         <element name="addPostcode" type="input" selector="#shipping-new-address-form input[name='postcode']"/>
         <element name="addTelephone" type="input" selector="#shipping-new-address-form input[name='telephone']"/>
-        <element name="addcCountry" type="select" selector="#shipping-new-address-form select[name='country_id']"/>
+        <element name="addCountry" type="select" selector="#shipping-new-address-form select[name='country_id']"/>
         <element name="addSaveButton" type="button" selector=".action.primary.action-save-address"/>
+        <element name="editActiveAddress" type="button" selector="//div[@class='shipping-address-item selected-item']//span[text()='Edit']" timeout="30"/>
     </section>
 </sections>

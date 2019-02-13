@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCategoryBasicFieldSection">
         <element name="IncludeInMenu" type="checkbox" selector="input[name='include_in_menu']"/>
         <element name="includeInMenuLabel" type="text" selector="input[name='include_in_menu']+label"/>
@@ -17,6 +17,9 @@
         <element name="enableUseDefault" type="checkbox" selector="input[name='use_default[is_active]']"/>
         <element name="CategoryNameInput" type="input" selector="input[name='name']"/>
         <element name="categoryNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
+        <element name="requiredFieldIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
+        <element name="requiredFieldIndicatorColor" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('color');"/>
+        <element name="panelFieldControl" type="input" selector='//aside//div[@data-index="{{arg1}}"]/descendant::*[@name="{{arg2}}"]' parameterized="true"/>
     </section>
     <section name="CatalogWYSIWYGSection">
         <element name="ShowHideBtn" type="button" selector="#togglecategory_form_description"/>

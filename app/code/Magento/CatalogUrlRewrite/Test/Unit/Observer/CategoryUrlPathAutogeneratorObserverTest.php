@@ -49,7 +49,9 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit\Framework\TestCa
                 'getResource',
                 'getUrlKey',
                 'getStoreId',
-                'getData'
+                'getData',
+                'getOrigData',
+                'formatUrlKey',
             ]);
         $this->category->expects($this->any())->method('getResource')->willReturn($this->categoryResource);
         $this->observer->expects($this->any())->method('getEvent')->willReturnSelf();
@@ -109,7 +111,35 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit\Framework\TestCa
         $this->categoryUrlPathGenerator->expects($this->once())
             ->method('getUrlKey')
             ->with($this->category)
-            ->willReturn(null);
+            ->willReturn('');
+        $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
+    }
+
+    /**
+     * Test execute method when option use default url key is true.
+     */
+    public function testExecuteWithUseDefault()
+    {
+        $categoryName = 'test';
+        $categoryData = ['url_key' => 1];
+        $this->category->expects($this->once())->method('getUrlKey')->willReturn($categoryName);
+        $this->category->expects($this->atLeastOnce())
+            ->method('getData')
+            ->with('use_default')
+            ->willReturn($categoryData);
+        $this->category->expects($this->once())->method('getOrigData')->with('name')->willReturn('some_name');
+        $this->category->expects($this->once())->method('formatUrlKey')->with('some_name')->willReturn('url_key');
+        $this->category->expects($this->any())->method('setUrlKey')
+            ->willReturnMap([
+                ['url_key', $this->category],
+                [null, $this->category],
+            ]);
+        $this->category->expects($this->any())->method('setUrlPath')
+            ->willReturnMap([
+                ['url_path', $this->category],
+                [null, $this->category],
+            ]);
+
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
     }
 

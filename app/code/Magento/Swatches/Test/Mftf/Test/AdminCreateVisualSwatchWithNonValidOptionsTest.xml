@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateVisualSwatchWithNonValidOptionsTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Create/configure swatches product attribute"/>
+            <title value="Admin should be able to create swatch product attribute"/>
+            <description value="Admin should be able to create swatch product attribute"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-95487"/>
+            <group value="swatches"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+        <after>
+            <!-- Remove attribute -->
+            <actionGroup ref="deleteProductAttribute" stepKey="deleteProductAttribute">
+                <argument name="ProductAttribute" value="VisualSwatchAttribute"/>
+            </actionGroup>
+
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="navigateToNewProductAttributePage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Set attribute properties -->
+        <fillField selector="{{AttributePropertiesSection.defaultLabel}}"
+                   userInput="{{VisualSwatchAttribute.default_label}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.inputType}}"
+                      userInput="{{VisualSwatchAttribute.input_type}}" stepKey="fillInputType"/>
+
+        <!-- Set advanced attribute properties -->
+        <click selector="{{AdvancedAttributePropertiesSection.advancedAttributePropertiesSectionToggle}}"
+               stepKey="showAdvancedAttributePropertiesSection"/>
+        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.attributeCode}}"
+                               stepKey="waitForSlideOut"/>
+        <fillField selector="{{AdvancedAttributePropertiesSection.attributeCode}}"
+                   userInput="{{VisualSwatchAttribute.attribute_code}}"
+                   stepKey="fillAttributeCode"/>
+
+        <!-- Add new swatch option without label -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch"/>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch">
+            <argument name="index" value="0"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.chooseColorRow('1')}}" stepKey="clickChooseColor"/>
+        <actionGroup ref="setColorPickerValueByHex" stepKey="fillHex">
+            <argument name="hexColor" value="ff0000"/>
+        </actionGroup>
+
+        <!-- Scroll to top of the page -->
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+
+        <!-- Save the new product attribute -->
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave1"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.error}}" stepKey="waitForError"/>
+
+        <!-- Fill options data -->
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}"
+                   userInput="red" stepKey="fillAdmin"/>
+
+        <!-- Add 2 additional new swatch options -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch1"/>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch1">
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.chooseColorRow('2')}}" stepKey="clickChooseColor1"/>
+        <actionGroup ref="setColorPickerValueByHex" stepKey="fillHex1">
+            <argument name="nthColorPicker" value="2"/>
+            <argument name="hexColor" value="00ff00"/>
+        </actionGroup>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}"
+                   userInput="green" stepKey="fillAdmin1"/>
+
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch2">
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.chooseColorRow('3')}}" stepKey="clickChooseColor2"/>
+        <actionGroup ref="setColorPickerValueByHex" stepKey="fillHex2">
+            <argument name="nthColorPicker" value="3"/>
+            <argument name="hexColor" value="0000ff"/>
+        </actionGroup>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('2')}}"
+                   userInput="blue" stepKey="fillAdmin2"/>
+
+        <!-- Mark second option as default -->
+        <click selector="{{AdminManageSwatchSection.nthIsDefault('2')}}" stepKey="setSecondOptionAsDefault"/>
+
+        <!-- Save the new product attribute -->
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave2"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}"
+                               stepKey="waitForSuccessMessage"/>
+
+        <actionGroup ref="navigateToCreatedProductAttribute" stepKey="navigateToAttribute">
+            <argument name="productAttribute" value="VisualSwatchAttribute"/>
+        </actionGroup>
+        <!-- Check attribute data -->
+        <seeCheckboxIsChecked selector="{{AdminManageSwatchSection.nthIsDefault('2')}}" stepKey="checkDefaultOption"/>
+    </test>
+</tests>

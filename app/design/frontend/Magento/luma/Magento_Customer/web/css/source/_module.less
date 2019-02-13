@@ -371,7 +371,7 @@
         .fieldset {
             > .field {
                 > .control {
-                    width: 55%;
+                    width: 80%;
                 }
             }
         }
@@ -416,6 +416,12 @@
 
         .column.main {
             width: 77.7%;
+        }
+
+        .sidebar-main {
+            .block {
+                margin-bottom: 0;
+            }
         }
     }
 
@@ -528,10 +534,17 @@
         .column.main,
         .sidebar-additional {
             margin: 0;
+            padding: 0;
         }
 
         .data.table {
             &:extend(.abs-table-striped-mobile all);
+        }
+
+        .sidebar-main {
+            .account-nav {
+                margin-bottom: 0;
+            }
         }
     }
 }
@@ -550,8 +563,8 @@
     }
 
     .account {
-        .page.messages {
-            margin-bottom: @indent__xl;
+        .messages {
+            margin-bottom: 0;
         }
 
         .column.main {

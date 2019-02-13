@@ -44,6 +44,11 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
+     * @var string
+     */
+    private $fullDirectoryPath;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -54,6 +59,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $this->imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->model = $this->objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::class);
+        $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/directory1';
     }
 
     /**
@@ -64,20 +70,15 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
-        $directoryName = 'directory1';
-        $fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/' . $directoryName;
-        $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($fullDirectoryPath));
-        $filePath =  $fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
+        $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
+        $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
         $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
         copy($fixtureDir . '/' . $this->fileName, $filePath);
 
-        $this->model->getRequest()->setMethod('POST')
-            ->setPostValue('files', [$this->imagesHelper->idEncode($this->fileName)]);
-        $this->model->getStorage()->getSession()->setCurrentPath($fullDirectoryPath);
-        $this->model->execute();
+        $this->executeFileDelete($this->fullDirectoryPath, $this->fileName);
         $this->assertFalse(
             $this->mediaDirectory->isExist(
-                $this->mediaDirectory->getRelativePath($fullDirectoryPath . '/' . $this->fileName)
+                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/' . $this->fileName)
             )
         );
     }
@@ -99,11 +100,74 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         copy($fixtureDir . '/' . $this->fileName, $filePath);
 
         $wysiwygDir = $this->mediaDirectory->getAbsolutePath() . '/wysiwyg';
-        $this->model->getRequest()->setMethod('POST')
-            ->setPostValue('files', [$this->imagesHelper->idEncode($this->fileName)]);
-        $this->model->getStorage()->getSession()->setCurrentPath($wysiwygDir);
-        $this->model->execute();
+        $this->executeFileDelete($wysiwygDir, $this->fileName);
         $this->assertFalse(is_file($fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName));
+    }
+
+    /**
+     * Check that htaccess file couldn't be removed via
+     * \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::execute method
+     *
+     * @return void
+     */
+    public function testDeleteHtaccess()
+    {
+        $this->createFile($this->fullDirectoryPath, '.htaccess');
+        $this->executeFileDelete($this->fullDirectoryPath, '.htaccess');
+
+        $this->assertTrue(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/.htaccess')
+            )
+        );
+    }
+
+    /**
+     * Check that random file could be removed via
+     * \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::execute method
+     *
+     * @return void
+     */
+    public function testDeleteAnyFile()
+    {
+        $this->createFile($this->fullDirectoryPath, 'ahtaccess');
+        $this->executeFileDelete($this->fullDirectoryPath, 'ahtaccess');
+
+        $this->assertFalse(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/ahtaccess')
+            )
+        );
+    }
+
+    /**
+     * Create file.
+     *
+     * @param string $path
+     * @param string $fileName
+     * @return void
+     */
+    private function createFile(string $path, string $fileName)
+    {
+        $file = $path . '/' . $fileName;
+        if (!$this->mediaDirectory->isFile($file)) {
+            $this->mediaDirectory->writeFile($file, 'Content');
+        }
+    }
+
+    /**
+     * Execute file delete operation.
+     *
+     * @param string $path
+     * @param string $fileName
+     * @return void
+     */
+    private function executeFileDelete(string $path, string $fileName)
+    {
+        $this->model->getRequest()->setMethod('POST')
+            ->setPostValue('files', [$this->imagesHelper->idEncode($fileName)]);
+        $this->model->getStorage()->getSession()->setCurrentPath($path);
+        $this->model->execute();
     }
 
     /**

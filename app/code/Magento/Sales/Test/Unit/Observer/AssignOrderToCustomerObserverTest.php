@@ -12,6 +12,7 @@ use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order\CustomerAssignment;
 use Magento\Sales\Observer\AssignOrderToCustomerObserver;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -27,6 +28,9 @@ class AssignOrderToCustomerObserverTest extends TestCase
     /** @var OrderRepositoryInterface|PHPUnit_Framework_MockObject_MockObject */
     protected $orderRepositoryMock;
 
+    /** @var CustomerAssignment | PHPUnit_Framework_MockObject_MockObject */
+    protected $assignmentMock;
+
     /**
      * Set Up
      */
@@ -35,7 +39,12 @@ class AssignOrderToCustomerObserverTest extends TestCase
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sut = new AssignOrderToCustomerObserver($this->orderRepositoryMock);
+
+        $this->assignmentMock =  $this->getMockBuilder(CustomerAssignment::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+
+        $this->sut = new AssignOrderToCustomerObserver($this->orderRepositoryMock, $this->assignmentMock);
     }
 
     /**
@@ -69,13 +78,14 @@ class AssignOrderToCustomerObserverTest extends TestCase
         $orderMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->orderRepositoryMock->expects($this->once())->method('get')->with($orderId)
             ->willReturn($orderMock);
-        if (!$customerId) {
-            $this->orderRepositoryMock->expects($this->once())->method('save')->with($orderMock);
+
+        if ($customerId) {
+            $this->assignmentMock->expects($this->once())->method('execute')->with($orderMock, $customerMock);
             $this->sut->execute($observerMock);
-            return ;
+            return;
         }
 
-        $this->orderRepositoryMock->expects($this->never())->method('save')->with($orderMock);
+        $this->assignmentMock->expects($this->never())->method('execute');
         $this->sut->execute($observerMock);
     }
 

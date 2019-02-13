@@ -130,6 +130,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const COL_NAME = 'name';
 
     /**
+     * Column new_from_date.
+     */
+    const COL_NEW_FROM_DATE = 'new_from_date';
+
+    /**
+     * Column new_to_date.
+     */
+    const COL_NEW_TO_DATE = 'new_to_date';
+
+    /**
      * Column product website.
      */
     const COL_PRODUCT_WEBSITES = '_product_websites';
@@ -292,7 +302,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
-        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually'
+        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually',
+        ValidatorInterface::ERROR_NEW_TO_DATE => 'Make sure new_to_date is later than or the same as new_from_date',
     ];
 
     /**
@@ -313,8 +324,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         Product::COL_TYPE => 'product_type',
         Product::COL_PRODUCT_WEBSITES => 'product_websites',
         'status' => 'product_online',
-        'news_from_date' => 'new_from_date',
-        'news_to_date' => 'new_to_date',
+        'news_from_date' => self::COL_NEW_FROM_DATE,
+        'news_to_date' => self::COL_NEW_TO_DATE,
         'options_container' => 'display_product_options_in',
         'minimal_price' => 'map_price',
         'msrp' => 'msrp_price',
@@ -1361,7 +1372,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $delProductId[] = $productId;
 
                 foreach (array_keys($categories) as $categoryId) {
-                    $categoriesIn[] = ['product_id' => $productId, 'category_id' => $categoryId, 'position' => 1];
+                    $categoriesIn[] = ['product_id' => $productId, 'category_id' => $categoryId, 'position' => 0];
                 }
             }
             if (Import::BEHAVIOR_APPEND != $this->getBehavior()) {
@@ -1568,14 +1579,24 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     continue;
                 }
                 if ($this->getErrorAggregator()->hasToBeTerminated()) {
-                    $this->getErrorAggregator()->addRowToSkip($rowNum);
-                    continue;
+                    if (ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
+                        !== $this->_parameters[Import::FIELD_NAME_VALIDATION_STRATEGY]
+                    ) {
+                        $this->getErrorAggregator()->addRowToSkip($rowNum);
+                        continue;
+                    }
                 }
                 $rowScope = $this->getRowScope($rowData);
 
                 $urlKey = $this->getUrlKey($rowData);
-                if (!empty($urlKey)) {
+                if (!empty($rowData[self::URL_KEY])) {
+                    // If url_key column and its value were in the CSV file
                     $rowData[self::URL_KEY] = $urlKey;
+                } else if ($this->isNeedToChangeUrlKey($rowData)) {
+                    // If url_key column was empty or even not declared in the CSV file but by the rules it is need to
+                    // be setteed. In case when url_key is generating from name column we have to ensure that the bunch
+                    // of products will pass for the event with url_key column.
+                    $bunch[$rowNum][self::URL_KEY] = $rowData[self::URL_KEY] = $urlKey;
                 }
 
                 $rowSku = $rowData[self::COL_SKU];
@@ -1718,6 +1739,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             if ($uploadedFile) {
                                 $uploadedImages[$columnImage] = $uploadedFile;
                             } else {
+                                unset($rowData[$column]);
                                 $this->addRowError(
                                     ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
                                     $rowNum,
@@ -2471,21 +2493,35 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
         }
+
+        if (!empty($rowData[self::COL_NEW_FROM_DATE]) && !empty($rowData[self::COL_NEW_TO_DATE])
+        ) {
+            $newFromTimestamp = strtotime($this->dateTime->formatDate($rowData[self::COL_NEW_FROM_DATE], false));
+            $newToTimestamp = strtotime($this->dateTime->formatDate($rowData[self::COL_NEW_TO_DATE], false));
+            if ($newFromTimestamp > $newToTimestamp) {
+                $this->addRowError(
+                    ValidatorInterface::ERROR_NEW_TO_DATE,
+                    $rowNum,
+                    $rowData[self::COL_NEW_TO_DATE]
+                );
+            }
+        }
+
         return !$this->getErrorAggregator()->isRowInvalid($rowNum);
     }
 
     /**
+     * Check if need to validate url key.
+     *
      * @param array $rowData
      * @return bool
      */
     private function isNeedToValidateUrlKey($rowData)
     {
-        $urlKey = $this->getUrlKey($rowData);
-        
-        return (!empty($urlKey))
+        return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
             && (empty($rowData[self::COL_VISIBILITY])
-            || $rowData[self::COL_VISIBILITY]
-            !== (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]);
+                || $rowData[self::COL_VISIBILITY]
+                !== (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]);
     }
 
     /**
@@ -2785,8 +2821,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Retrieve url key from provided row data.
+     *
      * @param array $rowData
      * @return string
+     *
      * @since 100.0.3
      */
     protected function getUrlKey($rowData)
@@ -2794,14 +2833,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!empty($rowData[self::URL_KEY])) {
             return $this->productUrl->formatUrlKey($rowData[self::URL_KEY]);
         }
-        
-        /**
-         * If the product exists, assume it already has a URL Key and even
-         * if a name is provided in the import data, it should not be used
-         * to overwrite that existing URL Key the product already has.
-         */
-        $isSkuExist = $this->isSkuExist($rowData[self::COL_SKU]);
-        if (!$isSkuExist && !empty($rowData[self::COL_NAME])) {
+
+        if (!empty($rowData[self::COL_NAME])) {
             return $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
         }
 
@@ -2818,6 +2851,26 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_resource = $this->_resourceFactory->create();
         }
         return $this->_resource;
+    }
+
+    /**
+     * Whether a url key is needed to be change.
+     *
+     * @param array $rowData
+     * @return bool
+     */
+    private function isNeedToChangeUrlKey(array $rowData): bool
+    {
+        $urlKey = $this->getUrlKey($rowData);
+        $productExists = $this->isSkuExist($rowData[self::COL_SKU]);
+        $markedToEraseUrlKey = isset($rowData[self::URL_KEY]);
+        // The product isn't new and the url key index wasn't marked for change.
+        if (!$urlKey && $productExists && !$markedToEraseUrlKey) {
+            // Seems there is no need to change the url key
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -2944,9 +2997,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         )
         ) {
             $stockItemDo->setData($row);
-            $row['is_in_stock'] = $stockItemDo->getBackorders() && isset($row['is_in_stock'])
-                ? $row['is_in_stock']
-                : $this->stockStateProvider->verifyStock($stockItemDo);
+            $row['is_in_stock'] = $row['is_in_stock'] ?? $this->stockStateProvider->verifyStock($stockItemDo);
             if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
                 $row['low_stock_date'] = $this->dateTime->gmDate(
                     'Y-m-d H:i:s',

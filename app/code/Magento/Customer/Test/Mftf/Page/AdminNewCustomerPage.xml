@@ -11,5 +11,8 @@
     <page name="AdminNewCustomerPage" url="/customer/index/new" area="admin" module="Customer">
         <section name="AdminNewCustomerAccountInformationSection"/>
         <section name="AdminNewCustomerMainActionsSection"/>
+        <section name="AdminCustomerAccountInformationEditAddressSection"/>
+        <section name="AdminCustomerAccountAddressSection"/>
+        <section name="AdminMainActionsSection"/>
     </page>
 </pages>

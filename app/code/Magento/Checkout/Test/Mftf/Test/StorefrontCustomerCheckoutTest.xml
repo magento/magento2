@@ -62,7 +62,7 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
         <amOnPage stepKey="s67" url="{{AdminOrdersPage.url}}"/>
-        <waitForPageLoad stepKey="s75"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
         <fillField stepKey="s77" selector="{{OrdersGridSection.search}}" userInput="{$s53}" />
         <waitForPageLoad stepKey="s78"/>
 
@@ -77,6 +77,7 @@
         <see stepKey="s95" selector="{{OrderDetailsInformationSection.itemsOrdered}}" userInput="$$simpleproduct1.name$$" />
         <amOnPage stepKey="s96" url="{{AdminCustomerPage.url}}"/>
         <waitForPageLoad stepKey="s97"/>
+        <waitForElementVisible selector="{{AdminCustomerFiltersSection.filtersButton}}" time="30" stepKey="waitFiltersButton"/>
         <click stepKey="s98" selector="{{AdminCustomerFiltersSection.filtersButton}}"/>
         <fillField stepKey="s99" selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="$$simpleuscustomer.email$$"/>
         <click stepKey="s100" selector="{{AdminCustomerFiltersSection.apply}}"/>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAbleToShipPartiallyInvoicedItemsTest">
+        <annotations>
+            <title value="Ship Action is available for remaining of the partially invoiced items "/>
+            <description value="Admin should be able to ship remaining ordered items if some of them are already refunded"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-95524"/>
+            <group value="sales"/>
+            <skip>
+                <issueId value="MAGETWO-97664"/>
+            </skip>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--login to Admin-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <!--Create new order-->
+        <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
+        <actionGroup ref="navigateToNewOrderPageNewCustomerSingleStore" stepKey="startToCreateNewOrder"/>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrderWithUserDefinedQty">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="quantity" value="10"/>
+        </actionGroup>
+
+        <!--Fill customer group and customer email which both are now required fields-->
+        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" after="addSimpleProductToOrderWithUserDefinedQty" stepKey="selectCustomerGroup"/>
+        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" after="selectCustomerGroup" stepKey="fillCustomerEmail"/>
+        <!--Fill customer address information-->
+        <actionGroup ref="fillOrderCustomerInformation" after="fillCustomerEmail" stepKey="fillCustomerAddress">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <!-- Select shipping -->
+        <actionGroup ref="orderSelectFlatRateShipping" after="fillCustomerAddress" stepKey="selectFlatRateShipping"/>
+        <!--Verify totals on Order page-->
+        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="$1,230.00" after="selectFlatRateShipping" stepKey="seeOrderSubTotal"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="$50.00" after="seeOrderSubTotal" stepKey="seeOrderShippingAmount"/>
+        <scrollTo selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="scrollToOrderGrandTotal"/>
+        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="$1,280.00" after="scrollToOrderGrandTotal" stepKey="seeCorrectGrandTotal"/>
+        <!--Submit Order and verify information-->
+        <click selector="{{AdminOrderFormActionSection.submitOrder}}" after="seeCorrectGrandTotal" stepKey="clickSubmitOrder"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskTodisappear"/>
+        <waitForPageLoad stepKey="waitForOrderSubmitted"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url('$grabOrderId')}}" after="grabOrderId" stepKey="seeViewOrderPage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." after="seeViewOrderPage" stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{CONST.orderStatusPending}}" stepKey="seeOrderPending"/>
+        <grabTextFrom selector="|Order # (\d+)|" after="seeSuccessMessage" stepKey="getOrderId"/>
+        <scrollTo selector="{{AdminOrderItemsOrderedSection.qtyColumn}}" after="getOrderId" stepKey="scrollToItemsOrdered"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 10" after="scrollToItemsOrdered" stepKey="seeQtyOfItemsOrdered"/>
+
+        <!--Create order invoice for first half of ordered items-->
+        <comment userInput="Admin creates invoice for order" stepKey="adminCreateInvoiceComment" />
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceActionButton"/>
+        <seeInCurrentUrl url="{{AdminInvoiceNewPage.url}}" after="clickInvoiceActionButton" stepKey="seeNewInvoicePageUrl"/>
+        <scrollTo selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" stepKey="scrollToItemsInvoiced"/>
+        <!--Change invoiced items count-->
+        <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="5" stepKey="invoiceHalfTheItems"/>
+        <waitForElementVisible selector="{{AdminInvoiceItemsSection.updateQtyEnabled}}" stepKey="waitForEnabledQtyToBeInvoicedSubmitButton"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQtyToBeInvoiced"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForQtyToUpdate"/>
+        <waitForElementVisible selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="waitforSubmitInvoiceBtn"/>
+        <!--Submit Invoice-->
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice"/>
+        <waitForPageLoad stepKey="waitForInvoiceToSubmit1"/>
+        <!--Invoice created successfully-->
+        <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{CONST.orderStatusProcessing}}" stepKey="seeOrderProcessing1"/>
+        <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Invoiced 5" stepKey="see5itemsInvoiced"/>
+        <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminOrderViewTabsSection.invoices}}" stepKey="clickInvoicesTab"/>
+        <waitForLoadingMaskToDisappear after="clickInvoicesTab" stepKey="waitForInvoiceGridToLoad"/>
+        <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="$665.00" after="waitForInvoiceGridToLoad" stepKey="seeOrderInvoiceTabInGrid"/>
+
+        <!--Ship Order-->
+        <comment userInput="Admin creates shipment" stepKey="adminCreatesShipmentComment"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" after="adminCreatesShipmentComment" stepKey="clickShip"/>
+        <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" after="clickShip" stepKey="seeOrderShipmentUrl" />
+        <scrollTo selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" stepKey="scrollToItemsToShip"/>
+        <see selector="{{AdminShipmentItemsSection.itemQty('1')}}" userInput="Invoiced 5" stepKey="see5ItemsInvoiced"/>
+        <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="5" stepKey="fillQtyOfItemsToShip"/>
+        <!--Submit Shipment-->
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" after="fillQtyOfItemsToShip" stepKey="submitShipment"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForShipmentToSubmit"/>
+        <!--Verify shipment created successfully-->
+        <see selector="{{AdminMessagesSection.success}}" userInput="The shipment has been created." after="submitShipment" stepKey="successfullShipmentCreation"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{CONST.orderStatusProcessing}}" stepKey="seeOrderProcessing2"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="$getOrderId" stepKey="seeOrderIdInPageTitleAfterShip"/>
+        <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems1"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 5" stepKey="see5itemsShipped"/>
+        <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToTopOfPage1"/>
+        <click selector="{{AdminOrderViewTabsSection.shipments}}" stepKey="clickShipmentsTab"/>
+        <waitForLoadingMaskToDisappear after="clickShipmentsTab" stepKey="waitForShipmentsGridToLoad"/>
+        <see selector="{{AdminOrderShipmentsTabSection.gridRow('1')}}" userInput="5.0000" after="waitForShipmentsGridToLoad" stepKey="seeOrderShipmentsTabInGrid"/>
+
+        <!--Create Credit Memo-->
+        <comment userInput="Admin creates credit memo" stepKey="createCreditMemoComment"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" after="createCreditMemoComment" stepKey="clickCreateCreditMemo"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle"/>
+        <!--Submit refund-->
+        <scrollTo selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="scrollToItemsToRefund"/>
+        <seeInField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" after="scrollToItemsToRefund" stepKey="checkQtyOfItemsToRefund"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOfflineEnabled}}" stepKey="waitForSubmitRefundOfflineEnabled"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="submitRefundOffline"/>
+        <!--Verify Credit Memo created successfully-->
+        <waitForElementVisible
+                selector="{{AdminMessagesSection.success}}"
+                time="20"
+                stepKey="waitForMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo." after="submitRefundOffline" stepKey="seeCreditMemoSuccessMsg"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{CONST.orderStatusProcessing}}" stepKey="seeOrderProcessing3"/>
+        <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems2"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Refunded 5" stepKey="see5itemsRefunded"/>
+        <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToTopOfPage2"/>
+        <click selector="{{AdminOrderViewTabsSection.creditMemos}}" stepKey="clickCreditMemosTab"/>
+        <waitForLoadingMaskToDisappear after="clickCreditMemosTab" stepKey="waitForCreditMemosGridToLoad"/>
+        <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="$665.00" after="waitForCreditMemosGridToLoad" stepKey="seeOrderCreditMemoTabInGrid"/>
+
+        <!--Create invoice for rest of the ordered items-->
+        <comment userInput="Admin creates invoice for rest of the items" stepKey="adminCreateInvoiceComment2" />
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceActionForRestOfItems"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" after="clickInvoiceActionForRestOfItems" stepKey="seePageNameNewInvoicePage2"/>
+        <comment userInput="Qty To Invoice is 5" stepKey="seeRemainderInQtyToInvoice"/>
+        <scrollTo selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" stepKey="scrollToItemsInvoiced2"/>
+        <seeInField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="5" stepKey="see5InTheQtyToInvoice"/>
+        <!--Verify items invoiced information-->
+        <see selector="{{AdminInvoiceItemsSection.itemQty('1')}}" userInput="Refunded 5" stepKey="seeQtyOfItemsRefunded"/>
+        <!--Submit Invoice-->
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice2" />
+        <waitForPageLoad stepKey="waitForInvoiceToSubmit2"/>
+        <!--Invoice created successfully for the rest of the ordered items-->
+        <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceSuccessMessage2"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{CONST.orderStatusProcessing}}" stepKey="seeOrderProcessing4"/>
+        <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems3"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Invoiced 10" stepKey="see10itemsInvoiced"/>
+        <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToTopOfPage3"/>
+        <click selector="{{AdminOrderViewTabsSection.invoices}}" stepKey="clickInvoicesTab1"/>
+        <waitForLoadingMaskToDisappear after="clickInvoicesTab1" stepKey="waitForInvoiceGridToLoad1"/>
+        <see selector="{{AdminOrderInvoicesTabSection.gridRow('2')}}" userInput="$615.00" after="waitForInvoiceGridToLoad1" stepKey="seeOrderInvoiceTabInGrid1"/>
+
+        <!--Verify Ship Action can be done for the rest of the invoiced items -->
+        <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToTopOfPage4"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" after="seeOrderInvoiceTabInGrid1" stepKey="clickShipActionForRestOfItems"/>
+
+        <!--Verify Items in Ship section -->
+        <scrollTo selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" stepKey="scrollToItemsToShip2"/>
+        <see selector="{{AdminShipmentItemsSection.itemQty('1')}}" userInput="Invoiced 10" stepKey="seeAll10ItemsInvoiced"/>
+        <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="5" stepKey="fillRestOfItemsToShip"/>
+        <!--Submit Shipment-->
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" after="fillRestOfItemsToShip" stepKey="submitShipment2" />
+        <see selector="{{AdminMessagesSection.success}}" userInput="The shipment has been created." after="submitShipment2" stepKey="successfullyCreatedShipment"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{CONST.orderStatusComplete}}" stepKey="seeOrderComplete"/>
+
+        <!--Verify Items Status and Shipped Qty in the Items Ordered section-->
+        <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToItemsOrdered2"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 10" stepKey="seeAllItemsShipped"/>
+        <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToTopOfPage5"/>
+        <click selector="{{AdminOrderViewTabsSection.shipments}}" stepKey="clickShipmentsTab1"/>
+        <waitForLoadingMaskToDisappear after="clickShipmentsTab1" stepKey="waitForShipmentsGridToLoad1"/>
+        <see selector="{{AdminOrderShipmentsTabSection.gridRow('2')}}" userInput="5.0000" after="waitForShipmentsGridToLoad1" stepKey="seeOrderShipmentsTabInGrid1"/>
+
+        <!--Remove created customer-->
+        <actionGroup ref="RemoveCustomerFromAdminActionGroup" stepKey="removeCustomer">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+    </test>
+</tests>
+

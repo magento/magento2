@@ -160,6 +160,61 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+    public function getUrlPathWithParentCategoryDataProvider(): array
+    {
+        $requireGenerationLevel = CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING;
+        $noGenerationLevel = CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING - 1;
+        return [
+            [13, 'url-key', false, $requireGenerationLevel, 10, 'parent-path', 'parent-path/url-key'],
+            [13, 'url-key', false, $requireGenerationLevel, Category::TREE_ROOT_ID, null, 'url-key'],
+            [13, 'url-key', true, $noGenerationLevel, Category::TREE_ROOT_ID, null, 'url-key'],
+        ];
+    }
+
+    /**
+     * Test receiving Url Path when parent category is presented.
+     *
+     * @param int $parentId
+     * @param string $urlKey
+     * @param bool $isCategoryNew
+     * @param bool $level
+     * @param int $parentCategoryParentId
+     * @param null|string $parentUrlPath
+     * @param string $result
+     * @dataProvider getUrlPathWithParentCategoryDataProvider
+     */
+    public function testGetUrlPathWithParentCategory(
+        int $parentId,
+        string $urlKey,
+        bool $isCategoryNew,
+        bool $level,
+        int $parentCategoryParentId,
+        $parentUrlPath,
+        string $result
+    ) {
+        $urlPath = null;
+        $this->category->expects($this->any())->method('getParentId')->willReturn($parentId);
+        $this->category->expects($this->any())->method('getLevel')->willReturn($level);
+        $this->category->expects($this->any())->method('getUrlPath')->willReturn($urlPath);
+        $this->category->expects($this->any())->method('getUrlKey')->willReturn($urlKey);
+        $this->category->expects($this->any())->method('isObjectNew')->willReturn($isCategoryNew);
+
+        $methods = ['getUrlPath', 'getParentId'];
+        $parentCategoryMock = $this->createPartialMock(\Magento\Catalog\Model\Category::class, $methods);
+        $parentCategoryMock->expects($this->any())->method('getParentId')->willReturn($parentCategoryParentId);
+        $parentCategoryMock->expects($this->any())->method('getUrlPath')->willReturn($parentUrlPath);
+
+        $this->categoryRepository->expects($this->any())
+            ->method('get')
+            ->with($parentCategoryParentId)
+            ->willReturn($parentCategoryMock);
+
+        $this->assertEquals($result, $this->categoryUrlPathGenerator->getUrlPath($this->category, $parentCategoryMock));
+    }
+
+    /**
+     * @return array
+     */
     public function getUrlPathWithSuffixDataProvider()
     {
         return [
