@@ -7,54 +7,38 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product\Related;
 
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Related\CrossSellDataProvider;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Related\RelatedDataProvider;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
-
+/**
+ * CrossSell Products Resolver
+ */
 class CrossSellProducts implements ResolverInterface
 {
     /**
-     * Attribute to select fields
-     */
-    public const FIELDS = ['sku', 'name', 'price', 'image', 'url_path', 'url_key'];
-    /**
-     * @var CrossSellDataProvider
+     * @see module di.xml
+     * @var RelatedDataProvider
      */
     private $dataProvider;
 
-    public function __construct(CrossSellDataProvider $dataProvider)
-    {
+    /**
+     * @param RelatedDataProvider $dataProvider
+     */
+    public function __construct(
+        RelatedDataProvider $dataProvider
+    ) {
         $this->dataProvider = $dataProvider;
     }
 
     /**
-     * Fetches the data from persistence models and format it according to the GraphQL schema.
-     *
-     * @param \Magento\Framework\GraphQl\Config\Element\Field $field
-     * @param ContextInterface $context
-     * @param ResolveInfo $info
-     * @param array|null $value
-     * @param array|null $args
-     * @throws \Exception
-     * @return mixed|Value
+     * @inheritdoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $product = $value['model'];
-        $this->dataProvider->addFieldToSelect(self::FIELDS);
-        $collection = $this->dataProvider->getData($product);
+        $data = $this->dataProvider->getProducts($info, $value);
 
-        $count = 0;
-        foreach ($collection as $item) {
-            $data[$count] = $item->getData();
-            $data[$count]['model'] = $item;
-            $count++;
-        }
         return $data;
     }
-
 }
