@@ -24,6 +24,7 @@
             <argument name="identifier" type="string" defaultValue="{{DefaultCmsBlock.identifier}}"/>
         </arguments>
         <amOnPage url="{{AdminCmsBlockGridPage.url}}" stepKey="navigateToCmsBlockListingPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
         <click selector="{{CmsPagesPageActionsSection.select(identifier)}}" stepKey="clickOnSelect"/>
         <click selector="{{CmsPagesPageActionsSection.delete(identifier)}}" stepKey="clickOnDelete"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
