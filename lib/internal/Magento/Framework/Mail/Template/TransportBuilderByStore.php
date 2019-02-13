@@ -13,7 +13,7 @@ use Magento\Framework\Mail\MessageInterface;
  *
  * @deprecated The ability to set From address based on store is now available
  * in the \Magento\Framework\Mail\Template\TransportBuilder class
- * @see \Magento\Framework\Mail\Template\TransportBuilder::setFromByStore
+ * @see \Magento\Framework\Mail\Template\TransportBuilder::setFromByScope
  */
 class TransportBuilderByStore
 {
