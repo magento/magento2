@@ -71,6 +71,8 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+     * Convert condition to filter group
+     *
      * @param ConditionInterface $condition
      * @return null|\Magento\Framework\Api\CombinedFilterGroup|\Magento\Framework\Api\Filter
      * @throws InputException
@@ -89,6 +91,8 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+     * Convert combined condition to filter group
+     *
      * @param Combine $combinedCondition
      * @return null|\Magento\Framework\Api\CombinedFilterGroup
      * @throws InputException
@@ -121,6 +125,8 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+     * Convert simple condition to filter group
+     *
      * @param ConditionInterface $productCondition
      * @return FilterGroup|Filter
      * @throws InputException
@@ -139,6 +145,8 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+     * Convert simple condition with array value to filter group
+     *
      * @param ConditionInterface $productCondition
      * @return FilterGroup
      * @throws InputException
@@ -161,6 +169,8 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+     * Get glue for multiple values by operator
+     *
      * @param string $operator
      * @return string
      */
@@ -211,6 +221,8 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+     * Convert filters array into combined filter group
+     *
      * @param array $filters
      * @param string $combinationMode
      * @return FilterGroup
@@ -227,6 +239,8 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+     * Creating of filter object by filtering params
+     *
      * @param string $field
      * @param string $value
      * @param string $conditionType
@@ -264,6 +278,7 @@ class ConditionsToSearchCriteriaMapper
             '!{}' => 'nlike', // does not contains
             '()' => 'in',    // is one of
             '!()' => 'nin',   // is not one of
+            '<=>' => 'is_null'
         ];
 
         if (!array_key_exists($ruleOperator, $operatorsMap)) {
