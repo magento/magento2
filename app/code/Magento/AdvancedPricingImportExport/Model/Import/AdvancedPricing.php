@@ -185,6 +185,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param AdvancedPricing\Validator\Website $websiteValidator
      * @param AdvancedPricing\Validator\TierPrice $tierPriceValidator
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Exception
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -255,6 +256,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $rowData
      * @param int $rowNum
      * @return bool
+     * @throws \Zend_Validate_Exception
      */
     public function validateRow(array $rowData, $rowNum)
     {
@@ -308,6 +310,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Save advanced pricing
      *
      * @return $this
+     * @throws \Exception
      */
     public function saveAdvancedPricing()
     {
@@ -319,6 +322,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Deletes Advanced price data from raw data.
      *
      * @return $this
+     * @throws \Exception
      */
     public function deleteAdvancedPricing()
     {
@@ -347,6 +351,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Replace advanced pricing
      *
      * @return $this
+     * @throws \Exception
      */
     public function replaceAdvancedPricing()
     {
@@ -360,6 +365,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Exception
      */
     protected function saveAndReplaceAdvancedPrices()
     {
@@ -427,6 +433,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $priceData
      * @param string $table
      * @return $this
+     * @throws \Exception
      */
     protected function saveProductPrices(array $priceData, $table)
     {
@@ -458,6 +465,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $listSku
      * @param string $table
      * @return boolean
+     * @throws \Exception
      */
     protected function deleteProductTierPrices(array $listSku, $table)
     {
@@ -535,6 +543,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Retrieve product skus
      *
      * @return array
+     * @throws \Exception
      */
     protected function retrieveOldSkus()
     {
@@ -555,6 +564,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $prices
      * @param string $table
      * @return $this
+     * @throws \Exception
      */
     protected function processCountExistingPrices($prices, $table)
     {
