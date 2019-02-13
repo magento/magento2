@@ -16,7 +16,7 @@ class NewActionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $formName = $this->getRequest()->getParam('form');
+        $formName = $this->getRequest()->getParam('form_namespace');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
@@ -36,7 +36,8 @@ class NewActionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         }
 
         if ($model instanceof \Magento\Rule\Model\Condition\AbstractCondition) {
-            $model->setJsFormObject($formName);
+            $model->setJsFormObject($this->getRequest()->getParam('form'));
+            $model->setFormName($formName);
             $html = $model->asHtmlRecursive();
         } else {
             $html = '';
