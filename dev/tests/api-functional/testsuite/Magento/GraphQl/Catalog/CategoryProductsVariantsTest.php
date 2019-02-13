@@ -24,8 +24,6 @@ class CategoryProductsVariantsTest extends GraphQlAbstract
      */
     public function testGetSimpleProductsFromCategory()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/360');
-
         $query
             = <<<QUERY
 {
