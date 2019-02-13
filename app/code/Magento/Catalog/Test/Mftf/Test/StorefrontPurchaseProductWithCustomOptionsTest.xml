@@ -17,8 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-61717"/>
             <group value="Catalog"/>
-            <!-- skip due to MAGETWO-97424 -->
-            <group value="skip"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>

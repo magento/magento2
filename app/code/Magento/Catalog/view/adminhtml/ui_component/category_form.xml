@@ -77,6 +77,13 @@
                 <dataType>text</dataType>
             </settings>
         </field>
+        <field name="level" formElement="hidden">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">category</item>
+                </item>
+            </argument>
+        </field>
         <field name="store_id" formElement="hidden">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

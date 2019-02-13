@@ -19,5 +19,9 @@
         <element name="telephone" type="input" selector="input[name=telephone]"/>
         <element name="next" type="button" selector="button.button.action.continue.primary" timeout="30"/>
         <element name="firstShippingMethod" type="radio" selector=".row:nth-of-type(1) .col-method .radio"/>
+
+        <!--Order Summary-->
+        <element name="itemInCart" type="button" selector="//div[@class='title']"/>
+        <element name="productName" type="text" selector="//strong[@class='product-item-name']"/>
     </section>
 </sections>
