@@ -261,14 +261,22 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
         $classes = [];
 
         $validateRules = $attribute->getValidationRules();
-        if (!empty($validateRules['min_text_length'])) {
-            $classes[] = 'minimum-length-' . $validateRules['min_text_length'];
-        }
-        if (!empty($validateRules['max_text_length'])) {
-            $classes[] = 'maximum-length-' . $validateRules['max_text_length'];
-        }
-        if (!empty($classes)) {
-            $classes[] = 'validate-length';
+        if(!empty($validateRules)) {
+            foreach ($validateRules as $rule) {
+                switch ($rule->getName()) {
+                    case 'min_text_length' :
+                        $classes[] = 'minimum-length-' . $rule->getValue();
+                        break;
+
+                    case 'max_text_length' :
+                        $classes[] = 'maximum-length-' . $rule->getValue();
+                        break;
+                }
+            }
+
+            if (!empty($classes)) {
+                $classes[] = 'validate-length';
+            }
         }
 
         return $classes;
