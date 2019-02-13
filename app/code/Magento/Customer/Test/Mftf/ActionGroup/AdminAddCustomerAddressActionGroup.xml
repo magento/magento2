@@ -7,20 +7,19 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAddCustomerAddressActionGroup" >
+    <actionGroup name="AdminAddCustomerAddressWithRegionTypeSelectActionGroup" >
         <arguments>
             <argument name="customerAddress" defaultValue="CustomerAddressSimple"/>
         </arguments>
         <click selector="{{AdminCustomerAccountAddressSection.addresses}}" stepKey="proceedToAddresses"/>
         <click selector="{{AdminCustomerAccountAddressSection.addNewAddress}}" stepKey="addNewAddresses"/>
-        <waitForPageLoad time="60" stepKey="waitAddressFieldsLoaded" />
         <fillField userInput="{{customerAddress.street[0]}}" selector="{{AdminCustomerAccountNewAddressSection.street}}" stepKey="fillStreetAddress"/>
         <fillField userInput="{{customerAddress.city}}" selector="{{AdminCustomerAccountNewAddressSection.city}}" stepKey="fillCity"/>
-        <selectOption userInput="{{US_Address_CA.country_id}}" selector="{{AdminCustomerAccountNewAddressSection.country}}" stepKey="selectCountry"/>
-        <selectOption userInput="{{US_Address_CA.state}}" selector="{{AdminCustomerAccountNewAddressSection.region}}" stepKey="selectState"/>
+        <selectOption userInput="{{customerAddress.country_id}}" selector="{{AdminCustomerAccountNewAddressSection.country}}" stepKey="selectCountry"/>
+        <selectOption userInput="{{customerAddress.state}}" selector="{{AdminCustomerAccountNewAddressSection.regionId}}" stepKey="selectState"/>
         <fillField userInput="{{customerAddress.postcode}}" selector="{{AdminCustomerAccountNewAddressSection.zip}}" stepKey="fillZipCode"/>
         <fillField userInput="{{customerAddress.telephone}}" selector="{{AdminCustomerAccountNewAddressSection.phone}}" stepKey="fillPhone"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCustomer"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the customer." stepKey="CustomerIsSaved"/>
+        <see userInput="You saved the customer." selector="{{AdminMessagesSection.success}}" stepKey="customerIsSaved"/>
     </actionGroup>
 </actionGroups>
