@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+
 /**
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
@@ -21,7 +23,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->dispatch('backend/admin/index/index');
         /** @var $backendUrlModel \Magento\Backend\Model\UrlInterface */
         $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         );
         $backendUrlModel->turnOffSecretKey();
         $url = $backendUrlModel->getUrl('admin');
@@ -45,6 +47,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testGlobalSearchAction()
     {
         $this->getRequest()->setParam('isAjax', 'true');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue('query', 'dummy');
         $this->dispatch('backend/admin/index/globalSearch');
 

@@ -11,8 +11,8 @@ use Magento\Framework\App\TemplateTypesInterface;
 /** @var $block \Magento\Email\Block\Adminhtml\Template\Edit */
 ?>
 <?php if (!$block->getEditMode()): ?>
-<form action="<?php /* @escapeNotVerified */ echo $block->getLoadUrl() ?>" method="post" id="email_template_load_form">
-    <?php echo $block->getBlockHtml('formkey')?>
+<form action="<?= $block->escapeUrl($block->getLoadUrl()) ?>" method="post" id="email_template_load_form">
+    <?= $block->getBlockHtml('formkey') ?>
     <fieldset class="admin__fieldset form-inline">
         <legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Load default template') ?></span></legend><br>
         <div class="admin__field">
@@ -43,15 +43,15 @@ use Magento\Framework\App\TemplateTypesInterface;
 </form>
 <?php endif ?>
 
-<form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="email_template_edit_form">
-    <?php echo $block->getBlockHtml('formkey')?>
+<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="email_template_edit_form">
+    <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
-    <input type="hidden" id="orig_template_code" name="orig_template_code" value="<?php /* @escapeNotVerified */ echo $block->getOrigTemplateCode() ?>" />
-    <?php echo $block->getFormHtml() ?>
+    <input type="hidden" id="orig_template_code" name="orig_template_code" value="<?= $block->escapeHtml($block->getOrigTemplateCode()) ?>" />
+    <?= /* @noEscape */ $block->getFormHtml() ?>
 </form>
 
-<form action="<?php /* @escapeNotVerified */ echo $block->getPreviewUrl() ?>" method="post" id="email_template_preview_form" target="_blank">
-    <?php echo $block->getBlockHtml('formkey')?>
+<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="email_template_preview_form" target="_blank">
+    <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <div class="no-display">
         <input type="hidden" id="preview_type" name="type" value="<?php /* @escapeNotVerified */ echo $block->isTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
@@ -63,10 +63,11 @@ require([
     "jquery",
     "tinymce",
     "Magento_Ui/js/modal/alert",
+    "mage/dataPost",
     "mage/mage",
     "Magento_Variable/variables",
     "prototype"
-], function(jQuery, tinyMCE, alert){
+], function(jQuery, tinyMCE, alert, dataPost){
 
 //<![CDATA[
     jQuery('#email_template_edit_form').mage('form').mage('validation');
@@ -166,8 +167,11 @@ require([
         },
 
         deleteTemplate: function() {
-            if(window.confirm("<?php /* @escapeNotVerified */ echo __('Are you sure you want to delete this template?') ?>")) {
-                   window.location.href = '<?php /* @escapeNotVerified */ echo $block->getDeleteUrl() ?>';
+            if(window.confirm("<?= $block->escapeJsQuote($block->escapeHtml(__('Are you sure you want to delete this template?'))) ?>")) {
+                dataPost().postData({
+                    action: '<?= $block->escapeJsQuote($block->escapeUrl($block->getDeleteUrl())) ?>',
+                    data: {}
+                });
             }
         },
 

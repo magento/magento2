@@ -39,6 +39,13 @@ class BuildWidget extends \Magento\Backend\App\Action
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            $this->getResponse()->representJson(
+                \json_encode(['error' => true, 'message' => 'Invalid request'])
+            );
+            return;
+        }
+
         $type = $this->getRequest()->getPost('widget_type');
         $params = $this->getRequest()->getPost('parameters', []);
         $asIs = $this->getRequest()->getPost('as_is');

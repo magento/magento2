@@ -34,7 +34,7 @@ class XssOutputValidator
      *
      * @var string[]
      */
-    private $escapeFunctions = ['escapeHtml', 'escapeHtmlAttr', 'escapeUrl', 'escapeJs', 'escapeCss'];
+    private $escapeFunctions = ['escapeHtml', 'escapeHtmlAttr', 'escapeUrl', 'escapeJs', 'escapeCss', 'escapeJsQuote'];
 
     /**
      *

@@ -7,7 +7,6 @@
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Backend\App\Action;
-use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 
 class CreateOptions extends Action
@@ -51,7 +50,11 @@ class CreateOptions extends Action
      */
     public function execute()
     {
-        $this->getResponse()->representJson($this->jsonHelper->jsonEncode($this->saveAttributeOptions()));
+        $result = [];
+        if ($this->getRequest()->isPost()) {
+            $result = $this->saveAttributeOptions();
+        }
+        $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
     }
 
     /**

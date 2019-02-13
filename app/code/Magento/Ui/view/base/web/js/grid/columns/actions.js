@@ -8,8 +8,9 @@ define([
     'mageUtils',
     'uiRegistry',
     './column',
-    'Magento_Ui/js/modal/confirm'
-], function (_, utils, registry, Column, confirm) {
+    'Magento_Ui/js/modal/confirm',
+    'mage/dataPost'
+], function (_, utils, registry, Column, confirm, dataPost) {
     'use strict';
 
     return Column.extend({
@@ -250,7 +251,14 @@ define([
          * @param {Object} action - Actions' data.
          */
         defaultCallback: function (actionIndex, recordId, action) {
-            window.location.href = action.href;
+            if (action.post) {
+                dataPost().postData({
+                    action: action.href,
+                    data: {}
+                });
+            } else {
+                window.location.href = action.href;
+            }
         },
 
         /**

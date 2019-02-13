@@ -12,6 +12,7 @@ namespace Magento\Checkout\Controller;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -193,6 +194,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'update_cart_action' => 'update_qty',
             'form_key' => $formKey->getFormKey(),
         ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         /** @var $customerSession Session */
         $customerSession = $this->_objectManager->create(Session::class);
@@ -255,6 +257,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'isAjax' => 1
         ];
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
 
         $quote =  $this->_objectManager->create(\Magento\Checkout\Model\Cart::class);

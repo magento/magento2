@@ -24,11 +24,14 @@ class DeleteButtonTest extends \PHPUnit_Framework_TestCase
      */
     protected $registryMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface', [], [], '', false);
-        $this->registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
-        $contextMock = $this->getMock('\Magento\Backend\Block\Widget\Context', [], [], '', false);
+        $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
+        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Backend\Block\Widget\Context::class, [], [], '', false);
 
         $contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
 
@@ -58,7 +61,7 @@ class DeleteButtonTest extends \PHPUnit_Framework_TestCase
             'class' => 'delete',
             'on_click' => 'deleteConfirm(\'' . __(
                 'Are you sure you want to do this?'
-            ) . '\', \'' . $deleteUrl . '\')',
+            ) . '\', \'' . $deleteUrl . '\', {data: {}})',
             'sort_order' => 20,
         ];
 

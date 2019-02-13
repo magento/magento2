@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-declare(strict_types=1);
-
 namespace Magento\Backup\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action;

@@ -28,10 +28,15 @@ class Index extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new \Magento\Framework\Exception\NotFoundException(__('Page not found.'));
+        }
+
         $formId = $this->_request->getPost('formId');
         if (null === $formId) {
             try {

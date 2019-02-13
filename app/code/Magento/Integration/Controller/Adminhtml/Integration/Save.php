@@ -5,6 +5,7 @@
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
@@ -43,9 +44,15 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * Save integration action.
      *
      * @return void
+     * @throws NotFoundException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         /** @var array $integrationData */
         $integrationData = [];
         try {

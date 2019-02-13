@@ -50,7 +50,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('save', 'label', __('Save User'));
         $this->buttonList->remove('delete');
 
-        $objId = $this->getRequest()->getParam($this->_objectId);
+        $objId = (int)$this->getRequest()->getParam($this->_objectId);
 
         if (!empty($objId)) {
             $this->addButton(
@@ -73,7 +73,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 [
                     'label' => __('Force Sign-In'),
                     'class' => 'invalidate-token',
-                    'onclick' => "deleteConfirm('" . $deleteConfirmMsg . "', '" . $this->getInvalidateUrl() . "')",
+                    'onclick' => "deleteConfirm('" . $deleteConfirmMsg . "', '" .
+                        $this->getInvalidateUrl() . "', {data: {}})",
                 ]
             );
         }

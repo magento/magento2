@@ -56,6 +56,9 @@ class MassStatusTest extends \PHPUnit_Framework_TestCase
      */
     private $actionMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManagerMock = $this->getMockBuilder(Manager::class)
@@ -119,8 +122,9 @@ class MassStatusTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->abstractDbMock);
         $this->requestMock = $this->getMockBuilder(Http::class)->setMethods(
-            ['getParam', 'getPost', 'getFullActionName', 'getPostValue']
+            ['getParam', 'getPost', 'getFullActionName', 'getPostValue', 'isPost']
         )->disableOriginalConstructor()->getMock();
+        $this->requestMock->expects($this->any())->method('isPost')->willReturn(true);
 
         $this->action = $objectManagerHelper->getObject(
             MassStatus::class,
