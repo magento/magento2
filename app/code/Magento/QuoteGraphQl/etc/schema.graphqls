@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    getAvailableShippingMethodsOnCart(input: AvailableShippingMethodsOnCartInput): AvailableShippingMethodsOnCartOutput @doc(description:"Returns available shipping methods for cart by address/address_id")
+    Cart(cart_id: String!): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Returns information about shopping cart")
 }
 
 type Mutation {
@@ -12,7 +12,7 @@ type Mutation {
     setShippingAddressesOnCart(input: SetShippingAddressesOnCartInput): SetShippingAddressesOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingAddressesOnCart")
     applyCouponToCart(input: ApplyCouponToCartInput): ApplyCouponToCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ApplyCouponToCart")
     removeCouponFromCart(input: RemoveCouponFromCartInput): RemoveCouponFromCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\RemoveCouponFromCart")
-    setBillingAddressOnCart(input: SetBillingAddressOnCartInput): SetBillingAddressOnCartOutput
+    setBillingAddressOnCart(input: SetBillingAddressOnCartInput): SetBillingAddressOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetBillingAddressOnCart")
     setShippingMethodsOnCart(input: SetShippingMethodsOnCartInput): SetShippingMethodsOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingMethodsOnCart")
     addSimpleProductsToCart(input: AddSimpleProductsToCartInput): AddSimpleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
 }
@@ -35,9 +35,13 @@ input CartItemQuantityInput {
 
 input SetBillingAddressOnCartInput {
     cart_id: String!
+    billing_address: BillingAddressInput!
+}
+
+input BillingAddressInput {
     customer_address_id: Int
     address: CartAddressInput
-    # TODO: consider adding "Same as shipping" option
+    use_for_shipping: Boolean
 }
 
 input CartAddressInput {
@@ -84,10 +88,6 @@ input AvailableShippingMethodsOnCartInput {
     address: CartAddressInput
 }
 
-type AvailableShippingMethodsOnCartOutput {
-    available_shipping_methods: [CheckoutShippingMethod]
-}
-
 input ApplyCouponToCartInput {
     cart_id: String!
     coupon_code: String!
@@ -101,7 +101,8 @@ type Cart {
     cart_id: String
     items: [CartItemInterface]
     applied_coupon: AppliedCoupon
-    addresses: [CartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddresses")
+    shipping_addresses: [CartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
+    billing_address: CartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
 }
 
 type CartAddress {
@@ -217,4 +218,9 @@ type CartItemSelectedOptionValuePrice {
     value: Float!
     units: String!
     type: PriceTypeEnum!
+}
+
+input CartItemDetailsInput {
+    sku: String!
+    qty: Float!
 }

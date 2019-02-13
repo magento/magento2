@@ -85,13 +85,16 @@ class WysiwygTest extends AbstractElementTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModelName()
     {
         return Wysiwyg::class;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function testGetComponentName()
     {
         $this->assertSame(Wysiwyg::NAME, $this->getModel()->getComponentName());

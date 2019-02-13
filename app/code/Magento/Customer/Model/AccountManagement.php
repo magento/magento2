@@ -60,6 +60,7 @@ use Psr\Log\LoggerInterface as PsrLogger;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AccountManagement implements AccountManagementInterface
 {
@@ -524,6 +525,8 @@ class AccountManagement implements AccountManagementInterface
         }
 
         $customer->setConfirmation(null);
+        // No need to validate customer and customer address while activating customer
+        $this->setIgnoreValidationFlag($customer);
         $this->customerRepository->save($customer);
         $this->getEmailNotification()->newAccount(
             $customer,
@@ -683,8 +686,9 @@ class AccountManagement implements AccountManagementInterface
             $customer = $this->customerRepository->get($email);
         }
 
-        // No need to validate customer address while saving customer reset password token
+        // No need to validate customer and customer address while saving customer reset password token
         $this->disableAddressValidation($customer);
+        $this->setIgnoreValidationFlag($customer);
 
         //Validate Token and new password strength
         $this->validateResetPasswordToken($customer->getId(), $resetToken);
@@ -811,7 +815,7 @@ class AccountManagement implements AccountManagementInterface
     /**
      * @inheritdoc
      */
-    public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '', $extensions = [])
+    public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
         if ($password !== null) {
             $this->checkPasswordStrength($password);
@@ -827,7 +831,7 @@ class AccountManagement implements AccountManagementInterface
         } else {
             $hash = null;
         }
-        return $this->createAccountWithPasswordHash($customer, $hash, $redirectUrl, $extensions);
+        return $this->createAccountWithPasswordHash($customer, $hash, $redirectUrl);
     }
 
     /**
@@ -835,12 +839,8 @@ class AccountManagement implements AccountManagementInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function createAccountWithPasswordHash(
-        CustomerInterface $customer,
-        $hash,
-        $redirectUrl = '',
-        $extensions = []
-    ) {
+    public function createAccountWithPasswordHash(CustomerInterface $customer, $hash, $redirectUrl = '')
+    {
         // This logic allows an existing customer to be added to a different store.  No new account is created.
         // The plan is to move this logic into a new method called something like 'registerAccountWithStore'
         if ($customer->getId()) {
@@ -913,7 +913,7 @@ class AccountManagement implements AccountManagementInterface
         $customer = $this->customerRepository->getById($customer->getId());
         $newLinkToken = $this->mathRandom->getUniqueHash();
         $this->changeResetPasswordLinkToken($customer, $newLinkToken);
-        $this->sendEmailConfirmation($customer, $redirectUrl, $extensions);
+        $this->sendEmailConfirmation($customer, $redirectUrl);
 
         return $customer;
     }
@@ -941,12 +941,11 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @param string $redirectUrl
-     * @param array $extensions
      * @return void
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    protected function sendEmailConfirmation(CustomerInterface $customer, $redirectUrl, $extensions = [])
+    protected function sendEmailConfirmation(CustomerInterface $customer, $redirectUrl)
     {
         try {
             $hash = $this->customerRegistry->retrieveSecureData($customer->getId())->getPasswordHash();
@@ -956,14 +955,7 @@ class AccountManagement implements AccountManagementInterface
             } elseif ($hash == '') {
                 $templateType = self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD;
             }
-            $this->getEmailNotification()->newAccount(
-                $customer,
-                $templateType,
-                $redirectUrl,
-                $customer->getStoreId(),
-                null,
-                $extensions
-            );
+            $this->getEmailNotification()->newAccount($customer, $templateType, $redirectUrl, $customer->getStoreId());
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
@@ -1029,6 +1021,7 @@ class AccountManagement implements AccountManagementInterface
         $this->checkPasswordStrength($newPassword);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->destroyCustomerSessions($customer->getId());
+        $this->disableAddressValidation($customer);
         $this->customerRepository->save($customer);
 
         return true;
