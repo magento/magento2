@@ -10,6 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Store\Model\Store;
@@ -44,16 +45,28 @@ class CronCommand extends Command
     private $deploymentConfig;
 
     /**
+     * Maintenance mode
+     *
+     * @var MaintenanceMode
+     */
+    private $maintenanceMode;
+
+    /**
      * @param ObjectManagerFactory $objectManagerFactory
      * @param DeploymentConfig $deploymentConfig Application deployment configuration
+     * @param MaintenanceMode $maintenanceMode
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
-        DeploymentConfig $deploymentConfig = null
+        DeploymentConfig $deploymentConfig = null,
+        MaintenanceMode $maintenanceMode = null
     ) {
         $this->objectManagerFactory = $objectManagerFactory;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(
             DeploymentConfig::class
+        );
+        $this->maintenanceMode = $maintenanceMode ?: ObjectManager::getInstance()->get(
+            MaintenanceMode::class
         );
         parent::__construct();
     }
@@ -90,6 +103,10 @@ class CronCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($this->maintenanceMode->isOn()) {
+            $output->writeln('<info>' . 'Cron is disabled because the maintenance mode is enabled.' . '</info>');
+            return;
+        }
         if (!$this->deploymentConfig->get('cron/enabled', 1)) {
             $output->writeln('<info>' . 'Cron is disabled. Jobs were not run.' . '</info>');
             return;
