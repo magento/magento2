@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="GeneralLocaleOptionsConfig" dataType="locale_options_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/general/" method="POST">
+        <object key="groups" dataType="locale_options_config">
+            <object key="locale" dataType="locale_options_config">
+                <object key="fields" dataType="locale_options_config">
+                    <object key="code" dataType="code">
+                        <field key="value">string</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

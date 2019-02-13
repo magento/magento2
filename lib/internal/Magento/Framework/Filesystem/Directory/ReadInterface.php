@@ -7,7 +7,7 @@ namespace Magento\Framework\Filesystem\Directory;
 
 /**
  * Interface \Magento\Framework\Filesystem\Directory\ReadInterface
- *
+ * @api
  */
 interface ReadInterface
 {
@@ -89,6 +89,7 @@ interface ReadInterface
      *
      * @param string $path
      * @return \Magento\Framework\Filesystem\File\ReadInterface
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function openFile($path);
 
