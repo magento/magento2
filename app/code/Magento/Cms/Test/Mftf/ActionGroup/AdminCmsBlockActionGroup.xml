@@ -24,12 +24,16 @@
             <argument name="identifier" type="string" defaultValue="{{DefaultCmsBlock.identifier}}"/>
         </arguments>
         <amOnPage url="{{AdminCmsBlockGridPage.url}}" stepKey="navigateToCmsBlockListingPage"/>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFiltersBeforeDelete"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openCmsBlockFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('identifier')}}" userInput="{{identifier}}" stepKey="fillFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
         <click selector="{{CmsPagesPageActionsSection.select(identifier)}}" stepKey="clickOnSelect"/>
         <click selector="{{CmsPagesPageActionsSection.delete(identifier)}}" stepKey="clickOnDelete"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirm"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the block." stepKey="verifyBlockIsDeleted"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFiltersAfterDelete"/>
     </actionGroup>
     <actionGroup name="NavigateToCreateCmsBlockActionGroup">
         <amOnPage url="{{AdminCmsBlockNewPage.url}}" stepKey="navigateToCreateCmsBlockPage"/>
