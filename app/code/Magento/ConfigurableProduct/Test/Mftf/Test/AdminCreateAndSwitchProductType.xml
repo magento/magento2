@@ -53,6 +53,9 @@
             <testCaseId value="MC-10930"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MQE-1445" />
+            </skip>
         </annotations>
         <before>
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
