@@ -14,6 +14,9 @@ use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
+/**
+ * Observer to assign the products to website
+ */
 class ProductToWebsiteChangeObserver implements ObserverInterface
 {
     /**
@@ -69,12 +72,14 @@ class ProductToWebsiteChangeObserver implements ObserverInterface
                 $this->request->getParam('store_id', Store::DEFAULT_STORE_ID)
             );
 
-            $this->urlPersist->deleteByData([
-                UrlRewrite::ENTITY_ID => $product->getId(),
-                UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
-            ]);
-            if ($product->getVisibility() != Visibility::VISIBILITY_NOT_VISIBLE) {
-                $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
+            if (!empty($this->productUrlRewriteGenerator->generate($product))) {
+                $this->urlPersist->deleteByData([
+                    UrlRewrite::ENTITY_ID => $product->getId(),
+                    UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+                ]);
+                if ($product->getVisibility() != Visibility::VISIBILITY_NOT_VISIBLE) {
+                    $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
+                }
             }
         }
     }
