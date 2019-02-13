@@ -97,7 +97,7 @@ class CronCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testWithDisabledMaintenanceMode()
+    public function testWithMaintenanceModeEnabled()
     {
         $this->maintenanceModeMock->expects($this->once())
             ->method('isOn')
