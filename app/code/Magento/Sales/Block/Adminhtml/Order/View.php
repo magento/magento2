@@ -315,15 +315,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getUrl($params = '', $params2 = [])
     {
-        if(!isset($params2['back']))
-        {
-          $params2['order_id'] = $this->getOrderId();  
-        }
-        else
-        {
-          unset($params2['back']);  
-        }  
-        
+        $params2['order_id'] = $this->getOrderId();
         return parent::getUrl($params, $params2);
     }
 
@@ -459,7 +451,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             return $this->getOrder()->getBackUrl();
         }
 
-        return $this->getUrl('sales/*/',['back'=>true]);
+        return $this->_urlBuilder->getUrl('sales/*/');
     }
 
     /**
