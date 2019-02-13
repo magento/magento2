@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Checkout select Check/Money Order payment -->
     <actionGroup name="CheckoutSelectCheckMoneyOrderPaymentActionGroup">
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
@@ -105,5 +105,18 @@
         <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+    </actionGroup>
+
+    <actionGroup name="CheckoutSelectShippingMethodActionGroup">
+        <arguments>
+            <!-- First available shipping method will be selected if value is not passed for shippingMethod -->
+            <argument name="shippingMethod" defaultValue="" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName(shippingMethod)}}" dependentSelector="{{CheckoutShippingMethodsSection.checkShippingMethodByName(shippingMethod)}}" visible="true" stepKey="selectShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForPaymentMethod"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
     </actionGroup>
 </actionGroups>
