@@ -344,15 +344,11 @@
 
         .product-item-name {
             float: left;
-            width: calc(100% - 20px);
+            width: 80%;
         }
 
         .product-item {
-            &:after {
-                content: '';
-                clear: both;
-                display: table;
-            }
+            .lib-clearer();
             
             .label {
                 &:extend(.abs-visually-hidden all);
