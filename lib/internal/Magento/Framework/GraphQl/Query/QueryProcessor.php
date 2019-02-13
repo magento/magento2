@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
-use GraphQL\Validator\DocumentValidator;
-use GraphQL\Validator\Rules\DisableIntrospection;
-use GraphQL\Validator\Rules\QueryDepth;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Schema;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -25,11 +22,20 @@ class QueryProcessor
     private $exceptionFormatter;
 
     /**
-     * @param ExceptionFormatter $exceptionFormatter
+     * @var QueryComplexityLimiter
      */
-    public function __construct(ExceptionFormatter $exceptionFormatter)
-    {
+    private $queryComplexityLimiter;
+
+    /**
+     * @param ExceptionFormatter $exceptionFormatter
+     * @param QueryComplexityLimiter $queryComplexityLimiter
+     */
+    public function __construct(
+        ExceptionFormatter $exceptionFormatter,
+        QueryComplexityLimiter $queryComplexityLimiter
+    ) {
         $this->exceptionFormatter = $exceptionFormatter;
+        $this->queryComplexityLimiter = $queryComplexityLimiter;
     }
 
     /**
@@ -50,9 +56,9 @@ class QueryProcessor
         string $operationName = null
     ) : array {
         if (!$this->exceptionFormatter->shouldShowDetail()) {
-            DocumentValidator::addRule(new QueryDepth(10));
-            DocumentValidator::addRule(new DisableIntrospection());
+            $this->queryComplexityLimiter->execute();
         }
+
         $rootValue = null;
         return \GraphQL\GraphQL::executeQuery(
             $schema,
@@ -63,7 +69,7 @@ class QueryProcessor
             $operationName
         )->toArray(
             $this->exceptionFormatter->shouldShowDetail() ?
-                \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE | \GraphQL\Error\Debug::INCLUDE_TRACE : false
+                \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE : false
         );
     }
 }

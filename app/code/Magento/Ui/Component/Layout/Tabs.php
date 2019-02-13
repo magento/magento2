@@ -5,18 +5,17 @@
  */
 namespace Magento\Ui\Component\Layout;
 
-use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
-use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Element\ComponentVisibilityInterface;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
  * Class Tabs
  */
-class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInterface
+class Tabs extends \Magento\Framework\View\Layout\Generic
 {
     /**
      * @var string
@@ -89,58 +88,15 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
                 $this->addWrappedBlock($childComponent, $childrenAreas);
                 continue;
             }
+            if ($childComponent instanceof ComponentVisibilityInterface && !$childComponent->isComponentVisible()) {
+                continue;
+            }
 
             $name = $childComponent->getName();
             $config = $childComponent->getData('config');
             $collectedComponents[$name] = true;
-            if (isset($config['is_collection']) && $config['is_collection'] === true) {
-                $label = $childComponent->getData('config/label');
-                $this->component->getContext()->addComponentDefinition(
-                    'collection',
-                    [
-                        'component' => 'Magento_Ui/js/form/components/collection',
-                        'extends' => $this->namespace
-                    ]
-                );
 
-                /**
-                 * @var UiComponentInterface $childComponent
-                 * @var array $structure
-                 */
-                list($childComponent, $structure) = $this->prepareChildComponents($childComponent, $name);
-
-                $childrenStructure = $structure[$name]['children'];
-
-                $structure[$name]['children'] = [
-                    $name . '_collection' => [
-                        'type' => 'collection',
-                        'config' => [
-                            'active' => 1,
-                            'removeLabel' => __('Remove %1', $label),
-                            'addLabel' => __('Add New %1', $label),
-                            'removeMessage' => $childComponent->getData('config/removeMessage'),
-                            'itemTemplate' => 'item_template',
-                        ],
-                        'children' => [
-                            'item_template' => ['type' => $this->namespace,
-                                'isTemplate' => true,
-                                'component' => 'Magento_Ui/js/form/components/collection/item',
-                                'childType' => 'group',
-                                'config' => [
-                                    'label' => __('New %1', $label),
-                                ],
-                                'children' => $childrenStructure
-                            ]
-                        ]
-                    ]
-                ];
-            } else {
-                /**
-                 * @var UiComponentInterface $childComponent
-                 * @var array $structure
-                 */
-                list($childComponent, $structure) = $this->prepareChildComponents($childComponent, $name);
-            }
+            [$childComponent, $structure] = $this->buildChildComponentStructure($config, $childComponent);
 
             $tabComponent = $this->createTabComponent($childComponent, $name);
 
@@ -166,6 +122,67 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
 
         $this->structure[static::AREAS_KEY]['children'] = $childrenAreas;
         $topNode = $this->structure;
+    }
+
+    /**
+     * Build child components structure of the tab
+     *
+     * @param array $config
+     * @param UiComponentInterface $childComponent
+     * @return array
+     */
+    private function buildChildComponentStructure(array $config, $childComponent): array
+    {
+        $name = $childComponent->getName();
+        if (isset($config['is_collection']) && $config['is_collection'] === true) {
+            $label = $childComponent->getData('config/label');
+            $this->component->getContext()->addComponentDefinition(
+                'collection',
+                [
+                    'component' => 'Magento_Ui/js/form/components/collection',
+                    'extends' => $this->namespace
+                ]
+            );
+            /**
+             * @var UiComponentInterface $childComponent
+             * @var array $structure
+             */
+            [$childComponent, $structure] = $this->prepareChildComponents($childComponent, $name);
+
+            $childrenStructure = $structure[$name]['children'];
+
+            $structure[$name]['children'] = [
+                $name . '_collection' => [
+                    'type' => 'collection',
+                    'config' => [
+                        'active' => 1,
+                        'removeLabel' => __('Remove %1', $label),
+                        'addLabel' => __('Add New %1', $label),
+                        'removeMessage' => $childComponent->getData('config/removeMessage'),
+                        'itemTemplate' => 'item_template',
+                    ],
+                    'children' => [
+                        'item_template' => ['type' => $this->namespace,
+                            'isTemplate' => true,
+                            'component' => 'Magento_Ui/js/form/components/collection/item',
+                            'childType' => 'group',
+                            'config' => [
+                                'label' => __('New %1', $label),
+                            ],
+                            'children' => $childrenStructure
+                        ]
+                    ]
+                ]
+            ];
+        } else {
+            /**
+             * @var UiComponentInterface $childComponent
+             * @var array $structure
+             */
+            [$childComponent, $structure] = $this->prepareChildComponents($childComponent, $name);
+        }
+
+        return [$childComponent, $structure];
     }
 
     /**

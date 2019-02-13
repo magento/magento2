@@ -264,4 +264,15 @@ class Totals extends Block
     {
         $this->waitForElementVisible($this->shippingPriceBlockSelector, Locator::SELECTOR_CSS);
     }
+
+    /**
+     * Wait for "Grand Total" row to appear.
+     *
+     * @return void
+     */
+    public function waitForGrandTotal()
+    {
+        $this->waitForUpdatedTotals();
+        $this->waitForElementVisible($this->grandTotal);
+    }
 }

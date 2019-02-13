@@ -28,6 +28,8 @@ class ConfigurableProductViewTest extends GraphQlAbstract
      */
     public function testQueryConfigurableProductLinks()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/361');
+
         $productSku = 'configurable';
 
         $query
@@ -204,7 +206,6 @@ QUERY;
         /**
          * @var ProductRepositoryInterface $productRepository
          */
-
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
 
@@ -407,6 +408,7 @@ QUERY;
                 $variantArray['product']['price']
             );
             $configurableOptions = $this->getConfigurableOptions();
+            $this->assertEquals(1, count($variantArray['attributes']));
             foreach ($variantArray['attributes'] as $attribute) {
                 $hasAssertion = false;
                 foreach ($configurableOptions as $option) {

@@ -9,6 +9,8 @@ use Magento\Elasticsearch\SearchAdapter\QueryAwareInterface;
 use Magento\Elasticsearch\SearchAdapter\QueryContainer;
 
 /**
+ * Elastic search data provider
+ *
  * @api
  * @since 100.1.0
  */
@@ -120,7 +122,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getRange()
@@ -129,7 +131,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getAggregations(\Magento\Framework\Search\Dynamic\EntityStorage $entityStorage)
@@ -168,7 +170,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getInterval(
@@ -191,7 +193,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getAggregation(
@@ -209,7 +211,8 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
             'prices' => [
                 'histogram' => [
                     'field' => $fieldName,
-                    'interval' => $range,
+                    'interval' => (float)$range,
+                    'min_doc_count' => 1,
                 ],
             ],
         ];
@@ -217,7 +220,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $queryResult = $this->connectionManager->getConnection()
             ->query($query);
         foreach ($queryResult['aggregations']['prices']['buckets'] as $bucket) {
-            $key = intval($bucket['key'] / $range + 1);
+            $key = (int)($bucket['key'] / $range + 1);
             $result[$key] = $bucket['doc_count'];
         }
 
@@ -225,7 +228,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function prepareData($range, array $dbRanges)

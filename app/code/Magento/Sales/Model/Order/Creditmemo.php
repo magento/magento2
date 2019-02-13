@@ -19,10 +19,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * Order creditmemo model
  *
  * @api
- * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
- * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
+ * @method \Magento\Sales\Model\Order\Creditmemo setSendEmail(bool $value)
+ * @method \Magento\Sales\Model\Order\Creditmemo setCustomerNote(string $value)
  * @method string getCustomerNote()
- * @method \Magento\Sales\Model\Order\Invoice setCustomerNoteNotify(bool $value)
+ * @method \Magento\Sales\Model\Order\Creditmemo setCustomerNoteNotify(bool $value)
  * @method bool getCustomerNoteNotify()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -41,11 +41,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     const REPORT_DATE_TYPE_ORDER_CREATED = 'order_created';
 
     const REPORT_DATE_TYPE_REFUND_CREATED = 'refund_created';
-
-    /**
-     * Allow Zero Grandtotal for Creditmemo path
-     */
-    const XML_PATH_ALLOW_ZERO_GRANDTOTAL = 'sales/zerograndtotal_creditmemo/allow_zero_grandtotal';
 
     /**
      * Identifier for order history item
@@ -655,10 +650,10 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      *
      * @return bool
      */
-    public function isAllowZeroGrandTotal()
+    private function isAllowZeroGrandTotal()
     {
         $isAllowed = $this->scopeConfig->getValue(
-            self::XML_PATH_ALLOW_ZERO_GRANDTOTAL,
+            'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return $isAllowed;

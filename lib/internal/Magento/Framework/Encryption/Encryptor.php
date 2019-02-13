@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Encryption;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Adapter\EncryptionAdapterInterface;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Math\Random;
@@ -116,19 +117,27 @@ class Encryptor implements EncryptorInterface
     private $random;
 
     /**
+     * @var KeyValidator
+     */
+    private $keyValidator;
+
+    /**
      * Encryptor constructor.
      * @param Random $random
      * @param DeploymentConfig $deploymentConfig
+     * @param KeyValidator|null $keyValidator
      */
     public function __construct(
         Random $random,
-        DeploymentConfig $deploymentConfig
+        DeploymentConfig $deploymentConfig,
+        KeyValidator $keyValidator = null
     ) {
         $this->random = $random;
 
         // load all possible keys
         $this->keys = preg_split('/\s+/s', trim((string)$deploymentConfig->get(self::PARAM_CRYPT_KEY)));
         $this->keyVersion = count($this->keys) - 1;
+        $this->keyValidator = $keyValidator ?: ObjectManager::getInstance()->get(KeyValidator::class);
     }
 
     /**
@@ -228,6 +237,8 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Explode password hash
+     *
      * @param string $hash
      * @return array
      */
@@ -243,6 +254,8 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Get password hash
+     *
      * @return string
      */
     private function getPasswordHash()
@@ -251,6 +264,8 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Get password salt
+     *
      * @return string
      */
     private function getPasswordSalt()
@@ -259,11 +274,19 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Get password version
+     *
      * @return array
      */
     private function getPasswordVersion()
     {
-        return array_map('intval', explode(self::DELIMITER, $this->passwordHashMap[self::PASSWORD_VERSION]));
+        return array_map(
+            'intval',
+            explode(
+                self::DELIMITER,
+                (string)$this->passwordHashMap[self::PASSWORD_VERSION]
+            )
+        );
     }
 
     /**
@@ -281,6 +304,22 @@ class Encryptor implements EncryptorInterface
             ':' . base64_encode($crypt->encrypt($data));
     }
 
+    /**
+     * Encrypt data using the fastest available algorithm
+     *
+     * @param string $data
+     * @return string
+     */
+    public function encryptWithFastestAvailableAlgorithm($data)
+    {
+        $crypt = $this->getCrypt();
+        if (null === $crypt) {
+            return $data;
+        }
+        return $this->keyVersion .
+            ':' . $this->getCipherVersion() .
+            ':' . base64_encode($crypt->encrypt($data));
+    }
     /**
      * Look for key and crypt versions in encrypted data before decrypting
      *
@@ -344,8 +383,12 @@ class Encryptor implements EncryptorInterface
      */
     public function validateKey($key)
     {
-        if (preg_match('/\s/s', $key)) {
-            throw new \Exception((string)new \Magento\Framework\Phrase('The encryption key format is invalid.'));
+        if (!$this->keyValidator->isValid($key)) {
+            throw new \Exception(
+                (string)new \Magento\Framework\Phrase(
+                    'Encryption key must be 32 character string without any white space.'
+                )
+            );
         }
     }
 
@@ -391,7 +434,7 @@ class Encryptor implements EncryptorInterface
         string $initVector = null
     ): ?EncryptionAdapterInterface {
         if (null === $key && null === $cipherVersion) {
-            $cipherVersion = self::CIPHER_RIJNDAEL_256;
+            $cipherVersion = $this->getCipherVersion();
         }
 
         if (null === $key) {
@@ -423,5 +466,19 @@ class Encryptor implements EncryptorInterface
         }
 
         return new Mcrypt($key, $cipher, $mode, $initVector);
+    }
+
+    /**
+     * Get cipher version
+     *
+     * @return int
+     */
+    private function getCipherVersion()
+    {
+        if (extension_loaded('sodium')) {
+            return $this->cipher;
+        } else {
+            return self::CIPHER_RIJNDAEL_256;
+        }
     }
 }
