@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminTaxCalcWithApplyTaxOnSettingTest">
+        <annotations>
+            <features value="AdminTaxCalcWithApplyTaxOnSettingTest"/>
+            <title value="Tax calculation process following 'Apply Tax On' setting"/>
+            <description value="Tax calculation process following 'Apply Tax On' setting"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-11026"/>
+            <useCaseId value="MC-4316"/>
+            <group value="Tax"/>
+        </annotations>
+
+        <before>
+            <createData entity="taxRateForPensylvannia" stepKey="initialTaxRate"/>
+            <createData entity="defaultTaxRule" stepKey="createTaxRule"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProductWithCustomPrice" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="SetTaxClassForShipping" stepKey="setTaxClass"/>
+            <actionGroup ref="SetTaxApplyOnSetting" stepKey="setApplyTaxOnSetting">
+                <argument name="userInput" value="Original price only"/>
+            </actionGroup>
+            <amOnPage url="{{AdminEditTaxRulePage.url($$createTaxRule.id$$)}}" stepKey="navigateToEditTaxRulePage"/>
+            <waitForPageLoad stepKey="waitEditTaxRulePageToLoad"/>
+            <click selector="{{AdminTaxRulesSection.taxRateNumber('1')}}" stepKey="clickonTaxRate"/>
+            <click selector="{{AdminTaxRulesSection.deleteTaxClassName($$initialTaxRate.code$$)}}" stepKey="checkTaxRate"/>
+            <click selector="{{AdminTaxRulesSection.saveRule}}" stepKey="saveChanges"/>
+            <waitForPageLoad stepKey="waitTaxRulesToBeSaved"/>
+            <see selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rule." stepKey="seeSuccessMessage2"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
+            <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate" />
+            <actionGroup ref="DisableTaxApplyOnOriginalPrice" stepKey="setApplyTaxOffSetting">
+                <argument name="userInput" value="Custom price if available"/>
+            </actionGroup>
+            <actionGroup ref="ResetTaxClassForShipping" stepKey="resetTaxClassForShipping"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="navigateToNewOrderPageNewCustomerSingleStore" stepKey="gotoNewOrderCreationPage"/>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$createProduct$$"></argument>
+        </actionGroup>
+        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillEmailField"/>
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_CA"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminOrderFormAccountSection.email}}" stepKey="scrollToEmailField"/>
+        <waitForElementVisible selector="{{AdminOrderFormAccountSection.email}}" stepKey="waitEmailFieldToBeVisible"/>
+        <click selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="uncheckSameAsBillingAddressCheckbox"/>
+        <waitForPageLoad stepKey="waitSectionToReload"/>
+        <selectOption selector="{{AdminOrderFormShippingAddressSection.State}}" stepKey="switchOnVisibleInAdvancedSearch" userInput="Pennsylvania"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="getShippingMethods"/>
+        <waitForPageLoad stepKey="waitForApplyingShippingMethods"/>
+        <grabTextFrom selector="{{AdminOrderFormTotalSection.subtotalRow('3')}}" stepKey="grabTaxCost"/>
+        <assertEquals expected='$6.00' expectedType="string" actual="($grabTaxCost)" stepKey="assertTax"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="scrollToSubmitButton"/>
+        <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitElementToBeVisble"/>
+        <click selector="{{AdminOrderFormItemsSection.customPriceCheckbox}}" stepKey="clickOnCustomPriceCheckbox"/>
+        <fillField selector="{{AdminOrderFormItemsSection.customPriceField}}" userInput="{{SimpleProductNameWithDoubleQuote.price}}" stepKey="changePrice"/>
+        <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="updateItemsAndQunatities"/>
+        <assertEquals expected='$6.00' expectedType="string" actual="($grabTaxCost)" stepKey="assertTaxAfterCustomPrice"/>
+    </test>
+</tests>
