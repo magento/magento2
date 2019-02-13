@@ -126,7 +126,7 @@ class DynamicField implements FieldProviderInterface
         foreach ($groups as $group) {
             $groupPriceKey = $this->fieldNameResolver->getFieldName(
                 $priceAttribute,
-                ['customerGroupId' => $group->getId(), 'websiteId' => $context['websiteId']]
+                array_merge($context, ['customerGroupId' => $group->getId()])
             );
             $allAttributes[$groupPriceKey] = [
                 'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_FLOAT),

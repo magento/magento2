@@ -10,9 +10,14 @@ use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Save Review action.
+ */
 class Save extends ProductController implements HttpPostActionInterface
 {
     /**
+     * Save Review action.
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -64,7 +69,7 @@ class Save extends ProductController implements HttpPostActionInterface
             if ($nextId) {
                 $resultRedirect->setPath('review/*/edit', ['id' => $nextId]);
             } elseif ($this->getRequest()->getParam('ret') == 'pending') {
-                $resultRedirect->setPath('*/*/pending');
+                $resultRedirect->setPath('review/*/pending');
             } else {
                 $resultRedirect->setPath('*/*/');
             }

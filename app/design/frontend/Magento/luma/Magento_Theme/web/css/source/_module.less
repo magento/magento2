@@ -144,6 +144,12 @@
         }
     }
 
+    .page-print {
+        .nav-toggle {
+            display: none;
+        }
+    }
+
     .page-main {
         > .page-title-wrapper {
             .page-title + .action {
@@ -312,6 +318,23 @@
             }
         }
     }
+    .page-header {
+        .switcher {
+            .options {
+                ul.dropdown {
+                    right: 0;
+                    &:before {
+                        left: auto;
+                        right: 10px;
+                    }
+                    &:after {
+                        left: auto;
+                        right: 9px;
+                    }
+                }
+            }
+        }
+    }
 
     //
     //  Widgets
@@ -435,7 +458,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .cms-page-view .page-main {
-        padding-top: 41px;
+        padding-top: 0;
         position: relative;
     }
 }
