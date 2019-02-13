@@ -16,7 +16,9 @@
             <description value="Customer should be able to share a persistent wishlist"/>
             <severity value="AVERAGE"/>
             <group value="wishlist"/>
-            <testCaseId value="MAGETWO-23394"/>
+            <testCaseId value="MC-13976"/>
+            <group value="wishlist"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
@@ -29,7 +31,6 @@
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Sign in as customer -->
@@ -47,5 +48,7 @@
         </actionGroup>
 
         <actionGroup ref="StorefrontCustomerShareWishlistActionGroup" stepKey="shareWishlist"/>
+
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
     </test>
 </tests>
