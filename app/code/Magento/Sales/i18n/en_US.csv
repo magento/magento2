@@ -797,3 +797,5 @@ Created,Created
 Refunds,Refunds
 "Allow Zero GrandTotal for Creditmemo","Allow Zero GrandTotal for Creditmemo"
 "Allow Zero GrandTotal","Allow Zero GrandTotal"
+"This credit memo no longer exists.","This credit memo no longer exists."
+"This shipment no longer exists.","This shipment no longer exists."
