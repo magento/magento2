@@ -260,6 +260,19 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+    <entity name="ApiSimpleTwoHidden" type="product2">
+        <data key="sku" unique="suffix">api-simple-product-two</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">1</data>
+        <data key="name" unique="suffix">Api Simple Product Two</data>
+        <data key="price">234.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product-two</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
     <entity name="ProductWithOptions2" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
@@ -281,5 +294,9 @@
     <entity name="ApiSimpleSingleQty" extends="ApiSimpleOne">
         <data key="quantity">1</data>
         <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleWithQty100" extends="ApiSimpleOne">
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
     </entity>
 </entities>
