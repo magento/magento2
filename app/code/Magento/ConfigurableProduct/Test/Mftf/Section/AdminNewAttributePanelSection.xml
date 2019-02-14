@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewAttributePanelSection">
         <element name="container" type="text" selector="#create_new_attribute"/>
         <element name="saveAttribute" type="button" selector="#save"/>
@@ -21,5 +21,12 @@
         <element name="deleteOption" type="button" selector="#delete_button_option_{{row}}" parameterized="true"/>
         <element name="attributeSelect" type="select" selector="product[{{var}}]" parameterized="true"/>
         <element name="attributeName" type="select" selector="//option[text()='{{var}}']" parameterized="true"/>
+        <element name="useInSearch" type="select" selector="#is_searchable"/>
+        <element name="visibleInAdvancedSearch" type="select" selector="#is_visible_in_advanced_search"/>
+        <element name="comparableOnStorefront" type="select" selector="#is_comparable"/>
+        <element name="useInLayeredNavigation" type="select" selector="#is_filterable"/>
+        <element name="visibleOnCatalogPagesOnStorefront" type="select" selector="#is_visible_on_front"/>
+        <element name="useInProductListing" type="select" selector="#used_in_product_listing"/>
+        <element name="storefrontPropertiesTab" type="button" selector="#front_fieldset-wrapper"/>
     </section>
 </sections>
