@@ -15,7 +15,7 @@ namespace Magento\Customer\Api;
 interface CustomerRepositoryInterface
 {
     /**
-     * Create or update a customer.
+     * use POST to Create customer and PUT to Update customer
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $passwordHash

@@ -128,7 +128,13 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
-    <route url="/V1/customers/:customerId" method="PUT">
+    <route url="/V1/customers/" method="POST">
+        <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customers/:id" method="PUT">
         <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Customer::manage"/>

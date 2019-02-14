@@ -14,7 +14,7 @@ namespace Magento\Catalog\Api;
 interface ProductRepositoryInterface
 {
     /**
-     * Create product
+     * use POST to Create product and PUT to Update product
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param bool $saveOptions
