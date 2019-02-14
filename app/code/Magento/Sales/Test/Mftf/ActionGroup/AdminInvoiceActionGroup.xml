@@ -45,10 +45,23 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoicePageTitle"/>
     </actionGroup>
 
+    <actionGroup name="CreatePartialInvoice">
+        <arguments>
+            <argument name="productSku" type="string"/>
+            <argument name="qtyToInvoice" type="string" defaultValue="1"/>
+        </arguments>
+        <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoiceBySku(productSku)}}" userInput="{{qtyToInvoice}}" stepKey="changeQtyToInvoice"/>
+        <waitForElementVisible selector="{{AdminInvoiceItemsSection.updateQtyEnabled}}" stepKey="waitForUpdateQtyEnabled"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQty"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForQtyToUpdate"/>
+        <waitForElementVisible selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="waitForSubmitInvoiceButton"/>
+    </actionGroup>
+
     <actionGroup name="SubmitInvoice">
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForMessageAppears"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url('$grabOrderId')}}" stepKey="seeViewOrderPageInvoice"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
     </actionGroup>
 </actionGroups>

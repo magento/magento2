@@ -42,5 +42,7 @@
         <element name="billingAddressSameAsShipping" type="checkbox" selector=".payment-method._active [name='billing-address-same-as-shipping']"/>
         <element name="orderSummaryTotal" type="text" selector="tr.grand.totals span.price" />
         <element name="checkPaymentMethodByName" type="radio" selector="//div[@id='checkout-payment-method-load']//div[contains(., '{{paymentName}}')]/..//input[@type='radio']" parameterized="true"/>
+        <element name="orderSummaryShippingTotal" type="text" selector=".totals.shipping.excl span.price"/>
+        <element name="noPaymentMethods" type="text" selector=".no-quotes-block"/>
     </section>
 </sections>

@@ -10,7 +10,7 @@ use Magento\Sales\Model\Order;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class CreditMemoCreateRefundTest
+ * API tests for CreditMemoCreateRefund.
  */
 class CreditMemoCreateRefundTest extends WebapiAbstract
 {
@@ -25,12 +25,17 @@ class CreditMemoCreateRefundTest extends WebapiAbstract
      */
     protected $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
     /**
+     * Test for Invoke method.
+     *
      * @magentoApiDataFixture Magento/Sales/_files/invoice.php
      */
     public function testInvoke()
@@ -115,8 +120,7 @@ class CreditMemoCreateRefundTest extends WebapiAbstract
         );
         $this->assertNotEmpty($result);
         $order = $this->objectManager->get(OrderRepositoryInterface::class)->get($order->getId());
-        //Totally refunded orders still can be processed and shipped.
-        $this->assertEquals(Order::STATE_PROCESSING, $order->getState());
+        $this->assertEquals(Order::STATE_CLOSED, $order->getState());
     }
 
     private function getItemsForRest($order)
