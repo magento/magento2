@@ -253,7 +253,7 @@ label.mage-error {
 
         .captcha-reload {
             float: right;
-            vertical-align: middle;
+            margin-top: 15px;
         }
     }
 }
@@ -409,14 +409,22 @@ label.mage-error {
             z-index: 1;
 
             &:before {
+                /**
+                 * @codingStandardsIgnoreStart
+                 */
                 &:extend(.admin__control-checkbox + label:before);
+                //  @codingStandardsIgnoreEnd
                 left: 0;
                 position: absolute;
                 top: 0;
             }
 
             &:after {
+                /**
+                 * @codingStandardsIgnoreStart
+                 */
                 &:extend(.action-multicheck-wrap .action-multicheck-toggle:after);
+                //  @codingStandardsIgnoreEnd
                 top: 40% !important;
             }
         }
@@ -424,7 +432,11 @@ label.mage-error {
         &:focus {
             + label {
                 &:after {
+                    /**
+                     * @codingStandardsIgnoreStart
+                     */
                     &:extend(.action-multicheck-wrap .action-multicheck-toggle._active:after);
+                    //  @codingStandardsIgnoreEnd
                 }
             }
         }
@@ -432,7 +444,11 @@ label.mage-error {
         &._checked {
             + label {
                 &:before {
+                    /**
+                     * @codingStandardsIgnoreStart
+                     */
                     &:extend(.admin__control-checkbox:checked + label:before);
+                    //  @codingStandardsIgnoreEnd
                 }
             }
 
