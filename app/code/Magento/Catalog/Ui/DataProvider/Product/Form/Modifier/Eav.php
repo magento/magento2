@@ -21,8 +21,10 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Filter\Translit;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Stdlib\ArrayManager;
@@ -214,6 +216,11 @@ class Eav extends AbstractModifier
     private $scopeConfig;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private $auth;
+
+    /**
      * Eav constructor.
      * @param LocatorInterface $locator
      * @param CatalogEavValidationRules $catalogEavValidationRules
@@ -261,7 +268,8 @@ class Eav extends AbstractModifier
         $attributesToEliminate = [],
         CompositeConfigProcessor $wysiwygConfigProcessor = null,
         ScopeConfigInterface $scopeConfig = null,
-        AttributeCollectionFactory $attributeCollectionFactory = null
+        AttributeCollectionFactory $attributeCollectionFactory = null,
+        ?AuthorizationInterface $auth = null
     ) {
         $this->locator = $locator;
         $this->catalogEavValidationRules = $catalogEavValidationRules;
@@ -282,12 +290,12 @@ class Eav extends AbstractModifier
         $this->dataPersistor = $dataPersistor;
         $this->attributesToDisable = $attributesToDisable;
         $this->attributesToEliminate = $attributesToEliminate;
-        $this->wysiwygConfigProcessor = $wysiwygConfigProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(CompositeConfigProcessor::class);
-        $this->scopeConfig = $scopeConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
-        ->get(ScopeConfigInterface::class);
+        $this->wysiwygConfigProcessor = $wysiwygConfigProcessor
+            ?: ObjectManager::getInstance()->get(CompositeConfigProcessor::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->attributeCollectionFactory = $attributeCollectionFactory
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
+            ?: ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
+        $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**
@@ -728,6 +736,25 @@ class Eav extends AbstractModifier
                 // Gallery attribute is being handled by "Images And Videos" section
                 $meta = [];
                 break;
+        }
+
+        //Checking access to design config.
+        if (in_array(
+            $attribute->getAttributeCode(),
+            ['custom_design', 'page_layout', 'options_container', 'custom_layout_update'],
+            true
+        )) {
+            if (!$this->auth->isAllowed('Magento_Catalog::edit_product_design')) {
+                $meta = $this->arrayManager->merge(
+                    $configPath,
+                    $meta,
+                    [
+                        'disabled' => true,
+                        'validation' => ['required' => false],
+                        'required' => false,
+                    ]
+                );
+            }
         }
 
         return $meta;
