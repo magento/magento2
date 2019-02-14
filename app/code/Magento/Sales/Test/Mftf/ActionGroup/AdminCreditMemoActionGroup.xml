@@ -12,12 +12,13 @@
         <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemoButton"/>
         <conditionalClick selector="{{AdminConfirmationModalSection.ok}}" dependentSelector="{{AdminConfirmationModalSection.ok}}"
                           visible="true" stepKey="acceptModal"/>
+        <waitForPageLoad time="30" stepKey="waitPageLoaded"/>
         <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewCreditMemoUrl"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewCreditMemoPageTitle"/>
     </actionGroup>
 
     <actionGroup name="SubmitCreditMemo">
-        <waitForElementNotVisible selector="{{AdminCreditMemoTotalSection.submitRefundOfflineDisabled}}" stepKey="waitButtonEnabled"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="waitButtonEnabled"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitCreditMemo"/>
         <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForMessageAppears"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeCreditMemoCreateSuccess"/>
