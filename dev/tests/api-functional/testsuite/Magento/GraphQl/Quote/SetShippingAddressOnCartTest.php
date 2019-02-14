@@ -89,6 +89,17 @@ mutation {
         city
         postcode
         telephone
+        available_shipping_methods {
+          amount
+          base_amount
+          carrier_code
+          carrier_title
+          error_message
+          method_code
+          method_title
+          price_excl_tax
+          price_incl_tax
+        }
       }
     }
   }
@@ -101,6 +112,7 @@ QUERY;
         self::assertArrayHasKey('shipping_addresses', $cartResponse);
         $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertNewShippingAddressFields($shippingAddressResponse);
+        $this->assertAvailableShippingRates($shippingAddressResponse);
     }
 
     /**
@@ -354,6 +366,17 @@ mutation {
         city
         postcode
         telephone
+        available_shipping_methods {
+          amount
+          base_amount
+          carrier_code
+          carrier_title
+          error_message
+          method_code
+          method_title
+          price_excl_tax
+          price_incl_tax
+        }
       }
     }
   }
@@ -366,6 +389,7 @@ QUERY;
         self::assertArrayHasKey('shipping_addresses', $cartResponse);
         $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertNewShippingAddressFields($shippingAddressResponse);
+        $this->assertAvailableShippingRates($shippingAddressResponse);
     }
 
     /**
@@ -412,6 +436,17 @@ mutation {
         city
         postcode
         telephone
+        available_shipping_methods {
+          amount
+          base_amount
+          carrier_code
+          carrier_title
+          error_message
+          method_code
+          method_title
+          price_excl_tax
+          price_incl_tax
+        }
       }
     }
   }
@@ -424,6 +459,7 @@ QUERY;
         self::assertArrayHasKey('shipping_addresses', $cartResponse);
         $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertSavedShippingAddressFields($shippingAddressResponse);
+        $this->assertAvailableShippingRates($shippingAddressResponse);
     }
 
     /**
@@ -464,6 +500,31 @@ QUERY;
         ];
 
         $this->assertResponseFields($shippingAddressResponse, $assertionMap);
+    }
+
+    /**
+     * Verify the expected shipping method is available
+     *
+     * @param array $shippingAddressResponse
+     */
+    private function assertAvailableShippingRates(array $shippingAddressResponse): void
+    {
+        $this->assertArrayHasKey('available_shipping_methods', $shippingAddressResponse);
+        $rate = current($shippingAddressResponse['available_shipping_methods']);
+
+        $assertionMap = [
+            ['response_field' => 'amount', 'expected_value' => 5],
+            ['response_field' => 'base_amount', 'expected_value' => 5],
+            ['response_field' => 'carrier_code', 'expected_value' => 'flatrate'],
+            ['response_field' => 'carrier_title', 'expected_value' => 'Flat Rate'],
+            ['response_field' => 'error_message', 'expected_value' => ''],
+            ['response_field' => 'method_code', 'expected_value' => 'flatrate'],
+            ['response_field' => 'method_title', 'expected_value' => 'Fixed'],
+            ['response_field' => 'price_incl_tax', 'expected_value' => 5],
+            ['response_field' => 'price_excl_tax', 'expected_value' => 5],
+        ];
+
+        $this->assertResponseFields($rate, $assertionMap);
     }
 
     /**
