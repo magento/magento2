@@ -19,18 +19,12 @@
             <group value="checkout"/>
         </annotations>
         <before>
-            <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <createData entity="defaultVirtualProduct" stepKey="createVirtualProduct">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer">
-                <field key="group_id">1</field>
-            </createData>
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
+            <createData entity="Customer_With_Different_Default_Billing_Shipping_Addresses" stepKey="createCustomer"/>
         </before>
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
         <!-- Steps -->
@@ -48,8 +42,8 @@
         <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingcart"/>
         <!-- Step 4: Open Estimate Tax section -->
         <click selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" stepKey="openEstimateTaxSection"/>
-        <see selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country_id}}" stepKey="checkCountry"/>
-        <see selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="checkState"/>
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="checkCountry"/>
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="checkState"/>
         <scrollTo selector="{{CheckoutCartSummarySection.postcode}}" stepKey="scrollToPostCodeField"/>
         <grabValueFrom  selector="{{CheckoutCartSummarySection.postcode}}" stepKey="grabTextPostCode"/>
         <assertEquals message="Customer postcode is invalid" stepKey="checkCustomerPostcode">
