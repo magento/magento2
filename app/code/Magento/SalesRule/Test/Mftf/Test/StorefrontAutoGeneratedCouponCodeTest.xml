@@ -56,8 +56,19 @@
                           stepKey="clickManageCouponCodes"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.couponQty}}" userInput="1" stepKey="fillFieldCouponQty"/>
         <click selector="{{AdminCartPriceRulesFormSection.generateCouponsButton}}" stepKey="clickGenerateCoupon"/>
-        <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="1 coupon(s) have been generated."
+        <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="Message is added to queue, wait to get your coupons soon"
              stepKey="seeSuccessMessage"/>
+
+        <!-- Run cron twice -->
+        <magentoCLI command="cron:run" stepKey="runCron1"/>
+        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitFormToReload1"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}"
+                          dependentSelector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" visible="true"
+                          stepKey="clickManageCouponCodes2"/>
+
+        <!-- Grab a coupon code and hold on to it for later -->
         <grabTextFrom selector="{{AdminCartPriceRulesFormSection.generatedCouponByIndex('1')}}"
                       stepKey="couponCode"/>
 
