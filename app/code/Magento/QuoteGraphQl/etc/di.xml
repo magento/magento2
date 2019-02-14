@@ -11,6 +11,7 @@
         <arguments>
             <argument name="supportedTypes" xsi:type="array">
                 <item name="simple" xsi:type="string">SimpleCartItem</item>
+                <item name="virtual" xsi:type="string">VirtualCartItem</item>
             </argument>
         </arguments>
     </type>

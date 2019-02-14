@@ -37,6 +37,7 @@
         <element name="applySingleQuantityToEachSkus" type="radio" selector=".admin__field-label[for='apply-single-inventory-radio']" timeout="30"/>
         <element name="quantity" type="input" selector="#apply-single-inventory-input"/>
         <element name="gridLoadingMask" type="text" selector="[data-role='spinner'][data-component*='product_attributes_listing']"/>
+        <element name="attributeCheckboxByName" type="input" selector="//*[contains(@data-attribute-option-title,'{{arg}}')]//input[@type='checkbox']" parameterized="true"/>
         <element name="attributeColorCheckbox" type="select" selector="//div[contains(text(),'color') and @class='data-grid-cell-content']/../preceding-sibling::td/label/input"/>
     </section>
 </sections>

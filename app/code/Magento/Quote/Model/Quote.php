@@ -1375,14 +1375,13 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      *
      * @param bool $useCache
      * @return  \Magento\Eav\Model\Entity\Collection\AbstractCollection
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getItemsCollection($useCache = true)
     {
-        if ($this->hasItemsCollection()) {
+        if ($this->hasItemsCollection() && $useCache) {
             return $this->getData('items_collection');
         }
-        if (null === $this->_items) {
+        if (null === $this->_items || !$useCache) {
             $this->_items = $this->_quoteItemCollectionFactory->create();
             $this->extensionAttributesJoinProcessor->process($this->_items);
             $this->_items->setQuote($this);
@@ -1399,7 +1398,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $items = [];
         foreach ($this->getItemsCollection() as $item) {
-            /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $item */
+            /** @var \Magento\Quote\Model\Quote\Item $item */
             if (!$item->isDeleted()) {
                 $items[] = $item;
             }

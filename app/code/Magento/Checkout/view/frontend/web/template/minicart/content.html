@@ -97,7 +97,7 @@
         </div>
     </div>
 
-    <div id="minicart-widgets" class="minicart-widgets">
+    <div id="minicart-widgets" class="minicart-widgets" if="getRegion('promotion').length">
         <each args="getRegion('promotion')" render=""/>
     </div>
 </div>
