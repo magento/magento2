@@ -5,14 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Cart\Address;
+namespace Magento\QuoteGraphQl\Model\Resolver\ShippingAdress;
 
-use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Quote\Model\Cart\ShippingMethodConverter;
-use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
-class ShippingMethodsDataProvider
+/**
+ * @inheritdoc
+ */
+class AvailableShippingMethods implements ResolverInterface
 {
     /**
      * @var ExtensibleDataObjectConverter
@@ -25,8 +31,6 @@ class ShippingMethodsDataProvider
     private $shippingMethodConverter;
 
     /**
-     * AddressDataProvider constructor.
-     *
      * @param ExtensibleDataObjectConverter $dataObjectConverter
      * @param ShippingMethodConverter $shippingMethodConverter
      */
@@ -38,9 +42,15 @@ class ShippingMethodsDataProvider
         $this->shippingMethodConverter = $shippingMethodConverter;
     }
 
-    public function getAvailableShippingMethods(QuoteAddress $address): array
+    /**
+     * @inheritdoc
+     */
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $methods = [];
+        if (!isset($value['model'])) {
+            throw new LocalizedException(__('"model" values should be specified'));
+        }
+        $address = $value['model'];
 
         // Allow shipping rates by setting country id for new addresses
         if (!$address->getCountryId() && $address->getCountryCode()) {
@@ -51,6 +61,7 @@ class ShippingMethodsDataProvider
         $address->collectShippingRates();
         $cart = $address->getQuote();
 
+        $methods = [];
         $shippingRates = $address->getGroupedAllShippingRates();
         foreach ($shippingRates as $carrierRates) {
             foreach ($carrierRates as $rate) {
@@ -61,7 +72,6 @@ class ShippingMethodsDataProvider
                 );
             }
         }
-
         return $methods;
     }
 }

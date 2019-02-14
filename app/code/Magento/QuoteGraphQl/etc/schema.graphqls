@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    Cart(cart_id: String!): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Returns information about shopping cart")
+    cart(cart_id: String!): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Returns information about shopping cart")
 }
 
 type Mutation {
@@ -117,8 +117,8 @@ type CartAddress {
     country: CartAddressCountry
     telephone: String
     address_type: AdressTypeEnum
-    selected_shipping_method: CheckoutShippingMethod
-    available_shipping_methods: [CheckoutAvailableShippingMethod] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressShippingMethods")
+    selected_shipping_method: ShippingMethod
+    available_shipping_methods: [AvailableShippingMethod] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAdress\\AvailableShippingMethods")
     items_weight: Float
     customer_notes: String
     cart_items: [CartItemQuantity]
@@ -139,7 +139,7 @@ type CartAddressCountry {
     label: String
 }
 
-type CheckoutShippingMethod {
+type ShippingMethod {
     code: String
     label: String
     free_shipping: Boolean!
@@ -150,7 +150,7 @@ type CheckoutShippingMethod {
     base_amount_incl_tax: Float!
 }
 
-type CheckoutAvailableShippingMethod {
+type AvailableShippingMethod {
     carrier_code: String!
     carrier_title: String!
     method_code: String!
@@ -160,7 +160,6 @@ type CheckoutAvailableShippingMethod {
     base_amount: Float!
     price_excl_tax: Float!
     price_incl_tax: Float!
-    available: Boolean!
 }
 
 enum AdressTypeEnum {
