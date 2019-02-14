@@ -31,6 +31,10 @@
     margin-top: 10px;
 }
 
+.swatch-attribute-options:focus {
+    box-shadow: none;
+}
+
 .swatch-option {
     /*width: 30px;*/
     padding: 1px 2px;
@@ -45,6 +49,10 @@
     border: 1px solid rgb(218, 218, 218);
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.swatch-option:focus {
+    box-shadow: 0 0 3px 1px #68a8e0;
 }
 
 .swatch-option.text {
