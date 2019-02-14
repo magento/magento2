@@ -68,9 +68,9 @@ class GetCartTest extends GraphQlAbstract
 
         $response = $this->sendRequestWithToken($query);
 
-        self::assertArrayHasKey('Cart', $response);
-        self::assertNotEmpty($response['Cart']['items']);
-        self::assertNotEmpty($response['Cart']['shipping_addresses']);
+        self::assertArrayHasKey('cart', $response);
+        self::assertNotEmpty($response['cart']['items']);
+        self::assertNotEmpty($response['cart']['shipping_addresses']);
     }
 
     /**
@@ -110,7 +110,7 @@ class GetCartTest extends GraphQlAbstract
 
         $response = $this->graphQlQuery($query);
 
-        self::assertArrayHasKey('Cart', $response);
+        self::assertArrayHasKey('cart', $response);
     }
 
     public function testGetNonExistentCart()
@@ -134,7 +134,7 @@ class GetCartTest extends GraphQlAbstract
     ) : string {
         return <<<QUERY
 {
-  Cart(cart_id: "$maskedQuoteId") {
+  cart(cart_id: "$maskedQuoteId") {
     applied_coupon {
     	  code
     }
