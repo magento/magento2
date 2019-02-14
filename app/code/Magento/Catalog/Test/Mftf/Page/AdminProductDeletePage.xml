@@ -8,9 +8,7 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="CheckoutCartPage" url="/checkout/cart" module="Magento_Checkout" area="storefront">
-        <section name="CheckoutCartProductSection"/>
-        <section name="CheckoutCartSummarySection"/>
-        <section name="CheckoutCartCrossSellSection"/>
+    <page name="AdminProductDeletePage" url="catalog/product/delete/id/{{productId}}/" area="admin" module="Magento_Catalog" parameterized="true">
+        <!-- This page object only exists for the url. Use the AdminProductCreatePage for selectors. -->
     </page>
 </pages>

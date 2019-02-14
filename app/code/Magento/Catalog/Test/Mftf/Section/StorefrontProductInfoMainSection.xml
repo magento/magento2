@@ -13,7 +13,7 @@
         <element name="productName" type="text" selector=".base"/>
         <element name="productSku" type="text" selector=".product.attribute.sku>.value"/>
         <element name="productPriceLabel" type="text" selector=".price-label"/>
-        <element name="productPrice" type="text" selector="div.price-box.price-final_price"/>
+        <element name="productPrice" type="text" selector=".price-final_price"/>
         <element name="qty" type="input" selector="#qty"/>
         <element name="specialPrice" type="text" selector=".special-price"/>
         <element name="specialPriceAmount" type="text" selector=".special-price span.price"/>
