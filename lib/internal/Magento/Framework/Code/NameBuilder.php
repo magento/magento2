@@ -7,8 +7,6 @@ namespace Magento\Framework\Code;
 
 /**
  * Name builder.
- *
- * @api
  */
 class NameBuilder
 {
