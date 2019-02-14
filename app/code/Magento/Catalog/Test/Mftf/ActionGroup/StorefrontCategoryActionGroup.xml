@@ -19,6 +19,12 @@
         <see userInput="{{category.name}}" selector="{{StorefrontCategoryMainSection.categoryTitle}}" stepKey="assertCategoryName"/>
         <see userInput="{{productCount}}" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCount"/>
     </actionGroup>
+    <!--Check category is empty-->
+    <actionGroup name="StorefrontCheckEmptyCategoryActionGroup" extends="StorefrontCheckCategoryActionGroup">
+        <remove keyForRemoval="assertProductCount"/>
+        <amOnPage url="{{StorefrontCategoryPage.url(category.name)}}" before="checkUrl" stepKey="goToCategoryStorefront"/>
+        <see selector="{{StorefrontCategoryMainSection.categoryEmptyMessage}}" userInput="We can't find products matching the selection." stepKey="seeCategoryEmpty"/>
+    </actionGroup>
 
     <!-- Check simple product on the category page -->
     <actionGroup name="StorefrontCheckCategorySimpleProduct">
