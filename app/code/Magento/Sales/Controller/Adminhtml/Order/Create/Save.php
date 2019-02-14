@@ -76,7 +76,9 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
             $resultRedirect->setPath('sales/*/');
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('Order saving error: %1', $e->getMessage()));
+            $resultRedirect->setPath('sales/*/');
         }
+
         return $resultRedirect;
     }
 }

@@ -156,7 +156,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         $this->messageManager->addNotice(
             __(
                 'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, ' .
-                'click <a href="#2" data-post="%3">here</a>.',
+                'click <a href="#" data-post="%3">here</a>.',
                 $updatedAt,
                 $refreshStatsLink,
                 str_replace(
