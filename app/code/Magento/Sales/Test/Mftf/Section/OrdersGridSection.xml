@@ -19,7 +19,7 @@
 
         <element name="website" type="radio" selector="//label[contains(text(), '{{arg}}')]" parameterized="true"/>
         <element name="addProducts" type="button" selector="#add_products"/>
-        <element name="selectProduct" type="checkbox" selector="//td[contains(text(), '{{arg}}')]/following-sibling::td[contains(@class, 'col-select col-in_products')]" parameterized="true"/>
+        <element name="selectProduct" type="checkbox" selector="//td[contains(text(), '{{arg}}')]/following-sibling::td[contains(@class, 'col-select col-in_products')]/label/input" parameterized="true"/>
         <element name="setQuantity" type="checkbox" selector="//td[contains(text(), '{{arg}}')]/following-sibling::td[contains(@class, 'col-qty')]/input" parameterized="true"/>
         <element name="addProductsToOrder" type="button" selector="//span[text()='Add Selected Product(s) to Order']"/>
         <element name="customPrice" type="checkbox" selector="//span[text()='{{arg}}']/parent::td/following-sibling::td/div//span[contains(text(),'Custom Price')]" parameterized="true"/>
