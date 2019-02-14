@@ -32,6 +32,8 @@
         <click selector="{{AdminNewWidgetSection.addNewCondition}}" stepKey="clickAddNewCondition"/>
         <selectOption selector="{{AdminNewWidgetSection.selectCondition}}" userInput="{{widget.condition}}" stepKey="selectCondition"/>
         <waitForElement selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="waitRuleParameter"/>
+        <click selector="{{AdminNewWidgetSection.ruleParameterEdit}}" stepKey="clickRuleParameterEdit"/>
+        <selectOption selector="{{AdminNewWidgetSection.ruleParameterEditSelect}}" userInput="{{widget.ruleIsOneOf}}" stepKey="selectRuleParameterEdit"/>
         <click selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="clickRuleParameter"/>
         <click selector="{{AdminNewWidgetSection.openChooser}}" stepKey="clickChooser"/>
         <waitForPageLoad stepKey="waitForAjaxLoad"/>

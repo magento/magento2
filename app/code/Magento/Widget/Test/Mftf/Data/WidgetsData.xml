@@ -18,6 +18,7 @@
         <data key="condition">SKU</data>
         <data key="display_on">All Pages</data>
         <data key="container">Main Content Area</data>
+        <data key="ruleIsOneOf">is one of</data>
     </entity>
     <entity name="DynamicBlocksRotatorWidget" type="widget">
         <data key="type">Banner Rotator</data>
