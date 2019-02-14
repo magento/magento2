@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="UpdateIndexerMode">
+        <arguments>
+            <argument name="indexerId" type="string"/>
+            <argument name="indexerMode" type="string" defaultValue="Update on Save"/>
+        </arguments>
+        <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="amOnIndexManagementPage"/>
+        <checkOption selector="{{AdminIndexManagementSection.indexerCheckbox(indexerId)}}" stepKey="selectIndexer"/>
+        <selectOption selector="{{AdminIndexManagementSection.massActionSelect}}" userInput="{{indexerMode}}" stepKey="selectIndexerMode"/>
+        <click selector="{{AdminIndexManagementSection.massActionSubmit}}" stepKey="submitIndexerForm"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput='1 indexer(s) are in "{{indexerMode}}" mode.' stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>
