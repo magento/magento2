@@ -70,7 +70,7 @@ class GetCartTest extends GraphQlAbstract
 
         self::assertArrayHasKey('Cart', $response);
         self::assertNotEmpty($response['Cart']['items']);
-        self::assertNotEmpty($response['Cart']['addresses']);
+        self::assertNotEmpty($response['Cart']['shipping_addresses']);
     }
 
     /**
@@ -141,10 +141,9 @@ class GetCartTest extends GraphQlAbstract
     items {
       id
     }
-    addresses {
+    shipping_addresses {
       firstname,
-      lastname,
-      address_type
+      lastname
     }
   }
 }
