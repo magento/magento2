@@ -123,7 +123,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        $expectedResponse = ['category' => null];
+        $expectedResponse = ['errors' => ['message' => 'Category doesn\'t exist']];
         $this->assertEquals($expectedResponse, $response);
     }
 
