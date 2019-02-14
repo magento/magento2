@@ -1202,7 +1202,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $nextLinkId = $this->_resourceHelper->getNextAutoincrement($mainTable);
 
         // pre-load 'position' attributes ID for each link type once
-        foreach ($this->_linkNameToId as $linkName => $linkId) {
+        foreach ($this->getLinkNameToId() as $linkName => $linkId) {
             $select = $this->_connection->select()->from(
                 $resource->getTable('catalog_product_link_attribute'),
                 ['id' => 'product_link_attribute_id']
@@ -1237,7 +1237,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $linkKey = "{$productId}-{$linkData['linked_id']}-{$linkData['link_type_id']}";
                     $productLinkKeys[$linkKey] = $linkData['id'];
                 }
-                foreach ($this->_linkNameToId as $linkName => $linkId) {
+                foreach ($this->getLinkNameToId() as $linkName => $linkId) {
                     $productIds[] = $productId;
                     if (isset($rowData[$linkName . 'sku'])) {
                         $linkSkus = explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
@@ -2272,6 +2272,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     public function getAttrSetIdToName()
     {
         return $this->_attrSetIdToName;
+    }
+
+    /**
+     * Attribute set ID-to-name pairs getter.
+     *
+     * @return array
+     */
+    public function getLinkNameToId()
+    {
+        return $this->_linkNameToId;
     }
 
     /**
