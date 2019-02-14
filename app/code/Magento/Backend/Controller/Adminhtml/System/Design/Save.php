@@ -6,6 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
 
+/**
+ * Save design action.
+ */
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
 {
     /**
@@ -26,6 +29,8 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
     }
 
     /**
+     * Save design action.
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
@@ -54,10 +59,10 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setDesignData($data);
-                return $resultRedirect->setPath('adminhtml/*/', ['id' => $design->getId()]);
+                return $resultRedirect->setPath('*/*/edit', ['id' => $design->getId()]);
             }
         }
 
-        return $resultRedirect->setPath('adminhtml/*/');
+        return $resultRedirect->setPath('*/*/');
     }
 }
