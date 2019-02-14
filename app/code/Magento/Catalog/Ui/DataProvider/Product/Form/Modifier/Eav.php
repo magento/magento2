@@ -244,6 +244,7 @@ class Eav extends AbstractModifier
      * @param CompositeConfigProcessor|null $wysiwygConfigProcessor
      * @param ScopeConfigInterface|null $scopeConfig
      * @param AttributeCollectionFactory $attributeCollectionFactory
+     * @param AuthorizationInterface|null $auth
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

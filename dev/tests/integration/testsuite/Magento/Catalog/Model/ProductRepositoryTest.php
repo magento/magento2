@@ -9,20 +9,22 @@ namespace Magento\Catalog\Model;
 
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\RoleFactory;
+use Magento\Backend\Model\Auth;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Acl\RootResource;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Authorization\Model\Rules;
 use Magento\Authorization\Model\RulesFactory;
 use Magento\TestFramework\Bootstrap as TestBootstrap;
-use Magento\User\Model\User;
-use Magento\User\Model\UserFactory;
 
 /**
  * Provide tests for ProductRepository model.
  *
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -49,9 +51,9 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $roleFactory;
 
     /**
-     * @var UserFactory
+     * @var Auth
      */
-    private $userFactory;
+    private $auth;
 
     /**
      * Sets up common objects
@@ -62,7 +64,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
         $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
-        $this->userFactory = Bootstrap::getObjectManager()->get(UserFactory::class);
+        $this->auth = Bootstrap::getObjectManager()->get(Auth::class);
     }
 
     /**
@@ -164,6 +166,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test authorization when saving product's design settings.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoAppArea adminhtml
      */
     public function testSaveDesign()
     {
@@ -171,8 +174,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         /** @var Role $role */
         $role = $this->roleFactory->create();
         $role->load(TestBootstrap::ADMIN_ROLE_NAME, 'role_name');
-        /** @var User $user */
-        $user = $this->userFactory->create();
+        $this->auth->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
 
         //Admin doesn't have access to product's design.
         /** @var Rules $rules */
@@ -180,10 +182,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $rules->setRoleId($role->getId());
         $rules->setResources(['Magento_Catalog::products']);
         $rules->saveRel();
-        $user->login(
-            TestBootstrap::ADMIN_NAME,
-            TestBootstrap::ADMIN_PASSWORD
-        )->reload();
 
         $product->setCustomAttribute('custom_design', 2);
         $product = $this->productRepository->save($product);
@@ -195,13 +193,19 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $rules->setRoleId($role->getId());
         $rules->setResources(['Magento_Catalog::products', 'Magento_Catalog::edit_product_design']);
         $rules->saveRel();
-        $user->login(
-            TestBootstrap::ADMIN_NAME,
-            TestBootstrap::ADMIN_PASSWORD
-        )->reload();
 
         $product->setCustomAttribute('custom_design', 2);
         $product = $this->productRepository->save($product);
-        $this->assertEquals(2, $product->getCustomAttribute('custom_design'));
+        $this->assertNotEmpty($product->getCustomAttribute('custom_design'));
+        $this->assertEquals(2, $product->getCustomAttribute('custom_design')->getValue());
+
+        //Restoring the role
+        /** @var RootResource $rootResource */
+        $rootResource = Bootstrap::getObjectManager()->get(\Magento\Framework\Acl\RootResource::class);
+        /** @var Rules $rules */
+        $rules = $this->rulesFactory->create();
+        $rules->setRoleId($role->getId());
+        $rules->setResources([$rootResource->getId()]);
+        $rules->saveRel();
     }
 }

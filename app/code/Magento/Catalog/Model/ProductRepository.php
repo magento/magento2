@@ -34,8 +34,10 @@ use Magento\Framework\AuthorizationInterface;
 
 /**
  * Product Repository.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface
 {
@@ -373,15 +375,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
 
         $userType = $this->userContext->getUserType();
-        if ($userType === UserContextInterface::USER_TYPE_ADMIN
+        if ((
+            $userType === UserContextInterface::USER_TYPE_ADMIN
             || $userType === UserContextInterface::USER_TYPE_INTEGRATION
+            )
+            && !$this->authorization->isAllowed('Magento_Catalog::edit_product_design')
         ) {
-            if (!$this->authorization->isAllowed('Magento_Catalog::edit_product_design')) {
-                $product->lockAttribute('custom_design');
-                $product->lockAttribute('page_layout');
-                $product->lockAttribute('options_container');
-                $product->lockAttribute('custom_layout_update');
-            }
+            $product->lockAttribute('custom_design');
+            $product->lockAttribute('page_layout');
+            $product->lockAttribute('options_container');
+            $product->lockAttribute('custom_layout_update');
         }
 
         foreach ($productData as $key => $value) {
