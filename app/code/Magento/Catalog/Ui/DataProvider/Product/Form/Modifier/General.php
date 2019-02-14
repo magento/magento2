@@ -355,8 +355,10 @@ class General extends AbstractModifier
                 'allowImport' => !$this->locator->getProduct()->getId(),
             ];
 
-            if (!in_array($listener, $textListeners)) {
-                $importsConfig['elementTmpl'] = 'ui/form/element/input';
+            if (in_array($listener, $textListeners)) {
+                $importsConfig['cols'] = 15;
+                $importsConfig['rows'] = 2;
+                $importsConfig['elementTmpl'] = 'ui/form/element/textarea';
             }
 
             $meta = $this->arrayManager->merge($listenerPath . static::META_CONFIG_PATH, $meta, $importsConfig);

@@ -10,7 +10,7 @@
 "var creditmemo.increment_id":"Credit Memo Id",
 "var billing.getName()":"Guest Customer Name",
 "var order.increment_id":"Order Id",
-"var order.getStatusLabel()":"Order Status"
+"var order.getFrontendStatusLabel()":"Order Status"
 } @-->
 {{template config_path="design/email/header_template"}}
 
@@ -23,7 +23,7 @@
                     "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."
 
                     increment_id=$order.increment_id
-                    order_status=$order.getStatusLabel()
+                    order_status=$order.getFrontendStatusLabel()
                 |raw}}
             </p>
             <p>
