@@ -16,6 +16,7 @@
     <entity name="ProductAttributeFrontendLabelThree" type="FrontendLabel">
         <data key="store_id">0</data>
         <data key="label" unique="suffix">attributeThree</data>
+        <data key="default_label" unique="suffix">attributeThree</data>
     </entity>
     <entity name="ColorAttributeFrontandLabel" type="FrontendLabel">
         <data key="store_id">0</data>

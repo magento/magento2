@@ -90,4 +90,41 @@
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextPageOpened2"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateProducts"/>
     </actionGroup>
+
+    <actionGroup name="AdminCreateConfigurableProductTwoAttributesWithOptionsActionGroup" extends="AdminCreateConfigurableProductActionGroup">
+        <arguments>
+            <argument name="attributeOption" type="string"/>
+            <argument name="attributeOption1" type="string"/>
+            <argument name="configurableAttributeCode1" type="string"/>
+            <argument name="attribute1Option" type="string"/>
+            <argument name="attribute1Option1" type="string"/>
+            <argument name="attribute1Option2" type="string"/>
+        </arguments>
+
+        <remove keyForRemoval="startEditAttrSet"/>
+        <remove keyForRemoval="searchForAttrSet"/>
+        <remove keyForRemoval="waitForLoad"/>
+        <remove keyForRemoval="selectAttrSetProd"/>
+        <remove keyForRemoval="saveEditedProductForProduct"/>
+        <remove keyForRemoval="clickClearFilters"/>
+        <remove keyForRemoval="clickFiltersExpand"/>
+        <remove keyForRemoval="fillFilter"/>
+        <remove keyForRemoval="clickSearch"/>
+        <remove keyForRemoval="clickAttributeColorCheckbox"/>
+        <remove keyForRemoval="clickOnSelectAllSecond"/>
+
+        <fillField userInput="{{configurationsPrice}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{configurationsQty}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+
+        <!--Select attributes -->
+        <click selector="{{AdminCreateProductConfigurationsPanel.checkboxByName(configurableAttributeCode)}}" after="openConfigurationPanel" stepKey="selectAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.checkboxByName(configurableAttributeCode1)}}" after="selectAttribute" stepKey="selectAttribute1"/>
+
+        <!--Select options-->
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeByName(attributeOption)}}" after="clickNextButton" stepKey="selectAttributeOption"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeByName(attributeOption1)}}" after="selectAttributeOption" stepKey="selectAttributeOption1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeByName(attribute1Option)}}" after="selectAttributeOption1" stepKey="selectAttribute1Option"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeByName(attribute1Option1)}}" after="selectAttribute1Option" stepKey="selectAttribute1Option1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeByName(attribute1Option2)}}" after="selectAttribute1Option1" stepKey="selectAttribute1Option2"/>
+    </actionGroup>
 </actionGroups>

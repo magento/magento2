@@ -180,6 +180,7 @@
         <element name="applySinglePriceToAllSkus" type="radio" selector=".admin__field-label[for='apply-single-price-radio']"/>
         <element name="singlePrice" type="input" selector="#apply-single-price-input"/>
         <element name="attributeByName" type="input" selector="//label[text()='{{var}}']/preceding-sibling::input" parameterized="true"/>
+        <element name="checkboxByName" type="input" selector="//div[text()='{{var}}']//ancestor::tr//input" parameterized="true"/>
     </section>
     <section name="AdminNewAttributePanel">
         <element name="saveAttribute" type="button" selector="#save" timeout="30"/>
