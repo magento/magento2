@@ -91,7 +91,6 @@ mutation {
         telephone
         available_shipping_methods {
           amount
-          available
           base_amount
           carrier_code
           carrier_title
@@ -369,7 +368,6 @@ mutation {
         telephone
         available_shipping_methods {
           amount
-          available
           base_amount
           carrier_code
           carrier_title
@@ -440,7 +438,6 @@ mutation {
         telephone
         available_shipping_methods {
           amount
-          available
           base_amount
           carrier_code
           carrier_title
@@ -517,7 +514,6 @@ QUERY;
 
         $assertionMap = [
             ['response_field' => 'amount', 'expected_value' => 5],
-            ['response_field' => 'available', 'expected_value' => true],
             ['response_field' => 'base_amount', 'expected_value' => 5],
             ['response_field' => 'carrier_code', 'expected_value' => 'flatrate'],
             ['response_field' => 'carrier_title', 'expected_value' => 'Flat Rate'],
