@@ -7,7 +7,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCustomerAccountAddressSection">
-        <element name="addresses" type="button" selector="a#tab_address"/>
-        <element name="addNewAddress" type="button" selector=".address-list-actions button.scalable.add span"/>
+        <element name="addresses" type="button" selector="#tab_address" timeout="30"/>
+        <element name="addNewAddress" type="button" selector=".address-list-actions button.scalable.add span" timeout="30"/>
     </section>
 </sections>

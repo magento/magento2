@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckingProductQtyAfterOrderCancelTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Product quantity after order cancel"/>
+            <title value="Products quantity return after order cancel"/>
+            <description value="Checking product quantity after the order cancel"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13790"/>
+            <group value="configurableProduct"/>
+        </annotations>
+        <before>
+            <!--Create category-->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!--Create configurable product and add it to the category-->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Create attribute-->
+            <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!--Add the attribute to default attribute set-->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!--Get the option of the attribute-->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <!--Create simple product and give it the attribute with option-->
+            <createData entity="ApiSimpleWithQty100" stepKey="createConfigChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <!--Create configurable product-->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <!--Add simple product to the configurable product-->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct"/>
+            </createData>
+            <!--Create customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Login-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Clear grid filters-->
+            <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrderGridPage"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
+            <!--Delete entities-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!--Logout-->
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="logoutFromStorefront"/>
+        </after>
+
+        <!--Go to Storefront as Customer-->
+        <actionGroup ref="CustomerLoginOnStorefront" stepKey="customerLogin">
+            <argument name="customer" value="$$createCustomer$$" />
+        </actionGroup>
+
+        <!--Go to the configurable product page on Storefront-->
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.sku$$)}}" stepKey="goToProductPage"/>
+        <!--Select option-->
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption.label$$" stepKey="selectOption"/>
+        <!--Add product to the Shopping cart-->
+        <actionGroup ref="StorefrontAddProductToCartQuantityActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$createConfigProduct.name$"/>
+            <argument name="quantity" value="4"/>
+        </actionGroup>
+
+        <!--Open Shopping cart-->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCartFromMinicart"/>
+        <!--Place order-->
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder">
+            <argument name="shippingMethod" value="Flat Rate"/>
+            <argument name="paymentMethod" value="Check / Money order"/>
+        </actionGroup>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+
+        <!--Open order-->
+        <actionGroup ref="OpenOrderById" stepKey="openOrderById">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+
+        <!--Start create invoice-->
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
+        <!--Create partial invoice-->
+        <actionGroup ref="CreatePartialInvoice" stepKey="createPartialInvoice">
+            <argument name="productSku" value="$createConfigChildProduct.sku$"/>
+            <argument name="qtyToInvoice" value="1"/>
+        </actionGroup>
+        <!--Submit Invoice-->
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+        <!--Create Shipment-->
+        <actionGroup ref="StartCreateShipmentFromOrderPage" stepKey="startCreateShipment"/>
+        <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="1" stepKey="changeItemQtyToShip"/>
+        <actionGroup ref="SubmitShipment" stepKey="submitShipment"/>
+
+        <!--Cancel order-->
+        <actionGroup ref="CancelProcessingOrder" stepKey="cancelOrder"/>
+        <!--Check quantities in "Items Ordered" table-->
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Invoiced 1" stepKey="seeInvoicedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 1" stepKey="seeShippedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Canceled 3" stepKey="seeCanceledQuantity"/>
+
+        <!--Go to catalog products page on Admin-->
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGrid">
+            <argument name="product" value="$$createConfigChildProduct$$"/>
+        </actionGroup>
+
+        <!--Check quantity of configurable child product-->
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Quantity')}}" userInput="99" stepKey="seeProductSkuInGrid"/>
+    </test>
+</tests>
