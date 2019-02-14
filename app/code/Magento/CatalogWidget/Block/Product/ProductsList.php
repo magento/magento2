@@ -109,11 +109,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     private $urlEncoder;
 
     /**
-     * @var \Magento\Framework\View\Element\RendererList
-     */
-    private $rendererListBlock;
-
-    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
