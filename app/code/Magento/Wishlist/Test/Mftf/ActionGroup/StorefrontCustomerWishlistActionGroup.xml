@@ -91,9 +91,7 @@
 
     <!-- Share wishlist -->
     <actionGroup name="StorefrontCustomerShareWishlistActionGroup">
-        <click selector="{{StorefrontCustomerWishlistProductSection.productShareWishList}}"
-               stepKey="clickMyWishListButton"/>
-        <amOnPage url="{{StorefrontCustomerWishlistSharePage.url}}" stepKey="amOnShareWishlist"/>
+        <click selector="{{StorefrontCustomerWishlistProductSection.productShareWishList}}" stepKey="clickMyWishListButton"/>
         <fillField userInput="{{Wishlist.shareInfo_emails}}" selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistEmail}}" stepKey="fillEmailsForShare"/>
         <fillField userInput="{{Wishlist.shareInfo_message}}" selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistTextMessage}}" stepKey="fillShareMessage"/>
         <click selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistButton}}" stepKey="sendWishlist"/>
