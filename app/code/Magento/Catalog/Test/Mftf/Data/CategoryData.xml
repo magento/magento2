@@ -104,4 +104,10 @@
         <data key="is_active">false</data>
         <data key="include_in_menu">true</data>
     </entity>
+    <entity name="CatInactiveNotInMenu" type="category">
+        <data key="name" unique="suffix">InactiveNotInMenu</data>
+        <data key="name_lwr" unique="suffix">inactivenotinmenu</data>
+        <data key="is_active">false</data>
+        <data key="include_in_menu">false</data>
+    </entity>
 </entities>
