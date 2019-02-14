@@ -5,7 +5,6 @@
  */
 namespace Magento\Store\App\FrontController\Plugin;
 
-use Magento\Store\Model\Store;
 use \Magento\Store\Model\StoreResolver\ReaderList;
 use \Magento\Store\Model\ScopeInterface;
 
@@ -49,7 +48,7 @@ class DefaultStore
         $scopeCode = null
     ) {
         $this->runMode = $scopeCode ? $runMode : ScopeInterface::SCOPE_WEBSITE;
-        $this->scopeCode = $scopeCode ? $scopeCode : Store::ADMIN_CODE;
+        $this->scopeCode = $scopeCode;
         $this->readerList = $readerList;
         $this->storeManager = $storeManager;
     }
