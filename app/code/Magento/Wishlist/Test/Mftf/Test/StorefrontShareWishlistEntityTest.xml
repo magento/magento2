@@ -11,7 +11,7 @@
     <test name="StorefrontShareWishlistEntityTest">
         <annotations>
             <features value="Wishlist"/>
-            <stories value="Customer should be able to share a persistent wishlist"/>
+            <stories value="Customer wishlist"/>
             <title value="Customer should be able to share a persistent wishlist"/>
             <description value="Customer should be able to share a persistent wishlist"/>
             <severity value="AVERAGE"/>
