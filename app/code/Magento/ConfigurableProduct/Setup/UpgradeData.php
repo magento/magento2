@@ -109,8 +109,9 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function upgradeQuoteItemPrice(ModuleDataSetupInterface $setup)
     {
-        $connection = $setup->getConnection('checkout');
-        $quoteItemTable = $connection->getTableName('quote_item');
+        $connectionName = 'checkout';
+        $connection = $setup->getConnection($connectionName);
+        $quoteItemTable = $setup->getTable('quote_item', $connectionName);
 
         $select = $connection->select();
         $select->joinLeft(
