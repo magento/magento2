@@ -66,11 +66,16 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         $lines = [];
 
         // draw Product name
-        $lines[0] = [['text' => $this->string->split($item->getName(), 35, true, true), 'feed' => 35]];
+        $lines[0] = [
+            [
+                'text' => $this->string->split(html_entity_decode($item->getName()), 35, true, true),
+                'feed' => 35
+            ]
+        ];
 
         // draw SKU
         $lines[0][] = [
-            'text' => $this->string->split($this->getSku($item), 17),
+            'text' => $this->string->split(html_entity_decode($this->getSku($item)), 17),
             'feed' => 290,
             'align' => 'right',
         ];
