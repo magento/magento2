@@ -49,12 +49,13 @@
         <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail" after="selectCustomerGroup"/>
 
         <!--Fill wrong customer address information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress" after="fillCustomerEmail">
-            <argument name="customer" value="Simple_US_Customer"/>
-            <argument name="address" value="US_address_TX_Wrong_Validation"/>
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillWrongCustomerAddress" after="fillCustomerEmail">
+            <argument name="customer" value="Simple_US_Customer_Incorrect_Name"/>
+            <argument name="address" value="US_Address_TX"/>
         </actionGroup>
         <!-- Select shipping -->
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"
+                     after="fillWrongCustomerAddress"/>
 
         <!--Verify totals on Order page-->
         <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeOrderSubTotal" after="selectFlatRateShipping"/>
@@ -63,17 +64,25 @@
         <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="${{AdminOrderSimpleProduct.grandTotal}}" stepKey="seeCorrectGrandTotal" after="scrollToOrderGrandTotal"/>
 
         <!--Submit Order and verify information-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="seeCorrectGrandTotal"/>
-        <see selector="{{AdminOrderFormBillingAddressSection.firstNameError}}" userInput="Please enter less or equal than 255 symbols." stepKey="firstNameError" after="clickSubmitOrder"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrderWrong"
+               after="seeCorrectGrandTotal"/>
+        <see selector="{{AdminOrderFormBillingAddressSection.firstNameError}}"
+             userInput="Please enter less or equal than 255 symbols." stepKey="firstNameError"
+             after="clickSubmitOrderWrong"/>
 
         <!--Fill correct customer address information-->
         <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress" after="firstNameError">
             <argument name="customer" value="Simple_US_Customer"/>
-            <argument name="address" value="US_address_TX"/>
+            <argument name="address" value="US_Address_TX"/>
         </actionGroup>
+
+        <!-- Select shipping -->
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShipping" after="fillCustomerAddress"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="selectShipping" after="clickShipping"/>
+
         <!--Submit Order and verify information-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="fillCustomerAddress"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="selectShipping"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage" after="clickSubmitOrder"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage" after="seeViewOrderPage"/>
-        </test>
-    </tests>
+    </test>
+</tests>
