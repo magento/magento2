@@ -75,7 +75,13 @@ class AddSimpleProductToCart
             throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
         }
 
-        $result = $cart->addProduct($product, $this->createBuyRequest($qty, $customizableOptions));
+        try {
+            $result = $cart->addProduct($product, $this->createBuyRequest($qty, $customizableOptions));
+        } catch (\Exception $e) {
+            throw new GraphQlInputException(
+                __('Shopping cart error with SKU \'%sku\': %message', ['sku' => $sku, 'message' => $e->getMessage()])
+            );
+        }
 
         if (is_string($result)) {
             throw new GraphQlInputException(__($result));
