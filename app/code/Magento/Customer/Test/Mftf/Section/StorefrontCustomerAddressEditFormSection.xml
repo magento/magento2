@@ -6,7 +6,7 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="StorefrontCustomerAddNewAddressSection">
+    <section name="StorefrontCustomerAddressEditFormSection">
         <element name="country" type="select" selector=".form-address-edit select#country" />
         <element name="countryEmptyOption" type="select" selector=".form-address-edit select#country option[value='']"/>
     </section>

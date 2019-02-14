@@ -45,10 +45,10 @@
         <!--Go to "Add New Address" page-->
         <amOnPage url="{{StorefrontCustomerAddressNewPage.url}}" stepKey="goToAddNewAddressPage"/>
         <!--Click on Country dropdown-->
-        <click selector="{{StorefrontCustomerAddNewAddressSection.country}}" stepKey="clickOnCountryDropdown"/>
+        <click selector="{{StorefrontCustomerAddressEditFormSection.country}}" stepKey="clickOnCountryDropdown"/>
         <!--Check dropdown options-->
-        <see selector="{{StorefrontCustomerAddNewAddressSection.country}}" userInput="United States" stepKey="seeUSInCountryDropdown"/>
-        <dontSee selector="{{StorefrontCustomerAddNewAddressSection.country}}" userInput="Brazil" stepKey="dontSeeBrazilInCountryDropdown"/>
-        <dontSeeElement selector="{{StorefrontCustomerAddNewAddressSection.countryEmptyOption}}" stepKey="dontSeeEmptyOptionInCountryDropdown"/>
+        <see selector="{{StorefrontCustomerAddressEditFormSection.country}}" userInput="United States" stepKey="seeUSInCountryDropdown"/>
+        <dontSee selector="{{StorefrontCustomerAddressEditFormSection.country}}" userInput="Brazil" stepKey="dontSeeBrazilInCountryDropdown"/>
+        <dontSeeElement selector="{{StorefrontCustomerAddressEditFormSection.countryEmptyOption}}" stepKey="dontSeeEmptyOptionInCountryDropdown"/>
     </test>
 </tests>
