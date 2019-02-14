@@ -15,7 +15,4 @@
                           stepKey="clickHeaderCustomerMenuButton" />
         <click selector="{{StorefrontPanelHeaderSection.customerLogoutLink}}" stepKey="clickSignOutButton" />
     </actionGroup>
-    <actionGroup name="CustomerSignInStorefrontActionGroup">
-        <click stepKey="signIn" selector="{{StorefrontPanelHeaderSection.customerLoginLink}}" />
-    </actionGroup>
 </actionGroups>
