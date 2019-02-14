@@ -409,18 +409,22 @@ label.mage-error {
             z-index: 1;
 
             &:before {
-                // @codingStandardsIgnoreStart
+                /**
+                 * @codingStandardsIgnoreStart
+                 */
                 &:extend(.admin__control-checkbox + label:before);
-                // @codingStandardsIgnoreEnd
+                //  @codingStandardsIgnoreEnd
                 left: 0;
                 position: absolute;
                 top: 0;
             }
 
             &:after {
-                // @codingStandardsIgnoreStart
+                /**
+                 * @codingStandardsIgnoreStart
+                 */
                 &:extend(.action-multicheck-wrap .action-multicheck-toggle:after);
-                // @codingStandardsIgnoreEnd
+                //  @codingStandardsIgnoreEnd
                 top: 40% !important;
             }
         }
@@ -428,9 +432,11 @@ label.mage-error {
         &:focus {
             + label {
                 &:after {
-                    // @codingStandardsIgnoreStart
+                    /**
+                     * @codingStandardsIgnoreStart
+                     */
                     &:extend(.action-multicheck-wrap .action-multicheck-toggle._active:after);
-                    // @codingStandardsIgnoreEnd
+                    //  @codingStandardsIgnoreEnd
                 }
             }
         }
@@ -438,9 +444,11 @@ label.mage-error {
         &._checked {
             + label {
                 &:before {
-                    // @codingStandardsIgnoreStart
+                    /**
+                     * @codingStandardsIgnoreStart
+                     */
                     &:extend(.admin__control-checkbox:checked + label:before);
-                    // @codingStandardsIgnoreEnd
+                    //  @codingStandardsIgnoreEnd
                 }
             }
 
