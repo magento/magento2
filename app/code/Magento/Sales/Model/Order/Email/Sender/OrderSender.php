@@ -55,10 +55,10 @@ class OrderSender extends Sender
      * @param OrderIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Renderer $addressRenderer
      * @param PaymentHelper $paymentHelper
      * @param OrderResource $orderResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-     * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
      */
     public function __construct(
@@ -97,7 +97,7 @@ class OrderSender extends Sender
      */
     public function send(Order $order, $forceSyncMode = false)
     {
-        $order->setSendEmail(true);
+        $order->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             if ($this->checkAndSend($order)) {
