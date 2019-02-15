@@ -12,7 +12,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\InfoInterface;
-use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -165,7 +164,7 @@ class VaultDetailsHandler implements HandlerInterface
     /**
      * Get payment extension attributes
      * @param InfoInterface $payment
-     * @return OrderPaymentExtensionInterface
+     * @return mixed
      */
     private function getExtensionAttributes(InfoInterface $payment)
     {
