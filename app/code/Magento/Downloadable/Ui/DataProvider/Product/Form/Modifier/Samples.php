@@ -183,8 +183,8 @@ class Samples extends AbstractModifier
             'children',
             $record,
             [
-                'container_sample_title' => $this->getTitleColumn(),
-                'container_sample' => $this->getSampleColumn(),
+                'container_sample_title' => $this->getTitleColumn(10),
+                'container_sample' => $this->getSampleColumn(20),
                 'position' => $recordPosition,
                 'action_delete' => $recordActionDelete,
             ]
@@ -192,9 +192,10 @@ class Samples extends AbstractModifier
     }
 
     /**
+     * @param int $sortOrder
      * @return array
      */
-    protected function getTitleColumn()
+    protected function getTitleColumn($sortOrder)
     {
         $titleContainer['arguments']['data']['config'] = [
             'componentType' => Container::NAME,
@@ -203,6 +204,7 @@ class Samples extends AbstractModifier
             'showLabel' => false,
             'label' => __('Title'),
             'dataScope' => '',
+            'sortOrder' => $sortOrder,
         ];
         $titleField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
@@ -218,9 +220,10 @@ class Samples extends AbstractModifier
     }
 
     /**
+     * @param int $sortOrder
      * @return array
      */
-    protected function getSampleColumn()
+    protected function getSampleColumn($sortOrder)
     {
         $sampleContainer['arguments']['data']['config'] = [
             'componentType' => Container::NAME,
@@ -229,6 +232,7 @@ class Samples extends AbstractModifier
             'label' => __('File'),
             'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => $sortOrder,
         ];
         $sampleType['arguments']['data']['config'] = [
             'formElement' => Form\Element\Select::NAME,

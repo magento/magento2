@@ -208,12 +208,12 @@ class Links extends AbstractModifier
             'children',
             $record,
             [
-                'container_link_title' => $this->getTitleColumn(),
-                'container_link_price' => $this->getPriceColumn(),
-                'container_file' => $this->getFileColumn(),
-                'container_sample' => $this->getSampleColumn(),
-                'is_shareable' => $this->getShareableColumn(),
-                'max_downloads' => $this->getMaxDownloadsColumn(),
+                'container_link_title' => $this->getTitleColumn(10),
+                'container_link_price' => $this->getPriceColumn(20),
+                'container_file' => $this->getFileColumn(30),
+                'container_sample' => $this->getSampleColumn(40),
+                'is_shareable' => $this->getShareableColumn(50),
+                'max_downloads' => $this->getMaxDownloadsColumn(60),
                 'position' => $recordPosition,
                 'action_delete' => $recordActionDelete,
             ]
@@ -221,9 +221,10 @@ class Links extends AbstractModifier
     }
 
     /**
+     * @param int $sortOrder
      * @return array
      */
-    protected function getTitleColumn()
+    protected function getTitleColumn($sortOrder)
     {
         $titleContainer['arguments']['data']['config'] = [
             'componentType' => Container::NAME,
@@ -232,6 +233,7 @@ class Links extends AbstractModifier
             'label' => __('Title'),
             'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => $sortOrder,
         ];
         $titleField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
@@ -247,9 +249,10 @@ class Links extends AbstractModifier
     }
 
     /**
+     * @param int $sortOrder
      * @return array
      */
-    protected function getPriceColumn()
+    protected function getPriceColumn($sortOrder)
     {
         $priceContainer['arguments']['data']['config'] = [
             'componentType' => Container::NAME,
@@ -258,6 +261,7 @@ class Links extends AbstractModifier
             'label' => __('Price'),
             'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => $sortOrder,
         ];
         $priceField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
@@ -281,9 +285,10 @@ class Links extends AbstractModifier
     }
 
     /**
+     * @param int $sortOrder
      * @return array
      */
-    protected function getFileColumn()
+    protected function getFileColumn($sortOrder)
     {
         $fileContainer['arguments']['data']['config'] = [
             'componentType' => Container::NAME,
@@ -292,6 +297,7 @@ class Links extends AbstractModifier
             'label' => __('File'),
             'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => $sortOrder,
         ];
         $fileTypeField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Select::NAME,
@@ -344,9 +350,10 @@ class Links extends AbstractModifier
     }
 
     /**
+     * @param int $sortOrder
      * @return array
      */
-    protected function getSampleColumn()
+    protected function getSampleColumn($sortOrder)
     {
         $sampleContainer['arguments']['data']['config'] = [
             'componentType' => Container::NAME,
@@ -355,6 +362,7 @@ class Links extends AbstractModifier
             'label' => __('Sample'),
             'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => $sortOrder,
         ];
         $sampleTypeField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Select::NAME,
@@ -403,9 +411,10 @@ class Links extends AbstractModifier
     }
 
     /**
+     * @param int $sortOrder
      * @return array
      */
-    protected function getShareableColumn()
+    protected function getShareableColumn($sortOrder)
     {
         $shareableField['arguments']['data']['config'] = [
             'label' => __('Shareable'),
@@ -413,6 +422,7 @@ class Links extends AbstractModifier
             'componentType' => Form\Field::NAME,
             'dataType' => Form\Element\DataType\Number::NAME,
             'dataScope' => 'is_shareable',
+            'sortOrder' => $sortOrder,
             'options' => $this->shareable->toOptionArray(),
         ];
 
@@ -420,9 +430,10 @@ class Links extends AbstractModifier
     }
 
     /**
+     * @param int $sortOrder
      * @return array
      */
-    protected function getMaxDownloadsColumn()
+    protected function getMaxDownloadsColumn($sortOrder)
     {
         $maxDownloadsContainer['arguments']['data']['config'] = [
             'componentType' => Container::NAME,
@@ -431,6 +442,7 @@ class Links extends AbstractModifier
             'label' => __('Max. Downloads'),
             'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => $sortOrder,
         ];
         $numberOfDownloadsField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
