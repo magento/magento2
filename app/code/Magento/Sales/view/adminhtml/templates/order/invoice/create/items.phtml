@@ -143,23 +143,23 @@ var enableSubmitButtons = <?= (int) !$block->getDisableSubmitButton() ?>;
 var fields = jQuery('.qty-input');
 
 function enableButtons(buttons) {
-    buttons.removeClass('disabled').prop('disabled',false);
+    buttons.removeClass('disabled').prop('disabled', false);
 };
 
 function disableButtons(buttons) {
-    buttons.addClass('disabled').prop('disabled',true);
+    buttons.addClass('disabled').prop('disabled', true);
 };
 
 disableButtons(updateButtons);
 
 fields.on('keyup', checkButtonsRelation);
-fields.each(function (i,elem) {
+fields.each(function (i, elem) {
     elem.baseValue = elem.value;
 });
 
 function checkButtonsRelation() {
     var hasChanges = false;
-    fields.each(function (i,elem) {
+    fields.each(function (i, elem) {
         if (elem.baseValue != elem.value) {
             hasChanges = true;
         }
@@ -185,10 +185,10 @@ if (sendEmailCheckbox.length) {
 function bindSendEmail()
 {
     if (sendEmailCheckbox.prop('checked') == true) {
-        notifyCustomerCheckbox.prop('disabled',false);
+        notifyCustomerCheckbox.prop('disabled', false);
     }
     else {
-        notifyCustomerCheckbox.prop('disabled',true);
+        notifyCustomerCheckbox.prop('disabled', true);
     }
 }
 
