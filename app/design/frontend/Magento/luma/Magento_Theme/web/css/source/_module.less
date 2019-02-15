@@ -443,23 +443,17 @@
             }
         }
     }
+
+    .cms-page-view .page-main {
+        padding-top: 0;
+        position: relative;
+    }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .logo {
         margin-bottom: 13px;
         margin-top: 4px;
-    }
-}
-
-//
-//  Mobile
-//  _____________________________________________
-
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .cms-page-view .page-main {
-        padding-top: 0;
-        position: relative;
     }
 }
 
