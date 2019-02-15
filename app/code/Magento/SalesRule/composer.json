@@ -22,7 +22,9 @@
         "magento/module-shipping": "*",
         "magento/module-store": "*",
         "magento/module-ui": "*",
-        "magento/module-widget": "*"
+        "magento/module-widget": "*",
+        "magento/module-captcha": "*",
+        "magento/module-checkout": "*"
     },
     "suggest": {
         "magento/module-sales-rule-sample-data": "*"

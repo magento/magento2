@@ -18,4 +18,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="checkout_sales_rule_captcha_config_provider" xsi:type="object">Magento\SalesRule\Model\Coupon\CaptchaConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

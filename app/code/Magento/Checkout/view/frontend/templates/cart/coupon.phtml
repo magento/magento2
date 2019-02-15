@@ -6,6 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
+/**
+ * @var \Magento\Framework\View\Element\AbstractBlock $block
+ */
 ?>
 <div class="block discount" id="block-discount" data-mage-init='{"collapsible":{"openedState": "active", "saveState": false}}'>
     <div class="title" data-role="title">
@@ -41,6 +44,9 @@
                     <?php endif; ?>
                 </div>
             </div>
+            <?php if (!strlen($block->getCouponCode())): ?>
+            <?= /* @noEscape */ $block->getChildHtml('captcha') ?>
+            <?php endif; ?>
         </form>
     </div>
 </div>
