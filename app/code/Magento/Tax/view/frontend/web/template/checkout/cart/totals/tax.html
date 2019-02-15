@@ -36,11 +36,11 @@
                 <td class="amount" rowspan="1">
                     <!-- ko if: $parents[1].isCalculated() -->
                     <span class="price"
-                          data-bind="text: $parents[1].formatPrice($parents[0].amount), attr: {'data-th': title, 'rowspan': $parents[0].rates.length }"></span>
+                          data-bind="text: $parents[1].getTaxAmount($parents[0], percent), attr: {'data-th': title, 'rowspan': $parents[0].rates.length }"></span>
                     <!-- /ko -->
                     <!-- ko ifnot: $parents[1].isCalculated() -->
                     <span class="not-calculated"
-                          data-bind="text: $parents[1].formatPrice($parents[0].amount), attr: {'data-th': title, 'rowspan': $parents[0].rates.length }"></span>
+                          data-bind="text: $parents[1].getTaxAmount($parents[0], percent), attr: {'data-th': title, 'rowspan': $parents[0].rates.length }"></span>
                     <!-- /ko -->
                 </td>
             <!-- /ko -->
