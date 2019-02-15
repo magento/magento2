@@ -26,11 +26,13 @@
         <element name="productImage" type="text" selector="img.product-image-photo"/>
         <element name="productLink" type="text" selector="a.product-item-link"/>
         <element name="productLinkByHref" type="text" selector="a.product-item-link[href$='{{var1}}.html']" parameterized="true"/>
-        <element name="productPrice" type="text" selector="div.price-box.price-final_price"/>
+        <element name="productPrice" type="text" selector=".price-final_price"/>
         <element name="categoryImage" type="text" selector=".category-image"/>
         <element name="emptyProductMessage" type="block" selector=".message.info.empty>div"/>
         <element name="lineProductName" type="text" selector=".products.list.items.product-items li:nth-of-type({{line}}) .product-item-link" timeout="30" parameterized="true"/>
         <element name="asLowAs" type="input" selector="//*[@class='price-box price-final_price']/a/span[@class='price-container price-final_price tax weee']"/>
         <element name="productsList" type="block" selector="#maincontent .column.main"/>
+        <element name="productName" type="text" selector=".product-item-name"/>
+        <element name="productOptionList" type="text" selector="#narrow-by-list"/>
     </section>
 </sections>
