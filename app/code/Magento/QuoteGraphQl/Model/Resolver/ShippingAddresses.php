@@ -11,25 +11,24 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\QuoteGraphQl\Model\Cart\Address\AddressDataProvider;
+use Magento\QuoteGraphQl\Model\Cart\ExtractDataFromAddress;
 
 /**
  * @inheritdoc
  */
-class CartAddresses implements ResolverInterface
+class ShippingAddresses implements ResolverInterface
 {
     /**
-     * @var AddressDataProvider
+     * @var ExtractDataFromAddress
      */
-    private $addressDataProvider;
+    private $extractDataFromAddress;
 
     /**
-     * @param AddressDataProvider $addressDataProvider
+     * @param ExtractDataFromAddress $extractDataFromAddress
      */
-    public function __construct(
-        AddressDataProvider $addressDataProvider
-    ) {
-        $this->addressDataProvider = $addressDataProvider;
+    public function __construct(ExtractDataFromAddress $extractDataFromAddress)
+    {
+        $this->extractDataFromAddress = $extractDataFromAddress;
     }
 
     /**
@@ -40,9 +39,16 @@ class CartAddresses implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
-
         $cart = $value['model'];
 
-        return $this->addressDataProvider->getCartAddresses($cart);
+        $addressesData = [];
+        $shippingAddresses = $cart->getAllShippingAddresses();
+
+        if (count($shippingAddresses)) {
+            foreach ($shippingAddresses as $shippingAddress) {
+                $addressesData[] = $this->extractDataFromAddress->execute($shippingAddress);
+            }
+        }
+        return $addressesData;
     }
 }
