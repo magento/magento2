@@ -108,7 +108,7 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Get formated price
+     * Get formatted price
      */
     public function testGetFormatedPrice()
     {
