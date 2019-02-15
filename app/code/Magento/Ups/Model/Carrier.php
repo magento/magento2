@@ -333,11 +333,11 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         }
 
         // For UPS, Las Palmas and Santa Cruz de Tenerife will be represented by Canary Islands country
-        if ($destCountry === self::SPAIN_COUNTRY_ID &&
-            ($request->getDestRegionCode() === self::LAS_PALMAS_REGION_ID
-                || $request->getDestRegionCode() === self::SANTA_CRUZ_DE_TENERIFE_REGION_ID)
+        if ($destCountry === 'ES' &&
+            ($request->getDestRegionCode() === 'Las Palmas'
+                || $request->getDestRegionCode() === 'Santa Cruz de Tenerife')
         ) {
-            $destCountry = self::CANARY_ISLANDS_COUNTRY_ID;
+            $destCountry = 'IC';
         }
 
         $country = $this->_countryFactory->create()->load($destCountry);

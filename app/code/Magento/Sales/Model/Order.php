@@ -24,6 +24,8 @@ use Magento\Sales\Model\ResourceModel\Order\Payment\Collection as PaymentCollect
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection as ShipmentCollection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection as TrackCollection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as HistoryCollection;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Order model
@@ -288,6 +290,16 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private $productOption;
 
     /**
+     * @var OrderItemRepositoryInterface
+     */
+    private $itemRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -317,6 +329,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param array $data
      * @param ResolverInterface $localeResolver
      * @param ProductOption|null $productOption
+     * @param OrderItemRepositoryInterface $itemRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -348,7 +362,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         ResolverInterface $localeResolver = null,
-        ProductOption $productOption = null
+        ProductOption $productOption = null,
+        OrderItemRepositoryInterface $itemRepository = null,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -372,6 +388,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->priceCurrency = $priceCurrency;
         $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(ResolverInterface::class);
         $this->productOption = $productOption ?: ObjectManager::getInstance()->get(ProductOption::class);
+        $this->itemRepository = $itemRepository ?: ObjectManager::getInstance()
+            ->get(OrderItemRepositoryInterface::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
+            ->get(SearchCriteriaBuilder::class);
 
         parent::__construct(
             $context,
@@ -669,14 +689,14 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
         return true;
     }
-    
+
     /**
      * Retrieve credit memo for zero total availability.
      *
      * @param float $totalRefunded
      * @return bool
      */
-    public function canCreditmemoForZeroTotal($totalRefunded)
+    private function canCreditmemoForZeroTotal($totalRefunded)
     {
         $totalPaid = $this->getTotalPaid();
         //check if total paid is less than grandtotal
@@ -1291,12 +1311,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Retrieve shipping method
      *
      * @param bool $asObject return carrier code and shipping method data as object
-     * @return string|\Magento\Framework\DataObject
+     * @return string|null|\Magento\Framework\DataObject
      */
     public function getShippingMethod($asObject = false)
     {
         $shippingMethod = parent::getShippingMethod();
-        if (!$asObject) {
+        if (!$asObject || !$shippingMethod) {
             return $shippingMethod;
         } else {
             list($carrierCode, $method) = explode('_', $shippingMethod, 2);
@@ -2088,9 +2108,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getItems()
     {
         if ($this->getData(OrderInterface::ITEMS) == null) {
+            $this->searchCriteriaBuilder->addFilter(OrderItemInterface::ORDER_ID, $this->getId());
+
+            $searchCriteria = $this->searchCriteriaBuilder->create();
             $this->setData(
                 OrderInterface::ITEMS,
-                $this->getItemsCollection()->getItems()
+                $this->itemRepository->getList($searchCriteria)->getItems()
             );
         }
         return $this->getData(OrderInterface::ITEMS);
@@ -2931,7 +2954,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Return hold_before_state
+     * Returns hold_before_state
      *
      * @return string|null
      */

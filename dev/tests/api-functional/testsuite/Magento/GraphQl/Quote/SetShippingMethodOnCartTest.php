@@ -81,9 +81,10 @@ class SetShippingMethodOnCartTest extends GraphQlAbstract
         self::assertEquals($maskedQuoteId, $response['setShippingMethodsOnCart']['cart']['cart_id']);
         $addressesInformation = $response['setShippingMethodsOnCart']['cart']['shipping_addresses'];
         self::assertCount(1, $addressesInformation);
-        self::assertEquals($addressesInformation[0]['selected_shipping_method']['carrier_code'], $shippingCarrierCode);
         self::assertEquals(
-            $addressesInformation[0]['selected_shipping_method']['method_code'], $shippingMethodCode);
+            $addressesInformation[0]['selected_shipping_method']['code'],
+            $shippingCarrierCode . '_' . $shippingMethodCode
+        );
     }
 
     /**
@@ -210,21 +211,19 @@ mutation {
   setShippingMethodsOnCart(input: 
     {
       cart_id: "$maskedQuoteId", 
-      shipping_addresses: [{
-        cart_address_id: $shippingAddressId
-        shipping_method: {
-          method_code: "$shippingMethodCode"
-          carrier_code: "$shippingCarrierCode"
+      shipping_methods: [
+        {
+          shipping_method_code: "$shippingMethodCode"
+          shipping_carrier_code: "$shippingCarrierCode"
+          cart_address_id: $shippingAddressId
         }
-      }]
-      }) {
+      ]}) {
     
     cart {
       cart_id,
       shipping_addresses {
         selected_shipping_method {
-          carrier_code
-          method_code
+          code
           label
         }
       }
