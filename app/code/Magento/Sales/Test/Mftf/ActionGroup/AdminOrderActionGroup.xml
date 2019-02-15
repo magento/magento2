@@ -18,6 +18,12 @@
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Canceled" stepKey="seeOrderStatusCanceled"/>
     </actionGroup>
 
+    <!--Cancel order that is in processing status-->
+    <actionGroup name="CancelProcessingOrder" extends="cancelPendingOrder">
+        <remove keyForRemoval="seeOrderStatusCanceled"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" after="seeCancelSuccessMessage" userInput="{{CONST.orderStatusComplete}}" stepKey="seeOrderStatusComplete"/>
+    </actionGroup>
+
     <!--Navigate to create order page (New Order -> Create New Customer)-->
     <actionGroup name="navigateToNewOrderPageNewCustomerSingleStore">
         <arguments>
