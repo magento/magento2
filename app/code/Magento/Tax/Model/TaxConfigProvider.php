@@ -73,7 +73,7 @@ class TaxConfigProvider implements ConfigProviderInterface
             'isFullTaxSummaryDisplayed' => $this->isFullTaxSummaryDisplayed(),
             'isZeroTaxDisplayed' => $this->taxConfig->displayCartZeroTax(),
             'reloadOnBillingAddress' => $this->reloadOnBillingAddress(),
-            'defaultCountryId' => $this->scopeConfig->getValue(
+            'defaultTaxCountryId' => $this->scopeConfig->getValue(
                 \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ),

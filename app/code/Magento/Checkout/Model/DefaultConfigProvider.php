@@ -332,6 +332,10 @@ class DefaultConfigProvider implements ConfigProviderInterface
                 )
             )
         ];
+        $output['defaultCountryId'] = $this->scopeConfig->getValue(
+            'general/country/default',
+            ScopeInterface::SCOPE_STORE
+        );
         $output['activeCarriers'] = $this->getActiveCarriers();
         $output['originCountryCode'] = $this->getOriginCountryCode();
         $output['paymentMethods'] = $this->getPaymentMethods();
