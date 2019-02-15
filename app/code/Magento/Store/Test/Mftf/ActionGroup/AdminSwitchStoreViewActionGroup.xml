@@ -16,6 +16,7 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitingForInformationModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmScopeSwitch"/>
         <waitForPageLoad stepKey="waitForScopeSwitched"/>
+        <scrollTo selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="scrollToStoreSwitcher"/>
         <see userInput="{{scopeName}}" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewScopeName"/>
     </actionGroup>
 
