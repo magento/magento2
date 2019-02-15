@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Fedex\Plugin\Block\DataProviders\Tracking;
 
@@ -18,12 +17,12 @@ class ChangeTitle
 {
     /**
      * @param Subject $subject
-     * @param string $result
+     * @param \Magento\Framework\Phrase|string $result
      * @param Status $trackingStatus
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetTitle(Subject $subject, string $result, Status $trackingStatus): string
+    public function afterGetTitle(Subject $subject, $result, Status $trackingStatus): string
     {
         if ($trackingStatus->getCarrier() === Carrier::CODE) {
             $result = __('Expected Delivery:');

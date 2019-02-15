@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Shipping\Block\DataProviders\Tracking;
 
@@ -17,9 +16,9 @@ class DeliveryDateTitle implements ArgumentInterface
 {
     /**
      * @param Status $trackingStatus
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
-    public function getTitle(Status $trackingStatus): string
+    public function getTitle(Status $trackingStatus)
     {
         return $trackingStatus->getCarrier() ? __('Delivered on:') : '';
     }
