@@ -10,7 +10,7 @@ namespace Magento\GraphQl\Catalog;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -124,7 +124,7 @@ QUERY;
 }
 QUERY;
 
-        $this->expectException(GraphQlNoSuchEntityException::class);
+        $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage('GraphQL response contains errors: Category doesn\'t exist');
         $this->graphQlQuery($query);
     }
