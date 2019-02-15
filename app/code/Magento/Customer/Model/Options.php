@@ -84,7 +84,6 @@ class Options
 
     /**
      * Unserialize and clear name prefix or suffix options
-     *
      * If field is optional, add an empty first option.
      *
      * @param string $options
