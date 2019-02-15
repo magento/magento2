@@ -26,6 +26,7 @@
                  parameterized="true"/>
         <element name="RemoveItem" type="button"
                  selector="//table[@id='shopping-cart-table']//tbody//tr[contains(@class,'item-actions')]//a[contains(@class,'action-delete')]"/>
+        <element name="productName" type="text" selector="//tbody[@class='cart item']//strong[@class='product-item-name']"/>
         <element name="nthItemOption" type="block" selector=".item:nth-of-type({{numElement}}) .item-options" parameterized="true"/>
         <element name="nthEditButton" type="block" selector=".item:nth-of-type({{numElement}}) .action-edit" parameterized="true"/>
         <element name="nthBundleOptionName" type="text" selector=".product-item-details .item-options:nth-of-type({{numOption}}) dt" parameterized="true"/>

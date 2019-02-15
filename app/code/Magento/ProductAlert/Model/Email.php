@@ -39,6 +39,8 @@ use Magento\Store\Model\Website;
  *
  * @api
  * @since 100.0.2
+ * @method int getStoreId()
+ * @method $this setStoreId()
  */
 class Email extends AbstractModel
 {
@@ -137,11 +139,6 @@ class Email extends AbstractModel
     protected $_customerHelper;
 
     /**
-     * @var int
-     */
-    private $storeId = null;
-
-    /**
      * @param Context $context
      * @param Registry $registry
      * @param Data $productAlertData
@@ -212,18 +209,6 @@ class Email extends AbstractModel
     public function setWebsite(\Magento\Store\Model\Website $website)
     {
         $this->_website = $website;
-        return $this;
-    }
-
-    /**
-     * Set store id from product alert.
-     *
-     * @param int $storeId
-     * @return $this
-     */
-    public function setStoreId(int $storeId)
-    {
-        $this->storeId = $storeId;
         return $this;
     }
 
@@ -357,7 +342,7 @@ class Email extends AbstractModel
             return false;
         }
 
-        $storeId = $this->storeId ?: (int) $this->_customer->getStoreId();
+        $storeId = $this->getStoreId() ?: (int) $this->_customer->getStoreId();
         $store = $this->getStore($storeId);
 
         $this->_appEmulation->startEnvironmentEmulation($storeId);
