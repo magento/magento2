@@ -7,16 +7,25 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminSwitchStoreViewActionGroup">
+    <actionGroup name="AdminSwitchBaseActionGroup">
         <arguments>
-            <argument name="storeView" defaultValue="customStore.name"/>
+            <argument name="scopeName" defaultValue="customStore.name"/>
         </arguments>
-        <click selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="clickStoreViewSwitchDropdown"/>
-        <waitForElementVisible selector="{{AdminMainActionsSection.storeViewByName('Default Store View')}}" stepKey="waitForStoreViewsAreVisible"/>
-        <click selector="{{AdminMainActionsSection.storeViewByName(storeView)}}" stepKey="clickStoreViewByName"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="clickScopeSwitchDropdown"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitingForInformationModal"/>
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreSwitch"/>
-        <waitForPageLoad stepKey="waitForStoreViewSwitched"/>
-        <see userInput="{{storeView}}" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmScopeSwitch"/>
+        <waitForPageLoad stepKey="waitForScopeSwitched"/>
+        <see userInput="{{scopeName}}" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewScopeName"/>
+    </actionGroup>
+
+    <actionGroup name="AdminSwitchStoreViewActionGroup" extends="AdminSwitchBaseActionGroup">
+        <waitForElementVisible selector="{{AdminMainActionsSection.storeViewByName(scopeName)}}" after="clickScopeSwitchDropdown" stepKey="waitForStoreViewNameIsVisible"/>
+        <click selector="{{AdminMainActionsSection.storeViewByName(scopeName)}}" after="waitForStoreViewNameIsVisible" stepKey="clickStoreViewByName"/>
+    </actionGroup>
+
+    <actionGroup name="AdminSwitchWebsiteActionGroup" extends="AdminSwitchBaseActionGroup">
+        <waitForElementVisible selector="{{AdminMainActionsSection.websiteByName(scopeName)}}" after="clickScopeSwitchDropdown" stepKey="waitForWebsiteNameIsVisible"/>
+        <click selector="{{AdminMainActionsSection.websiteByName(scopeName)}}" after="waitForWebsiteNameIsVisible" stepKey="clickStoreViewByName"/>
     </actionGroup>
 </actionGroups>
