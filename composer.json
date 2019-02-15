@@ -236,6 +236,7 @@
         "magento/module-usps": "*",
         "magento/module-variable": "*",
         "magento/module-vault": "*",
+        "magento/module-vault-graph-ql": "*",
         "magento/module-version": "*",
         "magento/module-webapi": "*",
         "magento/module-webapi-async": "*",
