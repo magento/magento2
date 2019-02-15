@@ -11,6 +11,7 @@ use Magento\Msrp\Model\Product\Attribute\Source\Type;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * Msrp data helper
@@ -70,8 +71,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Check if can apply Minimum Advertise price to product
-     * in specific visibility
+     * Check if can apply Minimum Advertise price to product in specific visibility
      *
      * @param int|Product $product
      * @param int|null $visibility Check displaying price in concrete place (by default generally)
@@ -135,6 +135,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Check if we should show MAP proce before order confirmation
+     *
      * @param int|Product $product
      * @return bool
      */
@@ -144,6 +146,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Check if any MAP price is larger than as low as value.
+     *
      * @param int|Product $product
      * @return bool|float
      */
@@ -155,10 +159,19 @@ class Data extends AbstractHelper
         $msrp = $product->getMsrp();
         $price = $product->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE);
         if ($msrp === null) {
-            if ($product->getTypeId() !== \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
-                return false;
-            } else {
+            if ($product->getTypeId() === \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
                 $msrp = $product->getTypeInstance()->getChildrenMsrp($product);
+            } elseif ($product->getTypeId() === Configurable::TYPE_CODE) {
+                $prices = [];
+                foreach ($product->getTypeInstance()->getUsedProducts($product) as $item) {
+                    if ($item->getMsrp() !== null) {
+                        $prices[] = $item->getMsrp();
+                    }
+                }
+
+                $msrp = $prices ? max($prices) : 0;
+            } else {
+                return false;
             }
         }
         if ($msrp) {
