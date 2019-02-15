@@ -197,14 +197,14 @@ class SetShippingMethodOnCartTest extends GraphQlAbstract
      * @param string $maskedQuoteId
      * @param string $shippingMethodCode
      * @param string $shippingCarrierCode
-     * @param string $shippingAddressId
+     * @param int $shippingAddressId
      * @return string
      */
     private function prepareMutationQuery(
         string $maskedQuoteId,
         string $shippingMethodCode,
         string $shippingCarrierCode,
-        string $shippingAddressId
+        int $shippingAddressId
     ) : string {
         return <<<QUERY
 mutation {

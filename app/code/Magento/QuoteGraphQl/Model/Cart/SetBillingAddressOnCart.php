@@ -28,11 +28,6 @@ class SetBillingAddressOnCart
     private $billingAddressManagement;
 
     /**
-     * @var AddressRepositoryInterface
-     */
-    private $addressRepository;
-
-    /**
      * @var Address
      */
     private $addressModel;
@@ -43,25 +38,34 @@ class SetBillingAddressOnCart
     private $checkCustomerAccount;
 
     /**
+     * @var GetCustomerAddress
+     */
+    private $getCustomerAddress;
+
+    /**
      * @param BillingAddressManagementInterface $billingAddressManagement
      * @param AddressRepositoryInterface $addressRepository
      * @param Address $addressModel
      * @param CheckCustomerAccount $checkCustomerAccount
+     * @param GetCustomerAddress $getCustomerAddress
      */
     public function __construct(
         BillingAddressManagementInterface $billingAddressManagement,
         AddressRepositoryInterface $addressRepository,
         Address $addressModel,
-        CheckCustomerAccount $checkCustomerAccount
+        CheckCustomerAccount $checkCustomerAccount,
+        GetCustomerAddress $getCustomerAddress
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->addressRepository = $addressRepository;
         $this->addressModel = $addressModel;
         $this->checkCustomerAccount = $checkCustomerAccount;
+        $this->getCustomerAddress = $getCustomerAddress;
     }
 
     /**
      * @inheritdoc
+     *
      * @param ContextInterface $context
      * @param CartInterface $cart
      * @param array $billingAddress
@@ -99,19 +103,7 @@ class SetBillingAddressOnCart
             $billingAddress = $this->addressModel->addData($addressInput);
         } else {
             $this->checkCustomerAccount->execute($context->getUserId(), $context->getUserType());
-
-            /** @var AddressInterface $customerAddress */
-            $customerAddress = $this->addressRepository->getById($customerAddressId);
-
-            if ((int)$customerAddress->getCustomerId() !== $context->getUserId()) {
-                throw new GraphQlAuthorizationException(
-                    __(
-                        'The current user cannot use address with ID "%customer_address_id"',
-                        ['customer_address_id' => $customerAddressId]
-                    )
-                );
-            }
-
+            $customerAddress = $this->getCustomerAddress->execute((int)$customerAddressId, (int)$context->getUserId());
             $billingAddress = $this->addressModel->importCustomerAddressData($customerAddress);
         }
 
