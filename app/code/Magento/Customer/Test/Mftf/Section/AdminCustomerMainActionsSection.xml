@@ -11,5 +11,6 @@
     <section name="AdminCustomerMainActionsSection">
         <element name="saveButton" type="button" selector="#save" timeout="30"/>
         <element name="resetPassword" type="button" selector="#resetPassword" timeout="30"/>
+        <element name="manageShoppingCart" type="button" selector="#manage_quote" timeout="30"/>
     </section>
 </sections>

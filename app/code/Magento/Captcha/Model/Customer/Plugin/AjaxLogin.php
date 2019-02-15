@@ -3,18 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Captcha\Model\Customer\Plugin;
 
 use Magento\Captcha\Helper\Data as CaptchaHelper;
-use Magento\Customer\Controller\Ajax\Login;
-use Magento\Framework\Controller\Result\Json;
-use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Controller\Result\JsonFactory;
 
 /**
- * The plugin for ajax login controller.
+ * Around plugin for login action.
  */
 class AjaxLogin
 {
@@ -67,14 +64,16 @@ class AjaxLogin
     }
 
     /**
-     * Validates captcha during request execution.
+     * Check captcha data on login action.
      *
-     * @param Login $subject
+     * @param \Magento\Customer\Controller\Ajax\Login $subject
      * @param \Closure $proceed
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function aroundExecute(
-        Login $subject,
+        \Magento\Customer\Controller\Ajax\Login $subject,
         \Closure $proceed
     ) {
         $captchaFormIdField = 'captcha_form_id';
@@ -99,15 +98,13 @@ class AjaxLogin
         foreach ($this->formIds as $formId) {
             if ($formId === $loginFormId) {
                 $captchaModel = $this->helper->getCaptcha($formId);
-
                 if ($captchaModel->isRequired($username)) {
                     if (!$captchaModel->isCorrect($captchaString)) {
                         $this->sessionManager->setUsername($username);
                         $captchaModel->logAttempt($username);
-                        return $this->returnJsonError(__('Incorrect CAPTCHA'), true);
+                        return $this->returnJsonError(__('Incorrect CAPTCHA'));
                     }
                 }
-
                 $captchaModel->logAttempt($username);
             }
         }
@@ -115,15 +112,14 @@ class AjaxLogin
     }
 
     /**
-     * Gets Json response.
+     * Format JSON response.
      *
      * @param \Magento\Framework\Phrase $phrase
-     * @param bool $isCaptchaRequired
-     * @return Json
+     * @return \Magento\Framework\Controller\Result\Json
      */
-    private function returnJsonError(\Magento\Framework\Phrase $phrase, bool $isCaptchaRequired = false): Json
+    private function returnJsonError(\Magento\Framework\Phrase $phrase): \Magento\Framework\Controller\Result\Json
     {
         $resultJson = $this->resultJsonFactory->create();
-        return $resultJson->setData(['errors' => true, 'message' => $phrase, 'captcha' => $isCaptchaRequired]);
+        return $resultJson->setData(['errors' => true, 'message' => $phrase]);
     }
 }

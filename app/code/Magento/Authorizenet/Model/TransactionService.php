@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Authorizenet\Model;
 
@@ -15,7 +16,7 @@ use Magento\Payment\Model\Method\Logger;
 
 /**
  * Class TransactionService
- * @package Magento\Authorizenet\Model
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class TransactionService
 {
@@ -74,6 +75,7 @@ class TransactionService
 
     /**
      * Get transaction information
+     *
      * @param \Magento\Authorizenet\Model\Authorizenet $context
      * @param string $transactionId
      * @return \Magento\Framework\Simplexml\Element
@@ -142,6 +144,7 @@ class TransactionService
 
     /**
      * Create request body to get transaction details
+     *
      * @param string $login
      * @param string $transactionKey
      * @param string $transactionId

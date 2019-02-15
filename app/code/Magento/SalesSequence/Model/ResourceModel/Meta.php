@@ -96,7 +96,9 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Using for load sequence profile and setting it into metadata
      *
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
+     *
+     * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -137,7 +139,12 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * @inheritdoc
+     * Perform actions after object save
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     *
+     * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {

@@ -20,9 +20,7 @@ class Checkbox extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Op
     protected $_template = 'Magento_Bundle::product/composite/fieldset/options/type/checkbox.phtml';
 
     /**
-     * @param  string $elementId
-     * @param  string $containerId
-     * @return string
+     * @inheritdoc
      */
     public function setValidationContainer($elementId, $containerId)
     {
@@ -33,5 +31,16 @@ class Checkbox extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Op
             $containerId .
             '\';
             </script>';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSelectionPrice($selection)
+    {
+        $price = parent::getSelectionPrice($selection);
+        $qty = $selection->getSelectionQty();
+
+        return $price * $qty;
     }
 }
