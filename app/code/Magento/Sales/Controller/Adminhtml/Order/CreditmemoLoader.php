@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\DataObject;
@@ -24,6 +25,7 @@ use Magento\Sales\Model\Order\CreditmemoFactory;
  * @method string getCreditmemo()
  * @method int getInvoiceId()
  * @method int getOrderId()
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CreditmemoLoader extends DataObject
 {
@@ -189,8 +191,6 @@ class CreditmemoLoader extends DataObject
             try {
                 $creditmemo = $this->creditmemoRepository->get($creditmemoId);
             } catch (NoSuchEntityException $e) {
-                $this->messageManager->addErrorMessage(__('This credit memo no longer exists.'));
-                return false;
             } catch (InputException $e) {
                 $this->messageManager->addErrorMessage(__('This credit memo no longer exists.'));
                 return false;
