@@ -191,4 +191,21 @@
         <data key="default_billing">true</data>
         <data key="default_shipping">false</data>
     </entity>
+    <entity name="addressNoZipNoState" type="address">
+        <data key="country_id">United Kingdom</data>
+        <array key="street">
+            <item>3962 Horner Street</item>
+        </array>
+        <data key="company">Magento</data>
+        <data key="telephone">334-200-4061</data>
+        <data key="city">London</data>
+        <data key="firstname">Fn</data>
+        <data key="lastname">Ln</data>
+        <data key="middlename">Mn</data>
+        <data key="prefix">Mr</data>
+        <data key="suffix">Sr</data>
+        <data key="vat_id">U1234567891</data>
+        <data key="default_shipping">true</data>
+        <data key="default_billing">true</data>
+    </entity>
 </entities>
