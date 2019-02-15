@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    Cart(cart_id: String!): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Returns information about shopping cart")
+    cart(cart_id: String!): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Returns information about shopping cart")
 }
 
 type Mutation {
@@ -64,8 +64,8 @@ input SetShippingMethodsOnCartInput {
 
 input ShippingMethodForAddressInput {
     cart_address_id: Int!
-    shipping_carrier_code: String!
-    shipping_method_code: String!
+    carrier_code: String!
+    method_code: String!
 }
 
 type SetBillingAddressOnCartOutput {
@@ -116,8 +116,6 @@ type CartAddress {
     country: CartAddressCountry
     telephone: String
     address_type: AdressTypeEnum
-    selected_shipping_method: CheckoutShippingMethod
-    available_shipping_methods: [CheckoutShippingMethod]
     items_weight: Float
     customer_notes: String
     cart_items: [CartItemQuantity]
@@ -138,12 +136,20 @@ type CartAddressCountry {
     label: String
 }
 
-type CheckoutShippingMethod {
-    code: String
-    label: String
-    free_shipping: Boolean!
+type SelectedShippingMethod {
+    amount: Float!
+}
+
+type AvailableShippingMethod {
+    carrier_code: String!
+    carrier_title: String!
+    method_code: String!
+    method_title: String!
     error_message: String
-    # TODO: Add more complex structure for shipping rates
+    amount: Float!
+    base_amount: Float!
+    price_excl_tax: Float!
+    price_incl_tax: Float!
 }
 
 enum AdressTypeEnum {
@@ -218,9 +224,4 @@ type CartItemSelectedOptionValuePrice {
     value: Float!
     units: String!
     type: PriceTypeEnum!
-}
-
-input CartItemDetailsInput {
-    sku: String!
-    qty: Float!
 }
