@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Customer\Api\Data\AddressInterface;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -64,18 +62,13 @@ class SetBillingAddressOnCart
     }
 
     /**
-     * @inheritdoc
+     * Set billing address for a specified shopping cart
      *
      * @param ContextInterface $context
      * @param CartInterface $cart
      * @param array $billingAddress
-     * @throws GraphQlAuthorizationException
+     * @return void
      * @throws GraphQlInputException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException
-     * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
      */
     public function execute(ContextInterface $context, CartInterface $cart, array $billingAddress): void
     {

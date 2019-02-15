@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -64,13 +63,7 @@ class SetShippingAddressOnCart implements SetShippingAddressesOnCartInterface
      * @param ContextInterface $context
      * @param CartInterface $cart
      * @param array $shippingAddresses
-     * @throws GraphQlAuthorizationException
      * @throws GraphQlInputException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException
-     * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
      */
     public function execute(ContextInterface $context, CartInterface $cart, array $shippingAddresses): void
     {
