@@ -138,7 +138,7 @@
     </entity>
     <entity name="newProductAttribute" type="ProductAttribute">
         <data key="attribute_code" unique="suffix">attribute</data>
-        <data key="frontend_input">Text Field</data>
+        <data key="frontend_input">text</data>
         <data key="scope">global</data>
         <data key="is_required">false</data>
         <data key="is_unique">false</data>
