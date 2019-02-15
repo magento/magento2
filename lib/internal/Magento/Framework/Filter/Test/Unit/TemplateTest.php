@@ -437,6 +437,10 @@ TEMPLATE;
             ['save'],
             ['getCollection'],
             ['getResource'],
+            ['setVariables'],
+            ['setTemplateProcessor'],
+            ['getTemplateProcessor'],
+            ['varDirective']
         ];
     }
 }
