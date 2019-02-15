@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontUrlRewriteRedirect">
+        <arguments>
+            <argument name="category" type="string"/>
+            <argument name="newRequestPath" type="string"/>
+        </arguments>
+        <amOnPage url="{{newRequestPath}}" stepKey="openCategoryInStorefront"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(category)}}" stepKey="seeCategoryOnStoreNavigationBar"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(category)}}" stepKey="seeCategoryInTitle"/>
+    </actionGroup>
+</actionGroups>
