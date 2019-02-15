@@ -9,6 +9,7 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -61,6 +62,16 @@ class SetBillingAddressOnCart
 
     /**
      * @inheritdoc
+     * @param ContextInterface $context
+     * @param CartInterface $cart
+     * @param array $billingAddress
+     * @throws GraphQlAuthorizationException
+     * @throws GraphQlInputException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException
+     * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
      */
     public function execute(ContextInterface $context, CartInterface $cart, array $billingAddress): void
     {
@@ -91,6 +102,16 @@ class SetBillingAddressOnCart
 
             /** @var AddressInterface $customerAddress */
             $customerAddress = $this->addressRepository->getById($customerAddressId);
+
+            if ((int)$customerAddress->getCustomerId() !== $context->getUserId()) {
+                throw new GraphQlAuthorizationException(
+                    __(
+                        'The current user cannot use address with ID "%customer_address_id"',
+                        ['customer_address_id' => $customerAddressId]
+                    )
+                );
+            }
+
             $billingAddress = $this->addressModel->importCustomerAddressData($customerAddress);
         }
 
