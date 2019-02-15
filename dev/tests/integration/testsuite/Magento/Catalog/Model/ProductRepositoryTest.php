@@ -201,11 +201,12 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
         //Restoring the role
         /** @var RootResource $rootResource */
-        $rootResource = Bootstrap::getObjectManager()->get(\Magento\Framework\Acl\RootResource::class);
+        $rootResource = Bootstrap::getObjectManager()->get(RootResource::class);
         /** @var Rules $rules */
         $rules = $this->rulesFactory->create();
         $rules->setRoleId($role->getId());
         $rules->setResources([$rootResource->getId()]);
         $rules->saveRel();
+        $this->auth->logout();
     }
 }

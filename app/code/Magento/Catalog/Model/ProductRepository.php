@@ -17,7 +17,6 @@ use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\DB\Adapter\LockWaitException;
@@ -29,15 +28,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\TemporaryState\CouldNotSaveException as TemporaryCouldNotSaveException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\AuthorizationInterface;
 
 /**
  * Product Repository.
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface
 {
@@ -167,16 +162,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private $readExtensions;
 
     /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
-    /**
-     * @var AuthorizationInterface
-     */
-    private $authorization;
-
-    /**
      * ProductRepository constructor.
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
@@ -202,8 +187,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param int $cacheLimit [optional]
      * @param ReadExtensions|null $readExtensions
-     * @param UserContextInterface|null $userContext
-     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -231,9 +214,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         CollectionProcessorInterface $collectionProcessor = null,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         $cacheLimit = 1000,
-        ReadExtensions $readExtensions = null,
-        ?UserContextInterface $userContext = null,
-        ?AuthorizationInterface $authorization = null
+        ReadExtensions $readExtensions = null
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -253,12 +234,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
-        $this->serializer = $serializer
-            ?: ObjectManager::getInstance()->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->cacheLimit = (int)$cacheLimit;
-        $this->readExtensions = $readExtensions ?: ObjectManager::getInstance()->get(ReadExtensions::class);
-        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
-        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        $this->readExtensions = $readExtensions ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(ReadExtensions::class);
     }
 
     /**
@@ -372,19 +352,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         } else {
             $this->removeProductFromLocalCache($productData['sku']);
             $product = $this->get($productData['sku']);
-        }
-
-        $userType = $this->userContext->getUserType();
-        if ((
-            $userType === UserContextInterface::USER_TYPE_ADMIN
-            || $userType === UserContextInterface::USER_TYPE_INTEGRATION
-            )
-            && !$this->authorization->isAllowed('Magento_Catalog::edit_product_design')
-        ) {
-            $product->lockAttribute('custom_design');
-            $product->lockAttribute('page_layout');
-            $product->lockAttribute('options_container');
-            $product->lockAttribute('custom_layout_update');
         }
 
         foreach ($productData as $key => $value) {

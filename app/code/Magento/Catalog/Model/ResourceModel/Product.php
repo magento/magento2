@@ -5,9 +5,12 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Catalog\Model\Product as ProductEntity;
 
 /**
  * Product entity resource model
@@ -90,6 +93,16 @@ class Product extends AbstractResource
     private $tableMaintainer;
 
     /**
+     * @var UserContextInterface
+     */
+    private $userContext;
+
+    /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -101,6 +114,8 @@ class Product extends AbstractResource
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param array $data
      * @param TableMaintainer|null $tableMaintainer
+     * @param UserContextInterface|null $userContext
+     * @param AuthorizationInterface|null $authorization
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -115,7 +130,9 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
         $data = [],
-        TableMaintainer $tableMaintainer = null
+        TableMaintainer $tableMaintainer = null,
+        ?UserContextInterface $userContext = null,
+        ?AuthorizationInterface $authorization = null
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -123,6 +140,8 @@ class Product extends AbstractResource
         $this->setFactory = $setFactory;
         $this->typeFactory = $typeFactory;
         $this->defaultAttributes = $defaultAttributes;
+        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
+        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
         parent::__construct(
             $context,
             $storeManager,
@@ -593,10 +612,25 @@ class Product extends AbstractResource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     * @param ProductEntity|object $object
      */
     public function validate($object)
     {
+        //Validate changing of design.
+        $userType = $this->userContext->getUserType();
+        if ((
+                $userType === UserContextInterface::USER_TYPE_ADMIN
+                || $userType === UserContextInterface::USER_TYPE_INTEGRATION
+            )
+            && !$this->authorization->isAllowed('Magento_Catalog::edit_product_design')
+        ) {
+            $object->setData('custom_design', $object->getOrigData('custom_design'));
+            $object->setData('page_layout', $object->getOrigData('page_layout'));
+            $object->setData('options_container', $object->getOrigData('options_container'));
+            $object->setData('custom_layout_update', $object->getOrigData('custom_layout_update'));
+        }
+
         //validate attribute set entity type
         $entityType = $this->typeFactory->create()->loadByCode(\Magento\Catalog\Model\Product::ENTITY);
         $attributeSet = $this->setFactory->create()->load($object->getAttributeSetId());

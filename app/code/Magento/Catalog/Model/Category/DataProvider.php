@@ -25,6 +25,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
+use Magento\Framework\AuthorizationInterface;
 
 /**
  * Class DataProvider
@@ -147,6 +148,11 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     private $fileInfo;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private $auth;
+
+    /**
      * DataProvider constructor
      *
      * @param string $name
@@ -162,6 +168,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param array $meta
      * @param array $data
      * @param PoolInterface|null $pool
+     * @param AuthorizationInterface|null $auth
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -177,7 +184,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         CategoryFactory $categoryFactory,
         array $meta = [],
         array $data = [],
-        PoolInterface $pool = null
+        PoolInterface $pool = null,
+        ?AuthorizationInterface $auth = null
     ) {
         $this->eavValidationRules = $eavValidationRules;
         $this->collection = $categoryCollectionFactory->create();
@@ -187,6 +195,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         $this->storeManager = $storeManager;
         $this->request = $request;
         $this->categoryFactory = $categoryFactory;
+        $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
 
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
     }
@@ -277,11 +286,19 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      */
     private function prepareFieldsMeta($fieldsMap, $fieldsMeta)
     {
+        $canEditDesign = $this->auth->isAllowed('Magento_Catalog::edit_category_design');
+
         $result = [];
         foreach ($fieldsMap as $fieldSet => $fields) {
             foreach ($fields as $field) {
                 if (isset($fieldsMeta[$field])) {
-                    $result[$fieldSet]['children'][$field]['arguments']['data']['config'] = $fieldsMeta[$field];
+                    $config = $fieldsMeta[$field];
+                    if (($fieldSet === 'design' || $fieldSet === 'schedule_design_update') && !$canEditDesign) {
+                        $config['required'] = 1;
+                        $config['disabled'] = 1;
+                    }
+
+                    $result[$fieldSet]['children'][$field]['arguments']['data']['config'] = $config;
                 }
             }
         }

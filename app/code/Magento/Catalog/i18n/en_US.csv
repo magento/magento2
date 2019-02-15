@@ -810,3 +810,4 @@ Details,Details
 "Category with ID: (%1) doesn't exist", "Category with ID: (%1) doesn't exist"
 "You added product %1 to the <a href=""%2"">comparison list</a>.","You added product %1 to the <a href=""%2"">comparison list</a>."
 "Edit Product Design","Edit Product Design"
+"Edit Category Design","Edit Category Design"
