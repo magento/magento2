@@ -45,7 +45,7 @@ class AccountTest extends \PHPUnit\Framework\TestCase
     private $session;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {
