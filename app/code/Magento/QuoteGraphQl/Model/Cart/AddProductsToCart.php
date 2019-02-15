@@ -50,13 +50,7 @@ class AddProductsToCart
     public function execute(Quote $cart, array $cartItems): void
     {
         foreach ($cartItems as $cartItemData) {
-            try {
-                $this->addProductToCart->execute($cart, $cartItemData);
-            } catch (\Exception $error) {
-                throw new GraphQlInputException(
-                    __('Shopping cart error: %message', ['message' => $error->getMessage()])
-                );
-            }
+            $this->addProductToCart->execute($cart, $cartItemData);
         }
 
         $this->cartRepository->save($cart);

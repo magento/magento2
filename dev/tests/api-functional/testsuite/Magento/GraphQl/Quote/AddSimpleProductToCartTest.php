@@ -44,6 +44,23 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddSimpleProductsToCart()
+    {
+        $sku = 'simple';
+        $qty = 2;
+        $maskedQuoteId = $this->getMaskedQuoteId();
+        $query = $this->getQueryAddSimpleProduct($maskedQuoteId, $sku, $qty);
+        $response = $this->graphQlQuery($query);
+        self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
+        $cartQty = $response['addSimpleProductsToCart']['cart']['items'][0]['qty'];
+
+        $this->assertEquals($qty, $cartQty);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @expectedException \Exception
      * @expectedExceptionMessage The requested qty is not available
      */
@@ -52,14 +69,51 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         $sku = 'simple';
         $qty = 200;
 
+        $maskedQuoteId = $this->getMaskedQuoteId();
+        $query = $this->getQueryAddSimpleProduct($maskedQuoteId, $sku, $qty);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The most you may purchase is 10000.
+     */
+    public function testAddMoreProductsThatAllowed()
+    {
+        $sku = 'simple-product-with-huge-amount';
+        $qty = 20000;
+        $maskedQuoteId = $this->getMaskedQuoteId();
+        $query = $this->getQueryAddSimpleProduct($maskedQuoteId, $sku, $qty);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getMaskedQuoteId()
+    {
         $this->quoteResource->load(
             $this->quote,
             'test_order_1',
             'reserved_order_id'
         );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        return $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+    }
 
-        $query = <<<QUERY
+    /**
+     * @param string $maskedQuoteId
+     * @param string $sku
+     * @param int $qty
+     *
+     * @return string
+     */
+    public function getQueryAddSimpleProduct(string $maskedQuoteId, string $sku, int $qty) : string
+    {
+        return <<<QUERY
 mutation {  
   addSimpleProductsToCart(
     input: {
@@ -76,11 +130,12 @@ mutation {
   ) {
     cart {
       cart_id
+      items {
+        qty
+      }
     }
   }
 }
 QUERY;
-
-        $this->graphQlQuery($query);
     }
 }
