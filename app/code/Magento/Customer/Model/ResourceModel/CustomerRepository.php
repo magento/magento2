@@ -184,12 +184,18 @@ class CustomerRepository implements CustomerRepositoryInterface
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $prevCustomerData->__toArray();
-            if (!$customer->getEmail()) {$customer->setEmail($prevCustomerDataArr['email']);}
-            if (!$customer->getLastname()) {$customer->setLastname($prevCustomerDataArr['lastname']);}
-            if (!$customer->getFirstname()) {$customer->setFirstname($prevCustomerDataArr['firstname']);}
-            if (!$customer->getWebsiteId()) {$customer->setWebsiteId($prevCustomerDataArr['website_id']);}
-            if (!$customer->getStoreId()) {$customer->setStoreId($prevCustomerDataArr['store_id']);}
-            if (!$customer->getGroupId()) {$customer->setGroupId($prevCustomerDataArr['group_id']);}
+            if (!$customer->getEmail()) {
+                $customer->setEmail($prevCustomerDataArr['email']);
+            }
+            if (!$customer->getLastname()) {
+                $customer->setLastname($prevCustomerDataArr['lastname']);
+            }
+            if (!$customer->getFirstname()) {
+                $customer->setFirstname($prevCustomerDataArr['firstname']);
+            }
+            if (!$customer->getWebsiteId()) {
+                $customer->setWebsiteId($prevCustomerDataArr['website_id']);
+            }
         }
         /** @var $customer \Magento\Customer\Model\Data\Customer */
         $customerArr = $customer->__toArray();
