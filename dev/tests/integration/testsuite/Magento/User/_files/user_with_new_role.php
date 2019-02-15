@@ -15,6 +15,7 @@ $objectManager = Bootstrap::getObjectManager();
 $role = $objectManager->create(Role::class);
 $role->setRoleName('new_role');
 $role->setRoleType('G');
+$role->setParentId(1);
 $role->save();
 
 /** @var User $model */

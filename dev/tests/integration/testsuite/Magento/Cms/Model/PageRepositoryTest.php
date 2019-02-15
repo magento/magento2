@@ -76,6 +76,8 @@ class PageRepositoryTest extends TestCase
      * @magentoDataFixture Magento/Cms/_files/pages.php
      * @magentoDataFixture Magento/User/_files/user_with_new_role.php
      * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      */
     public function testSaveDesign()
     {

@@ -15,7 +15,3 @@ $objectManager = Bootstrap::getObjectManager();
 $user = $objectManager->create(User::class);
 $user->load('admin_with_role', 'username');
 $user->delete();
-/** @var Role $role */
-$role = $objectManager->create(Role::class);
-$role->load('new_role', 'role_name');
-$role->delete();
