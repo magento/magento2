@@ -33,6 +33,7 @@ use Magento\Framework\AuthorizationInterface;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 101.0.0
  */
 class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
@@ -219,6 +220,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     }
 
     /**
+     * Disable fields if they are using default values.
+     *
      * @param Category $category
      * @param array $meta
      * @return array
@@ -550,6 +553,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     }
 
     /**
+     * List of fields groups and fields.
+     *
      * @return array
      * @since 101.0.0
      */

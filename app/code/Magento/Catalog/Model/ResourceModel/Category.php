@@ -118,6 +118,7 @@ class Category extends AbstractResource
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param UserContextInterface|null $userContext
      * @param AuthorizationInterface|null $authorization
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -1155,6 +1156,7 @@ class Category extends AbstractResource
 
     /**
      * @inheritDoc
+     *
      * @param CategoryEntity|object $object
      */
     public function validate($object)

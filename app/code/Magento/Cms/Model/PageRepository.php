@@ -94,6 +94,7 @@ class PageRepository implements PageRepositoryInterface
      * @param CollectionProcessorInterface $collectionProcessor
      * @param UserContextInterface|null $userContext
      * @param AuthorizationInterface|null $authorization
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourcePage $resource,
