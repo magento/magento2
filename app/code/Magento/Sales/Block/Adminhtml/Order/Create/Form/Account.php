@@ -192,42 +192,4 @@ class Account extends AbstractForm
 
         return $data;
     }
-
-    /**
-     * Extract the form values from attributes.
-     *
-     * @param array $attributes
-     * @param int $storeId
-     * @return array
-     */
-    private function extractValuesFromAttributes(array $attributes, int $storeId): array
-    {
-        $formValues = $this->getFormValues();
-        foreach ($attributes as $code => $attribute) {
-            $defaultValue = $attribute->getDefaultValue();
-            if (isset($defaultValue) && !isset($formValues[$code])) {
-                $formValues[$code] = $defaultValue;
-            }
-            if ($code === 'group_id' && empty($formValues[$code])) {
-                $formValues[$code] = $this->getDefaultCustomerGroup($storeId);
-            }
-        }
-
-        return $formValues;
-    }
-
-    /**
-     * Gets default customer group.
-     *
-     * @param int $storeId
-     * @return string|null
-     */
-    private function getDefaultCustomerGroup(int $storeId): ?string
-    {
-        return $this->_scopeConfig->getValue(
-            'customer/create_account/default_group',
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-    }
 }
