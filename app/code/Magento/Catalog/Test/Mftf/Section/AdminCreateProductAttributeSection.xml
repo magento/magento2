@@ -31,8 +31,8 @@
         <element name="dropdownNthOptionDelete" type="button" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) button[title='Delete']" parameterized="true"/>
     </section>
     <section name="AttributeDeleteModalSection">
-        <element name="confirm" type="button" selector=".modal-popup.confirm button.action-accept"/>
-        <element name="cancel" type="button" selector=".modal-popup.confirm button.action-dismiss"/>
+        <element name="confirm" type="button" selector=".modal-popup.confirm .action-accept"/>
+        <element name="cancel" type="button" selector=".modal-popup.confirm .action-dismiss"/>
     </section>
     <section name="AttributeManageSwatchSection">
         <element name="swatchField" type="input" selector="//th[contains(@class, 'col-swatch')]/span[contains(text(), '{{arg}}')]/ancestor::thead/following-sibling::tbody//input[@placeholder='Swatch']" parameterized="true"/>

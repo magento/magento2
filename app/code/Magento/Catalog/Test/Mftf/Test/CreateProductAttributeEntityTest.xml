@@ -18,6 +18,7 @@
             <testCaseId value="MC-10894"/>
             <group value="Catalog"/>
         </annotations>
+
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
@@ -28,6 +29,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -74,6 +76,7 @@
                 <issueId value="MC-13817"/>
             </skip>
         </annotations>
+
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
@@ -84,6 +87,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!--Generate date for use as default value, needs to be MM/d/YYYY -->
@@ -131,6 +135,7 @@
             <testCaseId value="MC-10897"/>
             <group value="Catalog"/>
         </annotations>
+
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
@@ -141,6 +146,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -182,6 +188,7 @@
             <testCaseId value="MC-10896"/>
             <group value="Catalog"/>
         </annotations>
+
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
@@ -192,6 +199,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -266,6 +274,7 @@
             <testCaseId value="MC-10898"/>
             <group value="Catalog"/>
         </annotations>
+
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
@@ -276,6 +285,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -311,7 +321,6 @@
         <seeInField stepKey="seeOption1StoreView" selector="{{AttributePropertiesSection.dropdownNthOptionDefaultStoreView('1')}}" userInput="{{dropdownProductAttributeWithQuote.option1_frontend}}"/>
         <seeCheckboxIsChecked stepKey="seeOption1Default" selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault('1')}}"/>
 
-
         <!--Go to New Product page, add Attribute and check dropdown values-->
         <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
         <actionGroup ref="addProductAttributeInProductModal" stepKey="addAttributeToProduct">
@@ -343,6 +352,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->

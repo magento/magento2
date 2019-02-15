@@ -19,6 +19,7 @@
         <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
         <waitForPageLoad stepKey="waitForPageLoad2" />
     </actionGroup>
+
     <actionGroup name="navigateToEditProductAttribute">
         <arguments>
             <argument name="ProductAttribute" type="string"/>
@@ -30,6 +31,7 @@
         <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="navigateToAttributeEditPage3" />
         <waitForPageLoad stepKey="waitForPageLoad3" />
     </actionGroup>
+
     <actionGroup name="changeUseForPromoRuleConditionsProductAttribute">
         <arguments>
             <argument name="option" type="string"/>
@@ -40,6 +42,7 @@
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product attribute." stepKey="successMessage"/>
     </actionGroup>
+
     <actionGroup name="deleteProductAttribute" extends="navigateToCreatedProductAttribute">
         <click selector="{{AttributePropertiesSection.DeleteAttribute}}" stepKey="deleteAttribute"/>
         <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="ClickOnDeleteButton"/>
@@ -47,6 +50,7 @@
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}"
                     stepKey="waitForSuccessMessage"/>
     </actionGroup>
+
     <!--Clicks Add Attribute and adds the given attribute-->
     <actionGroup name="addProductAttributeInProductModal">
         <arguments>
@@ -61,6 +65,7 @@
         <checkOption selector="{{AdminProductAddAttributeModalSection.firstRowCheckBox}}" stepKey="checkAttribute"/>
         <click stepKey="addSelected" selector="{{AdminProductAddAttributeModalSection.addSelected}}"/>
     </actionGroup>
+
     <!--Clicks createNewAttribute and fills out form-->
     <actionGroup name="createProductAttribute">
         <arguments>
@@ -72,12 +77,14 @@
         <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" stepKey="checkRequired" userInput="{{attribute.is_required_admin}}"/>
         <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
     </actionGroup>
+
     <!-- Inputs text default value and attribute code-->
     <actionGroup name="createProductAttributeWithTextField" extends="createProductAttribute" insertAfter="checkRequired">
         <click stepKey="openAdvancedProperties" selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}"/>
         <fillField stepKey="fillCode" selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{attribute.attribute_code}}"/>
         <fillField stepKey="fillDefaultValue" selector="{{AdvancedAttributePropertiesSection.DefaultValueText}}" userInput="{{attribute.default_value}}"/>
     </actionGroup>
+
     <!-- Inputs date default value and attribute code-->
     <actionGroup name="createProductAttributeWithDateField" extends="createProductAttribute" insertAfter="checkRequired">
         <arguments>
@@ -87,6 +94,7 @@
         <fillField stepKey="fillCode" selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{attribute.attribute_code}}"/>
         <fillField stepKey="fillDefaultValue" selector="{{AdvancedAttributePropertiesSection.DefaultValueDate}}" userInput="{{date}}"/>
     </actionGroup>
+
     <!-- Creates dropdown option at row without saving-->
     <actionGroup name="createAttributeDropdownNthOption">
         <arguments>
@@ -99,6 +107,7 @@
         <fillField stepKey="fillAdmin" selector="{{AttributePropertiesSection.dropdownNthOptionAdmin(row)}}" userInput="{{adminName}}"/>
         <fillField stepKey="fillStoreView" selector="{{AttributePropertiesSection.dropdownNthOptionDefaultStoreView(row)}}" userInput="{{frontName}}"/>
     </actionGroup>
+
     <!-- Creates dropdown option at row as default-->
     <actionGroup name="createAttributeDropdownNthOptionAsDefault" extends="createAttributeDropdownNthOption">
         <checkOption selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault(row)}}" stepKey="setAsDefault" after="fillStoreView"/>
