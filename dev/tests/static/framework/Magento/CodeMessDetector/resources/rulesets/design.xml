@@ -58,32 +58,30 @@ class PostOrder implements ActionInterface
             ]]>
         </example>
     </rule>
-    <rule name="RequestAwareBlockMethod"
-          class="Magento\CodeMessDetector\Rule\Design\RequestAwareBlockMethod"
-          message="{0} uses request object directly. Add user input validation and suppress this warning.">
+    <rule name="CookieAndSessionMisuse"
+          class="Magento\CodeMessDetector\Rule\Design\CookieAndSessionMisuse"
+          message= "The class {0} uses sessions or cookies while not being a part of HTML Presentation layer">
         <description>
             <![CDATA[
-Blocks must not depend on being used with certain controllers.
-If you use request object in a block directly you must validate all user input inside the block.
+Sessions and cookies must only be used in classes directly responsible for HTML presentation because Web APIs do not
+rely on cookies and sessions. If you need to get current user use Magento\Authorization\Model\UserContextInterface
             ]]>
         </description>
         <priority>2</priority>
         <properties />
         <example>
             <![CDATA[
-class MyOrder extends AbstractBlock
+class OrderProcessor
 {
+    public function __construct(SessionManagerInterface $session) {
+        $this->session = $session;
+    }
 
-    .......
-
-    public function getOrder()
+    public function place(OrderInterface $order)
     {
-        $orderId = $this->getRequest()->getParam('order_id');
-        //Validate customer having such order.
-        if (!$this->hasOrder($this->getCustomerId(), $orderId)) {
-            ...deny access...
-        }
-        .....
+        //Will not be present if processing a WebAPI request
+        $currentOrder = $this->session->get('current_order');
+        ...
     }
 }
             ]]>

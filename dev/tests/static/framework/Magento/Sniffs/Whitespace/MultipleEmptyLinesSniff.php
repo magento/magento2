@@ -14,7 +14,7 @@ use PHP_CodeSniffer\Files\File;
 class MultipleEmptyLinesSniff implements Sniff
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -22,7 +22,7 @@ class MultipleEmptyLinesSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
