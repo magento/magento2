@@ -12,5 +12,8 @@
         <element name="SubmitOrder" type="button" selector="#submit_order_top_button" timeout="30"/>
         <element name="Cancel" type="button" selector="#reset_order_top_button" timeout="30"/>
         <element name="CreateNewCustomer" type="button" selector="#order-customer-selector .actions button.primary" timeout="30"/>
+        <element name="submitOrder" type="button" selector="#submit_order_top_button" timeout="30"/>
+        <element name="cancel" type="button" selector="#reset_order_top_button" timeout="30"/>
+        <element name="createNewCustomer" type="button" selector="#order-customer-selector .actions button.primary" timeout="30"/>
     </section>
 </sections>
