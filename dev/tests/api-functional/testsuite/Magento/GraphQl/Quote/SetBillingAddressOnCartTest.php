@@ -335,7 +335,6 @@ mutation {
   setBillingAddressOnCart(
     input: {
       cart_id: "$maskedQuoteId"
-      customer_address_id: 1,
       billing_address: {
           customer_address_id: 1
        }
