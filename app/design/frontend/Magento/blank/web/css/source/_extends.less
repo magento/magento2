@@ -18,13 +18,11 @@
             margin: 0;
         }
     }
-}
 
 //
 //  Link as a button
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-action-link-button {
         .lib-button();
         .lib-link-as-button();
@@ -134,13 +132,11 @@
             position: static;
         }
     }
-}
 
 //
 //  Adaptive images
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-adaptive-images {
         display: block;
         height: auto;
@@ -153,13 +149,11 @@
         margin: 0 auto;
         max-width: 100%;
     }
-}
 
 //
 //  Title for login blocks
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-login-block-title {
         strong {
             font-weight: @font-weight__heavier;
@@ -170,13 +164,11 @@
         margin-bottom: 15px;
         padding-bottom: 12px;
     }
-}
 
 //
 //  Abstract block title
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-block-title {
         margin-bottom: 15px;
         
@@ -184,13 +176,11 @@
             .lib-heading(h3);
         }
     }
-}
 
 //
 //  Account blocks
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-account-blocks {
         .block-title {
             &:extend(.abs-block-title all);
@@ -224,13 +214,11 @@
             }
         }
     }
-}
 
 //
 //  Simple Dropdown
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-dropdown-simple {
         .lib-dropdown(
             @_dropdown-list-item-padding: 5px 5px 5px 23px,
@@ -239,34 +227,28 @@
             @_icon-font-vertical-align: middle
         );
     }
-}
 
 //
 //  Input quantity
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-input-qty {
         text-align: center;
         width: 47px;
     }
-}
 
 //
 //  Margin for blocks & widgets
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-margin-for-blocks-and-widgets {
         margin-bottom: @indent__xl;
     }
-}
 
 //
 //  Remove button for blocks
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-remove-button-for-blocks {
         .lib-icon-font(
             @icon-remove,
@@ -278,13 +260,11 @@
             @_icon-font-color-active: @color-gray19
         );
     }
-}
 
 //
 //  Product link
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-product-link {
         font-weight: @font-weight__regular;
 
@@ -586,13 +566,11 @@
     .abs-add-box-sizing-desktop-m {
         @abs-add-box-sizing();
     }
-}
 
 //
 //  Revert field type
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-revert-field-type-desktop {
         .fieldset {
             > .field,
@@ -627,13 +605,11 @@
             top: 0;
         }
     }
-}
 
 //
 //  Split button
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-split-button {
         .lib-dropdown-split(
             @_options-selector : ~'.items',
@@ -641,13 +617,11 @@
         );
         vertical-align: middle;
     }
-}
 
 //
 //  Action addto
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-action-addto-product {
         &:extend(.abs-action-link-button all);
         .lib-button-s();
@@ -664,23 +638,20 @@
             @_icon-font-line-height: 24px
         );
     }
-}
 
 //
 //  Large button
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-button-l {
         .lib-button-l();
     }
-}
+
 
 //
 //  Button as a link
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-action-button-as-link {
         .lib-button-as-link(@_margin: false);
         border-radius: 0;
@@ -692,43 +663,35 @@
             box-shadow: none;
         }
     }
-}
 
 //
 //  Button revert secondary color
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-revert-secondary-color {
         .lib-button-revert-secondary-color();
     }
-}
 
 //
 //  Button revert secondary size
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-revert-secondary-size {
         .lib-button-revert-secondary-size();
     }
-}
 
 //
 //  Box-tocart block
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-box-tocart {
         margin: @indent__s 0;
     }
-}
 
 //
 //  Excl/Incl tax
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-adjustment-incl-excl-tax {
         .price-including-tax,
         .price-excluding-tax,
@@ -751,13 +714,11 @@
             }
         }
     }
-}
 
 //
 //  Cart tax total
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-tax-total {
         cursor: pointer;
         padding-right: 12px;
@@ -790,13 +751,11 @@
             @_icon-font-position: after
         );
     }
-}
 
 //
 //  Checkout shipping methods title
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-methods-shipping-title {
         .lib-font-size(14);
         font-weight: @font-weight__bold;
@@ -859,13 +818,11 @@
             content: ': ';
         }
     }
-}
 
 //
 //  Icon - create add
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-icon-add {
         .lib-icon-font(
             @_icon-font-content: @icon-expand,
@@ -1153,24 +1110,20 @@
             &:extend(.abs-field-date-input);
         }
     }
-}
 
 //
 //  Form Field Date Input
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-field-date-input {
         margin-right: @indent__s;
         width: calc(~'100% -' @icon-calendar__font-size + @indent__s);
     }
-}
 
 //
 //  Form Field Tooltip
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-field-tooltip {
         &:extend(.abs-add-box-sizing all);
         position: relative;
@@ -1242,13 +1195,11 @@
             @_line-height: false
         );
     }
-}
 
 //
 //  Shopping cart sidebar and checkout sidebar totals
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-sidebar-totals {
         .mark {
             font-weight: @font-weight__regular;
@@ -1345,13 +1296,11 @@
             &:extend(.abs-no-display all);
         }
     }
-}
 
 //
 //  Shopping cart and payment discount codes block
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-discount-block {
         > .title {
             border-top: @border-width__base solid @border-color__base;

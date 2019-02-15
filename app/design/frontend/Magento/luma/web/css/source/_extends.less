@@ -17,24 +17,20 @@
             margin: 0;
         }
     }
-}
 
 //
 //  Primary button
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .action-primary {
         .lib-button-primary();
         .lib-css(border-radius, @button__border-radius);
     }
-}
 
 //
 //  Secondary button
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-revert-to-action-secondary {
         &:extend(.abs-revert-secondary-color all);
         .lib-css(border-radius, @button__border-radius);
@@ -47,25 +43,21 @@
             .lib-css(box-shadow, @button__shadow-active);
         }
     }
-}
 
 //
 //  Link as a button
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-action-link-button {
         .lib-button();
         .lib-link-as-button();
         .lib-css(border-radius, @button__border-radius);
     }
-}
 
 //
 //  Button as a link
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-action-button-as-link {
         .lib-button-as-link(@_margin: false);
         .lib-css(font-weight, @font-weight__regular);
@@ -76,33 +68,27 @@
             box-shadow: none;
         }
     }
-}
 
 //
 //  Button revert secondary color
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-revert-secondary-color {
         .lib-button-revert-secondary-color();
     }
-}
 
 //
 //  Button revert secondary size
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-revert-secondary-size {
         .lib-button-revert-secondary-size();
     }
-}
 
 //
 //  Large button
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-button-l {
         .lib-button-l();
     }
@@ -208,13 +194,11 @@
             position: static;
         }
     }
-}
 
 //
 //  Adaptive images
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-adaptive-images {
         display: block;
         height: auto;
@@ -227,13 +211,11 @@
         margin: 0 auto;
         max-width: 100%;
     }
-}
 
 //
 //  Title for login blocks
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-login-block-title {
         .lib-css(border-bottom, 1px solid @secondary__color);
         .lib-font-size(18);
@@ -244,13 +226,11 @@
             font-weight: 500;
         }
     }
-}
 
 //
 //  Simple Dropdown
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-dropdown-simple {
         .lib-dropdown(
         @_dropdown-list-item-padding: 5px 5px 5px 23px,
@@ -263,24 +243,20 @@
             padding: 6px 0;
         }
     }
-}
 
 //
 //  Input quantity
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-input-qty {
         text-align: center;
         width: 54px;
     }
-}
 
 //
 //  Margin for blocks & widgets
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-margin-for-blocks-and-widgets {
         margin-bottom: @indent__xl;
     }
@@ -308,13 +284,11 @@
         @_icon-font-color-active: @color-gray60
         );
     }
-}
 
 //
 //  Product link
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-product-link {
         font-weight: @font-weight__regular;
         > a {
@@ -330,13 +304,11 @@
             );
         }
     }
-}
 
 //
 //  Link
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-like-link {
         .lib-link();
         cursor: pointer;
@@ -469,13 +441,11 @@
             }
         }
     }
-}
 
 //
 //  Margin for forms
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-margin-for-forms-desktop {
         .lib-css(margin-left, @form-field-type-label-inline__width);
     }
@@ -652,13 +622,11 @@
             top: 0;
         }
     }
-}
 
 //
 //  Split button
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-split-button {
         .lib-dropdown-split(
         @_options-selector : ~'.items',
@@ -810,13 +778,11 @@
             width: 18px;
         }
     }
-}
 
 //
 //  Box-tocart block
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-box-tocart {
         margin: 0 0 @indent__l;
     }
@@ -945,25 +911,21 @@
     .abs-cart-block-content {
         margin: 0;
     }
-}
 
 //
 //  Checkout order review price
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-checkout-cart-price {
         .lib-css(color, @primary__color__lighter);
         .lib-font-size(16);
         font-weight: @font-weight__bold;
     }
-}
 
 //
 //  Checkout order product name
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-checkout-product-name {
         .lib-font-size(18);
         font-weight: @font-weight__light;
@@ -1166,13 +1128,11 @@
             }
         }
     }
-}
 
 //
 //  Cart tax total
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-tax-total {
         cursor: pointer;
         padding-right: @indent__s;
@@ -1199,23 +1159,19 @@
         @_icon-font-position: after
         );
     }
-}
 
 //
 //  Forms: margin-bottom for small forms
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-forms-margin-small {
         .lib-css(margin-bottom, @indent__base);
     }
-}
 
 //
 //  Forms: margin-bottom for small forms
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-rating-summary {
         .rating {
             &-summary {
@@ -1236,13 +1192,11 @@
             }
         }
     }
-}
 
 //
 //  Account pages: actions
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-account-actions {
         &:after {
             .lib-css(border-left, 1px solid @primary__color__light);
@@ -1259,13 +1213,11 @@
             }
         }
     }
-}
 
 //
 //  Account blocks
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-account-blocks {
         .block-title {
             &:extend(.abs-account-title all);
@@ -1289,25 +1241,21 @@
             }
         }
     }
-}
 
 //
 //  Add colon
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-colon {
         &:after {
             content: ': ';
         }
     }
-}
 
 //
 //  Icon - create add
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-icon-add {
         .lib-icon-font(
         @_icon-font-content: @icon-expand,
@@ -1491,13 +1439,11 @@
         @_table_border-width: 1px
         );
     }
-}
 
 //
 //  Pager toolbar for non-catalog pages desktop
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-pager-toolbar {
         position: relative;
 
@@ -1542,13 +1488,11 @@
             content: ')';
         }
     }
-}
 
 //
 //  Sidebar and widget blocks title
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-block-widget-title {
         margin: 0 0 @indent__base;
 
@@ -1557,13 +1501,11 @@
             font-weight: @font-weight__light;
         }
     }
-}
 
 //
 //  Shopping cart items
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-shopping-cart-items {
         margin-bottom: @indent__base;
 
@@ -1593,13 +1535,11 @@
     .abs-no-border-top {
         border-top: 0;
     }
-}
 
 //
 //  Remove bottom border
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .abs-no-border-bottom {
         border-bottom: 0;
     }
@@ -1620,24 +1560,20 @@
             &:extend(.abs-field-date-input);
         }
     }
-}
 
 //
 //  Form Field Date Input
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-field-date-input {
         .lib-css(margin-right, @indent__s);
         width: calc(~'100% -' @icon-calendar__font-size + @indent__s);
     }
-}
 
 //
 //  Form Field Tooltip
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-field-tooltip {
         &:extend(.abs-add-box-sizing all);
         position: relative;
@@ -1708,13 +1644,11 @@
         @_line-height: false
         );
     }
-}
 
 //
 //  Shopping cart sidebar and checkout sidebar totals
 //  ---------------------------------------------
 
-& when (@media-common = true) {
     .abs-sidebar-totals {
         border-top: 1px solid @border-color__base;
         padding-top: 10px;
