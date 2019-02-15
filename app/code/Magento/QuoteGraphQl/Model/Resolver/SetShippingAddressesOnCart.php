@@ -76,7 +76,7 @@ class SetShippingAddressesOnCart implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $shippingAddresses = $this->arrayManager->get('input/shipping_addresses', $args);
-        $maskedCartId = $this->arrayManager->get('input/cart_id', $args);
+        $maskedCartId = (string) $this->arrayManager->get('input/cart_id', $args);
 
         if (!$maskedCartId) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
@@ -85,7 +85,6 @@ class SetShippingAddressesOnCart implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "shipping_addresses" is missing'));
         }
 
-        $maskedCartId = $args['input']['cart_id'];
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
 
         $this->setShippingAddressesOnCart->execute($context, $cart, $shippingAddresses);
