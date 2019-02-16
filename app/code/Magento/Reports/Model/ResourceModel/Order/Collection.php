@@ -773,6 +773,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
             !$convertCurrency,
             $this->getConnection()->getIfNullSql('main_table.base_subtotal_refunded', 0),
             $this->getConnection()->getIfNullSql('main_table.base_subtotal_canceled', 0),
+            $this->getConnection()->getIfNullSql('main_table.base_discount_refunded', 0),
             $this->getConnection()->getIfNullSql('main_table.base_discount_canceled', 0)
         );
         $this->getSelect()->columns(['revenue' => $expr]);
@@ -795,6 +796,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
             $storeId,
             $this->getConnection()->getIfNullSql('main_table.base_subtotal_refunded', 0),
             $this->getConnection()->getIfNullSql('main_table.base_subtotal_canceled', 0),
+            $this->getConnection()->getIfNullSql('main_table.base_discount_refunded', 0),
             $this->getConnection()->getIfNullSql('main_table.base_discount_canceled', 0)
         );
 
@@ -813,6 +815,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param int $storeId
      * @param string $baseSubtotalRefunded
      * @param string $baseSubtotalCanceled
+     * @param string $baseDiscountRefunded
      * @param string $baseDiscountCanceled
      * @return string
      */
@@ -820,13 +823,14 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         $storeId,
         $baseSubtotalRefunded,
         $baseSubtotalCanceled,
+        $baseDiscountRefunded,
         $baseDiscountCanceled
     ) {
         $template = ($storeId != 0)
-            ? '(main_table.base_subtotal - %2$s - %1$s - ABS(main_table.base_discount_amount) - %3$s)'
-            : '((main_table.base_subtotal - %1$s - %2$s - ABS(main_table.base_discount_amount) + %3$s) '
+            ? '(main_table.base_subtotal - %2$s - %1$s - ABS(main_table.base_discount_amount) + %3$s + %4$s)'
+            : '((main_table.base_subtotal - %1$s - %2$s - ABS(main_table.base_discount_amount) + %3$s + %4$s) '
                 . ' * main_table.base_to_global_rate)';
-        return sprintf($template, $baseSubtotalRefunded, $baseSubtotalCanceled, $baseDiscountCanceled);
+        return sprintf($template, $baseSubtotalRefunded, $baseSubtotalCanceled, $baseDiscountRefunded, $baseDiscountCanceled);
     }
 
     /**
