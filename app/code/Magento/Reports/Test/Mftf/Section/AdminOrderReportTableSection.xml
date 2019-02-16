@@ -8,8 +8,8 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="AdminCustomerMainActionsSection">
-        <element name="saveButton" type="button" selector="#save" timeout="30"/>
-        <element name="deleteButton" type="button" selector="div.page-actions button.delete" timeout="30"/>
+    <section name="AdminOrderReportTableSection">
+        <element name="ordersCount" type="text" selector=".totals .col-orders.col-orders_count.col-number"/>
+        <element name="canceledOrders" type="text" selector=".totals .col-canceled.col-total_canceled_amount.a-right"/>
     </section>
 </sections>
