@@ -9,6 +9,9 @@ use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
+/**
+ * Class SessionChecker
+ */
 class SessionChecker
 {
     /**
@@ -38,6 +41,8 @@ class SessionChecker
      *
      * @param SessionManagerInterface $sessionManager
      * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
     public function beforeStart(SessionManagerInterface $sessionManager)
     {
