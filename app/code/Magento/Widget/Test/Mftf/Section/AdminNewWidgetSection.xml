@@ -25,6 +25,12 @@
         <element name="applyParameter" type="button" selector=".rule-param-apply"/>
         <element name="openChooser" type="button" selector=".rule-chooser-trigger"/>
         <element name="selectAll" type="checkbox" selector=".admin__control-checkbox"/>
+        <element name="widgetSelectBlock" type="button" selector="//button[@class='action-default scalable btn-chooser']"/>
+        <element name="selectBlockTitle" type="input" selector="//input[@name='chooser_title']"/>
+        <element name="searchBlock" type="button" selector="//div[@class='admin__filter-actions']/button[@title='Search']"/>
+        <element name="blockStatus" type="select" selector="//select[@name='chooser_is_active']"/>
+        <element name="searchedBlock" type="button" selector="//*[@class='magento-message']//tbody/tr/td[1]"/>
+        <element name="saveWidget" type="select" selector="#save"/>
         <element name="displayMode" type="select" selector="select[id*='display_mode']"/>
         <element name="restrictTypes" type="select" selector="select[id*='types']"/>
         <element name="saveAndContinue" type="button" selector="#save_and_edit_button" timeout="30"/>

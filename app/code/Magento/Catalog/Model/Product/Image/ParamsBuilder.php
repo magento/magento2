@@ -161,9 +161,7 @@ class ParamsBuilder
      */
     private function hasDefaultFrame(): bool
     {
-        return (bool) $this->viewConfig->getViewConfig()->getVarValue(
-            'Magento_Catalog',
-            'product_image_white_borders'
-        );
+        return (bool) $this->viewConfig->getViewConfig(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
+            ->getVarValue('Magento_Catalog', 'product_image_white_borders');
     }
 }
