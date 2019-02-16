@@ -335,6 +335,8 @@ class Context
     }
 
     /**
+     * Get Front Name
+     *
      * @see getModuleName
      */
     public function getFrontName()

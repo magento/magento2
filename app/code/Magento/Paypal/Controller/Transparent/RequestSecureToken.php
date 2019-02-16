@@ -56,7 +56,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
      * @param SecureToken $secureTokenService
      * @param SessionManager $sessionManager
      * @param Transparent $transparent
-     * @param SessionManagerInterface|null $sessionManagerInterface
+     * @param SessionManagerInterface|null $sessionInterface
      */
     public function __construct(
         Context $context,
