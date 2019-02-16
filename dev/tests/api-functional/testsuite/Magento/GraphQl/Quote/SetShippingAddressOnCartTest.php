@@ -492,7 +492,6 @@ QUERY;
      * @param string $username
      * @param string $password
      * @return array
-     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
     {
@@ -504,7 +503,6 @@ QUERY;
     /**
      * @param string $reversedQuoteId
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
     {
@@ -518,8 +516,6 @@ QUERY;
      * @param string $reversedQuoteId
      * @param int $customerId
      * @return string
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function assignQuoteToCustomer(
         string $reversedQuoteId = 'test_order_with_simple_product_without_address',
