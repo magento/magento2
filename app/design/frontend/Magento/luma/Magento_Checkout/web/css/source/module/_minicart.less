@@ -63,6 +63,13 @@
             }
         }
 
+        dl {
+            &.product.options.list {
+                display: inline-block;
+                vertical-align: top;
+            }
+        }
+
         .text {
             &.empty {
                 text-align: center;
@@ -288,6 +295,15 @@
             .details-qty {
                 margin-top: @indent__s;
             }
+
+            .product {
+                .options {
+                    &.list {
+                        &:extend(.abs-product-options-list all);
+                        &:extend(.abs-add-clearfix all);
+                    }
+                }
+            }
         }
 
         .product {
@@ -355,7 +371,7 @@
         .item-qty {
             margin-right: @indent__s;
             text-align: center;
-            width: 40px;
+            width: 45px;
         }
 
         .update-cart-item {

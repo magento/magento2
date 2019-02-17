@@ -7,10 +7,10 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontOnePageCheckoutDataWhenChangeQtyTest">
         <annotations>
-            <features value="Checkout"/>
+            <stories value="Checkout"/>
             <title value="One page Checkout Customer data when changing Product Qty"/>
             <description value="One page Checkout Customer data when changing Product Qty"/>
             <severity value="MAJOR"/>
@@ -57,6 +57,7 @@
         <!--Select shipping method and finalize checkout-->
         <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
         <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <waitForPageLoad stepKey="waitForShippingMethodLoad"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
