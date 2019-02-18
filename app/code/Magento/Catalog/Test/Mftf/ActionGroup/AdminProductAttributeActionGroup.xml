@@ -36,4 +36,42 @@
         <click selector="{{AdminProductAttributeGridSection.attributeCode(attributeCode)}}" stepKey="clickRowToEdit"/>
         <waitForPageLoad stepKey="waitForColorAttributePageLoad"/>
     </actionGroup>
+    <!--Save product attribute and see success message-->
+    <actionGroup name="SaveProductAttribute">
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveAttribute"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product attribute." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+    <actionGroup name="deleteProductAttribute">
+        <arguments>
+            <argument name="ProductAttribute"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <waitForPageLoad stepKey="waitForAttributeGridPageLoad"/>
+        <fillField selector="{{AdminProductAttributeGridSection.gridFilterAttributeCode}}"
+                   userInput="{{ProductAttribute.attribute_code}}" stepKey="setAttributeCode"/>
+        <click selector="{{AdminProductAttributeGridSection.search}}" stepKey="searchForAttributeFromTheGrid"/>
+        <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="clickOnAttributeRow"/>
+        <waitForPageLoad stepKey="waitForAttributeEditPageLoad" />
+        <click selector="{{AttributePropertiesSection.deleteAttribute}}" stepKey="deleteAttribute"/>
+        <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForDeleteConfirmation"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to do this?" stepKey="seeConfirmationMessage"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDeleteAttribute"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterDeleteAttribute"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the product attribute." stepKey="seeDeleteSuccessMessage"/>
+    </actionGroup>
+    <actionGroup name="navigateToCreatedProductAttribute">
+        <arguments>
+            <argument name="productAttribute"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <waitForPageLoad stepKey="waitForAttributesGridPageLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <waitForPageLoad stepKey="waitForAttributesGridPageLoad1"/>
+        <fillField selector="{{AdminProductAttributeGridSection.gridFilterAttributeCode}}"
+                   userInput="{{productAttribute.attribute_code}}" stepKey="setAttributeCode"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="searchForAttributeFromTheGrid"/>
+        <click selector="{{AdminDataGridTableSection.row('1')}}" stepKey="clickOnAttributeRow"/>
+        <waitForPageLoad stepKey="waitForAttributePageLoad" />
+    </actionGroup>
 </actionGroups>

@@ -215,7 +215,7 @@ class CustomOptionPriceModifier implements PriceModifierInterface
         } else {
             $select->joinLeft(
                 ['otps' => $this->getTable('catalog_product_option_type_price')],
-                'otps.option_type_id = otpd.option_type_id AND otpd.store_id = cwd.default_store_id',
+                'otps.option_type_id = otpd.option_type_id AND otps.store_id = cwd.default_store_id',
                 []
             );
 

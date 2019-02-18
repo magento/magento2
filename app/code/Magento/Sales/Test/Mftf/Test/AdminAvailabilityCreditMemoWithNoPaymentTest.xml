@@ -77,7 +77,6 @@
         <waitForPageLoad stepKey="waitForInvoicePageOpened"/>
 
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad stepKey="waitForInvoiceSaved"/>
         <see userInput="The invoice has been created." stepKey="seeCorrectMessage"/>
 
         <!--Verify that *Credit Memo* button is displayed-->

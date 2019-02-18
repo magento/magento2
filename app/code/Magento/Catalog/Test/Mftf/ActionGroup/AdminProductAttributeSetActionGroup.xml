@@ -49,6 +49,7 @@
         <arguments>
             <argument name="attributeSetName" type="string"/>
         </arguments>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
         <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{attributeSetName}}" stepKey="searchForAttrSet"/>
         <waitForAjaxLoad stepKey="waitForLoad"/>
