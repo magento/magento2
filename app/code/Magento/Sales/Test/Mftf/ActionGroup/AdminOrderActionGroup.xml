@@ -18,6 +18,12 @@
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Canceled" stepKey="seeOrderStatusCanceled"/>
     </actionGroup>
 
+    <!--Cancel order that is in processing status-->
+    <actionGroup name="CancelProcessingOrder" extends="cancelPendingOrder">
+        <remove keyForRemoval="seeOrderStatusCanceled"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" after="seeCancelSuccessMessage" userInput="{{CONST.orderStatusComplete}}" stepKey="seeOrderStatusComplete"/>
+    </actionGroup>
+
     <!--Navigate to create order page (New Order -> Create New Customer)-->
     <actionGroup name="navigateToNewOrderPageNewCustomerSingleStore">
         <arguments>
@@ -60,17 +66,24 @@
     <actionGroup name="navigateToNewOrderPageExistingCustomer">
         <arguments>
             <argument name="customer"/>
+            <argument name="storeView" defaultValue="_defaultStore"/>
         </arguments>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
         <waitForPageLoad stepKey="waitForIndexPageLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
         <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewOrder"/>
         <waitForPageLoad stepKey="waitForCustomerGridLoad"/>
+        <!--Clear grid filters-->
+        <conditionalClick selector="{{AdminOrderCustomersGridSection.resetButton}}" dependentSelector="{{AdminOrderCustomersGridSection.resetButton}}" visible="true" stepKey="clearExistingCustomerFilters"/>
+        <waitForPageLoad stepKey="waitPageLoadAfterFilterReset"/>
         <fillField userInput="{{customer.email}}" selector="{{AdminOrderCustomersGridSection.emailFilter}}" stepKey="filterEmail"/>
         <click selector="{{AdminOrderCustomersGridSection.searchButton}}" stepKey="applyFilter"/>
         <waitForPageLoad stepKey="waitForFilteredCustomerGridLoad"/>
         <click selector="{{AdminOrderCustomersGridSection.firstRow}}" stepKey="clickOnCustomer"/>
-        <waitForPageLoad stepKey="waitForCreateOrderPageLoad" />
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoad"/>
+        <!-- Select store view if appears -->
+        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoadAfterStoreSelect"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
     </actionGroup>
     <!--Add a simple product to order-->
@@ -132,13 +145,13 @@
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterBundle"/>
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchBundle"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
+        <scrollToTopOfPage stepKey="scrollToTop1"/>
         <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectBundleProduct"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForMask"/>
         <waitForElementVisible selector="{{AdminOrderFormBundleProductSection.quantity}}" stepKey="waitForBundleOptionLoad"/>
-        <wait time="2" stepKey="waitForOptionsToLoad"/>
         <fillField selector="{{AdminOrderFormBundleProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
+        <scrollToTopOfPage stepKey="scrollToTop2"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
     <!--Add bundle product to order and check product price in the grid-->

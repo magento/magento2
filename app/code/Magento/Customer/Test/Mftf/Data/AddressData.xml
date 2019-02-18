@@ -67,6 +67,7 @@
         <data key="state">California</data>
         <data key="postcode">90230</data>
         <data key="country_id">US</data>
+        <data key="country">United States</data>
         <data key="default_billing">Yes</data>
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionCA</requiredEntity>
@@ -101,6 +102,15 @@
         <data key="state"></data>
         <data key="postcode">SE1 7RW</data>
         <data key="country_id">GB</data>
+        <data key="country">United Kingdom</data>
         <data key="telephone">444-44-444-44</data>
+    </entity>
+    <entity name="US_Default_Billing_Address_TX" type="address" extends="US_Address_TX">
+        <data key="default_billing">false</data>
+        <data key="default_shipping">true</data>
+    </entity>
+    <entity name="US_Default_Shipping_Address_CA" type="address" extends="US_Address_CA">
+        <data key="default_billing">true</data>
+        <data key="default_shipping">false</data>
     </entity>
 </entities>

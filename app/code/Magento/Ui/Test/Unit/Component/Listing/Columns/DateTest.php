@@ -6,6 +6,7 @@
 namespace Magento\Ui\Test\Unit\Component\Listing\Columns;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class DateTest
@@ -14,10 +15,25 @@ class DateTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_TIME = '2000-04-12 16:34:12';
 
+    private $data = [
+        'js_config' => [
+            'extends' => 'test_config_extends',
+        ],
+        'config' => [
+            'dataType' => 'testType',
+        ],
+        'name' => 'field_name',
+    ];
+
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|MockObject
      */
     protected $contextMock;
+
+    /**
+     * @var \Magento\Framework\View\Element\UiComponentFactory|MockObject
+     */
+    private $uiComponentFactoryMock;
 
     /**
      * @var \Magento\Ui\Component\Listing\Columns\Date
@@ -25,7 +41,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|MockObject
      */
     protected $timezoneMock;
 
@@ -50,11 +66,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
-
+        $this->uiComponentFactoryMock = $this->createMock(\Magento\Framework\View\Element\UiComponentFactory::class);
         $this->timezoneMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -63,18 +75,63 @@ class DateTest extends \PHPUnit\Framework\TestCase
             \Magento\Ui\Component\Listing\Columns\Date::class,
             [
                 'context' => $this->contextMock,
-                'data' => [
-                    'js_config' => [
-                        'extends' => 'test_config_extends'
-                    ],
-                    'config' => [
-                        'dataType' => 'testType'
-                    ],
-                    'name' => 'field_name',
-                ],
-                'timezone' => $this->timezoneMock
+                'uiComponentFactory' => $this->uiComponentFactoryMock,
+                'data' => $this->data,
+                'timezone' => $this->timezoneMock,
             ]
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testPrepare()
+    {
+        $dateFormat = 'M/d/Y';
+
+        $this->data['config']['filter'] = [
+            'filterType' => 'dateRange',
+            'templates' => [
+                'date' => [
+                    'options' => [
+                        'dateFormat' => $dateFormat,
+                    ],
+                ],
+            ],
+        ];
+
+        $this->timezoneMock->expects($this->once())
+            ->method('getDateFormatWithLongYear')
+            ->willReturn($dateFormat);
+
+        /** @var \Magento\Framework\View\Element\UiComponent\Processor|MockObject $processor */
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
+
+        /** @var \Magento\Framework\View\Element\UiComponentInterface|MockObject $wrappedComponentMock */
+        $wrappedComponentMock = $this->getMockForAbstractClass(
+            \Magento\Framework\View\Element\UiComponentInterface::class,
+            [],
+            '',
+            false
+        );
+
+        $wrappedComponentMock->expects($this->once())
+            ->method('getContext')
+            ->willReturn($this->contextMock);
+
+        $this->uiComponentFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(
+                $this->data['name'],
+                $this->data['config']['dataType'],
+                array_merge(['context' => $this->contextMock], $this->data)
+            )
+            ->willReturn($wrappedComponentMock);
+
+        $this->model->prepare();
     }
 
     public function testPrepareDataSource()

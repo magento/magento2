@@ -1579,8 +1579,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     continue;
                 }
                 if ($this->getErrorAggregator()->hasToBeTerminated()) {
-                    $this->getErrorAggregator()->addRowToSkip($rowNum);
-                    continue;
+                    if (ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
+                        !== $this->_parameters[Import::FIELD_NAME_VALIDATION_STRATEGY]
+                    ) {
+                        $this->getErrorAggregator()->addRowToSkip($rowNum);
+                        continue;
+                    }
                 }
                 $rowScope = $this->getRowScope($rowData);
 
@@ -2993,9 +2997,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         )
         ) {
             $stockItemDo->setData($row);
-            $row['is_in_stock'] = $stockItemDo->getBackorders() && isset($row['is_in_stock'])
-                ? $row['is_in_stock']
-                : $this->stockStateProvider->verifyStock($stockItemDo);
+            $row['is_in_stock'] = $row['is_in_stock'] ?? $this->stockStateProvider->verifyStock($stockItemDo);
             if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
                 $row['low_stock_date'] = $this->dateTime->gmDate(
                     'Y-m-d H:i:s',

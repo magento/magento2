@@ -25,7 +25,10 @@
             </createData>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <!--Clear filter in orders grid-->
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="ordersGridClearFilters"/>
+            <actionGroup ref="logout" stepKey="logoutAdminUserAfterTest"/>
+
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
@@ -50,6 +53,7 @@
         <click selector="{{GuestCheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
         <waitForElement selector="{{GuestCheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{GuestCheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="checkPaymentMethod"/>
         <waitForElement selector="{{GuestCheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <conditionalClick selector="{{GuestCheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{GuestCheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="exposeMiniCart"/>
         <see selector="{{GuestCheckoutPaymentSection.cartItems}}" userInput="{{_defaultProduct.name}}" stepKey="seeProductInCart"/>
@@ -61,18 +65,37 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnOrdersPage"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
-        <fillField selector="{{OrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="fillOrderNum"/>
-        <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearchOrderNum"/>
+        <!--Navigate to orders index page and filter orders-->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnSearch"/>
         <click selector="{{OrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForOrderPageLoad"/>
         <see selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeAdminOrderStatus"/>
         <see selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="Guest" stepKey="seeAdminOrderGuest"/>
         <see selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeAdminOrderEmail"/>
         <see selector="{{OrderDetailsInformationSection.billingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAdminOrderBillingAddress"/>
         <see selector="{{OrderDetailsInformationSection.shippingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAdminOrderShippingAddress"/>
         <see selector="{{OrderDetailsInformationSection.itemsOrdered}}" userInput="{{_defaultProduct.name}}" stepKey="seeAdminOrderProduct"/>
+    </test>
+    <test name="StorefrontGuestCheckoutWithSidebarDisabledTest" extends="StorefrontGuestCheckoutTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via Guest Checkout"/>
+            <title value="Guest Checkout when Cart sidebar disabled"/>
+            <description value="Should be able to place an order as a Guest when Cart sidebar is disabled"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-97155"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set checkout/sidebar/display 0" stepKey="disableSidebar" />
+        </before>
+        <after>
+            <magentoCLI command="config:set checkout/sidebar/display 1" stepKey="enableSidebar" />
+        </after>
+        <remove keyForRemoval="addProductNavigateToCheckout" />
+        <actionGroup ref="GoToCheckoutFromCartActionGroup" stepKey="guestGoToCheckoutFromCart" after="seeCartQuantity" />
     </test>
 </tests>

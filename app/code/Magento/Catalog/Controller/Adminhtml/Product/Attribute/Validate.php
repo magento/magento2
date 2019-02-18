@@ -100,7 +100,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $attributeCode
         );
 
-        if ($attribute->getId() && !$attributeId) {
+        if ($attribute->getId() && !$attributeId || $attributeCode === 'product_type') {
             $message = strlen($this->getRequest()->getParam('attribute_code'))
                 ? __('An attribute with this code already exists.')
                 : __('An attribute with the same code (%1) already exists.', $attributeCode);

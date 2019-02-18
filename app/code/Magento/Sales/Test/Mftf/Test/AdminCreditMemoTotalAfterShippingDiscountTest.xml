@@ -7,8 +7,8 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="CreditMemoTotalAfterShippingDiscountTest">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreditMemoTotalAfterShippingDiscountTest">
         <annotations>
             <features value="Credit memo"/>
             <title value="Verify credit memo grand total after shipping discount is applied via Cart Price Rule"/>
@@ -26,6 +26,8 @@
             <actionGroup ref="SetTaxClassForShipping" stepKey="setShippingTaxClass"/>
         </before>
         <after>
+            <!--Clear filter in orders grid-->
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="ordersGridClearFilters"/>
             <actionGroup ref="ResetTaxClassForShipping" stepKey="resetTaxClassForShipping"/>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteSalesRule">
                 <argument name="ruleName" value="{{ApiSalesRule.name}}"/>
@@ -89,14 +91,15 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
         <!-- Search for Order in the order grid -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
-        <fillField selector="{{OrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
-        <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
 
         <!-- Create invoice -->
-        <click selector="{{OrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{CONST.orderStatusPending}}" stepKey="seeOrderPending"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
 
@@ -114,6 +117,7 @@
         <grabTextFrom selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="grabInvoiceGrandTotal" after="seeCorrectGrandTotal"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
         <see selector="{{OrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage1"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{CONST.orderStatusProcessing}}" stepKey="seeOrderProcessing"/>
 
         <!--Create Credit Memo-->
         <comment userInput="Admin creates credit memo" stepKey="createCreditMemoComment"/>

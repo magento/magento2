@@ -7,15 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
+use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\TestFramework\Indexer\TestCase as IndexerTestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
-use Magento\Catalog\Model\ResourceModel\Product\Flat;
+use Magento\Catalog\Model\ResourceModel\Product\Flat as FlatResource;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Store\Model\Store;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\Indexer\Product\Flat\State as FlatState;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Custom Flat Attribute Test
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomFlatAttributeTest extends IndexerTestCase
 {
@@ -35,6 +44,31 @@ class CustomFlatAttributeTest extends IndexerTestCase
     private $productRepository;
 
     /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $attributeRepository;
+
+    /**
+     * @var FlatResource
+     */
+    private $flatResource;
+
+    /**
+     * @var FlatState
+     */
+    private $flatState;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var \Magento\Store\Api\Data\StoreInterface
+     */
+    private $savedCurrentStore;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -42,6 +76,21 @@ class CustomFlatAttributeTest extends IndexerTestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->processor = $this->objectManager->get(Processor::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->attributeRepository = $this->objectManager->get(ProductAttributeRepositoryInterface::class);
+        $this->flatResource = $this->objectManager->get(FlatResource::class);
+        $this->flatState = $this->objectManager->create(FlatState::class, [
+            'isAvailable' => true
+        ]);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->savedCurrentStore = $this->storeManager->getStore();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->storeManager->setCurrentStore($this->savedCurrentStore);
     }
 
     /**
@@ -77,7 +126,7 @@ class CustomFlatAttributeTest extends IndexerTestCase
             ->getEntity();
 
         self::assertInstanceOf(
-            Flat::class,
+            FlatResource::class,
             $resourceModel,
             'Product should be received from flat resource'
         );
@@ -87,5 +136,86 @@ class CustomFlatAttributeTest extends IndexerTestCase
             $product->getFlatAttribute(),
             'Product flat attribute should be able to change.'
         );
+    }
+
+    /**
+     * Tests flat dropdown attribute.
+     * Tests that flat dropdown attribute will be changed for different flat tables (it means for different stores)
+     *
+     * @magentoDbIsolation disabled
+     * @magentoAppArea adminhtml
+     * @magentoConfigFixture default_store catalog/frontend/flat_catalog_product 1
+     * @magentoConfigFixture default_store catalog/frontend/flat_catalog_category 1
+     * @magentoConfigFixture fixturestore_store catalog/frontend/flat_catalog_product 1
+     * @magentoConfigFixture fixturestore_store catalog/frontend/flat_catalog_category 1
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_multistore.php
+     * @magentoDataFixture Magento/Catalog/_files/flat_dropdown_attribute.php
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    public function testFlatDropDownAttribute()
+    {
+        $attribute = $this->attributeRepository->get('flat_attribute');
+        $attributeOptions = $attribute->getOptions();
+
+        $firstStoreAttributeOption = $attributeOptions[1];
+        $productStore1 = $this->productRepository->get('simple', false, 1);
+        $productStore1->setFlatAttribute($firstStoreAttributeOption->getValue());
+        $this->productRepository->save($productStore1);
+
+        /** @var StoreRepositoryInterface $storeRepository */
+        $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
+        $store = $storeRepository->get('fixturestore');
+
+        $secondStoreAttributeOption = $attributeOptions[2];
+        $productStore2 = $this->productRepository->get('simple', false, $store->getId());
+        $productStore2->setFlatAttribute($secondStoreAttributeOption->getValue());
+        $this->productRepository->save($productStore2);
+
+        $this->processor = $this->objectManager->create(Processor::class);
+        $this->processor->reindexAll();
+
+        $productStore1 = $this->getFlatProductFromStore('simple');
+        self::assertEquals($firstStoreAttributeOption->getLabel(), $productStore1->getFlatAttributeValue());
+
+        $productStore2 = $this->getFlatProductFromStore('simple', $store);
+        self::assertEquals($secondStoreAttributeOption->getLabel(), $productStore2->getFlatAttributeValue());
+    }
+
+    /**
+     * Get product from store with flat data
+     *
+     * @param string $sku
+     * @param Store|null $store
+     * @return ProductInterface
+     */
+    private function getFlatProductFromStore(string $sku, $store = null): ProductInterface
+    {
+        if ($store) {
+            $this->storeManager->setCurrentStore($store);
+        }
+
+        /** @var Collection $productCollection */
+        $productCollection = $this->objectManager->create(
+            Collection::class,
+            [
+                'catalogProductFlatState' => $this->flatState
+            ]
+        );
+
+        if ($store) {
+            $productCollection->setStoreId($store->getId());
+        }
+
+        $productCollection->setEntity($this->flatResource);
+        $productCollection->addAttributeToFilter('sku', $sku);
+        $productCollection->addAttributeToSelect('flat_attribute');
+
+        return $productCollection->load()
+            ->getFirstItem();
     }
 }
