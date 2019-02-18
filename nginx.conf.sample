@@ -9,6 +9,7 @@
 #    listen 80;
 #    server_name mage.dev;
 #    set $MAGE_ROOT /var/www/magento2;
+#    set $MAGE_DEBUG_SHOW_ARGS 1;
 #    include /vagrant/magento2/nginx.conf.sample;
 # }
 #
@@ -32,6 +33,12 @@ autoindex off;
 charset UTF-8;
 error_page 404 403 = /errors/404.php;
 #add_header "X-UA-Compatible" "IE=Edge";
+
+
+# Deny access to sensitive files
+location /.user.ini {
+    deny all;
+}
 
 # PHP entry point for setup application
 location ~* ^/setup($|/) {

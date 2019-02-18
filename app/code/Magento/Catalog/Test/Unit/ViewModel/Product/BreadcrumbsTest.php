@@ -152,21 +152,21 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test ™']]),
-                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","userCategoryPathInUrl":0,"product":"Test \u2122"}}',
+                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test \u2122"}}',
             ],
             [
                 $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test "']]),
-                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","userCategoryPathInUrl":0,"product":"Test &quot;"}}',
+                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test &quot;"}}',
             ],
             [
                 $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test <b>x</b>']]),
-                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","userCategoryPathInUrl":0,"product":'
+                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":'
                 . '"Test &lt;b&gt;x&lt;\/b&gt;"}}',
             ],
             [
                 $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test \'abc\'']]),
                 '{"breadcrumbs":'
-                . '{"categoryUrlSuffix":".&quot;html","userCategoryPathInUrl":0,"product":"Test &#039;abc&#039;"}}'
+                . '{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test &#039;abc&#039;"}}'
             ],
         ];
     }

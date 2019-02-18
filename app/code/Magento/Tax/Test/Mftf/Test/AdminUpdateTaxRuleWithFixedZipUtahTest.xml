@@ -95,7 +95,11 @@
             <argument name="address" value="US_Address_Utah" />
         </actionGroup>
         <scrollTo selector="{{StorefrontProductPageSection.orderTotal}}" x="0" y="-80" stepKey="scrollToOrderTotal"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.shipping}}" time="30" stepKey="waitForShipping"/>
+        <see selector="{{StorefrontProductPageSection.shipping}}" userInput="$5.00" stepKey="seeShipping"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.tax}}" time="30" stepKey="waitForTax"/>
         <see selector="{{StorefrontProductPageSection.tax}}" userInput="$20.00" stepKey="seeAssertTaxAmount" />
+        <waitForElementVisible selector="{{StorefrontProductPageSection.orderTotal}}" time="30" stepKey="waitForOrderTotal"/>
         <see selector="{{StorefrontProductPageSection.orderTotal}}" userInput="$125.00" stepKey="seeAssertGrandTotal"/>
     </test>
 </tests>

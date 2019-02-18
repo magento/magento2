@@ -492,6 +492,17 @@
             }
         }
     }
+
+    .cart.table-wrapper,
+    .order-items.table-wrapper {
+        .col.price,
+        .col.qty,
+        .col.subtotal,
+        .col.msrp {
+            text-align: left;
+        }
+    }
+
 }
 
 //
@@ -688,6 +699,9 @@
                     margin-left: @indent__s;
                     position: static;
                 }
+            }
+            &.discount {
+                width: auto;
             }
         }
     }

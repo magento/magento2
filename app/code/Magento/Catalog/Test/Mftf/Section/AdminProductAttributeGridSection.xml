@@ -16,5 +16,6 @@
         <element name="ResetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="30"/>
         <element name="FirstRow" type="button" selector="//*[@id='attributeGrid_table']/tbody/tr[1]" timeout="30"/>
         <element name="FilterByAttributeCode" type="input" selector="#attributeGrid_filter_attribute_code"/>
+        <element name="attributeLabelFilter" type="input" selector="//input[@name='frontend_label']"/>
     </section>
 </sections>

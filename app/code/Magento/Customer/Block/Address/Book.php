@@ -6,8 +6,8 @@
 namespace Magento\Customer\Block\Address;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Address\Mapper;
+use Magento\Customer\Block\Address\Grid as AddressesGrid;
 
 /**
  * Customer address book block
@@ -24,7 +24,7 @@ class Book extends \Magento\Framework\View\Element\Template
     protected $currentCustomer;
 
     /**
-     * @var CustomerRepositoryInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
     protected $customerRepository;
 
@@ -44,32 +44,43 @@ class Book extends \Magento\Framework\View\Element\Template
     protected $addressMapper;
 
     /**
+     * @var AddressesGrid
+     */
+    private $addressesGrid;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param CustomerRepositoryInterface $customerRepository
+     * @param CustomerRepositoryInterface|null $customerRepository
      * @param AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param Mapper $addressMapper
      * @param array $data
+     * @param AddressesGrid|null $addressesGrid
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        CustomerRepositoryInterface $customerRepository,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository = null,
         AddressRepositoryInterface $addressRepository,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Customer\Model\Address\Config $addressConfig,
         Mapper $addressMapper,
-        array $data = []
+        array $data = [],
+        Grid $addressesGrid = null
     ) {
-        $this->customerRepository = $customerRepository;
         $this->currentCustomer = $currentCustomer;
         $this->addressRepository = $addressRepository;
         $this->_addressConfig = $addressConfig;
         $this->addressMapper = $addressMapper;
+        $this->addressesGrid = $addressesGrid ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(AddressesGrid::class);
         parent::__construct($context, $data);
     }
 
     /**
+     * Prepare the Address Book section layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -79,14 +90,20 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Generate and return "New Address" URL
+     *
      * @return string
+     * @deprecated not used in this block
+     * @see \Magento\Customer\Block\Address\Grid::getAddAddressUrl
      */
     public function getAddAddressUrl()
     {
-        return $this->getUrl('customer/address/new', ['_secure' => true]);
+        return $this->addressesGrid->getAddAddressUrl();
     }
 
     /**
+     * Generate and return "Back" URL
+     *
      * @return string
      */
     public function getBackUrl()
@@ -98,24 +115,37 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Generate and return "Delete" URL
+     *
      * @return string
+     * @deprecated not used in this block
+     * @see \Magento\Customer\Block\Address\Grid::getDeleteUrl
      */
     public function getDeleteUrl()
     {
-        return $this->getUrl('customer/address/delete');
+        return $this->addressesGrid->getDeleteUrl();
     }
 
     /**
+     * Generate and return "Edit Address" URL.
+     *
+     * Address ID passed in parameters
+     *
      * @param int $addressId
      * @return string
+     * @deprecated not used in this block
+     * @see \Magento\Customer\Block\Address\Grid::getAddressEditUrl
      */
     public function getAddressEditUrl($addressId)
     {
-        return $this->getUrl('customer/address/edit', ['_secure' => true, 'id' => $addressId]);
+        return $this->addressesGrid->getAddressEditUrl($addressId);
     }
 
     /**
+     * Determines is the address primary (billing or shipping)
+     *
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function hasPrimaryAddress()
     {
@@ -123,22 +153,22 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current additional customer addresses
+     *
+     * Will return array of address interfaces if customer have additional addresses and false in other case.
+     *
      * @return \Magento\Customer\Api\Data\AddressInterface[]|bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @deprecated not used in this block
+     * @see \Magento\Customer\Block\Address\Grid::getAdditionalAddresses
      */
     public function getAdditionalAddresses()
     {
         try {
-            $addresses = $this->customerRepository->getById($this->currentCustomer->getCustomerId())->getAddresses();
+            $addresses = $this->addressesGrid->getAdditionalAddresses();
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            return false;
         }
-        $primaryAddressIds = [$this->getDefaultBilling(), $this->getDefaultShipping()];
-        foreach ($addresses as $address) {
-            if (!in_array($address->getId(), $primaryAddressIds)) {
-                $additional[] = $address;
-            }
-        }
-        return empty($additional) ? false : $additional;
+        return empty($addresses) ? false : $addresses;
     }
 
     /**
@@ -158,23 +188,23 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current customer
+     *
      * @return \Magento\Customer\Api\Data\CustomerInterface|null
      */
     public function getCustomer()
     {
-        $customer = $this->getData('customer');
-        if ($customer === null) {
-            try {
-                $customer = $this->customerRepository->getById($this->currentCustomer->getCustomerId());
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                return null;
-            }
-            $this->setData('customer', $customer);
+        $customer = null;
+        try {
+            $customer = $this->currentCustomer->getCustomer();
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
         }
         return $customer;
     }
 
     /**
+     * Get customer's default billing address
+     *
      * @return int|null
      */
     public function getDefaultBilling()
@@ -188,8 +218,11 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get customer address by ID
+     *
      * @param int $addressId
      * @return \Magento\Customer\Api\Data\AddressInterface|null
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAddressById($addressId)
     {
@@ -201,6 +234,8 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get customer's default shipping address
+     *
      * @return int|null
      */
     public function getDefaultShipping()
