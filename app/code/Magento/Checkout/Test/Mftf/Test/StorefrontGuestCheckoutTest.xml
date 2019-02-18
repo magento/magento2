@@ -69,6 +69,25 @@
         <see selector="{{AdminOrderDetailsInformationSection.shippingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAdminOrderShippingAddress"/>
         <see selector="{{AdminOrderDetailsInformationSection.itemsOrdered}}" userInput="$$createProduct.name$$" stepKey="seeAdminOrderProduct"/>
     </test>
+    <test name="StorefrontGuestCheckoutWithSidebarDisabledTest" extends="StorefrontGuestCheckoutTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via Guest Checkout"/>
+            <title value="Guest Checkout when Cart sidebar disabled"/>
+            <description value="Should be able to place an order as a Guest when Cart sidebar is disabled"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-97001"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <magentoCLI stepKey="disableSidebar" command="config:set checkout/sidebar/display 0" />
+        </before>
+        <after>
+            <magentoCLI stepKey="enableSidebar" command="config:set checkout/sidebar/display 1" />
+        </after>
+        <remove keyForRemoval="guestGoToCheckoutFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromCartActionGroup" stepKey="guestGoToCheckoutFromCart" after="seeCartQuantity" />
+    </test>
     <test name="StorefrontGuestCheckoutTestWithRestrictedCountriesForPayment">
         <annotations>
             <features value="Checkout"/>
@@ -109,9 +128,10 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" />
 
         <!-- Fill US Address and verify that no payment available -->
-        <actionGroup ref="GuestCheckoutFillingShippingSectionUnavailablePaymentActionGroup" stepKey="guestCheckoutFillingShippingSection">
+        <actionGroup ref="GuestCheckoutWithSpecificCountryOptionForPaymentMethodActionGroup" stepKey="guestCheckoutFillingShippingSection">
             <argument name="customerVar" value="CustomerEntityOne" />
             <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="paymentMethod" value="Check / Money order"/>
         </actionGroup>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->

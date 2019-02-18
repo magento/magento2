@@ -7,6 +7,21 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteUserActionGroup">
+        <arguments>
+            <argument name="user"/>
+        </arguments>
+        <amOnPage stepKey="amOnAdminUsersPage" url="{{AdminUsersPage.url}}"/>
+        <waitForPageLoad stepKey="waitForAdminUserPageLoad"/>
+        <click stepKey="openTheUser" selector="{{AdminDeleteUserSection.role(user.name)}}"/>
+        <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click stepKey="clickToDeleteRole" selector="{{AdminDeleteUserSection.delete}}"/>
+        <waitForElementVisible stepKey="wait" selector="{{AdminDeleteRoleSection.confirm}}" time="30"/>
+        <click stepKey="clickToConfirm" selector="{{AdminDeleteUserSection.confirm}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see stepKey="seeDeleteMessageForUser" userInput="You deleted the user."/>
+    </actionGroup>
     <actionGroup name="AdminDeleteCustomUserActionGroup">
         <arguments>
             <argument name="user"/>

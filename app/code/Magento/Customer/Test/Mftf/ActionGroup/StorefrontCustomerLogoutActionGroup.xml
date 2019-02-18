@@ -11,4 +11,11 @@
     <actionGroup name="StorefrontCustomerLogoutActionGroup">
         <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="storefrontSignOut"/>
     </actionGroup>
+
+    <actionGroup name="StorefrontSignOutActionGroup">
+        <click selector="{{StoreFrontSignOutSection.customerAccount}}" stepKey="clickCustomerButton"/>
+        <click selector="{{StoreFrontSignOutSection.signOut}}" stepKey="clickToSignOut"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="You are signed out" stepKey="signOut"/>
+    </actionGroup>
 </actionGroups>

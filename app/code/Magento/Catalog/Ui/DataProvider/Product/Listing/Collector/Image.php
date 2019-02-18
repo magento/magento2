@@ -14,6 +14,7 @@ use Magento\Catalog\Helper\ImageFactory;
 use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
@@ -104,6 +105,8 @@ class Image implements ProductRenderCollectorInterface
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
     {
         $images = [];
+        /** @var ThemeInterface $currentTheme */
+        $currentTheme = $this->design->getDesignTheme();
 
         foreach ($this->imageCodes as $imageCode) {
             /** @var ImageInterface $image */
@@ -132,6 +135,7 @@ class Image implements ProductRenderCollectorInterface
             $images[] = $image;
         }
 
+        $this->design->setDesignTheme($currentTheme);
         $productRender->setImages($images);
     }
 
