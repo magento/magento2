@@ -87,7 +87,6 @@
         <arguments>
             <argument name="addFieldStrategies" xsi:type="array">
                 <item name="websites" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddWebsitesFieldToCollection</item>
-                <item name="quantity_and_stock_status" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddQuantityAndStockStatusFieldToCollection</item>
             </argument>
             <argument name="addFilterStrategies" xsi:type="array">
                 <item name="store_id" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddStoreFieldToCollection</item>

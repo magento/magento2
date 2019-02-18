@@ -7,16 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
-use Magento\Eav\Setup\EavSetup;
+use Magento\CatalogInventory\Model\Stock\StockItemRepository;
+use Magento\CatalogInventory\Ui\DataProvider\Product\AddIsInStockFieldToCollection;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Catalog\Model\Product;
-use Magento\CatalogInventory\Model\Stock\StockItemRepository;
-use Magento\CatalogInventory\Api\StockItemCriteriaInterface;
-use Magento\Catalog\Api\Data\EavAttributeInterface;
 
 /**
- * Class QuantityAndStockStatusTest
+ * Quantity and stock status test
  */
 class QuantityAndStockStatusTest extends TestCase
 {
@@ -31,52 +28,32 @@ class QuantityAndStockStatusTest extends TestCase
     private $objectManager;
 
     /**
-     * @var int
-     */
-    private $isUsedInGridValue;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $eavSetup = $this->objectManager->create(EavSetup::class);
-        $this->isUsedInGridValue = $eavSetup->getAttribute(
-            Product::ENTITY,
-            self::$quantityAndStockStatus,
-            EavAttributeInterface::IS_USED_IN_GRID
-        );
-        $eavSetup->addAttribute(
-            Product::ENTITY,
-            self::$quantityAndStockStatus,
-            [
-                EavAttributeInterface::IS_USED_IN_GRID => 1,
-            ]
-        );
     }
 
     /**
      * Test product stock status in the products grid column
      *
+     * @magentoDataFixture Magento/Catalog/_files/quantity_and_stock_status_attribute_used_in_grid.php
      * @magentoDataFixture Magento/Checkout/_files/simple_product.php
      */
     public function testProductStockStatus()
     {
-        $stockItemRepository = $this->objectManager->create(StockItemRepository::class);
+        $productId = 1;
 
-        /** @var StockItemCriteriaInterface $stockItemCriteria */
-        $stockItemCriteria = $this->objectManager->create(StockItemCriteriaInterface::class);
+        /** @var StockItemRepository $stockItemRepository */
+        $stockItemRepository = $this->objectManager
+            ->create(StockItemRepository::class);
+        $stockItem = $stockItemRepository->get($productId);
+        $stockItem->setIsInStock(false);
+        $stockItemRepository->save($stockItem);
 
-        $savedStockItem = current($stockItemRepository->getList($stockItemCriteria)
-            ->getItems());
-        $savedStockItemId = $savedStockItem->getItemId();
-
-        $savedStockItem->setIsInStock(true);
-        $savedStockItem->save();
-
-        $savedStockItem->setIsInStock(false);
-        $savedStockItem->save();
+        $savedStockItem = $stockItemRepository->get($productId);
+        $savedStockStatus = $savedStockItem->getData('is_in_stock');
 
         $dataProvider = $this->objectManager->create(
             ProductDataProvider::class,
@@ -86,34 +63,15 @@ class QuantityAndStockStatusTest extends TestCase
                 'requestFieldName' => 'id',
                 'addFieldStrategies' => [
                     'quantity_and_stock_status' =>
-                        $this->objectManager->get(AddQuantityAndStockStatusFieldToCollection::class)
+                        $this->objectManager->get(AddIsInStockFieldToCollection::class)
                 ]
             ]
         );
 
         $dataProvider->addField(self::$quantityAndStockStatus);
         $data = $dataProvider->getData();
+        $dataProviderStockStatus = $data['items'][0][self::$quantityAndStockStatus];
 
-        $this->assertEquals(
-            $data['items'][0][self::$quantityAndStockStatus],
-            $savedStockItem->load($savedStockItemId)
-                ->getData('is_in_stock')
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown()
-    {
-        $eavSetup = $this->objectManager->create(EavSetup::class);
-        $eavSetup->addAttribute(
-            Product::ENTITY,
-            self::$quantityAndStockStatus,
-            [
-                EavAttributeInterface::IS_USED_IN_GRID => $this->isUsedInGridValue,
-            ]
-        );
-        parent::tearDown();
+        $this->assertEquals($dataProviderStockStatus, $savedStockStatus);
     }
 }

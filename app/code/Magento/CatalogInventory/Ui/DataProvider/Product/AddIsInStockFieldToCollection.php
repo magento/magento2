@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Ui\DataProvider\Product;
+namespace Magento\CatalogInventory\Ui\DataProvider\Product;
 
 use Magento\Framework\Data\Collection;
 use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
 
 /**
- * Class AddQuantityAndStockStatusFieldToCollection
+ * Add is_in_stock field to collection
  */
-class AddQuantityAndStockStatusFieldToCollection implements AddFieldToCollectionInterface
+class AddIsInStockFieldToCollection implements AddFieldToCollectionInterface
 {
     /**
      * @inheritdoc
