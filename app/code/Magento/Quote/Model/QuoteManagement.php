@@ -159,7 +159,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
-     * @param \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
+     * @param \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -221,7 +221,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createEmptyCart()
     {
@@ -241,7 +241,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createEmptyCartForCustomer($customerId)
     {
@@ -257,7 +257,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function assignCustomer($cartId, $customerId, $storeId)
     {
@@ -332,7 +332,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
     {
@@ -349,6 +349,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
             $data = $paymentMethod->getData();
             $quote->getPayment()->importData($data);
+        } else {
+            $quote->collectTotals();
         }
 
         if ($quote->getCheckoutMethod() === self::METHOD_GUEST) {
@@ -379,7 +381,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCartForCustomer($customerId)
     {
@@ -406,6 +408,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
+     * Convert quote items to order items for quote
+     *
      * @param Quote $quote
      * @return array
      */

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormAttributeSection">
+        <element name="createNewAttribute" type="button" selector="//button[@data-index='add_new_attribute_button']" timeout="30"/>
+    </section>
+    <section name="AdminProductFormNewAttributeSection">
+        <element name="attributeLabel" type="button" selector="//input[@name='frontend_label[0]']" timeout="30"/>
+        <element name="attributeType" type="select" selector="//select[@name='frontend_input']" timeout="30"/>
+        <element name="addValue" type="button" selector="//button[@data-action='add_new_row']" timeout="30"/>
+        <element name="optionViewName" type="text" selector="//table[@data-index='attribute_options_select']//span[contains(text(), '{{arg}}')]" parameterized="true" timeout="30"/>
+        <element name="optionValue" type="input" selector="(//input[contains(@name, 'option[value]')])[{{arg}}]" timeout="30" parameterized="true"/>
+        <element name="manageTitlesHeader" type="button" selector="//div[@class='fieldset-wrapper-title']//span[contains(text(), 'Manage Titles')]" timeout="30/"/>
+        <element name="manageTitlesViewName" type="text" selector="//div[@data-index='manage-titles']//span[contains(text(), '{{arg}}')]" timeout="30" parameterized="true"/>
+        <element name="saveAttribute" type="button" selector="button#save" timeout="30"/>
+    </section>
+</sections>

@@ -50,4 +50,4 @@ A clickable link to internal or external content in any text field will be creat
 
 ### Link Format Example:
 
-The text: `http://devdocs.magento.com/ [Magento DevDocs].` will appear as [Magento DevDocs](http://devdocs.magento.com/).
+The text: `https://devdocs.magento.com/ [Magento DevDocs].` will appear as [Magento DevDocs](https://devdocs.magento.com/).

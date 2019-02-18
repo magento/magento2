@@ -7,23 +7,21 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <entity name="allowGiftReceipt" type="allow_gift_receipt">
-        <data key="value">0</data>
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="EnableGiftMessageForOrder" type="gift_message_config_state">
+        <requiredEntity type="allow_order">AllowGiftMessageForOrder</requiredEntity>
     </entity>
-    <entity name="allowPrintedCard" type="allow_printed_card">
-        <data key="value">0</data>
-    </entity>
-
-    <entity name="DefaultConfigGiftOptions" type="gift_options_config_state">
-        <requiredEntity type="wrapping_allow_order">defaultWrappingAllowOrder</requiredEntity>
-        <requiredEntity type="allow_gift_receipt">defaultAllowGiftReceipt</requiredEntity>
-        <requiredEntity type="allow_printed_card">defaultAllowPrintedCard</requiredEntity>
-    </entity>
-    <entity name="defaultAllowGiftReceipt" type="allow_gift_receipt">
+    <entity name="AllowGiftMessageForOrder" type="allow_order">
         <data key="value">1</data>
     </entity>
-    <entity name="defaultAllowPrintedCard" type="allow_printed_card">
-        <data key="value">1</data>
+    <entity name="DefaultConfigGiftMessageOptions" type="gift_message_config_state">
+        <requiredEntity type="allow_order">OrderDefault</requiredEntity>
+        <requiredEntity type="allow_items">ItemsDefault</requiredEntity>
+    </entity>
+    <entity name="OrderDefault" type="allow_order">
+        <data key="value">0</data>
+    </entity>
+    <entity name="ItemsDefault" type="allow_items">
+        <data key="value">0</data>
     </entity>
 </entities>

@@ -3,24 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
 
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\Search\Request\EmptyRequestDataException;
 use Magento\Framework\Search\Request\NonExistingRequestNameException;
-use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * Advanced search collection
  *
  * This collection should be refactored to not have dependencies on MySQL-specific implementation.
  *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -87,8 +93,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param SearchResultFactory|null $searchResultFactory
      * @param ProductLimitationFactory|null $productLimitationFactory
-     * @param MetadataPool|null $metadataPool
-     *
+     * @param MetadataPool|null $metadataPool     *
+     * @param TableMaintainer|null $tableMaintainer
+     * @param PriceTableResolver|null $priceTableResolver
+     * @param DimensionFactory|null $dimensionFactory
+     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -117,7 +126,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         SearchResultFactory $searchResultFactory = null,
         ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null
+        MetadataPool $metadataPool = null,
+        TableMaintainer $tableMaintainer = null,
+        PriceTableResolver $priceTableResolver = null,
+        DimensionFactory $dimensionFactory = null,
+        ResourceModelPoolInterface $resourceModelPool = null
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
@@ -148,7 +161,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $groupManagement,
             $connection,
             $productLimitationFactory,
-            $metadataPool
+            $metadataPool,
+            $tableMaintainer,
+            $priceTableResolver,
+            $dimensionFactory,
+            $resourceModelPool
         );
     }
 
@@ -296,7 +313,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Get fielter builder.
+     * Get filter builder.
      *
      * @return FilterBuilder
      */

@@ -181,7 +181,7 @@ class DataGrid extends Grid
      *
      * @return void
      */
-    protected function waitFilterToLoad()
+    public function waitFilterToLoad()
     {
         $this->getTemplateBlock()->waitLoader();
         $browser = $this->_rootElement;
