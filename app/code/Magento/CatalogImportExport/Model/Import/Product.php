@@ -2997,9 +2997,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         )
         ) {
             $stockItemDo->setData($row);
-            $row['is_in_stock'] = $stockItemDo->getBackorders() && isset($row['is_in_stock'])
-                ? $row['is_in_stock']
-                : $this->stockStateProvider->verifyStock($stockItemDo);
+            $row['is_in_stock'] = $row['is_in_stock'] ?? $this->stockStateProvider->verifyStock($stockItemDo);
             if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
                 $row['low_stock_date'] = $this->dateTime->gmDate(
                     'Y-m-d H:i:s',

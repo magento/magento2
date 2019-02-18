@@ -181,3 +181,4 @@ Payment,Payment
 "Item in Cart","Item in Cart"
 "Items in Cart","Items in Cart"
 "Close","Close"
+"You added %1 to your <a href=""%2"">shopping cart</a>.","You added %1 to your <a href=""%2"">shopping cart</a>."

@@ -318,7 +318,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 [ '(customer_group_id=? AND all_groups=0) OR all_groups=1', $customerGroupId]
             )
             ->willReturnSelf();
-        $select->expects($this->once())->method('order')->with('entity_id')->willReturnSelf();
+        $select->expects($this->once())->method('order')->with('qty')->willReturnSelf();
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($select)
@@ -370,7 +370,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $select->expects($this->exactly(1))->method('where')
             ->with('entity_id IN(?)', [1])
             ->willReturnSelf();
-        $select->expects($this->once())->method('order')->with('entity_id')->willReturnSelf();
+        $select->expects($this->once())->method('order')->with('qty')->willReturnSelf();
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($select)

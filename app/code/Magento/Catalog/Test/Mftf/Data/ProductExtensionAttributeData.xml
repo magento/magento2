@@ -14,4 +14,7 @@
     <entity name="EavStock1" type="product_extension_attribute">
         <requiredEntity type="stock_item">Qty_1</requiredEntity>
     </entity>
+    <entity name="EavStock100" type="product_extension_attribute">
+        <requiredEntity type="stock_item">Qty_100</requiredEntity>
+    </entity>
 </entities>
