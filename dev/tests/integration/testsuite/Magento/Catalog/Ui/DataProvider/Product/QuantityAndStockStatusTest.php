@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\CatalogInventory\Ui\DataProvider\Product\AddIsInStockFieldToCollection;
 use PHPUnit\Framework\TestCase;
@@ -39,19 +40,21 @@ class QuantityAndStockStatusTest extends TestCase
      * Test product stock status in the products grid column
      *
      * @magentoDataFixture Magento/Catalog/_files/quantity_and_stock_status_attribute_used_in_grid.php
-     * @magentoDataFixture Magento/Checkout/_files/simple_product.php
+     * @magentoDataFixture Magento/Catalog/_files/products.php
      */
     public function testProductStockStatus()
     {
-        $productId = 1;
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple');
+        $productId = $product->getId();
 
         /** @var StockItemRepository $stockItemRepository */
-        $stockItemRepository = $this->objectManager
-            ->create(StockItemRepository::class);
+        $stockItemRepository = $this->objectManager->create(StockItemRepository::class);
+
         $stockItem = $stockItemRepository->get($productId);
         $stockItem->setIsInStock(false);
         $stockItemRepository->save($stockItem);
-
         $savedStockItem = $stockItemRepository->get($productId);
         $savedStockStatus = $savedStockItem->getData('is_in_stock');
 
