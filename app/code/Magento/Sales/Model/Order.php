@@ -8,6 +8,7 @@ namespace Magento\Sales\Model;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -23,6 +24,8 @@ use Magento\Sales\Model\ResourceModel\Order\Payment\Collection as PaymentCollect
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection as ShipmentCollection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection as TrackCollection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as HistoryCollection;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Order model
@@ -287,6 +290,16 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private $productOption;
 
     /**
+     * @var OrderItemRepositoryInterface
+     */
+    private $itemRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -316,6 +329,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param array $data
      * @param ResolverInterface $localeResolver
      * @param ProductOption|null $productOption
+     * @param OrderItemRepositoryInterface $itemRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -347,7 +362,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         ResolverInterface $localeResolver = null,
-        ProductOption $productOption = null
+        ProductOption $productOption = null,
+        OrderItemRepositoryInterface $itemRepository = null,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -371,6 +388,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->priceCurrency = $priceCurrency;
         $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(ResolverInterface::class);
         $this->productOption = $productOption ?: ObjectManager::getInstance()->get(ProductOption::class);
+        $this->itemRepository = $itemRepository ?: ObjectManager::getInstance()
+            ->get(OrderItemRepositoryInterface::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
+            ->get(SearchCriteriaBuilder::class);
 
         parent::__construct(
             $context,
@@ -668,14 +689,14 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
         return true;
     }
-    
+
     /**
      * Retrieve credit memo for zero total availability.
      *
      * @param float $totalRefunded
      * @return bool
      */
-    public function canCreditmemoForZeroTotal($totalRefunded)
+    private function canCreditmemoForZeroTotal($totalRefunded)
     {
         $totalPaid = $this->getTotalPaid();
         //check if total paid is less than grandtotal
@@ -1041,9 +1062,20 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Retrieve frontend label of order status
+     *
+     * @return string
+     */
+    public function getFrontendStatusLabel()
+    {
+        return $this->getConfig()->getStatusFrontendLabel($this->getStatus());
+    }
+
+    /**
      * Retrieve label of order status
      *
      * @return string
+     * @throws LocalizedException
      */
     public function getStatusLabel()
     {
@@ -1151,12 +1183,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Hold order
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function hold()
     {
         if (!$this->canHold()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('A hold action is not available.'));
+            throw new LocalizedException(__('A hold action is not available.'));
         }
         $this->setHoldBeforeState($this->getState());
         $this->setHoldBeforeStatus($this->getStatus());
@@ -1169,12 +1201,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Attempt to unhold the order
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function unhold()
     {
         if (!$this->canUnhold()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('You cannot remove the hold.'));
+            throw new LocalizedException(__('You cannot remove the hold.'));
         }
 
         $this->setState($this->getHoldBeforeState())
@@ -1218,7 +1250,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param string $comment
      * @param bool $graceful
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function registerCancellation($comment = '', $graceful = true)
@@ -1257,7 +1289,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
                 $this->addStatusHistoryComment($comment, false);
             }
         } elseif (!$graceful) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot cancel this order.'));
+            throw new LocalizedException(__('We cannot cancel this order.'));
         }
         return $this;
     }
@@ -2076,9 +2108,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getItems()
     {
         if ($this->getData(OrderInterface::ITEMS) == null) {
+            $this->searchCriteriaBuilder->addFilter(OrderItemInterface::ORDER_ID, $this->getId());
+
+            $searchCriteria = $this->searchCriteriaBuilder->create();
             $this->setData(
                 OrderInterface::ITEMS,
-                $this->getItemsCollection()->getItems()
+                $this->itemRepository->getList($searchCriteria)->getItems()
             );
         }
         return $this->getData(OrderInterface::ITEMS);
@@ -2919,7 +2954,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Return hold_before_state
+     * Returns hold_before_state
      *
      * @return string|null
      */

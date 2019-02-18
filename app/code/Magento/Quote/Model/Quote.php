@@ -1399,7 +1399,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $items = [];
         foreach ($this->getItemsCollection() as $item) {
-            /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $item */
+            /** @var \Magento\Quote\Model\Quote\Item $item */
             if (!$item->isDeleted()) {
                 $items[] = $item;
             }

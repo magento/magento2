@@ -40,8 +40,11 @@ class ExtractDataFromCart
             ];
         }
 
+        $appliedCoupon = $cart->getCouponCode();
+
         return [
             'items' => $items,
+            'applied_coupon' => $appliedCoupon ? ['code' => $appliedCoupon] : null
         ];
     }
 }

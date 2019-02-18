@@ -8,9 +8,8 @@
  */
 define([
     'uiComponent',
-    'ko',
     'Magento_Paypal/js/model/iframe'
-], function (Component, ko, iframe) {
+], function (Component, iframe) {
     'use strict';
 
     return Component.extend({
