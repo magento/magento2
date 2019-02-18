@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-declare(strict_types=1);
-
 namespace Magento\Review\Model;
 
 /**
@@ -41,7 +39,7 @@ class Rss extends \Magento\Framework\Model\AbstractModel
     /**
      * @return ResourceModel\Review\Product\Collection
      */
-    public function getProductCollection(): ResourceModel\Review\Product\Collection
+    public function getProductCollection()
     {
         /** @var $reviewModel \Magento\Review\Model\Review */
         $reviewModel = $this->reviewFactory->create();
