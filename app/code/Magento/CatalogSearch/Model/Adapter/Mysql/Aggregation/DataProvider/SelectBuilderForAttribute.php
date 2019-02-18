@@ -74,6 +74,8 @@ class SelectBuilderForAttribute
     }
 
     /**
+     * Build select for attribute search
+     *
      * @param Select $select
      * @param AbstractAttribute $attribute
      * @param int $currentScope
@@ -116,6 +118,8 @@ class SelectBuilderForAttribute
     }
 
     /**
+     * Is add stock filter
+     *
      * @return bool
      */
     private function isAddStockFilter()
