@@ -127,6 +127,8 @@ class CustomOptionPriceModifier implements PriceModifierInterface
     }
 
     /**
+     * Check if custom options exist.
+     *
      * @param IndexTableStructure $priceTable
      * @return bool
      * @throws \Exception
@@ -154,6 +156,8 @@ class CustomOptionPriceModifier implements PriceModifierInterface
     }
 
     /**
+     * Get connection.
+     *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     private function getConnection()
@@ -373,6 +377,8 @@ class CustomOptionPriceModifier implements PriceModifierInterface
     }
 
     /**
+     * Get select for update.
+     *
      * @param string $sourceTable
      * @return \Magento\Framework\DB\Select
      */
@@ -402,6 +408,8 @@ class CustomOptionPriceModifier implements PriceModifierInterface
     }
 
     /**
+     * Get table name.
+     *
      * @param string $tableName
      * @return string
      */
@@ -411,6 +419,8 @@ class CustomOptionPriceModifier implements PriceModifierInterface
     }
 
     /**
+     * Is price scope global.
+     *
      * @return bool
      */
     private function isPriceGlobal(): bool
