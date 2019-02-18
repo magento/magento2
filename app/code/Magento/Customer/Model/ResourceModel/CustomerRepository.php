@@ -185,16 +185,16 @@ class CustomerRepository implements CustomerRepositoryInterface
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $prevCustomerData->__toArray();
             if (!$customer->getEmail()) {
-                $customer->setEmail($prevCustomerDataArr['email']);
+                $customer->setEmail($prevCustomerData->getEmail());
             }
             if (!$customer->getLastname()) {
-                $customer->setLastname($prevCustomerDataArr['lastname']);
+                $customer->setLastname($prevCustomerData->getLastname());
             }
             if (!$customer->getFirstname()) {
-                $customer->setFirstname($prevCustomerDataArr['firstname']);
+                $customer->setFirstname($prevCustomerData->getFirstname());
             }
             if (!$customer->getWebsiteId()) {
-                $customer->setWebsiteId($prevCustomerDataArr['website_id']);
+                $customer->setWebsiteId($prevCustomerData->getWebsiteId());
             }
         }
         /** @var $customer \Magento\Customer\Model\Data\Customer */
