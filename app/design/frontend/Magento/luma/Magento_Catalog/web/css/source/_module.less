@@ -563,6 +563,7 @@
 
         .product-items-names {
             .product-item {
+                display: flex;
                 margin-bottom: @indent__s;
             }
 
@@ -974,6 +975,15 @@
     .compare.wrapper,
     [class*='block-compare'] {
         display: none;
+    }
+    .catalog-product_compare-index {
+        .columns {
+            .column {
+                &.main {
+                    flex-basis: inherit;
+                }
+            }
+        }
     }
 }
 

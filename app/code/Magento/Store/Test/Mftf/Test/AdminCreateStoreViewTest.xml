@@ -33,6 +33,9 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView2" />
             <actionGroup ref="AdminCreateStoreViewCodeUniquenessActionGroup" stepKey="createStoreViewCode" />
             <after>
+                <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                    <argument name="customStore" value="customStore"/>
+                </actionGroup>
                 <actionGroup ref="logout" stepKey="logout"/>
             </after>
         </test>

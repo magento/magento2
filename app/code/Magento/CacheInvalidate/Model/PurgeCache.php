@@ -94,7 +94,7 @@ class PurgeCache
         $formattedTags = explode('|', $tagsPattern);
         foreach ($formattedTags as $formattedTag) {
             if ($tagsBatchSize + strlen($formattedTag) > $this->requestSize - count($formattedTagsChunk) - 1) {
-                yield implode('|', array_unique($formattedTagsChunk));
+                yield implode('|', $formattedTagsChunk);
                 $formattedTagsChunk = [];
                 $tagsBatchSize = 0;
             }
@@ -103,7 +103,7 @@ class PurgeCache
             $formattedTagsChunk[] = $formattedTag;
         }
         if (!empty($formattedTagsChunk)) {
-            yield implode('|', array_unique($formattedTagsChunk));
+            yield implode('|', $formattedTagsChunk);
         }
     }
 

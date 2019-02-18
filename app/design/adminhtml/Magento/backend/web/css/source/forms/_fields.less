@@ -159,6 +159,14 @@
             } 
         }
     }
+    &.composite-bundle {
+        .admin__field-control {
+            padding-top: 7px;
+        }
+        .admin__field-option {
+            padding-top: 0;
+        }
+    }
 }
 
 .admin__fieldset-product-websites {
@@ -652,10 +660,11 @@
         &.admin__field {
             > .admin__field-control {
                 &:extend(.abs-field-size-small all);
-                float: left;
                 position: relative;
+                display: inline-block;
             }
         }
+        
 
         + .admin__field:last-child {
             width: auto;

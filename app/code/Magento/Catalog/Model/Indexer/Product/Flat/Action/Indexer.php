@@ -54,7 +54,7 @@ class Indexer
      * @param int $storeId
      * @param int $productId
      * @param string $valueFieldSuffix
-     * @return \Magento\Catalog\Model\Indexer\Product\Flat
+     * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
