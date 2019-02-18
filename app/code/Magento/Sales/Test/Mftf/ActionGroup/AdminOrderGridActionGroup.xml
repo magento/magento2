@@ -23,4 +23,8 @@
             <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToGridOrdersPage"/>
             <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.enabledFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
         </actionGroup>
+        <actionGroup name="OpenOrderById" extends="filterOrderGridById">
+            <click selector="{{AdminDataGridTableSection.firstRow}}" after="clickOrderApplyFilters" stepKey="openOrderViewPage"/>
+            <waitForPageLoad after="openOrderViewPage" stepKey="waitForOrderViewPageOpened"/>
+        </actionGroup>
 </actionGroups>

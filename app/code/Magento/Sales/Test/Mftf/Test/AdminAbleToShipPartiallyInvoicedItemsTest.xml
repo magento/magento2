@@ -14,9 +14,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-95524"/>
             <group value="sales"/>
-            <skip>
-                <issueId value="MAGETWO-97664"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -122,6 +119,10 @@
         <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOfflineEnabled}}" stepKey="waitForSubmitRefundOfflineEnabled"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="submitRefundOffline"/>
         <!--Verify Credit Memo created successfully-->
+        <waitForElementVisible
+                selector="{{AdminMessagesSection.success}}"
+                time="20"
+                stepKey="waitForMessage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo." after="submitRefundOffline" stepKey="seeCreditMemoSuccessMsg"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{CONST.orderStatusProcessing}}" stepKey="seeOrderProcessing3"/>
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems2"/>

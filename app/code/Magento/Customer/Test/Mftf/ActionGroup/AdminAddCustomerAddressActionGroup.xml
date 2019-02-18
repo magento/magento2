@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddCustomerAddressWithRegionTypeSelectActionGroup" >
+        <arguments>
+            <argument name="customerAddress" defaultValue="CustomerAddressSimple"/>
+        </arguments>
+        <click selector="{{AdminCustomerAccountAddressSection.addresses}}" stepKey="proceedToAddresses"/>
+        <click selector="{{AdminCustomerAccountAddressSection.addNewAddress}}" stepKey="addNewAddresses"/>
+        <fillField userInput="{{customerAddress.street[0]}}" selector="{{AdminCustomerAccountNewAddressSection.street}}" stepKey="fillStreetAddress"/>
+        <fillField userInput="{{customerAddress.city}}" selector="{{AdminCustomerAccountNewAddressSection.city}}" stepKey="fillCity"/>
+        <selectOption userInput="{{customerAddress.country_id}}" selector="{{AdminCustomerAccountNewAddressSection.country}}" stepKey="selectCountry"/>
+        <selectOption userInput="{{customerAddress.state}}" selector="{{AdminCustomerAccountNewAddressSection.regionId}}" stepKey="selectState"/>
+        <fillField userInput="{{customerAddress.postcode}}" selector="{{AdminCustomerAccountNewAddressSection.zip}}" stepKey="fillZipCode"/>
+        <fillField userInput="{{customerAddress.telephone}}" selector="{{AdminCustomerAccountNewAddressSection.phone}}" stepKey="fillPhone"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCustomer"/>
+        <see userInput="You saved the customer." selector="{{AdminMessagesSection.success}}" stepKey="customerIsSaved"/>
+    </actionGroup>
+</actionGroups>

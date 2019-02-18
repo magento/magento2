@@ -28,6 +28,7 @@
         <element name="scope" type="select" selector="#is_global"/>
         <element name="addToColumnOptions" type="select" selector="#is_used_in_grid"/>
         <element name="useInFilterOptions" type="select" selector="#is_filterable_in_grid"/>
+        <element name="addSwatch" type="button" selector="#add_new_swatch_text_option_button"/>
     </section>
     <section name="AdminAttributeOptionsSection">
         <element name="addOption" type="button" selector="#add_new_option_button"/>
@@ -37,5 +38,9 @@
     <section name="StorefrontPropertiesSection">
         <element name="storefrontPropertiesTab" selector="#product_attribute_tabs_front" type="button" timeout="30"/>
         <element name="useForPromoRuleConditions" type="select" selector="#is_used_for_promo_rules"/>
+    </section>
+    <section name="AttributeManageSwatchSection">
+        <element name="swatchField" type="input" selector="input[name='swatchtext[value][option_{{option_index}}][{{index}}]'][placeholder='Swatch']" parameterized="true"/>
+        <element name="descriptionField" type="input" selector="input[name='optiontext[value][option_{{option_index}}][{{index}}]'][placeholder='Description']" parameterized="true"/>
     </section>
 </sections>

@@ -85,7 +85,7 @@
         cursor: pointer;
     }
 
-    &:focus {
+    &:active {
         background-image+: url('../images/arrows-bg.svg');
         background-position+: ~'calc(100% - 12px)' 13px;
 
@@ -106,19 +106,6 @@
         padding-right: @field-control__padding-horizontal;
     }
 }
-
-//  ToDo UI: add month and date styles
-//  .admin__control-select-month {
-//      width: 140px;
-//  }
-
-//  .admin__control-select-year {
-//      width: 103px;
-//  }
-
-//  .admin__control-cvn {
-//      width: 3em;
-//  }
 
 option:empty {
     display: none;
@@ -151,22 +138,24 @@ option:empty {
 .admin__control-file-label {
     &:before {
         &:extend(.abs-form-control-pattern);
-
-        content:'';
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: 100%;
-        z-index: 0;
-
         .admin__control-file:active + &,
         .admin__control-file:focus + & {
+            /**
+             * @codingStandardsIgnoreStart
+             */
             &:extend(.abs-form-control-pattern:focus);
         }
 
         .admin__control-file[disabled] + & {
             &:extend(.abs-form-control-pattern[disabled]);
         }
+
+        content: '';
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 0;
     }
 }
 
