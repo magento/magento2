@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 
 /**
  * Product entity resource model
@@ -101,6 +102,7 @@ class Product extends AbstractResource
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param array $data
      * @param TableMaintainer|null $tableMaintainer
+     * @param UniqueValidationInterface|null $uniqueValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -115,7 +117,8 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
         $data = [],
-        TableMaintainer $tableMaintainer = null
+        TableMaintainer $tableMaintainer = null,
+        UniqueValidationInterface $uniqueValidator = null
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -127,7 +130,8 @@ class Product extends AbstractResource
             $context,
             $storeManager,
             $modelFactory,
-            $data
+            $data,
+            $uniqueValidator
         );
         $this->connectionName  = 'catalog';
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
@@ -289,7 +293,7 @@ class Product extends AbstractResource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($object)
     {
@@ -593,7 +597,7 @@ class Product extends AbstractResource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate($object)
     {
@@ -633,7 +637,7 @@ class Product extends AbstractResource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @since 101.0.0
      */
@@ -675,6 +679,8 @@ class Product extends AbstractResource
     }
 
     /**
+     * Retrieve entity manager object
+     *
      * @return \Magento\Framework\EntityManager\EntityManager
      */
     private function getEntityManager()
@@ -687,6 +693,8 @@ class Product extends AbstractResource
     }
 
     /**
+     * Retrieve ProductWebsiteLink object
+     *
      * @deprecated 101.1.0
      * @return ProductWebsiteLink
      */
@@ -696,6 +704,8 @@ class Product extends AbstractResource
     }
 
     /**
+     * Retrieve CategoryLink object
+     *
      * @deprecated 101.1.0
      * @return \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
      */
@@ -710,9 +720,10 @@ class Product extends AbstractResource
 
     /**
      * Extends parent method to be appropriate for product.
+     *
      * Store id is required to correctly identify attribute value we are working with.
      *
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.1.0
      */
     protected function getAttributeRow($entity, $object, $attribute)
