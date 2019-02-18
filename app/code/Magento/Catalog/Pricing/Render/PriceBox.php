@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Pricing\Render;
 
 use Magento\Catalog\Model\Product;
@@ -69,7 +71,7 @@ class PriceBox extends PriceBoxRender
     /**
      * Get random string
      *
-     * @param int         $length
+     * @param int $length
      * @param string|null $chars
      *
      * @return string
@@ -97,11 +99,12 @@ class PriceBox extends PriceBoxRender
     }
 
     /**
-     * @param float $percent
+     * Format percent
      *
+     * @param float $percent
      * @return string
      */
-    public function formatPercent(float $percent):string
+    public function formatPercent(float $percent): string
     {
         return rtrim(number_format($percent, 2), '.0');
     }
