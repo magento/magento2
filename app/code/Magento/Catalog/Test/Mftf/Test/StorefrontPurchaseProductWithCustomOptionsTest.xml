@@ -23,6 +23,8 @@
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderListingFilters"/>
+            <actionGroup ref="logout" stepKey="logoutAdmin"/>
         </after>
 
         <!--Create Simple Product with Custom Options-->
@@ -36,10 +38,9 @@
 
         <!-- Login Customer Storeront -->
 
-        <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
-        <fillField  userInput="$$createCustomer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="fillEmail"/>
-        <fillField userInput="$$createCustomer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}" stepKey="fillPassword"/>
-        <click selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="clickSignInAccountButton"/>
+        <actionGroup ref="CustomerLoginOnStorefront" stepKey="loginCustomerOnStorefront">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
 
         <!-- Checking the correctness of displayed prices for user parameters -->
 
@@ -104,12 +105,15 @@
         <see selector="{{CheckoutPaymentSection.productOptionsActiveByProductItemName($createProduct.name$)}}" userInput="Jan 1, 2018" stepKey="seeProductOptionDateAndTimeInput" />
         <see selector="{{CheckoutPaymentSection.productOptionsActiveByProductItemName($createProduct.name$)}}" userInput="1/1/18, 1:00 AM" stepKey="seeProductOptionDataInput" />
         <see selector="{{CheckoutPaymentSection.productOptionsActiveByProductItemName($createProduct.name$)}}" userInput="1:00 AM" stepKey="seeProductOptionTimeInput" />
-
+        <!--Select shipping method-->
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
-
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
+        <!--Select payment method-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <!-- Place Order -->
-
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
 
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
@@ -118,13 +122,11 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
-        <fillField selector="{{OrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="fillOrderNum"/>
-        <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
-        <click selector="{{OrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <actionGroup ref="filterOrderGridById" stepKey="filterByOrderId">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForOrderPageOpened"/>
 
         <!-- Checking the correctness of displayed custom options for user parameters on Order -->
 
@@ -142,6 +144,7 @@
         <!-- Reorder and Checking the correctness of displayed custom options for user parameters on Order and correctness of displayed price Subtotal-->
 
         <click selector="{{OrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
+        <actionGroup ref="AdminCheckoutSelectCheckMoneyOrderBillingMethodActionGroup" stepKey="selectBillingMethod"/>
         <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="trySubmitOrder"/>
 
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionField.title}}" stepKey="seeAdminOrderProductOptionField1" />
@@ -171,6 +174,9 @@
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionDate.title, 'Jan 1, 2018')}}" userInput="Jan 1, 2018" stepKey="seeStorefontOrderProductOptionDateAndTime1" />
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionDateTime.title, '1/1/18, 1:00 AM')}}" userInput="1/1/18, 1:00 AM" stepKey="seeStorefontOrderProductOptionData1" />
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionTime.title, '1:00 AM')}}" userInput="1:00 AM" stepKey="seeStorefontOrderProductOptionTime1" />
+
+        <!-- Logout customer -->
+        <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="logoutCustomer"/>
 
         <!-- Delete product and category -->
 

@@ -211,6 +211,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
 
     public function testUpdateSubscription()
     {
+        $websiteId = 1;
         $storeId = 2;
         $customerId = 1;
         $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
@@ -234,13 +235,16 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             ->with($customerId)
             ->willReturn('account_confirmation_required');
         $customerDataMock->expects($this->exactly(2))->method('getStoreId')->willReturn($storeId);
+        $customerDataMock->expects($this->exactly(2))->method('getWebsiteId')->willReturn(null);
+        $customerDataMock->expects($this->exactly(2))->method('setWebsiteId')->with($websiteId)->willReturnSelf();
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
 
         $storeModel = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->setMethods(['getId', 'getWebsiteId'])
             ->getMock();
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($storeModel);
+        $storeModel->expects($this->exactly(2))->method('getWebsiteId')->willReturn($websiteId);
 
         $this->assertEquals($this->subscriber, $this->subscriber->updateSubscription($customerId));
     }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormGroupedProductsSection">
+        <element name="toggleGroupedProduct" type="button" selector="[data-index=grouped] .admin__collapsible-title"/>
+        <element name="addProductsToGroup" type="button" selector="[data-index=grouped] button[data-index='grouped_products_button']" timeout="30"/>
+        <element name="nextActionButton" type="button" selector="[data-index='grouped'] .action-next"/>
+        <element name="previousActionButton" type="button" selector="[data-index='grouped'] .action-previous"/>
+        <element name="positionProduct" type="input" selector="[data-index='grouped'] tr[class*='data-row']:nth-child({{arg}}) td[data-index='positionCalculated'] .position-widget-input" parameterized="true"/>
+        <element name="nameProductFromGrid" type="text" selector="[data-index='grouped'] tr[class*='data-row']:nth-child({{arg}}) td[data-index='name'] .admin__field-control span" parameterized="true"/>
+        <element name="buttonContainer" type="block" selector="[data-index='grouped_products_button_set']"/>
+    </section>
+</sections>

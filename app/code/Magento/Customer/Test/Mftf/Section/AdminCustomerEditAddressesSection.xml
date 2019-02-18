@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerEditAddressesSection">
+        <element name="addNewAddress" type="button" selector="//span[text()='Add New Addresses']"/>
+        <element name="defaultBillingAddress" type="button" selector="//label[text()='Default Billing Address']"/>
+        <element name="defaultShippingAddress" type="button" selector="//label[text()='Default Shipping Address']"/>
+        <element name="firstName" type="button" selector="input[name*='address'][name*=firstname]"/>
+        <element name="lastName" type="button" selector="input[name*='address'][name*=lastname]"/>
+        <element name="streetAddress" type="button" selector="input[name*='address'][name*=street]"/>
+        <element name="city" type="input" selector="input[name*='address'][name*=city]"/>
+        <element name="country" type="select" selector="select[name*='address'][name*=country_id]"/>
+        <element name="state" type="select" selector="select[name*=address][name*=region_id]"/>
+        <element name="zip" type="input" selector="input[name*=address][name*=postcode]"/>
+        <element name="phoneNumber" type="input" selector="input[name*=address][name*=telephone]"/>
+    </section>
+</sections>

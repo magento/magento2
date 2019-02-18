@@ -21,5 +21,6 @@
         <element name="shippingHeading" type="button" selector="#block-shipping-heading"/>
         <element name="blockSummary" type="button" selector="#block-summary"/>
         <element name="discountAmount" type="text" selector="td[data-th='Discount']"/>
+        <element name="totalsElementByPosition" type="text" selector=".data.table.totals > tbody tr:nth-of-type({{value}}) > th" parameterized="true"/>
     </section>
 </sections>
