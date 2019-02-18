@@ -42,14 +42,14 @@
     <!--Admin Fast Create Invoice-->
     <actionGroup name="adminFastCreateInvoice">
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
-        <waitForPageLoad stepKey="waitForNewInvoicePageLoad" time="3"/>
+        <waitForPageLoad stepKey="waitForNewInvoicePageLoad"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad stepKey="waitForSuccessMessageLoad" time="5"/>
+        <waitForPageLoad stepKey="waitForSuccessMessageLoad"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5" />
         <click selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="openInvoicePage"/>
-        <waitForPageLoad stepKey="waitForInvoicePageLoad" time="5"/>
+        <waitForPageLoad stepKey="waitForInvoicePageLoad"/>
     </actionGroup>
 
     <actionGroup name="goToInvoiceIntoOrder">

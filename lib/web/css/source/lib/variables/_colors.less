@@ -78,7 +78,7 @@
 @color-sky-blue1: #68a8e0;
 
 @color-pink1: #fae5e5;
-@color-dark-pink1: #800080;
+@color-dark-pink1: #800080; // Legacy pink
 
 @color-brownie1: #6f4400;
 @color-brownie-light1: #c07600;
@@ -92,6 +92,10 @@
 //  Color nesting
 //  ---------------------------------------------
 
+@theme__color__primary: @color-blue1;
+@theme__color__primary-alt: @color-blue2;
+@theme__color__secondary: @color-orange-red1;
+
 @primary__color: @color-gray20;
 @primary__color__dark: darken(@primary__color, 35%); // #000
 @primary__color__darker: darken(@primary__color, 13.5%); // #111
@@ -104,5 +108,5 @@
 @page__background-color: @color-white;
 @panel__background-color: darken(@page__background-color, 6%);
 
-@active__color: @color-orange-red1;
+@active__color: @theme__color__secondary;
 @error__color: @color-red10;

@@ -46,7 +46,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
             $optionData = [
                 'title' => $checkoutOption['title'],
                 'value' => "{$qty} x {$value} {$price}",
-                'sku' => "{$qty} x {$value}"
+                'sku' => "{$value}"
             ];
 
             $checkoutBundleOptions[$checkoutOptionKey] = $optionData;

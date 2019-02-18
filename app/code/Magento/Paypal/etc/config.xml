@@ -10,6 +10,30 @@
         <paypal>
             <style>
                 <logo></logo>
+                <checkout_page_button_customize>0</checkout_page_button_customize>
+                <checkout_page_button_label>paypal</checkout_page_button_label>
+                <checkout_page_button_layout>vertical</checkout_page_button_layout>
+                <checkout_page_button_size>responsive</checkout_page_button_size>
+                <checkout_page_button_shape>rect</checkout_page_button_shape>
+                <checkout_page_button_color>gold</checkout_page_button_color>
+                <product_page_button_customize>0</product_page_button_customize>
+                <product_page_button_label>buynow</product_page_button_label>
+                <product_page_button_layout>horizontal</product_page_button_layout>
+                <product_page_button_size>responsive</product_page_button_size>
+                <product_page_button_shape>pill</product_page_button_shape>
+                <product_page_button_color>gold</product_page_button_color>
+                <cart_page_button_customize>0</cart_page_button_customize>
+                <cart_page_button_label>paypal</cart_page_button_label>
+                <cart_page_button_layout>vertical</cart_page_button_layout>
+                <cart_page_button_size>responsive</cart_page_button_size>
+                <cart_page_button_shape>rect</cart_page_button_shape>
+                <cart_page_button_color>gold</cart_page_button_color>
+                <mini_cart_page_button_customize>0</mini_cart_page_button_customize>
+                <mini_cart_page_button_label>paypal</mini_cart_page_button_label>
+                <mini_cart_page_button_layout>vertical</mini_cart_page_button_layout>
+                <mini_cart_page_button_size>responsive</mini_cart_page_button_size>
+                <mini_cart_page_button_shape>rect</mini_cart_page_button_shape>
+                <mini_cart_page_button_color>gold</mini_cart_page_button_color>
             </style>
             <wpp>
                 <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
@@ -100,6 +124,7 @@
                 <instant_purchase>
                     <tokenFormat>\Magento\Paypal\Model\InstantPurchase\Payflow\Pro\TokenFormatter</tokenFormat>
                 </instant_purchase>
+                <group>paypal</group>
             </payflowpro_cc_vault>
             <paypal_billing_agreement>
                 <active>1</active>

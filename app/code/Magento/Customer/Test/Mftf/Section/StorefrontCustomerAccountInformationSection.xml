@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerAccountInformationSection">
+        <element name="firstName" type="input" selector="#firstname"/>
+        <element name="lastName" type="input" selector="#lastname"/>
+        <element name="changeEmail" type="checkbox" selector="#change_email"/>
+        <element name="changePassword" type="checkbox" selector="#change_password"/>
+        <element name="testAddedAttributeFiled" type="input" selector="//input[contains(@id,'{{var}}')]" parameterized="true"/>
+        <element name="saveButton" type="button" selector="#form-validate .action.save.primary"/>
+    </section>
+</sections>

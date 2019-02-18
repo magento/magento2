@@ -16532,7 +16532,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 				}
 			};
 			
-			// Applies formatting to the caret postion
+			// Applies formatting to the caret position
 			function applyCaretFormat() {
 				var rng, caretContainer, textNode, offset, bookmark, container, text;
 
