@@ -35,6 +35,11 @@ define([
                 return true;
             }
 
+            var action = this.element.find('#update_cart_action_container').val();
+            if (action === 'empty_cart') {
+                return true;
+            }
+
             if (this.isValid()) {
                 event.preventDefault();
                 this.validateItems(this.options.validationURL, this.element.serialize());
