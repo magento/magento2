@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateProductDropdownAttributeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create/configure Dropdown product attribute"/>
+            <title value="Admin should be able to create dropdown product attribute"/>
+            <description value="Admin should be able to create dropdown product attribute"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-95868"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+        <after>
+            <!-- Remove attribute -->
+            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
+                <argument name="ProductAttribute" value="productAttributeWithDropdownTwoOptions"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="navigateToNewProductAttributePage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Set attribute properties -->
+        <fillField selector="{{AttributePropertiesSection.defaultLabel}}"
+                   userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.inputType}}"
+                      userInput="{{productAttributeWithDropdownTwoOptions.frontend_input}}" stepKey="fillInputType"/>
+
+        <!-- Set advanced attribute properties -->
+        <click selector="{{AdvancedAttributePropertiesSection.advancedAttributePropertiesSectionToggle}}"
+               stepKey="showAdvancedAttributePropertiesSection"/>
+        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.attributeCode}}"
+                               stepKey="waitForSlideOut"/>
+        <fillField selector="{{AdvancedAttributePropertiesSection.attributeCode}}"
+                   userInput="{{productAttributeWithDropdownTwoOptions.attribute_code}}"
+                   stepKey="fillAttributeCode"/>
+
+        <!-- Add new attribute options -->
+        <click selector="{{AdminAttributeOptionsSection.addOption}}" stepKey="clickAddOption1"/>
+        <fillField selector="{{AdminAttributeOptionsSection.nthOptionAdminLabel('1')}}"
+                   userInput="Fish and Chips" stepKey="fillAdminValue1"/>
+
+        <click selector="{{AdminAttributeOptionsSection.addOption}}" stepKey="clickAddOption2"/>
+        <fillField selector="{{AdminAttributeOptionsSection.nthOptionAdminLabel('2')}}"
+                   userInput="Fish &amp; Chips" stepKey="fillAdminValue2"/>
+
+        <!-- Save the new product attribute -->
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave1"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}"
+                               stepKey="waitForSuccessMessage"/>
+
+        <actionGroup ref="navigateToCreatedProductAttribute" stepKey="navigateToAttribute">
+            <argument name="productAttribute" value="productAttributeWithDropdownTwoOptions"/>
+        </actionGroup>
+        <!-- Check attribute data -->
+        <grabValueFrom selector="{{AdminAttributeOptionsSection.nthOptionAdminLabel('2')}}"
+                       stepKey="secondOptionAdminLabel"/>
+        <assertEquals actual="$secondOptionAdminLabel" expected="'Fish &amp; Chips'"
+                      stepKey="assertSecondOption"/>
+    </test>
+</tests>

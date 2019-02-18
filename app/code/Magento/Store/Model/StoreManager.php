@@ -234,11 +234,11 @@ class StoreManager implements
     public function reinitStores()
     {
         $this->currentStoreId = null;
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, [StoreResolver::CACHE_TAG, Store::CACHE_TAG]);
-        $this->scopeConfig->clean();
         $this->storeRepository->clean();
         $this->websiteRepository->clean();
         $this->groupRepository->clean();
+        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, [StoreResolver::CACHE_TAG, Store::CACHE_TAG]);
+        $this->scopeConfig->clean();
     }
 
     /**

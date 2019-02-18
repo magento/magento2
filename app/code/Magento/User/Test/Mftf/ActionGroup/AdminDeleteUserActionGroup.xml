@@ -20,10 +20,9 @@
         <click selector="{{AdminUserGridSection.searchResultFirstRow}}" stepKey="openUserEdit"/>
         <waitForPageLoad stepKey="waitForUserEditPageLoad"/>
         <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword" />
-        <click selector="{{AdminEditUserSection.deleteButton}}" stepKey="deleteUser"/>
+        <click selector="{{AdminMainActionsSection.delete}}" stepKey="deleteUser"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
-        <waitForPageLoad stepKey="waitForSave" />
         <see userInput="You deleted the user." stepKey="seeUserDeleteMessage"/>
     </actionGroup>
 </actionGroups>

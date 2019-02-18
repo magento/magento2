@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateConfigurableProductActionGroup">
+        <arguments>
+            <argument name="product"/>
+            <argument name="category" type="string"/>
+            <argument name="attributeSet"/>
+            <argument name="configurableAttributeCode" defaultValue="color" type="string"/>
+            <argument name="configurationsPrice" defaultValue="0" type="string"/>
+            <argument name="configurationsQty" defaultValue="0" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
+        <click selector="{{AdminProductGridActionSection.addConfigurableProduct}}" stepKey="clickOnAddConfigurableProduct"/>
+        <fillField userInput="{{product.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{product.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+        <fillField userInput="{{product.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{product.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{category}}]" stepKey="fillCategory"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+
+        <!--Apply Attribute Set for product-->
+        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{attributeSet.label}}" stepKey="searchForAttrSet"/>
+        <waitForAjaxLoad stepKey="waitForLoad"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResultByName(attributeSet.label)}}" stepKey="selectAttrSetProd"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveEditedProductForProduct"/>
+
+        <!--Click "Create Configurations" button in configurations field-->
+        <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="openConfigurationPanel"/>
+
+        <!--Select attribute "Color"-->
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickFiltersExpand"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('attribute_code')}}" userInput="{{configurableAttributeCode}}" stepKey="fillFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickAttributeColorCheckbox"/>
+
+        <!--Click the "Next" button-->
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextButton"/>
+
+        <!--Select All-->
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAllSecond"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButtonSecond"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="clickOnApplySinglePriceToEachSkuSecond"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="{{configurationsPrice}}" stepKey="enterAttributePriceSecond"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSkuSecond"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="{{configurationsQty}}" stepKey="enterAttributeQuantitySecond"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextStepSecond"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateSecondProducts"/>
+
+        <!-- Save the product -->
+        <click selector="{{AdminProductFormActionSection.saveArrow}}" stepKey="openSaveDropDown"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSave"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="clickConfirm"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="assertSuccess"/>
+    </actionGroup>
+
+    <actionGroup name="AdminGenerateProductConfigurations">
+        <arguments>
+            <argument name="attributeCode" type="string"/>
+            <argument name="qty" type="string"/>
+            <argument name="price" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickOnFilters"/>
+        <fillField selector="{{AdminProductAttributeGridSection.attributeCodeFilterInput}}" userInput="{{attributeCode}}" stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanelSection.selectAllByAttribute(attributeCode)}}" stepKey="waitForNextPageOpened"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.selectAllByAttribute(attributeCode)}}" stepKey="clickSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep1"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="waitForNextPageOpened1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="clickOnApplySinglePriceToAllSkus"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="{{price}}" stepKey="enterAttributePrice"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="{{qty}}" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep2"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextPageOpened2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateProducts"/>
+    </actionGroup>
+</actionGroups>

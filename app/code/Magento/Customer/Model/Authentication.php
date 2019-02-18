@@ -167,7 +167,7 @@ class Authentication implements AuthenticationInterface
     {
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
         $hash = $customerSecure->getPasswordHash();
-        if (!$this->encryptor->validateHash($password, $hash)) {
+        if (!$hash || !$this->encryptor->validateHash($password, $hash)) {
             $this->processAuthenticationFailure($customerId);
             if ($this->isLocked($customerId)) {
                 throw new UserLockedException(__('The account is locked.'));

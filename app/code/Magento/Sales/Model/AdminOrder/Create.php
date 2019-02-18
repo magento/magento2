@@ -16,6 +16,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Model\Order;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Order create model
@@ -244,6 +245,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $dataObjectConverter;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -274,6 +280,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param ExtensibleDataObjectConverter|null $dataObjectConverter
+     * @param StoreManagerInterface $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -306,7 +313,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        ExtensibleDataObjectConverter $dataObjectConverter = null
+        ExtensibleDataObjectConverter $dataObjectConverter = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -340,6 +348,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         parent::__construct($data);
         $this->dataObjectConverter = $dataObjectConverter ?: ObjectManager::getInstance()
             ->get(ExtensibleDataObjectConverter::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -417,7 +426,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
     /**
      * Recollect totals for customer cart.
-     * Set recollect totals flag for quote
+     *
+     * Set recollect totals flag for quote.
      *
      * @return $this
      */
@@ -1327,6 +1337,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
     /**
      * Set and validate Quote address
+     *
      * All errors added to _errors
      *
      * @param \Magento\Quote\Model\Quote\Address $address
@@ -1530,6 +1541,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function collectShippingRates()
     {
+        $store = $this->getQuote()->getStore();
+        $this->storeManager->setCurrentStore($store);
         $this->getQuote()->getShippingAddress()->setCollectShippingRates(true);
         $this->collectRates();
 

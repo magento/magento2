@@ -25,4 +25,17 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitingForWarningModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreDelete"/>
     </actionGroup>
+
+    <actionGroup name="navigateToProductAttribute">
+        <arguments>
+            <argument name="attributeCode" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <waitForPageLoad stepKey="waitForAttributeGridPageLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <fillField selector="{{AdminProductAttributeGridSection.filterByAttributeCode}}" userInput="{{attributeCode}}" stepKey="fillAttributeCodeFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminProductAttributeGridSection.attributeCode(attributeCode)}}" stepKey="navigateToAttributeEditPage" />
+        <waitForPageLoad stepKey="waitForAttributeEditPageLoad" />
+    </actionGroup>
 </actionGroups>

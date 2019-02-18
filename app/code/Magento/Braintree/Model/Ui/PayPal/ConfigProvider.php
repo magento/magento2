@@ -41,12 +41,14 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve assoc array of checkout configuration
+     * Retrieve assoc array of checkout configuration.
      *
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
+        $requireBillingAddressAll = \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL;
+        
         return [
             'payment' => [
                 self::PAYPAL_CODE => [
@@ -60,6 +62,8 @@ class ConfigProvider implements ConfigProviderInterface
                     'vaultCode' => self::PAYPAL_VAULT_CODE,
                     'skipOrderReview' => $this->config->isSkipOrderReview(),
                     'paymentIcon' => $this->config->getPayPalIcon(),
+                    'isRequiredBillingAddress' =>
+                        (int)$this->config->isRequiredBillingAddress() === $requireBillingAddressAll,
                 ]
             ]
         ];

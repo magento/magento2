@@ -14,7 +14,8 @@
         "Magento_Backend/js/media-uploader" : {
             "maxFileSize": <?= /* @escapeNotVerified */ $block->getFileSizeService()->getMaxFileSize() ?>,
             "maxWidth":<?= /* @escapeNotVerified */ $block->getImageUploadMaxWidth() ?> ,
-            "maxHeight": <?= /* @escapeNotVerified */ $block->getImageUploadMaxHeight() ?>
+            "maxHeight": <?= /* @escapeNotVerified */ $block->getImageUploadMaxHeight() ?>,
+            "isResizeEnabled": <?= /* @noEscape */ $block->getImageUploadConfigData()->getIsResizeEnabled() ?>
         }
     }'
 >

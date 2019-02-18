@@ -139,4 +139,12 @@ abstract class Compare extends \Magento\Framework\App\Action\Action
         $this->_customerId = $customerId;
         return $this;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function execute()
+    {
+        return $this->resultRedirectFactory->create()->setPath('catalog/product_compare');
+    }
 }

@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Helper to move images from tmp to catalog directory
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -19,7 +20,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Swatch area inside media folder
-     *
      */
     const  SWATCH_MEDIA_PATH = 'attribute/swatch';
 
@@ -100,6 +100,8 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get swatch attribute image
+     *
      * @param string $swatchType
      * @param string $file
      * @return string
@@ -110,13 +112,17 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         $absoluteImagePath = $this->mediaDirectory
             ->getAbsolutePath($this->getSwatchMediaPath() . '/' . $generationPath);
         if (!file_exists($absoluteImagePath)) {
-            $this->generateSwatchVariations($file);
+            try {
+                $this->generateSwatchVariations($file);
+            } catch (\Exception $e) {
+                return '';
+            }
         }
         return $this->getSwatchMediaUrl() . '/' . $generationPath;
     }
 
     /**
-     * move image from tmp to catalog dir
+     * Move image from tmp to catalog dir
      *
      * @param string $file
      * @return string path
@@ -152,7 +158,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check whether file to move exists. Getting unique name
      *
-     * @param <type> $file
+     * @param string $file
      * @return string
      */
     protected function getUniqueFileName($file)
@@ -176,6 +182,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $imageUrl
      * @return $this
+     * @throws \Exception
      */
     public function generateSwatchVariations($imageUrl)
     {
@@ -234,7 +241,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Generate folder name WIDTHxHEIGHT based on config in view.xml
      *
      * @param string $swatchType
-     * @param null $imageConfig
+     * @param array|null $imageConfig
      * @return string
      */
     public function getFolderNameSize($swatchType, $imageConfig = null)
@@ -336,6 +343,8 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get registered themes
+     *
      * @return \Magento\Theme\Model\ResourceModel\Theme\Collection
      */
     private function getRegisteredThemes()
