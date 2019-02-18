@@ -9,9 +9,11 @@ namespace Magento\Catalog\Ui\DataProvider\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;
-use Magento\CatalogInventory\Ui\DataProvider\Product\AddIsInStockFieldToCollection;
+use Magento\CatalogInventory\Ui\DataProvider\Product\AddQuantityAndStockStatusFieldToCollection;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\CatalogInventory\Api\StockItemCriteriaInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 
 /**
  * Quantity and stock status test
@@ -44,19 +46,16 @@ class QuantityAndStockStatusTest extends TestCase
      */
     public function testProductStockStatus()
     {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get('simple');
-        $productId = $product->getId();
-
         /** @var StockItemRepository $stockItemRepository */
         $stockItemRepository = $this->objectManager->create(StockItemRepository::class);
 
-        $stockItem = $stockItemRepository->get($productId);
+        /** @var StockRegistryInterface $stockRegistry */
+        $stockRegistry = $this->objectManager->create(StockRegistryInterface::class);
+
+        $stockItem = $stockRegistry->getStockItemBySku('simple');
         $stockItem->setIsInStock(false);
         $stockItemRepository->save($stockItem);
-        $savedStockItem = $stockItemRepository->get($productId);
-        $savedStockStatus = $savedStockItem->getData('is_in_stock');
+        $savedStockStatus = (int)$stockItem->getIsInStock();
 
         $dataProvider = $this->objectManager->create(
             ProductDataProvider::class,
@@ -66,7 +65,7 @@ class QuantityAndStockStatusTest extends TestCase
                 'requestFieldName' => 'id',
                 'addFieldStrategies' => [
                     'quantity_and_stock_status' =>
-                        $this->objectManager->get(AddIsInStockFieldToCollection::class)
+                        $this->objectManager->get(AddQuantityAndStockStatusFieldToCollection::class)
                 ]
             ]
         );

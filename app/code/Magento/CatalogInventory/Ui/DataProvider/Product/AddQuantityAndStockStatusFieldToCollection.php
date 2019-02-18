@@ -11,9 +11,9 @@ use Magento\Framework\Data\Collection;
 use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
 
 /**
- * Add is_in_stock field to collection
+ * Add quantity_and_stock_status field to collection
  */
-class AddIsInStockFieldToCollection implements AddFieldToCollectionInterface
+class AddQuantityAndStockStatusFieldToCollection implements AddFieldToCollectionInterface
 {
     /**
      * @inheritdoc
