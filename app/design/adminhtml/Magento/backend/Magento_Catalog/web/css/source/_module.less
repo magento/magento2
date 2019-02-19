@@ -29,6 +29,35 @@
             &:extend(.abs-control-qty all);
         }
     }
+
+    .admin__field {
+        &.required,
+        &._required {
+            & > .admin__field-label {
+                &:after {
+                    color: @validation__color;
+                    content: '*';
+                    display: inline-block;
+                    font-size: @font-size__l;
+                    font-weight: @font-weight__heavier;
+                    line-height: 1;
+                    margin-left: 10px;
+                    margin-top: .2rem;
+                    position: absolute;
+                    z-index: 1;
+                }
+                & .price-notice {
+                    &:after {
+                        display: none;
+                    }
+
+                    & span:after {
+                        display: none
+                    }
+                }
+            }
+        }
+    }
 }
 
 //
