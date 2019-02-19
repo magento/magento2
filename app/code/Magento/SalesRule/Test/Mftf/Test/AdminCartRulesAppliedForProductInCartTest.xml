@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCartRulesAppliedForProductInCartTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
+            <title value="Check that cart rules applied for product in cart"/>
+            <description value="Check that cart rules applied for product in cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-13629"/>
+            <useCaseId value="MAGETWO-94348"/>
+            <group value="salesRule"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!--Create category and product-->
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">200</field>
+                <field key="quantity">500</field>
+                <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createPreReqCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <actionGroup ref="DeleteProductOnProductsGridPageByName" stepKey="deleteProductOnProductsGridPageByName">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
+
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{PriceRuleWithCondition.name}}"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters1"/>
+
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Start creating a bundle product-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <!--Off dynamic price and set value-->
+        <click  selector="{{AdminProductFormBundleSection.priceTypeSwitcher}}" stepKey="offDynamicPrice"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="0" stepKey="setProductPrice"/>
+
+        <!-- Add option, a "Radio Buttons" type option, with one product and set fixed price 200-->
+        <actionGroup ref="CreateBundleProductForOneSimpleProductsWithRadioTypeOption" stepKey="createBundleProductWithRadioTypeOption">
+            <argument name="bundleProduct" value="BundleProduct"/>
+            <argument name="simpleProductFirst" value="$$simpleProduct$$"/>
+            <argument name="simpleProductSecond"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductFormBundleSection.bundleSelectionPriceType}}" userInput="Fixed" stepKey="selectPriceType"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleSelectionPriceValue}}" userInput="200" stepKey="fillPriceValue"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <!--Create cart price rule-->
+        <actionGroup ref="AdminCreateCartPriceRuleWithProductSubselectionCondition" stepKey="createRule">
+            <argument name="rule" value="PriceRuleWithCondition"/>
+            <argument name="condition" value="Category"/>
+            <argument name="operation" value="equals or greater than"/>
+            <argument name="totalQuantity" value="2"/>
+            <argument name="value" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
+
+        <!--Go to Storefront and add product to cart and checkout from cart-->
+        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.name$$)}}" stepKey="goToProduct"/>
+        <actionGroup ref="StorefrontAddProductToCartQuantityActionGroup" stepKey="addToCart">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping"/>
+
+        <!--Check totals-->
+        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="grabSubtotal"/>
+        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" stepKey="grabShippingTotal"/>
+        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="grabTotal"/>
+        <assertEquals stepKey="assertSubtotal">
+            <expectedResult type="string">$400.00</expectedResult>
+            <actualResult type="variable">$grabSubtotal</actualResult>
+        </assertEquals>
+        <assertEquals stepKey="assertShippingTotal">
+            <expectedResult type="string">$10.00</expectedResult>
+            <actualResult type="variable">$grabShippingTotal</actualResult>
+        </assertEquals>
+        <assertEquals stepKey="assertTotal">
+            <expectedResult type="string">$410.00</expectedResult>
+            <actualResult type="variable">$grabTotal</actualResult>
+        </assertEquals>
+    </test>
+</tests>

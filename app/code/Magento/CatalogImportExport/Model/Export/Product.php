@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
+use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
 use Magento\ImportExport\Model\Import;
 use \Magento\Store\Model\Store;
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
@@ -202,7 +203,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_itemFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
+     * @var Collection
      */
     protected $_optionColFactory;
 
@@ -1277,11 +1278,23 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         }
 
         if (!empty($multiRawData['customOptionsData'][$productLinkId][$storeId])) {
+            $shouldBeMerged = true;
             $customOptionsRows = $multiRawData['customOptionsData'][$productLinkId][$storeId];
-            $multiRawData['customOptionsData'][$productLinkId][$storeId] = [];
-            $customOptions = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $customOptionsRows);
 
-            $dataRow = array_merge($dataRow, ['custom_options' => $customOptions]);
+            if ($storeId != Store::DEFAULT_STORE_ID
+                && !empty($multiRawData['customOptionsData'][$productLinkId][Store::DEFAULT_STORE_ID])
+            ) {
+                $defaultCustomOptions = $multiRawData['customOptionsData'][$productLinkId][Store::DEFAULT_STORE_ID];
+                if (!array_diff($defaultCustomOptions, $customOptionsRows)) {
+                    $shouldBeMerged = false;
+                }
+            }
+
+            if ($shouldBeMerged) {
+                $multiRawData['customOptionsData'][$productLinkId][$storeId] = [];
+                $customOptions = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $customOptionsRows);
+                $dataRow = array_merge($dataRow, ['custom_options' => $customOptions]);
+            }
         }
 
         if (empty($dataRow)) {
@@ -1373,56 +1386,55 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function getCustomOptionsData($productIds)
     {
         $customOptionsData = [];
+        $defaultOptionsData = [];
 
         foreach (array_keys($this->_storeIdToCode) as $storeId) {
             $options = $this->_optionColFactory->create();
-            /* @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection $options*/
-            $options->reset()->addOrder(
-                'sort_order',
-                \Magento\Catalog\Model\ResourceModel\Product\Option\Collection::SORT_ORDER_ASC
-            )->addTitleToResult(
-                $storeId
-            )->addPriceToResult(
-                $storeId
-            )->addProductToFilter(
-                $productIds
-            )->addValuesToResult(
-                $storeId
-            );
+            /* @var Collection $options*/
+            $options->reset()
+                ->addOrder('sort_order', Collection::SORT_ORDER_ASC)
+                ->addTitleToResult($storeId)
+                ->addPriceToResult($storeId)
+                ->addProductToFilter($productIds)
+                ->addValuesToResult($storeId);
 
             foreach ($options as $option) {
+                $optionData = $option->toArray();
                 $row = [];
                 $productId = $option['product_id'];
                 $row['name'] = $option['title'];
                 $row['type'] = $option['type'];
-                if (Store::DEFAULT_STORE_ID === $storeId) {
-                    $row['required'] = $option['is_require'];
-                    $row['price'] = $option['price'];
-                    $row['price_type'] = ($option['price_type'] === 'percent') ? 'percent' : 'fixed';
-                    $row['sku'] = $option['sku'];
-                    if ($option['max_characters']) {
-                        $row['max_characters'] = $option['max_characters'];
-                    }
 
-                    foreach (['file_extension', 'image_size_x', 'image_size_y'] as $fileOptionKey) {
-                        if (!isset($option[$fileOptionKey])) {
-                            continue;
-                        }
-
-                        $row[$fileOptionKey] = $option[$fileOptionKey];
+                $row['required'] = $this->getOptionValue('is_require', $defaultOptionsData, $optionData);
+                $row['price'] = $this->getOptionValue('price', $defaultOptionsData, $optionData);
+                $row['sku'] = $this->getOptionValue('sku', $defaultOptionsData, $optionData);
+                if (array_key_exists('max_characters', $optionData)
+                    || array_key_exists('max_characters', $defaultOptionsData)
+                ) {
+                    $row['max_characters'] = $this->getOptionValue('max_characters', $defaultOptionsData, $optionData);
+                }
+                foreach (['file_extension', 'image_size_x', 'image_size_y'] as $fileOptionKey) {
+                    if (isset($option[$fileOptionKey]) || isset($defaultOptionsData[$fileOptionKey])) {
+                        $row[$fileOptionKey] = $this->getOptionValue($fileOptionKey, $defaultOptionsData, $optionData);
                     }
                 }
+                $percentType = $this->getOptionValue('price_type', $defaultOptionsData, $optionData);
+                $row['price_type'] = ($percentType === 'percent') ? 'percent' : 'fixed';
+
+                if (Store::DEFAULT_STORE_ID === $storeId) {
+                    $optionId = $option['option_id'];
+                    $defaultOptionsData[$optionId] = $option->toArray();
+                }
+
                 $values = $option->getValues();
 
                 if ($values) {
                     foreach ($values as $value) {
                         $row['option_title'] = $value['title'];
-                        if (Store::DEFAULT_STORE_ID === $storeId) {
-                            $row['option_title'] = $value['title'];
-                            $row['price'] = $value['price'];
-                            $row['price_type'] = ($value['price_type'] === 'percent') ? 'percent' : 'fixed';
-                            $row['sku'] = $value['sku'];
-                        }
+                        $row['option_title'] = $value['title'];
+                        $row['price'] = $value['price'];
+                        $row['price_type'] = ($value['price_type'] === 'percent') ? 'percent' : 'fixed';
+                        $row['sku'] = $value['sku'];
                         $customOptionsData[$productId][$storeId][] = $this->optionRowToCellString($row);
                     }
                 } else {
@@ -1434,6 +1446,29 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         }
 
         return $customOptionsData;
+    }
+
+    /**
+     * Get value for custom option according to store or default value
+     *
+     * @param string $optionName
+     * @param array $defaultOptionsData
+     * @param array $optionData
+     * @return mixed
+     */
+    private function getOptionValue(string $optionName, array $defaultOptionsData, array $optionData)
+    {
+        $optionId = $optionData['option_id'];
+
+        if (isset($optionData[$optionName])) {
+            return $optionData[$optionName];
+        }
+
+        if (isset($defaultOptionsData[$optionId][$optionName])) {
+            return $defaultOptionsData[$optionId][$optionName];
+        }
+
+        return null;
     }
 
     /**

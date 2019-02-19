@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminMediaGallerySection">
+        <element name="imageSelected" type="text" selector="//small[text()='{{imageName}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
+        <element name="uploadImage" type="file" selector="input.fileupload" />
+        <element name="insertFile" type="text" selector="#insert_files"/>
+        <element name="imageBlockByName" type="block" selector="//div[@data-row='file'][contains(., '{{imageName}}')]" parameterized="true"/>
+    </section>
+</sections>

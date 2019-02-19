@@ -58,7 +58,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 'onclick',
                 "deleteConfirm('" . __(
                     'Are you sure you want to send a Shipment email to customer?'
-                ) . "', '" . $this->getEmailUrl() . "')"
+                ) . "', '" . $this->getEmailUrl() . "', {data: {}})"
             );
         }
 

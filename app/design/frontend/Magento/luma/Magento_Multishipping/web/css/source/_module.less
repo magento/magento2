@@ -374,7 +374,7 @@
                 text-align: right;
 
                 .action {
-                    margin-left: @indent__s;
+                    margin-left: 0;
 
                     &.back {
                         display: block;
@@ -494,6 +494,14 @@
 
         .logo {
             margin-left: @indent__xl;
+        }
+    }
+    
+    .multicheckout { 
+        .actions-toolbar {
+            > .primary {
+                margin-right: 0;
+            }
         }
     }
 }

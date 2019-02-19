@@ -18,6 +18,9 @@ use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Tax\Api\OrderTaxManagementInterface;
+use Magento\Payment\Api\Data\PaymentAdditionalInfoInterface;
+use Magento\Payment\Api\Data\PaymentAdditionalInfoInterfaceFactory;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
 /**
  * Repository class
@@ -67,6 +70,16 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     private $orderTaxManagement;
 
     /**
+     * @var PaymentAdditionalInfoFactory
+     */
+    private $paymentAdditionalInfoFactory;
+
+    /**
+     * @var JsonSerializer
+     */
+    private $serializer;
+
+    /**
      * Constructor
      *
      * @param Metadata $metadata
@@ -75,6 +88,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @param \Magento\Sales\Api\Data\OrderExtensionFactory|null $orderExtensionFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param OrderTaxManagementInterface|null $orderTaxManagement
+     * @param PaymentAdditionalInfoInterfaceFactory|null $paymentAdditionalInfoFactory
+     * @param JsonSerializer|null $serializer
      */
     public function __construct(
         Metadata $metadata,
@@ -82,7 +97,9 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         CollectionProcessorInterface $collectionProcessor = null,
         \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory = null,
         JoinProcessorInterface $extensionAttributesJoinProcessor = null,
-        OrderTaxManagementInterface $orderTaxManagement = null
+        OrderTaxManagementInterface $orderTaxManagement = null,
+        PaymentAdditionalInfoInterfaceFactory $paymentAdditionalInfoFactory = null,
+        JsonSerializer $serializer = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
@@ -94,6 +111,10 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             ?: ObjectManager::getInstance()->get(JoinProcessorInterface::class);
         $this->orderTaxManagement = $orderTaxManagement ?: ObjectManager::getInstance()
             ->get(OrderTaxManagementInterface::class);
+        $this->paymentAdditionalInfoFactory = $paymentAdditionalInfoFactory ?: ObjectManager::getInstance()
+            ->get(PaymentAdditionalInfoInterfaceFactory::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(JsonSerializer::class);
     }
 
     /**
@@ -117,6 +138,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             }
             $this->setOrderTaxDetails($entity);
             $this->setShippingAssignments($entity);
+            $this->setPaymentAdditionalInfo($entity);
             $this->registry[$id] = $entity;
         }
         return $this->registry[$id];
@@ -146,6 +168,34 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     }
 
     /**
+     * Set payment additional info to the order.
+     *
+     * @param OrderInterface $order
+     * @return void
+     */
+    private function setPaymentAdditionalInfo(OrderInterface $order)
+    {
+        $extensionAttributes = $order->getExtensionAttributes();
+        $paymentAdditionalInformation = $order->getPayment()->getAdditionalInformation();
+
+        $objects = [];
+        foreach ($paymentAdditionalInformation as $key => $value) {
+            /** @var PaymentAdditionalInfoInterface $additionalInformationObject */
+            $additionalInformationObject = $this->paymentAdditionalInfoFactory->create();
+            $additionalInformationObject->setKey($key);
+
+            if (!is_string($value)) {
+                $value = $this->serializer->serialize($value);
+            }
+
+            $additionalInformationObject->setValue($value);
+            $objects[] = $additionalInformationObject;
+        }
+        $extensionAttributes->setPaymentAdditionalInfo($objects);
+        $order->setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
      * Find entities by criteria
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
@@ -161,6 +211,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         foreach ($searchResult->getItems() as $order) {
             $this->setShippingAssignments($order);
             $this->setOrderTaxDetails($order);
+            $this->setPaymentAdditionalInfo($order);
         }
         return $searchResult;
     }
