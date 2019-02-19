@@ -132,7 +132,7 @@ class Match implements QueryInterface
      * Escape a value for special query characters such as ':', '(', ')', '*', '?', etc.
      *
      * Cut trailing plus or minus sign, and @ symbol, using of which causes InnoDB to report a syntax error.
-     * @link https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html Fulltext-boolean search docs.
+     * https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html Fulltext-boolean search docs.
      *
      * @param string $value
      * @return string
