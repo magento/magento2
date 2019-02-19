@@ -67,25 +67,6 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
-
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The most you may purchase is 5.
-     */
-    public function testAddMoreProductsThatAllowed()
-    {
-        $sku = 'simple';
-        $qty = 7;
-        $maxQty = 5;
-
-        $this->config->saveConfig('cataloginventory/item_options/max_sale_qty', $maxQty, 'default', 0);
-        $maskedQuoteId = $this->getMaskedQuoteId();
-        $query = $this->getQueryAddSimpleProduct($maskedQuoteId, $sku, $qty);
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @expectedException \Exception
      * @expectedExceptionMessage The requested qty is not available
@@ -101,8 +82,24 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @expectedExceptionMessage The most you may purchase is 5.
+     */
+    public function testAddMoreProductsThatAllowed()
+    {
+        $sku = 'custom-design-simple-product';
+        $qty = 7;
+        $maxQty = 5;
+
+        $this->config->saveConfig('cataloginventory/item_options/max_sale_qty', $maxQty, 'default', 0);
+        $maskedQuoteId = $this->getMaskedQuoteId();
+        $query = $this->getQueryAddSimpleProduct($maskedQuoteId, $sku, $qty);
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getMaskedQuoteId() : string
     {
