@@ -66,11 +66,11 @@
         <!-- Change attribute property: Use in Search >Yes -->
         <scrollToTopOfPage stepKey="scrollToTabs"/>
         <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
-        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" stepKey="waitTabLoad"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <selectOption selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" userInput="Yes" stepKey="seeInSearch"/>
 
         <!-- Change attribute property: Visible In Advanced Search >No -->
-        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.VisibleInAdvancedSearch}}" stepKey="waitTabLoad2"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <selectOption selector="{{AdvancedAttributePropertiesSection.VisibleInAdvancedSearch}}" userInput="No" stepKey="dontSeeInAdvancedSearch"/>
 
         <!-- Save the new product attributes -->
