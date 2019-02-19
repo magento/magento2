@@ -41,6 +41,9 @@
             <magentoCLI command="cron:run" stepKey="runCron2"/>
         </before>
         <after>
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
+            <magentoCLI stepKey="setIndexersMode" command="indexer:set-mode" arguments="realtime" />
+            <magentoCLI stepKey="indexerReindex" command="indexer:reindex" />
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
                 <argument name="customStore" value="customStoreEN"/>
@@ -48,7 +51,6 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewFr">
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
-            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Verify Category is not listed in navigation menu-->
