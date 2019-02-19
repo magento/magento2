@@ -163,7 +163,7 @@ class DataGrid extends Grid
     protected $currentPage = ".//*[@data-ui-id='current-page-input'][not(ancestor::*[@class='sticky-header'])]";
 
     /**
-     * Top page element to implement a scrolling in case of some grid elements are not visible.
+     * Top page element to implement a scrolling in case of grid element not visible.
      */
     private $topElementToScroll = 'header.page-header';
 
@@ -373,6 +373,7 @@ class DataGrid extends Grid
             $this->sortGridByField('ID');
         }
         foreach ($items as $item) {
+
             if (!$this->_rootElement->find($this->currentPage, Locator::SELECTOR_XPATH)->isVisible()) {
                 //Scroll to the top of the page to be sure current page field is visible.
                 $this->browser->find($this->topElementToScroll)->hover();
