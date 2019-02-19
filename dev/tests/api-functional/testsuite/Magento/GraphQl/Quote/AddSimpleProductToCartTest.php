@@ -12,6 +12,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Config\Model\ResourceModel\Config;
 
 class AddSimpleProductToCartTest extends GraphQlAbstract
 {
@@ -31,6 +32,11 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     private $quoteIdToMaskedId;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -39,6 +45,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quote = $objectManager->create(Quote::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->config = $objectManager->get(Config::class);
     }
 
     /**
@@ -60,6 +67,25 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
+
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The most you may purchase is 5.
+     */
+    public function testAddMoreProductsThatAllowed()
+    {
+        $sku = 'simple';
+        $qty = 7;
+        $maxQty = 5;
+
+        $this->config->saveConfig('cataloginventory/item_options/max_sale_qty', $maxQty, 'default', 0);
+        $maskedQuoteId = $this->getMaskedQuoteId();
+        $query = $this->getQueryAddSimpleProduct($maskedQuoteId, $sku, $qty);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @expectedException \Exception
      * @expectedExceptionMessage The requested qty is not available
@@ -75,26 +101,10 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/products.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The most you may purchase is 10000.
-     */
-    public function testAddMoreProductsThatAllowed()
-    {
-        $sku = 'simple-product-with-huge-amount';
-        $qty = 20000;
-        $maskedQuoteId = $this->getMaskedQuoteId();
-        $query = $this->getQueryAddSimpleProduct($maskedQuoteId, $sku, $qty);
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getMaskedQuoteId()
+    public function getMaskedQuoteId() : string
     {
         $this->quoteResource->load(
             $this->quote,
