@@ -19,4 +19,7 @@
         <plugin name="get_catalog_category_product_index_table_name" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\TableResolver"/>
         <plugin name="get_catalog_product_price_index_table_name" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\TableResolver"/>
     </type>
+    <type name="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface">
+        <plugin name="updateProductCustomOptionsAttributes" type="Magento\Catalog\Plugin\Model\Product\Option\UpdateProductCustomOptionsAttributes"/>
+    </type>
 </config>
