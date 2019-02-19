@@ -57,7 +57,6 @@ class LockBackendFactory
         self::LOCK_ZOOKEEPER => ZookeeperLock::class
     ];
 
-
     /**
      * @param ObjectManagerInterface $objectManager The Object Manager instance
      * @param DeploymentConfig $deploymentConfig The Application deployment configuration

@@ -131,7 +131,7 @@ class Zookeeper implements LockManagerInterface
     public function unlock(string $name): bool
     {
         if (!isset($this->locks[$name])) {
-            return true;
+            return false;
         }
 
         return $this->getProvider()->delete($this->locks[$name]);
