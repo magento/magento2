@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "70e12ebd95df6fef8f478e49da366aa3",
+    "content-hash": "87ae97b2da2504eaa90e4f56a3b968cb",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6591,16 +6591,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-MQE-1444-B",
+            "version": "2.3.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "423b0074046b3927b35b93b44dcb4dc18b44807d"
+                "reference": "b4002b3fe53884895921b44cf519d42918e3c7c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/423b0074046b3927b35b93b44dcb4dc18b44807d",
-                "reference": "423b0074046b3927b35b93b44dcb4dc18b44807d",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/b4002b3fe53884895921b44cf519d42918e3c7c6",
+                "reference": "b4002b3fe53884895921b44cf519d42918e3c7c6",
                 "shasum": ""
             },
             "require": {
@@ -6649,19 +6649,7 @@
                     "MFTF\\": "dev/tests/functional/MFTF"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "tests\\unit\\": "dev/tests/unit"
-                }
-            },
-            "scripts": {
-                "tests": [
-                    "bin/phpunit-checks"
-                ],
-                "static": [
-                    "bin/static-checks"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "AGPL-3.0"
             ],
@@ -6672,11 +6660,7 @@
                 "magento",
                 "testing"
             ],
-            "support": {
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/MQE-1444-B",
-                "issues": "https://github.com/magento/magento2-functional-testing-framework/issues"
-            },
-            "time": "2019-02-13T19:19:32+00:00"
+            "time": "2019-02-19T16:03:22+00:00"
         },
         {
             "name": "mikey179/vfsStream",
@@ -9403,9 +9387,8 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": {
-        "magento/magento2-functional-testing-framework": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": true,
