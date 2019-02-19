@@ -9,8 +9,9 @@ use Magento\Eav\Model\Entity\Attribute;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Framework\App\ObjectManager;
-use \Magento\ImportExport\Model\Export\ConfigInterface;
-use \Magento\CatalogImportExport\Model\Export\Product\Type\Factory as TypeFactory;
+use Magento\ImportExport\Model\Export\ConfigInterface;
+use Magento\CatalogImportExport\Model\Export\Product\Type\Factory as TypeFactory;
+use Magento\CatalogImportExport\Model\Export\Product\Type\AbstractType;
 
 /**
  * Export filter block
@@ -52,10 +53,9 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @var \Magento\CatalogImportExport\Model\Export\Product\Type\Factory
      */
-    private  $typeFactory;
+    private $typeFactory;
 
     /**
-     * Filter constructor.
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
@@ -143,8 +143,8 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _getInputHtmlWithValue(Attribute $attribute, $value)
     {
         $html = '<input type="text" name="' . $this->getFilterElementName(
-            $attribute->getAttributeCode()
-        ) . '" class="admin__control-text input-text input-text-export-filter"';
+                $attribute->getAttributeCode()
+            ) . '" class="admin__control-text input-text input-text-export-filter"';
         if ($value) {
             $html .= ' value="' . $this->escapeHtml($value) . '"';
         }
@@ -440,6 +440,8 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get Disabled Attributes
+     *
      * @return array
      */
     private function getDisabledAttributes()
@@ -448,7 +450,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         $productTypes = $this->exportConfig->getEntityTypes(CatalogProduct::ENTITY);
         foreach ($productTypes as $productTypeConfig) {
             $model = $this->typeFactory->create($productTypeConfig['model']);
-            if ($model instanceof \Magento\CatalogImportExport\Model\Export\Product\Type\AbstractType && $model->isSuitable()) {
+            if ($model instanceof AbstractType && $model->isSuitable()) {
                 $disabledAttrs = array_merge($disabledAttrs, $model->getDisabledAttrs());
             }
         }
@@ -457,7 +459,8 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Prepare collection by setting page number, sorting etc..
+     * Prepare collection by setting page number, sorting, etc
+     *
      * @param \Magento\Framework\Data\Collection $collection
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      * @return \Magento\Framework\Data\Collection
