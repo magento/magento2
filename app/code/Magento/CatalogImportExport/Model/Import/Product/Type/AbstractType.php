@@ -476,6 +476,8 @@ abstract class AbstractType
                 // check value for non-empty in the case of required attribute?
                 if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
                     $error |= !$this->_entityModel->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
+                } elseif(isset($rowData['product_type']) && !in_array($rowData['product_type'], $attrParams['apply_to'])){
+                    // This attribute does not apply for this product type
                 } elseif ($this->_isAttributeRequiredCheckNeeded($attrCode) && $attrParams['is_required']) {
                     // For the default scope - if this is a new product or
                     // for an old product, if the imported doc has the column present for the attrCode
