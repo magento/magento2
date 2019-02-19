@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Attribute\Backend;
 
 use Magento\Catalog\Api\Data\MassActionInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Notification\NotifierInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Consumer for export message.
@@ -70,16 +72,19 @@ class Consumer
      * @var ObjectManager
      */
     private $objectManager;
+
     /**
      * @var \Magento\Catalog\Model\Product\Action
      */
     private $productAction;
+
     /**
-     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterfaceFactory
      */
     private $stockRegistry;
+
     /**
-     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface
+     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterfaceFactory
      */
     private $stockItemRepository;
 
@@ -92,8 +97,8 @@ class Consumer
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Product\Action $action
-     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistryFactory
-     * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepositoryFactory
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterfaceFactory $stockRegistryFactory
+     * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterfaceFactory $stockItemRepositoryFactory
      * @param NotifierInterface $notifier
      */
     public function __construct(
@@ -105,8 +110,8 @@ class Consumer
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Product\Action $action,
-        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistryFactory,
-        \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepositoryFactory,
+        \Magento\CatalogInventory\Api\StockRegistryInterfaceFactory $stockRegistryFactory,
+        \Magento\CatalogInventory\Api\StockItemRepositoryInterfaceFactory $stockItemRepositoryFactory,
         NotifierInterface $notifier
     ) {
         $this->catalogProduct = $catalogProduct;
@@ -119,7 +124,7 @@ class Consumer
         $this->eventManager = $eventManager;
         $this->objectManager = ObjectManager::getInstance();
         $this->productAction = $action;
-        $this->stockRegistry = $stockRegistryFactory;
+        $this->stockRegistry = $stockRegistryFactory->create();
         $this->stockItemRepository = $stockItemRepositoryFactory->create();
     }
 
@@ -162,12 +167,11 @@ class Consumer
      */
     private function getAttributesData($productIds, $storeId, $attributesData)
     {
-        $dateFormat = $this->objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
-            ->getDateFormat(\IntlDateFormatter::SHORT);
+        $dateFormat = $this->objectManager->get(TimezoneInterface::class)->getDateFormat(\IntlDateFormatter::SHORT);
+        $config = $this->objectManager->get(\Magento\Eav\Model\Config::class);
 
         foreach ($attributesData as $attributeCode => $value) {
-            $attribute = $this->objectManager->get(\Magento\Eav\Model\Config::class)
-                ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
+            $attribute = $config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
             if (!$attribute->getAttributeId()) {
                 unset($attributesData[$attributeCode]);
                 continue;
@@ -215,11 +219,7 @@ class Consumer
             }
 
             $stockItemId = $stockItemDo->getId();
-            $this->dataObjectHelper->populateWithArray(
-                $stockItemDo,
-                $inventoryData,
-                \Magento\CatalogInventory\Api\Data\StockItemInterface::class
-            );
+            $this->dataObjectHelper->populateWithArray($stockItemDo, $inventoryData, StockItemInterface::class);
             $stockItemDo->setItemId($stockItemId);
             $this->stockItemRepository->save($stockItemDo);
         }
