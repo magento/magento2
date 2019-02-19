@@ -75,8 +75,6 @@
             </createData>
         </before>
         <after>
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductListing"/>
-            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -84,6 +82,8 @@
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductListing"/>
+            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
         </after>
         <!-- Step 1: Add simple product to shopping cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
@@ -108,8 +108,7 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <!-- Disabled child configurable product -->
         <click selector="{{AdminProductFormSection.enableProductAttributeLabel}}" stepKey="clickDisableProduct"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
-        <waitForPageLoad stepKey="waitForProductPageSaved"/>
+        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
         <!-- Disabled simple product from grid -->
         <actionGroup ref="ChangeStatusProductUsingProductGridActionGroup" stepKey="disabledProductFromGrid">
             <argument name="product" value="$$createSimpleProduct$$"/>
