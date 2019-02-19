@@ -201,4 +201,46 @@
         <data key="used_for_sort_by">false</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
+    <entity name="textProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">text</data>
+        <data key="default_value" unique="suffix">defaultValue</data>
+        <data key="is_required_admin">No</data>
+    </entity>
+    <entity name="dateProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">date</data>
+        <data key="is_required_admin">No</data>
+    </entity>
+    <entity name="priceProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">date</data>
+        <data key="is_required_admin">No</data>
+    </entity>
+    <entity name="dropdownProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">select</data>
+        <data key="frontend_input_admin">Dropdown</data>
+        <data key="is_required_admin">No</data>
+        <data key="option1_admin" unique="suffix">opt1Admin</data>
+        <data key="option1_frontend" unique="suffix">opt1Front</data>
+        <data key="option2_admin" unique="suffix">opt2Admin</data>
+        <data key="option2_frontend" unique="suffix">opt2Front</data>
+        <data key="option3_admin" unique="suffix">opt3Admin</data>
+        <data key="option3_frontend" unique="suffix">opt3Front</data>
+    </entity>
+    <entity name="multiselectProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">multiselect</data>
+        <data key="frontend_input_admin">Multiple Select</data>
+        <data key="is_required_admin">No</data>
+        <data key="option1_admin" unique="suffix">opt1Admin</data>
+        <data key="option1_frontend" unique="suffix">opt1Front</data>
+        <data key="option2_admin" unique="suffix">opt2Admin</data>
+        <data key="option2_frontend" unique="suffix">opt2Front</data>
+        <data key="option3_admin" unique="suffix">opt3Admin</data>
+        <data key="option3_frontend" unique="suffix">opt3Front</data>
+    </entity>
+    <entity name="dropdownProductAttributeWithQuote" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">select</data>
+        <data key="frontend_input_admin">Dropdown</data>
+        <data key="is_required_admin">No</data>
+        <data key="option1_admin" unique="suffix">opt1'Admin</data>
+        <data key="option1_frontend" unique="suffix">opt1'Front</data>
+    </entity>
 </entities>
