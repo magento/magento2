@@ -104,7 +104,7 @@ type Cart {
     applied_coupon: AppliedCoupon
     shipping_addresses: [CartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
     billing_address: CartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
-    available_payment_methods : [CheckoutPaymentMethod]  @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
+    available_payment_methods : [PaymentMethod]  @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
 }
 
 type CartAddress {
@@ -156,9 +156,9 @@ type AvailableShippingMethod {
     price_incl_tax: Float!
 }
 
-type CheckoutPaymentMethod @doc(description: "The type contains list of active payment methods") {
-    code : String @doc(description: "The payment method code")
-    title : String @doc(description: "The payment method title.")
+type PaymentMethod {
+    code: String @doc(description: "The payment method code")
+    title: String @doc(description: "The payment method title.")
 }
 
 enum AdressTypeEnum {
