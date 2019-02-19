@@ -183,25 +183,11 @@ class TransportBuilder
      *
      * @param string|array $from
      * @return $this
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function setFrom($from)
     {
         return $this->setFromByScope($from, null);
-    }
-
-    /**
-     * Set mail from address by store
-     *
-     * @deprecated Use setFromByScope
-     * @see setFromByScope()
-     *
-     * @param string|array $from
-     * @param string|int $store
-     * @return $this
-     */
-    public function setFromByStore($from, $store = null)
-    {
-        return $this->setFromByScope($from, $store);
     }
 
     /**
@@ -210,6 +196,7 @@ class TransportBuilder
      * @param string|array $from
      * @param string|int $scopeId
      * @return $this
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function setFromByScope($from, $scopeId = null)
     {
@@ -270,6 +257,7 @@ class TransportBuilder
      * Get mail transport
      *
      * @return \Magento\Framework\Mail\TransportInterface
+     * @throws LocalizedException
      */
     public function getTransport()
     {
