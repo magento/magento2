@@ -17,6 +17,13 @@ use Magento\Framework\Exception\SecurityViolationException;
 class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index implements HttpGetActionInterface
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::reset_password';
+
+    /**
      * Reset password handler
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
