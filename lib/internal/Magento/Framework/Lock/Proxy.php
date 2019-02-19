@@ -17,7 +17,7 @@ class Proxy implements LockManagerInterface
     /**
      * The factory to create LockManagerInterface implementation
      *
-     * @var Factory
+     * @var LockBackendFactory
      */
     private $factory;
 
@@ -29,9 +29,9 @@ class Proxy implements LockManagerInterface
     private $locker;
 
     /**
-     * @param Factory $factory The factory to create LockManagerInterface implementation
+     * @param LockBackendFactory $factory The factory to create LockManagerInterface implementation
      */
-    public function __construct(Factory $factory)
+    public function __construct(LockBackendFactory $factory)
     {
         $this->factory = $factory;
     }

@@ -31,6 +31,11 @@ class Zookeeper implements LockManagerInterface
     private $path;
 
     /**
+     * @var string
+     */
+    private $lockName = 'lock-';
+
+    /**
      * The host to connect to Zookeeper
      *
      * @var string
@@ -59,6 +64,13 @@ class Zookeeper implements LockManagerInterface
     private $acl = [['perms'=>\Zookeeper::PERM_ALL, 'scheme' => 'world', 'id' => 'anyone']];
 
     /**
+     * The mapping list of the lock name with the full lock path
+     *
+     * @var array
+     */
+    private $locks = [];
+
+    /**
      * @param string $host The host to connect to Zookeeper
      * @param string $path The base path to locks in Zookeeper
      * @throws RuntimeException
@@ -77,6 +89,9 @@ class Zookeeper implements LockManagerInterface
 
     /**
      * {@inheritdoc}
+     * You can see the lock algorithm by the link
+     * @link https://zookeeper.apache.org/doc/r3.1.2/recipes.html#sc_recipes_Locks
+     *
      * @throws RuntimeException
      */
     public function lock(string $name, int $timeout = -1): bool
@@ -85,19 +100,29 @@ class Zookeeper implements LockManagerInterface
         $lockPath = $this->getFullPathToLock($name);
         $deadline = microtime(true) + $timeout;
 
-        while($this->getProvider()->exists($lockPath)) {
+        if (!$this->checkAndCreateParentNode($lockPath)) {
+            throw new RuntimeException(new Phrase('Failed creating the path %1', [$lockPath]));
+        }
+
+        $lockKey = $this->getProvider()
+            ->create($lockPath, '1', $this->acl, \Zookeeper::EPHEMERAL | \Zookeeper::SEQUENCE);
+
+        if (!$lockKey) {
+            throw new RuntimeException(new Phrase('Failed creating lock %1', [$lockPath]));
+        }
+
+        while($this->isAnyLock($lockKey, $this->getIndex($lockKey))) {
             if (!$skipDeadline && $deadline <= microtime(true)) {
+                $this->getProvider()->delete($lockKey);
                 return false;
             }
 
             usleep($this->sleepCycle);
         }
 
-        if (!$this->getProvider()->create($lockPath, '1', $this->acl, \Zookeeper::EPHEMERAL)) {
-            throw new RuntimeException(new Phrase('Failed creating lock %1', [$lockPath]));
-        } else {
-            return true;
-        }
+        $this->locks[$name] = $lockKey;
+
+        return true;
     }
 
     /**
@@ -105,13 +130,11 @@ class Zookeeper implements LockManagerInterface
      */
     public function unlock(string $name): bool
     {
-        $lockPath = $this->getFullPathToLock($name);
-
-        if (!$this->getProvider()->exists($lockPath)) {
+        if (!isset($this->locks[$name])) {
             return true;
         }
 
-        return $this->getProvider()->delete($lockPath);
+        return $this->getProvider()->delete($this->locks[$name]);
     }
 
     /**
@@ -119,7 +142,7 @@ class Zookeeper implements LockManagerInterface
      */
     public function isLocked(string $name): bool
     {
-        return (bool) $this->getProvider()->exists($this->getFullPathToLock($name));
+        return $this->isAnyLock($this->getFullPathToLock($name));
     }
 
     /**
@@ -130,7 +153,7 @@ class Zookeeper implements LockManagerInterface
      */
     private function getFullPathToLock(string $name): string
     {
-        return $this->path . '/' . $name;
+        return $this->path . '/' . $name . '/' . $this->lockName;
     }
 
     /**
@@ -143,18 +166,14 @@ class Zookeeper implements LockManagerInterface
     {
         if (!$this->zookeeper) {
             $this->zookeeper = new \Zookeeper($this->host);
+        }
 
-            $deadline = microtime(true) + $this->connectionTimeout;
-            while($this->zookeeper->getState() != \Zookeeper::CONNECTED_STATE) {
-                if ($deadline <= microtime(true)) {
-                    throw new RuntimeException(new Phrase('Zookeeper connection timed out!'));
-                }
-                usleep($this->sleepCycle);
+        $deadline = microtime(true) + $this->connectionTimeout;
+        while($this->zookeeper->getState() != \Zookeeper::CONNECTED_STATE) {
+            if ($deadline <= microtime(true)) {
+                throw new RuntimeException(new Phrase('Zookeeper connection timed out!'));
             }
-
-            if (!$this->createBasePath($this->path)) {
-                throw new RuntimeException(new Phrase('Failed creating base path %1', [$this->path]));
-            }
+            usleep($this->sleepCycle);
         }
 
         return $this->zookeeper;
@@ -163,23 +182,81 @@ class Zookeeper implements LockManagerInterface
     /**
      * Checks and creates base path recursively
      *
-     * @param $path
+     * @param string $path
      * @return bool
+     * @throws RuntimeException
      */
-    private function createBasePath($path)
+    private function checkAndCreateParentNode(string $path): bool
     {
-        if ($this->zookeeper->exists($path)) {
+        $path = dirname($path);
+        if ($this->getProvider()->exists($path)) {
             return true;
         }
 
-        if (!$this->createBasePath(dirname($path))) {
+        if (!$this->checkAndCreateParentNode($path)) {
             return false;
         }
 
-        if ($this->zookeeper->create($path, '1', $this->acl)) {
+        if ($this->getProvider()->create($path, '1', $this->acl)) {
             return true;
         }
 
-        return $this->zookeeper->exists($path);
+        return $this->getProvider()->exists($path);
+    }
+
+    /**
+     * Gets int increment of lock key
+     *
+     * @param string $key
+     * @return int|null
+     */
+    private function getIndex(string $key)
+    {
+        if (!preg_match("/[0-9]+$/", $key, $matches))
+            return null;
+
+        return intval($matches[0]);
+    }
+
+    /**
+     * Checks if there is any sequence node under parent of $fullKey.
+     * At first checks that the $fullKey node is present, if not - returns false.
+     *
+     * If $indexKey is non-null and there is a smaller index that $indexKey then returns true,
+     * if all the nodes are larger than $indexKey then returns false.
+     *
+     * @param string $fullKey The full path without any sequence info
+     * @param int|null $indexKey The index to compare
+     * @return bool
+     * @throws RuntimeException
+     */
+    private function isAnyLock(string $fullKey, int $indexKey = null): bool
+    {
+        $parent = dirname($fullKey);
+
+        if (!$this->getProvider()->exists($parent)) {
+            return false;
+        }
+
+        $children = $this->getProvider()->getChildren($parent);
+
+        foreach($children as $childKey) {
+
+            if (is_null($indexKey)) {
+                return true;
+            }
+
+            $childIndex = $this->getIndex($childKey);
+
+            if (is_null($childIndex)) {
+                continue;
+            }
+
+            if ($childIndex < $indexKey) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

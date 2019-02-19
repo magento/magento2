@@ -17,7 +17,7 @@ use Magento\Framework\Lock\Backend\Zookeeper as ZookeeperLock;
 /**
  * The factory to create object that implements LockManagerInterface
  */
-class Factory
+class LockBackendFactory
 {
     /**
      * The Object Manager instance
