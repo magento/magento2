@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductNameMinicartOnCheckoutPageDifferentStoreViewsTest">
+        <annotations>
+            <title value="Checking Product name with custom store views"/>
+            <description value="Checking Product name in Minicart and on Checkout page with custom store views"/>
+            <stories value="Verify product name with custom store view"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14944"/>
+            <features value="Checkout"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!--Login as Admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create a product-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create store view -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete product-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!--Delete store view-->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <!--Logout from admin-->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Go to created product page-->
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToEditPage"/>
+
+        <!--Switch to second store view and change the product name-->
+        <actionGroup ref="SwitchToTheNewStoreView" stepKey="switchToCustomStoreView">
+            <argument name="storeViewName" value="customStore"/>
+        </actionGroup>
+        <click selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="uncheckUseDefault"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="$$createProduct.name$$-new" stepKey="fillProductName"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+
+        <!--Add product to cart-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="amOnProductPage"/>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$createProduct.name$$"/>
+        </actionGroup>
+
+        <!--Check simple product in minicart-->
+        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertProductNameInMiniCart1">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+
+        <!--Switch to second store view-->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreView">
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+
+        <!--Check simple product in minicart-->
+        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertProductNameInMiniCart2">
+            <argument name="productName" value="$$createProduct.name$$-new"/>
+        </actionGroup>
+
+        <!--Go to Shopping Cart-->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToCheckoutFromMinicart"/>
+        <seeElement selector="{{CheckoutCartProductSection.productLinkByName($$createProduct.name$$-new)}}" stepKey="assertProductName"/>
+
+        <!--Proceed to checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutPage"/>
+        <conditionalClick selector="{{CheckoutShippingGuestInfoSection.itemInCart}}" dependentSelector="{{CheckoutShippingGuestInfoSection.itemInCart}}" visible="true" stepKey="clickItemsInCart"/>
+        <see selector="{{CheckoutShippingGuestInfoSection.productName}}" userInput="$$createProduct.name$$-new" stepKey="seeProductNameAtCheckout"/>
+    </test>
+</tests>
