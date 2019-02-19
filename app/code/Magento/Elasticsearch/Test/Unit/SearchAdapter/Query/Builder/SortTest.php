@@ -121,6 +121,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
     public function getSortProvider()

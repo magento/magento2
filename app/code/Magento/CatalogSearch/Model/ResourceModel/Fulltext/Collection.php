@@ -568,11 +568,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
     {
         $this->addFieldToFilter('category_ids', $category->getId());
-        if ($this->isCurrentEngineMysql()) {
-            parent::addCategoryFilter($category);
-        } else {
-            $this->_productLimitationPrice();
-        }
+        $this->_productLimitationPrice();
+
         return $this;
     }
 
@@ -585,9 +582,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setVisibility($visibility)
     {
         $this->addFieldToFilter('visibility', $visibility);
-        if ($this->isCurrentEngineMysql()) {
-            parent::setVisibility($visibility);
-        }
 
         return $this;
     }
