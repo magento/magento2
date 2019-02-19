@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,6 +7,7 @@ namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\NotFoundException;
 
 class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
@@ -18,6 +18,10 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found.'));
+        }
+
         /** @var \Magento\Framework\Filesystem\Directory\Write $directory */
         $directory = $this->_objectManager->get(
             'Magento\Framework\Filesystem'

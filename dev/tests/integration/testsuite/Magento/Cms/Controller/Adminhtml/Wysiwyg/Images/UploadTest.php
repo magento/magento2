@@ -70,6 +70,7 @@ class UploadTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $this->model->getRequest()->setParams(['type' => 'image/png']);
+        $this->model->getRequest()->setMethod('POST');
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
         $this->model->execute();
         $this->assertTrue(
