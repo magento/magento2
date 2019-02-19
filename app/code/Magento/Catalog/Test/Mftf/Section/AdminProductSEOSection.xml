@@ -11,5 +11,6 @@
     <section name="AdminProductSEOSection">
         <element name="sectionHeader" type="button" selector="div[data-index='search-engine-optimization']" timeout="30"/>
         <element name="urlKeyInput" type="input" selector="input[name='product[url_key]']"/>
+        <element name="useDefaultUrl" type="checkbox" selector="input[name='use_default[url_key]']"/>
     </section>
 </sections>
