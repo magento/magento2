@@ -14,6 +14,8 @@ use Magento\Customer\Model\Metadata\Form;
 use Magento\Framework\Controller\Result\Redirect;
 
 /**
+ * Testing Save Customer use case from admin page
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @covers \Magento\Customer\Controller\Adminhtml\Index\Save
@@ -434,6 +436,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $customerEmail = 'customer@email.com';
         $customerMock->expects($this->once())->method('getEmail')->willReturn($customerEmail);
+
+        $customerMock->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([]);
 
         $this->emailNotificationMock->expects($this->once())
             ->method('credentialsChanged')

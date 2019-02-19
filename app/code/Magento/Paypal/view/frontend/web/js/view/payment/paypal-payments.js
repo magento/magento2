@@ -20,10 +20,6 @@ define([
             config: window.checkoutConfig.payment.paypalExpress.inContextConfig
         },
         {
-            type: 'paypal_express_bml',
-            component: 'Magento_Paypal/js/view/payment/method-renderer/paypal-express-bml'
-        },
-        {
             type: 'payflow_express',
             component: 'Magento_Paypal/js/view/payment/method-renderer/payflow-express'
         },
