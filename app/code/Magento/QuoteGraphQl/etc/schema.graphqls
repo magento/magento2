@@ -104,7 +104,7 @@ type Cart {
     applied_coupon: AppliedCoupon
     shipping_addresses: [CartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
     billing_address: CartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
-    available_payment_methods : [CheckoutPaymentMethod]  @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethodsResolver") @doc(description: "Available payment methods")
+    available_payment_methods : [CheckoutPaymentMethod]  @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
 }
 
 type CartAddress {

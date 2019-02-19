@@ -5,15 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Cart\PaymentMethod;
+namespace Magento\QuoteGraphQl\Model\Resolver;
 
 use Magento\Checkout\Api\PaymentInformationManagementInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\Data\CartInterface;
 
 /**
- * Get array of available payment methods.
+ * Get list of active payment methods resolver.
  */
-class AvailablePaymentMethodsDataProvider
+class AvailablePaymentMethods implements ResolverInterface
 {
     /**
      * @var PaymentInformationManagementInterface
@@ -21,7 +25,6 @@ class AvailablePaymentMethodsDataProvider
     private $informationManagement;
 
     /**
-     * AvailablePaymentMethodsDataProvider constructor.
      * @param PaymentInformationManagementInterface $informationManagement
      */
     public function __construct(PaymentInformationManagementInterface $informationManagement)
@@ -30,24 +33,36 @@ class AvailablePaymentMethodsDataProvider
     }
 
     /**
+     * @inheritdoc
+     */
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    {
+        if (!isset($value['model'])) {
+            throw new LocalizedException(__('"model" value should be specified'));
+        }
+
+        $cart = $value['model'];
+        return $this->getPaymentMethodsData($cart);
+    }
+
+    /**
      * Collect and return information about available payment methods
      *
      * @param CartInterface $cart
      * @return array
      */
-    public function getPaymentMethods(CartInterface $cart): array
+    private function getPaymentMethodsData(CartInterface $cart): array
     {
         $paymentInformation = $this->informationManagement->getPaymentInformation($cart->getId());
         $paymentMethods = $paymentInformation->getPaymentMethods();
 
-        $paymentMethodsNested = [];
+        $paymentMethodsData = [];
         foreach ($paymentMethods as $paymentMethod) {
-            $paymentMethodsNested[] = [
+            $paymentMethodsData[] = [
                 'title' => $paymentMethod->getTitle(),
-                'code' => $paymentMethod->getCode()
+                'code' => $paymentMethod->getCode(),
             ];
         }
-
-        return $paymentMethodsNested;
+        return $paymentMethodsData;
     }
 }
