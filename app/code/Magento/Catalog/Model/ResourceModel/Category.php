@@ -200,7 +200,7 @@ class Category extends AbstractResource
      * delete child categories
      *
      * @param \Magento\Framework\DataObject $object
-     * @return $this
+     * @return void
      */
     protected function _beforeDelete(\Magento\Framework\DataObject $object)
     {
