@@ -30,19 +30,19 @@ class Consumer
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
      */
-    protected $_productFlatIndexerProcessor;
+    protected $productFlatIndexerProcessor;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
      */
-    protected $_productPriceIndexerProcessor;
+    protected $productPriceIndexerProcessor;
 
     /**
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
      */
-    protected $_catalogProduct;
+    protected $catalogProduct;
 
     /**
      * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory
@@ -54,7 +54,7 @@ class Consumer
      *
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
-    protected $_stockIndexerProcessor;
+    protected $stockIndexerProcessor;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
@@ -64,12 +64,24 @@ class Consumer
     /**
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    private $_eventManager;
+    private $eventManager;
 
     /**
      * @var ObjectManager
      */
-    private $_objectManager;
+    private $objectManager;
+    /**
+     * @var \Magento\Catalog\Model\Product\Action
+     */
+    private $productAction;
+    /**
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     */
+    private $stockRegistry;
+    /**
+     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface
+     */
+    private $stockItemRepository;
 
     /**
      * @param \Magento\Catalog\Helper\Product $catalogProduct
@@ -79,6 +91,9 @@ class Consumer
      * @param \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Catalog\Model\Product\Action $action
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistryFactory
+     * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepositoryFactory
      * @param NotifierInterface $notifier
      */
     public function __construct(
@@ -89,35 +104,42 @@ class Consumer
         \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Catalog\Model\Product\Action $action,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistryFactory,
+        \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepositoryFactory,
         NotifierInterface $notifier
     ) {
-        $this->_catalogProduct = $catalogProduct;
-        $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
-        $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
-        $this->_stockIndexerProcessor = $stockIndexerProcessor;
+        $this->catalogProduct = $catalogProduct;
+        $this->productFlatIndexerProcessor = $productFlatIndexerProcessor;
+        $this->productPriceIndexerProcessor = $productPriceIndexerProcessor;
+        $this->stockIndexerProcessor = $stockIndexerProcessor;
         $this->stockItemFactory = $stockItemFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->notifier = $notifier;
-        $this->_eventManager = $eventManager;
-        $this->_objectManager = ObjectManager::getInstance();
+        $this->eventManager = $eventManager;
+        $this->objectManager = ObjectManager::getInstance();
+        $this->productAction = $action;
+        $this->stockRegistry = $stockRegistryFactory;
+        $this->stockItemRepository = $stockItemRepositoryFactory->create();
     }
 
     public function process(MassActionInterface $data): void
     {
         try {
-            if ($data->getAttributes()) {
-                $attributesData = $this->getAttributesData($data, $data->getAttributes());
-            }
-
             if ($data->getInventory()) {
-                $this->saveInventory($data, $data->getInventory());
+                $this->updateInventoryInProducts($data->getProductIds(), $data->getWebsiteId(), $data->getInventory());
             }
 
             if ($data->getWebsiteAdd() || $data->getWebsiteRemove()) {
-                $this->updateWebsiteInProducts($data, $data->getWebsiteRemove(), $data->getWebsiteAdd());
+                $this->updateWebsiteInProducts($data->getProductIds(), $data->getWebsiteRemove(), $data->getWebsiteAdd());
             }
 
-            $this->reindex($data, $attributesData, $data->getWebsiteRemove(), $data->getWebsiteAdd());
+            if ($data->getAttributes()) {
+                $attributesData = $this->getAttributesData($data->getProductIds(), $data->getStoreId(), $data->getAttributes());
+                $this->reindex($data->getProductIds(), $attributesData, $data->getWebsiteRemove(), $data->getWebsiteAdd());
+            }
+
+            $this->productFlatIndexerProcessor->reindexList($data->getProductIds());
 
             $this->notifier->addNotice(
                 __('Product attributes updated'),
@@ -133,17 +155,18 @@ class Consumer
     }
 
     /**
-     * @param MassActionInterface $data
+     * @param $productIds
+     * @param $storeId
      * @param $attributesData
      * @return mixed
      */
-    private function getAttributesData(MassActionInterface $data, $attributesData)
+    private function getAttributesData($productIds, $storeId, $attributesData)
     {
-        $dateFormat = $this->_objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
+        $dateFormat = $this->objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->getDateFormat(\IntlDateFormatter::SHORT);
 
         foreach ($attributesData as $attributeCode => $value) {
-            $attribute = $this->_objectManager->get(\Magento\Eav\Model\Config::class)
+            $attribute = $this->objectManager->get(\Magento\Eav\Model\Config::class)
                 ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
             if (!$attribute->getAttributeId()) {
                 unset($attributesData[$attributeCode]);
@@ -174,29 +197,19 @@ class Consumer
             }
         }
 
-        $this->_objectManager->get(\Magento\Catalog\Model\Product\Action::class)
-            ->updateAttributes($data->getProductIds(), $attributesData, $data->getStoreId());
+        $this->productAction->updateAttributes($productIds, $attributesData, $storeId);
         return $attributesData;
     }
 
     /**
-     * @param MassActionInterface $data
+     * @param $productIds
+     * @param $websiteId
      * @param $inventoryData
      */
-    private function saveInventory(MassActionInterface $data, $inventoryData): void
+    private function updateInventoryInProducts($productIds, $websiteId, $inventoryData): void
     {
-        // TODO why use ObjectManager?
-        /** @var \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry */
-        $stockRegistry = $this->_objectManager
-            ->create(\Magento\CatalogInventory\Api\StockRegistryInterface::class);
-        /** @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository */
-        $stockItemRepository = $this->_objectManager
-            ->create(\Magento\CatalogInventory\Api\StockItemRepositoryInterface::class);
-        foreach ($data->getProductIds() as $productId) {
-            $stockItemDo = $stockRegistry->getStockItem(
-                $productId,
-                $data->getWebsiteId()
-            );
+        foreach ($productIds as $productId) {
+            $stockItemDo = $this->stockRegistry->getStockItem($productId, $websiteId);
             if (!$stockItemDo->getProductId()) {
                 $inventoryData['product_id'] = $productId;
             }
@@ -208,47 +221,41 @@ class Consumer
                 \Magento\CatalogInventory\Api\Data\StockItemInterface::class
             );
             $stockItemDo->setItemId($stockItemId);
-            $stockItemRepository->save($stockItemDo);
+            $this->stockItemRepository->save($stockItemDo);
         }
-        $this->_stockIndexerProcessor->reindexList($data->getProductIds());
+        $this->stockIndexerProcessor->reindexList($productIds);
     }
 
     /**
-     * @param MassActionInterface $data
+     * @param $productIds
      * @param $websiteRemoveData
      * @param $websiteAddData
      */
-    private function updateWebsiteInProducts(MassActionInterface $data, $websiteRemoveData, $websiteAddData): void
+    private function updateWebsiteInProducts($productIds, $websiteRemoveData, $websiteAddData): void
     {
-        /* @var $actionModel \Magento\Catalog\Model\Product\Action */
-        $actionModel = $this->_objectManager->get(\Magento\Catalog\Model\Product\Action::class);
-        $productIds = $data->getProductIds();
-
         if ($websiteRemoveData) {
-            $actionModel->updateWebsites($productIds, $websiteRemoveData, 'remove');
+            $this->productAction->updateWebsites($productIds, $websiteRemoveData, 'remove');
         }
         if ($websiteAddData) {
-            $actionModel->updateWebsites($productIds, $websiteAddData, 'add');
+            $this->productAction->updateWebsites($productIds, $websiteAddData, 'add');
         }
 
-        $this->_eventManager->dispatch('catalog_product_to_website_change', ['products' => $productIds]);
+        $this->eventManager->dispatch('catalog_product_to_website_change', ['products' => $productIds]);
     }
 
     /**
-     * @param MassActionInterface $data
+     * @param $productIds
      * @param $attributesData
      * @param $websiteRemoveData
      * @param $websiteAddData
      */
-    private function reindex(MassActionInterface $data, $attributesData, $websiteRemoveData, $websiteAddData): void
+    private function reindex($productIds, $attributesData, $websiteRemoveData, $websiteAddData): void
     {
-        $this->_productFlatIndexerProcessor->reindexList($data->getProductIds());
-
-        if ($this->_catalogProduct->isDataForPriceIndexerWasChanged($attributesData)
+        if ($this->catalogProduct->isDataForPriceIndexerWasChanged($attributesData)
             || !empty($websiteRemoveData)
             || !empty($websiteAddData)
         ) {
-            $this->_productPriceIndexerProcessor->reindexList($data->getProductIds());
+            $this->productPriceIndexerProcessor->reindexList($productIds);
         }
     }
 }
