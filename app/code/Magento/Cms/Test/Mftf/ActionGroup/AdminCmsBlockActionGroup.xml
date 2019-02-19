@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FillCmsBlockForm">
+        <arguments>
+            <argument name="title" type="string" defaultValue="{{DefaultCmsBlock.title}}"/>
+            <argument name="identifier" type="string" defaultValue="{{DefaultCmsBlock.identifier}}"/>
+            <argument name="store" type="string" defaultValue="[All Store View]"/>
+            <argument name="content" type="string" defaultValue="{{DefaultCmsBlock.content}}"/>
+        </arguments>
+        <fillField selector="{{AdminCmsBlockContentSection.title}}" userInput="{{title}}" stepKey="fillFieldTitle"/>
+        <fillField selector="{{AdminCmsBlockContentSection.identifier}}" userInput="{{identifier}}" stepKey="fillFieldIdentifier"/>
+        <selectOption selector="{{AdminCmsBlockContentSection.storeView}}" parameterArray="{{store}}" stepKey="selectStore" />
+        <fillField selector="{{AdminCmsBlockContentSection.content}}" userInput="{{content}}" stepKey="fillContentField"/>
+    </actionGroup>
+    <actionGroup name="DeleteCmsBlockActionGroup">
+        <arguments>
+            <argument name="cmsBlockIdentifier" type="string" defaultValue="{{DefaultCmsBlock.identifier}}"/>
+        </arguments>
+        <amOnPage url="{{AdminCmsBlockGridPage.url}}" stepKey="navigateToCmsBlockListingPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFiltersBeforeDelete"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openCmsBlockFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('identifier')}}" userInput="{{cmsBlockIdentifier}}" stepKey="fillFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <click selector="{{CmsPagesPageActionsSection.select(cmsBlockIdentifier)}}" stepKey="clickOnSelect"/>
+        <click selector="{{CmsPagesPageActionsSection.delete(cmsBlockIdentifier)}}" stepKey="clickOnDelete"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirm"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the block." stepKey="verifyBlockIsDeleted"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFiltersAfterDelete"/>
+    </actionGroup>
+    <actionGroup name="NavigateToCreateCmsBlockActionGroup">
+        <amOnPage url="{{AdminCmsBlockNewPage.url}}" stepKey="navigateToCreateCmsBlockPage"/>
+    </actionGroup>
+    <actionGroup name="SaveCmsBlockActionGroup">
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveBlockButton"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the block." stepKey="verifyMessage"/>
+    </actionGroup>
+    <actionGroup name="SaveCmsBlockWithErrorActionGroup" extends="SaveCmsBlockActionGroup">
+        <arguments>
+            <argument name="errorMessage" type="string" defaultValue="A block identifier with the same properties already exists in the selected store."/>
+        </arguments>
+        <see selector="{{AdminMessagesSection.error}}" userInput="{{errorMessage}}" stepKey="verifyMessage"/>
+    </actionGroup>
+</actionGroups>
