@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
+    <block class="Magento\Framework\View\Element\Text" name="block_with_args_complex_values">
+        <arguments>
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="one" xsi:type="array">
+                <item name="parameters" xsi:type="array">
+                    <item name="first" xsi:type="string">1</item>
+                    <item name="second" xsi:type="string">2</item>
+                </item>
+            </argument>
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="two" xsi:type="array">
+                <item name="parameter_one" xsi:type="array">
+                    <item name="value" xsi:type="string">Paramter One</item>
+                </item>
+                <item name="parameter_two" xsi:type="string">2</item>
+            </argument>
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="three" xsi:type="array">
+                <item name="extra" xsi:type="array">
+                    <item name="key1" xsi:type="string">value</item>
+                </item>
+            </argument>
+        </arguments>
+    </block>
+
+    <referenceBlock name="block_with_args_complex_values">
+        <arguments>
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="two" xsi:type="string">two</argument>
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="three" xsi:type="array">
+                <item name="extra" xsi:type="array">
+                    <item name="key1" xsi:type="string">value1</item>
+                    <item name="key2" xsi:type="string">value2</item>
+                </item>
+            </argument>
+        </arguments>
+    </referenceBlock>
+</layout>

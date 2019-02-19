@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="catalogRule"
+             module="Magento_CatalogRule"
+             type="eav"
+             entity_type="catalog_rule"
+             collection="Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price\Collection"
+             repository_class="Magento\CatalogRule\Test\Repository\CatalogRule"
+             handler_interface="Magento\CatalogRule\Test\Handler\CatalogRule\CatalogRuleInterface"
+             class="Magento\CatalogRule\Test\Fixture\CatalogRule">
+        <field name="name" is_required="1" group="rule_information" />
+        <field name="description" group="rule_information" />
+        <field name="is_active" is_required="1" group="rule_information" />
+        <field name="website_ids" is_required="1" group="rule_information" />
+        <field name="customer_group_ids" is_required="1" group="rule_information" />
+        <field name="from_date" is_required="0" group="rule_information" />
+        <field name="to_date" is_required="0" group="rule_information" />
+        <field name="simple_action" is_required="0" group="actions" />
+        <field name="discount_amount" is_required="1" group="actions" />
+        <field name="condition_type" is_required="0" group="conditions" />
+        <field name="condition_value" is_required="0" group="conditions" />
+        <field name="rule" is_required="0" group="conditions" />
+        <field name="conditions" group="conditions" />
+        <field name="id" />
+        <field name="sort_order" group="rule_information" />
+        <field name="stop_rules_processing" group="rule_information" />
+    </fixture>
+</config>

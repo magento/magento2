@@ -1,0 +1,105 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  UI -> Data Grid -> Header -> Action Columns
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@data-grid-action-columns-menu__padding-horizontal: 3.5rem;
+
+@data-grid-action-columns-menu-item__column: 3;
+@data-grid-action-columns-menu-item__margin-bottom: 1.5rem;
+@data-grid-action-columns-menu-item__width: 15.8rem;
+@data-grid-action-columns-menu-item__height: round((@font-size__base * @line-height__base), 1);
+
+@data-grid-action-columns-menu-items-to-scroll: 18;
+@data-grid-action-columns-menu-scroll__width: 1.8rem;
+
+//
+
+.admin__data-grid-action-columns {
+    &._active {
+        opacity: @component-modal__opacity;
+        z-index: @data-grid-action__z-index;
+    }
+
+    .admin__action-dropdown {
+        &:before {
+            &:extend(.abs-icon all);
+            content: @icon-systems__content;
+            font-size: 1.8rem; // Static
+            margin-right: @action__outer-indent;
+            vertical-align: top;
+        }
+    }
+}
+
+.admin__data-grid-action-columns-menu {
+    color: @color-very-dark-gray-black;
+    font-size: 1.3rem;
+    overflow: hidden;
+    padding: 2.2rem @data-grid-action-columns-menu__padding-horizontal 1rem;
+    z-index: 1;
+
+    //  State with scroll when .admin__field-option > @data-grid-action-columns-menu-items-to-scroll
+    &._overflow {
+        .admin__action-dropdown-menu-header {
+            border-bottom: 1px solid @border-color__base;
+        }
+
+        .admin__action-dropdown-menu-content {
+            width: @data-grid-action-columns-menu-item__width * @data-grid-action-columns-menu-item__column + @data-grid-action-columns-menu-scroll__width;
+        }
+
+        .admin__action-dropdown-menu-footer {
+            border-top: 1px solid @border-color__base;
+            padding-top: 2.5rem;
+        }
+    }
+
+    .admin__action-dropdown-menu-content {
+        &:extend(.abs-clearfix all);
+        max-height: (@data-grid-action-columns-menu-items-to-scroll / @data-grid-action-columns-menu-item__column) * (@data-grid-action-columns-menu-item__height + @data-grid-action-columns-menu-item__margin-bottom) + (@data-grid-action-columns-menu-item__height / 2 + @data-grid-action-columns-menu-item__margin-bottom);
+        overflow-y: auto;
+        padding-top: 1.5rem;
+        position: relative;
+        width: @data-grid-action-columns-menu-item__width * @data-grid-action-columns-menu-item__column;
+    }
+
+    .admin__field-option {
+        float: left;
+        height: @data-grid-action-columns-menu-item__height;
+        margin-bottom: @data-grid-action-columns-menu-item__margin-bottom;
+        padding: 0 1rem 0 0;
+        width: @data-grid-action-columns-menu-item__width;
+    }
+
+    .admin__field-label {
+        .lib-text-overflow-ellipsis();
+        display: block;
+    }
+
+    .admin__action-dropdown-menu-header {
+        padding-bottom: 1.5rem;
+    }
+
+    .admin__action-dropdown-menu-footer {
+        padding: 1rem 0 2rem;
+    }
+
+    .admin__action-dropdown-footer-main-actions {
+        margin-left: 25%;
+        text-align: right;
+    }
+
+    .admin__action-dropdown-footer-secondary-actions {
+        float: left;
+        margin-left: -@button__padding-horizontal;
+    }
+}

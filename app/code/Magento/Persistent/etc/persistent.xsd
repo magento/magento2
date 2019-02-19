@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:annotation>
+            <xs:documentation>
+                Specifies a configuration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="instances" type="instancesType" minOccurs="1" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="instancesType">
+        <xs:annotation>
+            <xs:documentation>
+                The definition of the current instances.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element name="blocks" type="blocksType" minOccurs="1" />
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="blocksType">
+        <xs:annotation>
+            <xs:documentation>
+                Contains the set of block references
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="reference" type="referenceType" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="referenceType">
+        <xs:annotation>
+            <xs:documentation>
+                The definition of the block references
+            </xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element name="name_in_layout" type="xs:token" />
+            <xs:element name="class" type="xs:string" />
+            <xs:element name="method" type="xs:token" />
+            <xs:element name="block_type" type="xs:string" />
+        </xs:all>
+        <xs:attribute name="id" type="xs:ID" use="required" />
+    </xs:complexType>
+
+</xs:schema>

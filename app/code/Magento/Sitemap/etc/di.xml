@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Sitemap\Model\SitemapItemInterface" type="Magento\Sitemap\Model\SitemapItem" />
+    <preference for="Magento\Sitemap\Model\ItemProvider\ItemProviderInterface" type="Magento\Sitemap\Model\ItemProvider\Composite" />
+    <preference for="Magento\Sitemap\Model\SitemapConfigReaderInterface" type="Magento\Sitemap\Model\SitemapConfigReader" />
+
+    <type name="Magento\Sitemap\Model\Sitemap">
+        <arguments>
+            <argument name="resource" xsi:type="object">Magento\Sitemap\Model\ResourceModel\Sitemap</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="sitemap/generate/error_email" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\ItemProvider\Composite">
+        <arguments>
+            <argument name="itemProviders" xsi:type="array">
+                <item name="categoryProvider" xsi:type="object">Magento\Sitemap\Model\ItemProvider\Category</item>
+                <item name="cmsPageProvider" xsi:type="object">Magento\Sitemap\Model\ItemProvider\CmsPage</item>
+                <item name="productProvider" xsi:type="object">Magento\Sitemap\Model\ItemProvider\Product</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\ItemProvider\Category">
+        <arguments>
+            <argument name="configReader" xsi:type="object">Magento\Sitemap\Model\ItemProvider\CategoryConfigReader</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\ItemProvider\Product">
+        <arguments>
+            <argument name="configReader" xsi:type="object">Magento\Sitemap\Model\ItemProvider\ProductConfigReader</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\ItemProvider\CmsPage">
+        <arguments>
+            <argument name="configReader" xsi:type="object">Magento\Sitemap\Model\ItemProvider\CmsPageConfigReader</argument>
+        </arguments>
+    </type>
+</config>

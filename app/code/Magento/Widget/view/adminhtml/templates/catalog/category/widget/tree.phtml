@@ -1,0 +1,188 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser $block */
+?>
+
+<?php $_divId = 'tree' . $block->getId() ?>
+<div id="<?= $block->escapeHtmlAttr($_divId) ?>" class="tree"></div>
+<script id="ie-deferred-loader" defer="defer" src="//:"></script>
+<script>
+require(['jquery', "prototype", "extjs/ext-tree-checkbox"], function(jQuery){
+
+var tree<?= $block->escapeJs($block->getId()) ?>;
+
+var useMassaction = <?= /* @noEscape */ $block->getUseMassaction() ? 1 : 0 ?>;
+
+var isAnchorOnly = <?= /* @noEscape */ $block->getIsAnchorOnly() ? 1 : 0 ?>;
+
+Ext.tree.TreePanel.Enhanced = function(el, config)
+{
+    Ext.tree.TreePanel.Enhanced.superclass.constructor.call(this, el, config);
+};
+
+Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
+
+    loadTree : function(config, firstLoad)
+    {
+        var parameters = config['parameters'];
+        var data = config['data'];
+
+        if ((typeof parameters['root_visible']) != 'undefined') {
+            this.rootVisible = parameters['root_visible']*1;
+        }
+
+        var root = new Ext.tree.TreeNode(parameters);
+
+        this.nodeHash = {};
+        this.setRootNode(root);
+
+        if (firstLoad) {
+            <?php if ($block->getNodeClickListener()): ?>
+                this.addListener('click', <?= /* @noEscape */ $block->getNodeClickListener() ?>.createDelegate(this));
+            <?php endif; ?>
+        }
+
+        this.loader.buildCategoryTree(root, data);
+        this.el.dom.innerHTML = '';
+        // render the tree
+        this.render();
+    }
+});
+
+jQuery(function()
+{
+    var emptyNodeAdded = <?= /* @noEscape */ ($block->getWithEmptyNode() ? 'false' : 'true') ?>;
+
+    var categoryLoader = new Ext.tree.TreeLoader({
+        dataUrl: '<?= $block->escapeUrl($block->getLoadTreeUrl()) ?>'
+    });
+
+    categoryLoader.buildCategoryTree = function(parent, config)
+    {
+        if (!config) return null;
+
+
+        if (parent && config && config.length){
+            for (var i = 0; i < config.length; i++) {
+                var node;
+                if (useMassaction && config[i].level != 1) {
+                    config[i].uiProvider = Ext.tree.CheckboxNodeUI;
+                }
+                var _node = Object.clone(config[i]);
+
+                // Add empty node to reset category filter
+                if(!emptyNodeAdded) {
+                    var empty = Object.clone(_node);
+                    empty.text = '<?= $block->escapeJs($block->escapeHtml(__('None'))) ?>';
+                    empty.children = [];
+                    empty.id = 'none';
+                    empty.path = '1/none';
+                    empty.cls = 'leaf';
+                    parent.appendChild(new Ext.tree.TreeNode(empty));
+                    emptyNodeAdded = true;
+                }
+
+                if (_node.children && !_node.children.length) {
+                    delete(_node.children);
+                    node = new Ext.tree.AsyncTreeNode(_node);
+                } else {
+                    node = new Ext.tree.TreeNode(config[i]);
+                }
+                parent.appendChild(node);
+                node.loader = node.getOwnerTree().loader;
+                node.loader = node.getOwnerTree().loader;
+                if (_node.children) {
+                    this.buildCategoryTree(node, _node.children);
+                }
+            }
+        }
+    };
+
+    categoryLoader.createNode = function(config) {
+        var node;
+        if (useMassaction && config.level != 1) {
+            config.uiProvider = Ext.tree.CheckboxNodeUI;
+        }
+        var _node = Object.clone(config);
+        if (config.children && !config.children.length) {
+            delete(config.children);
+            node = new Ext.tree.AsyncTreeNode(config);
+        } else {
+            node = new Ext.tree.TreeNode(config);
+        }
+        return node;
+    };
+
+    categoryLoader.buildHash = function(node)
+    {
+        var hash = {};
+
+        hash = this.toArray(node.attributes);
+
+        if (node.childNodes.length>0 || (node.loaded==false && node.loading==false)) {
+            hash['children'] = new Array;
+
+            for (var i = 0, len = node.childNodes.length; i < len; i++) {
+                if (!hash['children']) {
+                    hash['children'] = new Array;
+                }
+                hash['children'].push(this.buildHash(node.childNodes[i]));
+            }
+        }
+
+        return hash;
+    };
+
+    categoryLoader.toArray = function(attributes) {
+        var data = {};
+        for (var key in attributes) {
+            var value = attributes[key];
+            data[key] = value;
+        }
+
+        return data;
+    };
+
+    categoryLoader.on("beforeload", function(treeLoader, node) {
+        $('<?= $block->escapeJs($_divId) ?>').fire('category:beforeLoad', {treeLoader:treeLoader});
+        treeLoader.baseParams.id = node.attributes.id;
+    });
+
+    tree<?= $block->escapeJs($block->getId()) ?> = new Ext.tree.TreePanel.Enhanced('<?= $block->escapeJs($_divId) ?>', {
+        animate:          false,
+        loader:           categoryLoader,
+        enableDD:         false,
+        containerScroll:  true,
+        rootVisible:      '<?= (bool) $block->getRoot()->getIsVisible() ?>',
+        useAjax:          true,
+        currentNodeId:    <?= (int) $block->getCategoryId() ?>,
+        addNodeTo:        false
+    });
+
+    if (useMassaction) {
+        tree<?= $block->escapeJs($block->getId()) ?>.on('check', function(node) {
+            $('<?= $block->escapeJs($_divId) ?>').fire('node:changed', {node:node});
+        }, tree<?= $block->escapeJs($block->getId()) ?>);
+    }
+
+    // set the root node
+    var parameters = {
+        text:        'Psw',
+        draggable:   false,
+        id:          <?= (int) $block->getRoot()->getId() ?>,
+        expanded:    <?= (int) $block->getIsWasExpanded() ?>,
+        category_id: <?= (int) $block->getCategoryId() ?>
+    };
+
+    tree<?= $block->escapeJs($block->getId()) ?>.loadTree({parameters:parameters, data:<?= /* @noEscape */ $block->getTreeJson() ?>},true);
+
+});
+
+});
+</script>

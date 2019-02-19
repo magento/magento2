@@ -1,0 +1,66 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+//
+//  Admin  styles
+//  _____________________________________________
+
+//
+//  Global lib + theme styles
+//  ---------------------------------------------
+
+@import 'source/lib/_lib.less'; // Global lib
+@import (reference) 'source/_extends.less';
+@import 'source/_sources.less'; // Theme
+
+//
+//  Magento Import instructions
+//  ---------------------------------------------
+
+//@magento_import 'source/_module.less'; // import theme styles
+
+//
+//  Temporary
+//  ---------------------------------------------
+
+//  ToDo UI: Hiding menu (should be fixed in layouts)
+.attribute-popup {
+    .page-wrapper {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .menu-wrapper,
+    .page-header-hgroup,
+    .page-header-actions {
+        display: none;
+    }
+}
+
+[class*='admin__'] {
+    + label,
+    + label:after,
+    + label:before,
+    &:before,
+    &:after {
+        box-sizing: border-box;
+    }
+}
+
+//  ToDo UI: Temporary. Should be changed
+@import 'source/components/_calendar-temp.less';
+@import 'source/components/_rules-temp.less';
+
+//
+//  Media queries collector
+//  ---------------------------------------------
+
+@import 'source/_responsive.less';
+
+//
+//  Theme variables overrides
+//  ---------------------------------------------
+
+@import 'source/_theme.less';

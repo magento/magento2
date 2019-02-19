@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config" type="configType" />
+
+    <xs:complexType name="configType">
+        <xs:sequence>
+            <xs:element type="cacheType" name="type" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="cacheType">
+        <xs:annotation>
+            <xs:documentation>Cache type declaration</xs:documentation>
+        </xs:annotation>
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element name="label" type="xs:string" />
+            <xs:element name="description" type="xs:string" />
+        </xs:choice>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="translate" use="optional"/>
+        <xs:attribute type="xs:string" name="instance" use="optional"/>
+    </xs:complexType>
+</xs:schema>

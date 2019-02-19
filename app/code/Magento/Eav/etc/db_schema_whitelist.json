@@ -1,0 +1,390 @@
+{
+    "eav_entity_type": {
+        "column": {
+            "entity_type_id": true,
+            "entity_type_code": true,
+            "entity_model": true,
+            "attribute_model": true,
+            "entity_table": true,
+            "value_table_prefix": true,
+            "entity_id_field": true,
+            "is_data_sharing": true,
+            "data_sharing_key": true,
+            "default_attribute_set_id": true,
+            "increment_model": true,
+            "increment_per_store": true,
+            "increment_pad_length": true,
+            "increment_pad_char": true,
+            "additional_attribute_table": true,
+            "entity_attribute_collection": true
+        },
+        "index": {
+            "EAV_ENTITY_TYPE_ENTITY_TYPE_CODE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "eav_entity": {
+        "column": {
+            "entity_id": true,
+            "entity_type_id": true,
+            "attribute_set_id": true,
+            "increment_id": true,
+            "parent_id": true,
+            "store_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "is_active": true
+        },
+        "index": {
+            "EAV_ENTITY_ENTITY_TYPE_ID": true,
+            "EAV_ENTITY_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ENTITY_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID": true,
+            "EAV_ENTITY_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "eav_entity_datetime": {
+        "column": {
+            "value_id": true,
+            "entity_type_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "EAV_ENTITY_DATETIME_STORE_ID": true,
+            "EAV_ENTITY_DATETIME_ATTRIBUTE_ID_VALUE": true,
+            "EAV_ENTITY_DATETIME_ENTITY_TYPE_ID_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ENTITY_DATETIME_ENTITY_ID_EAV_ENTITY_ENTITY_ID": true,
+            "EAV_ENTT_DTIME_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID": true,
+            "EAV_ENTITY_DATETIME_STORE_ID_STORE_STORE_ID": true,
+            "EAV_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "eav_entity_decimal": {
+        "column": {
+            "value_id": true,
+            "entity_type_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "EAV_ENTITY_DECIMAL_STORE_ID": true,
+            "EAV_ENTITY_DECIMAL_ATTRIBUTE_ID_VALUE": true,
+            "EAV_ENTITY_DECIMAL_ENTITY_TYPE_ID_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ENTITY_DECIMAL_ENTITY_ID_EAV_ENTITY_ENTITY_ID": true,
+            "EAV_ENTITY_DECIMAL_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID": true,
+            "EAV_ENTITY_DECIMAL_STORE_ID_STORE_STORE_ID": true,
+            "EAV_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "eav_entity_int": {
+        "column": {
+            "value_id": true,
+            "entity_type_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "EAV_ENTITY_INT_STORE_ID": true,
+            "EAV_ENTITY_INT_ATTRIBUTE_ID_VALUE": true,
+            "EAV_ENTITY_INT_ENTITY_TYPE_ID_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ENTITY_INT_ENTITY_ID_EAV_ENTITY_ENTITY_ID": true,
+            "EAV_ENTITY_INT_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID": true,
+            "EAV_ENTITY_INT_STORE_ID_STORE_STORE_ID": true,
+            "EAV_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "eav_entity_text": {
+        "column": {
+            "value_id": true,
+            "entity_type_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "EAV_ENTITY_TEXT_ENTITY_TYPE_ID": true,
+            "EAV_ENTITY_TEXT_ATTRIBUTE_ID": true,
+            "EAV_ENTITY_TEXT_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ENTITY_TEXT_ENTITY_ID_EAV_ENTITY_ENTITY_ID": true,
+            "EAV_ENTITY_TEXT_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID": true,
+            "EAV_ENTITY_TEXT_STORE_ID_STORE_STORE_ID": true,
+            "EAV_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "eav_entity_varchar": {
+        "column": {
+            "value_id": true,
+            "entity_type_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "EAV_ENTITY_VARCHAR_STORE_ID": true,
+            "EAV_ENTITY_VARCHAR_ATTRIBUTE_ID_VALUE": true,
+            "EAV_ENTITY_VARCHAR_ENTITY_TYPE_ID_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ENTITY_VARCHAR_ENTITY_ID_EAV_ENTITY_ENTITY_ID": true,
+            "EAV_ENTITY_VARCHAR_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID": true,
+            "EAV_ENTITY_VARCHAR_STORE_ID_STORE_STORE_ID": true,
+            "EAV_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "eav_attribute": {
+        "column": {
+            "attribute_id": true,
+            "entity_type_id": true,
+            "attribute_code": true,
+            "attribute_model": true,
+            "backend_model": true,
+            "backend_type": true,
+            "backend_table": true,
+            "frontend_model": true,
+            "frontend_input": true,
+            "frontend_label": true,
+            "frontend_class": true,
+            "source_model": true,
+            "is_required": true,
+            "is_user_defined": true,
+            "default_value": true,
+            "is_unique": true,
+            "note": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ATTRIBUTE_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID": true,
+            "EAV_ATTRIBUTE_ENTITY_TYPE_ID_ATTRIBUTE_CODE": true
+        }
+    },
+    "eav_entity_store": {
+        "column": {
+            "entity_store_id": true,
+            "entity_type_id": true,
+            "store_id": true,
+            "increment_prefix": true,
+            "increment_last_id": true
+        },
+        "index": {
+            "EAV_ENTITY_STORE_ENTITY_TYPE_ID": true,
+            "EAV_ENTITY_STORE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ENTITY_STORE_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID": true,
+            "EAV_ENTITY_STORE_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "eav_attribute_set": {
+        "column": {
+            "attribute_set_id": true,
+            "entity_type_id": true,
+            "attribute_set_name": true,
+            "sort_order": true
+        },
+        "index": {
+            "EAV_ATTRIBUTE_SET_ENTITY_TYPE_ID_SORT_ORDER": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ATTRIBUTE_SET_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID": true,
+            "EAV_ATTRIBUTE_SET_ENTITY_TYPE_ID_ATTRIBUTE_SET_NAME": true
+        }
+    },
+    "eav_attribute_group": {
+        "column": {
+            "attribute_group_id": true,
+            "attribute_set_id": true,
+            "attribute_group_name": true,
+            "sort_order": true,
+            "default_id": true,
+            "attribute_group_code": true,
+            "tab_group_code": true
+        },
+        "index": {
+            "EAV_ATTRIBUTE_GROUP_ATTRIBUTE_SET_ID_SORT_ORDER": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ATTR_GROUP_ATTR_SET_ID_EAV_ATTR_SET_ATTR_SET_ID": true,
+            "EAV_ATTRIBUTE_GROUP_ATTRIBUTE_SET_ID_ATTRIBUTE_GROUP_NAME": true,
+            "EAV_ATTRIBUTE_GROUP_ATTRIBUTE_SET_ID_ATTRIBUTE_GROUP_CODE": true,
+            "CATALOG_CATEGORY_PRODUCT_ATTRIBUTE_SET_ID_ATTRIBUTE_GROUP_CODE": true
+        }
+    },
+    "eav_entity_attribute": {
+        "column": {
+            "entity_attribute_id": true,
+            "entity_type_id": true,
+            "attribute_set_id": true,
+            "attribute_group_id": true,
+            "attribute_id": true,
+            "sort_order": true
+        },
+        "index": {
+            "EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_SET_ID_SORT_ORDER": true,
+            "EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true,
+            "EAV_ENTT_ATTR_ATTR_GROUP_ID_EAV_ATTR_GROUP_ATTR_GROUP_ID": true,
+            "EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_SET_ID_ATTRIBUTE_ID": true,
+            "EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_GROUP_ID_ATTRIBUTE_ID": true
+        }
+    },
+    "eav_attribute_option": {
+        "column": {
+            "option_id": true,
+            "attribute_id": true,
+            "sort_order": true
+        },
+        "index": {
+            "EAV_ATTRIBUTE_OPTION_ATTRIBUTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ATTRIBUTE_OPTION_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true
+        }
+    },
+    "eav_attribute_option_value": {
+        "column": {
+            "value_id": true,
+            "option_id": true,
+            "store_id": true,
+            "value": true
+        },
+        "index": {
+            "EAV_ATTRIBUTE_OPTION_VALUE_OPTION_ID": true,
+            "EAV_ATTRIBUTE_OPTION_VALUE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ATTR_OPT_VAL_OPT_ID_EAV_ATTR_OPT_OPT_ID": true,
+            "EAV_ATTRIBUTE_OPTION_VALUE_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "eav_attribute_label": {
+        "column": {
+            "attribute_label_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "value": true
+        },
+        "index": {
+            "EAV_ATTRIBUTE_LABEL_STORE_ID": true,
+            "EAV_ATTRIBUTE_LABEL_ATTRIBUTE_ID_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ATTRIBUTE_LABEL_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true,
+            "EAV_ATTRIBUTE_LABEL_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "eav_form_type": {
+        "column": {
+            "type_id": true,
+            "code": true,
+            "label": true,
+            "is_system": true,
+            "theme": true,
+            "store_id": true
+        },
+        "index": {
+            "EAV_FORM_TYPE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_FORM_TYPE_STORE_ID_STORE_STORE_ID": true,
+            "EAV_FORM_TYPE_CODE_THEME_STORE_ID": true
+        }
+    },
+    "eav_form_type_entity": {
+        "column": {
+            "type_id": true,
+            "entity_type_id": true
+        },
+        "index": {
+            "EAV_FORM_TYPE_ENTITY_ENTITY_TYPE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_FORM_TYPE_ENTT_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID": true,
+            "EAV_FORM_TYPE_ENTITY_TYPE_ID_EAV_FORM_TYPE_TYPE_ID": true
+        }
+    },
+    "eav_form_fieldset": {
+        "column": {
+            "fieldset_id": true,
+            "type_id": true,
+            "code": true,
+            "sort_order": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_FORM_FIELDSET_TYPE_ID_EAV_FORM_TYPE_TYPE_ID": true,
+            "EAV_FORM_FIELDSET_TYPE_ID_CODE": true
+        }
+    },
+    "eav_form_fieldset_label": {
+        "column": {
+            "fieldset_id": true,
+            "store_id": true,
+            "label": true
+        },
+        "index": {
+            "EAV_FORM_FIELDSET_LABEL_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_FORM_FSET_LBL_FSET_ID_EAV_FORM_FSET_FSET_ID": true,
+            "EAV_FORM_FIELDSET_LABEL_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "eav_form_element": {
+        "column": {
+            "element_id": true,
+            "type_id": true,
+            "fieldset_id": true,
+            "attribute_id": true,
+            "sort_order": true
+        },
+        "index": {
+            "EAV_FORM_ELEMENT_FIELDSET_ID": true,
+            "EAV_FORM_ELEMENT_ATTRIBUTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_FORM_ELEMENT_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true,
+            "EAV_FORM_ELEMENT_FIELDSET_ID_EAV_FORM_FIELDSET_FIELDSET_ID": true,
+            "EAV_FORM_ELEMENT_TYPE_ID_EAV_FORM_TYPE_TYPE_ID": true,
+            "EAV_FORM_ELEMENT_TYPE_ID_ATTRIBUTE_ID": true
+        }
+    }
+}

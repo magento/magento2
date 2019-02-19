@@ -1,0 +1,36 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .block {
+        &.widget {
+            &.viewed {
+                .grid,
+                .list,
+                .links,
+                .mini.products.images {
+                }
+            }
+
+            &.compared {
+                .grid,
+                .list,
+                .links,
+                .mini.products.images {
+                }
+            }
+        }
+
+        &.viewed,
+        &.compared {
+            .links {
+            }
+        }
+    }
+}

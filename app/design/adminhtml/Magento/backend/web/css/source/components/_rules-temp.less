@@ -1,0 +1,125 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Rule tree component
+//  _____________________________________________
+
+.rule-tree-wrapper {
+    line-height: 28px;
+}
+
+.rule-tree {
+    .admin__field-control & {
+        padding-top: .3rem;
+    }
+
+    ul {
+        border-left: 1px dotted @color-gray52;
+        list-style: none;
+        padding-left: 16px;
+    }
+
+    li {
+        margin: 0 0 10px;
+    }
+
+    .x-tree ul {
+        border-left: none !important;
+        padding-left: 0 !important;
+    }
+
+    .x-tree li {
+        margin-bottom: 0 !important;
+        line-height: normal !important;
+    }
+
+    .legend {
+        font-weight: @font-weight__semibold;
+    }
+}
+
+.rule-tree .fieldset {
+    border: 0;
+    margin: 0;
+    min-width: 0; // Fixed Chrome fieldset issue
+    padding: 0;
+}
+
+@-moz-document url-prefix() { // Fixed Firefox fieldset issue
+    .rule-tree .fieldset {
+        display: table-cell;
+    }
+}
+
+.rule-param .label {
+    color: @color-black;
+    float: none;
+    padding: 0;
+    text-align: left;
+    vertical-align: baseline;
+    width: auto;
+}
+
+.rule-param .label-disabled {
+    color: @color-gray-darken0;
+    cursor: default;
+    text-decoration: none;
+}
+
+.rule-chooser,
+.rule-param .element,
+.rule-param-edit .label {
+    display: none;
+}
+
+.rule-chooser .field-row {
+    .lib-clearfix();
+    display: block;
+    margin-bottom: 17px;
+
+    .input-text {
+        margin-top: 5px;
+    }
+
+    .ui-datepicker-trigger {
+        margin-left: 5px;
+        margin-top: -2px;
+    }
+}
+
+.rule-param input,
+.rule-param select {
+    margin: 0;
+    min-width: 170px;
+    width: auto !important;
+}
+
+.rule-param-edit .element {
+    display: inline;
+}
+
+.rule-param-edit .element .addafter {
+    padding-left: 5px;
+}
+
+[class^='rule-param-'],
+.rule-chooser-trigger {
+    img {
+        vertical-align: middle;
+    }
+}
+
+.rule-chooser {
+    border: 1px solid @color-gray80;
+    margin: 20px;
+    overflow: auto;
+    padding: 15px 10px 5px;
+}
+
+.rule-param-wait {
+    background: url(../mui/images/ajax-loader-small.gif) no-repeat left center;
+    padding-left: 20px;
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="MultishippingCheckoutSuccess" mca="multishipping/checkout/success" module="Magento_Multishipping">
+        <block name="successBlock" class="Magento\Multishipping\Test\Block\Checkout\Success" locator=".multicheckout.success" strategy="css selector"/>
+        <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title" strategy="css selector"/>
+    </page>
+</config>

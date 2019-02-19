@@ -1,0 +1,373 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@admin__page-nav__background-color: @color-white-fog2;
+@admin__page-nav__border-color: @border__color;
+
+@admin__page-nav-title__color: @color-very-dark-gray-black;
+@admin__page-nav-title__border-color: @border__color;
+@admin__page-nav-title__collapsible__background-color: @page-wrapper__background-color;
+@admin__page-nav-title__collapsible__active__background-color: @color-white-fog2;
+@admin__page-nav-title__font-size: @font-size__base;
+
+@admin__page-nav-item__border-color: @border__color;
+@admin__page-nav-item__margin-vertical: 1.3rem;
+@admin__page-nav-item__margin-horizontal: @action__outer-indent;
+@admin__page-nav-item__active__color: @color-phoenix;
+@admin__page-nav-item__hover__background-color: darken(@admin__page-nav__background-color, 5%);
+
+@admin__page-nav-link__color: @color-very-dark-gray-black;
+@admin__page-nav-link__padding: @indent__base 4rem @indent__base @indent__s;
+@admin__page-nav-link__hover__color: @color-very-dark-gray-black;
+@admin__page-nav-link__changed__color: @color-very-dark-gray;
+
+@admin__page-nav-icon-up__content: @icon-caret-up__content;
+@admin__page-nav-icon-down__content: @icon-caret-down__content;
+@admin__page-nav-icon-changed__content: @icon-edit__content;
+@admin__page-nav-icon-error__content: @icon-warning__content;
+@admin__page-nav-icon-error__color: @color-phoenix;
+
+@admin__page-nav-item-message-loader__font-size: 2rem;
+@admin__page-nav-tooltip-message__width: 27rem;
+@admin__page-nav-tooltip__background: @admin__page-nav__background-color;
+@admin__page-nav-tooltip__border-color: @color-gray75;
+@admin__page-nav-tooltip__box-shadow: 0 3px 9px 0 rgba(0, 0, 0, .3);
+@admin__page-nav-tooltip__z-index1: @field-tooltip__z-index;
+
+@admin__page-nav-transition: border-color .1s ease-out, background-color .1s ease-out;
+
+//
+//  Page Nav (can be simple and collapsed)
+//  _____________________________________________
+
+.admin__page-nav {
+    background: @admin__page-nav__background-color;
+    border: 1px solid @admin__page-nav__border-color;
+
+    &._collapsed {
+        &:first-child {
+            border-bottom: none;
+        }
+
+        &._show {
+            border-bottom: 1px solid @admin__page-nav__border-color;
+
+            ._collapsible {
+                background: @admin__page-nav-title__collapsible__active__background-color;
+
+                &:after {
+                    content: @admin__page-nav-icon-up__content;
+                }
+
+                + .admin__page-nav-items {
+                    display: block;
+                }
+            }
+        }
+
+        &._hide {
+            .admin__page-nav-title-messages {
+                display: inline-block;
+
+                ._active {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    + ._collapsed {
+        border-bottom: none;
+        border-top: none;
+    }
+}
+
+.admin__page-nav-title {
+    border-bottom: 1px solid @admin__page-nav-title__border-color;
+    color: @admin__page-nav-title__color;
+    display: block;
+    font-size: @admin__page-nav-title__font-size;
+    line-height: @line-height__s;
+    margin: 0 0 -1px;
+    padding: 1.8rem 1.5rem;
+    position: relative;
+    text-transform: uppercase;
+
+    &._collapsible {
+        background: @admin__page-nav-title__collapsible__background-color;
+        cursor: pointer;
+        margin: 0;
+        padding-right: 3.5rem;
+        transition: @admin__page-nav-transition;
+
+        + .admin__page-nav-items {
+            display: none;
+            margin-top: -1px;
+        }
+
+        &:after {
+            &:extend(.abs-icon all);
+            content: @admin__page-nav-icon-down__content;
+            font-size: 1.3rem;
+            font-weight: @font-weight__bold;
+            position: absolute;
+            right: 1.8rem;
+            top: 2rem;
+        }
+
+        &:hover {
+            background: @admin__page-nav-title__collapsible__active__background-color;
+        }
+
+        &:last-child {
+            margin: 0 0 -1px;
+        }
+    }
+
+    strong {
+        font-weight: @font-weight__bold;
+    }
+
+    .admin__page-nav-title-messages {
+        display: none;
+    }
+}
+
+.admin__page-nav-items {
+    list-style-type: none;
+    margin: 0;
+    padding: @indent__s 0 @admin__page-nav-item__margin-vertical 0;
+}
+
+.admin__page-nav-item {
+    border-left: 3px solid transparent;
+    margin-left: @admin__page-nav-item__margin-horizontal;
+    padding: 0;
+    position: relative;
+    transition: @admin__page-nav-transition;
+
+    &:hover {
+        border-color: @admin__page-nav-item__hover__background-color;
+
+        .admin__page-nav-link {
+            background: @admin__page-nav-item__hover__background-color;
+            color: @admin__page-nav-link__hover__color;
+            text-decoration: none;
+        }
+    }
+
+    &._active,
+    &.ui-state-active {
+        border-color: @admin__page-nav-item__active__color;
+
+        .admin__page-nav-link {
+            background: @admin__page-nav-title__collapsible__background-color;
+            border-color: @admin__page-nav-item__border-color;
+            border-right: 1px solid @admin__page-nav-title__collapsible__background-color;
+            color: @admin__page-nav-link__hover__color;
+            margin-right: -1px;
+        }
+    }
+
+    &._active,
+    &.ui-state-active {
+        .admin__page-nav-link {
+            font-weight: @font-weight__semibold;
+        }
+    }
+
+    &._loading,
+    &.ui-tabs-loading {
+        &:before {
+            display: none;
+        }
+
+        .admin__page-nav-item-message-loader {
+            display: inline-block;
+        }
+    }
+}
+
+
+.admin__page-nav-link {
+    border: 1px solid transparent;
+    border-width: 1px 0;
+    color: @admin__page-nav-link__color;
+    display: block;
+    font-weight: @font-weight__heavier;
+    line-height: @line-height__s;
+    margin: 0 0 -1px;
+    padding: @admin__page-nav-link__padding;
+    transition: @admin__page-nav-transition;
+    word-wrap: break-word;
+}
+
+//  Messages in tooltip
+.admin__page-nav-item-messages {
+    display: inline-block;
+
+    .admin__page-nav-item-message-tooltip {
+        background: @admin__page-nav-tooltip__background;
+        border: 1px solid @admin__page-nav-tooltip__background;
+        border-radius: 1px;
+        bottom: 3.7rem;
+        box-shadow: @admin__page-nav-tooltip__box-shadow;
+        display: none;
+        font-size: @font-size__base;
+        font-weight: @font-weight__regular;
+        left: -@indent__s;
+        line-height: @line-height__base;
+        padding: 1.5rem;
+        position: absolute;
+        text-transform: none;
+        width: @admin__page-nav-tooltip-message__width;
+        word-break: normal;
+        z-index: 2;
+
+        &:after,
+        &:before {
+            .lib-arrow(
+            @_position: down,
+            @_size: 15px,
+            @_color: @admin__page-nav-tooltip__background
+            );
+            content: '';
+            display: block;
+            left: 2rem;
+            position: absolute;
+            top: 100%;
+            z-index: 3;
+        }
+
+        &:after {
+            border-top-color: @admin__page-nav-tooltip__background;
+            margin-top: -1px;
+            z-index: 4;
+        }
+
+        &:before {
+            border-top-color: @admin__page-nav-tooltip__border-color;
+            margin-top: 1px;
+        }
+    }
+}
+
+.admin__page-nav-item-message-loader {
+    display: none;
+    margin-top: -(@admin__page-nav-item-message-loader__font-size/2);
+    position: absolute;
+    right: 0;
+    top: 50%;
+
+    .spinner {
+        font-size: @admin__page-nav-item-message-loader__font-size;
+        margin-right: 1.5rem;
+    }
+
+    ._loading > .admin__page-nav-item-messages & {
+        display: inline-block;
+    }
+}
+
+.admin__page-nav-item-message {
+    position: relative;
+
+    &:hover {
+        z-index: @admin__page-nav-tooltip__z-index;
+
+        .admin__page-nav-item-message-tooltip {
+            display: block;
+        }
+    }
+
+    &._error,
+    &._changed {
+        display: none;
+    }
+
+    .admin__page-nav-item-message-icon {
+        &:extend(.abs-icon all);
+        display: inline-block;
+        font-size: @admin__page-nav-title__font-size;
+        padding-left: .8em;
+        vertical-align: baseline;
+
+        &:after {
+            color: @admin__page-nav-link__changed__color;
+            content: @admin__page-nav-icon-changed__content;
+        }
+    }
+}
+
+&._changed {
+    ._changed:not(._error) > .admin__page-nav-item-messages & {
+        display: inline-block;
+    }
+}
+
+&._error {
+    .admin__page-nav-item-message-icon {
+        &:after {
+            color: @admin__page-nav-icon-error__color;
+            content: @admin__page-nav-icon-error__content;
+        }
+    }
+
+    ._error > .admin__page-nav-item-messages & {
+        display: inline-block;
+
+        .spinner {
+            font-size: @admin__page-nav-item-message-loader__font-size;
+            margin-right: 1.5rem;
+        }
+    }
+
+    .admin__page-nav-item-message-tooltip {
+        background: @admin__page-nav-tooltip__background;
+        border: 1px solid @admin__page-nav-tooltip__background;
+        border-radius: 1px;
+        bottom: 3.7rem;
+        box-shadow: @admin__page-nav-tooltip__box-shadow;
+        display: none;
+        font-weight: @font-weight__regular;
+        left: -@indent__s;
+        line-height: @line-height__base;
+        padding: 2rem;
+        position: absolute;
+        text-transform: none;
+        width: 27rem;
+        word-break: normal;
+        z-index: 2;
+
+        &:after,
+        &:before {
+            .lib-arrow(
+            @_position: down,
+            @_size: 15px,
+            @_color: @admin__page-nav-tooltip__background
+            );
+            content: '';
+            display: block;
+            left: 2rem;
+            position: absolute;
+            top: 100%;
+            z-index: 3;
+        }
+
+        &:after {
+            border-top-color: @admin__page-nav-tooltip__background;
+            margin-top: -1px;
+            z-index: 4;
+        }
+
+        &:before {
+            border-top-color: @admin__page-nav-tooltip__border-color;
+        }
+    }
+}

@@ -1,0 +1,438 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Paypal:etc/rules.xsd">
+    <!-- PayPal Payments Advanced (Includes Express Checkout) -->
+    <payment id="payflow_advanced">
+        <events selector="[data-enable='payment']">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
+                <predicate name="confirm"
+                           message="There is already another PayPal solution enabled. Enable this solution instead?"
+                           event="deactivate-rule"
+                        >
+                    <argument name="wpp_usuk">wpp_usuk</argument>
+                    <argument name="wps_express">wps_express</argument>
+                    <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                    <argument name="payflow_link_us">payflow_link_us</argument>
+                </predicate>
+            </event>
+        </events>
+        <events selector="[data-enable='bml']">
+            <event value="0" name="deactivate-bml"/>
+            <event value="1" name="activate-bml"/>
+        </events>
+        <relation target="wpp_usuk">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="wps_express">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="paypal_payflowpro_with_express_checkout">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="payflow_link_us">
+            <rule type="disable" event="activate-rule"/>
+            <rule type="payflowExpressDisableConditional" event="deactivate-rule">
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+            <rule type="payflowBmlDisableConditional" event="deactivate-rule">
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+            <rule type="payflowBmlEnableConditional" event="activate-bml">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+            </rule>
+            <rule type="payflowBmlDisableConditional" event="deactivate-bml"/>
+        </relation>
+        <relation target="express_checkout_us">
+            <rule type="paypalExpressDisable" event="activate-rule"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="paypalExpressLockConfiguration" event="activate-rule"/>
+            <rule type="paypalExpressMarkDisable" event="deactivate-rule">
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+            <rule type="paypalExpressUnlockConfiguration" event="deactivate-rule">
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+        </relation>
+        <relation target=":self">
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="payflowBmlEnable" event="activate-rule"/>
+            <rule type="payflowShowSortOrder" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
+            <rule type="payflowBmlDisable" event="deactivate-rule"/>
+            <rule type="payflowHideSortOrder" event="deactivate-rule"/>
+            <rule type="payflowExpressDisableConditional" event=":load"/>
+            <rule type="payflowBmlDisableConditional" event=":load"/>
+            <rule type="conflict" event=":load">
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="wps_express">wps_express</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+                <argument name="express_checkout_us">express_checkout_us</argument>
+            </rule>
+        </relation>
+    </payment>
+    <!-- PayPal Payments Pro (Includes Express Checkout) -->
+    <payment id="wpp_usuk">
+        <events selector="[data-enable='payment']">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
+                <predicate name="confirm"
+                           message="There is already another PayPal solution enabled. Enable this solution instead?"
+                           event="deactivate-rule"
+                        >
+                    <argument name="payflow_advanced">payflow_advanced</argument>
+                    <argument name="wps_express">wps_express</argument>
+                    <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                    <argument name="payflow_link_us">payflow_link_us</argument>
+                </predicate>
+            </event>
+        </events>
+        <events selector="tr:has(> td > [data-enable='payment']) [type='checkbox']">
+            <event value="1" name="usedefault-on"/>
+            <event value="0" name="usedefault-off"/>
+        </events>
+        <events selector="[data-enable='bml']">
+            <event value="0" name="deactivate-bml"/>
+            <event value="1" name="activate-bml"/>
+        </events>
+        <relation target="payflow_advanced">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="wps_express">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="paypal_payflowpro_with_express_checkout">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="payflow_link_us">
+            <rule type="disable" event="activate-rule"/>
+            <rule type="payflowExpressDisableConditional" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+            <rule type="payflowExpressUsedefaultDisable" event="usedefault-off"/>
+            <rule type="payflowExpressUsedefaultEnable" event="usedefault-on"/>
+            <rule type="payflowBmlDisableConditional" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+            <rule type="payflowBmlEnableConditional" event="activate-bml">
+                <argument name="wpp_usuk">wpp_usuk</argument>
+            </rule>
+            <rule type="payflowBmlDisableConditional" event="deactivate-bml"/>
+        </relation>
+        <relation target="express_checkout_us">
+            <rule type="paypalExpressDisable" event="activate-rule"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="paypalExpressLockConfiguration" event="activate-rule"/>
+            <rule type="paypalExpressMarkDisable" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+            <rule type="paypalExpressUnlockConfiguration" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+        </relation>
+        <relation target=":self">
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="payflowBmlEnable" event="activate-rule"/>
+            <rule type="payflowShowSortOrder" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
+            <rule type="payflowBmlDisable" event="deactivate-rule"/>
+            <rule type="payflowHideSortOrder" event="deactivate-rule"/>
+            <rule type="payflowExpressDisableConditional" event=":load"/>
+            <rule type="payflowBmlDisableConditional" event=":load"/>
+            <rule type="conflict" event=":load">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wps_express">wps_express</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+                <argument name="express_checkout_us">express_checkout_us</argument>
+            </rule>
+        </relation>
+    </payment>
+    <!-- PayPal Payments Standard -->
+    <payment id="wps_express">
+        <events selector="[data-enable='payment']">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
+                <predicate name="confirm"
+                           message="There is already another PayPal solution enabled. Enable this solution instead?"
+                           event="deactivate-rule"
+                        >
+                    <argument name="payflow_advanced">payflow_advanced</argument>
+                    <argument name="wpp_usuk">wpp_usuk</argument>
+                    <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                    <argument name="payflow_link_us">payflow_link_us</argument>
+                    <argument name="express_checkout_us">express_checkout_us</argument>
+                </predicate>
+            </event>
+        </events>
+        <relation target="payflow_advanced">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="wpp_usuk">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="paypal_payflowpro_with_express_checkout">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="payflow_link_us">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="express_checkout_us">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target=":self">
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="paypalBmlEnable" event="activate-rule"/>
+            <rule type="paypalShowSortOrder" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
+            <rule type="paypalBmlDisable" event="deactivate-rule"/>
+            <rule type="paypalHideSortOrder" event="deactivate-rule"/>
+            <rule type="paypalBmlDisableConditional" event=":load"/>
+            <rule type="conflict" event=":load">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+                <argument name="express_checkout_us">express_checkout_us</argument>
+            </rule>
+        </relation>
+    </payment>
+    <!-- PayPal Payflow Pro (Includes Express Checkout) -->
+    <payment id="paypal_payflowpro_with_express_checkout">
+        <events selector="[data-enable='payment']">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
+                <predicate name="confirm"
+                           message="There is already another PayPal solution enabled. Enable this solution instead?"
+                           event="deactivate-rule"
+                        >
+                    <argument name="payflow_advanced">payflow_advanced</argument>
+                    <argument name="wpp_usuk">wpp_usuk</argument>
+                    <argument name="wps_express">wps_express</argument>
+                    <argument name="payflow_link_us">payflow_link_us</argument>
+                </predicate>
+            </event>
+        </events>
+        <events selector="[data-enable='bml']">
+            <event value="0" name="deactivate-bml"/>
+            <event value="1" name="activate-bml"/>
+        </events>
+        <relation target="payflow_advanced">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="wpp_usuk">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="wps_express">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="payflow_link_us">
+            <rule type="disable" event="activate-rule"/>
+            <rule type="payflowExpressDisableConditional" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+            <rule type="payflowBmlDisableConditional" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+            <rule type="payflowBmlEnableConditional" event="activate-bml">
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+            </rule>
+            <rule type="payflowBmlDisableConditional" event="deactivate-bml"/>
+        </relation>
+        <relation target="express_checkout_us">
+            <rule type="paypalExpressDisable" event="activate-rule"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="paypalExpressLockConfiguration" event="activate-rule"/>
+            <rule type="paypalExpressMarkDisable" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+            <rule type="paypalExpressUnlockConfiguration" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+        </relation>
+        <relation target=":self">
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="payflowBmlEnable" event="activate-rule"/>
+            <rule type="payflowShowSortOrder" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
+            <rule type="payflowBmlDisable" event="deactivate-rule"/>
+            <rule type="payflowHideSortOrder" event="deactivate-rule"/>
+            <rule type="payflowExpressDisableConditional" event=":load"/>
+            <rule type="payflowBmlDisableConditional" event=":load"/>
+            <rule type="conflict" event=":load">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="wps_express">wps_express</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+                <argument name="express_checkout_us">express_checkout_us</argument>
+            </rule>
+        </relation>
+    </payment>
+    <!-- PayPal Payflow Link (Includes Express Checkout) -->
+    <payment id="payflow_link_us">
+        <events selector="[data-enable='payment']">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
+                <predicate name="confirm"
+                           message="There is already another PayPal solution enabled. Enable this solution instead?"
+                           event="deactivate-rule"
+                        >
+                    <argument name="payflow_advanced">payflow_advanced</argument>
+                    <argument name="wpp_usuk">wpp_usuk</argument>
+                    <argument name="wps_express">wps_express</argument>
+                    <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                </predicate>
+            </event>
+        </events>
+        <events selector="[data-enable='express']">
+            <event value="0" name="deactivate-express"/>
+            <event value="1" name="activate-express"/>
+        </events>
+        <relation target="payflow_advanced">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="wpp_usuk">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="wps_express">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="paypal_payflowpro_with_express_checkout">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="express_checkout_us">
+            <rule type="paypalExpressDisable" event="activate-rule"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="paypalExpressLockConfiguration" event="activate-rule"/>
+            <rule type="paypalExpressMarkDisable" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+            </rule>
+            <rule type="paypalExpressUnlockConfiguration" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+            </rule>
+        </relation>
+        <relation target=":self">
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="payflowExpressEnable" event="activate-rule"/>
+            <rule type="payflowBmlEnable" event="activate-rule"/>
+            <rule type="payflowShowSortOrder" event="activate-rule"/>
+            <rule type="payflowShowSortOrder" event="activate-express"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
+            <rule type="payflowExpressEnableConditional" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+            </rule>
+            <rule type="payflowBmlEnableConditional" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+            </rule>
+            <rule type="payflowHideSortOrder" event="deactivate-rule"/>
+            <rule type="payflowHideSortOrder" event="deactivate-express"/>
+            <rule type="payflowBmlDisableConditionalExpress" event="deactivate-express"/>
+            <rule type="payflowBmlDisableConditionalExpress" event=":load"/>
+            <rule type="payflowBmlEnable" event="activate-express"/>
+            <rule type="payflowExpressLockConditional" event=":load"/>
+            <rule type="payflowBmlLockConditional" event=":load"/>
+            <rule type="conflict" event=":load">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="wps_express">wps_express</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="express_checkout_us">express_checkout_us</argument>
+            </rule>
+        </relation>
+    </payment>
+    <!-- PayPal Express Checkout -->
+    <payment id="express_checkout_us">
+        <events selector="[data-enable='payment']">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
+                <predicate name="confirm"
+                           message="There is already another PayPal solution enabled. Enable this solution instead?"
+                           event="deactivate-rule"
+                        >
+                    <argument name="wps_express">wps_express</argument>
+                </predicate>
+            </event>
+        </events>
+        <events selector="[data-enable='in-context-api']">
+            <event value="0" name="deactivate-in-context-api"/>
+            <event value="1" name="activate-in-context-api"/>
+        </events>
+        <relation target="wps_express">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target=":self">
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="paypalBmlEnable" event="activate-rule"/>
+            <rule type="paypalBmlDisable" event="deactivate-rule"/>
+            <rule type="paypalExpressMarkDisable" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="wps_express">wps_express</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+            <rule type="inContextEnable" event="activate-rule"/>
+            <rule type="inContextDisable" event="deactivate-rule"/>
+            <rule type="inContextShowMerchantId" event="activate-rule"/>
+            <rule type="inContextHideMerchantId" event="deactivate-rule"/>
+            <rule type="paypalShowSortOrder" event="activate-rule"/>
+            <rule type="paypalHideSortOrder" event="deactivate-rule"/>
+            <rule type="inContextActivate" event="activate-in-context-api"/>
+            <rule type="inContextDeactivate" event="deactivate-in-context-api"/>
+            <rule type="inContextDisableConditional" event=":load"/>
+            <rule type="paypalBmlDisableConditional" event=":load"/>
+            <rule type="conflict" event=":load">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="wps_express">wps_express</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+            <rule type="paypalExpressLockConfigurationConditional" event=":load">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+        </relation>
+    </payment>
+</rules>

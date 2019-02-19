@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="SalesCouponReportView" area="Adminhtml" mca="reports/report_sales/coupons" module="Magento_Reports">
+    <block name="filterBlock" class="Magento\Reports\Test\Block\Adminhtml\Sales\Coupons\Filter" locator="#filter_form" strategy="css selector"/>
+    <block name="actionBlock" class="Magento\Reports\Test\Block\Adminhtml\Sales\Coupons\Action" locator=".page-main-actions" strategy="css selector"/>
+    <block name="gridBlock" class="Magento\Reports\Test\Block\Adminhtml\Sales\Coupons\Grid" locator="//*[@class='data-grid']" strategy="xpath"/>
+  </page>
+</config>

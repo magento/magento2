@@ -1,0 +1,86 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/** @var $block \Magento\Weee\Block\Renderer\Weee\Tax */
+$data = ['fptAttribute' => [
+    'region' => $this->helper('Magento\Framework\Json\Helper\Data')->jsonDecode(
+        $this->helper('Magento\Directory\Helper\Data')->getRegionJson()
+    ),
+    'itemsData' => $block->getValues(),
+    'bundlePriceType' => '#price_type',
+]];
+?>
+<div id="attribute-<?= $block->getElement()->getHtmlId() ?>-container" class="field"
+     data-attribute-code="<?= $block->getElement()->getHtmlId() ?>"
+     data-mage-init="<?= $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data)) ?>">
+    <label class="label"><span><?= /* @escapeNotVerified */ $block->getElement()->getLabel() ?></span></label>
+
+    <div class="control">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none;"<?php endif; ?>><?= /* @escapeNotVerified */ __('Website') ?></th>
+                    <th class="col-country required"><?= /* @escapeNotVerified */ __('Country/State') ?></th>
+                    <th class="col-tax required"><?= /* @escapeNotVerified */ __('Tax') ?></th>
+                    <th class="col-action"><?= /* @escapeNotVerified */ __('Action') ?></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="col-actions-add"><?= $block->getAddButtonHtml() ?></td>
+                </tr>
+            </tfoot>
+            <tbody data-role="fpt-item-container" class="fpt-item-container">
+            </tbody>
+        </table>
+        <!--
+            Hidden field below with attribute code id is necessary for jQuery validation plugin.
+            Validation message will be displayed after this field.
+        -->
+        <input type="hidden" name="<?= $block->getElement()->getHtmlId() ?>" id="<?= $block->getElement()->getHtmlId() ?>" disabled="disabled">
+    </div>
+
+    <script data-role="row-template" type="text/x-magento-template">
+        <tr id="<?= $block->getElement()->getHtmlId() ?>_weee_tax_row_<%- data.index %>" data-role="fpt-item-row">
+            <td class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none"<?php endif; ?>>
+                <select id="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_website"
+                        name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][website_id]"
+                        class="<?= /* @escapeNotVerified */ $block->getElement()->getClass() ?> website required-entry" data-role="select-website">
+                    <?php foreach ($block->getWebsites() as $_websiteId => $_info): ?>
+                    <option value="<?= /* @escapeNotVerified */ $_websiteId ?>"><?= /* @escapeNotVerified */ $_info['name'] ?><?php if (!empty($_info['currency'])): ?>[<?= /* @escapeNotVerified */ $_info['currency'] ?>]<?php endif; ?></option>
+                    <?php endforeach ?>
+                </select>
+            </td>
+            <td class="col-country">
+                <select id="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_country"
+                        name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][country]"
+                        class="<?= /* @escapeNotVerified */ $block->getElement()->getClass() ?> country required-entry" data-role="select-country">
+                    <?php foreach ($block->getCountries() as $_country): ?>
+                    <option value="<?= /* @escapeNotVerified */ $_country['value'] ?>"><?= /* @escapeNotVerified */ htmlspecialchars($_country['label']) ?></option>
+                    <?php endforeach ?>
+                </select>
+                <select id="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_state"
+                        name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][state]"
+                        class="<?= /* @escapeNotVerified */ $block->getElement()->getClass() ?> state" disabled="" data-role="select-state">
+                    <option value="0">*</option>
+                </select>
+            </td>
+            <td class="col-tax">
+                <input name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][price]"
+                       class="<?= /* @escapeNotVerified */ $block->getElement()->getClass() ?> required-entry validate-greater-than-zero"
+                       type="text" value="<%- data.value %>"/>
+            </td>
+            <td class="col-action">
+                <input name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][delete]" class="delete" type="hidden" value="" data-role="delete-fpt-item"/>
+                <?= $block->getChildHtml('delete_button') ?>
+            </td>
+        </tr>
+    </script>
+</div>

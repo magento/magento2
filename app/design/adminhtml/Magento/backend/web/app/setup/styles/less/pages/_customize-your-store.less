@@ -1,0 +1,45 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+.customize-your-store {
+    .customize-your-store-default {
+        .legend {
+            &:extend(.abs-visually-hidden all);
+        }
+    }
+
+    .advanced-modules-select,
+    .advanced-modules-count {
+        padding-left: 1.5rem;
+    }
+
+    .customize-your-store-advanced {
+        min-width: 0; // Fix for Chrome
+    }
+
+    .message-error {
+        &:before {
+            margin-top: 0;
+            top: 1.8rem;
+        }
+
+        a {
+            color: @alert__color;
+            text-decoration: underline;
+        }
+
+        .form-label {
+            &:before {
+                background: @color-white;
+            }
+        }
+    }
+
+    .customize-database-clean {
+        p {
+            margin-top: @indent__m;
+        }
+    }
+}

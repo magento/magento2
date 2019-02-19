@@ -1,0 +1,286 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@data-grid-sticky-header__background-color: @color-white-fog;
+@data-grid-sticky-header__border-color: @color-gray89;
+@data-grid-sticky-header__box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .25);
+
+@data-grid-sticky-header-actions__background-color: @color-white;
+@data-grid-sticky-header-actions__border-color: @action__border-color;
+@data-grid-sticky-header-actions__box-shadow: @component__box-shadow__base;
+@data-grid-sticky-header-actions__margin: -@indent__xs 0 0 1.1rem;
+@data-grid-sticky-header-actions__padding: .6rem;
+@data-grid-sticky-header-actions__z-index: 210;
+
+@data-grid-sticky-header-action-select__width: percentage((2 / @grid-columns));
+
+//
+
+.sticky-header {
+    background-color: @data-grid-sticky-header__background-color;
+    border-bottom: 1px solid @data-grid-sticky-header__border-color;
+    box-shadow: @data-grid-sticky-header__box-shadow;
+    left: @page-wrapper__indent-left;
+    margin-top: -1px;
+    padding: @indent__xs @indent__l 0;
+    position: fixed;
+    right: 0;
+    top: 77px;
+    z-index: @data-grid-sticky-header__z-index;
+
+    .admin__data-grid-wrap {
+        margin-bottom: 0;
+        overflow-x: visible;
+        padding-bottom: 0;
+    }
+
+    .admin__data-grid-header-row {
+        position: relative;
+        text-align: right;
+
+        &:last-child {
+            margin: 0;
+        }
+    }
+
+    .data-grid-search-control-wrap,
+    .data-grid-filters-actions-wrap,
+    .admin__data-grid-filters-wrap,
+    .admin__data-grid-pager-wrap,
+    .admin__data-grid-actions-wrap {
+        display: inline-block;
+        float: none;
+        vertical-align: top;
+    }
+
+    //  Action select
+    .action-select-wrap {
+        float: left;
+        margin-right: 1.5rem;
+        width: @data-grid-sticky-header-action-select__width;
+    }
+
+    //  Total found
+    .admin__control-support-text {
+        float: left;
+    }
+
+    //  Data Grid Search
+    .data-grid-search-control-wrap {
+        margin: @data-grid-sticky-header-actions__margin;
+        width: auto;
+
+        .data-grid-search-label {
+            box-sizing: border-box;
+            cursor: pointer;
+            display: block;
+            min-width: 3.8rem;
+            padding: 1.2rem @data-grid-sticky-header-actions__padding 1.7rem;
+            position: relative;
+            text-align: center;
+
+            &:before {
+                &:extend(.abs-icon all);
+                color: @action-dropdown__color;
+                content: @icon-search__content;
+                font-size: @data-grid-search-action__size;
+                transition: @smooth__color;
+            }
+
+            &:hover {
+                &:before {
+                    color: @action-dropdown__hover__color;
+                }
+            }
+
+            span {
+                display: none;
+            }
+        }
+    }
+
+    //  Filters
+    .data-grid-filters-actions-wrap {
+        margin: @data-grid-sticky-header-actions__margin;
+        padding-left: 0;
+        position: relative;
+
+        .action-default {
+            background-color: transparent;
+            border: 1px solid transparent;
+            box-sizing: border-box;
+            min-width: 3.8rem;
+            padding: 1.2rem @data-grid-sticky-header-actions__padding 1.7rem;
+            text-align: center;
+            transition: all @appearing__transition-duration @apperaing__transition-timing-function;
+
+            span {
+                display: none;
+            }
+
+            &:before {
+                margin: 0;
+            }
+
+            &._active {
+                background-color: @data-grid-sticky-header-actions__background-color;
+                border-bottom-color: @data-grid-sticky-header-actions__background-color;
+                border-left-color: @data-grid-sticky-header-actions__border-color;
+                border-right-color: @data-grid-sticky-header-actions__border-color;
+                border-top-color: @data-grid-sticky-header-actions__border-color;
+                box-shadow: 1px 1px 5px rgba(0, 0, 0, .5);
+                z-index: @data-grid-sticky-header-actions__z-index;
+
+                &:after {
+                    background-color: @data-grid-sticky-header-actions__background-color;
+                    content: '';
+                    height: 6px;
+                    left: -2px;
+                    position: absolute;
+                    right: -6px;
+                    top: 100%;
+                }
+            }
+        }
+    }
+
+    .data-grid-filters-action-wrap {
+        padding: 0;
+    }
+
+    .admin__data-grid-filters-wrap {
+        background-color: @data-grid-sticky-header-actions__background-color;
+        border: 1px solid @data-grid-sticky-header-actions__border-color;
+        box-shadow: @data-grid-sticky-header__box-shadow;
+        left: 0;
+        padding-left: 3.5rem;
+        padding-right: 3.5rem;
+        position: absolute;
+        top: 100%;
+        width: 100%;
+        z-index: @data-grid-sticky-header-actions__z-index - 1;
+    }
+
+    .admin__data-grid-filters-current {
+        + .admin__data-grid-filters-wrap {
+            &._show {
+                margin-top: -6px;
+            }
+        }
+    }
+
+    .filters-active {
+        background-color: @color-phoenix-down;
+        border-radius: 10px;
+        color: @color-white;
+        display: block;
+        font-size: @font-size__base;
+        font-weight: @font-weight__bold;
+        padding: .1rem .7rem;
+        position: absolute;
+        right: -7px;
+        top: 0;
+        z-index: @data-grid-sticky-header-actions__z-index + 1;
+
+        &:empty {
+            padding-bottom: 0;
+            padding-top: 0;
+        }
+    }
+
+    //  Default view & columns
+    .admin__data-grid-actions-wrap {
+        margin: @data-grid-sticky-header-actions__margin;
+        padding-right: .3rem;
+
+        .admin__action-dropdown {
+            background-color: transparent;
+            box-sizing: border-box;
+            min-width: 3.8rem;
+            padding-left: @data-grid-sticky-header-actions__padding;
+            padding-right: @data-grid-sticky-header-actions__padding;
+            text-align: center;
+
+            .admin__action-dropdown-text {
+                display: inline-block;
+                max-width: 0;
+                min-width: 0;
+                overflow: hidden;
+            }
+
+            &:before {
+                margin: 0;
+            }
+        }
+
+        .admin__action-dropdown-wrap {
+            margin-right: 1.1rem;
+        }
+
+        .admin__action-dropdown-wrap,
+        .admin__action-dropdown {
+            &:after {
+                display: none;
+            }
+        }
+
+        ._active {
+            .admin__action-dropdown {
+                background-color: @color-white;
+            }
+        }
+    }
+
+    .admin__data-grid-action-bookmarks {
+        .admin__action-dropdown {
+            &:before {
+                position: relative;
+                top: -3px;
+            }
+        }
+    }
+
+    .admin__data-grid-filters-current {
+        border-bottom: 0;
+        border-top: 0;
+        margin-bottom: 0;
+        padding-bottom: 0;
+        padding-top: 0;
+    }
+
+    .data-grid-search-control-wrap .data-grid-search-control,
+    .data-grid-search-control-wrap .action-submit,
+    .admin__data-grid-pager .admin__control-text,
+    .admin__data-grid-pager-wrap .admin__control-support-text {
+        display: none;
+    }
+
+    .action-next {
+        margin: 0;
+    }
+
+    //  Table header
+    .data-grid {
+        margin-bottom: -1px;
+    }
+}
+
+.data-grid-cap-left,
+.data-grid-cap-right {
+    background-color: @data-grid-sticky-header__background-color;
+    bottom: -2px;
+    position: absolute;
+    top: 6rem;
+    width: @page-content__padding-horizontal;
+    z-index: @action-multicheck__z-index + 1;
+}
+
+.data-grid-cap-left {
+    left: 0;
+}

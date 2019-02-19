@@ -1,0 +1,73 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+<script>
+    require([
+            "Magento_Ui/js/modal/confirm",
+            "prototype",
+            "Magento_Catalog/catalog/product/composite/configure"
+        ], function(confirm){
+
+//<!--
+            wishlistControl = {
+                reload: function (urlParams) {
+                    if (!urlParams) {
+                        urlParams = '';
+                    }
+                    var url = <?= $block->escapeJs($block->escapeUrl($block->getJsObjectName())) ?>.url + '?ajax=true' + urlParams;
+                    new Ajax.Updater(
+                        <?= $block->escapeJs($block->escapeHtml($block->getJsObjectName())) ?>.containerId,
+                        url,
+                        {
+                            parameters: {form_key: FORM_KEY},
+                            onComplete: <?= $block->escapeJs($block->escapeHtml($block->getJsObjectName())) ?>.initGrid.bind(<?= $block->escapeJs($block->escapeHtml($block->getJsObjectName())) ?>),
+                        evalScripts:true
+                }
+            );
+        },
+
+        configureItem: function (itemId) {
+        productConfigure.setOnLoadIFrameCallback('wishlist', this.cbOnLoadIframe.bind(this));
+        productConfigure.showItemConfiguration('wishlist', itemId);
+        return false;
+    },
+
+    cbOnLoadIframe: function (response) {
+        if (!response.ok) {
+            return;
+        }
+        this.reload();
+    },
+
+    removeItem: function (itemId) {
+        var self = this;
+
+        confirm({
+            content: '<?= $block->escapeJs($block->escapeHtml(__('Are you sure you want to remove this item?'))) ?>',
+            actions: {
+                confirm: function () {
+                    self.reload('&delete=' + itemId);
+                }
+            }
+        });
+    }
+    }
+
+    productConfigure.addListType(
+        'wishlist',
+        {
+            urlFetch: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/configure'))) ?>',
+            urlConfirm: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/update'))) ?>'
+        }
+    );
+    //-->
+
+    });
+</script>

@@ -1,0 +1,61 @@
+"Edit URL Rewrite for a Category","Edit URL Rewrite for a Category"
+"Add URL Rewrite for a Category","Add URL Rewrite for a Category"
+Category:,Category:
+"We can't set up a URL rewrite because the product you chose is not associated with a website.","We can't set up a URL rewrite because the product you chose is not associated with a website."
+"Please assign a website to the selected category.","Please assign a website to the selected category."
+"Edit URL Rewrite for a Product","Edit URL Rewrite for a Product"
+"Add URL Rewrite for a Product","Add URL Rewrite for a Product"
+Product:,Product:
+"Skip Category Selection","Skip Category Selection"
+ID,ID
+Name,Name
+SKU,SKU
+Status,Status
+"Edit URL Rewrite for CMS page","Edit URL Rewrite for CMS page"
+"Add URL Rewrite for CMS page","Add URL Rewrite for CMS page"
+"CMS page:","CMS page:"
+"Please assign a website to the selected CMS page.","Please assign a website to the selected CMS page."
+Title,Title
+"URL Key","URL Key"
+"Store View","Store View"
+"Edit URL Rewrite","Edit URL Rewrite"
+"Add New URL Rewrite","Add New URL Rewrite"
+Reset,Reset
+Back,Back
+Delete,Delete
+"Are you sure you want to do this?","Are you sure you want to do this?"
+Save,Save
+"Block Information","Block Information"
+"URL Rewrite Information","URL Rewrite Information"
+"Request Path","Request Path"
+"Target Path","Target Path"
+"Redirect Type","Redirect Type"
+Description,Description
+Store,Store
+"URL Rewrite Management","URL Rewrite Management"
+"Add URL Rewrite","Add URL Rewrite"
+Custom,Custom
+"For Category","For Category"
+"For Product","For Product"
+"For CMS page","For CMS page"
+"Create URL Rewrite","Create URL Rewrite"
+"You deleted the URL rewrite.","You deleted the URL rewrite."
+"We can't delete URL Rewrite right now.","We can't delete URL Rewrite right now."
+"URL Rewrites","URL Rewrites"
+"The product you chose is not associated with the selected store or category.","The product you chose is not associated with the selected store or category."
+"The category you chose is not associated with the selected store.","The category you chose is not associated with the selected store."
+"The URL Rewrite has been saved.","The URL Rewrite has been saved."
+"Something went wrong while saving URL Rewrite.","Something went wrong while saving URL Rewrite."
+"Do not use two or more consecutive slashes in the request path.","Do not use two or more consecutive slashes in the request path."
+"Anchor symbol (#) is not supported in request path.","Anchor symbol (#) is not supported in request path."
+"Do not use two or more consecutive slashes in the url rewrite suffix.","Do not use two or more consecutive slashes in the url rewrite suffix."
+"Anchor symbol (#) is not supported in url rewrite suffix.","Anchor symbol (#) is not supported in url rewrite suffix."
+No,No
+"Temporary (302)","Temporary (302)"
+"Permanent (301)","Permanent (301)"
+"Request Path for Specified Store","Request Path for Specified Store"
+"URL key for specified store already exists.","URL key for specified store already exists."
+"Custom storage message","Custom storage message"
+"Select Category","Select Category"
+Action,Action
+Edit,Edit

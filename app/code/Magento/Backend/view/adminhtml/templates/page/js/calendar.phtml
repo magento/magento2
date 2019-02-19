@@ -1,0 +1,62 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// no notice of license for now
+?>
+
+<?php
+/**
+ * Calendar localization script. Should be put into page header.
+ *
+ * @see \Magento\Framework\View\Element\Html\Calendar
+ */
+?>
+
+<script>
+require([
+    "jquery",
+    "jquery/ui"
+], function($){
+
+    $.extend(true, $, {
+        calendarConfig: {
+            dayNames: <?= /* @escapeNotVerified */ $days['wide'] ?>,
+            dayNamesMin: <?= /* @escapeNotVerified */ $days['abbreviated'] ?>,
+            monthNames: <?= /* @escapeNotVerified */ $months['wide'] ?>,
+            monthNamesShort: <?= /* @escapeNotVerified */ $months['abbreviated'] ?>,
+            infoTitle: "<?= /* @escapeNotVerified */ __('About the calendar') ?>",
+            firstDay: <?= /* @escapeNotVerified */ $firstDay ?>,
+            closeText: "<?= /* @escapeNotVerified */ __('Close') ?>",
+            currentText: "<?= /* @escapeNotVerified */ __('Go Today') ?>",
+            prevText: "<?= /* @escapeNotVerified */ __('Previous') ?>",
+            nextText: "<?= /* @escapeNotVerified */ __('Next') ?>",
+            weekHeader: "<?= /* @escapeNotVerified */ __('WK') ?>",
+            timeText: "<?= /* @escapeNotVerified */ __('Time') ?>",
+            hourText: "<?= /* @escapeNotVerified */ __('Hour') ?>",
+            minuteText: "<?= /* @escapeNotVerified */ __('Minute') ?>",
+            dateFormat: $.datepicker.RFC_2822,
+            showOn: "button",
+            showAnim: "",
+            changeMonth: true,
+            changeYear: true,
+            buttonImageOnly: null,
+            buttonImage: null,
+            showButtonPanel: true,
+            showOtherMonths: true,
+            showWeek: false,
+            timeFormat: '',
+            showTime: false,
+            showHour: false,
+            showMinute: false,
+            serverTimezoneSeconds: <?= (int) $block->getStoreTimestamp() ?>,
+            serverTimezoneOffset: <?= (int) $block->getTimezoneOffsetSeconds() ?>,
+            yearRange: '<?= /* @escapeNotVerified */ $block->getYearRange() ?>'
+        }
+    });
+
+enUS = <?= /* @escapeNotVerified */ $enUS ?>; // en_US locale reference
+
+});
+</script>

@@ -1,0 +1,13 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Catalog\Block\Adminhtml\Rss\Grid\Link */
+?>
+<?php if ($block->isRssAllowed() && $block->getLink()): ?>
+<a href="<?= /* @escapeNotVerified */ $block->getLink() ?>" class="link-feed"><?= /* @escapeNotVerified */ $block->getLabel() ?></a>
+<?php endif; ?>

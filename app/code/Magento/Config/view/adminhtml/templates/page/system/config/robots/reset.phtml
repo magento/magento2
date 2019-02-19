@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * @deprecated
+ * @var $block \Magento\Backend\Block\Page\System\Config\Robots\Reset
+ * @var $jsonHelper \Magento\Framework\Json\Helper\Data
+ */
+$jsonHelper = $this->helper('Magento\Framework\Json\Helper\Data');
+?>
+
+<script>
+    require([
+        'jquery'
+    ], function ($) {
+        window.resetRobotsToDefault = function(){
+            $('#design_search_engine_robots_custom_instructions').val(<?php
+                /* @escapeNotVerified */ echo $jsonHelper->jsonEncode($block->getRobotsDefaultCustomInstructions())
+            ?>);
+        }
+    });
+</script>
+
+<?= $block->getButtonHtml() ?>

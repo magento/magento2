@@ -1,0 +1,25 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/**
+ * @see \Magento\Paypal\Block\System\Config\Fieldset\Hint
+ * @var \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint $block
+ */
+$helpLink = $block->escapeUrl($block->getHelpLink());
+?>
+<?php
+if ($helpLink):
+?>
+    <div class="paypal-payment-notice">
+        <?= $block->escapeHtml(__('Not sure what PayPal payment method to use? Click ')) ?>
+        <a href="<?php /* @noEscape */
+        echo $helpLink; ?>" target="_blank"><?= $block->escapeHtml(__('here')) ?></a>
+        <?= $block->escapeHtml(__(' to learn more.')) ?>
+    </div>
+<?php
+endif;
+?>

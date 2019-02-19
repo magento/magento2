@@ -1,0 +1,278 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php $_giftMessage = false; ?>
+<?php switch ($block->getCheckoutType()): case 'onepage_checkout': ?>
+    <fieldset class="fieldset gift-message">
+        <legend class="legend"><span><?= /* @escapeNotVerified */ __('Do you have any gift items in your order?') ?></span></legend><br>
+
+        <div class="field choice" id="add-gift-options-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>">
+            <input type="checkbox" name="allow_gift_options" id="allow_gift_options" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-container"}'<?php if ($block->getItemsHasMesssages() || $block->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+            <label for="allow_gift_options" class="label"><span><?= /* @escapeNotVerified */ __('Add Gift Options') ?></span></label>
+        </div>
+
+        <dl class="options-items" id="allow-gift-options-container">
+            <?php if ($block->isMessagesAvailable()): ?>
+            <dt id="add-gift-options-for-order-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="order-title">
+                <div class="field choice">
+                    <input type="checkbox" name="allow_gift_messages_for_order" id="allow_gift_options_for_order" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-order-container"}'<?php if ($block->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+                    <label for="allow_gift_options_for_order" class="label"><span><?= /* @escapeNotVerified */ __('Gift Options for the Entire Order') ?></span></label>
+                </div>
+            </dt>
+
+            <dd id="allow-gift-options-for-order-container" class="order-options">
+                <div class="options-order-container" id="options-order-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>"></div>
+                    <button class="action action-gift"
+                            data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#allow-gift-messages-for-order-container"}}'>
+                        <span><?= /* @escapeNotVerified */ __('Gift Message') ?></span>
+                    </button>
+                    <div id="allow-gift-messages-for-order-container" class="gift-messages-order hidden">
+                        <fieldset class="fieldset">
+                            <p><?= /* @escapeNotVerified */ __('Leave this box blank if you don\'t want to leave a gift message for the entire order.') ?></p>
+                            <div class="field from">
+                                <label for="gift-message-whole-from" class="label"><span><?= /* @escapeNotVerified */ __('From') ?></span></label>
+                                <div class="control">
+                                    <input type="text" name="giftmessage[quote][<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>][from]" id="gift-message-whole-from" title="<?= /* @escapeNotVerified */ __('From') ?>"  value="<?= /* @escapeNotVerified */ $block->getEscaped($block->getMessage()->getSender(), $block->getDefaultFrom()) ?>" class="input-text">
+                                </div>
+                            </div>
+                            <div class="field to">
+                                <label for="gift-message-whole-to" class="label"><span><?= /* @escapeNotVerified */ __('To') ?></span></label>
+                                <div class="control">
+                                    <input type="text" name="giftmessage[quote][<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>][to]" id="gift-message-whole-to" title="<?= /* @escapeNotVerified */ __('To') ?>" value="<?= /* @escapeNotVerified */ $block->getEscaped($block->getMessage()->getRecipient(), $block->getDefaultTo()) ?>" class="input-text">
+                                </div>
+                            </div>
+                            <div class="field text">
+                                <label for="gift-message-whole-message" class="label"><span><?= /* @escapeNotVerified */ __('Message') ?></span></label>
+                                <div class="control">
+                                    <textarea id="gift-message-whole-message" class="input-text" name="giftmessage[quote][<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>][message]" title="<?= /* @escapeNotVerified */ __('Message') ?>" rows="5" cols="10"><?= /* @escapeNotVerified */ $block->getEscaped($block->getMessage()->getMessage()) ?></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <script>
+                            require(['jquery'], function(jQuery){
+                                jQuery('#add-gift-options-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>')
+                                    .add('#add-gift-options-for-order-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>')
+                                    .removeClass('hidden');
+                            });
+                        </script>
+                    </div>
+            </dd>
+            <?php endif ?>
+            <?php if ($block->isItemsAvailable()): ?>
+            <dt id="add-gift-options-for-items-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="order-title individual">
+                <div class="field choice">
+                    <input type="checkbox" name="allow_gift_options_for_items" id="allow_gift_options_for_items" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-items-container"}'<?php if ($block->getItemsHasMesssages()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+                    <label for="allow_gift_options_for_items" class="label"><span><?= /* @escapeNotVerified */ __('Gift Options for Individual Items') ?></span></label>
+                </div>
+            </dt>
+
+            <dd id="allow-gift-options-for-items-container" class="order-options individual">
+                <ol class="items">
+                    <?php foreach ($block->getItems() as $_index => $_item): ?>
+                    <?php $_product = $_item->getProduct() ?>
+                    <li class="item">
+                         <div class="product">
+                             <div class="number">
+                                 <?= /* @escapeNotVerified */ __('<span>Item %1</span> of %2', $_index+1, $block->countItems()) ?>
+                             </div>
+                             <div class="img photo container">
+                                 <?= $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
+                             </div>
+                             <strong class="product name"><?= $block->escapeHtml($_product->getName()) ?></strong>
+                         </div>
+                         <div class="options">
+                             <div class="options-items-container" id="options-items-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>-<?= /* @escapeNotVerified */ $_item->getId() ?>"></div>
+                             <?php if ($block->isItemMessagesAvailable($_item)): ?>
+                             <button class="action action-gift"
+                                     data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?= /* @escapeNotVerified */ $_item->getId() ?>"}}'>
+                                 <span><?= /* @escapeNotVerified */ __('Gift Message') ?></span>
+                             </button>
+                             <div id="gift-messages-for-item-container-<?= /* @escapeNotVerified */ $_item->getId() ?>" class="block message hidden">
+                                 <fieldset class="fieldset">
+                                     <p><?= /* @escapeNotVerified */ __('Leave a box blank if you don\'t want to add a gift message for that item.') ?></p>
+                                     <div class="field from">
+                                         <label for="gift-message-<?= /* @escapeNotVerified */ $_item->getId() ?>-from" class="label"><span><?= /* @escapeNotVerified */ __('From') ?></span></label>
+                                         <div class="control">
+                                             <input type="text" name="giftmessage[quote_item][<?= /* @escapeNotVerified */ $_item->getId() ?>][from]" id="gift-message-<?= /* @escapeNotVerified */ $_item->getId() ?>-from" title="<?= /* @escapeNotVerified */ __('From') ?>" value="<?= /* @escapeNotVerified */ $block->getEscaped($block->getMessage($_item)->getSender(), $block->getDefaultFrom()) ?>" class="input-text">
+                                         </div>
+                                     </div>
+                                     <div class="field to">
+                                        <label for="gift-message-<?= /* @escapeNotVerified */ $_item->getId() ?>-to" class="label"><span><?= /* @escapeNotVerified */ __('To') ?></span></label>
+                                        <div class="control">
+                                            <input type="text" name="giftmessage[quote_item][<?= /* @escapeNotVerified */ $_item->getId() ?>][to]" id="gift-message-<?= /* @escapeNotVerified */ $_item->getId() ?>-to" title="<?= /* @escapeNotVerified */ __('To') ?>" value="<?= /* @escapeNotVerified */ $block->getEscaped($block->getMessage($_item)->getRecipient(), $block->getDefaultTo()) ?>" class="input-text">
+                                        </div>
+                                     </div>
+                                     <div class="field text">
+                                         <label for="gift-message-<?= /* @escapeNotVerified */ $_item->getId() ?>-message" class="label"><span><?= /* @escapeNotVerified */ __('Message') ?></span></label>
+                                         <div class="control">
+                                            <textarea id="gift-message-<?= /* @escapeNotVerified */ $_item->getId() ?>-message" class="input-text giftmessage-area" name="giftmessage[quote_item][<?= /* @escapeNotVerified */ $_item->getId() ?>][message]" title="<?= /* @escapeNotVerified */ __('Message') ?>" rows="5" cols="40"><?= /* @escapeNotVerified */ $block->getEscaped($block->getMessage($_item)->getMessage()) ?></textarea>
+                                         </div>
+                                     </div>
+                                </fieldset>
+                             </div>
+                         <?php endif; ?>
+                         </div>
+                    </li>
+                    <?php endforeach; ?>
+                </ol>
+            </dd>
+            <script>
+                require(['jquery'], function(jQuery){
+                    jQuery('#add-gift-options-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>')
+                        .add('#add-gift-options-for-items-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>')
+                        .removeClass('hidden');
+                });
+            </script>
+            <?php endif; ?>
+            <dt class="extra-options-container" id="extra-options-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>"></dt>
+        </dl>
+    </fieldset>
+    <script type="text/x-magento-init">
+    {
+        "#allow_gift_options, #allow_gift_options_for_order, #allow_gift_options_for_items": {
+            "giftOptions": {}
+        }
+    }
+    </script>
+<?php break; ?>
+
+<?php case 'multishipping_address': ?>
+    <fieldset id="add-gift-options-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="fieldset gift-message">
+        <legend class="legend"><span><?= /* @escapeNotVerified */ __('Do you have any gift items in your order?') ?></span></legend><br>
+
+        <div class="field choice" id="add-gift-options-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>">
+            <input type="checkbox" name="allow_gift_options_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" id="allow_gift_options_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>"}'<?php if ($block->getItemsHasMesssages() || $block->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+            <label for="allow_gift_options_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="label"><span><?= /* @escapeNotVerified */ __('Add Gift Options') ?></span></label>
+        </div>
+
+        <dl class="options-items" id="allow-gift-options-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>">
+            <?php if ($block->isMessagesOrderAvailable() || $block->isMessagesAvailable()): ?>
+            <dt id="add-gift-options-for-order-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="order-title">
+                <div class="field choice">
+                    <input type="checkbox" name="allow_gift_options_for_order_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" id="allow_gift_options_for_order_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-order-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>"}'<?php if ($block->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+                    <label for="allow_gift_options_for_order_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="label"><span><?= /* @escapeNotVerified */ __('Add Gift Options for the Entire Order') ?></span></label>
+                </div>
+            </dt>
+
+            <dd id="allow-gift-options-for-order-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="order-options">
+                <div class="options-order-container" id="options-order-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>"></div>
+                <?php if ($block->isMessagesAvailable()): ?>
+                    <?php $_giftMessage = true; ?>
+                    <button class="action action-gift"
+                            data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-order-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>"}}'>
+                        <span><?= /* @escapeNotVerified */ __('Gift Message') ?></span>
+                    </button>
+                    <div id="gift-messages-for-order-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="gift-messages-order hidden">
+                        <fieldset class="fieldset">
+                            <p><?= /* @escapeNotVerified */ __('You can leave this box blank if you don\'t want to add a gift message for this address.') ?></p>
+                            <div class="field from">
+                                <label for="gift-message-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>-from" class="label"><span><?= /* @escapeNotVerified */ __('From') ?></span></label>
+                                <div class="control">
+                                    <input type="text" name="giftmessage[quote_address][<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>][from]" id="gift-message-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>-from" title="<?= /* @escapeNotVerified */ __('From') ?>" value="<?= /* @escapeNotVerified */ $block->getEscaped($block->getMessage()->getSender(), $block->getDefaultFrom()) ?>" class="input-text">
+                                </div>
+                            </div>
+                            <div class="field to">
+                                <label for="gift-message-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>-to" class="label"><span><?= /* @escapeNotVerified */ __('To') ?></span></label>
+                                <div class="control">
+                                    <input type="text" name="giftmessage[quote_address][<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>][to]" id="gift-message-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>-to" title="<?= /* @escapeNotVerified */ __('To') ?>" value="<?= /* @escapeNotVerified */ $block->getEscaped($block->getMessage()->getRecipient(), $block->getDefaultTo()) ?>" class="input-text">
+                                </div>
+                            </div>
+                            <div class="field text">
+                                <label for="gift-message-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>-message" class="label"><span><?= /* @escapeNotVerified */ __('Message') ?></span></label>
+                                <div class="control">
+                                    <textarea id="gift-message-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>-message" class="input-text" name="giftmessage[quote_address][<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>][message]" title="<?= /* @escapeNotVerified */ __('Message') ?>" rows="5" cols="40"><?= /* @escapeNotVerified */ $block->getEscaped($block->getMessage()->getMessage()) ?></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                 <?php endif; ?>
+            </dd>
+            <?php endif; ?>
+            <?php if ($block->isItemsAvailable()): ?>
+            <dt id="add-gift-options-for-items-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="order-title individual">
+                <div class="field choice">
+                    <input type="checkbox" name="allow_gift_options_for_items_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" id="allow_gift_options_for_items_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-items-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>"}'<?php if ($block->getItemsHasMesssages()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+                    <label for="allow_gift_options_for_items_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="label"><span><?= /* @escapeNotVerified */ __('Add Gift Options for Individual Items') ?></span></label>
+                </div>
+            </dt>
+
+            <dd id="allow-gift-options-for-items-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="order-options individual">
+                 <ol class="items">
+                 <?php foreach ($block->getItems() as $_index => $_item): ?>
+                 <?php $_product = $_item->getProduct() ?>
+                     <li class="item">
+                         <div class="product">
+                             <div class="number"><?= /* @escapeNotVerified */ __('<span>Item %1</span> of %2', $_index+1, $block->countItems()) ?></div>
+                             <div class="img photo container">
+                                 <?= $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
+                             </div>
+                             <strong class="product-name"><?= $block->escapeHtml($_product->getName()) ?></strong>
+                         </div>
+                         <div class="options">
+                             <div class="options-items-container" id="options-items-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>-<?= /* @escapeNotVerified */ $_item->getId() ?>"></div>
+                             <input type="hidden" name="giftoptions[quote_address_item][<?= /* @escapeNotVerified */ $_item->getId() ?>][address]" value="<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" />
+
+                             <?php if ($block->isItemMessagesAvailable($_item)): ?>
+                             <?php $_giftMessage = true; ?>
+                                 <button class="action action-gift"
+                                         data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?= /* @escapeNotVerified */ $_item->getId() ?>"}}'>
+                                     <span><?= /* @escapeNotVerified */ __('Gift Message') ?></span>
+                                 </button>
+                                 <div id="gift-messages-for-item-container-<?= /* @escapeNotVerified */ $_item->getId() ?>" class="block message hidden">
+                                     <fieldset class="fieldset">
+                                        <p><?= /* @escapeNotVerified */ __('You can leave this box blank if you don\'t want to add a gift message for the item.') ?></p>
+                                         <input type="hidden" name="giftmessage[quote_address_item][<?= /* @escapeNotVerified */ $_item->getId() ?>][address]" value="<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" />
+                                         <div class="field from">
+                                             <label for="gift-message-<?= /* @escapeNotVerified */ $_item->getId() ?>-from" class="label"><span><?= /* @escapeNotVerified */ __('From') ?></span></label>
+                                             <div class="control">
+                                                 <input type="text" name="giftmessage[quote_address_item][<?= /* @escapeNotVerified */ $_item->getId() ?>][from]" id="gift-message-<?= /* @escapeNotVerified */ $_item->getId() ?>-from" title="<?= /* @escapeNotVerified */ __('From') ?>"  value="<?= /* @escapeNotVerified */ $block->getEscaped($block->getMessage($_item)->getSender(), $block->getDefaultFrom()) ?>" class="input-text">
+                                             </div>
+                                         </div>
+                                         <div class="field to">
+                                            <label for="gift-message-<?= /* @escapeNotVerified */ $_item->getId() ?>-to" class="label"><span><?= /* @escapeNotVerified */ __('To') ?></span></label>
+                                            <div class="control">
+                                                <input type="text" name="giftmessage[quote_address_item][<?= /* @escapeNotVerified */ $_item->getId() ?>][to]" id="gift-message-<?= /* @escapeNotVerified */ $_item->getId() ?>-to" title="<?= /* @escapeNotVerified */ __('To') ?>" value="<?= /* @escapeNotVerified */ $block->getEscaped($block->getMessage($_item)->getRecipient(), $block->getDefaultTo()) ?>" class="input-text">
+                                            </div>
+                                        </div>
+                                         <div class="field text">
+                                             <label for="gift-message-<?= /* @escapeNotVerified */ $_item->getId() ?>-message" class="label"><span><?= /* @escapeNotVerified */ __('Message') ?></span></label>
+                                             <div class="control">
+                                                <textarea id="gift-message-<?= /* @escapeNotVerified */ $_item->getId() ?>-message" class="input-text giftmessage-area" name="giftmessage[quote_address_item][<?= /* @escapeNotVerified */ $_item->getId() ?>][message]" title="<?= /* @escapeNotVerified */ __('Message') ?>" rows="5" cols="10"><?= /* @escapeNotVerified */ $block->getEscaped($block->getMessage($_item)->getMessage()) ?></textarea>
+                                             </div>
+                                         </div>
+                                     </fieldset>
+                                 </div>
+                             <?php endif; ?>
+                         </div>
+                     </li>
+                 <?php endforeach; ?>
+                 </ol>
+            </dd>
+            <?php endif; ?>
+            <dt class="extra-options-container" id="extra-options-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>"></dt>
+        </dl>
+    </fieldset>
+    <script type="text/x-magento-init">
+        {
+            "#allow_gift_options_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>, #allow_gift_options_for_order_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>, #allow_gift_options_for_items_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>": {
+                "giftOptions": {}
+            }
+        }
+    </script>
+    <?php break; ?>
+<?php endswitch ?>
+<?php if ($_giftMessage): ?>
+<script type="text/x-magento-init">
+    {
+        "#shipping_method_form": {
+            "validation": {}
+        }
+    }
+</script>
+<?php endif; ?>

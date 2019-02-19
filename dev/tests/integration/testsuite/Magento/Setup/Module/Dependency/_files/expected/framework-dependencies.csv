@@ -1,0 +1,8 @@
+"Dependencies of framework:","Total number"
+,3
+
+"Dependencies for each module:",
+"Magento\FirstModule",3
+" -- Magento\LibFirst",1
+" -- Magento\LibSecond",2
+" -- Magento\Third",1

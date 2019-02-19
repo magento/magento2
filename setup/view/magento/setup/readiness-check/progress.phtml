@@ -1,0 +1,582 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<div ng-switch="isCompleted()">
+
+    <div ng-switch-when="true" ng-switch="hasErrors">
+
+        <div class="message message-error" ng-switch-when="true">
+            <span class="message-text">
+               <strong>Error!</strong> You need to resolve these issues to continue.
+            </span>
+        </div>
+
+        <div class="message message-success" ng-switch-default>
+            <span class="message-text">
+                <strong>Completed!</strong> You can now move on to the next step.
+            </span>
+        </div>
+
+    </div>
+
+    <div class="message message-spinner" ng-switch-default>
+        <span class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <span class="message-text" ng-bind-html="wordingOfReadinessCheckAction()"></span>
+    </div>
+
+</div>
+
+<div class="extensions-information" ng-if="$state.current.type == 'update' && getObjectSize(getExtensionsList()) > 0">
+    <div class="message message-warning"
+         ng-show="componentDependency.processed && componentDependency.responseType != 'success'"
+    >
+        We found some extensions with available version updates. We recommend that you update to the recommended
+        versions or remove these extensions from the installation process. We found some extensions with available
+        version updates. We recommend that you update to the recommended versions or remove these extensions from
+        the installation process.
+    </div>
+    <div class="extensions-container">
+        <h3>Update these extension(s)</h3>
+        <ul class="list">
+            <li ng-repeat="extension in getExtensionsList()">
+                {{extension.name}} {{getCurrentVersion(extension.name)}} to
+                <select ng-change="versionChanged()"
+                        ng-model="extension.version"
+                        ng-disabled="checkingInProgress()"
+                >
+                    <option ng-repeat="version in getVersionsList(extension.name)"
+                            ng-selected="version == extension.version"
+                            value="{{version}}"
+                    >Version {{version}}</option>
+                </select>
+                <button class="extension-delete"
+                        title="Delete"
+                        ng-click="openDialog(extension.name)"
+                        ng-show="!checkingInProgress() && getObjectSize(getExtensionsList()) > 1">
+                    <span>Delete</span>
+                </button>
+            </li>
+        </ul>
+
+        <div ng-show="(needReCheck || hasErrors) && !checkingInProgress()">
+            <button ng-click="$state.forceReload()" class="btn btn-medium btn-secondary">
+                <span>Try Again</span>
+            </button>
+        </div>
+        <div ng-show="!needReCheck && !checkingInProgress() && !hasErrors">
+            <button ng-click="nextState()" class="btn btn-medium btn-prime">
+                <span>Update</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="updater-application" class="readiness-check-item" ng-show="updater.visible">
+    <div ng-hide="updater.processed">
+        <span class="spinner side">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <h3 class="readiness-check-title">Checking Updater Application Availability...</h3>
+    </div>
+
+    <div ng-show="updater.processed" ng-switch="updater.responseType">
+
+        <div ng-switch-when="success" ng-init="updateOnSuccess(version)">
+
+            <span class="readiness-check-icon icon-success-round"></span>
+
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">Check Updater Application Availability</h3>
+                <p>
+                    Updater application is available.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(updater)">
+
+            <span class="readiness-check-icon icon-failed-round"></span>
+
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">Check Updater Application Availability</h3>
+                <p>
+                    Updater application is not available.
+                    <a href="#updater-application" ng-click="updateOnExpand(updater)">
+                        <span ng-hide="updater.expanded">Show detail</span>
+                        <span ng-show="updater.expanded">Hide detail</span>
+                    </a>
+                </p>
+                <p ng-show="updater.expanded">
+                    Download and install the updater.
+                </p>
+                <p ng-show="updater.expanded">For additional assistance, see
+                    <a href="https://devdocs.magento.com/guides/v2.0/comp-mgr/trouble/cman/updater.html"
+                       target="_blank">updater application help</a>.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="cron-script" class="readiness-check-item" ng-show="cronScript.visible">
+    <div ng-hide="cronScript.processed">
+        <span class="spinner side">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <h3 class="readiness-check-title">Checking Cron Scripts...</h3>
+    </div>
+
+    <div ng-show="cronScript.processed" ng-switch="cronScript.responseType">
+        <div ng-switch-when="success" ng-init="updateOnSuccess(cronScript)">
+            <span class="readiness-check-icon icon-success-round"></span>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">Check Cron Scripts</h3>
+                <p>
+                    Cron script readiness check passed.
+                </p>
+                <p ng-show="cronScript.notice" ng-bind-html="cronScript.setupNoticeMessage">
+                </p>
+                <p ng-show="cronScript.notice" ng-bind-html="cronScript.updaterNoticeMessage">
+                </p>
+            </div>
+        </div>
+
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(cronScript)">
+            <span class="readiness-check-icon icon-failed-round"></span>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">Check Cron Scripts</h3>
+                <p>
+                    Cron script readiness check failed.
+                    <a href="#cron-script" ng-click="updateOnExpand(cronScript)">
+                        <span ng-hide="cronScript.expanded">Show detail</span>
+                        <span ng-show="cronScript.expanded">Hide detail</span>
+                    </a>
+                </p>
+                <p ng-show="cronScript.expanded" ng-bind-html="cronScript.setupErrorMessage">
+                </p>
+                <p ng-show="cronScript.expanded" ng-bind-html="cronScript.updaterErrorMessage">
+                </p>
+                <p ng-show="cronScript.expanded">For additional assistance, see
+                    <a href="https://devdocs.magento.com/guides/v2.0/comp-mgr/trouble/cman/cron.html"
+                       target="_blank">cron scripts help</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="component-dependency" class="readiness-check-item" ng-show="componentDependency.visible">
+    <div ng-hide="componentDependency.processed">
+        <span class="spinner side">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <h3 class="readiness-check-title">Checking Component Dependency...</h3>
+    </div>
+
+    <div ng-show="componentDependency.processed" ng-switch="componentDependency.responseType">
+        <div ng-switch-when="success" ng-init="updateOnSuccess(componentDependency)">
+            <span class="readiness-check-icon icon-success-round"></span>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">Check Component Dependency</h3>
+                <p>
+                    Component dependency is correct.
+                </p>
+            </div>
+        </div>
+
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(componentDependency)">
+            <span class="readiness-check-icon icon-failed-round"></span>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">Check Component Dependency</h3>
+                <p>
+                    We found conflicting component dependencies.
+                    <a href="#component-dependency" ng-click="updateOnExpand(componentDependency)">
+                        <span ng-hide="componentDependency.expanded">Show detail</span>
+                        <span ng-show="componentDependency.expanded">Hide detail</span>
+                    </a>
+                </p>
+                <p ng-show="componentDependency.expanded" ng-bind-html="componentDependency.errorMessage">
+                </p>
+                <p ng-show="componentDependency.expanded">For additional assistance, see
+                    <a href="https://devdocs.magento.com/guides/v2.0/comp-mgr/trouble/cman/component-depend.html"
+                       target="_blank">component dependency help
+                    </a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="php-version" class="readiness-check-item" ng-show="version.visible">
+    <div ng-hide="version.processed">
+        <span class="spinner side">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <h3 class="readiness-check-title">Checking PHP Version...</h3>
+    </div>
+
+    <div ng-show="version.processed" ng-switch="version.responseType">
+
+        <div ng-switch-when="success" ng-init="updateOnSuccess(version)">
+
+            <span class="readiness-check-icon icon-success-round"></span>
+
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">PHP Version Check</h3>
+                <p>
+                    Your PHP version is correct ({{version.data.current}}).
+                </p>
+            </div>
+
+        </div>
+
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(version)">
+
+            <div class="readiness-check-side">
+                <p class="side-title">Need Help?</p>
+                <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>
+            </div>
+
+            <span class="readiness-check-icon icon-failed-round"></span>
+
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">PHP Version Check</h3>
+                <div ng-show="version.isRequestError">
+                    <p>Server failed to respond. Please try again.</p>
+                </div>
+                <div ng-hide="version.isRequestError">
+                    <p>
+                        Your PHP version is {{version.data.current}}. The required PHP version is {{version.data.required}}.
+                        <a href="#php-version" ng-click="updateOnExpand(version)">
+                            <span ng-hide="version.expanded">Show detail</span>
+                            <span ng-show="version.expanded">Hide detail</span>
+                        </a>
+                    </p>
+                    <p ng-show="version.expanded">
+                        Download and install PHP from <a href="http://www.php.net" target="_blank">www.php.net</a> using this <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>.
+                    </p>
+                    <p ng-show="version.expanded">For additional assistance, contact your hosting provider.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="php-settings" class="readiness-check-item" ng-show="settings.visible">
+    <div ng-hide="settings.processed">
+        <span class="spinner side">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <h3 class="readiness-check-title">Checking PHP Settings *....</h3>
+    </div>
+
+    <div ng-show="settings.processed" ng-switch="settings.responseType">
+
+        <div ng-switch-when="success" ng-init="updateOnSuccess(settings)">
+
+            <span class="readiness-check-icon icon-success-round"></span>
+
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">PHP Settings Check *</h3>
+                <p>
+                    Your PHP settings are correct.
+                </p>
+            </div>
+
+            <div ng-repeat="setting in settings.data">
+                <div class="message" ng-show="setting.warning">
+                    <p>
+                        {{setting.message}}
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(settings)">
+
+            <span class="readiness-check-icon icon-failed-round"></span>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">PHP Settings Check *</h3>
+
+                <div ng-show="settings.isRequestError">
+                    <p>Server failed to respond. Please try again.</p>
+                </div>
+                <div ng-hide="settings.isRequestError" ng-repeat="setting in settings.data">
+                    <div ng-show="setting.error && setting.helpUrl" class="readiness-check-side">
+                        <p class="side-title">Need Help?</p>
+                        <a href="{{setting.helpUrl}}" target="_blank">PHP Documentation</a>
+                    </div>
+                    <div ng-show="setting.error">
+                        <p>
+                            {{setting.message}}
+                        </p>
+                    </div>
+                </div>
+
+                <p ng-show="componentDependency.expanded">For additional assistance, see
+                    <a href="https://devdocs.magento.com/guides/v2.2/install-gde/trouble/php/tshoot_php-set.html"
+                       target="_blank">PHP settings check help
+                    </a>.
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="php-extensions" class="readiness-check-item" ng-show="extensions.visible">
+    <div ng-hide="extensions.processed">
+        <span class="spinner side">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <h3 class="readiness-check-title">Checking PHP Extensions...</h3>
+    </div>
+    <div ng-show="extensions.processed" ng-switch="extensions.responseType">
+
+        <div ng-switch-when="success" ng-init="updateOnSuccess(extensions)">
+
+            <span class="readiness-check-icon icon-success-round"></span>
+
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">PHP Extensions Check</h3>
+                <p>
+                    You meet {{extensions.length}} out of {{extensions.length}} PHP extensions requirements.
+                    <a href="#php-extensions" ng-click="updateOnExpand(extensions)">
+                        <span ng-hide="extensions.expanded">Show detail</span>
+                        <span ng-show="extensions.expanded">Hide detail</span>
+                    </a>
+                </p>
+                <ul class="list" ng-show="extensions.expanded">
+                    <li class="list-item-success"
+                        ng-repeat="name in extensions.data.required"
+                        >PHP Extension {{name}}.</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div ng-switch-default ng-init="updateOnError(extensions)">
+
+            <div ng-switch="extensions.data.error">
+
+                <div ng-switch-when="phpExtensionError" class="message message-error">
+                    <span class="message-text">
+                        {{extensions.data.message}}
+                    </span>
+                </div>
+
+                <div class="readiness-check-side">
+                    <p class="side-title">Need Help?</p>
+                    <a href="https://devdocs.magento.com/guides/v2.2/install-gde/system-requirements.html" target="_blank">PHP Extension Help</a>
+                </div>
+
+                <span class="readiness-check-icon icon-failed-round"></span>
+
+                <div class="readiness-check-content">
+                    <h3 class="readiness-check-title">PHP Extensions Check</h3>
+                    <div ng-show="extensions.isRequestError">
+                        <p>Server failed to respond. Please try again.</p>
+                    </div>
+                    <div ng-hide="extensions.isRequestError">
+                        <p>
+                            {{extensions.data.missing.length}} missing PHP extensions.
+                            <a href="#php-extensions" ng-click="updateOnExpand(extensions)">
+                                <span ng-hide="extensions.expanded">Show detail</span>
+                                <span ng-show="extensions.expanded">Hide detail</span>
+                            </a>
+                        </p>
+                        <p>
+                            The best way to resolve this is to install the correct missing extensions. The exact fix depends on our server, your host, and other system variables.
+                            <br>
+                            Our <a href="https://devdocs.magento.com/guides/v2.2/install-gde/system-requirements.html" target="_blank">PHP extension help</a> can get you started.
+                        </p>
+                        <p>
+                            For additional assistance, contact your hosting provider.
+                        </p>
+                        <ul class="list" ng-show="extensions.expanded">
+                            <li
+                                class="list-item-icon"
+                                ng-repeat="name in extensions.data.required"
+                                ng-switch="extensions.data.missing.indexOf(name) >= 0"
+                                >
+                                <span ng-switch-when="true" class="icon-failed"></span>
+                                <span ng-switch-default class="icon-success"></span>
+                                PHP Extension {{name}}.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="readiness-check-item" id="php-permissions" ng-show="permissions.visible">
+    <div ng-hide="permissions.processed">
+        <span class="spinner side">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <h3 class="readiness-check-title">Checking File Permissions...</h3>
+    </div>
+
+    <div ng-show="permissions.processed" ng-switch="permissions.responseType">
+
+        <div ng-switch-when="success" ng-init="updateOnSuccess(permissions)">
+
+            <span class="readiness-check-icon icon-success-round"></span>
+
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">File Permission Check</h3>
+                <p>
+                    You meet {{permissions.data.current.length}} out of {{permissions.data.required.length}} writable file permission requirements.
+                    <a href="#php-permissions" ng-click="updateOnExpand(permissions)">
+                        <span ng-hide="permissions.expanded">Show detail</span>
+                        <span ng-show="permissions.expanded">Hide detail</span>
+                    </a>
+                </p>
+                <ul class="list" ng-show="permissions.expanded">
+                    <li class="list-item-success" ng-repeat="name in permissions.data.required">
+                        "{{name}}" writable directory permission.
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div ng-switch-default ng-init="updateOnError(permissions)">
+
+            <div class="readiness-check-side">
+                <p class="side-title">Need Help?</p>
+                <a href="https://devdocs.magento.com/guides/v2.2/install-gde/prereq/file-system-perms.html" target="_blank">File Permission Help</a>
+            </div>
+
+            <span class="readiness-check-icon icon-failed-round"></span>
+
+            <div class="readiness-check-content">
+
+                <h3 class="readiness-check-title">File Permission Check</h3>
+                <div ng-show="permissions.isRequestError">
+                    <p>Server failed to respond. Please try again.</p>
+                </div>
+                <div ng-hide="permissions.isRequestError">
+                    <p>
+                        {{permissions.data.required.length - permissions.data.current.length}} file permission not met.
+                        <a href="#php-permissions" ng-click="updateOnExpand(permissions)">
+                            <span ng-hide="permissions.expanded">Show detail</span>
+                            <span ng-show="permissions.expanded">Hide detail</span>
+                        </a>
+                    </p>
+                    <p ng-show="permissions.expanded">
+                        The best way to resolve this is to allow write permissions for files in the following Magento directories and subdirectories. The exact fix depends on your server, your host,
+                        and other system variables.
+                        <br>
+                        For help, see our <a href="https://devdocs.magento.com/guides/v2.2/install-gde/prereq/file-system-perms.html" target="_blank">File Permission Help</a> or call your hosting provider.
+                    </p>
+                    <ul class="list" ng-show="permissions.expanded" ng-init="showDetails=false">
+                        <li
+                            class="list-item-icon"
+                            ng-repeat="name in permissions.data.required"
+                            ng-switch="hasItem(permissions.data.current, name.path)">
+                            <span ng-switch-when="true" class="icon-success"></span>
+                            <span ng-switch-default class="icon-failed"></span>
+                            <span>"{{name.path}}"</span>
+                            <span ng-switch-when="true">
+                                 - Writable.
+                            </span>
+                            <span ng-switch-default ng-hide="permission.expanded">
+                                - Not writable, change the permissions.
+                                <a href="#" ng-click="showDetails = !showDetails"">
+                                    <span ng-hide="showDetails">Show details</span>
+                                    <span ng-show="showDetails">Hide details</span>
+                                </a>
+                                <ul ng-show="showDetails" ng-repeat="file in name.missing">
+                                    <li class="icon-failed">
+                                        {{file}}<br>
+                                    </li>
+                                </ul>
+                            </span>
+                        </li>
+                    </ul>
+                    
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="readiness-check-item" id="warning-message" ng-show="true">
+    * - In some cases, you might have two PHP configuration files: one for the PHP command line and for the web server. If so, make the change in both php.ini files. For details, see the <a href="http://php.net/manual/en/configuration.file.php">php.ini reference</a>.
+</div>
+
+<script type="text/ng-template" id="removeDialog">
+    <div class="modals-wrapper">
+        <aside class="modal-popup modal-connect-signin _show" data-role="modal">
+            <div class="modal-inner-wrap">
+                <header class="modal-header">
+                    <button ng-click="closeThisDialog()"
+                            title="Close"
+                            class="action-close"
+                            data-role="closeBtn"
+                            type="button">
+                        <span>Close</span>
+                    </button>
+                </header>
+                <div class="modal-content" data-role="content">
+                    <div class="delete-modal-wrap">
+                        <h3>Remove Extension</h3>
+
+                        <p>Are you sure you want to remove “{{extensionToRemove}}” from
+                            the list?</p>
+                        <p>
+                            Please be aware that removing this extension will remove it from the current
+                            update wizard flow. You can update this extension at a later time by selecting
+                            the extension in the update grid.
+                        </p>
+                        <div class="actions">
+                            <button ng-click="removeExtension(extensionToRemove)" class="btn btn-large btn-prime">
+                                <span>Remove</span>
+                            </button>
+                            <button ng-click="closeThisDialog()" class="btn btn-large btn-secondary">
+                                <span>Cancel</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</script>

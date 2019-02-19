@@ -1,0 +1,252 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid
+ */
+?>
+
+<?php $_items = $block->getItems() ?>
+<?php if (empty($_items)): ?>
+    <div id="order-items_grid">
+        <div class="admin__table-wrapper">
+            <table class="data-table admin__table-primary order-tables">
+                <thead>
+                    <tr class="headings">
+                        <th class="col-product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
+                        <th class="col-price"><span><?= /* @escapeNotVerified */ __('Price') ?></span></th>
+                        <th class="col-qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
+                        <th class="col-subtotal"><span><?= /* @escapeNotVerified */ __('Subtotal') ?></span></th>
+                        <th class="col-discount"><span><?= /* @escapeNotVerified */ __('Discount') ?></span></th>
+                        <th class="col-row-total"><span><?= /* @escapeNotVerified */ __('Row Subtotal') ?></span></th>
+                        <th class="col-action"><span><?= /* @escapeNotVerified */ __('Action') ?></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="even">
+                        <td class="empty-text" colspan="100"><?= /* @escapeNotVerified */ __('No ordered items') ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php else: ?>
+    <div class="admin__table-wrapper" id="order-items_grid">
+    <?php if (count($_items)>10): ?>
+        <div class="actions update actions-update">
+            <?= $block->getButtonHtml(__('Update Items and Quantities'), 'order.itemsUpdate()', 'action-secondary') ?>
+        </div>
+    <?php endif; ?>
+        <table class="data-table admin__table-primary order-tables">
+            <thead>
+                <tr class="headings">
+                    <th class="col-product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
+                    <th class="col-price"><span><?= /* @escapeNotVerified */ __('Price') ?></span></th>
+                    <th class="col-qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
+                    <th class="col-subtotal"><span><?= /* @escapeNotVerified */ __('Subtotal') ?></span></th>
+                    <th class="col-discount"><span><?= /* @escapeNotVerified */ __('Discount') ?></span></th>
+                    <th class="col-row-total"><span><?= /* @escapeNotVerified */ __('Row Subtotal') ?></span></th>
+                    <th class="col-action"><span><?= /* @escapeNotVerified */ __('Action') ?></span></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td class="col-total"><?= /* @escapeNotVerified */ __('Total %1 product(s)', count($_items)) ?></td>
+                    <td colspan="2" class="col-subtotal"><?= /* @escapeNotVerified */ __('Subtotal:') ?></td>
+                    <td class="col-price"><strong><?= /* @escapeNotVerified */ $block->formatPrice($block->getSubtotal()) ?></strong></td>
+                    <td class="col-price"><strong><?= /* @escapeNotVerified */ $block->formatPrice($block->getDiscountAmount()) ?></strong></td>
+                    <td class="col-price"><strong>
+                    <?php
+                        /* @escapeNotVerified */ echo $block->formatPrice($block->getSubtotalWithDiscount());
+                    ?></strong></td>
+                    <td colspan="2">&nbsp;</td>
+                </tr>
+            </tfoot>
+                <?php $i = 0 ?>
+                <?php foreach ($_items as $_item):$i++ ?>
+                <tbody class="<?= /* @escapeNotVerified */ ($i%2) ? 'even' : 'odd' ?>">
+                    <tr>
+                        <td class="col-product">
+                            <span id="order_item_<?= /* @escapeNotVerified */ $_item->getId() ?>_title"><?= $block->escapeHtml($_item->getName()) ?></span>
+                            <div class="product-sku-block">
+                                <span><?= /* @escapeNotVerified */ __('SKU') ?>:</span>
+                                <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))) ?>
+                            </div>
+                            <div class="product-configure-block">
+                                <?= $block->getConfigureButtonHtml($_item) ?>
+                            </div>
+                        </td>
+                        <td class="col-price">
+
+                            <?= $block->getItemUnitPriceHtml($_item) ?>
+
+                            <?php $_isCustomPrice = $block->usedCustomPriceForItem($_item) ?>
+                            <?php if ($_tier = $block->getTierHtml($_item)): ?>
+                            <div id="item_tier_block_<?= /* @escapeNotVerified */ $_item->getId() ?>"<?php if ($_isCustomPrice): ?> style="display:none"<?php endif; ?>>
+                                <a href="#" onclick="$('item_tier_<?= /* @escapeNotVerified */ $_item->getId() ?>').toggle();return false;"><?= /* @escapeNotVerified */ __('Tier Pricing') ?></a>
+                                <div style="display:none" id="item_tier_<?= /* @escapeNotVerified */ $_item->getId() ?>"><?= /* @escapeNotVerified */ $_tier ?></div>
+                            </div>
+                            <?php endif; ?>
+                            <?php if ($block->canApplyCustomPrice($_item)): ?>
+                                <div class="custom-price-block">
+                                    <input type="checkbox"
+                                           class="admin__control-checkbox"
+                                           id="item_use_custom_price_<?= /* @escapeNotVerified */ $_item->getId() ?>"
+                                           <?php if ($_isCustomPrice): ?> checked="checked"<?php endif; ?>
+                                           onclick="order.toggleCustomPrice(this, 'item_custom_price_<?= /* @escapeNotVerified */ $_item->getId() ?>', 'item_tier_block_<?= /* @escapeNotVerified */ $_item->getId() ?>');"/>
+                                    <label
+                                        class="normal admin__field-label"
+                                        for="item_use_custom_price_<?= /* @escapeNotVerified */ $_item->getId() ?>">
+                                        <span><?= /* @escapeNotVerified */ __('Custom Price') ?>*</span></label>
+                                </div>
+                            <?php endif; ?>
+                            <input id="item_custom_price_<?= /* @escapeNotVerified */ $_item->getId() ?>"
+                                   name="item[<?= /* @escapeNotVerified */ $_item->getId() ?>][custom_price]"
+                                   value="<?= /* @escapeNotVerified */ sprintf("%.2f", $block->getOriginalEditablePrice($_item)) ?>"
+                                   <?php if (!$_isCustomPrice): ?>
+                                   style="display:none"
+                                   disabled="disabled"
+                                   <?php endif; ?>
+                                   class="input-text item-price admin__control-text"/>
+                        </td>
+                        <td class="col-qty">
+                            <input name="item[<?= /* @escapeNotVerified */ $_item->getId() ?>][qty]"
+                                   class="input-text item-qty admin__control-text"
+                                   value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>"
+                                   maxlength="12" />
+                        </td>
+                        <td class="col-subtotal col-price">
+                            <?= $block->getItemRowTotalHtml($_item) ?>
+                        </td>
+                        <td class="col-discount col-price">
+                            <?= /* @escapeNotVerified */ $block->formatPrice(-$_item->getTotalDiscountAmount()) ?>
+                            <div class="discount-price-block">
+                                <input id="item_use_discount_<?= /* @escapeNotVerified */ $_item->getId() ?>"
+                                       class="admin__control-checkbox"
+                                       name="item[<?= /* @escapeNotVerified */ $_item->getId() ?>][use_discount]"
+                                       <?php if (!$_item->getNoDiscount()): ?>checked="checked"<?php endif; ?>
+                                       value="1"
+                                       type="checkbox" />
+                                <label
+                                    for="item_use_discount_<?= /* @escapeNotVerified */ $_item->getId() ?>"
+                                    class="normal admin__field-label">
+                                    <span><?= /* @escapeNotVerified */ __('Apply') ?></span></label>
+                            </div>
+
+                        </td>
+                        <td class="col-price col-row-subtotal">
+                            <?= $block->getItemRowTotalWithDiscountHtml($_item) ?>
+                        </td>
+                        <td class="col-actions last">
+                            <select class="admin__control-select" name="item[<?= /* @escapeNotVerified */ $_item->getId() ?>][action]">
+                                <option value=""><?= /* @escapeNotVerified */ __('Please select') ?></option>
+                                <option value="remove"><?= /* @escapeNotVerified */ __('Remove') ?></option>
+                                <?php if ($block->getCustomerId() && $block->getMoveToCustomerStorage()): ?>
+                                    <option value="cart"><?= /* @escapeNotVerified */ __('Move to Shopping Cart') ?></option>
+                                    <?php if ($block->isMoveToWishlistAllowed($_item)): ?>
+                                        <?php $wishlists = $block->getCustomerWishlists();?>
+                                        <?php if (count($wishlists) <= 1):?>
+                                            <option value="wishlist"><?= /* @escapeNotVerified */ __('Move to Wish List') ?></option>
+                                        <?php else: ?>
+                                            <optgroup label="<?= /* @escapeNotVerified */ __('Move to Wish List') ?>">
+                                                <?php foreach ($wishlists as $wishlist):?>
+                                                    <option value="wishlist_<?= /* @escapeNotVerified */ $wishlist->getId() ?>"><?= $block->escapeHtml($wishlist->getName()) ?></option>
+                                                <?php endforeach;?>
+                                            </optgroup>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <?php $hasMessageError = false; ?>
+                    <?php foreach ($_item->getMessage(false) as $messageError):?>
+                        <?php if (!empty($messageError)) {
+                            $hasMessageError = true;
+                        }
+                        ?>
+                    <?php endforeach; ?>
+
+                    <?php if ($hasMessageError):?>
+                        <tr class="row-messages-error">
+                            <td colspan="100"> <!-- ToDo UI: remove the 100 -->
+                                <?php foreach ($_item->getMessage(false) as $message):
+                                    if (empty($message)) {
+                                        continue;
+                                    }
+                                    ?>
+                                    <div class="message <?php if ($_item->getHasError()): ?>message-error<?php else: ?>message-notice<?php endif; ?>">
+                                        <?= $block->escapeHtml($message) ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            </td>
+                        </tr>
+                    <?php endif;?>
+
+                    <?= $block->getItemExtraInfo($_item)->toHtml() ?>
+                </tbody>
+                <?php endforeach; ?>
+        </table>
+        <p><small><?= /* @escapeNotVerified */ $block->getInclExclTaxMessage() ?></small></p>
+    </div>
+
+    <div class="order-discounts">
+        <?= $block->getButtonHtml(__('Update Items and Quantities'), 'order.itemsUpdate()', 'action-secondary') ?>
+        <div id="order-coupons" class="order-coupons"><?= $block->getChildHtml() ?></div>
+    </div>
+
+    <script>
+        require([
+            'Magento_Sales/order/create/form'
+        ], function(){
+            order.itemsOnchangeBind()
+        });
+    </script>
+
+<?php if ($block->isGiftMessagesAvailable()) : ?>
+<script>
+require([
+    "prototype",
+    "Magento_Sales/order/giftoptions_tooltip"
+], function(){
+
+//<![CDATA[
+    /**
+     * Retrieve gift options tooltip content
+     */
+    function getGiftOptionsTooltipContent(itemId) {
+        var contentLines = [];
+        var headerLine = null;
+        var contentLine = null;
+
+        $$('#gift_options_data_' + itemId + ' .gift-options-tooltip-content').each(function (element) {
+            if (element.down(0)) {
+                headerLine = element.down(0).innerHTML;
+                contentLine = element.down(0).next().innerHTML;
+                if (contentLine.length > 30) {
+                    contentLine = contentLine.slice(0,30) + '...';
+                }
+                contentLines.push(headerLine + ' ' + contentLine);
+            }
+        });
+        return contentLines.join('<br/>');
+    }
+
+    giftOptionsTooltip.setTooltipContentLoaderFunction(getGiftOptionsTooltipContent);
+
+    window.getGiftOptionsTooltipContent = getGiftOptionsTooltipContent;
+
+//]]>
+
+});
+</script>
+<?php endif; ?>
+<?php endif; ?>

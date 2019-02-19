@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Tax\Api\Data\TaxRateInterface">
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
+        <attribute code="stock_item" type="Magento\CatalogInventory\Api\Data\StockItemInterface" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
+        <attribute code="custom_1" type="Magento\Customer\Api\Data\CustomerCustom" />
+        <attribute code="custom_2" type="Magento\CustomerExtra\Api\Data\CustomerCustom2" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface2">
+        <attribute code="custom_with_permission" type="Magento\Customer\Api\Data\CustomerCustom">
+            <resources>
+                <resource ref="Magento_Customer::manage"/>
+            </resources>
+        </attribute>
+        <attribute code="custom_with_multiple_permissions" type="Magento\CustomerExtra\Api\Data\CustomerCustom2">
+            <resources>
+                <resource ref="Magento_Customer::manage"/>
+                <resource ref="Magento_Customer::manage2"/>
+            </resources>
+        </attribute>
+    </extension_attributes>
+</config>

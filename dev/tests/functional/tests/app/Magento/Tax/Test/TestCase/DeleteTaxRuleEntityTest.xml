@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Tax\Test\TestCase\DeleteTaxRuleEntityTest" summary="Delete Tax Rule" ticketId="MAGETWO-20924">
+        <variation name="DeleteTaxRuleEntityTestVariation1">
+            <data name="taxRule/dataset" xsi:type="string">tax_rule_with_custom_tax_classes</data>
+            <data name="address/data/country_id" xsi:type="string">United States</data>
+            <data name="address/data/region_id" xsi:type="string">California</data>
+            <data name="address/data/postcode" xsi:type="string">90001</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="shipping/price" xsi:type="string">5</data>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessDeleteMessage" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleNotInGrid" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsNotApplied" />
+        </variation>
+    </testCase>
+</config>

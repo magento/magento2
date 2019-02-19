@@ -1,0 +1,200 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Page header -> Action group -> Notifications
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@notifications__font-size: round(@font-size__s - .1rem, 1);
+@notifications__color: @color-gray20;
+
+@notifications-action__color: @text__color;
+@notifications-action__padding-bottom: (@page-header-action__height - @notifications-action-icon__size) / 2 - .05rem;
+@notifications-action__padding-side: 2rem;
+@notifications-action__padding-top: (@page-header-action__height - @notifications-action-icon__size) / 2 + .05rem;
+@notifications-action__hover__color: darken(@action-dropdown__color, 20%);
+@notifications-action-icon__size: 1.9rem;
+@notifications-action-menu__z-index: @header__z-index;
+
+@notifications-close__color: @color-gray80;
+@notifications-counter__background-color: @color-tomato-brick;
+@notifications-entry__padding-top: .6rem;
+@notifications-entry__hover__background-color: @action__hover__background-color;
+@notifications-list__width: 32rem;
+@notifications-title__color: @color-light-phoenix;
+@notifications-time__color: @color-very-dark-gray1;
+
+//
+
+.notifications-wrapper {
+    float: right;
+    line-height: 1;
+    position: relative;
+
+    &.active {
+        z-index: @notifications-action-menu__z-index; // Should be over global search when active
+
+        .notifications-action {
+            border-color: @action-dropdown__active__border-color;
+            box-shadow: @component__box-shadow__base;
+
+            &:after {
+                background-color: @action-dropdown__background-color;
+                border: none;
+                content: '';
+                display: block;
+                height: @component__shadow-size__base + 1;
+                left: -(@component__shadow-size__base + 1);
+                margin-top: 0;
+                position: absolute;
+                right: 0;
+                top: 100%;
+                width: auto;
+            }
+        }
+    }
+
+    //  Notifications dropdown
+    .admin__action-dropdown-menu {
+        padding: 1rem 0 0;
+        width: @notifications-list__width;
+    }
+}
+
+.notifications-action {
+    color: @notifications-action__color;
+    height: @page-header-action__height;
+    padding: @notifications-action__padding-top @notifications-action__padding-side @notifications-action__padding-bottom;
+
+    &:after {
+        display: none;
+    }
+
+    &:before {
+        &:extend(.abs-icon all);
+        content: @icon-notification-02__content;
+        font-size: @notifications-action-icon__size;
+        margin-right: 0;
+    }
+
+    &:active {
+        &:before {
+            position: relative;
+            top: 1px;
+        }
+    }
+
+    .notifications-counter {
+        background-color: @notifications-counter__background-color;
+        border-radius: 1em;
+        color: @color-white;
+        display: inline-block;
+        font-size: @notifications__font-size;
+        font-weight: @font-weight__bold;
+        height: 18px;
+        left: 50%;
+        margin-left: .3em;
+        margin-top: -1.1em;
+        min-width: 18px;
+        padding: .3em .5em;
+        position: absolute;
+        top: 50%;
+    }
+}
+
+.notifications-entry {
+    line-height: @line-height__base;
+    padding: @notifications-entry__padding-top @notifications-action__padding-side .8rem;
+    position: relative;
+    transition: @smooth__background-color;
+
+    &:hover {
+        background-color: @notifications-entry__hover__background-color;
+    }
+
+    &.notifications-entry-last {
+        margin: 0 @notifications-action__padding-side;
+        padding: .3rem 0 1.3rem;
+        text-align: center;
+
+        &:hover {
+            background-color: transparent;
+        }
+    }
+
+    + .notifications-entry-last {
+        border-top: 1px solid @color-light-gray;
+        padding-bottom: .6rem;
+    }
+
+    //  Case with cutted message description
+    ._cutted {
+        cursor: pointer;
+
+        .notifications-entry-description-start {
+            &:after {
+                content: '...';
+            }
+        }
+    }
+}
+
+.notifications-entry-title {
+    color: @notifications-title__color;
+    display: block;
+    font-size: @notifications__font-size;
+    font-weight: @font-weight__bold;
+    margin-bottom: .7rem;
+    margin-right: 1em;
+}
+
+.notifications-entry-description {
+    color: @notifications__color;
+    font-size: @notifications__font-size;
+    margin-bottom: .8rem;
+}
+
+.notifications-entry-description-end {
+    display: none;
+
+    &._show {
+        display: inline;
+    }
+}
+
+.notifications-entry-time {
+    color: @notifications-time__color;
+    font-size: @notifications__font-size;
+}
+
+.notifications-close {
+    &:extend(.abs-action-reset all);
+    line-height: 1;
+    padding: @notifications-action__padding-side / 2;
+    position: absolute;
+    right: 0;
+    top: .6rem;
+
+    &:before {
+        &:extend(.abs-icon all);
+        color: @notifications-close__color;
+        content: @icon-remove-small__content;
+        .transition(color);
+    }
+
+    &:hover {
+        &:before {
+            color: darken(@notifications-close__color, 10%);
+        }
+    }
+
+    &:active {
+        transform: scale(.95);
+    }
+}

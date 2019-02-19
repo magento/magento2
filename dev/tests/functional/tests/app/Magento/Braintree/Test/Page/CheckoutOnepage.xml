@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="CheckoutOnepage" mca="checkout/index">
+        <block name="braintreeBlock" class="Magento\Braintree\Test\Block\Form\BraintreeCc" locator="#payment_form_braintree" strategy="css selector"/>
+        <block name="braintree3dSecureBlock" class="Magento\Braintree\Test\Block\Form\Secure3d" locator="body" strategy="xpath"/>
+        <block name="braintreePaypalBlock" class="Magento\Braintree\Test\Block\Paypal\PopupWindow" locator="body" strategy="xpath"/>
+        <block name="paymentBlock">
+            <render name="braintree" class="Magento\Braintree\Test\Block\Form\BraintreeCc" />
+        </block>
+    </page>
+</config>

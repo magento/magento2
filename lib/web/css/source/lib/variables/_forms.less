@@ -1,0 +1,315 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Form variables
+//  _____________________________________________
+
+//
+//  Form elements inputs default variables
+//  ---------------------------------------------
+
+@form-element-input-type: ''; // [input-text|select|textarea|input-radio|input-checkbox]
+@form-element-input__background: @color-white;
+@form-element-input__border-color: @color-gray76;
+@form-element-input__border: 1px solid @form-element-input__border-color;
+@form-element-input__border-radius: 1px;
+@form-element-input__height: 32px;
+@form-element-input__width: 100%;
+@form-element-input__margin: false;
+@form-element-input__padding: 0 9px;
+@form-element-input__vertical-align: baseline;
+@form-element-input__background-clip: padding-box; // [border-box|content-box|padding-box]
+@form-element-input__font-size: @font-size__base;
+@form-element-input__color: false;
+@form-element-input__font-family: @font-family__base;
+@form-element-input__font-weight: false;
+@form-element-input__font-style: false;
+@form-element-input__line-height: @line-height__base;
+
+//  Placeholder
+@form-element-input-placeholder__color: @color-gray76;
+@form-element-input-placeholder__font-style: @form-element-input__font-style;
+
+//  Disabled state
+@form-element-input__disabled__background: @form-element-input__background;
+@form-element-input__disabled__border: @form-element-input__border;
+@form-element-input__disabled__opacity: .5;
+@form-element-input__disabled__color: @form-element-input__color;
+@form-element-input__disabled__font-style: @form-element-input__font-style;
+
+//  Focus state
+@form-element-input__focus__background: @form-element-input__background;
+@form-element-input__focus__border: @form-element-input__border;
+@form-element-input__focus__color: @form-element-input__color;
+@form-element-input__focus__font-style: @form-element-input__font-style;
+
+//  Form elements choice default variables
+@form-element-choice__type: ''; // [radio|checkbox]
+@form-element-choice__vertical-align: false;
+@form-element-choice__margin: 2px @indent__xs 0 0;
+@form-element-choice__disabled__opacity: @form-element-input__disabled__opacity;
+
+//
+//  Input-text
+//  ---------------------------------------------
+
+@input-text__background: @form-element-input__background;
+@input-text__border: @form-element-input__border;
+@input-text__border-radius: @form-element-input__border-radius;
+@input-text__height: @form-element-input__height;
+@input-text__width: @form-element-input__width;
+@input-text__margin: @form-element-input__margin;
+@input-text__padding: @form-element-input__padding;
+@input-text__vertical-align: @form-element-input__vertical-align;
+@input-text__background-clip: @form-element-input__background-clip; // [border-box|content-box|padding-box]
+@input-text__font-size: @form-element-input__font-size;
+@input-text__color: @form-element-input__color;
+@input-text__font-family: @form-element-input__font-family;
+@input-text__font-weight: @form-element-input__font-weight;
+@input-text__font-style: @form-element-input__font-style;
+@input-text__line-height: @form-element-input__line-height;
+
+//  Placeholder
+@input-text-placeholder__color: @form-element-input-placeholder__color;
+@input-text-placeholder__font-style: @form-element-input-placeholder__font-style;
+
+//  Disabled state
+@input-text__disabled__background: @form-element-input__disabled__background;
+@input-text__disabled__border: @form-element-input__disabled__border;
+@input-text__disabled__opacity: @form-element-input__disabled__opacity;
+@input-text__disabled__color: @form-element-input__disabled__color;
+@input-text__disabled__font-style: @form-element-input__disabled__font-style;
+
+//  Focus state
+@input-text__focus__background: @form-element-input__focus__background;
+@input-text__focus__border: @form-element-input__focus__border;
+@input-text__focus__color: @form-element-input__focus__color;
+@input-text__focus__font-style: @form-element-input__focus__font-style;
+
+//
+//  Select
+//  ---------------------------------------------
+
+@select__background: @form-element-input__background;
+@select__border: @form-element-input__border;
+@select__border-radius: @form-element-input__border-radius;
+@select__height: @form-element-input__height;
+@select__width: @form-element-input__width;
+@select__margin: @form-element-input__margin;
+@select__padding: @indent__xs @indent__s 4px;
+@select__vertical-align: @form-element-input__vertical-align;
+@select__background-clip: @form-element-input__background-clip; // [border-box|content-box|padding-box]
+@select__font-size: @form-element-input__font-size;
+@select__color: @form-element-input__color;
+@select__font-family: @form-element-input__font-family;
+@select__font-weight: @form-element-input__font-weight;
+@select__font-style: @form-element-input__font-style;
+@select__line-height: @form-element-input__line-height;
+
+//  Placeholder
+@select-placeholder__color: false;
+@select-placeholder__font-style: false;
+
+//  Disabled state
+@select__disabled__background: @form-element-input__disabled__background;
+@select__disabled__border: @form-element-input__disabled__border;
+@select__disabled__opacity: @form-element-input__disabled__opacity;
+@select__disabled__color: @form-element-input__disabled__color;
+@select__disabled__font-style: @form-element-input__disabled__font-style;
+
+//  Focus state
+@select__focus__background: false;
+@select__focus__border: @form-element-input__focus__border;
+@select__focus__color: @form-element-input__focus__color;
+@select__focus__font-style: @form-element-input__focus__font-style;
+
+//
+//  Textarea
+//  ---------------------------------------------
+
+@textarea__background: @form-element-input__background;
+@textarea__border: @form-element-input__border;
+@textarea__border-radius: @form-element-input__border-radius;
+@textarea__height: auto;
+@textarea__width: @form-element-input__width;
+@textarea__padding: @indent__s;
+@textarea__margin: 0;
+@textarea__vertical-align: @form-element-input__vertical-align;
+@textarea__background-clip: @form-element-input__background-clip; // [border-box|content-box|padding-box]
+@textarea__font-size: @form-element-input__font-size;
+@textarea__color: @form-element-input__color;
+@textarea__font-family: @form-element-input__font-family;
+@textarea__font-weight: @form-element-input__font-weight;
+@textarea__font-style: @form-element-input__font-style;
+@textarea__line-height: @form-element-input__line-height;
+@textarea__resize: vertical; // [none|both|horizontal|vertical|inherit]
+
+//  Placeholder
+@textarea-placeholder__color: @form-element-input-placeholder__color;
+@textarea-placeholder__font-style: @form-element-input-placeholder__font-style;
+
+//  Disabled state
+@textarea__disabled__background: @form-element-input__disabled__background;
+@textarea__disabled__border: @form-element-input__disabled__border;
+@textarea__disabled__opacity: @form-element-input__disabled__opacity;
+@textarea__disabled__color: @form-element-input__disabled__color;
+@textarea__disabled__font-style: @form-element-input__disabled__font-style;
+
+//  Focus state
+@textarea__focus__background: @form-element-input__focus__background;
+@textarea__focus__border: @form-element-input__focus__border;
+@textarea__focus__color: @form-element-input__focus__color;
+@textarea__focus__font-style: @form-element-input__focus__font-style;
+
+//
+//  Radio
+//  ---------------------------------------------
+
+@input-radio__vertical-align: @form-element-choice__vertical-align;
+@input-radio__margin: @form-element-choice__margin;
+
+@input-radio__disabled__opacity: @form-element-choice__disabled__opacity;
+
+//
+//  Checkbox
+//  ---------------------------------------------
+
+@input-checkbox__vertical-align: @form-element-choice__vertical-align;
+@input-checkbox__margin: @form-element-choice__margin;
+
+@input-checkbox__disabled__opacity: @form-element-choice__disabled__opacity;
+
+//
+//  Validation
+//  ---------------------------------------------
+
+@form-validation-note__color-error: @error__color;
+@form-validation-note__font-size: @font-size__s;
+@form-validation-note__font-family: false;
+@form-validation-note__font-style: false;
+@form-validation-note__font-weight: false;
+@form-validation-note__line-height: false;
+@form-validation-note__margin: 3px 0 0;
+@form-validation-note__padding: false;
+
+@form-validation-note-icon__use: false;
+@form-validation-note-icon__font-content: @icon-pointer-up;
+@form-validation-note-icon__font: @icon-font;
+@form-validation-note-icon__font-size: @form-validation-note__font-size * 2;
+@form-validation-note-icon__font-line-height: @form-validation-note__font-size;
+@form-validation-note-icon__font-color: @form-validation-note__color-error;
+@form-validation-note-icon__font-color-hover: false;
+@form-validation-note-icon__font-color-active: false;
+@form-validation-note-icon__font-margin: false;
+@form-validation-note-icon__font-vertical-align: @icon-font__vertical-align;
+@form-validation-note-icon__font-position: @icon-font__position;
+@form-validation-note-icon__font-text-hide: @icon-font__text-hide;
+
+@form-element-validation__color-error: false;
+@form-element-validation__color-valid: false;
+@form-element-validation__border-error: lighten(@form-validation-note__color-error, 20%);
+@form-element-validation__border-valid: false;
+@form-element-validation__background-error: false;
+@form-element-validation__background-valid: false;
+
+//
+//  Fieldset
+//  ---------------------------------------------
+
+@form-fieldset__border: 0;
+@form-fieldset__margin: 0 0 @indent__xl;
+@form-fieldset__padding: 0;
+@form-fieldset-legend__color: false;
+@form-fieldset-legend__font-size: 20px;
+@form-fieldset-legend__font-family: false;
+@form-fieldset-legend__font-weight: false;
+@form-fieldset-legend__font-style: false;
+@form-fieldset-legend__line-height: 1.2;
+@form-fieldset-legend__margin: 0 0 @indent__m;
+@form-fieldset-legend__padding: 0;
+@form-fieldset-legend__width: false;
+
+//
+//  Field
+//  ---------------------------------------------
+
+@form-field-type: block; // [inline|block]
+@form-field-type-revert: inline; // [inline|block|false]
+@form-field__border: false;
+@form-field__vertical-indent: @indent__base;
+@form-field__additional-vertical-indent: @form-field__vertical-indent/2;
+@form-field-type-block__margin: 0 0 @form-field__vertical-indent;
+@form-field-type-inline__margin: 0 0 @form-field__vertical-indent;
+
+@form-field-column: false;
+@form-field-column__padding: 0 12px 0 0;
+@form-field-column__number: 2;
+
+//  Form field label
+@form-field-label__align: false;
+@form-field-label__color: false;
+@form-field-label__font-size: false;
+@form-field-label__font-family: false;
+@form-field-label__font-weight: @font-weight__bold;
+@form-field-label__font-style: false;
+@form-field-label__line-height: false;
+
+@form-field-type-label-inline__margin: false;
+@form-field-type-label-inline__padding-top: 6px;
+@form-field-type-label-inline__padding: @form-field-type-label-inline__padding-top 15px 0 0;
+@form-field-type-label-inline__width: 25.8%;
+@form-field-type-label-inline__align: right;
+
+@form-field-type-label-block__margin: 0 0 @indent__xs;
+@form-field-type-label-block__padding: false;
+@form-field-type-label-block__align: @form-field-label__align;
+
+//  Form field control
+@form-field-type-control-inline__width: 74.2%;
+
+//  Form field label asterisk
+@form-field-label-asterisk__color: @color-red10;
+@form-field-label-asterisk__font-size: @font-size__s;
+@form-field-label-asterisk__font-family: false;
+@form-field-label-asterisk__font-weight: false;
+@form-field-label-asterisk__font-style: false;
+@form-field-label-asterisk__line-height: false;
+@form-field-label-asterisk__margin: 0 0 0 @indent__xs;
+
+//  Form field note
+@form-field-note__color: false;
+@form-field-note__font-size: @font-size__s;
+@form-field-note__font-family: false;
+@form-field-note__font-weight: false;
+@form-field-note__font-style: false;
+@form-field-note__line-height: false;
+@form-field-note__margin: 3px 0 0;
+@form-field-note__padding: 0;
+
+//  Form field note icon
+@form-field-note-icon-font: @icon-font;
+@form-field-note-icon-font__content: @icon-pointer-up;
+@form-field-note-icon-font__size: @form-field-note__font-size * 2;
+@form-field-note-icon-font__line-height: @form-field-note__font-size;
+@form-field-note-icon-font__color: @form-field-note__color;
+@form-field-note-icon-font__color-hover: false;
+@form-field-note-icon-font__color-active: false;
+@form-field-note-icon-font__margin: false;
+@form-field-note-icon-font__vertical-align: @icon-font__vertical-align;
+@form-field-note-icon-font__position: @icon-font__position;
+@form-field-note-icon-font__text-hide: @icon-font__text-hide;
+
+//  Hasrequired
+@form-hasrequired__position: top; // [top|bottom]
+@form-hasrequired__color: @form-field-label-asterisk__color;
+@form-hasrequired__font-size: @font-size__s;
+@form-hasrequired__font-family: false;
+@form-hasrequired__font-weight: false;
+@form-hasrequired__font-style: false;
+@form-hasrequired__line-height: false;
+@form-hasrequired__border: false;
+@form-hasrequired__margin: @indent__s 0 0;
+@form-hasrequired__padding: false;

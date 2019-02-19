@@ -1,0 +1,23 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/**
+ * @see \Magento\Paypal\Block\Adminhtml\System\Config\Payflowlink\Info
+ * @var \Magento\Paypal\Block\Adminhtml\System\Config\Payflowlink\Info $block
+ */
+
+?>
+<div class="payflow-settings-notice">
+    <strong class="important-label"><?= $block->escapeHtml(__('Important: ')) ?></strong>
+    <?= $block->escapeHtml(__('To use PayPal Payflow Link, you must configure your PayPal Payflow Link account on the PayPal website.')) ?>
+    <?= $block->escapeHtml(__('Once you log into your PayPal Payflow Link account, navigate to the Service Settings - Hosted Checkout Pages - Set Up menu and set the options described below')) ?>
+    <ul class="options-list">
+        <li><strong>AVS:</strong> No</li>
+        <li><strong>CSC:</strong> No</li>
+        <li><strong>Enable Secure Token:</strong> Yes</li>
+    </ul>
+</div>

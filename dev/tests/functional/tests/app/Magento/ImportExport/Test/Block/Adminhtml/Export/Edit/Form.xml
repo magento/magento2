@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <entity>
+            <input>select</input>
+        </entity>
+        <file_format>
+            <input>select</input>
+        </file_format>
+        <product composite="1">
+            <sku>
+                <input>input</input>
+                <selector>[name="export_filter[sku]"]</selector>
+            </sku>
+        </product>
+    </fields>
+</mapping>

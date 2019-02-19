@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="promo" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
+            <class>separator-top</class>
+            <label>Promotions</label>
+            <tab>customer</tab>
+            <resource>Magento_SalesRule::config_promo</resource>
+            <group id="auto_generated_coupon_codes" translate="label" showInDefault="1" sortOrder="10">
+                <label>Auto Generated Specific Coupon Codes</label>
+                <field id="length" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Code Length</label>
+                    <comment>Excluding prefix, suffix and separators.</comment>
+                    <frontend_class>validate-digits</frontend_class>
+                </field>
+                <field id="format" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Code Format</label>
+                    <source_model>Magento\SalesRule\Model\System\Config\Source\Coupon\Format</source_model>
+                </field>
+                <field id="prefix" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Code Prefix</label>
+                </field>
+                <field id="suffix" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Code Suffix</label>
+                </field>
+                <field id="dash" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Dash Every X Characters</label>
+                    <comment>If empty no separation.</comment>
+                    <frontend_class>validate-digits</frontend_class>
+                </field>
+            </group>
+        </section>
+        <section id="rss">
+            <group id="catalog">
+                <field id="discounts" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Coupons/Discounts</label>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

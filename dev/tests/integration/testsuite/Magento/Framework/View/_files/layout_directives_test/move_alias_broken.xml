@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout>
+    <container name="container1" label="Container 1">
+        <block class="Magento\Framework\View\Element\Text" name="no_name1" as="same_alias"/>
+    </container>
+    <move element="no_name3" destination="container1" as="same_alias"/>
+    <block class="Magento\Framework\View\Element\Text" name="no_name3" as="same_alias"/>
+</layout>

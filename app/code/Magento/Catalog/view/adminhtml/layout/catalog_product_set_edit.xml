@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <container name="adminhtml.catalog.product.set.edit.wrapper" htmlTag="div" htmlClass="admin__scope-old"><!-- @todo ui: remove arguments within .admin__scope-old -->
+                <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main"
+                       name="adminhtml.catalog.product.set.edit"
+                       template="Magento_Catalog::catalog/product/attribute/set/main.phtml"/>
+            </container>
+        </referenceContainer>
+    </body>
+</page>

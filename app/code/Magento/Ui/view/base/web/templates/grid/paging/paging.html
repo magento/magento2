@@ -1,0 +1,16 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__data-grid-pager-wrap">
+    <scope args="sizes" render=""/>
+
+    <div class="admin__data-grid-pager">
+        <button class="action-previous" type="button" attr="title: $t('Previous Page')" click="prev" disable="isFirst()"/>
+        <input class="admin__control-text" type="number" data-ui-id="current-page-input" attr="id: ++ko.uid" ko-value="_current"/>
+        <label class="admin__control-support-text" attr="for: ko.uid" text="'of ' + pages"/>
+        <button class="action-next" type="button" attr="title: $t('Next Page')" click="next" disable="isLast()"/>
+    </div>
+</div>

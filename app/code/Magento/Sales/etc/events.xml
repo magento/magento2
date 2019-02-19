@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_order_place_after">
+        <observer name="sales_vat_request_params_order_comment" instance="Magento\Sales\Observer\Frontend\AddVatRequestParamsOrderComment" />
+    </event>
+    <event name="sales_order_process_relation">
+        <observer name="sales_grid_order_sync_insert" instance="SalesOrderIndexGridSyncInsert" />
+    </event>
+    <event name="sales_order_invoice_process_relation">
+        <observer name="sales_grid_order_invoice_sync_insert" instance="SalesInvoiceIndexGridSyncInsert" />
+    </event>
+    <event name="sales_order_shipment_process_relation">
+        <observer name="sales_grid_order_shipment_sync_insert" instance="SalesShipmentIndexGridSyncInsert" />
+    </event>
+    <event name="sales_order_creditmemo_process_relation">
+        <observer name="sales_grid_order_creditmemo_sync_insert" instance="SalesCreditmemoIndexGridSyncInsert" />
+    </event>
+    <event name="sales_order_delete_after">
+        <observer name="sales_grid_order_sync_remove" instance="SalesOrderIndexGridSyncRemove" />
+    </event>
+    <event name="sales_order_invoice_delete_after">
+        <observer name="sales_grid_order_invoice_sync_remove" instance="SalesInvoiceIndexGridSyncRemove" />
+    </event>
+    <event name="sales_order_shipment_delete_after">
+        <observer name="sales_grid_order_shipment_sync_remove" instance="SalesShipmentIndexGridSyncRemove" />
+    </event>
+    <event name="sales_order_creditmemo_delete_after">
+        <observer name="sales_grid_order_creditmemo_sync_remove" instance="SalesCreditmemoIndexGridSyncRemove" />
+    </event>
+    <event name="admin_sales_order_address_update">
+        <observer name="sales_grid_admin_refresh_grids" instance="Magento\Sales\Observer\GridProcessAddressChange" />
+    </event>
+    <event name="config_data_dev_grid_async_indexing_disabled">
+        <observer name="sales_grid_order_async_insert" instance="SalesOrderIndexGridAsyncInsertObserver" />
+        <observer name="sales_grid_order_invoice_async_insert" instance="SalesInvoiceIndexGridAsyncInsertObserver" />
+        <observer name="sales_grid_order_shipment_async_insert" instance="SalesShipmentIndexGridAsyncInsertObserver" />
+        <observer name="sales_grid_order_creditmemo_async_insert" instance="SalesCreditmemoIndexGridAsyncInsertObserver" />
+    </event>
+    <event name="config_data_sales_email_general_async_sending_disabled">
+        <observer name="sales_send_order_emails" instance="SalesOrderSendEmailsObserver" />
+        <observer name="sales_send_order_invoice_emails" instance="SalesOrderInvoiceSendEmailsObserver" />
+        <observer name="sales_send_order_shipment_emails" instance="SalesOrderShipmentSendEmailsObserver" />
+        <observer name="sales_send_order_creditmemo_emails" instance="SalesOrderCreditmemoSendEmailsObserver" />
+    </event>
+    <event name="store_add">
+        <observer name="magento_sequence" instance="Magento\SalesSequence\Observer\SequenceCreatorObserver" />
+    </event>
+    <event name="customer_save_after_data_object">
+        <observer
+                name="sales_assign_order_to_customer"
+                instance="Magento\Sales\Observer\AssignOrderToCustomerObserver" />
+    </event>
+</config>

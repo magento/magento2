@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Rss\Controller\Adminhtml\Feed\Index">
+        <plugin name="adminAuthentication" type="Magento\Rss\App\Action\Plugin\BackendAuthentication"/>
+    </type>
+    <type name="Magento\Rss\App\Action\Plugin\BackendAuthentication">
+        <arguments>
+            <argument name="aclResources" xsi:type="array">
+                <item name="feed" xsi:type="string">Magento_Rss::rss</item>
+                <item name="notifystock" xsi:type="string">Magento_Catalog::catalog_inventory</item>
+                <item name="new_order" xsi:type="string">Magento_Sales::actions_view</item>
+                <item name="review" xsi:type="string">Magento_Reports::review_product</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

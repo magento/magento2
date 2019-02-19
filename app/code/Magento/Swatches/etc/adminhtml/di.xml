@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save">
+        <plugin name="save_swatches_frontend_input" type="Magento\Swatches\Controller\Adminhtml\Product\Attribute\Plugin\Save"/>
+    </type>
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Main">
+        <arguments>
+            <argument name="formFactory" xsi:type="object">Magento\Swatches\Block\Adminhtml\Product\Attribute\Edit\FormFactory</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Swatches\Block\Adminhtml\Product\Attribute\Edit\FormFactory" type="Magento\Framework\Data\FormFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Swatches\Block\Adminhtml\Product\Attribute\Edit\Form</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\GetAttributes">
+        <arguments>
+            <argument name="attributesList" xsi:type="object">Magento\Swatches\Model\AttributesList</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Eav\Attribute">
+        <plugin name="invalidate_caches_after_attribute_save" type="Magento\Swatches\Plugin\Catalog\CacheInvalidate" />
+    </type>
+    <type name="Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype">
+        <plugin name="append_compatible_input_types" type="Magento\Swatches\Plugin\Eav\System\Config\Source\InputtypePlugin" />
+    </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Attribute\Validate">
+        <arguments>
+            <argument name="multipleAttributeList" xsi:type="array">
+                <item name="swatch_text" xsi:type="string">optiontext</item>
+                <item name="swatch_visual" xsi:type="string">optionvisual</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

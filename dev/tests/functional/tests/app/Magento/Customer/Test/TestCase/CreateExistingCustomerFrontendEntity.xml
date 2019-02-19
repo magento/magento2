@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Customer\Test\TestCase\CreateExistingCustomerFrontendEntity" summary="Create Existing Frontend Customer" ticketId="MAGETWO-23545">
+        <variation name="CreateExistingCustomerFrontendEntityVariation1">
+            <data name="customer/data/firstname" xsi:type="string">john</data>
+            <data name="customer/data/lastname" xsi:type="string">doe</data>
+            <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
+            <data name="customer/data/password" xsi:type="string">123123q#</data>
+            <data name="customer/data/password_confirmation" xsi:type="string">123123q#</data>
+            <data name="customer/data/website_id/dataset" xsi:type="string">default</data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerFailRegisterMessage" />
+        </variation>
+    </testCase>
+</config>

@@ -1,0 +1,50 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<!-- ko if: ifShowValue() && !ifShowDetails() -->
+<tr class="totals-tax">
+    <th data-bind="text: title" class="mark" colspan="1" scope="row"></th>
+    <td data-bind="attr: {'data-th': title}" class="amount">
+        <span class="price" data-bind="text: getValue()"></span>
+    </td>
+</tr>
+<!-- /ko -->
+<!-- ko if: ifShowValue() && ifShowDetails() -->
+    <tr class="totals-tax-summary"
+        data-bind="mageInit: {'toggleAdvanced':{'selectorsToggleClass': 'shown', 'baseToggleClass': 'expanded', 'toggleContainers': '.totals-tax-details'}}">
+        <th class="mark" scope="row" colspan="1">
+            <span class="detailed" data-bind="text: title"></span>
+        </th>
+        <td data-bind="attr: {'data-th': title}" class="amount">
+            <span class="price" data-bind="text: getValue()"></span>
+        </td>
+    </tr>
+    <!-- ko foreach: getDetails() -->
+        <!-- ko foreach: rates -->
+        <tr class="totals-tax-details">
+            <!-- ko if: percent -->
+                <th class="mark" scope="row" colspan="1" data-bind="text: title + ' (' + percent + '%)'"></th>
+            <!-- /ko -->
+            <!-- ko if: !percent -->
+                <th class="mark" scope="row" colspan="1" data-bind="text: title"></th>
+            <!-- /ko -->
+            <!-- ko if: $index() == 0 -->
+                <td class="amount" rowspan="1">
+                    <!-- ko if: $parents[1].isCalculated() -->
+                    <span class="price"
+                          data-bind="text: $parents[1].formatPrice($parents[0].amount), attr: {'data-th': title, 'rowspan': $parents[0].rates.length }"></span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: $parents[1].isCalculated() -->
+                    <span class="not-calculated"
+                          data-bind="text: $parents[1].formatPrice($parents[0].amount), attr: {'data-th': title, 'rowspan': $parents[0].rates.length }"></span>
+                    <!-- /ko -->
+                </td>
+            <!-- /ko -->
+        </tr>
+        <!-- /ko -->
+    <!-- /ko -->
+<!-- /ko -->

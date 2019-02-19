@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <attribute name="prefix" value="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# product: http://ogp.me/ns/product#" />
+    </head>
+    <body>
+        <referenceBlock name="head.additional">
+            <block class="Magento\Catalog\Block\Product\View" name="opengraph.general" template="Magento_Catalog::product/view/opengraph/general.phtml">
+                <block class="Magento\Directory\Block\Currency" name="opengraph.currency" as="meta.currency" template="Magento_Catalog::product/view/opengraph/currency.phtml"/>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

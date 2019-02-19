@@ -1,0 +1,68 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\File */ ?>
+<?php $_option = $block->getOption(); ?>
+<?php $_fileInfo = $block->getFileInfo(); ?>
+<?php $_fileExists = $_fileInfo->hasData(); ?>
+<?php $_fileName = 'options_' . $_option->getId() . '_file'; ?>
+<?php $_fieldNameAction = $_fileName . '_action'; ?>
+<?php $_fieldValueAction = $_fileExists ? 'save_old' : 'save_new'; ?>
+<?php $_fileNamed = $_fileName . '_name'; ?>
+<?php $class = ($_option->getIsRequire()) ? ' required' : ''; ?>
+
+<div class="field file<?= /* @escapeNotVerified */ $class ?>">
+    <label class="label" for="<?= /* @noEscape */ $_fileName ?>" id="<?= /* @noEscape */ $_fileName ?>-label">
+        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+        <?= /* @escapeNotVerified */ $block->getFormattedPrice() ?>
+    </label>
+    <?php if ($_fileExists): ?>
+    <div class="control">
+        <span class="<?= /* @noEscape */ $_fileNamed ?>"><?= $block->escapeHtml($_fileInfo->getTitle()) ?></span>
+        <a href="javascript:void(0)" class="label" id="change-<?= /* @noEscape */ $_fileName ?>" >
+            <?= /* @escapeNotVerified */ __('Change') ?>
+        </a>
+        <?php if (!$_option->getIsRequire()): ?>
+            <input type="checkbox" id="delete-<?= /* @escapeNotVerified */ $_fileName ?>" />
+            <span class="label"><?= /* @escapeNotVerified */ __('Delete') ?></span>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+    <div class="control" id="input-box-<?= /* @escapeNotVerified */ $_fileName ?>"
+             data-mage-init='{"priceOptionFile":{
+                "fileName":"<?= /* @noEscape */ $_fileName ?>",
+                "fileNamed":"<?= /* @noEscape */ $_fileNamed ?>",
+                "fieldNameAction":"<?= /* @escapeNotVerified */ $_fieldNameAction ?>",
+                "changeFileSelector":"#change-<?= /* @escapeNotVerified */ $_fileName ?>",
+                "deleteFileSelector":"#delete-<?= /* @escapeNotVerified */ $_fileName ?>"}
+             }'
+            <?= $_fileExists ? 'style="display:none"' : '' ?>>
+        <input type="file"
+               name="<?= /* @escapeNotVerified */ $_fileName ?>"
+               id="<?= /* @escapeNotVerified */ $_fileName ?>"
+               class="product-custom-option<?= $_option->getIsRequire() ? ' required' : '' ?>"
+               <?= $_fileExists ? 'disabled="disabled"' : '' ?> />
+        <input type="hidden" name="<?= /* @escapeNotVerified */ $_fieldNameAction ?>" value="<?= /* @escapeNotVerified */ $_fieldValueAction ?>" />
+        <?php if ($_option->getFileExtension()): ?>
+            <p class="note">
+                <?= /* @escapeNotVerified */ __('Compatible file extensions to upload') ?>: <strong><?= /* @escapeNotVerified */ $_option->getFileExtension() ?></strong>
+            </p>
+        <?php endif; ?>
+        <?php if ($_option->getImageSizeX() > 0): ?>
+            <p class="note">
+                <?= /* @escapeNotVerified */ __('Maximum image width') ?>: <strong><?= /* @escapeNotVerified */ $_option->getImageSizeX() ?> <?= /* @escapeNotVerified */ __('px.') ?></strong>
+            </p>
+        <?php endif; ?>
+        <?php if ($_option->getImageSizeY() > 0): ?>
+            <p class="note">
+                <?= /* @escapeNotVerified */ __('Maximum image height') ?>: <strong><?= /* @escapeNotVerified */ $_option->getImageSizeY() ?> <?= /* @escapeNotVerified */ __('px.') ?></strong>
+            </p>
+        <?php endif; ?>
+    </div>
+</div>

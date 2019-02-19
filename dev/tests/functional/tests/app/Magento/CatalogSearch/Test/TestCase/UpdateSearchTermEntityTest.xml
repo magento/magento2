@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\CatalogSearch\Test\TestCase\UpdateSearchTermEntityTest" summary="Update Search Term" ticketId="MAGETWO-26100">
+        <variation name="UpdateSearchTermEntityTestVariation1">
+            <data name="searchTerm/data/query_text/value" xsi:type="string">catalogProductSimple::sku</data>
+            <data name="searchTerm/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="searchTerm/data/num_results" xsi:type="string">1</data>
+            <data name="searchTerm/data/popularity" xsi:type="string">20</data>
+            <data name="searchTerm/data/redirect" xsi:type="string">http://example.com/</data>
+            <data name="searchTerm/data/display_in_terms" xsi:type="string">No</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessSaveMessage" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermForm" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermInGrid" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermOnFrontend" />
+        </variation>
+    </testCase>
+</config>

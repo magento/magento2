@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <tax>
+            <classes>
+                <shipping_tax_class>0</shipping_tax_class>
+                <default_product_tax_class>2</default_product_tax_class>
+                <default_customer_tax_class>3</default_customer_tax_class>
+            </classes>
+            <calculation>
+                <algorithm>TOTAL_BASE_CALCULATION</algorithm>
+                <apply_after_discount>1</apply_after_discount>
+                <discount_tax>0</discount_tax>
+                <based_on>shipping</based_on>
+                <price_includes_tax>0</price_includes_tax>
+                <shipping_includes_tax>0</shipping_includes_tax>
+                <apply_tax_on>0</apply_tax_on>
+            </calculation>
+            <defaults>
+                <country>US</country>
+                <region>0</region>
+            </defaults>
+            <display>
+                <type>1</type>
+                <shipping>1</shipping>
+            </display>
+            <cart_display>
+                <price>1</price>
+                <subtotal>1</subtotal>
+                <shipping>1</shipping>
+                <discount>1</discount>
+                <grandtotal>0</grandtotal>
+                <full_summary>0</full_summary>
+                <zero_tax>0</zero_tax>
+            </cart_display>
+            <sales_display>
+                <price>1</price>
+                <subtotal>1</subtotal>
+                <shipping>1</shipping>
+                <discount>1</discount>
+                <grandtotal>0</grandtotal>
+                <full_summary>0</full_summary>
+                <zero_tax>0</zero_tax>
+            </sales_display>
+            <notification>
+                <info_url>http://docs.magento.com/m2/ce/user_guide/tax/warning-messages.html</info_url>
+            </notification>
+        </tax>
+    </default>
+</config>

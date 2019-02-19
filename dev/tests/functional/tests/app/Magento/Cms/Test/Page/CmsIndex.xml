@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="CmsIndex" mca="cms/index/index" module="Magento_Cms">
+        <block name="searchBlock" class="Magento\Catalog\Test\Block\Search" locator="#search_mini_form" strategy="css selector" />
+        <block name="topmenu" class="Magento\Theme\Test\Block\Html\Topmenu" locator="[data-action='navigation']" strategy="css selector" />
+        <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper" strategy="css selector" />
+        <block name="footerBlock" class="Magento\Theme\Test\Block\Html\Footer" locator="footer.page-footer" strategy="css selector" />
+        <block name="logoBlock" class="Magento\Theme\Test\Block\Html\Logo" locator=".header .logo" strategy="css selector" />
+        <block name="linksBlock" class="Magento\Theme\Test\Block\Links" locator=".panel.header" strategy="css selector" />
+        <block name="storeSwitcherBlock" class="Magento\Store\Test\Block\Switcher" locator="[data-ui-id='language-switcher']" strategy="css selector" />
+        <block name="currencyBlock" class="Magento\Directory\Test\Block\Currency\Switcher" locator=".switcher.currency" strategy="css selector" />
+        <block name="cmsPageBlock" class="Magento\Cms\Test\Block\Page" locator=".page-main" strategy="css selector" />
+        <block name="widgetView" class="Magento\Widget\Test\Block\WidgetView" locator=".widget" strategy="css selector" />
+        <block name="messagesBlock" class="Magento\Cms\Test\Block\Messages" locator=".messages" strategy="css selector"/>
+    </page>
+</config>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Validator/etc/validation.xsd">
+    <entity name="test_entity_a">
+        <rules>
+            <rule name="check_alnum_and_int_not_empty_and_have_valid_value">
+                <property_constraints>
+                    <property name="int">
+                        <constraint class="Magento\Framework\Validator\Test\Unit\Test\NotEmpty"/>
+                    </property>
+                </property_constraints>
+            </rule>
+            <rule name="check_alnum_has_valid_value">
+                <property_constraints>
+                    <property name="alnum">
+                        <constraint class="Magento\Framework\Validator\Test\Unit\Test\Alnum"/>
+                    </property>
+                </property_constraints>
+            </rule>
+        </rules>
+        <groups>
+            <group name="check_alnum">
+                <uses>
+                    <use rule="check_alnum_has_valid_value"/>
+                </uses>
+            </group>
+        </groups>
+    </entity>
+</validation>

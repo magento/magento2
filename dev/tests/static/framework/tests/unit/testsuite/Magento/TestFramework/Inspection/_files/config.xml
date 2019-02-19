@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config>
+    <words>
+        <word>demon</word>
+        <word>vampire</word>
+    </words>
+    <whitelist>
+        <item>
+            <path>twilight/eclipse.php</path>
+        </item>
+        <item>
+            <word>vampire</word>
+            <path>twilight/newmoon.php</path>
+        </item>
+    </whitelist>
+</config>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="prototype/windows/themes/default.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Widget\Block\Adminhtml\Widget\Instance\Edit" name="widget_instance_edit"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tabs" name="widget_instance_edit_tabs">
+                <block class="Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Settings" name="widget_instance_edit_tab_settings"/>
+                <block class="Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main" name="widget_instance_edit_tab_main"/>
+                <block class="Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Properties" name="widget_instance_edit_tab_properties"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">settings_section</argument>
+                    <argument name="block" xsi:type="string">widget_instance_edit_tab_settings</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">main_section</argument>
+                    <argument name="block" xsi:type="string">widget_instance_edit_tab_main</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">properties_section</argument>
+                    <argument name="block" xsi:type="string">widget_instance_edit_tab_properties</argument>
+                </action>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="js">
+            <block class="Magento\Backend\Block\Template" template="Magento_Widget::instance/js.phtml" name="widget_instance_js"/>
+        </referenceContainer>
+    </body>
+</page>

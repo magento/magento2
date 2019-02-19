@@ -1,0 +1,26 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+.affected-attribute-set {
+    .admin__fieldset {
+        margin: @indent__base 0 0 @indent__l;
+
+        .admin__field {
+            &:extend(.abs-field-rows all);
+        }
+    }
+
+    .admin__field-option {
+        .addafter {
+            &:before {
+                margin-right: @indent__s;
+            }
+
+            &:after {
+                top: 3px;
+            }
+        }
+    }
+}

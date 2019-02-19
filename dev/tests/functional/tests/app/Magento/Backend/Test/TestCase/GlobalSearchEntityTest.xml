@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Backend\Test\TestCase\GlobalSearchEntityTest" summary="Global Search Backend " ticketId="MAGETWO-28457">
+        <variation name="GlobalSearchEntityTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="description" xsi:type="string">search shows admin preview</data>
+            <data name="search/data/query" xsi:type="string">Some search term</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertGlobalSearchPreview" />
+        </variation>
+        <variation name="GlobalSearchEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="description" xsi:type="string">search with 2 sign return no results</data>
+            <data name="search/data/query" xsi:type="string">:)</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertGlobalSearchNoRecordsFound" />
+        </variation>
+        <variation name="GlobalSearchEntityTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="description" xsi:type="string">search product by sku</data>
+            <data name="search/data/query" xsi:type="string">orderInjectable::default::product::sku</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertGlobalSearchProductName" />
+        </variation>
+        <variation name="GlobalSearchEntityTestVariation4">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="description" xsi:type="string">search existed customer</data>
+            <data name="search/data/query" xsi:type="string">customer::johndoe_unique::lastname</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertGlobalSearchCustomerName" />
+        </variation>
+        <variation name="GlobalSearchEntityTestVariation5">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="description" xsi:type="string">search order (by order id)</data>
+            <data name="search/data/query" xsi:type="string">orderInjectable::default::id</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertGlobalSearchOrderId" />
+        </variation>
+    </testCase>
+</config>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Sales:etc/pdf_file.xsd">
+    <renderers>
+        <page type="type_one">
+            <renderer product_type="product_type_two">Renderer\Type\One\Product\Two</renderer>
+        </page>
+        <page type="type_two">
+            <renderer product_type="product_type_three">Renderer\Type\Two\Product\Two</renderer>
+        </page>
+    </renderers>
+    <totals>
+        <total name="total1">
+            <title>Title1 Modified</title>
+        </total>
+        <total name="total3">
+            <title>Title3</title>
+            <source_field>source3</source_field>
+            <title_source_field>title_source3</title_source_field>
+            <font_size>3</font_size>
+            <display_zero>false</display_zero>
+            <sort_order>3</sort_order>
+            <model>Model3</model>
+            <amount_prefix>prefix3</amount_prefix>
+        </total>
+    </totals>
+</config>

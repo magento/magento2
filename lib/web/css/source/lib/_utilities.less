@@ -1,0 +1,527 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Utilities
+//  _____________________________________________
+
+//
+//  Convert values to unit specified in typography variables
+//  ---------------------------------------------
+
+.lib-font-size-value(
+    @_value
+) when not (@_value = false) and not (@_value = '') and (@font-size-unit-convert) {
+    @fontValue: unit(((@_value) * 1), @font-size-unit) / @font-size-unit-ratio;
+}
+.lib-font-size-value(
+    @_value
+) when (@font-size-unit-convert = false) {
+    @fontValue: @_value;
+}
+
+.lib-visibility-hidden() {
+    height: 0;
+    visibility: hidden;
+}
+
+.lib-visually-hidden() {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.lib-visually-hidden-reset() {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+
+//
+//  Clearfix
+//  ---------------------------------------------
+
+.lib-clearfix() {
+    &:before,
+    &:after {
+        content: '';
+        display: table;
+    }
+
+    &:after {
+        clear: both;
+    }
+}
+
+.lib-clearer() {
+    &:after {
+        clear: both;
+        content: '';
+        display: table;
+    }
+}
+
+//
+//  Gradient
+//  ---------------------------------------------
+
+#lib-gradient {
+    //  Horizontal gradient, from left to right
+    //  Creates two color stops, start and end, by specifying a color and position for each color stop.
+    //  Color stops are not available in IE9 and below.
+    //  Filters are enabled
+    .horizontal(
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when not (@disable-filters) and (@_background-color-position = true) {
+        background-color: @_end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)", @_start-color, @_end-color)); // IE9 and down
+    }
+
+    .horizontal(
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when not (@disable-filters) and (@_background-color-position = false) {
+        background-color: @_start-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)", @_start-color, @_end-color)); // IE9 and down
+    }
+
+    //  Horizontal gradient, from left to right
+    //  Creates two color stops, start and end, by specifying a color and position for each color stop.
+    //  Color stops are not available in IE9 and below.
+    //  Filters are disabled
+    .horizontal(
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when (@disable-filters) and (@_background-color-position = true) {
+        background-color: @_end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    }
+
+    .horizontal(
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when (@disable-filters) and (@_background-color-position = false) {
+        background-color: @_start-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    }
+
+    //  Vertical gradient, from top to bottom
+    //  Creates two color stops, start and end, by specifying a color and position for each color stop.
+    //  Color stops are not available in IE9 and below.
+    //  Filters are enabled
+    .vertical(
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when not (@disable-filters) and (@_background-color-position = true) {
+        background-color: @_end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)", @_start-color, @_end-color)); // IE9 and down
+    }
+
+    .vertical(
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when not (@disable-filters) and (@_background-color-position = false) {
+        background-color: @_start-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)", @_start-color, @_end-color)); // IE9 and down
+    }
+
+    //  Vertical gradient, from top to bottom
+    //  Creates two color stops, start and end, by specifying a color and position for each color stop.
+    //  Color stops are not available in IE9 and below.
+    //  Filters are disabled
+    .vertical(
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when (@disable-filters) and (@_background-color-position = true) {
+        background-color: @_end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    }
+
+    .vertical(
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when (@disable-filters) and (@_background-color-position = false) {
+        background-color: @_start-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    }
+}
+
+//
+//  Custom background gradient
+//  ---------------------------------------------
+
+//  Pager gradient - horizontal
+.lib-background-gradient(
+    @_background-gradient-color-start,
+    @_background-gradient-color-end,
+    @_background-gradient-direction,
+    @_background-gradient,
+    @_background-gradient-color-position: true
+) when (@_background-gradient-direction = horizontal) and (@_background-gradient = true) {
+    #lib-gradient > .horizontal(
+    @_start-color: @_background-gradient-color-start,
+    @_end-color: @_background-gradient-color-end,
+    @_background-color-position: @_background-gradient-color-position
+    );
+}
+
+//  Pager gradient - vertical
+.lib-background-gradient(
+    @_background-gradient-color-start,
+    @_background-gradient-color-end,
+    @_background-gradient-direction,
+    @_background-gradient,
+    @_background-gradient-color-position: true
+) when (@_background-gradient-direction = vertical) and (@_background-gradient = true) {
+    #lib-gradient > .vertical(
+    @_start-color: @_background-gradient-color-start,
+    @_end-color: @_background-gradient-color-end,
+    @_background-color-position: @_background-gradient-color-position
+    );
+}
+
+//
+//  Rotate
+//  ---------------------------------------------
+
+.lib-rotate(@_rotation) {
+    -webkit-transform: rotate(@_rotation); //  Use in 8 Safari
+        -ms-transform: rotate(@_rotation); //  Use in 9 IE
+            transform: rotate(@_rotation);
+}
+
+//
+//  Remove spaces between elements with display: inline-block
+//  ---------------------------------------------
+
+.lib-inline-block-space-container() {
+    font-size: 0;
+    letter-spacing: -1px;
+    line-height: 0;
+}
+
+.lib-inline-block-space-item(
+    @_font-size: @font-size__base,
+    @_line-height: normal
+) {
+    .lib-font-size(@_font-size);
+    .lib-line-height(@_line-height);
+    letter-spacing: normal;
+}
+
+//
+//  Add any css property
+//  ---------------------------------------------
+
+.lib-css(
+    @_property,
+    @_value,
+    @_prefix: 0
+) when (@_prefix = 1)
+  and not (@_value = '')
+  and not (@_value = false)
+  and not (extract(@_value, 1) = false)
+  and not (extract(@_value, 2) = false)
+  and not (extract(@_value, 3) = false)
+  and not (extract(@_value, 4) = false)
+  and not (extract(@_value, 5) = false) {
+  -webkit-@{_property}: @_value;
+       -moz-@{_property}: @_value;
+        -ms-@{_property}: @_value;
+}
+
+.lib-css(
+    @_property,
+    @_value,
+    @_prefix: 0
+) when not (@_value = '')
+  and not (@_value = false)
+  and not (extract(@_value, 1) = false)
+  and not (extract(@_value, 2) = false)
+  and not (extract(@_value, 3) = false)
+  and not (extract(@_value, 4) = false)
+  and not (extract(@_value, 5) = false) {
+    @{_property}: @_value;
+}
+
+//
+//  Add url to property
+//  ---------------------------------------------
+
+// usage:
+// .column.left {
+//     .lib-url('images/fallback.png');
+//     background:url("@{url}") repeat-y;
+// }
+// .columns {
+//     .lib-url('images/fallback.png', 'Magento_Catalog');
+//     background:url("@{url}") repeat;
+// }
+
+@urls-resolved: false;
+
+.lib-url(@_path) {
+    @url: "@{baseDir}@{_path}";
+}
+
+.lib-url(
+    @_path,
+    @_module
+) when not (@_module = false) and not (@_module = '') and (@urls-resolved = false) {
+    @url: "@{_module}::@{_path}";
+}
+
+.lib-url(
+    @_path,
+    @_module
+) when not (@_module = false) and not (@_module = '') and (@urls-resolved = true) {
+    @url: "@{baseDir}@{_module}/@{_path}";
+}
+
+//
+//  Arrow
+//  ---------------------------------------------
+
+.lib-arrow(
+    @_position,
+    @_size,
+    @_color
+) {
+    border: @_size solid transparent;
+    height: 0;
+    width: 0;
+    ._lib-abbor_el(@_position, @_color);
+}
+
+._lib-abbor_el(
+    @_position,
+    @_color
+) when (@_position = left) {
+    .lib-css(border-right-color, @_color);
+}
+
+._lib-abbor_el(
+    @_position,
+    @_color
+) when (@_position = right) {
+    .lib-css(border-left-color, @_color);
+}
+
+._lib-abbor_el(
+    @_position,
+    @_color
+) when (@_position = up) {
+    .lib-css(border-bottom-color, @_color);
+}
+
+._lib-abbor_el(
+    @_position,
+    @_color
+) when (@_position = down) {
+    .lib-css(border-top-color, @_color);
+}
+
+//
+//  Input placeholder
+//  ---------------------------------------------
+
+.lib-input-placeholder(
+    @_input-placeholder-color: @form-element-input-placeholder__color,
+    @_input-placeholder-font-weight: @form-element-input__font-weight
+) {
+    &::-webkit-input-placeholder {
+        .lib-css(color, @_input-placeholder-color);
+        .lib-css(font-weight, @_input-placeholder-font-weight);
+    }
+
+    &:-moz-placeholder {
+        .lib-css(color, @_input-placeholder-color);
+        .lib-css(font-weight, @_input-placeholder-font-weight);
+    }
+
+    &::-moz-placeholder {
+        .lib-css(color, @_input-placeholder-color);
+        .lib-css(font-weight, @_input-placeholder-font-weight);
+    }
+
+    &:-ms-input-placeholder {
+        .lib-css(color, @_input-placeholder-color);
+        .lib-css(font-weight, @_input-placeholder-font-weight);
+    }
+}
+
+//
+//  Flex layout
+//  ---------------------------------------------
+
+.lib-vendor-prefix-display(
+    @_value: flex
+) {
+    display: ~"-webkit-@{_value}";
+    display: ~"-ms-@{_value}box";
+    display: @_value;
+}
+
+.lib-vendor-prefix-flex-grow(
+    @_value: 0
+) {
+    -webkit-flex-grow: @_value;
+            flex-grow: @_value;
+}
+
+.lib-vendor-prefix-flex-shrink (
+    @_value: 1
+) {
+    -webkit-flex-shrink: @_value;
+            flex-shrink: @_value;
+}
+
+.lib-vendor-prefix-flex-basis (
+    @_value: auto
+) {
+    -webkit-flex-basis: @_value;
+            flex-basis: @_value;
+}
+
+.lib-vendor-prefix-flex-wrap (
+    @_value: wrap
+) {
+    -webkit-flex-wrap: @_value;
+            flex-wrap: @_value;
+}
+
+.lib-vendor-prefix-flex-direction (
+    @_value: column
+) {
+    -webkit-flex-direction: @_value;
+        -ms-flex-direction: @_value;
+            flex-direction: @_value;
+}
+
+.lib-vendor-prefix-order (
+    @_value: 0
+) {
+    -ms-flex-order: @_value;
+     -webkit-order: @_value;
+             order: @_value;
+}
+
+.lib-vendor-box-align (
+    @_value: stretch
+) {
+    -webkit-align-items: @_value;
+        -ms-align-items: @_value;
+            align-items: @_value;
+}
+
+.lib-vendor-prefix-appearance (
+    @value: none
+) {
+    -webkit-appearance: @value;
+    -moz-appearance: @value;
+    appearance: @value;
+}
+
+.lib-vendor-prefix-column-count (
+    @_value
+) {
+    -webkit-column-count: @_value;
+       -moz-column-count: @_value;
+            column-count: @_value;
+}
+
+//
+//  Pointer for popups or dropdowns
+//  ---------------------------------------------
+
+.lib-pointer(
+    @_size: 6px,
+    @_background-color: @color-white,
+    @_border-color: @color-gray-light3,
+    @_position__vertical: top,
+    @_position__horizontal: left,
+    @_position__vertical__value: -12px,
+    @_position__horizontal__value: @indent__s,
+    @_z-index: 99
+) {
+    &:before,
+    &:after {
+        content: '';
+        position: absolute;
+        display: block;
+        width: 0;
+        height: 0;
+        border-bottom-style: solid;
+    }
+
+    &:before {
+        .lib-css(@_position__horizontal, @_position__horizontal__value);
+        .lib-css(@_position__vertical, @_position__vertical__value);
+        .lib-css(border, solid @_size - 1);
+        .lib-css(border-color, transparent transparent @_background-color transparent);
+        .lib-css(z-index, @_z-index);
+    }
+
+    &:after {
+        .lib-css(@_position__horizontal, @_position__horizontal__value - 1);
+        .lib-css(@_position__vertical, @_position__vertical__value - 2);
+        .lib-css(border, solid @_size);
+        .lib-css(border-color, transparent transparent @_border-color transparent);
+        .lib-css(z-index, @_z-index - 1);
+    }
+}

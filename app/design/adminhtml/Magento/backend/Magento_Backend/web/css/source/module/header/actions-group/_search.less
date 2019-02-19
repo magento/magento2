@@ -1,0 +1,168 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Page header -> Actions group -> Global search
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@search-global__z-index: @user-account-menu__z-index - 10; // Should be lower than user account
+
+@search-global-field__width: @search-global-input__width;
+
+@search-global-input__font-size: @font-size__base;
+@search-global-input__height: @page-header-action__height;
+@search-global-input__padding-bottom: (@search-global-input__height - @search-global-icon__height) / 2 - .1rem;
+@search-global-input__padding-top: (@search-global-input__height - @search-global-icon__height) / 2 + .1rem;
+@search-global-input__padding-side: @font-size__base;
+@search-global-input__width: @search-global-icon__width + @search-global-input__padding-side * 2;
+
+@search-global-input__active__padding-right: @search-global-icon__height + 2rem;
+@search-global-input__active__width: 25rem;
+
+@search-global-label-icon__color: @text__color;
+@search-global-icon__height: 2rem;
+@search-global-icon__width: 2.2rem;
+
+@search-global-action__width: @search-global-input__active__padding-right;
+
+//
+
+.search-global {
+    float: right;
+    margin-right: -.3rem; // px perfect
+    position: relative;
+    z-index: @search-global__z-index;
+}
+
+.search-global-field {
+    min-width: @search-global-field__width;
+
+    &._active {
+        .search-global-input {
+            background-color: @action-dropdown__background-color;
+            border-color: @action-dropdown__active__border-color;
+            box-shadow: @component__box-shadow__base;
+            padding-right: @search-global-input__active__padding-right;
+            width: @search-global-input__active__width;
+        }
+
+        .search-global-action {
+            &:extend(.abs-action-reset all);
+            display: block;
+            height: @search-global-input__height;
+            position: absolute;
+            right: 0;
+            text-indent: -100%;
+            top: 0;
+            width: @search-global-icon__width + @search-global-input__padding-side * 2;
+            z-index: 3;
+        }
+    }
+
+    //  Autocomplete
+    .autocomplete-results {
+        height: @search-global-input__height;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: @search-global-input__active__width;
+    }
+
+    .search-global-menu {
+        border: 1px solid @action-dropdown__active__border-color;
+        border-top-color: transparent;
+        box-shadow: @component__box-shadow__base;
+        left: 0;
+        margin-top: -2px;
+        max-height: 80vh;
+        overflow: auto;
+        padding: 0;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        z-index: 2;
+
+        &:after {
+            background-color: @action-dropdown__background-color;
+            content: '';
+            height: @component__shadow-size__base;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: -@component__shadow-size__base;
+        }
+
+        > li {
+            background-color: @action-dropdown__background-color;
+            border-top: 1px solid @action-dropdown__border-color;
+            display: block;
+            font-size: @font-size__s;
+            padding: @search-global-input__padding-top @search-global-input__padding-side @search-global-input__padding-bottom;
+
+            &._active {
+                background-color: @color-blue-clear-sky;
+            }
+        }
+
+        .title {
+            display: block;
+            font-size: @search-global-input__font-size;
+        }
+
+        .type {
+            color: darken(@text__color, 10%);
+            display: block;
+        }
+    }
+}
+
+.search-global-label {
+    cursor: pointer;
+    height: @search-global-input__height;
+    padding: @search-global-input__padding-top @search-global-input__padding-side @search-global-input__padding-bottom;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 2;
+
+    &:active {
+        .scale();
+    }
+
+    &:hover {
+        &:before {
+            color: @action-dropdown__hover__color;
+        }
+    }
+
+    &:before {
+        &:extend(.abs-icon all);
+        color: @search-global-label-icon__color;
+        content: @icon-search__content;
+        font-size: @search-global-icon__height;
+    }
+}
+
+.search-global-input {
+    background-color: transparent;
+    border: 1px solid transparent;
+    font-size: @search-global-input__font-size;
+    height: @search-global-input__height + .2;
+    padding: @search-global-input__padding-top @search-global-input__padding-side @search-global-input__padding-bottom;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: all .1s linear, width .3s linear;
+    width: @search-global-input__width;
+    z-index: 1;
+}
+
+.search-global-action {
+    display: none;
+}

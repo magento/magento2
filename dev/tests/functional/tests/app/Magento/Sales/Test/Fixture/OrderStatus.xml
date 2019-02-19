@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="orderStatus"
+             module="Magento_Sales"
+             type="composite"
+             collection="Magento\Sales\Model\ResourceModel\Order\Status\Collection"
+             repository_class="Magento\Sales\Test\Repository\OrderStatus"
+             handler_interface="Magento\Sales\Test\Handler\OrderStatus\OrderStatusInterface"
+             class="Magento\Sales\Test\Fixture\OrderStatus">
+        <field name="status" is_required="1" />
+        <field name="label" is_required="" />
+        <field name="state" is_required="1" />
+        <field name="is_default" is_required="" />
+        <field name="visible_on_front" is_required="" />
+    </fixture>
+</config>

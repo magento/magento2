@@ -1,0 +1,269 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Catalog\Test\Repository\CatalogProductSimple\CheckoutData">
+        <dataset name="simple_with_two_custom_option">
+            <field name="options" xsi:type="array">
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_1</item>
+                        <item name="value" xsi:type="string">Content option %isolation%</item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">340</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">340</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_with_two_custom_option_qty_2">
+            <field name="options" xsi:type="array">
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_1</item>
+                        <item name="value" xsi:type="string">Content option %isolation%</item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">2</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">370</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">740</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_update_mini_shopping_cart">
+            <field name="options" xsi:type="array">
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_1</item>
+                        <item name="value" xsi:type="string">Content option %isolation%</item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">2</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">370</item>
+                <item name="subtotal" xsi:type="string">74</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_options_suite">
+            <field name="options" xsi:type="array">
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">Field value 1 %isolation%</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_1</item>
+                        <item name="value" xsi:type="string">Field value 2 %isolation%</item>
+                    </item>
+                    <item name="2" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_2</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                    <item name="3" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_3</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_drop_down_with_one_option_fixed_price">
+            <field name="options" xsi:type="array">
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_drop_down_with_one_option_percent_price">
+            <field name="options" xsi:type="array">
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_order_default">
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">560</item>
+                <item name="subtotal" xsi:type="string">560</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_order_qty_2">
+            <field name="qty" xsi:type="string">2</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">560</item>
+                <item name="subtotal" xsi:type="string">560</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_two_products">
+            <field name="qty" xsi:type="string">2</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">100</item>
+                <item name="subtotal" xsi:type="string">200</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_order_big_qty">
+            <field name="qty" xsi:type="string">900</field>
+        </dataset>
+
+        <dataset name="simple_order_custom_price">
+            <field name="qty" xsi:type="string">3</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="use_custom_price" xsi:type="string">Yes</item>
+                <item name="custom_price" xsi:type="string">100</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_order_special_price">
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">9</item>
+                <item name="subtotal" xsi:type="string">9</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_order_tier_price_5">
+            <field name="qty" xsi:type="string">5</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">40</item>
+                <item name="subtotal" xsi:type="string">40</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_order_10_dollar_product">
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">10</item>
+                <item name="subtotal" xsi:type="string">10</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_order_qty_25">
+            <field name="qty" xsi:type="string">25</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">10</item>
+                <item name="subtotal" xsi:type="string">250</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_order_qty_3">
+            <field name="qty" xsi:type="string">3</field>
+        </dataset>
+
+        <dataset name="with_fixed_custom_option">
+            <field name="options" xsi:type="array">
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">560.78</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">560.78</item>
+            </field>
+        </dataset>
+
+        <dataset name="text_and_two_custom_options">
+            <field name="options" xsi:type="array">
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">Ok</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_1</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">5</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">125</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_order_qty_1_price_56">
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">49.40</item>
+                <item name="subtotal" xsi:type="string">49.40</item>
+            </field>
+        </dataset>
+
+        <dataset name="with_fixed_custom_option">
+            <field name="options" xsi:type="array">
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">61.74</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">61.74</item>
+            </field>
+        </dataset>
+
+        <dataset name="with_percent_custom_option">
+            <field name="options" xsi:type="array">
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">53.85</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">53.85</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

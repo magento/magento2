@@ -1,0 +1,489 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+// Primary colors
+@primary1: #676056;
+@primary2: #ed4f2e;
+@primary3: #026294;
+@primary4: #fff;
+@primary5: #007dbd;
+@primary6: #e22626;
+@primary7: #f2ebde;
+@primary8: #31302b;
+@primary9: #ef672f;
+
+// Buttons
+// Default Buttons
+@defaultButton1: #f2ebde;
+@defaultButton2: #ada89e;
+@defaultButton3: #676056;
+@defaultButton4: #cac3b4;
+@defaultButton5: #989287;
+
+// Primary Buttons
+@primaryButton1: #007dbd;
+@primaryButton2: #0574ad;
+@primaryButton3: #026294;
+@primaryButton4: #004c74;
+
+// Links
+@linkColor: @primary3;
+@linkColor2: @primary4;
+
+// Base font
+@font-family-name__base: 'Open Sans';
+@baseFont: 'Open Sans', sans-serif;
+@baseFontSize: 14px;
+@baseFontWeight: 400;
+@baseFontWeightSemibold: 600;
+@baseFontWeightBold: 700;
+@baseLineHeight: 1.33;
+@baseColor: @primary1;
+
+// Headings
+// H1
+@h1color: @primary1;
+@h1font: 400 28px/1.2 @baseFont;
+
+// H2
+@h2color: @primary1;
+@h2font: 400 20px/1.2 @baseFont;
+
+// H3
+@h3color: @primary1;
+@h3font: 600 16px/1.2 @baseFont;
+
+// H4
+@h4color: @primary1;
+@h4font: 600 14px/1.2 @baseFont;
+
+// H5
+@h5color: @primary1;
+@h5font: 600 13px/1.2 @baseFont;
+
+// H6
+@h6color: @primary1;
+@h6font: 600 12px/1.2 @baseFont;
+
+
+.actionLink() {
+    display: inline;
+    color: @linkColor;
+    text-decoration: none;
+    &:visited,
+    &:active {
+        color: @linkColor;
+    }
+    &:focus,
+    &:hover {
+        color: @linkColor;
+        text-decoration: underline;
+    }
+}
+
+.actionLinkI() {
+    display: inline;
+    color: @linkColor2;
+    text-decoration: underline;
+    &:visited,
+    &:active {
+        color: @linkColor2;
+    }
+    &:focus,
+    &:hover {
+        color: @linkColor2;
+        text-decoration: underline;
+    }
+}
+
+.style1() { // absent in design
+}
+
+.style2() {
+    color: @primary1;
+    font-size: 13px;
+    font-weight: @baseFontWeightSemibold;
+}
+
+.style3() {
+    color: @primary5;
+    font-size: 14px;
+    font-weight: @baseFontWeight;
+
+    &:focus,
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.style4() { // absent in design
+}
+
+.style5() { // absent in design
+}
+
+.style6() {
+    color: @primary1;
+    font-size: 13px;
+    font-weight: @baseFontWeight;
+
+    &:focus,
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.style7() {
+    color: @primary1;
+    font-size: 16px;
+    font-weight: @baseFontWeight;
+}
+
+.style8() {
+    color: @primary6;
+    font-size: 13px;
+    font-weight: @baseFontWeight;
+}
+
+.style9() {
+    color: @primary1;
+    font-size: 14px;
+    font-weight: @baseFontWeight;
+}
+
+.style10() {
+    color: @primary1;
+    font-size: 20px;
+    font-weight: @baseFontWeight;
+}
+
+.style11() { // absent in design
+}
+
+.style12() { // absent in design
+}
+
+.style13() { // absent in design
+}
+
+.style14() {
+    color: @primary1;
+    font-size: 11px;
+    font-weight: @baseFontWeight;
+}
+
+.style15() {
+    color: @primary7;
+    font-size: 13px;
+    font-weight: @baseFontWeightSemibold;
+}
+
+.style15I() {
+    color: @primary1;
+    font-size: 13px;
+    font-weight: @baseFontWeightSemibold;
+}
+
+.style16() {
+    color: @primary4;
+    font-size: 12px;
+    font-weight: @baseFontWeightSemibold;
+}
+
+.style17() { // absent in design
+}
+
+.style18() {
+    color: @primary1;
+    font-size: 13px;
+    font-weight: @baseFontWeight;
+}
+
+.style19() {
+    color: @primary1;
+    font-size: 12px;
+    font-weight: @baseFontWeight;
+}
+
+.style20() { // absent in design
+    color: @primary2;
+    font-size: 12px;
+    font-weight: @baseFontWeightSemibold;
+}
+
+.style21() { // absent in design
+    color: @primary1;
+    font-size: 11px;
+    font-weight: @baseFontWeight;
+}
+
+.style22() {
+    color: @primary5;
+    font-size: 12px;
+    font-weight: @baseFontWeight;
+    &:focus,
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.style23() {
+    color: @primary1;
+    font-size: 28px;
+    font-weight: @baseFontWeight;
+}
+
+.style24() { // absent in design
+    color: @primary1;
+    font-size: 12px;
+    font-weight: @baseFontWeight;
+}
+
+.style25() { // absent in design
+    color: @primary8;
+    font-size: 14px;
+    font-weight: @baseFontWeight;
+    &:focus,
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.style26() { // absent in design
+    color: @primary4;
+    font-size: 30px;
+    font-weight: @baseFontWeightBold;
+}
+
+.style27() { // absent in design
+    color: @primary9;
+    font-size: 20px;
+    font-weight: @baseFontWeightBold;
+}
+
+.style28() {
+    color: @primary1;
+    font-size: 14px;
+    font-weight: @baseFontWeightBold;
+}
+
+.style29() {
+    color: @primary4;
+    font-size: 13px;
+    font-weight: @baseFontWeightBold;
+}
+
+.style30() {
+    color: @primary1;
+    font-size: 14px;
+    font-weight: @baseFontWeightBold;
+}
+
+.style31() {
+    color: @primary1;
+    font-size: 20px;
+    font-style: italic;
+    font-weight: @baseFontWeight;
+}
+
+.style32() {
+    color: @primary6;
+    font-size: 14px;
+    font-weight: @baseFontWeightBold;
+}
+
+.style33() {
+    color: @primary2;
+    font-size: 12px;
+    font-weight: @baseFontWeightSemibold;
+}
+
+.style34() { // no such html yet
+    color: @primary2;
+    font-size: 12px;
+    font-weight: @baseFontWeight;
+    &:focus,
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+/* ==========================================================================
+   theme.less (begin)
+   ========================================================================== */
+
+//
+//  Blank theme overrides
+//  _____________________________________________
+
+//  Theme file should contain declarations (overrides) ONLY OF EXISTING variables
+//  Otherwise this theme won't be available for parent nesting
+//  All new variables should be placed in local theme lib or local theme files
+
+//
+//  Typography
+//  ---------------------------------------------
+
+//  Fonts
+@color-dark: #31302b;
+
+//
+//  Layout
+//  ---------------------------------------------
+
+@responsive: false;
+
+@layout__max-width: 1300px;
+@layout-indent__width: 15px;
+
+//
+//  Dropdowns
+//  ---------------------------------------------
+
+@dropdown-split-actions__padding: '';
+@dropdown-split-toggle__actions__padding: 6px 5px;
+@dropdown-split-toggle-icon__font-line-height: 14px;
+
+//
+//  Buttons
+//  ---------------------------------------------
+
+//  Default = secondary button
+@button__padding: 6px 13px;
+@button__font-weight: 500;
+@button__font-size: 13px;
+@button__line-height: @button__font-size + 1;
+@button__color: #645d53;
+@button__background: #f2ebde;
+@button__border: 1px solid #ada89e;
+
+@button__hover__background: #cac3b4;
+@button__hover__color: '';
+@button__hover__border: '';
+
+@button__active__background: @button__hover__background;
+@button__active__color: '';
+@button__active__border: 1px solid #989287;
+
+//  Primary button
+@button-primary__background: #007dbd;
+@button-primary__border: 1px solid #0a6c9f;
+@button-primary__color: @color-white;
+
+@button-primary__hover__background: #026294;
+@button-primary__hover__border: 1px solid #026294;
+@button-primary__hover__color: '';
+
+@button-primary__active__background: @button-primary__hover__background;
+@button-primary__active__border: 1px solid #004c74;
+
+/* ==========================================================================
+   theme.less (end)
+   ========================================================================== */
+
+/* ==========================================================================
+   variables.less (begin)
+   ========================================================================== */
+
+//
+//  Admin theme variables
+//  _____________________________________________
+
+//
+//  Typography
+//  ---------------------------------------------
+
+//  Fonts
+@font-family-name__base: 'Open Sans';
+@font-family__base: @font-family-name__base, @font-family__sans-serif;
+
+//  Colors
+@col-layout-background-color: #f6f3eb;
+@color-middle: #676056;
+@color-light: #e0dacf;
+@color-general: #f3ebde;
+@link__color: #026294;
+@page-main-action-color: #645d53;
+
+//
+//  Layout
+//  ---------------------------------------------
+
+@layout__min-width: 960px;
+
+//
+//  Forms
+//  ---------------------------------------------
+
+@form-element-background-color: @color-white;
+
+//  Validation
+@validation__color: #e22626;
+@validation__color-rgba: rgba(226, 38, 38, .6);
+@validation-background-color: #f9d4d4;
+@validation-border: 1px dashed @validation__color;
+@validation__color-light: #f9d4d4; //  For asterisk on <th> elements of grid tables
+
+//
+//  Tables
+//  ---------------------------------------------
+
+//  Data-table
+@data-table-th-border-color: #c9c2b8;
+@data-table-td-border-color: #eae8e4;
+@data-table-td-background-color: @grid-td-light;
+@data-table-td-background-color-odd: #fbfaf6;
+@data-table-td-background-color-hover: #f7f3eb;
+
+//
+//  Grid
+//  ---------------------------------------------
+
+@grid-frame-background-color: @color-white;
+@grid-controls-border: #989287;
+
+@grid-headings-color: #f7f3eb;
+@grid-headings-color-darker: darken(@grid-headings-color, 20%);
+@grid-headings-background-color: #807a6e;
+@grid-headings-border: #cac3b4;
+
+@grid-filters-color: #f7f3eb;
+@grid-filters-background-color: @color-middle;
+@grid-filters-border: @grid-filters-background-color;
+@grid-filters-placeholder-color: #989287;
+
+@grid-massaction-border: 1px solid #f2ebde;
+
+@grid-td-color: @color-middle;
+@grid-td-light: @color-white;
+@grid-td-dark: #f7f3eb;
+@grid-td-border: @grid-headings-border;
+@grid-td-background-color-hover: #f2ebde;
+
+@grid-tfoot-color: @grid-td-color;
+@grid-tfoot-background-color: #f2ebde;
+
+@grid-severity-critical-color: #e22626;
+@grid-severity-critical-background-color: #f9d4d4;
+@grid-severity-critical-border: @grid-severity-critical-color;
+
+@grid-severity-notice-color: #185b00;
+@grid-severity-notice-background-color: #d0e5a9;
+@grid-severity-notice-border: #5b8116;
+
+@grid-severity-minor-color: #ed4f2e;
+@grid-severity-minor-background-color: #feeee1;
+@grid-severity-minor-border: @grid-severity-minor-color;
+
+//
+//  Pager
+//  ---------------------------------------------
+
+@pager-actions__color: @primary3;
+@pager-actions__color-hover: @primary5;
+
+/* ==========================================================================
+   variables.less (end)
+   ========================================================================== */

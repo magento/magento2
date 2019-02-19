@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <checkmo>
+                <active>1</active>
+                <model>Magento\OfflinePayments\Model\Checkmo</model>
+                <order_status>pending</order_status>
+                <title>Check / Money order</title>
+                <allowspecific>0</allowspecific>
+                <group>offline</group>
+            </checkmo>
+            <purchaseorder>
+                <active>0</active>
+                <model>Magento\OfflinePayments\Model\Purchaseorder</model>
+                <order_status>pending</order_status>
+                <title>Purchase Order</title>
+                <allowspecific>0</allowspecific>
+                <group>offline</group>
+            </purchaseorder>
+            <banktransfer>
+                <active>0</active>
+                <model>Magento\OfflinePayments\Model\Banktransfer</model>
+                <order_status>pending</order_status>
+                <title>Bank Transfer Payment</title>
+                <allowspecific>0</allowspecific>
+                <group>offline</group>
+            </banktransfer>
+            <cashondelivery>
+                <active>0</active>
+                <model>Magento\OfflinePayments\Model\Cashondelivery</model>
+                <order_status>pending</order_status>
+                <title>Cash On Delivery</title>
+                <allowspecific>0</allowspecific>
+                <group>offline</group>
+            </cashondelivery>
+            <free>
+                <group>offline</group>
+            </free>
+        </payment>
+    </default>
+</config>

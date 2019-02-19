@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Authorizenet\Model\Directpost">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Checkout\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="authorizenet" xsi:type="string">/authorizenet/</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Authorizenet\Model\Authorizenet">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Checkout\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Payment\Model\CcGenericConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="directpost" xsi:type="const">Magento\Authorizenet\Model\Directpost::METHOD_CODE</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="DirectpostIframeCcConfigProvider" type="Magento\Payment\Model\IframeConfigProvider">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Authorizenet\Model\Directpost::METHOD_CODE</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="authorizenet_iframe_cc_config_provider" xsi:type="object">DirectpostIframeCcConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

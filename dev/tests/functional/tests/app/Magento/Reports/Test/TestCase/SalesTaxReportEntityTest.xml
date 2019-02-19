@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Reports\Test\TestCase\SalesTaxReportEntityTest" summary="Sales Tax Report" ticketId="MAGETWO-28515">
+        <variation name="SalesTaxReportEntityTestVariation1">
+            <data name="orderSteps" xsi:type="string">-</data>
+            <data name="taxRule/dataset" xsi:type="string">custom_rule</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="orderStatus" xsi:type="string">Pending</data>
+            <data name="report/report_type" xsi:type="string">Order Created</data>
+            <data name="report/period_type" xsi:type="string">Day</data>
+            <data name="report/from" xsi:type="string">m/d/Y</data>
+            <data name="report/to" xsi:type="string">m/d/Y</data>
+            <data name="report/show_order_statuses" xsi:type="string">Any</data>
+            <data name="invoice/do_shipment" xsi:type="string">No</data>
+            <data name="taxAmount" xsi:type="string">$46.20</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertTaxReportNotInGrid" />
+        </variation>
+        <variation name="SalesTaxReportEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="orderSteps" xsi:type="string">invoice</data>
+            <data name="taxRule/dataset" xsi:type="string">custom_rule</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="orderStatus" xsi:type="string">Processing</data>
+            <data name="report/report_type" xsi:type="string">Order Created</data>
+            <data name="report/period_type" xsi:type="string">Month</data>
+            <data name="report/from" xsi:type="string">m/d/Y</data>
+            <data name="report/to" xsi:type="string">m/d/Y</data>
+            <data name="report/show_order_statuses" xsi:type="string">Specified</data>
+            <data name="report/order_statuses" xsi:type="string">Processing</data>
+            <data name="invoice/do_shipment" xsi:type="string">No</data>
+            <data name="taxAmount" xsi:type="string">$46.20</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertTaxReportInGrid" />
+        </variation>
+        <variation name="SalesTaxReportEntityTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="orderSteps" xsi:type="string">invoice,shipment</data>
+            <data name="taxRule/dataset" xsi:type="string">custom_rule</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="orderStatus" xsi:type="string">Complete</data>
+            <data name="report/report_type" xsi:type="string">Order Updated</data>
+            <data name="report/period_type" xsi:type="string">Year</data>
+            <data name="report/from" xsi:type="string">m/d/Y</data>
+            <data name="report/to" xsi:type="string">m/d/Y</data>
+            <data name="report/show_order_statuses" xsi:type="string">Specified</data>
+            <data name="report/order_statuses" xsi:type="string">Complete</data>
+            <data name="report/show_empty_rows" xsi:type="string">Yes</data>
+            <data name="invoice/do_shipment" xsi:type="string">Yes</data>
+            <data name="taxAmount" xsi:type="string">$46.20</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertTaxReportInGrid" />
+        </variation>
+    </testCase>
+</config>

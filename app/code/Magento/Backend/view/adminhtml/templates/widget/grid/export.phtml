@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<div class="admin__data-grid-export">
+    <label for="<?= /* @escapeNotVerified */ $block->getId() ?>_export" class="admin__control-support-text">
+        <?= /* @escapeNotVerified */ __('Export to:') ?>
+    </label>
+    <select name="<?= /* @escapeNotVerified */ $block->getId() ?>_export" id="<?= /* @escapeNotVerified */ $block->getId() ?>_export" class="admin__control-select">
+        <?php foreach ($block->getExportTypes() as $_type): ?>
+            <option value="<?= /* @escapeNotVerified */ $_type->getUrl() ?>"><?= /* @escapeNotVerified */ $_type->getLabel() ?></option>
+        <?php endforeach; ?>
+    </select>
+    <?= $block->getExportButtonHtml() ?>
+</div>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Search\Test\TestCase\CreateMultipleSynonymGroupsTest" summary="Create Multiple Synonym Groups" ticketId="MAGETWO-47264">
+        <variation name="CreateMultipleSynonymGroupsTestVariation1" summary="Create multiple synonym groups and check search by keywords" ticketId="MAGETWO-47264">
+            <data name="issue" xsi:type="string">MAGETWO-63120: Search icon is disabled on collapsed toolbar</data>
+            <data name="synonymGroups/0" xsi:type="string">synonym_group_1</data>
+            <data name="synonymGroups/1" xsi:type="string">synonym_group_2</data>
+            <data name="synonymGroups/2" xsi:type="string">synonym_group_3</data>
+            <data name="searchQueries" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="query" xsi:type="string">synonym_undefined</item>
+                    <item name="results" xsi:type="array">
+                        <item name="0" xsi:type="boolean">false</item>
+                        <item name="1" xsi:type="boolean">false</item>
+                        <item name="2" xsi:type="boolean">false</item>
+                    </item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="query" xsi:type="string">synonym_1_group_1</item>
+                    <item name="results" xsi:type="array">
+                        <item name="0" xsi:type="boolean">true</item>
+                        <item name="1" xsi:type="boolean">false</item>
+                        <item name="2" xsi:type="boolean">false</item>
+                    </item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="query" xsi:type="string">synonym_1_group_2 synonym_undefined</item>
+                    <item name="results" xsi:type="array">
+                        <item name="0" xsi:type="boolean">false</item>
+                        <item name="1" xsi:type="boolean">true</item>
+                        <item name="2" xsi:type="boolean">false</item>
+                    </item>
+                </item>
+                <item name="3" xsi:type="array">
+                    <item name="query" xsi:type="string">synonym_1_group_1 synonym_2_group_2</item>
+                    <item name="results" xsi:type="array">
+                        <item name="0" xsi:type="boolean">true</item>
+                        <item name="1" xsi:type="boolean">true</item>
+                        <item name="2" xsi:type="boolean">false</item>
+                    </item>
+                </item>
+                <item name="4" xsi:type="array">
+                    <item name="query" xsi:type="string">synonym_1_group_1 synonym_2_group_2 synonym_1_group_3 synonym_undefined</item>
+                    <item name="results" xsi:type="array">
+                        <item name="0" xsi:type="boolean">true</item>
+                        <item name="1" xsi:type="boolean">true</item>
+                        <item name="2" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </data>
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupsSearch" />
+        </variation>
+    </testCase>
+</config>

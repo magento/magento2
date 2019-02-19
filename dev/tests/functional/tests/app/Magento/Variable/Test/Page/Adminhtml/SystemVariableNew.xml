@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="SystemVariableNew" area="Adminhtml" mca="admin/system_variable/new" module="Magento_Variable">
+        <block name="formPageActions" class="Magento\Variable\Test\Block\Adminhtml\System\Variable\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
+        <block name="systemVariableForm" class="Magento\Variable\Test\Block\Adminhtml\System\Variable\Edit\VariableForm" locator="#edit_form" strategy="css selector"/>
+        <block name="modalBlock" class="Magento\Ui\Test\Block\Adminhtml\Modal" locator="._show[data-role=modal]" strategy="css selector"/>
+    </page>
+</config>

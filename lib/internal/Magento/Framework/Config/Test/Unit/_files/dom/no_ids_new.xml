@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<root>
+    <node>
+        <entity>entity_value2</entity>
+        <subnode>
+            <child><![CDATA[<test_value>]]></child>
+        </subnode>
+    </node>
+    <other_node>
+        <child/>
+    </other_node>
+    <new_node>some value</new_node>
+</root>

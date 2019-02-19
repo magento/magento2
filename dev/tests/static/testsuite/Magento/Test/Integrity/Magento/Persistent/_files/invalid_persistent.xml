@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * This file contains errors that will fail schema validation.
+ *
+ * The welcome and models nodes will be unexpected - this is the old version of persistent.xml.
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Persistent:etc/persistent.xsd">
+    <instances>
+        <blocks>
+            <welcome>
+                <name_in_layout>header</name_in_layout>
+                <class>Magento\Persistent\Model\Observer</class>
+                <method>emulateWelcomeBlock</method>
+                <block_type>Magento\Theme\Block\Html\Header</block_type>
+            </welcome>
+            <top_links>
+                <name_in_layout>top.links</name_in_layout>
+                <class>Magento\Persistent\Model\Observer</class>
+                <method>emulateTopLinks</method>
+                <block_type>Magento\Theme\Block\Template\Links</block_type>
+            </top_links>
+        </blocks>
+        <models />
+        <collections />
+    </instances>
+</config>

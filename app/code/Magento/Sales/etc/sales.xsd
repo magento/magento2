@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="section" type="sectionDeclaration">
+                    <xs:unique name="uniqueGroupName">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Group name must be unique.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="group"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
+                <xs:element name="order" type="orderDeclaration">
+                    <xs:unique name="uniqueProductTypeName">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Product type name must be unique.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="available_product_type"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
+            </xs:choice>
+        </xs:complexType>
+        <xs:unique name="uniqueSectionName">
+            <xs:annotation>
+                <xs:documentation>
+                    Section name must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="section"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="sectionDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Section declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="group" type="groupDeclaration" minOccurs="0" maxOccurs="unbounded">
+                <xs:unique name="uniqueItemName">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Item name must be unique.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:selector xpath="item"/>
+                    <xs:field xpath="@name"/>
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="groupDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Group declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="item" type="itemDeclaration" minOccurs="0" maxOccurs="unbounded">
+                <xs:unique name="uniqueRendererName">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Rendeder name must be unique.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:selector xpath="renderer"/>
+                    <xs:field xpath="@name"/>
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="itemDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Item declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="renderer" type="rendererDeclaration" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="instance" type="xs:string" use="optional"/>
+        <xs:attribute name="sort_order" type="xs:integer" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="rendererDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Renderer declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="instance" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="orderDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Order declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="available_product_type" type="availableProductTypeDeclaration" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="availableProductTypeDeclaration">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+</xs:schema>

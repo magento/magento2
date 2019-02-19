@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_model_service_quote_submit_before">
+        <observer name="giftmessage" instance="Magento\GiftMessage\Observer\SalesEventQuoteSubmitBeforeObserver" shared="false" />
+    </event>
+    <event name="sales_convert_order_to_quote">
+        <observer name="giftmessage" instance="Magento\GiftMessage\Observer\SalesEventOrderToQuoteObserver" shared="false" />
+    </event>
+    <event name="sales_quote_merge_after">
+        <observer name="giftmessage" instance="Magento\GiftMessage\Observer\SalesEventQuoteMerge" shared="false" />
+    </event>
+    <event name="checkout_type_multishipping_create_orders_single">
+        <observer name="giftmessage" instance="Magento\GiftMessage\Observer\MultishippingEventCreateOrdersObserver" shared="false" />
+    </event>
+</config>

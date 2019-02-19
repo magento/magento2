@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <general>
+            <file>
+                <importexport_local_valid_paths>
+                    <available>
+                        <export_xml>var/export/*/*.xml</export_xml>
+                        <export_csv>var/export/*/*.csv</export_csv>
+                        <import_xml>var/import/*/*.xml</import_xml>
+                        <import_csv>var/import/*/*.csv</import_csv>
+                    </available>
+                </importexport_local_valid_paths>
+                <bunch_size>100</bunch_size>
+            </file>
+        </general>
+        <import>
+            <format_v1>
+                <page_size>5000</page_size>
+            </format_v1>
+            <format_v2>
+                <page_size>10000</page_size>
+                <bunch_size>100</bunch_size>
+            </format_v2>
+        </import>
+    </default>
+</config>

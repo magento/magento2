@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <ups>
+                <access_license_number backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <active>0</active>
+                <sallowspecific>0</sallowspecific>
+                <allowed_methods>1DM,1DML,1DA,1DAL,1DAPI,1DP,1DPL,2DM,2DML,2DA,2DAL,3DS,GND,GNDCOM,GNDRES,STD,XPR,WXS,XPRL,XDM,XDML,XPD,01,02,03,07,08,11,12,14,54,59,65</allowed_methods>
+                <origin_shipment>Shipments Originating in United States</origin_shipment>
+                <shipment_requesttype>0</shipment_requesttype>
+                <container>CP</container>
+                <cutoff_cost />
+                <dest_type>RES</dest_type>
+                <free_method>GND</free_method>
+                <gateway_url>http://www.ups.com/using/services/rave/qcostcgi.cgi</gateway_url>
+                <gateway_xml_url>https://onlinetools.ups.com/ups.app/xml/Rate</gateway_xml_url>
+                <handling>0</handling>
+                <model>Magento\Ups\Model\Carrier</model>
+                <pickup>CC</pickup>
+                <title>United Parcel Service</title>
+                <tracking_xml_url>https://onlinetools.ups.com/ups.app/xml/Track</tracking_xml_url>
+                <unit_of_measure>LBS</unit_of_measure>
+                <username backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
+                <min_package_weight>0.1</min_package_weight>
+                <max_package_weight>150</max_package_weight>
+                <handling_type>F</handling_type>
+                <handling_action>O</handling_action>
+                <negotiated_active>0</negotiated_active>
+                <include_taxes>0</include_taxes>
+                <mode_xml>1</mode_xml>
+                <type>UPS</type>
+                <is_account_live>0</is_account_live>
+                <active_rma>0</active_rma>
+                <is_online>1</is_online>
+            </ups>
+        </carriers>
+    </default>
+</config>

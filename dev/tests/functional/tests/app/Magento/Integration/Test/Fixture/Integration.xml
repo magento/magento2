@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="integration"
+             module="Magento_Integration"
+             type="composite"
+             entity_type="integration"
+             collection="Magento\Integration\Model\ResourceModel\Integration\Collection"
+             repository_class="Magento\Integration\Test\Repository\Integration"
+             handler_interface="Magento\Integration\Test\Handler\Integration\IntegrationInterface"
+             class="Magento\Integration\Test\Fixture\Integration">
+        <field name="integration_id" is_required="1" group="null" />
+        <field name="name" is_required="" group="integration_info" />
+        <field name="email" is_required="" group="integration_info" />
+        <field name="endpoint" is_required="" group="integration_info" />
+        <field name="status" is_required="" />
+        <field name="consumer_id" is_required="" />
+        <field name="created_at" is_required="" />
+        <field name="updated_at" is_required="" />
+        <field name="setup_type" is_required="" />
+        <field name="identity_link_url" is_required="" group="integration_info" />
+        <field name="entity_id" is_required="1" />
+        <field name="admin_id" is_required="" />
+        <field name="customer_id" is_required="" />
+        <field name="type" is_required="" />
+        <field name="token" is_required="" />
+        <field name="secret" is_required="" />
+        <field name="verifier" is_required="" />
+        <field name="callback_url" is_required="" />
+        <field name="revoked" is_required="" />
+        <field name="authorized" is_required="" />
+        <field name="user_type" is_required="" />
+        <field name="key" is_required="" />
+        <field name="rejected_callback_url" is_required="" />
+        <field name="resource_access" group="api" />
+        <field name="resources" group="api" />
+        <field name="token_secret" group="integration_info" />
+        <field name="consumer_secret" group="integration_info" />
+        <field name="current_password" group="integration_info" source="Magento\User\Test\Fixture\User\CurrentPassword" />
+    </fixture>
+</config>

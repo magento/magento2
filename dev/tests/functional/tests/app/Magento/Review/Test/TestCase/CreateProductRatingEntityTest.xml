@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Review\Test\TestCase\CreateProductRatingEntityTest" summary="Create Product Rating" ticketId="MAGETWO-23331">
+        <variation name="CreateProductRatingEntityTestVariation1">
+            <data name="productRating/data/rating_code" xsi:type="string">productRating_%isolation%</data>
+            <data name="productRating/data/stores" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="productRating/data/is_active" xsi:type="string">Yes</data>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingSuccessSaveMessage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInGrid" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage" />
+        </variation>
+        <variation name="CreateProductRatingEntityTestVariation2">
+            <data name="productRating/data/rating_code" xsi:type="string">productRating_%isolation%</data>
+            <data name="productRating/data/stores" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="productRating/data/is_active" xsi:type="string">No</data>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingSuccessSaveMessage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInGrid" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInProductPage" />
+        </variation>
+    </testCase>
+</config>

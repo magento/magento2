@@ -1,0 +1,355 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<script>
+require([
+    "jquery",
+    'Magento_Ui/js/modal/alert',
+    'Magento_Ui/js/modal/prompt',
+    "collapsable",
+    "prototype"
+], function(jQuery, alert, prompt){
+
+function toggleApplyVisibility(select) {
+    if ($(select).value == 1) {
+        $(select).next('select').removeClassName('no-display');
+        $(select).next('select').removeClassName('ignore-validate');
+
+    } else {
+        $(select).next('select').addClassName('no-display');
+        $(select).next('select').addClassName('ignore-validate');
+        var options = $(select).next('select').options;
+        for( var i=0; i < options.length; i++) {
+            options[i].selected = false;
+        }
+    }
+}
+function getFrontTab() {
+    if ($('product_attribute_tabs_front')) {
+        return $('product_attribute_tabs_front').up('li');
+    } else {
+        return $('front_fieldset-wrapper');
+    }
+}
+
+function checkOptionsPanelVisibility(){
+    if($('manage-options-panel')){
+        var panel = $('manage-options-panel').up('.fieldset'),
+            activePanelClass = 'selected-type-options';
+
+        if($('frontend_input') && ($('frontend_input').value=='select' || $('frontend_input').value=='multiselect')){
+            panel.show();
+            panel.addClass(activePanelClass);
+        }
+        else {
+            panel.hide();
+            panel.removeClass(activePanelClass);
+        }
+    }
+}
+
+function bindAttributeInputType()
+{
+    checkOptionsPanelVisibility();
+    switchDefaultValueField();
+    if($('frontend_input') && ($('frontend_input').value=='boolean' || $('frontend_input').value=='select' || $('frontend_input').value=='multiselect' || $('frontend_input').value=='price')){
+        if($('is_filterable') && !$('is_filterable').getAttribute('readonly')){
+            $('is_filterable').disabled = false;
+        }
+        if($('is_filterable_in_search') && !$('is_filterable_in_search').getAttribute('readonly')){
+            $('is_filterable_in_search').disabled = false;
+        }
+        if($('backend_type') && $('backend_type').options){
+            for(var i=0;i<$('backend_type').options.length;i++){
+                if($('backend_type').options[i].value=='int') $('backend_type').selectedIndex = i;
+            }
+        }
+    }
+    else {
+        if($('is_filterable')){
+            $('is_filterable').selectedIndex=0;
+            $('is_filterable').disabled = true;
+        }
+        if($('is_filterable_in_search')){
+            $('is_filterable_in_search').disabled = true;
+        }
+    }
+
+    if ($('frontend_input') && ($('frontend_input').value=='multiselect'
+        || $('frontend_input').value=='gallery'
+        || $('frontend_input').value=='textarea')) {
+        if ($('used_for_sort_by')) {
+            $('used_for_sort_by').disabled = true;
+        }
+    }
+    else {
+        if ($('used_for_sort_by') && !$('used_for_sort_by').getAttribute('readonly')) {
+            $('used_for_sort_by').disabled = false;
+        }
+    }
+
+    setRowVisibility('is_wysiwyg_enabled', false);
+    setRowVisibility('is_html_allowed_on_front', false);
+
+    switch ($('frontend_input').value) {
+        case 'textarea':
+            setRowVisibility('is_wysiwyg_enabled', true);
+            if($('is_wysiwyg_enabled').value == '0'){
+                setRowVisibility('is_html_allowed_on_front', true);
+                $('is_html_allowed_on_front').disabled = false;
+            }
+            $('frontend_class').value = '';
+            $('frontend_class').disabled = true;
+            break;
+        case 'text':
+            setRowVisibility('is_html_allowed_on_front', true);
+            $('is_html_allowed_on_front').disabled = false;
+
+            if (!$('frontend_class').getAttribute('readonly')) {
+                $('frontend_class').disabled = false;
+            }
+            break;
+        case 'select':
+        case 'multiselect':
+            setRowVisibility('is_html_allowed_on_front', true);
+            $('is_html_allowed_on_front').disabled = false;
+            $('frontend_class').value = '';
+            $('frontend_class').disabled = true;
+            break;
+        default:
+            $('frontend_class').value = '';
+            $('frontend_class').disabled = true;
+    }
+
+    switchIsFilterable();
+}
+
+function switchIsFilterable()
+{
+    if ($('is_filterable')) {
+        if ($('is_filterable').selectedIndex == 0) {
+            $('position').disabled = true;
+        } else {
+            if (!$('position').getAttribute('readonly')){
+                $('position').disabled = false;
+            }
+        }
+    }
+}
+
+function switchDefaultValueField()
+{
+    if (!$('frontend_input')) {
+        return;
+    }
+
+    var currentValue = $('frontend_input').value;
+
+    var defaultValueTextVisibility = false;
+    var defaultValueTextareaVisibility = false;
+    var defaultValueDateVisibility = false;
+    var defaultValueYesnoVisibility = false;
+    var scopeVisibility = true;
+
+    switch (currentValue) {
+        case 'select':
+            optionDefaultInputType = 'radio';
+            break;
+
+        case 'multiselect':
+            optionDefaultInputType = 'checkbox';
+            break;
+
+        case 'date':
+            defaultValueDateVisibility = true;
+            break;
+
+        case 'boolean':
+            defaultValueYesnoVisibility = true;
+            break;
+
+        case 'textarea':
+            defaultValueTextareaVisibility = true;
+            break;
+
+        case 'media_image':
+            defaultValueTextVisibility = false;
+            break;
+        case 'price':
+            scopeVisibility = false;
+        default:
+            defaultValueTextVisibility = true;
+            break;
+    }
+
+    switch (currentValue) {
+        case 'media_image':
+            getFrontTab().hide();
+
+            setRowVisibility('is_required', false);
+            setRowVisibility('is_unique', false);
+            setRowVisibility('frontend_class', false);
+        break;
+
+        <?php foreach ($this->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields() as $type => $fields): ?>
+            case '<?= /* @escapeNotVerified */ $type ?>':
+                var isFrontTabHidden = false;
+                <?php foreach ($fields as $one): ?>
+                    <?php if ($one == '_front_fieldset'): ?>
+                        getFrontTab().hide();
+                        isFrontTabHidden = true;
+                    <?php elseif ($one == '_default_value'): ?>
+                        defaultValueTextVisibility =
+                        defaultValueTextareaVisibility =
+                        defaultValueDateVisibility =
+                        defaultValueYesnoVisibility = false;
+                    <?php elseif ($one == '_scope'): ?>
+                        scopeVisibility = false;
+                    <?php else: ?>
+                        setRowVisibility('<?= /* @escapeNotVerified */ $one ?>', false);
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+                if (!isFrontTabHidden){
+                  getFrontTab().show();
+                }
+            break;
+        <?php endforeach; ?>
+
+        default:
+            getFrontTab().show();
+
+            showDefaultRows();
+        break;
+    }
+
+    setRowVisibility('default_value_text', defaultValueTextVisibility);
+    setRowVisibility('default_value_textarea', defaultValueTextareaVisibility);
+    setRowVisibility('default_value_date', defaultValueDateVisibility);
+    setRowVisibility('default_value_yesno', defaultValueYesnoVisibility);
+    setRowVisibility('is_global', scopeVisibility);
+
+    var elems = document.getElementsByName('default[]');
+    for (var i = 0; i < elems.length; i++) {
+        elems[i].type = optionDefaultInputType;
+    }
+}
+
+function showDefaultRows()
+{
+    setRowVisibility('is_required', true);
+    setRowVisibility('is_unique', true);
+    setRowVisibility('frontend_class', true);
+}
+
+function setRowVisibility(id, isVisible)
+{
+    if ($(id)) {
+        var td = $(id).parentNode;
+        var tr = $(td.parentNode);
+
+        if (isVisible) {
+            tr.show();
+        } else {
+            tr.blur();
+            tr.hide();
+        }
+    }
+}
+
+
+function updateRequriedOptions()
+{
+    if ($F('frontend_input')=='select' && $F('is_required')==1) {
+        $('option-count-check').addClassName('required-options-count');
+    } else {
+        $('option-count-check').removeClassName('required-options-count');
+    }
+}
+
+function saveAttributeInNewSet(promptMessage)
+{
+    var newAttributeSetName;
+
+    prompt({
+        content: promptMessage,
+        actions: {
+            confirm: function(val) {
+                newAttributeSetName = val;
+
+                if (!newAttributeSetName) {
+                    return;
+                }
+
+                var rules = ['required-entry', 'validate-no-html-tags'];
+                for (var i = 0; i < rules.length; i++) {
+                    if (!jQuery.validator.methods[rules[i]](newAttributeSetName)) {
+                        alert({
+                            content: jQuery.validator.messages[rules[i]]
+                        });
+
+                        return;
+                    }
+                }
+
+                var newAttributeSetNameInputId = 'new_attribute_set_name';
+
+                if ($(newAttributeSetNameInputId)) {
+                    $(newAttributeSetNameInputId).value = newAttributeSetName;
+                } else {
+                    $('edit_form').insert({
+                        top: new Element('input', {
+                            type: 'hidden',
+                            id: newAttributeSetNameInputId,
+                            name: 'new_attribute_set_name',
+                            value: newAttributeSetName
+                        })
+                    });
+                }
+                // Temporary solution will replaced after refactoring of attributes functionality
+                jQuery('#edit_form').triggerHandler('save');
+            }
+        }
+    });
+}
+
+if($('frontend_input')){
+    Event.observe($('frontend_input'), 'change', updateRequriedOptions);
+    Event.observe($('frontend_input'), 'change', bindAttributeInputType);
+}
+
+if ($('is_filterable')) {
+    Event.observe($('is_filterable'), 'change', switchIsFilterable);
+}
+
+if ($('is_required')) {
+    Event.observe($('is_required'), 'change', updateRequriedOptions);
+}
+
+jQuery(function($) {
+    bindAttributeInputType();
+    // @todo: refactor collapsible component
+    $('.attribute-popup .collapse, [data-role="advanced_fieldset-content"]')
+        .collapsable()
+        .collapse('hide');
+});
+
+window.saveAttributeInNewSet = saveAttributeInNewSet;
+window.updateRequriedOptions = updateRequriedOptions;
+window.setRowVisibility = setRowVisibility;
+window.showDefaultRows = showDefaultRows;
+window.switchDefaultValueField = switchDefaultValueField;
+window.switchIsFilterable = switchIsFilterable;
+window.bindAttributeInputType = bindAttributeInputType;
+window.checkOptionsPanelVisibility = checkOptionsPanelVisibility;
+window.getFrontTab = getFrontTab;
+window.toggleApplyVisibility = toggleApplyVisibility;
+
+});
+</script>

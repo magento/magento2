@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Mustishipping state
+ *
+ * @see \Magento\Multishipping\Block\Checkout\State
+ */
+?>
+<ol class="block multicheckout progress items" id="checkout-progress-state">
+    <?php foreach ($block->getSteps() as $_step): ?>
+        <li title="<?= /* @escapeNotVerified */ $_step->getLabel() ?>" class="item<?= ($_step->getIsActive()) ? ' active' : '' ?>"><span><?= /* @escapeNotVerified */ $_step->getLabel() ?></span></li>
+    <?php endforeach; ?>
+</ol>

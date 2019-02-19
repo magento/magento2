@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+  <type name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Integration\Test\Constraint\AssertIntegrationInGrid">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Integration\Test\Constraint\AssertIntegrationForm">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Integration\Test\Constraint\AssertIntegrationNotInGrid">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Integration\Test\Constraint\AssertIntegrationResourcesPopup">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Integration\Test\Constraint\AssertIntegrationTokensPopup">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessActivationMessage">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessReauthorizeMessage">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Integration\Test\Constraint\AssertIntegrationTokensAfterReauthorize">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+</config>

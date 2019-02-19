@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Backend\Block\Template" template="Magento_ImportExport::export/form/before.phtml" name="export.form.before" as="form_before"/>
+            <block class="Magento\ImportExport\Block\Adminhtml\Export\Edit" name="export.form.container"/>
+            <block class="Magento\ImportExport\Block\Adminhtml\Form\After" template="Magento_ImportExport::export/form/after.phtml" name="export.form.after" as="form_after"/>
+        </referenceContainer>
+    </body>
+</page>

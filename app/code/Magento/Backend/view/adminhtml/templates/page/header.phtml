@@ -1,0 +1,68 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Backend\Block\Page\Header */
+?>
+<?php switch ($block->getShowPart()):
+    case 'logo': ?>
+        <?php $edition = $block->hasEdition() ? 'data-edition="' . $block->escapeHtml($block->getEdition()) . '"' : ''; ?>
+        <?php $logoSrc = ($block->hasLogoImageSrc()) ? $block->escapeHtml($block->getLogoImageSrc()) : 'images/magento-logo.svg' ?>
+        <a
+            href="<?= /* @escapeNotVerified */ $block->getHomeLink() ?>"
+            <?= /* @escapeNotVerified */ $edition ?>
+            class="logo">
+            <img class="logo-img" src="<?= /* @escapeNotVerified */ $block->getViewFileUrl($logoSrc) ?>"
+            alt="<?= $block->escapeHtml(__('Magento Admin Panel')) ?>" title="<?= $block->escapeHtml(__('Magento Admin Panel')) ?>"/>
+        </a>
+    <?php break; ?>
+    <?php case 'user': ?>
+        <div class="admin-user admin__action-dropdown-wrap">
+            <a
+                href="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/system_account/index') ?>"
+                class="admin__action-dropdown"
+                title="<?= $block->escapeHtml(__('My Account')) ?>"
+                data-mage-init='{"dropdown":{}}'
+                data-toggle="dropdown">
+                <span class="admin__action-dropdown-text">
+                    <span class="admin-user-account-text"><?= $block->escapeHtml($block->getUser()->getUserName()) ?></span>
+                </span>
+            </a>
+            <ul class="admin__action-dropdown-menu">
+                <?php if ($block->getAuthorization()->isAllowed('Magento_Backend::myaccount')): ?>
+                <li>
+                    <a
+                        href="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/system_account/index') ?>"
+                        <?= /* @escapeNotVerified */ $block->getUiId('user', 'account', 'settings') ?>
+                        title="<?= $block->escapeHtml(__('Account Setting')) ?>">
+                        <?= /* @escapeNotVerified */ __('Account Setting') ?> (<span class="admin-user-name"><?= $block->escapeHtml($block->getUser()->getUserName()) ?></span>)
+                    </a>
+                </li>
+                <?php endif; ?>
+                <li>
+                    <a
+                        href="<?= /* @escapeNotVerified */ $block->getBaseUrl() ?>"
+                        title="<?= $block->escapeHtml(__('Customer View')) ?>"
+                        target="_blank" class="store-front">
+                        <?= /* @escapeNotVerified */ __('Customer View') ?>
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href="<?= /* @escapeNotVerified */ $block->getLogoutLink() ?>"
+                        class="account-signout"
+                        title="<?= $block->escapeHtml(__('Sign Out')) ?>">
+                        <?= /* @escapeNotVerified */ __('Sign Out') ?>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    <?php break; ?>
+    <?php case 'other': ?>
+        <?= $block->getChildHtml() ?>
+    <?php break; ?>
+<?php endswitch; ?>

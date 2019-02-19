@@ -1,0 +1,209 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\Shipping\Block\Adminhtml\Order\Packaging */ ?>
+<div id="packaging_window">
+    <div class="message message-warning" style="display: none"></div>
+    <section class="admin__page-section" id="package_template" style="display:none;">
+        <div class="admin__page-section-title">
+            <span class="title">
+                <?= /* @escapeNotVerified */ __('Package') ?> <span data-role="package-number"></span>
+            </span>
+            <div class="actions _primary">
+                <button type="button" class="action-secondary" data-action="package-save-items" onclick="packaging.packItems(this);">
+                    <span><?= /* @escapeNotVerified */ __('Add Selected Product(s) to Package') ?></span>
+                </button>
+                <button type="button" class="action-secondary" data-action="package-add-items" onclick="packaging.getItemsForPack(this);">
+                    <span><?= /* @escapeNotVerified */ __('Add Products to Package') ?></span>
+                </button>
+            </div>
+        </div>
+        <div class="admin__control-table-wrapper admin__page-subsection">
+            <table class="data-table admin__control-table">
+                <thead>
+                    <tr>
+                        <th class="col-type"><?= /* @escapeNotVerified */ __('Type') ?></th>
+                        <?php if ($girthEnabled == 1): ?>
+                        <th class="col-size"><?= /* @escapeNotVerified */ __('Size') ?></th>
+                        <th class="col-girth"><?= /* @escapeNotVerified */ __('Girth') ?></th>
+                        <th>&nbsp;</th>
+                        <?php endif; ?>
+                        <th class="col-custom" <?= $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
+                            <?= /* @escapeNotVerified */ __('Customs Value') ?>
+                        </th>
+                        <th class="col-total-weight"><?= /* @escapeNotVerified */ __('Total Weight') ?></th>
+                        <th class="col-length"><?= /* @escapeNotVerified */ __('Length') ?></th>
+                        <th class="col-width"><?= /* @escapeNotVerified */ __('Width') ?></th>
+                        <th class="col-height"><?= /* @escapeNotVerified */ __('Height') ?></th>
+                        <th>&nbsp;</th>
+                        <?php if ($block->getDeliveryConfirmationTypes()): ?>
+                        <th class="col-signature"><?= /* @escapeNotVerified */ __('Signature Confirmation') ?></th>
+                            <?php endif; ?>
+                        <th class="col-actions">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col-type">
+                            <?php $containers = $block->getContainers(); ?>
+                            <select name="package_container"
+                                    onchange="packaging.changeContainerType(this);packaging.checkSizeAndGirthParameter(this, <?= /* @escapeNotVerified */ $girthEnabled ?>);"
+                                    <?php if (empty($containers)):?>
+                                        title="<?= /* @escapeNotVerified */ __('USPS domestic shipments don\'t use package types.') ?>"
+                                        disabled=""
+                                        class="admin__control-select disabled"
+                                    <?php else: ?>
+                                        class="admin__control-select"
+                                    <?php endif; ?>>
+                                <?php foreach ($containers as $key => $value): ?>
+                                    <option value="<?= /* @escapeNotVerified */ $key ?>" >
+                                        <?= /* @escapeNotVerified */ $value ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                        <?php if ($girthEnabled == 1 && !empty($sizeSource)): ?>
+                        <td>
+                            <select name="package_size"
+                                    class="admin__control-select"
+                                    onchange="packaging.checkSizeAndGirthParameter(this, <?= /* @escapeNotVerified */ $girthEnabled ?>);">
+                                <?php foreach ($sizeSource as $key => $value): ?>
+                                <option value="<?= /* @escapeNotVerified */ $sizeSource[$key]['value'] ?>">
+                                    <?= /* @escapeNotVerified */ $sizeSource[$key]['label'] ?>
+                                </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text"
+                                   class="input-text admin__control-text validate-greater-than-zero"
+                                   name="container_girth" />
+                        </td>
+                        <td>
+                            <select name="container_girth_dimension_units"
+                                    class="options-units-dimensions measures admin__control-select"
+                                    onchange="packaging.changeMeasures(this);">
+                                <option value="<?= /* @escapeNotVerified */ Zend_Measure_Length::INCH ?>" selected="selected" ><?= /* @escapeNotVerified */ __('in') ?></option>
+                                <option value="<?= /* @escapeNotVerified */ Zend_Measure_Length::CENTIMETER ?>" ><?= /* @escapeNotVerified */ __('cm') ?></option>
+                            </select>
+                        </td>
+                            <?php endif; ?>
+                        <?php
+                        if ($block->displayCustomsValue()) {
+                            $customsValueDisplay = '';
+                            $customsValueValidation = ' validate-zero-or-greater ';
+                        } else {
+                            $customsValueDisplay = ' style="display: none;" ';
+                            $customsValueValidation = '';
+                        }
+                        ?>
+                        <td class="col-custom" <?= /* @escapeNotVerified */ $customsValueDisplay ?>>
+                            <div class="admin__control-addon">
+                                <input type="text"
+                                       class="customs-value input-text admin__control-text <?= /* @escapeNotVerified */ $customsValueValidation ?>"
+                                       name="package_customs_value" />
+                                <span class="admin__addon-suffix">
+                                    <span class="customs-value-currency"><?= /* @escapeNotVerified */ $block->getCustomValueCurrencyCode() ?></span>
+                                </span>
+                            </div>
+                        </td>
+                        <td class="col-total-weight">
+                            <div class="admin__control-addon">
+                            <input type="text"
+                                   class="options-weight input-text admin__control-text required-entry validate-greater-than-zero"
+                                   name="container_weight" />
+                                    <select name="container_weight_units"
+                                            class="options-units-weight measures admin__control-select"
+                                            onchange="packaging.changeMeasures(this);">
+                                        <option value="<?= /* @escapeNotVerified */ Zend_Measure_Weight::POUND ?>" selected="selected"  ><?= /* @escapeNotVerified */ __('lb') ?></option>
+                                        <option value="<?= /* @escapeNotVerified */ Zend_Measure_Weight::KILOGRAM ?>" ><?= /* @escapeNotVerified */ __('kg') ?></option>
+                                    </select>
+                                <span class="admin__addon-prefix"></span>
+                            </div>
+                        </td>
+                        <td class="col-length">
+                            <input type="text"
+                                   class="input-text admin__control-text validate-greater-than-zero"
+                                   name="container_length" />
+                        </td>
+                        <td class="col-width">
+                            <input type="text"
+                                   class="input-text admin__control-text validate-greater-than-zero"
+                                   name="container_width" />
+                        </td>
+                        <td class="col-height">
+                            <input type="text"
+                                   class="input-text admin__control-text validate-greater-than-zero"
+                                   name="container_height" />
+                        </td>
+                        <td class="col-measure">
+                            <select name="container_dimension_units"
+                                    class="options-units-dimensions measures admin__control-select"
+                                    onchange="packaging.changeMeasures(this);">
+                                <option value="<?= /* @escapeNotVerified */ Zend_Measure_Length::INCH ?>" selected="selected" ><?= /* @escapeNotVerified */ __('in') ?></option>
+                                <option value="<?= /* @escapeNotVerified */ Zend_Measure_Length::CENTIMETER ?>" ><?= /* @escapeNotVerified */ __('cm') ?></option>
+                            </select>
+                        </td>
+                        <?php if ($block->getDeliveryConfirmationTypes()): ?>
+                        <td>
+                            <select name="delivery_confirmation_types" class="admin__control-select">
+                                <?php foreach ($block->getDeliveryConfirmationTypes() as $key => $value): ?>
+                                <option value="<?= /* @escapeNotVerified */ $key ?>" >
+                                    <?= /* @escapeNotVerified */ $value ?>
+                                </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                            <?php endif; ?>
+                        <td class="col-actions">
+                            <button type="button" class="action-delete DeletePackageBtn" onclick="packaging.deletePackage(this);">
+                                <span><?= /* @escapeNotVerified */ __('Delete Package') ?></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <?php if ($block->getContentTypes()): ?>
+                <table class="data-table admin__control-table" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th><?= /* @escapeNotVerified */ __('Contents') ?></th>
+                            <th><?= /* @escapeNotVerified */ __('Explanation') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <select name="content_type"
+                                    class="admin__control-select"
+                                    onchange="packaging.changeContentTypes(this);">
+                                <?php foreach ($block->getContentTypes() as $key => $value): ?>
+                                    <option value="<?= /* @escapeNotVerified */ $key ?>" >
+                                        <?= /* @escapeNotVerified */ $value ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                        <td>
+                            <input name="content_type_other"
+                                   type="text"
+                                   class="input-text admin__control-text options-content-type disabled"
+                                   disabled="disabled" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+        <div class="admin__page-subsection" data-role="package-items">
+            <div class="grid_prepare admin__page-subsection"></div>
+        </div>
+    </section>
+    <div id="packages_content"></div>
+</div>

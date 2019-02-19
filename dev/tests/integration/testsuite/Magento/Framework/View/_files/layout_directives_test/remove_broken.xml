@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <block name="test.broken.block" type="Magento\Framework\View\Element\Text"/>
+    <referenceBlock name="test.broken.block" remove="true"/>
+    <block class="Magento\Framework\View\Element\Template" name="bug.without.name.action.is.ignored">
+        <action method="insert">
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="element" xsi:type="string">test.broken.block</argument>
+        </action>
+        <action method="append">
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="element" xsi:type="string">test.broken.block</argument>
+        </action>
+    </block>
+</layout>

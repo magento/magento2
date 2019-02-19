@@ -1,0 +1,13 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<if args="isAllowed()">
+    <button attr="'data-post': $col.getDataPost($row()), title: getLabel()"
+            class="action tocompare"
+            data-action="add-to-compare">
+            <span text="getLabel()"/>
+    </button>
+</if>

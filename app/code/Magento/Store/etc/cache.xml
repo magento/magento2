@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="config" translate="label,description" instance="Magento\Framework\App\Cache\Type\Config">
+        <label>Configuration</label>
+        <description>Various XML configurations that were collected across modules and merged</description>
+    </type>
+    <type name="layout" translate="label,description" instance="Magento\Framework\App\Cache\Type\Layout">
+        <label>Layouts</label>
+        <description>Layout building instructions</description>
+    </type>
+    <type name="block_html" translate="label,description" instance="Magento\Framework\App\Cache\Type\Block">
+        <label>Blocks HTML output</label>
+        <description>Page blocks HTML</description>
+    </type>
+    <type name="collections" translate="label,description" instance="Magento\Framework\App\Cache\Type\Collection">
+        <label>Collections Data</label>
+        <description>Collection data files</description>
+    </type>
+    <type name="reflection" translate="label,description" instance="Magento\Framework\App\Cache\Type\Reflection">
+        <label>Reflection Data</label>
+        <description>API interfaces reflection data</description>
+    </type>
+    <type name="db_ddl" translate="label,description" instance="Magento\Framework\DB\Adapter\DdlCache">
+        <label>Database DDL operations</label>
+        <description>Results of DDL queries, such as describing tables or indexes</description>
+    </type>
+    <type name="compiled_config" translate="label,description" instance="Magento\Framework\App\Interception\Cache\CompiledConfig">
+        <label>Compiled Config</label>
+        <description>Compilation configuration</description>
+    </type>
+</config>

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Magento Admin</title>
+        <script src="prototype/prototype.js"/>
+        <script src="prototype/window.js"/>
+        <script src="prototype/deprecation.js"/>
+    </head>
+    <block class="Magento\Backend\Block\Page" name="root" output="1" template="Magento_Backend::page.phtml">
+        <block class="Magento\Backend\Block\Page" name="nodeForTesting">
+            <action method="setSomething"/>
+        </block>
+        <block class="Magento\Backend\Block\Page\Header" name="header" as="header"/>
+        <block class="Magento\Backend\Block\Menu" name="menu" as="menu"/>
+        <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
+        <block class="Magento\Framework\View\Element\Text" as="no_name"/>
+    </block>
+    <update handle="layout_test_handle_sample"/>
+    <referenceBlock name="header" remove="true"/>
+    <referenceBlock name="menu" remove="true"/>
+    <referenceBlock name="some_element_1" remove="true"/>
+    <referenceBlock name="some_element_2" remove="true"/>
+    <referenceBlock name="root">
+        <action method="setTemplate">
+            <argument name="template" xsi:type="string">popup.phtml</argument>
+        </action>
+    </referenceBlock>
+    <referenceBlock name="some_element_1"/>
+    <block class="Magento\Framework\View\Element\Text\ListText" name="test.nonexisting.block"/>
+    <referenceBlock name="test.nonexisting.block" remove="true"/>
+    <referenceBlock name="test.nonexisting.block">
+        <action method="getSomething"/>
+    </referenceBlock>
+    <referenceBlock name="after.body.start">
+        <block class="Magento\Framework\View\Element\Html\Calendar" name="head.calendar" as="calendar" template="Magento_Framework::page/js/calendar.phtml"/>
+    </referenceBlock>
+</page>

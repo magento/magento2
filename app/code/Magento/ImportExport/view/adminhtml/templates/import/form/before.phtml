@@ -1,0 +1,268 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?php
+/** @var $block \Magento\ImportExport\Block\Adminhtml\Import\Edit\Before */
+?>
+<script>
+require([
+    'jquery',
+    'Magento_Ui/js/modal/alert',
+    'prototype'
+], function(jQuery, alert){
+
+//<![CDATA[
+    // Temporary Class will be replaced after refactoring of import/export functionality
+    varienImport = {
+        /**
+         * Name and ID for iframe for data POST-ing.
+         * @type {string}
+         */
+        ifrElemName: 'import_post_target_frame',
+
+        /**
+         * List of existing behavior sets
+         * @type {Array}
+         */
+        uniqueBehaviors: <?= /* @escapeNotVerified */ $block->getUniqueBehaviors() ?>,
+
+        /**
+         * Behaviour codes for import entities
+         * @type {Array}
+         */
+        entityBehaviors: <?= /* @escapeNotVerified */ $block->getEntityBehaviors() ?>,
+
+        /**
+         * Behaviour notes for import entities
+         * @type {Array}
+         */
+        entityBehaviorsNotes: <?= /* @escapeNotVerified */ $block->getEntityBehaviorsNotes() ?>,
+
+        /**
+         * Base url
+         * @type {string}
+         */
+        sampleFilesBaseUrl: '<?= /* @escapeNotVerified */ $block->getUrl('*/*/download/', ['filename' => 'entity-name']) ?>',
+
+        /**
+         * Reset selected index
+         * @param {string} elementId
+         */
+        resetSelectIndex: function(elementId) {
+            var element = jQuery('#' + elementId);
+            if (element) {
+                element[0].selectedIndex = 0;
+            }
+        },
+
+        /**
+         * Show behavior selector
+         * @param {string|boolean} entity If false, then hide all behavior selectors
+         */
+        showBehavior: function(entity) {
+            var requiredBehavior = this.entityBehaviors[entity];
+            for (i = 0; i < this.uniqueBehaviors.length; i++) {
+                var currentBehavior = this.uniqueBehaviors[i];
+                this.showBehaviorFieldset(currentBehavior, requiredBehavior == currentBehavior);
+            }
+        },
+
+        /**
+         * Show/hide one behavior fieldset
+         * @param {string} behaviorId
+         * @param {boolean} isShow
+         */
+        showBehaviorFieldset: function(behaviorId, isShow) {
+            var behaviorFieldset = jQuery('#' + behaviorId + '_fieldset'),
+                behaviorFields = jQuery('.' + behaviorId);
+            if (isShow) {
+                behaviorFieldset.show();
+            } else {
+                behaviorFieldset.hide();
+                this.resetSelectIndex(behaviorId);
+            }
+            behaviorFields.each(function(k, behaviorField){
+                behaviorField = jQuery(behaviorField);
+                if (isShow) {
+                    behaviorField.prop('disabled', false);
+                    behaviorField.addClass('required-entry');
+                } else {
+                    behaviorField.prop('disabled', 'disabled');
+                    behaviorField.removeClass('required-entry');
+                }
+            });
+        },
+
+        /**
+         * Show upload file field
+         * @param {boolean} isShow
+         */
+        showUploadFile: function(isShow) {
+            if (isShow == true) {
+                jQuery('#upload_file_fieldset').show();
+            } else {
+                jQuery('#upload_file_fieldset').hide();
+            }
+        },
+
+        /**
+         * Show/hide sample file link
+         * @param {string} entityId
+         */
+        showSampleFile: function(entityId) {
+            var sampleFileSpan = jQuery('#sample-file-span');
+            if (entityId) {
+                var sampleFileLink = this.sampleFilesBaseUrl.replace('entity-name', entityId);
+                jQuery('#sample-file-link').attr('href', sampleFileLink);
+                if (sampleFileSpan.is(':hidden')) {
+                    sampleFileSpan.show();
+                }
+            } else {
+                sampleFileSpan.hide();
+            }
+        },
+
+        /**
+         * Handle value change in entity type selector
+         */
+        handleEntityTypeSelector: function() {
+            var entity = jQuery('#entity');
+            if (entity && entity.val()) {
+                this.showBehavior(entity.val());
+                this.showUploadFile(true);
+                this.showSampleFile(entity.val());
+            } else {
+                this.showBehavior(false);
+                this.showUploadFile(false);
+                this.showSampleFile(false);
+            }
+            this.handleImportBehaviorSelector();
+        },
+
+        /**
+         * Handle value change in behavior selector
+         */
+        handleImportBehaviorSelector: function() {
+            var entity = jQuery('#entity');
+            if (entity && entity.val()) {
+                var notes = this.entityBehaviorsNotes[entity.val()];
+                var requiredBehavior = this.entityBehaviors[entity.val()];
+                var behaviorInput = jQuery('#' + requiredBehavior);
+                var behavior = behaviorInput && behaviorInput.val();
+                if (behavior && notes[behavior]) {
+                    jQuery('#' + requiredBehavior + '-note').html(notes[behavior]);
+                } else {
+                    jQuery('#' + requiredBehavior + '-note').html('');
+                }
+            }
+        },
+
+        /**
+         * Post form data to dynamic iframe.
+         * @param {string} newActionUrl OPTIONAL Change form action to this if specified
+         */
+        postToFrame: function(newActionUrl) {
+            if (!jQuery('[name="' + this.ifrElemName + '"]').length) {
+                jQuery('body').append('<iframe name="' + this.ifrElemName + '" id="' + this.ifrElemName
+                    + '" style="display:none;"/>');
+            }
+            jQuery('body')
+                .loader({
+                    icon: jQuery('#loading_mask_loader img').attr('src')
+                })
+                .loader('show');
+            var form = jQuery('#edit_form')
+                .one('invalid-form.validate', function(e){jQuery('body').loader('hide')});
+
+            newActionUrl = (newActionUrl ? newActionUrl : form.attr('action'));
+            if (newActionUrl.lastIndexOf('form_key') === -1) {
+                newActionUrl = newActionUrl +
+                    (newActionUrl.lastIndexOf('?') !== -1 ? '&' : '?') +
+                    'form_key=' + encodeURIComponent(form.find('[name="form_key"]').val());
+            }
+
+            form.trigger('save', [{
+                action: newActionUrl,
+                target: this.ifrElemName
+            }]);
+        },
+
+        /**
+         * Actions after data post complete. Hide load mask, remove iframe, run response processing method.
+         * @param {Object} response
+         */
+        postToFrameComplete: function(response) {
+            jQuery('body').loader('hide');
+            jQuery('#' + this.ifrElemName).remove();
+            this.postToFrameProcessResponse(response);
+        },
+
+        /**
+         * Process response JSON.
+         * @param {Object} response
+         */
+        postToFrameProcessResponse: function(response) {
+            if ('object' != typeof(response)) {
+                alert({
+                    content: 'Invalid response'
+                });
+
+                return false;
+            }
+            $H(response).each(function(pair) {
+                switch (pair.key) {
+                    case 'show':
+                    case 'clear':
+                    case 'hide':
+                        $H(pair.value).each(function(val) {
+                            if ($(val.value)) {
+                                $(val.value)[pair.key]();
+                            }
+                        });
+                        break;
+                    case 'innerHTML':
+                    case 'value':
+                        $H(pair.value).each(function(val) {
+                            var el = $(val.key);
+                            if (el) {
+                                el[pair.key] = val.value;
+                                // if element does not visible
+                                el.offsetWidth || el.up('div.entry-edit').show();
+                            }
+                        });
+                        break;
+                    case 'removeClassName':
+                    case 'addClassName':
+                        $H(pair.value).each(function(val) {
+                            if ($(val.key)) $(val.key)[pair.key](val.value);
+                        });
+                        break;
+                    default:
+                        alert({
+                            content: pair.key + ': ' + pair.value
+                        });
+                        break;
+                }
+            });
+        },
+
+        /**
+         * Send form data to Start action when file is validated.
+         * @param {string} newActionUrl
+         * @param {string} sourceFileField
+         */
+        startImport: function(newActionUrl, sourceFileField) {
+            jQuery('#' + sourceFileField).removeClass('required-entry');
+            this.postToFrame(newActionUrl);
+            jQuery('#' + sourceFileField).addClass('required-entry');
+        }
+    };
+//]]>
+
+});
+</script>

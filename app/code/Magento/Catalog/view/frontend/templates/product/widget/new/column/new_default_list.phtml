@@ -1,0 +1,74 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php if (($_products = $block->getProductCollection()) && $_products->getSize()): ?>
+    <div class="block widget block-new-products-list">
+        <div class="block-title">
+            <strong><?= /* @escapeNotVerified */ __('New Products') ?></strong>
+        </div>
+        <div class="block-content">
+            <?php $suffix = $block->getNameInLayout(); ?>
+            <ol class="product-items" id="widget-new-products-<?= /* @escapeNotVerified */ $suffix ?>">
+                <?php foreach ($_products->getItems() as $_product): ?>
+                    <li class="product-item">
+                        <div class="product-item-info">
+                            <a class="product-item-photo" href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>"
+                               title="<?= /* @escapeNotVerified */ $block->stripTags($_product->getName(), null, true) ?>">
+                                <?= $block->getImage($_product, 'side_column_widget_product_thumbnail')->toHtml() ?>
+                            </a>
+                            <div class="product-item-details">
+                                <strong class="product-item-name">
+                                    <a href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>"
+                                       title="<?= /* @escapeNotVerified */ $block->stripTags($_product->getName(), null, true) ?>)" class="product-item-link">
+                                        <?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
+                                    </a>
+                                </strong>
+                                <?= /* @escapeNotVerified */ $block->getProductPriceHtml($_product, '-widget-new-' . $suffix) ?>
+                                <div class="product-item-actions">
+                                    <div class="actions-primary">
+                                        <?php if ($_product->isSaleable()): ?>
+                                            <?php if (!$_product->getTypeInstance()->isPossibleBuyFromList($_product)): ?>
+                                                <button type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>"
+                                                        class="action tocart primary"
+                                                        data-mage-init='{"redirectUrl":{"url":"<?= /* @escapeNotVerified */ $block->getAddToCartUrl($_product) ?>"}}'>
+                                                    <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
+                                                </button>
+                                            <?php else: ?>
+                                                <?php
+                                                    $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
+                                                    $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
+                                            ?>
+                                                <button type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>"
+                                                        class="action tocart primary"
+                                                        data-post='<?= /* @escapeNotVerified */ $postData ?>'>
+                                                    <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
+                                                </button>
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                            <?php if ($_product->getIsSalable()): ?>
+                                                <div class="stock available" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
+                                                    <span><?= /* @escapeNotVerified */ __('In stock') ?></span>
+                                                </div>
+                                            <?php else: ?>
+                                                <div class="stock unavailable" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
+                                                    <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span>
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+            <?= $block->getPagerHtml() ?>
+        </div>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,1018 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Sales\Api\Data\CreditmemoCommentInterface" type="Magento\Sales\Model\Order\Creditmemo\Comment"/>
+    <preference for="Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\Collection"/>
+    <preference for="Magento\Sales\Api\Data\CreditmemoInterface" type="Magento\Sales\Model\Order\Creditmemo"/>
+    <preference for="Magento\Sales\Api\Data\CreditmemoItemInterface" type="Magento\Sales\Model\Order\Creditmemo\Item"/>
+    <preference for="Magento\Sales\Api\Data\CreditmemoItemSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection"/>
+    <preference for="Magento\Sales\Api\Data\CreditmemoSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceCommentInterface" type="Magento\Sales\Model\Order\Invoice\Comment"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceCommentSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\Collection"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceInterface" type="Magento\Sales\Model\Order\Invoice"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceItemInterface" type="Magento\Sales\Model\Order\Invoice\Item"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceItemSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Invoice\Item\Collection"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Invoice\Collection"/>
+    <preference for="Magento\Sales\Api\Data\OrderAddressInterface" type="Magento\Sales\Model\Order\Address"/>
+    <preference for="Magento\Sales\Api\Data\OrderAddressSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Address\Collection"/>
+    <preference for="Magento\Sales\Api\Data\OrderInterface" type="Magento\Sales\Model\Order"/>
+    <preference for="Magento\Sales\Api\Data\OrderItemInterface" type="Magento\Sales\Model\Order\Item"/>
+    <preference for="Magento\Sales\Api\Data\OrderItemSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Item\Collection"/>
+    <preference for="Magento\Sales\Api\Data\OrderPaymentInterface" type="Magento\Sales\Model\Order\Payment"/>
+    <preference for="Magento\Sales\Api\Data\OrderPaymentSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Payment\Collection"/>
+    <preference for="Magento\Sales\Api\Data\OrderSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Collection"/>
+    <preference for="Magento\Sales\Api\Data\OrderStatusHistoryInterface" type="Magento\Sales\Model\Order\Status\History"/>
+    <preference for="Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Status\History\Collection"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentCommentInterface" type="Magento\Sales\Model\Order\Shipment\Comment"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentCommentSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface" type="Magento\Sales\Model\Order\Shipment\CreationArguments"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentInterface" type="Magento\Sales\Model\Order\Shipment"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentItemCreationInterface" type="Magento\Sales\Model\Order\Shipment\ItemCreation"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentItemInterface" type="Magento\Sales\Model\Order\Shipment\Item"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentItemSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Item\Collection"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Collection"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentTrackInterface" type="Magento\Sales\Model\Order\Shipment\Track"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentTrackSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection"/>
+    <preference for="Magento\Sales\Api\Data\ShippingInterface" type="Magento\Sales\Model\Order\Shipping"/>
+    <preference for="Magento\Sales\Api\Data\ShippingAssignmentInterface" type="Magento\Sales\Model\Order\ShippingAssignment"/>
+    <preference for="Magento\Sales\Api\Data\TransactionInterface" type="Magento\Sales\Model\Order\Payment\Transaction"/>
+    <preference for="Magento\Sales\Api\Data\TransactionSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection"/>
+    <preference for="Magento\Sales\Api\Data\TotalInterface" type="Magento\Sales\Model\Order\ShippingTotal"/>
+    <preference for="Magento\Sales\Api\CreditmemoCommentRepositoryInterface" type="Magento\Sales\Model\Order\Creditmemo\CommentRepository"/>
+    <preference for="Magento\Sales\Api\CreditmemoItemRepositoryInterface" type="Magento\Sales\Model\Order\Creditmemo\ItemRepository"/>
+    <preference for="Magento\Sales\Api\CreditmemoRepositoryInterface" type="Magento\Sales\Model\Order\CreditmemoRepository"/>
+    <preference for="Magento\Sales\Api\CreditmemoManagementInterface" type="Magento\Sales\Model\Service\CreditmemoService"/>
+    <preference for="Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface" type="Magento\Sales\Model\Order\Creditmemo\CreationArguments"/>
+    <preference for="Magento\Sales\Api\Data\CreditmemoItemCreationInterface" type="Magento\Sales\Model\Order\Creditmemo\ItemCreation"/>
+    <preference for="Magento\Sales\Api\InvoiceCommentRepositoryInterface" type="Magento\Sales\Model\Order\Invoice\CommentRepository"/>
+    <preference for="Magento\Sales\Api\InvoiceItemRepositoryInterface" type="Magento\Sales\Model\Order\Invoice\ItemRepository"/>
+    <preference for="Magento\Sales\Api\InvoiceRepositoryInterface" type="Magento\Sales\Model\Order\InvoiceRepository"/>
+    <preference for="Magento\Sales\Api\InvoiceManagementInterface" type="Magento\Sales\Model\Service\InvoiceService"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface" type="Magento\Sales\Model\Order\Invoice\CreationArguments"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceItemCreationInterface" type="Magento\Sales\Model\Order\Invoice\ItemCreation"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceCommentCreationInterface" type="Magento\Sales\Model\Order\Invoice\CommentCreation"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentCommentCreationInterface" type="Magento\Sales\Model\Order\Shipment\CommentCreation"/>
+    <preference for="Magento\Sales\Api\Data\CreditmemoCommentCreationInterface" type="Magento\Sales\Model\Order\Creditmemo\CommentCreation"/>
+    <preference for="Magento\Sales\Api\OrderAddressRepositoryInterface" type="Magento\Sales\Model\Order\AddressRepository"/>
+    <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\CustomerManagement"/>
+    <preference for="Magento\Sales\Api\OrderItemRepositoryInterface" type="Magento\Sales\Model\Order\ItemRepository"/>
+    <preference for="Magento\Sales\Api\OrderPaymentRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Repository"/>
+    <preference for="Magento\Sales\Api\OrderRepositoryInterface" type="Magento\Sales\Model\OrderRepository"/>
+    <preference for="Magento\Sales\Api\OrderManagementInterface" type="Magento\Sales\Model\Service\OrderService"/>
+    <preference for="Magento\Sales\Api\OrderStatusHistoryRepositoryInterface" type="Magento\Sales\Model\Order\Status\HistoryRepository"/>
+    <preference for="Magento\Sales\Api\PaymentFailuresInterface" type="Magento\Sales\Model\Service\PaymentFailuresService" />
+    <preference for="Magento\Sales\Api\ShipmentCommentRepositoryInterface" type="Magento\Sales\Model\Order\Shipment\CommentRepository"/>
+    <preference for="Magento\Sales\Api\ShipmentItemRepositoryInterface" type="Magento\Sales\Model\Order\Shipment\ItemRepository"/>
+    <preference for="Magento\Sales\Api\ShipmentRepositoryInterface" type="Magento\Sales\Model\Order\ShipmentRepository"/>
+    <preference for="Magento\Sales\Api\ShipmentManagementInterface" type="Magento\Sales\Model\Service\ShipmentService"/>
+    <preference for="Magento\Sales\Api\ShipmentTrackRepositoryInterface" type="Magento\Sales\Model\Order\Shipment\TrackRepository"/>
+    <preference for="Magento\Sales\Api\ShipOrderInterface" type="Magento\Sales\Model\ShipOrder"/>
+    <preference for="Magento\Sales\Api\TransactionRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Repository"/>
+    <preference for="Magento\Sales\Model\Order\Invoice\NotifierInterface" type="Magento\Sales\Model\Order\Invoice\Notifier"/>
+    <preference for="Magento\Sales\Model\Order\Shipment\NotifierInterface" type="Magento\Sales\Model\Order\Shipment\Notifier"/>
+    <preference for="Magento\Sales\Model\Order\PaymentAdapterInterface" type="Magento\Sales\Model\Order\PaymentAdapter"/>
+    <preference for="Magento\Sales\Model\Order\RefundAdapterInterface" type="Magento\Sales\Model\Order\RefundAdapter"/>
+    <preference for="Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Manager"/>
+    <preference for="Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Builder"/>
+    <preference for="Magento\Sales\Model\Order\Shipment\OrderRegistrarInterface" type="Magento\Sales\Model\Order\Shipment\OrderRegistrar"/>
+    <preference for="Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment"/>
+    <preference for="Magento\Sales\Model\Spi\CreditmemoItemResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item"/>
+    <preference for="Magento\Sales\Model\Spi\CreditmemoResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Creditmemo"/>
+    <preference for="Magento\Sales\Model\Spi\InvoiceCommentResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Invoice\Comment"/>
+    <preference for="Magento\Sales\Model\Spi\InvoiceItemResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Invoice\Item"/>
+    <preference for="Magento\Sales\Model\Spi\InvoiceResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Invoice"/>
+    <preference for="Magento\Sales\Model\Spi\OrderAddressResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Address"/>
+    <preference for="Magento\Sales\Model\Spi\OrderItemResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Item"/>
+    <preference for="Magento\Sales\Model\Spi\OrderPaymentResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Payment"/>
+    <preference for="Magento\Sales\Model\Spi\OrderResourceInterface" type="Magento\Sales\Model\ResourceModel\Order"/>
+    <preference for="Magento\Sales\Model\Spi\OrderStatusHistoryResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Status\History"/>
+    <preference for="Magento\Sales\Model\Spi\ShipmentCommentResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Comment"/>
+    <preference for="Magento\Sales\Model\Spi\ShipmentItemResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Item"/>
+    <preference for="Magento\Sales\Model\Spi\ShipmentResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment"/>
+    <preference for="Magento\Sales\Model\Spi\ShipmentTrackResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Track"/>
+    <preference for="Magento\Sales\Model\Spi\TransactionResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Payment\Transaction"/>
+    <preference for="Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface" type="Magento\Sales\Model\ResourceModel\Order\CollectionFactory"/>
+    <preference for="Magento\Sales\Api\InvoiceOrderInterface" type="Magento\Sales\Model\InvoiceOrder"/>
+    <preference for="Magento\Sales\Model\Order\OrderStateResolverInterface" type="Magento\Sales\Model\Order\StateResolver"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentTrackCreationInterface" type="Magento\Sales\Model\Order\Shipment\TrackCreation"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentPackageInterface" type="Magento\Sales\Model\Order\Shipment\Package"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentPackageCreationInterface" type="Magento\Sales\Model\Order\Shipment\PackageCreation"/>
+    <preference for="Magento\Sales\Model\Order\OrderValidatorInterface" type="Magento\Sales\Model\Order\OrderValidator"/>
+    <preference for="Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface" type="Magento\Sales\Model\Order\Invoice\InvoiceValidator"/>
+    <preference for="Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface" type="Magento\Sales\Model\Order\Shipment\ShipmentValidator"/>
+    <preference for="Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface" type="Magento\Sales\Model\Order\Creditmemo\CreditmemoValidator"/>
+    <preference for="Magento\Sales\Model\Order\Creditmemo\ItemCreationValidatorInterface" type="Magento\Sales\Model\Order\Creditmemo\ItemCreationValidator"/>
+    <preference for="Magento\Sales\Model\ValidatorResultInterface" type="Magento\Sales\Model\ValidatorResult"/>
+    <preference for="Magento\Sales\Model\Order\Validation\InvoiceOrderInterface" type="Magento\Sales\Model\Order\Validation\InvoiceOrder"/>
+    <preference for="Magento\Sales\Model\Order\Validation\RefundInvoiceInterface" type="Magento\Sales\Model\Order\Validation\RefundInvoice"/>
+    <preference for="Magento\Sales\Model\Order\Validation\RefundOrderInterface" type="Magento\Sales\Model\Order\Validation\RefundOrder"/>
+    <preference for="Magento\Sales\Model\Order\Validation\ShipOrderInterface" type="Magento\Sales\Model\Order\Validation\ShipOrder"/>
+    <preference for="Magento\Sales\Model\Order\Creditmemo\NotifierInterface" type="Magento\Sales\Model\Order\Creditmemo\Notifier"/>
+    <preference for="Magento\Sales\Api\RefundOrderInterface" type="Magento\Sales\Model\RefundOrder"/>
+    <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>
+    <preference for="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider" />
+    <type name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Sales\Model\ResourceModel\Provider\UpdatedIdListProvider</item>
+                <item name="updated_at" xsi:type="string">Magento\Sales\Model\ResourceModel\Provider\UpdatedAtListProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Report" shared="false"/>
+    <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
+        <arguments>
+            <argument name="fileName" xsi:type="string">pdf.xml</argument>
+            <argument name="converter" xsi:type="object">Magento\Sales\Model\Order\Pdf\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Sales\Model\Order\Pdf\Config\SchemaLocator</argument>
+        </arguments>
+    </type>
+    <virtualType name="pdfConfigDataStorage" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Sales\Model\Order\Pdf\Config\Reader</argument>
+            <argument name="cacheId" xsi:type="string">sales_pdf_config</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Sales\Model\Order\Pdf\Config">
+        <arguments>
+            <argument name="dataStorage" xsi:type="object">pdfConfigDataStorage</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Helper\Product\Flat\Indexer">
+        <arguments>
+            <argument name="flatAttributeGroups" xsi:type="array">
+                <item name="quote_item" xsi:type="string">quote_item</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Payment\Model\Checks\SpecificationFactory">
+        <arguments>
+            <argument name="mapping" xsi:type="array">
+                <item name="country" xsi:type="object">Magento\Payment\Model\Checks\CanUseForCountry</item>
+                <item name="currency" xsi:type="object">Magento\Payment\Model\Checks\CanUseForCurrency</item>
+                <item name="checkout" xsi:type="object">Magento\Payment\Model\Checks\CanUseCheckout</item>
+                <item name="internal" xsi:type="object">Magento\Payment\Model\Checks\CanUseInternal</item>
+                <item name="total" xsi:type="object">Magento\Payment\Model\Checks\TotalMinMax</item>
+                <item name="zero_total" xsi:type="object">Magento\Payment\Model\Checks\ZeroTotal</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\ActionValidator\RemoveAction">
+        <arguments>
+            <argument name="protectedModels" xsi:type="array">
+                <item name="salesOrder" xsi:type="string">Magento\Sales\Model\Order</item>
+                <item name="salesOrderCreditmemo" xsi:type="string">Magento\Sales\Model\Order\Creditmemo</item>
+                <item name="salesOrderInvoice" xsi:type="string">Magento\Sales\Model\Order\Invoice</item>
+                <item name="salesOrderShipment" xsi:type="string">Magento\Sales\Model\Order\Shipment</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Sales\Model\Config\Reader\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Controller\Order\Creditmemo">
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
+    </type>
+    <type name="Magento\Sales\Controller\Order\History">
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
+    </type>
+    <type name="Magento\Sales\Controller\Order\Invoice">
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
+    </type>
+    <type name="Magento\Sales\Controller\Order\PrintAction">
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
+    </type>
+    <type name="Magento\Sales\Controller\Order\PrintCreditmemo">
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
+    </type>
+    <type name="Magento\Sales\Controller\Order\PrintInvoice">
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
+    </type>
+    <type name="Magento\Sales\Controller\Order\PrintShipment">
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
+    </type>
+    <type name="Magento\Sales\Controller\Order\Reorder">
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
+    </type>
+    <type name="Magento\Sales\Controller\Order\Shipment">
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
+    </type>
+    <type name="Magento\Sales\Controller\Order\View">
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
+    </type>
+    <type name="Magento\Framework\App\Rss\RssManagerInterface">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="order_status" xsi:type="string">Magento\Sales\Model\Rss\OrderStatus</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="SalesOrderIndexGridSyncRemove" type="Magento\Sales\Observer\GridSyncRemoveObserver">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesInvoiceIndexGridSyncRemove" type="Magento\Sales\Observer\GridSyncRemoveObserver">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesShipmentIndexGridSyncRemove" type="Magento\Sales\Observer\GridSyncRemoveObserver">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">ShipmentGridAggregator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesCreditmemoIndexGridSyncRemove" type="Magento\Sales\Observer\GridSyncRemoveObserver">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">CreditmemoGridAggregator</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SalesOrderIndexGridSyncInsert" type="Magento\Sales\Observer\GridSyncInsertObserver">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesInvoiceIndexGridSyncInsert" type="Magento\Sales\Observer\GridSyncInsertObserver">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesShipmentIndexGridSyncInsert" type="Magento\Sales\Observer\GridSyncInsertObserver">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">ShipmentGridAggregator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesCreditmemoIndexGridSyncInsert" type="Magento\Sales\Observer\GridSyncInsertObserver">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">CreditmemoGridAggregator</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SalesOrderIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesInvoiceIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesShipmentIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">ShipmentGridAggregator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesCreditmemoIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">CreditmemoGridAggregator</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SalesOrderIndexGridAsyncInsertObserver" type="Magento\Sales\Observer\GridAsyncInsertObserver">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesOrderIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesInvoiceIndexGridAsyncInsertObserver" type="Magento\Sales\Observer\GridAsyncInsertObserver">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesInvoiceIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesShipmentIndexGridAsyncInsertObserver" type="Magento\Sales\Observer\GridAsyncInsertObserver">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesShipmentIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesCreditmemoIndexGridAsyncInsertObserver" type="Magento\Sales\Observer\GridAsyncInsertObserver">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesCreditmemoIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SalesOrderIndexGridAsyncInsertCron" type="Magento\Sales\Cron\GridAsyncInsert">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesOrderIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesInvoiceIndexGridAsyncInsertCron" type="Magento\Sales\Cron\GridAsyncInsert">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesInvoiceIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesShipmentIndexGridAsyncInsertCron" type="Magento\Sales\Cron\GridAsyncInsert">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesShipmentIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesCreditmemoIndexGridAsyncInsertCron" type="Magento\Sales\Cron\GridAsyncInsert">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesCreditmemoIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SalesOrderSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
+        <arguments>
+            <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\OrderSender</argument>
+            <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order</argument>
+            <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Collection</argument>
+            <argument name="identityContainer" xsi:type="object" shared="false">Magento\Sales\Model\Order\Email\Container\OrderIdentity</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesOrderInvoiceSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
+        <arguments>
+            <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\InvoiceSender</argument>
+            <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice</argument>
+            <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Invoice\Collection</argument>
+            <argument name="identityContainer" xsi:type="object" shared="false">Magento\Sales\Model\Order\Email\Container\InvoiceIdentity</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesOrderShipmentSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
+        <arguments>
+            <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\ShipmentSender</argument>
+            <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Shipment</argument>
+            <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Shipment\Collection</argument>
+            <argument name="identityContainer" xsi:type="object" shared="false">Magento\Sales\Model\Order\Email\Container\ShipmentIdentity</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesOrderCreditmemoSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
+        <arguments>
+            <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\CreditmemoSender</argument>
+            <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo</argument>
+            <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection</argument>
+            <argument name="identityContainer" xsi:type="object" shared="false">Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SalesOrderSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderSendEmails</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesOrderInvoiceSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderInvoiceSendEmails</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesOrderShipmentSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderShipmentSendEmails</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesOrderCreditmemoSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderCreditmemoSendEmails</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SalesOrderSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderSendEmails</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesInvoiceSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderInvoiceSendEmails</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesShipmentSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderShipmentSendEmails</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesCreditmemoSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderCreditmemoSendEmails</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\SalesSequence\Model\EntityPool">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="order" xsi:type="string">order</item>
+                <item name="invoice" xsi:type="string">invoice</item>
+                <item name="creditmemo" xsi:type="string">creditmemo</item>
+                <item name="shipment" xsi:type="string">shipment</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesSequence\Model\ResourceModel\Meta">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesSequence\Model\ResourceModel\Profile">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Report\Order\Createdat">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Report\Bestsellers">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Status">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <virtualType name="OrderRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Sales\Model\ResourceModel\Order">
+        <arguments>
+            <argument name="entityRelationComposite" xsi:type="object">OrderRelationsComposite</argument>
+        </arguments>
+    </type>
+    <virtualType name="InvoiceRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Invoice">
+        <arguments>
+            <argument name="entityRelationComposite" xsi:type="object">InvoiceRelationsComposite</argument>
+        </arguments>
+    </type>
+    <virtualType name="ShipmentRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Shipment\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Shipment">
+        <arguments>
+            <argument name="entityRelationComposite" xsi:type="object">ShipmentRelationsComposite</argument>
+        </arguments>
+    </type>
+    <virtualType name="CreditmemoRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Creditmemo">
+        <arguments>
+            <argument name="entityRelationComposite" xsi:type="object">CreditmemoRelationsComposite</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedOrderDataProvider" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Sales\Model\ResourceModel\Provider\UpdatedIdListProvider</item>
+                <item name="updated_at" xsi:type="string">Magento\Sales\Model\ResourceModel\Provider\UpdatedAtListProvider</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="mainTableName" xsi:type="string">sales_order</argument>
+            <argument name="gridTableName" xsi:type="string">sales_order_grid</argument>
+            <argument name="orderIdField" xsi:type="string">sales_order.entity_id</argument>
+            <argument name="joins" xsi:type="array">
+                <item name="sales_shipping_address" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_address</item>
+                    <item name="origin_column" xsi:type="string">shipping_address_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+                <item name="sales_billing_address" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_address</item>
+                    <item name="origin_column" xsi:type="string">billing_address_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+                <item name="sales_order_payment" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_payment</item>
+                    <item name="origin_column" xsi:type="string">entity_id</item>
+                    <item name="target_column" xsi:type="string">parent_id</item>
+                </item>
+            </argument>
+            <argument name="columns" xsi:type="array">
+                <item name="entity_id" xsi:type="string">sales_order.entity_id</item>
+                <item name="status" xsi:type="string">sales_order.status</item>
+                <item name="store_id" xsi:type="string">sales_order.store_id</item>
+                <item name="store_name" xsi:type="string">sales_order.store_name</item>
+                <item name="customer_id" xsi:type="string">sales_order.customer_id</item>
+                <item name="base_grand_total" xsi:type="string">sales_order.base_grand_total</item>
+                <item name="base_total_paid" xsi:type="string">sales_order.base_total_paid</item>
+                <item name="grand_total" xsi:type="string">sales_order.grand_total</item>
+                <item name="total_paid" xsi:type="string">sales_order.total_paid</item>
+                <item name="increment_id" xsi:type="string">sales_order.increment_id</item>
+                <item name="base_currency_code" xsi:type="string">sales_order.base_currency_code</item>
+                <item name="order_currency_code" xsi:type="string">sales_order.order_currency_code</item>
+                <item name="shipping_name" xsi:type="object">ShippingNameAggregator</item>
+                <item name="billing_name" xsi:type="object">BillingNameAggregator</item>
+                <item name="created_at" xsi:type="string">sales_order.created_at</item>
+                <item name="updated_at" xsi:type="string">sales_order.updated_at</item>
+                <item name="billing_address" xsi:type="object">BillingAddressAggregator</item>
+                <item name="shipping_address" xsi:type="object">ShippingAddressAggregator</item>
+                <item name="shipping_information" xsi:type="string">sales_order.shipping_description</item>
+                <item name="customer_email" xsi:type="string">sales_order.customer_email</item>
+                <item name="customer_group" xsi:type="string">sales_order.customer_group_id</item>
+                <item name="subtotal" xsi:type="string">sales_order.base_subtotal</item>
+                <item name="shipping_and_handling" xsi:type="string">sales_order.base_shipping_amount</item>
+                <item name="customer_name" xsi:type="object">CustomerNameAggregator</item>
+                <item name="payment_method" xsi:type="string">sales_order_payment.method</item>
+                <item name="total_refunded" xsi:type="string">sales_order.total_refunded</item>
+            </argument>
+            <argument name="notSyncedDataProvider" xsi:type="object">Magento\Sales\Model\ResourceModel\Provider\NotSyncedOrderDataProvider</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShipmentGridAggregator" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="mainTableName" xsi:type="string">sales_shipment</argument>
+            <argument name="gridTableName" xsi:type="string">sales_shipment_grid</argument>
+            <argument name="orderIdField" xsi:type="string">sales_shipment.order_id</argument>
+            <argument name="joins" xsi:type="array">
+                <item name="sales_order" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order</item>
+                    <item name="origin_column" xsi:type="string">order_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+                <item name="sales_shipping_address" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_address</item>
+                    <item name="origin_column" xsi:type="string">shipping_address_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+                <item name="sales_billing_address" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_address</item>
+                    <item name="origin_column" xsi:type="string">billing_address_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+                <item name="sales_order_payment" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_payment</item>
+                    <item name="origin_column" xsi:type="string">order_id</item>
+                    <item name="target_column" xsi:type="string">parent_id</item>
+                </item>
+            </argument>
+            <argument name="columns" xsi:type="array">
+                <item name="entity_id" xsi:type="string">sales_shipment.entity_id</item>
+                <item name="increment_id" xsi:type="string">sales_shipment.increment_id</item>
+                <item name="store_id" xsi:type="string">sales_shipment.store_id</item>
+                <item name="order_increment_id" xsi:type="string">sales_order.increment_id</item>
+                <item name="order_created_at" xsi:type="string">sales_order.created_at</item>
+                <item name="customer_name" xsi:type="object">CustomerNameAggregator</item>
+                <item name="total_qty" xsi:type="string">sales_shipment.total_qty</item>
+                <item name="shipment_status" xsi:type="string">sales_shipment.shipment_status</item>
+                <item name="order_status" xsi:type="string">sales_order.status</item>
+                <item name="billing_address" xsi:type="object">BillingAddressAggregator</item>
+                <item name="shipping_address" xsi:type="object">ShippingAddressAggregator</item>
+                <item name="billing_name" xsi:type="object">BillingNameAggregator</item>
+                <item name="shipping_name" xsi:type="object">ShippingNameAggregator</item>
+                <item name="customer_email" xsi:type="string">sales_order.customer_email</item>
+                <item name="customer_group_id" xsi:type="string">sales_order.customer_group_id</item>
+                <item name="payment_method" xsi:type="string">sales_order_payment.method</item>
+                <item name="created_at" xsi:type="string">sales_shipment.created_at</item>
+                <item name="updated_at" xsi:type="string">sales_shipment.updated_at</item>
+                <item name="order_id" xsi:type="string">sales_shipment.order_id</item>
+                <item name="shipping_information" xsi:type="string">sales_order.shipping_description</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CreditmemoGridAggregator" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="mainTableName" xsi:type="string">sales_creditmemo</argument>
+            <argument name="gridTableName" xsi:type="string">sales_creditmemo_grid</argument>
+            <argument name="orderIdField" xsi:type="string">sales_creditmemo.order_id</argument>
+            <argument name="joins" xsi:type="array">
+                <item name="sales_shipping_address" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_address</item>
+                    <item name="origin_column" xsi:type="string">shipping_address_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+                <item name="sales_billing_address" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_address</item>
+                    <item name="origin_column" xsi:type="string">billing_address_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+                <item name="sales_order" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order</item>
+                    <item name="origin_column" xsi:type="string">order_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+                <item name="sales_order_payment" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_payment</item>
+                    <item name="origin_column" xsi:type="string">order_id</item>
+                    <item name="target_column" xsi:type="string">parent_id</item>
+                </item>
+            </argument>
+            <argument name="columns" xsi:type="array">
+                <item name="entity_id" xsi:type="string">sales_creditmemo.entity_id</item>
+                <item name="increment_id" xsi:type="string">sales_creditmemo.increment_id</item>
+                <item name="created_at" xsi:type="string">sales_creditmemo.created_at</item>
+                <item name="updated_at" xsi:type="string">sales_creditmemo.updated_at</item>
+                <item name="order_id" xsi:type="string">sales_order.entity_id</item>
+                <item name="order_increment_id" xsi:type="string">sales_order.increment_id</item>
+                <item name="order_created_at" xsi:type="string">sales_order.created_at</item>
+                <item name="billing_name" xsi:type="object">BillingNameAggregator</item>
+                <item name="state" xsi:type="string">sales_creditmemo.state</item>
+                <item name="base_grand_total" xsi:type="string">sales_creditmemo.base_grand_total</item>
+                <item name="order_status" xsi:type="string">sales_order.status</item>
+                <item name="store_id" xsi:type="string">sales_creditmemo.store_id</item>
+                <item name="billing_address" xsi:type="object">BillingAddressAggregator</item>
+                <item name="shipping_address" xsi:type="object">ShippingAddressAggregator</item>
+                <item name="customer_name" xsi:type="object">CustomerNameAggregator</item>
+                <item name="customer_email" xsi:type="string">sales_order.customer_email</item>
+                <item name="customer_group_id" xsi:type="string">sales_order.customer_group_id</item>
+                <item name="payment_method" xsi:type="string">sales_order_payment.method</item>
+                <item name="shipping_information" xsi:type="string">sales_order.shipping_description</item>
+                <item name="subtotal" xsi:type="string">sales_creditmemo.subtotal</item>
+                <item name="shipping_and_handling" xsi:type="string">sales_creditmemo.shipping_amount</item>
+                <item name="adjustment_positive" xsi:type="string">sales_creditmemo.adjustment_positive</item>
+                <item name="adjustment_negative" xsi:type="string">sales_creditmemo.adjustment_negative</item>
+                <item name="order_base_grand_total" xsi:type="string">sales_order.base_grand_total</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Invoice\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="mainTableName" xsi:type="string">sales_invoice</argument>
+            <argument name="gridTableName" xsi:type="string">sales_invoice_grid</argument>
+            <argument name="orderIdField" xsi:type="string">sales_invoice.order_id</argument>
+            <argument name="joins" xsi:type="array">
+                <item name="sales_order" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order</item>
+                    <item name="origin_column" xsi:type="string">order_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+                <item name="sales_shipping_address" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_address</item>
+                    <item name="origin_column" xsi:type="string">shipping_address_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+                <item name="sales_billing_address" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_address</item>
+                    <item name="origin_column" xsi:type="string">billing_address_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+                <item name="sales_order_payment" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_payment</item>
+                    <item name="origin_column" xsi:type="string">order_id</item>
+                    <item name="target_column" xsi:type="string">parent_id</item>
+                </item>
+            </argument>
+            <argument name="columns" xsi:type="array">
+                <item name="entity_id" xsi:type="string">sales_invoice.entity_id</item>
+                <item name="increment_id" xsi:type="string">sales_invoice.increment_id</item>
+                <item name="state" xsi:type="string">sales_invoice.state</item>
+                <item name="store_id" xsi:type="string">sales_invoice.store_id</item>
+                <item name="store_name" xsi:type="string">sales_order.store_name</item>
+                <item name="order_id" xsi:type="string">sales_invoice.order_id</item>
+                <item name="order_increment_id" xsi:type="string">sales_order.increment_id</item>
+                <item name="order_created_at" xsi:type="string">sales_order.created_at</item>
+                <item name="customer_name" xsi:type="object">CustomerNameAggregator</item>
+                <item name="customer_email" xsi:type="string">sales_order.customer_email</item>
+                <item name="customer_group_id" xsi:type="string">sales_order.customer_group_id</item>
+                <item name="payment_method" xsi:type="string">sales_order_payment.method</item>
+                <item name="store_currency_code" xsi:type="string">sales_invoice.store_currency_code</item>
+                <item name="order_currency_code" xsi:type="string">sales_invoice.order_currency_code</item>
+                <item name="base_currency_code" xsi:type="string">sales_invoice.base_currency_code</item>
+                <item name="global_currency_code" xsi:type="string">sales_invoice.global_currency_code</item>
+                <item name="billing_name" xsi:type="object">BillingNameAggregator</item>
+                <item name="billing_address" xsi:type="object">BillingAddressAggregator</item>
+                <item name="shipping_address" xsi:type="object">ShippingAddressAggregator</item>
+                <item name="shipping_information" xsi:type="string">sales_order.shipping_description</item>
+                <item name="subtotal" xsi:type="string">sales_invoice.base_subtotal</item>
+                <item name="shipping_and_handling" xsi:type="string">sales_invoice.base_shipping_amount</item>
+                <item name="base_grand_total" xsi:type="string">sales_invoice.base_grand_total</item>
+                <item name="grand_total" xsi:type="string">sales_invoice.grand_total</item>
+                <item name="created_at" xsi:type="string">sales_invoice.created_at</item>
+                <item name="updated_at" xsi:type="string">sales_invoice.updated_at</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CustomerNameAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="customer_firstname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_order</item>
+                    <item name="columnName" xsi:type="string">customer_firstname</item>
+                </item>
+                <item name="customer_lastname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_order</item>
+                    <item name="columnName" xsi:type="string">customer_lastname</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShippingNameAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="firstname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">firstname</item>
+                </item>
+                <item name="lastname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">lastname</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BillingNameAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="firstname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">firstname</item>
+                </item>
+                <item name="lastname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">lastname</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShippingAddressAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="company" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">company</item>
+                </item>
+                <item name="street" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">street</item>
+                </item>
+                <item name="city" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">city</item>
+                </item>
+                <item name="region" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">region</item>
+                </item>
+                <item name="postcode" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">postcode</item>
+                </item>
+            </argument>
+            <argument name="separator" xsi:type="string">, </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BillingAddressAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="company" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">company</item>
+                </item>
+                <item name="street" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">street</item>
+                </item>
+                <item name="city" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">city</item>
+                </item>
+                <item name="region" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">region</item>
+                </item>
+                <item name="postcode" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">postcode</item>
+                </item>
+            </argument>
+            <argument name="separator" xsi:type="string">, </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PaymentMethodSubSelect" type="Magento\Framework\DB\Sql\LookupExpression">
+        <arguments>
+            <argument name="targetTable" xsi:type="string">sales_order_payment</argument>
+            <argument name="targetColumn" xsi:type="string">method</argument>
+            <argument name="referenceColumns" xsi:type="array">
+                <item name="parent_id" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_order</item>
+                    <item name="columnName" xsi:type="string">entity_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Sales\Model\ResourceModel\GridPool">
+        <arguments>
+            <argument name="grids" xsi:type="array">
+                <item name="order_grid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</item>
+                <item name="invoice_grid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid</item>
+                <item name="shipment_grid" xsi:type="object">ShipmentGridAggregator</item>
+                <item name="creditmemo_grid" xsi:type="object">CreditmemoGridAggregator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="sales_order_grid_data_source" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Grid\Collection</item>
+                <item name="sales_order_invoice_grid_data_source" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid\Collection</item>
+                <item name="sales_order_shipment_grid_data_source" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Shipment\Grid\Collection</item>
+                <item name="sales_order_creditmemo_grid_data_source" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Grid\Collection</item>
+                <item name="sales_order_view_invoice_grid_data_source" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Invoice\Orders\Grid\Collection</item>
+                <item name="sales_order_view_shipment_grid_data_source" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Shipment\Order\Grid\Collection</item>
+                <item name="sales_order_view_creditmemo_grid_data_source" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Order\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Config">
+        <arguments>
+            <argument name="state" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
+        </arguments>
+    </type>
+    <virtualType name="orderMetadata" type="Magento\Sales\Model\ResourceModel\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\ResourceModel\Order</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="orderItemMetadata" type="Magento\Sales\Model\ResourceModel\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Item</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Item</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="invoiceMetadata" type="Magento\Sales\Model\ResourceModel\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Invoice</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Invoice</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="shipmentMetadata" type="Magento\Sales\Model\ResourceModel\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Shipment</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Shipment</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="creditmemoMetadata" type="Magento\Sales\Model\ResourceModel\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Creditmemo</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Creditmemo</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="transactionMetaData" type="Magento\Sales\Model\ResourceModel\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Payment\Transaction</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Payment\Transaction</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="paymentMetaData" type="Magento\Sales\Model\ResourceModel\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Payment</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Payment</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="orderAddressMetadata" type="Magento\Sales\Model\ResourceModel\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Address</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Address</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Sales\Model\OrderRepository">
+        <arguments>
+            <argument name="metadata" xsi:type="object">orderMetadata</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\ItemRepository">
+        <arguments>
+            <argument name="metadata" xsi:type="object">orderItemMetadata</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\InvoiceRepository">
+        <arguments>
+            <argument name="invoiceMetadata" xsi:type="object">invoiceMetadata</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\ShipmentRepository">
+        <arguments>
+            <argument name="metadata" xsi:type="object">shipmentMetadata</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\CreditmemoRepository">
+        <arguments>
+            <argument name="metadata" xsi:type="object">creditmemoMetadata</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Payment\Transaction\Repository">
+        <arguments>
+            <argument name="metaData" xsi:type="object">transactionMetaData</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Payment\Repository">
+        <arguments>
+            <argument name="metaData" xsi:type="object">paymentMetaData</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\AddressRepository">
+        <arguments>
+            <argument name="metadata" xsi:type="object">orderAddressMetadata</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Payment\Operations\AuthorizeOperation">
+        <arguments>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\AuthorizeCommand</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Payment\Operations\CaptureOperation">
+        <arguments>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\CaptureCommand</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Payment\Operations\OrderOperation">
+        <arguments>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\OrderCommand</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Payment\Operations\RegisterCaptureNotificationOperation">
+        <arguments>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\RegisterCaptureNotificationCommand</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Tax\Item">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Invoice\Notifier">
+        <arguments>
+            <argument name="senders" xsi:type="array">
+                <item name="email" xsi:type="object">Magento\Sales\Model\Order\Invoice\Sender\EmailSender</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Shipment\Notifier">
+        <arguments>
+            <argument name="senders" xsi:type="array">
+                <item name="email" xsi:type="object">Magento\Sales\Model\Order\Shipment\Sender\EmailSender</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Creditmemo\Notifier">
+        <arguments>
+            <argument name="senders" xsi:type="array">
+                <item name="email" xsi:type="object">Magento\Sales\Model\Order\Creditmemo\Sender\EmailSender</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\HydratorPool">
+        <arguments>
+            <argument name="hydrators" xsi:type="array">
+                <item name="Magento\Sales\Api\Data\ShipmentTrackCreationInterface" xsi:type="string">Magento\Framework\EntityManager\HydratorInterface</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Handler\Address">
+        <plugin name="addressUpdate" type="Magento\Sales\Model\Order\Invoice\Plugin\AddressUpdate"/>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="encyption_payment_data_update" xsi:type="object">Magento\Sales\Console\Command\EncryptionPaymentDataUpdateCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="sales_email/creditmemo/copy_to" xsi:type="string">1</item>
+                <item name="sales_email/creditmemo_comment/copy_to" xsi:type="string">1</item>
+                <item name="sales_email/invoice/copy_to" xsi:type="string">1</item>
+                <item name="sales_email/invoice_comment/copy_to" xsi:type="string">1</item>
+                <item name="sales_email/order/copy_to" xsi:type="string">1</item>
+                <item name="sales_email/order_comment/copy_to" xsi:type="string">1</item>
+                <item name="sales_email/shipment/copy_to" xsi:type="string">1</item>
+                <item name="sales_email/shipment_comment/copy_to" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="customer/create_account/email_domain" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference
+            for="Magento\Sales\Api\OrderCustomerDelegateInterface"
+            type="Magento\Sales\Model\Order\OrderCustomerDelegate" />
+</config>

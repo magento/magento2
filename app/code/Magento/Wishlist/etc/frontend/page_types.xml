@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page_types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_types.xsd">
+    <type id="wishlist_index_index" label="Customer My Account My Wish List"/>
+    <type id="wishlist_index_share" label="Customer My Account Wish List Sharing Form"/>
+    <type id="wishlist_shared_index" label="Customer Shared Wish List View"/>
+    <type id="wishlist_index_configure" label="Configure Wish List Item"/>
+</page_types>

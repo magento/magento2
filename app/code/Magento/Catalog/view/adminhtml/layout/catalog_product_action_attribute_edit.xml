@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="page.main.actions">
+            <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher" template="Magento_Backend::store/switcher.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tabs" name="attributes_tabs">
+                <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Attributes" name="tab_attributes"/>
+                <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Inventory" name="tab_inventory" template="Magento_Catalog::catalog/product/edit/action/inventory.phtml"/>
+                <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Websites" name="tab_websites" template="Magento_Catalog::catalog/product/edit/action/websites.phtml"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">attributes</argument>
+                    <argument name="block" xsi:type="string">tab_attributes</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">inventory</argument>
+                    <argument name="block" xsi:type="string">tab_inventory</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">websites</argument>
+                    <argument name="block" xsi:type="string">tab_websites</argument>
+                </action>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute" name="attribute" template="Magento_Catalog::catalog/product/edit/action/attribute.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

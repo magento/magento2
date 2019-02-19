@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Magento Admin</title>
+        <meta name="viewport" content="width=1024"/>
+        <meta name="format-detection" content="telephone=no"/>
+        <link src="requirejs/require.js"/>
+        <css src="extjs/resources/css/ext-all.css"/>
+        <css src="extjs/resources/css/ytheme-magento.css"/>
+    </head>
+    <body>
+        <attribute name="id" value="html-body"/>
+        <block name="require.js" class="Magento\Backend\Block\Page\RequireJs" template="Magento_Backend::page/js/require_js.phtml"/>
+        <referenceContainer name="global.notices">
+            <block class="Magento\Backend\Block\Page\Notices" name="global_notices" as="global_notices" template="Magento_Backend::page/notices.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="header">
+            <block class="Magento\Backend\Block\Page\Header" name="logo" before="-">
+                <arguments>
+                    <argument name="show_part" xsi:type="string">logo</argument>
+                    <argument name="edition" translate="true" xsi:type="string">Community Edition</argument>
+                    <argument name="logo_image_src" xsi:type="string">images/magento-icon.svg</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Backend\Block\GlobalSearch" name="global.search" as="search" after="logo" aclResource="Magento_Backend::global_search"/>
+            <block class="Magento\Backend\Block\Page\Header" name="user" after="-">
+                <arguments>
+                    <argument name="show_part" xsi:type="string">user</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="page.menu">
+            <block class="Magento\Backend\Block\Menu" name="menu" as="menu" template="Magento_Backend::menu.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="page.breadcrumbs">
+            <block class="Magento\Backend\Block\Widget\Breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
+        </referenceContainer>
+        <referenceContainer name="page.formkey">
+            <block class="Magento\Backend\Block\Admin\Formkey" name="formkey" as="formkey" template="Magento_Backend::admin/formkey.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="main.top">
+            <block class="Magento\Theme\Block\Html\Title" name="page.title" template="Magento_Theme::title.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="page.messages">
+            <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
+        </referenceContainer>
+        <referenceContainer name="page.main.actions">
+            <block class="Magento\Framework\View\Element\Template" name="page.actions.toolbar" template="Magento_Backend::pageactions.phtml" after="-"/>
+        </referenceContainer>
+        <referenceContainer name="footer">
+            <container name="legal" htmlTag="div" htmlClass="footer-legal">
+                <container name="legal.copyright" htmlTag="p" htmlClass="copyright col-m-6">
+                    <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright" />
+                </container>
+                <container name="legal.system" htmlTag="div" htmlClass="footer-legal-system col-m-6">
+                    <block class="Magento\Backend\Block\Page\Footer" name="version" as="version" />
+                    <block class="Magento\Framework\View\Element\Template" name="report" as="report" template="Magento_Backend::page/report.phtml">
+                        <arguments>
+                            <argument name="bugreport_url" xsi:type="string">https://github.com/magento/magento2/issues</argument>
+                        </arguments>
+                    </block>
+                </container>
+            </container>
+        </referenceContainer>
+        <referenceContainer name="after.body.start">
+            <block class="Magento\RequireJs\Block\Html\Head\Config" name="requirejs-config"/>
+            <block class="Magento\Translation\Block\Html\Head\Config" name="translate-config"/>
+            <block class="Magento\Translation\Block\Js" name="translate" template="Magento_Translation::translate.phtml"/>
+            <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Backend::page/js/components.phtml"/>
+            <block class="Magento\Framework\View\Element\Html\Calendar" name="head.calendar" as="calendar" template="Magento_Backend::page/js/calendar.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

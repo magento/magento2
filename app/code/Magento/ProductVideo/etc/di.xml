@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Api\Data\VideoContentInterface" type="Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry" />
+    <preference for="Magento\Framework\Validator\ValidatorInterface" type="Magento\Framework\Validator\AllowedProtocols" />
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool">
+        <arguments>
+            <argument name="mediaGalleryEntryConvertersCollection" xsi:type="array">
+                <item name="external-video" xsi:type="object">Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Config\View">
+        <arguments>
+            <argument name="xpath" xsi:type="array">
+                <item name="video" xsi:type="array">
+                    <item name="/view/media/videos" xsi:type="array">
+                        <item name="id" xsi:type="string">module</item>
+                    </item>
+                    <item name="/view/media/videos/video" xsi:type="array">
+                        <item name="id1" xsi:type="string">id</item>
+                        <item name="id2" xsi:type="string">type</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ProductVideo\Controller\Adminhtml\Product\Gallery\RetrieveImage">
+        <arguments>
+            <argument name="fileDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Xsd\Media\TypeDataExtractorPool">
+        <arguments>
+            <argument name="extractors" xsi:type="array">
+                <item name="videos" xsi:type="object">Magento\ProductVideo\Model\VideoExtractor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Gallery\CreateHandler">
+        <plugin name="external_video_media_entry_saver" type="Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery\CreateHandler" />
+    </type>
+    <type name="Magento\Catalog\Model\Product\Gallery\ReadHandler">
+        <plugin name="external_video_media_entry_reader" type="Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery\ReadHandler" />
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Gallery">
+        <plugin name="external_video_media_resource_backend" type="Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend" />
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="catalog/product_video/youtube_api_key" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

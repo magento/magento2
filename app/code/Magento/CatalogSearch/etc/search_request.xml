@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:framework:Search/etc/search_request.xsd">
+    <request query="quick_search_container" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="quick_search_container" boost="1">
+                <queryReference clause="should" ref="search" />
+                <queryReference clause="must" ref="category"/>
+                <queryReference clause="must" ref="price"/>
+                <queryReference clause="must" ref="visibility"/>
+            </query>
+            <query xsi:type="matchQuery" value="$search_term$" name="search">
+                <match field="sku"/>
+                <match field="*"/>
+            </query>
+            <query xsi:type="filteredQuery" name="category">
+                <filterReference clause="must" ref="category_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="price">
+                <filterReference clause="must" ref="price_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="visibility">
+                <filterReference clause="must" ref="visibility_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_ids$"/>
+            <filter xsi:type="rangeFilter" name="price_filter" field="price" from="$price.from$" to="$price.to$"/>
+            <filter xsi:type="termFilter" name="visibility_filter" field="visibility" value="$visibility$"/>
+        </filters>
+        <aggregations>
+            <bucket name="price_bucket" field="price" xsi:type="dynamicBucket" method="$price_dynamic_algorithm$">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+            <bucket name="category_bucket" field="category_ids" xsi:type="termBucket">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+        </aggregations>
+        <from>0</from>
+        <size>10000</size>
+    </request>
+    <request query="advanced_search_container" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="advanced_search_container" boost="1">
+                <queryReference clause="should" ref="sku_query"/>
+                <queryReference clause="should" ref="price_query"/>
+                <queryReference clause="should" ref="category_query"/>
+            </query>
+            <query name="sku_query" xsi:type="filteredQuery">
+                <filterReference clause="must" ref="sku_query_filter"/>
+            </query>
+            <query name="price_query" xsi:type="filteredQuery">
+                <filterReference clause="must" ref="price_query_filter"/>
+            </query>
+            <query name="category_query" xsi:type="filteredQuery">
+                <filterReference clause="must" ref="category_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="wildcardFilter" name="sku_query_filter" field="sku" value="$sku$"/>
+            <filter xsi:type="rangeFilter" name="price_query_filter" field="price" from="$price.from$" to="$price.to$"/>
+            <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_ids$"/>
+        </filters>
+        <from>0</from>
+        <size>10000</size>
+    </request>
+    <request query="catalog_view_container" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="catalog_view_container" boost="1">
+                <queryReference clause="must" ref="category"/>
+                <queryReference clause="must" ref="price"/>
+                <queryReference clause="must" ref="visibility"/>
+            </query>
+            <query xsi:type="filteredQuery" name="category">
+                <filterReference clause="must" ref="category_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="price">
+                <filterReference clause="must" ref="price_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="visibility">
+                <filterReference clause="must" ref="visibility_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_ids$"/>
+            <filter xsi:type="rangeFilter" name="price_filter" field="price" from="$price.from$" to="$price.to$"/>
+            <filter xsi:type="termFilter" name="visibility_filter" field="visibility" value="$visibility$"/>
+        </filters>
+        <aggregations>
+            <bucket name="price_bucket" field="price" xsi:type="dynamicBucket" method="$price_dynamic_algorithm$">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+            <bucket name="category_bucket" field="category_ids" xsi:type="termBucket">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+        </aggregations>
+        <from>0</from>
+        <size>10000</size>
+    </request>
+</requests>

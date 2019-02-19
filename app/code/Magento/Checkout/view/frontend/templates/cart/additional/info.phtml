@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Shopping cart additional info
+ * @var $block \Magento\Framework\View\Element\Template
+ */
+?>
+<?php
+$name = $block->getNameInLayout();
+foreach ($block->getChildNames($name) as $childName) {
+    echo $block->getChildBlock($childName)->setItem($block->getItem())->toHtml();
+}
+?>

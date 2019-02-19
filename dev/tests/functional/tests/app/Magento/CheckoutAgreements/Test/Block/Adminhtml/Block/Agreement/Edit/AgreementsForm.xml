@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <name />
+        <is_active>
+            <input>select</input>
+        </is_active>
+        <is_html>
+            <input>select</input>
+        </is_html>
+        <mode>
+            <input>select</input>
+        </mode>
+        <stores>
+            <selector>[name="stores[]"]</selector>
+            <input>multiselectgrouplist</input>
+        </stores>
+        <checkbox_text />
+        <content />
+        <content_height />
+    </fields>
+</mapping>

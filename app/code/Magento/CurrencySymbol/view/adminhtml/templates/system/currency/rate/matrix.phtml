@@ -1,0 +1,77 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Matrix
+ */
+?>
+<?php
+$_oldRates = $block->getOldRates();
+$_newRates = $block->getNewRates();
+$_rates = ($_newRates) ? $_newRates : $_oldRates;
+?>
+<?php if (empty($_rates)): ?>
+    <div class="message message-warning warning"><p><?= /* @escapeNotVerified */ __('You must first configure currency options before being able to see currency rates.') ?></p></div>
+<?php else: ?>
+    <form name="rateForm" id="rate-form" method="post" action="<?= /* @escapeNotVerified */ $block->getRatesFormAction() ?>">
+        <?= $block->getBlockHtml('formkey') ?>
+        <div class="admin__control-table-wrapper">
+            <table class="admin__control-table">
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <?php $_i = 0; foreach ($block->getAllowedCurrencies() as $_currencyCode): ?>
+                            <th><span><?= /* @escapeNotVerified */ $_currencyCode ?></span></th>
+                        <?php endforeach; ?>
+                    </tr>
+                </thead>
+                <?php $_j = 0; foreach ($block->getDefaultCurrencies() as $_currencyCode): ?>
+                <tr>
+                    <?php if (isset($_rates[$_currencyCode]) && is_array($_rates[$_currencyCode])): ?>
+                        <?php foreach ($_rates[$_currencyCode] as $_rate => $_value): ?>
+                            <?php if (++$_j == 1): ?>
+                                <td><span class="admin__control-support-text"><?= /* @escapeNotVerified */ $_currencyCode ?></span></td>
+                                <td>
+                                    <input type="text"
+                                           name="rate[<?= /* @escapeNotVerified */ $_currencyCode ?>][<?= /* @escapeNotVerified */ $_rate ?>]"
+                                           value="<?= ($_currencyCode == $_rate) ? '1.0000' : ($_value>0 ? $_value : (isset($_oldRates[$_currencyCode][$_rate]) ? $_oldRates[$_currencyCode][$_rate] : '')) ?>"
+                                           class="admin__control-text"
+                                            <?= ($_currencyCode == $_rate) ? ' disabled' : '' ?> />
+                                    <?php if (isset($_newRates) && $_currencyCode != $_rate && isset($_oldRates[$_currencyCode][$_rate])): ?>
+                                    <div class="admin__field-note"><?= /* @escapeNotVerified */ __('Old rate:') ?> <strong><?= /* @escapeNotVerified */ $_oldRates[$_currencyCode][$_rate] ?></strong></div>
+                                    <?php endif; ?>
+                                </td>
+                            <?php else: ?>
+                                <td>
+                                    <input type="text"
+                                           name="rate[<?= /* @escapeNotVerified */ $_currencyCode ?>][<?= /* @escapeNotVerified */ $_rate ?>]"
+                                           value="<?= ($_currencyCode == $_rate) ? '1.0000' : ($_value>0 ? $_value : (isset($_oldRates[$_currencyCode][$_rate]) ? $_oldRates[$_currencyCode][$_rate] : '')) ?>"
+                                           class="admin__control-text"
+                                           <?= ($_currencyCode == $_rate) ? ' disabled' : '' ?> />
+                                    <?php if (isset($_newRates)  && $_currencyCode != $_rate && isset($_oldRates[$_currencyCode][$_rate])): ?>
+                                    <div class="admin__field-note"><?= /* @escapeNotVerified */ __('Old rate:') ?> <strong><?= /* @escapeNotVerified */ $_oldRates[$_currencyCode][$_rate] ?></strong></div>
+                                    <?php endif; ?>
+                                </td>
+                            <?php endif; ?>
+                        <?php endforeach; $_j = 0; ?>
+                    <?php endif; ?>
+                </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
+    </form>
+<?php endif; ?>
+<script>
+require(['jquery', "mage/mage"], function(jQuery){
+
+    jQuery('#rate-form').mage('form').mage('validation');
+
+});
+</script>

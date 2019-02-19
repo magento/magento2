@@ -1,0 +1,497 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Imports
+//  _____________________________________________
+
+@import 'actions/_actions-dropdown.less';
+@import 'actions/_actions-split.less';
+@import 'actions/_actions-select.less';
+@import 'actions/_actions-multicheck.less';
+@import 'actions/_actions-multiselect.less';
+@import 'actions/_actions-switcher.less';
+
+//
+//  Extends
+//  _____________________________________________
+
+.abs-action-reset {
+    .action-reset();
+}
+
+.abs-action-pattern {
+    &[disabled],
+    &.disabled {
+        cursor: default;
+        opacity: @disabled__opacity;
+        pointer-events: none;
+    }
+
+    border: @button__border-size @button__border-style;
+    border-radius: 0; // ToDo UI Delete with admin scope
+    display: inline-block;
+    font-family: @button__font-family;
+    font-size: @button__font-size;
+    font-weight: @font-weight__semibold;
+    line-height: @button__line-height;
+    padding: @button__padding-top @button__padding-horizontal @button__padding-bottom;
+    text-align: center;
+    vertical-align: baseline;
+}
+
+.abs-action-l {
+    font-size: @font-size__l;
+    letter-spacing: .025em;
+    padding-bottom: @button__padding-vertical__l;
+    padding-top: @button__padding-vertical__l;
+}
+
+.abs-action-delete {
+    &:extend(.abs-action-reset all);
+    &:extend(.abs-icon all);
+    display: inline-block;
+    font-size: 1.6rem;
+    margin-left: 1.2rem;
+    padding-top: .7rem;
+    text-decoration: none;
+    vertical-align: middle;
+
+    &:after {
+        color: @color-very-dark-gray;
+        content: @icon-delete__content;
+    }
+
+    &:hover {
+        &:after {
+            color: @color-very-dark-gray-black2;
+        }
+    }
+
+    > span {
+        &:extend(.abs-visually-hidden all);
+    }
+}
+
+.abs-action-button-as-link {
+    .lib-button-as-link(@_margin: false);
+    .lib-css(font-weight, @font-weight__regular);
+    border-radius: 0;
+
+    &:active,
+    &:not(:focus) {
+        box-shadow: none;
+    }
+
+    &:focus {
+        color: @link__hover__color;
+    }
+}
+
+.abs-action-default {
+    .action-default();
+}
+
+.abs-action-primary {
+    .action-primary();
+}
+
+.abs-action-secondary {
+    .action-secondary();
+}
+
+.abs-action-tertiary {
+    .action-tertiary();
+}
+
+.abs-action-quaternary {
+    .action-quaternary();
+}
+
+.abs-action-menu {
+    .action-menu();
+}
+
+//  Triangle Wrap
+.abs-action-wrap-triangle {
+    position: relative;
+
+    .action-default {
+        width: 100%;
+
+        &:before,
+        &:after {
+            border-style: solid;
+            content: '';
+            height: 0;
+            position: absolute;
+            top: 0;
+            width: 0;
+        }
+
+        &:active,
+        &:hover,
+        &:focus {
+            box-shadow: none;
+        }
+
+        &:focus {
+            ._keyfocus & {
+                box-shadow: @button__hover__box-shadow;
+            }
+        }
+    }
+}
+
+//  Right Triangle
+.abs-action-wrap-triangle-right {
+    display: inline-block;
+    padding-right: @button-triangle__base__size - .1;
+    position: relative;
+
+    .action-default {
+        &:before,
+        &:after {
+            border-color: transparent transparent transparent @button__background-color;
+            border-width: @button-triangle__base__size 0 (@button-triangle__base__size - .1) @button-triangle__base__size;
+            left: 100%;
+            margin-left: -(@button-triangle__base__size);
+        }
+
+        &:before {
+            border-left-color: @button-triangle__base__border-color;
+            right: -1px;
+        }
+
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-left-color: @button__hover__background-color;
+            }
+        }
+    }
+
+    .action-primary {
+        &:after {
+            border-color: transparent transparent transparent @button-primary__background-color;
+        }
+
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-left-color: @button-primary__hover__background-color;
+            }
+        }
+    }
+}
+
+//  Left Triangle
+.abs-action-wrap-triangle-left {
+    display: inline-block;
+    padding-left: @button-triangle__base__size - .1;
+
+    .action-default {
+        text-indent: -(@button-triangle__base__size) / 2;
+
+        &:before,
+        &:after {
+            border-color: transparent @button__background-color transparent transparent;
+            border-width: @button-triangle__base__size @button-triangle__base__size (@button-triangle__base__size - .1) 0;
+            margin-right: -(@button-triangle__base__size);
+            right: 100%;
+        }
+
+        &:before {
+            border-right-color: @button-triangle__base__border-color;
+            left: -1px;
+        }
+
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-right-color: @button__hover__background-color;
+            }
+        }
+    }
+
+    .action-primary {
+        &:after {
+            border-color: transparent @button-primary__background-color transparent transparent;
+        }
+
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-right-color: @button-primary__hover__background-color;
+            }
+        }
+    }
+}
+
+
+//
+//  Default action
+//  ---------------------------------------------
+
+.action-default,
+button {
+    &:extend(.abs-action-pattern all);
+    background: @button__background-color;
+    border-color: @button__border-color;
+    color: @button__color;
+
+    &:hover,
+    &:active,
+    &:focus {
+        background-color: @button__hover__background-color;
+        color: @button__color;
+        text-decoration: none;
+    }
+}
+
+//
+//  Primary action
+//  ---------------------------------------------
+
+.action-primary {
+    &:extend(.abs-action-pattern all);
+    background-color: @button-primary__background-color;
+    border-color: @button-primary__background-color;
+    color: @button-primary__color;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, .25);
+
+    &:hover,
+    &:active,
+    &:focus {
+        background-color: @button-primary__hover__background-color;
+        border-color: @button-primary__hover__border-color;
+        box-shadow: @button__hover__box-shadow;
+        color: @button-primary__color;
+        text-decoration: none;
+    }
+
+    &.disabled,
+    &[disabled] {
+        cursor: default;
+        opacity: @disabled__opacity;
+        pointer-events: none;
+    }
+}
+
+//
+//  Secondary action
+//  ---------------------------------------------
+
+.action-secondary {
+    &:extend(.abs-action-pattern all);
+    background-color: @button-secondary__background-color;
+    border-color: @button-secondary__border-color;
+    color: @button-secondary__color;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
+
+    &:hover,
+    &:active,
+    &:focus {
+        background-color: @button-secondary__hover__background-color;
+        border-color: @button-secondary__hover__border-color;
+        box-shadow: @button__hover__box-shadow;
+        color: @button-secondary__color;
+        text-decoration: none;
+    }
+
+    &:active {
+        background-color: @button-secondary__active__background-color;
+    }
+}
+
+//
+//  Tertiary action & Quaternary action
+//  ---------------------------------------------
+
+.action-tertiary,
+.action-quaternary {
+    &:extend(.abs-action-pattern all);
+    background-color: transparent;
+    border-color: transparent;
+    text-shadow: none;
+
+    &:active,
+    &:hover,
+    &:focus {
+        background-color: transparent;
+        border-color: transparent;
+        box-shadow: none;
+    }
+}
+
+.action-tertiary {
+    color: @link__color;
+
+    &:active,
+    &:hover,
+    &:focus {
+        color: @link__hover__color;
+        text-decoration: underline;
+    }
+}
+
+.action-quaternary {
+    color: @text__color;
+
+    &:active,
+    &:hover,
+    &:focus {
+        color: darken(@text__color, 10%);
+    }
+}
+
+//
+//  Specific actions
+//  ---------------------------------------------
+
+.action-close {
+    > span {
+        .hidden();
+    }
+
+    &:extend(.abs-action-reset all);
+    &:active {
+        .scale();
+    }
+
+    &:before {
+        &:extend(.abs-icon all);
+        content: @icon-close-mage__content;
+        .transition(color);
+    }
+
+    &:hover {
+        cursor: pointer;
+        text-decoration: none;
+    }
+}
+
+.action-basic {
+    &:extend(.abs-action-secondary all);
+}
+
+.action-additional {
+    &:extend(.abs-action-button-as-link all);
+}
+
+//
+//  Action menu
+//  ---------------------------------------------
+
+//  Used in actions split, action select and all other simple (one line) action menu list
+.action-menu {
+    background-color: @page-wrapper__background-color;
+    border: 1px solid @action__active__border-color;
+    border-radius: 1px;
+    box-shadow: @component__box-shadow__base;
+    color: @text__color;
+    display: none;
+    font-weight: @font-weight__regular;
+    left: 0;
+    list-style: none;
+    margin: 2px 0 0; // Action box-shadow + 1px indent
+    min-width: 0; // ToDo UI Should be deleted with old styles
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 100%;
+
+    &._active {
+        display: block;
+    }
+
+    > li {
+        border: none; // ToDo UI Should be deleted with old styles
+        display: block;
+        padding: 0;
+        transition: background-color .1s linear;
+
+        > a {
+            &:hover {
+                text-decoration: none;
+            }
+        }
+
+        &._visible {
+            background-color: @action-menu__hover__background-color;
+        }
+
+        &:hover {
+            background-color: @action-menu__hover__background-color;
+        }
+
+        &:active {
+            background-color: darken(@action-menu__hover__background-color, 10%);
+        }
+
+        &._parent {
+            .lib-vendor-prefix-display(flex);
+            .lib-vendor-prefix-flex-direction(row);
+            display: flex;
+            flex-direction: row;
+
+            > .action-menu-item {
+                min-width: 100%;
+            }
+        }
+    }
+
+    .item,
+    .action-menu-item {
+        cursor: pointer;
+        display: block;
+        padding: .6875em 1em;
+    }
+
+    .action-submenu {
+        &:extend(.action-menu all);
+        bottom: auto;
+        left: auto;
+        margin-left: 0;
+        margin-top: -1px;
+        position: absolute;
+        right: auto;
+        top: auto;
+    }
+
+    a {
+        &.action-menu-item {
+            color: @text__color;
+
+            &:focus {
+                background-color: @action-menu__hover__background-color;
+                box-shadow: none;
+            }
+        }
+    }
+}
+
+//
+//  ToDo UI: Button migration
+//  _____________________________________________
+
+button {
+    &:extend(.abs-action-default all);
+    &.primary {
+        &:extend(.abs-action-primary all);
+    }
+
+    &.secondary {
+        &:extend(.abs-action-secondary all);
+    }
+
+    &.tertiary {
+        &:extend(.abs-action-tertiary all);
+    }
+}

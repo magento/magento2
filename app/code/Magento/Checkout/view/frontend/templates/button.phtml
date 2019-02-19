@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\Checkout\Block\Onepage\Success */ ?>
+
+<?php if ($block->getCanViewOrder() && $block->getCanPrintOrder()) :?>
+    <a href="<?= /* @escapeNotVerified */ $block->getPrintUrl() ?>" target="_blank" class="print">
+        <?= /* @escapeNotVerified */ __('Print receipt') ?>
+    </a>
+    <?= $block->getChildHtml() ?>
+<?php endif;?>

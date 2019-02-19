@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <dhl_folder>dhl</dhl_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
+        <carriers>
+            <dhl>
+                <model>Magento\Dhl\Model\Carrier</model>
+                <account />
+                <active>0</active>
+                <title>DHL</title>
+                <sallowspecific>0</sallowspecific>
+                <nondoc_methods>1,3,4,8,P,Q,E,F,H,J,M,V,Y</nondoc_methods>
+                <doc_methods>2,5,6,7,9,B,C,D,U,K,L,G,W,I,N,O,R,S,T,X</doc_methods>
+                <free_method>G</free_method>
+                <gateway_url>https://xmlpi-ea.dhl.com/XMLShippingServlet</gateway_url>
+                <id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <content_type>N</content_type>
+                <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
+                <divide_order_weight>1</divide_order_weight>
+                <unit_of_measure>K</unit_of_measure>
+                <size>R</size>
+                <handling_type>F</handling_type>
+                <handling_action>O</handling_action>
+                <shipment_days>Mon,Tue,Wed,Thu,Fri</shipment_days>
+                <active_rma>0</active_rma>
+                <is_online>1</is_online>
+            </dhl>
+        </carriers>
+    </default>
+</config>

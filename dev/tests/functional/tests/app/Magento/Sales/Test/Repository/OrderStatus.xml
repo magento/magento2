@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Sales\Test\Repository\OrderStatus">
+        <dataset name="default">
+            <field name="status" xsi:type="string">order_status%isolation%</field>
+            <field name="label" xsi:type="string">orderLabel%isolation%</field>
+        </dataset>
+
+        <dataset name="assign_to_pending">
+            <field name="status" xsi:type="string">order_status%isolation%</field>
+            <field name="label" xsi:type="string">orderLabel%isolation%</field>
+            <field name="state" xsi:type="string">Pending</field>
+            <field name="is_default" xsi:type="string">Yes</field>
+            <field name="visible_on_front" xsi:type="string">Yes</field>
+        </dataset>
+    </repository>
+</config>

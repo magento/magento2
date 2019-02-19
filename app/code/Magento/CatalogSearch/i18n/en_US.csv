@@ -1,0 +1,40 @@
+Home,Home
+"Go to Home Page","Go to Home Page"
+"Catalog Advanced Search","Catalog Advanced Search"
+All,All
+Yes,Yes
+No,No
+Results,Results
+"Advanced Search Results","Advanced Search Results"
+Grid,Grid
+List,List
+"Search Weight","Search Weight"
+Relevance,Relevance
+"Search results for: '%1'","Search results for: '%1'"
+"Minimum Search query length is %1","Minimum Search query length is %1"
+"Please specify at least one search term.","Please specify at least one search term."
+"%1 and greater","%1 and greater"
+"up to %1","up to %1"
+". "" which is inconsistent with state of scope resolver""",". "" which is inconsistent with state of scope resolver"""
+Category,Category
+"%1 and above","%1 and above"
+"%1 - %2","%1 - %2"
+"Sorry, something went wrong. You can find out more in the error log.","Sorry, something went wrong. You can find out more in the error log."
+"Bucket does not exist","Bucket does not exist"
+Product,Product
+"Search Settings","Search Settings"
+Search,Search
+"Advanced Search","Advanced Search"
+"<strong>%1 item</strong> were found using the following search criteria","<strong>%1 item</strong> were found using the following search criteria"
+"<strong>%1 items</strong> were found using the following search criteria","<strong>%1 items</strong> were found using the following search criteria"
+"We can't find any items matching these search criteria.","We can't find any items matching these search criteria."
+"Modify your search.","Modify your search."
+name,name
+"Don't see what you're looking for?","Don't see what you're looking for?"
+"Your search returned no results.","Your search returned no results."
+"Popular Search Terms","Popular Search Terms"
+"Catalog Search","Catalog Search"
+"Minimal Query Length","Minimal Query Length"
+"Maximum Query Length","Maximum Query Length"
+"Rebuild Catalog product fulltext search index","Rebuild Catalog product fulltext search index"
+"Please enter a valid price range.","Please enter a valid price range."

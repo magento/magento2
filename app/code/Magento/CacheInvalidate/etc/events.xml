@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="clean_cache_by_tags">
+        <observer name="invalidate_varnish" instance="Magento\CacheInvalidate\Observer\InvalidateVarnishObserver"/>
+    </event>
+    <event name="adminhtml_cache_flush_system">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\FlushAllCacheObserver"/>
+    </event>
+    <event name="clean_media_cache_after">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\FlushAllCacheObserver"/>
+    </event>
+    <event name="clean_catalog_images_cache_after">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\FlushAllCacheObserver"/>
+    </event>
+    <event name="assigned_theme_changed">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\InvalidateVarnishObserver"/>
+    </event>
+    <event name="catalogrule_after_apply">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\InvalidateVarnishObserver"/>
+    </event>
+    <event name="adminhtml_cache_refresh_type">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\FlushAllCacheObserver"/>
+    </event>
+    <event name="adminhtml_cache_flush_all">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\FlushAllCacheObserver"/>
+    </event>
+    <event name="assign_theme_to_stores_after">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\FlushAllCacheObserver"/>
+    </event>
+    <event name="controller_action_postdispatch_adminhtml_system_currency_saveRates">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\InvalidateVarnishObserver"/>
+    </event>
+    <event name="controller_action_postdispatch_adminhtml_system_config_save">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\InvalidateVarnishObserver"/>
+    </event>
+    <event name="controller_action_postdispatch_adminhtml_catalog_product_action_attribute_save">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\InvalidateVarnishObserver"/>
+    </event>
+    <event name="controller_action_postdispatch_adminhtml_catalog_product_massStatus">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\InvalidateVarnishObserver"/>
+    </event>
+    <event name="controller_action_postdispatch_adminhtml_system_currencysymbol_save">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\InvalidateVarnishObserver"/>
+    </event>
+    <event name="clean_cache_after_reindex">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\InvalidateVarnishObserver"/>
+    </event>
+</config>

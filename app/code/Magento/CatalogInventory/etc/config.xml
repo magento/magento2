@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <cataloginventory>
+            <options>
+                <can_subtract>1</can_subtract>
+                <can_back_in_stock>1</can_back_in_stock>
+                <show_out_of_stock>0</show_out_of_stock>
+                <stock_threshold_qty>0</stock_threshold_qty>
+                <display_product_stock_status>1</display_product_stock_status>
+            </options>
+            <item_options>
+                <manage_stock>1</manage_stock>
+                <backorders>0</backorders>
+                <max_sale_qty>10000</max_sale_qty>
+                <min_sale_qty>1</min_sale_qty>
+                <min_qty>0</min_qty>
+                <notify_stock_qty>1</notify_stock_qty>
+                <enable_qty_increments>0</enable_qty_increments>
+                <qty_increments>1</qty_increments>
+            </item_options>
+        </cataloginventory>
+    </default>
+</config>

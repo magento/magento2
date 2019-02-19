@@ -1,0 +1,228 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@block-auth__dropdown__padding: @indent__m;
+@block-auth__dropdown__background-color: @color-white;
+@block-auth__or-label__size: 36px;
+@block-auth__width: 0;
+@block-auth__border: 1px solid @color-gray-light3;
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .authentication-dropdown {
+        box-sizing: border-box;
+
+        .modal-inner-wrap {
+            padding: @block-auth__dropdown__padding;
+        }
+    }
+
+    .authentication-wrapper {
+        float: right;
+        margin-top: -1.5*@indent__xl;
+        max-width: 50%;
+        position: relative;
+        z-index: 1;
+
+        ._has-auth-shown & {
+            z-index: @modal__z-index;
+        }
+    }
+
+    .action-auth-toggle {
+        &:extend(.abs-action-button-as-link all);
+    }
+
+    .block-authentication {
+        .block-title {
+            .lib-font-size(@h3__font-size);
+            border-bottom: 0;
+            margin-bottom: @indent__m;
+
+            strong {
+                font-weight: @font-weight__light;
+            }
+        }
+
+        .field {
+            .label {
+                font-weight: @font-weight__regular;
+            }
+        }
+
+        .actions-toolbar {
+            margin-bottom: @indent__xs;
+
+            > .secondary {
+                padding-top: @indent__m;
+                text-align: left;
+            }
+        }
+
+        .action.action-register,
+        .action.action-login {
+            &:extend(.abs-button-l all);
+        }
+
+        .block[class] {
+            margin: 0;
+
+            ul {
+                list-style: none;
+                padding-left: @indent__s;
+            }
+
+            .field {
+                .control,
+                .label {
+                    float: none;
+                    width: auto;
+                }
+            }
+
+            & + .block {
+                border-top: 1px solid @color-gray-light5;
+                margin-top: @indent__xl;
+                padding-top: @indent__xl;
+                position: relative;
+
+                &:before {
+                    .lib-css(height, @block-auth__or-label__size);
+                    .lib-css(line-height, @block-auth__or-label__size - 2px);
+                    .lib-css(margin, -(@block-auth__or-label__size/2 + 1px) 0 0 -(@block-auth__or-label__size / 2));
+                    .lib-css(min-width, @block-auth__or-label__size);
+                    background: @color-white;
+                    border: 1px solid @color-gray-light5;
+                    border-radius: 50%;
+                    box-sizing: border-box;
+                    color: @color-gray-light5;
+                    content: attr(data-label);
+                    display: inline-block;
+                    left: 50%;
+                    letter-spacing: normal;
+                    padding: 0 .2rem;
+                    position: absolute;
+                    text-align: center;
+                    text-transform: uppercase;
+                    top: 0;
+                }
+            }
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .authentication-dropdown {
+        .lib-css(background-color, @block-auth__dropdown__background-color);
+        .lib-css(border, @block-auth__border);
+        -webkit-transform: scale(1,0);
+        -webkit-transform-origin: 0 0;
+        -webkit-transition: -webkit-transform linear .1s, visibility 0s linear .1s;
+        position: absolute;
+        text-align: left;
+        top: 100%;
+        transform: scale(1,0);
+        transform-origin: 0 0;
+        transition: transform linear .1s, visibility 0s linear .1s;
+        visibility: hidden;
+        width: 100%;
+
+        &._show {
+            .lib-css(z-index, @dropdown-list__z-index);
+            -webkit-transform: scale(1,1);
+            -webkit-transition: -webkit-transform linear .1s, visibility 0s linear 0s;
+            transform: scale(1,1);
+            transition: transform linear .1s, visibility 0s linear 0s;
+            visibility: visible;
+        }
+    }
+
+    .authentication-wrapper {
+        .lib-column-width(@checkout-sidebar__columns);
+        text-align: right;
+    }
+
+    .block-authentication {
+        .block-title {
+            .lib-font-size(@h2__font-size);
+            border-bottom: 0;
+            margin-bottom: @indent__m;
+        }
+
+        .actions-toolbar {
+            > .primary {
+                display: inline;
+                float: right;
+                margin-right: 0;
+                .action {
+                    margin-right: 0;
+                }
+            }
+
+            > .secondary {
+                float: left;
+                margin-right: 2rem;
+                padding-top: 1rem;
+            }
+        }
+    }
+
+    .popup-authentication {
+        .modal-inner-wrap {
+            min-width: @screen__m;
+            width: 60%;
+        }
+
+        .block-authentication {
+            .lib-vendor-prefix-display(flex);
+            .lib-vendor-prefix-flex-direction(row);
+            border-top: 1px solid @color-gray-light5;
+        }
+
+        .block[class],
+        .form-login,
+        .fieldset,
+        .block-content {
+            .lib-vendor-prefix-display(flex);
+            .lib-vendor-prefix-flex-direction(column);
+            .lib-vendor-prefix-flex-grow(1);
+        }
+
+        .block[class] {
+            box-sizing: border-box;
+            float: left;
+            padding: @indent__s @indent__l 0 0;
+            width: 50%;
+
+            & + .block {
+                border-left: 1px solid @color-gray-light5;
+                border-top: 0;
+                margin: 0;
+                padding: @indent__s 0 0 @indent__xl;
+
+                &:before {
+                    left: 0;
+                    top: 50%;
+                }
+            }
+        }
+
+        .actions-toolbar {
+            margin-bottom: 0;
+            margin-top: auto;
+        }
+    }
+}

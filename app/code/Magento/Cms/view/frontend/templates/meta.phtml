@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php if ($pageData->getPageMetaKeywords()): ?>
+    <meta name="keywords" content="<?= /* @noEscape */ $pageData->getPageMetaKeywords() ?>"/>
+<?php endif; ?>
+<?php if ($pageData->getPageMetaDescription()): ?>
+    <meta name="description" content="<?= /* @noEscape */ $pageData->getPageMetaDescription() ?>"/>
+<?php endif; ?>

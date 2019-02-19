@@ -1,0 +1,219 @@
+.mselect-list {
+    position: relative;
+}
+
+.mselect-list .block-footer {
+    padding: 8px 0;
+}
+
+.mselect-items-wrapper {
+    min-height: 80px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.mselect-fixed {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.mselect-list-item {
+    position: relative;
+    margin: 1px 0;
+}
+
+.mselect-list-item:hover {
+    background: #eef8fc;
+}
+
+.mselect-list-item label {
+    width: 100%;
+    display: block;
+}
+
+.mselect-input-container {
+    position: relative;
+    display: none;
+    margin: 5px 0;
+}
+
+.mselect-input {
+    width: 99%;
+    margin:0;
+}
+.mselect-list-item .mselect-checked + span {
+    background: #cdecf6;
+}
+
+.mselect-list-item input:checked + span {
+    background: #cdecf6;
+}
+
+.mselect-list-item .mselect-checked + span:before {
+    color: #7ba4b1;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    vertical-align: baseline;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: "\e067";
+}
+
+.mselect-list-item input:checked + span:before {
+    color: #7ba4b1;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    vertical-align: baseline;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: "\e067";
+}
+
+.mselect-list-item input[type='checkbox'] {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+}
+
+.mselect-list-item.mselect-disabled label span {
+    color: #999;
+    cursor: default;
+}
+
+.mselect-list-item.mselect-disabled:hover {
+    background: #fff;
+}
+
+.mselect-list-item label > span {
+    display: block;
+    padding: 5px 50px 5px 20px;
+    font-size: 13px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.mselect-list-item label span form {
+    position: relative;
+    margin: 0 -45px 0 -15px;
+    z-index: 2;
+}
+
+.mselect-list-item input[type='text'] {
+    padding-right: 45px;
+    width: 100%;
+}
+
+.mselect-list-item input::-ms-clear {
+    display: none;
+}
+
+.mselect-cancel,
+.mselect-edit,
+.mselect-delete,
+.mselect-save {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    position: absolute;
+    cursor: pointer;
+    font-size: 0;
+}
+
+.mselect-cancel {
+    right: 5px;
+    top: 3px;
+    padding: 0;
+}
+
+.mselect-edit {
+    top: 2px;
+    right: 30px;
+    display: none;
+}
+
+.mselect-delete {
+    display: none;
+    top: 2px;
+    right: 5px;
+}
+
+.mselect-save,
+.mselect-save:hover,
+.mselect-save:focus {
+    display: block;
+    top: 4px;
+    right: 25px;
+    border: none;
+    background: none;
+    filter: none;
+}
+
+.mselect-cancel:before,
+.mselect-edit:before,
+.mselect-delete:before,
+.mselect-save:before {
+    font-size: 16px;
+    color: #666;
+    color: rgba(20,20,20,0.3);
+    vertical-align: baseline;
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+}
+
+.mselect-cancel:active,
+.mselect-edit:active,
+.mselect-delete:active,
+.mselect-save:active {
+    box-shadow: none;
+}
+
+.mselect-cancel:hover:before,
+.mselect-edit:hover:before,
+.mselect-delete:hover:before,
+.mselect-save:hover:before {
+    color: #333;
+    color: rgba(20,20,20,0.6);
+}
+
+.mselect-cancel:before {
+    content: "\e069"
+}
+
+.mselect-edit:before {
+    content: "\e05b"
+}
+
+.mselect-delete:before {
+    content: "\e07f"
+}
+
+.mselect-save:before {
+    content: "\e067";
+}
+
+.mselect-list-item:hover .mselect-delete,
+.mselect-list-item:hover .mselect-edit {
+    display: block;
+}
+.mselect-list-item-not-editable:hover .mselect-edit {
+    display: none;
+}
+
+.mselect-list-item-not-removable:hover .mselect-delete {
+    display: none;
+}
+
+.mselect-input-container .mselect-save {
+    top: 3px;
+}

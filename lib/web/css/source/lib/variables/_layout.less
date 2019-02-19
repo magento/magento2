@@ -1,0 +1,40 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Layout variables
+//  _____________________________________________
+
+//  Widths
+@layout__width: ''; // for the fixed width layout
+@layout__max-width: 1280px;
+@layout-indent__width: 20px;
+@layout__width-xs-indent: 15px;
+
+//  Classnames defining different layouts
+@layout-class-1column: page-layout-1column;
+@layout-class-2columns__left: page-layout-2columns-left;
+@layout-class-2columns__right: page-layout-2columns-right;
+@layout-class-3columns: page-layout-3columns;
+
+//  Variables used for layout grid
+@total-columns: 12;
+@gutter-width: 0;
+
+//  Variables for layout columns
+@layout-column__width: @total-columns;
+@layout-column__sidebar-width: 2;
+@layout-column__left-width: @layout-column__sidebar-width;
+@layout-column__right-width: @layout-column__sidebar-width;
+
+//  Variables for layout columns depending on layout used
+@layout-column-main__width-1: 100%;
+@layout-column-main__width-2-left: @layout-column__width - @layout-column__left-width;
+@layout-column-main__width-2-right: @layout-column__width - @layout-column__right-width;
+@layout-column-main__width-3: @layout-column__width - @layout-column__left-width - @layout-column__right-width;
+
+//  Checkout columns width
+@layout-column-checkout__width-left: 3;
+@layout-column-checkout__width-main: @layout-column__width - @layout-column-checkout__width-left;

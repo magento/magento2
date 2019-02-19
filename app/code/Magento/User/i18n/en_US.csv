@@ -1,0 +1,138 @@
+Back,Back
+Reset,Reset
+"Delete Role","Delete Role"
+"Are you sure you want to do this?","Are you sure you want to do this?"
+"Save Role","Save Role"
+Roles,Roles
+"Add New Role","Add New Role"
+"Role Information","Role Information"
+"Role Users","Role Users"
+"User ID","User ID"
+"User Name","User Name"
+"First Name","First Name"
+"Last Name","Last Name"
+Email,Email
+Status,Status
+Active,Active
+Inactive,Inactive
+"Role Resources","Role Resources"
+"Role Info","Role Info"
+"Role Name","Role Name"
+"Current User Identity Verification","Current User Identity Verification"
+"Your Password","Your Password"
+"Add New User","Add New User"
+Users,Users
+"Save User","Save User"
+"Delete User","Delete User"
+"Are you sure you want to revoke the user's tokens?","Are you sure you want to revoke the user's tokens?"
+"Force Sign-In","Force Sign-In"
+"Edit User '%1'","Edit User '%1'"
+"New User","New User"
+"Account Information","Account Information"
+"User Email","User Email"
+Password,Password
+"New Password","New Password"
+"Password Confirmation","Password Confirmation"
+"Interface Locale","Interface Locale"
+"This account is","This account is"
+"Account Status","Account Status"
+"User Roles Information","User Roles Information"
+Assigned,Assigned
+Role,Role
+"User Information","User Information"
+"User Info","User Info"
+"User Role","User Role"
+"Please correct the password reset token.","Please correct the password reset token."
+"Please specify the correct account and try again.","Please specify the correct account and try again."
+"Your password reset link has expired.","Your password reset link has expired."
+"We're unable to send the password reset email.","We're unable to send the password reset email."
+"We'll email you a link to reset your password.","We'll email you a link to reset your password."
+"Please correct this email address:","Please correct this email address:"
+"Please enter an email address.","Please enter an email address."
+"You updated your password.","You updated your password."
+"Locked Users","Locked Users"
+"Unlocked %1 user(s).","Unlocked %1 user(s)."
+System,System
+Permissions,Permissions
+"You cannot delete your own account.","You cannot delete your own account."
+"You have entered an invalid password for current user.","You have entered an invalid password for current user."
+"You deleted the user.","You deleted the user."
+"We can't find a user to delete.","We can't find a user to delete."
+"This user no longer exists.","This user no longer exists."
+"Edit User","Edit User"
+"You have revoked the user's tokens.","You have revoked the user's tokens."
+"We can't find a user to revoke.","We can't find a user to revoke."
+"You cannot delete self-assigned roles.","You cannot delete self-assigned roles."
+"You deleted the role.","You deleted the role."
+"An error occurred while deleting this role.","An error occurred while deleting this role."
+"Edit Role","Edit Role"
+"New Role","New Role"
+"This role no longer exists.","This role no longer exists."
+"You saved the role.","You saved the role."
+"An error occurred while saving this role.","An error occurred while saving this role."
+"You saved the user.","You saved the user."
+"A user with the same user name or email already exists.","A user with the same user name or email already exists."
+Recommended,Recommended
+Forced,Forced
+"Sorry, but this password has already been used. Please create another.","Sorry, but this password has already been used. Please create another."
+email,email
+password,password
+username,username
+"You did not sign in correctly or your account is temporarily disabled.","You did not sign in correctly or your account is temporarily disabled."
+"You need more permissions to access this.","You need more permissions to access this."
+"Your account is temporarily disabled.","Your account is temporarily disabled."
+"User Name is a required field.","User Name is a required field."
+"First Name is a required field.","First Name is a required field."
+"Last Name is a required field.","Last Name is a required field."
+"Please enter a valid email.","Please enter a valid email."
+"Password is required field.","Password is required field."
+"Your password must be at least %1 characters.","Your password must be at least %1 characters."
+"Your password must include both numeric and alphabetic characters.","Your password must include both numeric and alphabetic characters."
+"Your password confirmation must match your password.","Your password confirmation must match your password."
+"It's time to change your password.","It's time to change your password."
+"It's time to <a href=""%1"">change your password</a>.","It's time to <a href=""%1"">change your password</a>."
+"Your password has expired; please contact your administrator.","Your password has expired; please contact your administrator."
+"Password Help","Password Help"
+"Enter your email address.  You will receive an email with a link to reset your password.","Enter your email address.  You will receive an email with a link to reset your password."
+"Email address","Email address"
+"Retrieve Password","Retrieve Password"
+"Back to Sign in","Back to Sign in"
+"Forgot your password?","Forgot your password?"
+"Reset a Password","Reset a Password"
+"Confirm New Password","Confirm New Password"
+"Reset Password","Reset Password"
+"Roles Resources","Roles Resources"
+"Resource Access","Resource Access"
+Custom,Custom
+All,All
+Resources,Resources
+"Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?","Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?"
+"Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?"
+"Password Reset Confirmation for %name","Password Reset Confirmation for %name"
+"%name,","%name,"
+"There was recently a request to change the password for your account.","There was recently a request to change the password for your account."
+"If you requested this change, reset your password here:","If you requested this change, reset your password here:"
+"If you did not make this request, you can ignore this email and your password will remain the same.","If you did not make this request, you can ignore this email and your password will remain the same."
+"Thank you,","Thank you,"
+"New %changes for %user_name","New %changes for %user_name"
+"Hello,","Hello,"
+"We have received a request to change the following information associated with your account at %store_name: %changes.","We have received a request to change the following information associated with your account at %store_name: %changes."
+"If you have not authorized this action, please contact us immediately at %store_email","If you have not authorized this action, please contact us immediately at %store_email"
+"or call us at %store_phone","or call us at %store_phone"
+"Thanks,","Thanks,"
+"All Users","All Users"
+"User Roles","User Roles"
+"User Notification Template","User Notification Template"
+"Email template chosen based on theme fallback when ""Default"" option is selected.","Email template chosen based on theme fallback when ""Default"" option is selected."
+"Maximum Login Failures to Lockout Account","Maximum Login Failures to Lockout Account"
+"We will disable this feature if the value is empty.","We will disable this feature if the value is empty."
+"Lockout Time (minutes)","Lockout Time (minutes)"
+"Password Lifetime (days)","Password Lifetime (days)"
+"We will disable this feature if the value is empty. ","We will disable this feature if the value is empty. "
+"Password Change","Password Change"
+Unlock,Unlock
+ID,ID
+Username,Username
+"Last login","Last login"
+Failures,Failures
+Unlocked,Unlocked

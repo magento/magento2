@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <catalog>
+            <frontend>
+                <swatches_per_product>16</swatches_per_product>
+                <show_swatches_in_product_list>1</show_swatches_in_product_list>
+            </frontend>
+        </catalog>
+        <general>
+            <validator_data>
+                <input_types>
+                    <swatch_visual>swatch_visual</swatch_visual>
+                    <swatch_text>swatch_text</swatch_text>
+                </input_types>
+            </validator_data>
+        </general>
+        <design>
+            <watermark>
+                <swatch_image_position>stretch</swatch_image_position>
+            </watermark>
+        </design>
+    </default>
+</config>

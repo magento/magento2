@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Review\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">review</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Review\Model\Session" type="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Review\Model\Session\Storage</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Review\Controller\Product">
+        <arguments>
+            <argument name="reviewSession" xsi:type="object">Magento\Review\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Review\CustomerData\Review">
+        <arguments>
+            <argument name="reviewSession" xsi:type="object">Magento\Review\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="review" xsi:type="string">Magento\Review\CustomerData\Review</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="review_customer" xsi:type="string">/review/customer/</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Block\Product\Compare\ListCompare">
+        <plugin name="reviewInitializer" type="Magento\Review\Block\Product\Compare\ListCompare\Plugin\Review" />
+    </type>
+</config>

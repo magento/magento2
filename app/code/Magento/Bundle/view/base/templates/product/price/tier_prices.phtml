@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<?php
+/** @var \Magento\Framework\Pricing\Render\PriceBox $block */
+
+/** @var \Magento\Bundle\Pricing\Price\TierPrice $tierPriceModel */
+$tierPriceModel = $block->getPrice();
+$tierPrices = $tierPriceModel->getTierPriceList();
+?>
+<?php if (count($tierPrices)) : ?>
+    <ul class="<?= /* @escapeNotVerified */ ($block->hasListClass() ? $block->getListClass() : 'prices-tier items') ?>">
+        <?php foreach ($tierPrices as $index => $price) : ?>
+            <li class="item">
+                <?php /* @escapeNotVerified */ echo __(
+                    'Buy %1 with %2 discount each',
+                    $price['price_qty'],
+                    '<strong class="benefit">' . round($price['percentage_value']) . '%</strong>'
+                ); ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>

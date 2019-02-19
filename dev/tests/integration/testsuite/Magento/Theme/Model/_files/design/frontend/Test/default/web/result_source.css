@@ -1,0 +1,6 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+#header{color: #4d926f}h2{color: #4d926f}#header{-webkit-border-radius: 5px;-moz-border-radius: 5px;-ms-border-radius: 5px;-o-border-radius: 5px;border-radius: 5px}#footer{-webkit-border-radius: 10px;-moz-border-radius: 10px;-ms-border-radius: 10px;-o-border-radius: 10px;border-radius: 10px}#header h1{font-size: 26px;font-weight: bold}#header p{font-size: 12px}#header p a{text-decoration: none}#header p a:hover{border-width: 1px}#header{color: #333;border-left: 1px;border-right: 2px}#footer{color: #141;border-color: #7d2717}

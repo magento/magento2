@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magento_Backend::system_design_schedule" title="Schedule" translate="title" module="Magento_Backend" sortOrder="30" parent="Magento_Backend::system_design" action="adminhtml/system_design" resource="Magento_Backend::schedule"/>
+        <add id="Magento_Backend::system_currency" title="Currency" translate="title" module="Magento_Backend" sortOrder="30" parent="Magento_Backend::stores" action="adminhtml/system_currency" resource="Magento_CurrencySymbol::system_currency"/>
+        <add id="Magento_Backend::system_store" title="All Stores" translate="title" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::stores_settings" action="adminhtml/system_store/" resource="Magento_Backend::store"/>
+        <add id="Magento_Backend::dashboard" title="Dashboard" translate="title" module="Magento_Backend" sortOrder="10" action="adminhtml/dashboard" resource="Magento_Backend::dashboard"/>
+        <add id="Magento_Backend::system" title="System" translate="title" module="Magento_Backend" sortOrder="80" resource="Magento_Backend::system"/>
+        <add id="Magento_Backend::system_tools" title="Tools" translate="title" module="Magento_Backend" sortOrder="50" parent="Magento_Backend::system" resource="Magento_Backend::tools"/>
+        <add id="Magento_Backend::system_design" title="Design" translate="title" module="Magento_Backend" sortOrder="20" parent="Magento_Backend::content" resource="Magento_Backend::design"/>
+        <add id="Magento_Backend::system_convert" title="Data Transfer" translate="title" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::system" resource="Magento_Backend::convert"/>
+        <add id="Magento_Backend::system_cache" title="Cache Management" translate="title" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::system_tools" action="adminhtml/cache" resource="Magento_Backend::cache"/>
+        <add id="Magento_Backend::marketing" title="Marketing" translate="title" module="Magento_Backend" sortOrder="40" resource="Magento_Backend::marketing"/>
+        <add id="Magento_Backend::marketing_communications" title="Communications" translate="title" module="Magento_Backend" sortOrder="30" parent="Magento_Backend::marketing"  resource="Magento_Backend::marketing_communications"/>
+        <add id="Magento_Backend::marketing_seo" title="SEO &amp; Search" translate="title" module="Magento_Backend" sortOrder="40" parent="Magento_Backend::marketing"  resource="Magento_Backend::marketing_seo"/>
+        <add id="Magento_Backend::marketing_user_content" title="User Content" translate="title" module="Magento_Backend" sortOrder="50" parent="Magento_Backend::marketing"  resource="Magento_Backend::marketing_user_content"/>
+        <add id="Magento_Backend::content" title="Content" translate="title" module="Magento_Backend" sortOrder="50" resource="Magento_Backend::content"/>
+        <add id="Magento_Backend::content_elements" title="Elements" translate="title" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::content" resource="Magento_Backend::content_elements"/>
+        <add id="Magento_Backend::stores" title="Stores" translate="title" module="Magento_Backend" sortOrder="70" resource="Magento_Backend::stores"/>
+        <add id="Magento_Backend::stores_settings" title="Settings" translate="title" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::stores" resource="Magento_Backend::stores_settings"/>
+        <add id="Magento_Backend::stores_attributes" title="Attributes" translate="title" module="Magento_Backend" sortOrder="40" parent="Magento_Backend::stores" resource="Magento_Backend::stores_attributes"/>
+        <add id="Magento_Backend::other_settings" title="Other Settings" translate="title" module="Magento_Backend" sortOrder="50" parent="Magento_Backend::stores" resource="Magento_Backend::stores_other_settings"/>
+        <add id="Magento_Backend::system_other_settings" title="Other Settings" translate="title" module="Magento_Backend" sortOrder="80" parent="Magento_Backend::system" resource="Magento_Backend::system_other_settings"/>
+        <add id="Magento_Backend::setup_wizard" action="adminhtml/backendapp/redirect/app/setup" title="Web Setup Wizard" translate="title" module="Magento_Backend" sortOrder="80" parent="Magento_Backend::system_tools" resource="Magento_Backend::setup_wizard"/>
+    </menu>
+</config>

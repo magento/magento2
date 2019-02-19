@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminDesignConfigSection">
+        <element name="scopeRow" type="button" selector="//*[contains(@class,'data-row')][{{arg1}}]//*[contains(@class,'action-menu-item')]" parameterized="true"/>
+        <element name="watermarkSectionHeader" type="text" selector="[data-index='watermark']"/>
+        <element name="watermarkSection" type="text" selector="[data-index='watermark'] .admin__fieldset-wrapper-content"/>
+        <element name="imageUploadInputByFieldsetName" type="input" selector="//*[contains(@class,'fieldset-wrapper')][child::*[contains(@class,'fieldset-wrapper-title')]//*[contains(text(),'{{arg1}}')]]//*[contains(@class,'file-uploader')]//input" parameterized="true"/>
+        <element name="imageUploadPreviewByFieldsetName" type="input" selector="//*[contains(@class,'fieldset-wrapper')][child::*[contains(@class,'fieldset-wrapper-title')]//*[contains(text(),'{{arg1}}')]]//*[contains(@class,'file-uploader-preview')]//img" parameterized="true"/>
+    </section>
+</sections>

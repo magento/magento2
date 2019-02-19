@@ -1,0 +1,20 @@
+{
+  "config": {
+    "sort-packages": true
+  },
+  "require": {
+    "magento/product-community-edition": "*",
+    "magento/sample-module-minimal" : "*"
+   },
+  "autoload": {
+        "psr-4": {
+            "Magento\\Framework\\": "htdocs/lib/internal/Magento/Framework/",
+            "Magento\\Setup\\": "htdocs/setup/src/Magento/Setup/"
+        }
+    },
+   "extra": {
+    "magento-root-dir": "htdocs",
+    "magento-deploystrategy": "copy"
+  },
+  "minimum-stability": "dev"
+}

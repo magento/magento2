@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="newrelicreporting" translate="label" type="text" sortOrder="1100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>New Relic Reporting</label>
+            <tab>general</tab>
+            <resource>Magento_NewRelicReporting::config_newrelicreporting</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable New Relic Integration</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="api_url" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>New Relic API URL</label>
+                </field>
+                <field id="insights_api_url" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Insights API URL</label>
+                    <comment>Use %s to replace the account ID in the URL</comment>
+                </field>
+                <field id="account_id" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>New Relic Account ID</label>
+                    <comment><![CDATA["Need a New Relic account? <a href="http://www.newrelic.com/magento" target="_blank">Click here to get one]]></comment>
+                </field>
+                <field id="app_id" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>New Relic Application ID</label>
+                    <comment>This can commonly be found at the end of the URL when viewing the APM after "/applications/"</comment>
+                </field>
+                <field id="api" translate="label comment" type="obscure" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>New Relic API Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment>This is located by navigating to Events -> Deployments from the New Relic APM website</comment>
+                </field>
+                <field id="insights_insert_key" translate="label comment" type="obscure" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Insights API Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment>Generated under Insights in Manage data -> API Keys -> Insert Keys</comment>
+                </field>
+                <field id="app_name" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>New Relic Application Name</label>
+                    <comment>This is located by navigating to Settings from the New Relic APM website</comment>
+                </field>
+                <field id="separate_apps" translate="label comment" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Send Adminhtml and Frontend as Separate Apps</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>In addition to the main app (which includes all PHP execution), separate apps for adminhtml and frontend will be created. Requires New Relic Application Name to be set.</comment>
+                </field>
+            </group>
+            <group id="cron" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Cron</label>
+                <field id="enable_cron" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Cron</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CustomerEntityOne" type="customer">
+        <data key="group_id">0</data>
+        <data key="default_billing">defaultBillingValue</data>
+        <data key="default_shipping">defaultShippingValue</data>
+        <data key="confirmation">confirmationData</data>
+        <data key="created_at">12:00</data>
+        <data key="updated_at">12:00</data>
+        <data key="created_in">createdInData</data>
+        <data key="dob">01-01-1970</data>
+        <data key="email" unique="prefix">test@email.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="middlename">S</data>
+        <data key="password">pwdTest123!</data>
+        <data key="prefix">Mr</data>
+        <data key="suffix">Sr</data>
+        <data key="gender">0</data>
+        <data key="store_id">0</data>
+        <data key="taxvat">taxValue</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">CustomerAddressSimple</requiredEntity>
+        <data key="disable_auto_group_change">0</data>
+        <!--requiredEntity type="extension_attribute">ExtensionAttributeSimple</requiredEntity-->
+    </entity>
+    <entity name="Simple_US_Customer" type="customer">
+        <data key="group_id">1</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">US_Address_TX</requiredEntity>
+    </entity>
+    <entity name="Simple_Customer_Without_Address" type="customer">
+        <data key="group_id">1</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+    </entity>
+    <entity name="Simple_US_Customer_Multiple_Addresses" type="customer">
+        <data key="group_id">0</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">US_Address_NY</requiredEntity>
+        <requiredEntity type="address">UK_Not_Default_Address</requiredEntity>
+    </entity>
+    <entity name="Simple_US_Customer_Multiple_Addresses_No_Default_Address" type="customer">
+        <data key="group_id">0</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">US_Address_NY_Not_Default_Address</requiredEntity>
+        <requiredEntity type="address">UK_Not_Default_Address</requiredEntity>
+    </entity>
+    <entity name="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" type="customer">
+        <data key="group_id">0</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">US_Address_TX_Default_Billing</requiredEntity>
+        <requiredEntity type="address">US_Address_NY_Default_Shipping</requiredEntity>
+    </entity>
+    <entity name="Simple_US_Customer_NY" type="customer">
+        <data key="group_id">0</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">US_Address_NY</requiredEntity>
+    </entity>
+    <entity name="Simple_US_Customer_CA" type="customer">
+        <data key="group_id">0</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">US_Address_CA</requiredEntity>
+    </entity>
+    <entity name="Simple_US_Customer_For_Update" type="customer">
+        <var key="id" entityKey="id" entityType="customer"/>
+        <data key="firstname">Jane</data>
+    </entity>
+    <entity name="Simple_US_CA_Customer" type="customer">
+        <data key="group_id">1</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">US_Address_CA</requiredEntity>
+    </entity>
+    <entity name="Simple_US_Utah_Customer" type="customer">
+        <data key="group_id">1</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">US_Address_Utah</requiredEntity>
+    </entity>
+    <entity name="Simple_GB_Customer" type="customer">
+        <data key="group_id">0</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">Jane.Doe@example.com</data>
+        <data key="firstname">Jane</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">Jane Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">UK_Not_Default_Address</requiredEntity>
+    </entity>
+    <entity name="Customer_With_Different_Default_Billing_Shipping_Addresses" type="customer">
+        <data key="group_id">1</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">US_Default_Billing_Address_TX</requiredEntity>
+        <requiredEntity type="address">US_Default_Shipping_Address_CA</requiredEntity>
+    </entity>
+</entities>

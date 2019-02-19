@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+
+    <xs:complexType name="namedType" abstract="true" mixed="true">
+        <xs:attribute name="name" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="simpleType" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="namedType">
+                <xs:sequence>
+                    <xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="complexType" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="namedType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="array" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="complexType">
+                <xs:sequence>
+                    <xs:element name="item" type="namedType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="string" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="simpleType">
+                <xs:attribute name="translate" use="optional" fixed="true" type="xs:boolean"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="boolean" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="simpleType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="object" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="simpleType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="number" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="simpleType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="options" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="complexType">
+                <xs:attribute name="model" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="url" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="complexType">
+                <xs:sequence minOccurs="0">
+                    <xs:element name="param" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType mixed="true">
+                            <xs:attribute name="name" type="xs:string" use="required"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="path" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="helper" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="complexType">
+                <xs:sequence minOccurs="0">
+                    <xs:element name="param" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType mixed="true">
+                            <xs:attribute name="name" type="xs:string" use="required"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="helper" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

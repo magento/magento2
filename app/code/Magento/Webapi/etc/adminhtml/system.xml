@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Representation of Webapi module in System Configuration (Magento admin panel).
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="webapi" translate="label" type="text" sortOrder="102" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Magento Web API</label>
+            <tab>service</tab>
+            <resource>Magento_Webapi::config_webapi</resource>
+            <group id="soap" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>SOAP Settings</label>
+                <field id="charset" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Default Response Charset</label>
+                    <comment>If empty, UTF-8 will be used.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
+

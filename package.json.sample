@@ -1,0 +1,42 @@
+{
+    "name": "magento2",
+    "author": "Magento Commerce Inc.",
+    "description": "Magento2 node modules dependencies for local development",
+    "license": "(OSL-3.0 OR AFL-3.0)",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/magento/magento2.git"
+    },
+    "homepage": "http://magento.com/",
+    "devDependencies": {
+        "glob": "~7.1.1",
+        "grunt": "~1.0.1",
+        "grunt-autoprefixer": "~3.0.4",
+        "grunt-banner": "~0.6.0",
+        "grunt-continue": "~0.1.0",
+        "grunt-contrib-clean": "~1.1.0",
+        "grunt-contrib-connect": "~1.0.2",
+        "grunt-contrib-cssmin": "~2.2.1",
+        "grunt-contrib-imagemin": "~2.0.1",
+        "grunt-contrib-jasmine": "~1.1.0",
+        "grunt-contrib-less": "~1.4.1",
+        "grunt-contrib-watch": "~1.0.0",
+        "grunt-eslint": "~20.1.0",
+        "grunt-exec": "~3.0.0",
+        "grunt-jscs": "~3.0.1",
+        "grunt-replace": "~1.0.1",
+        "grunt-styledocco": "~0.3.0",
+        "grunt-template-jasmine-requirejs": "~0.2.3",
+        "grunt-text-replace": "~0.4.0",
+        "imagemin-svgo": "~5.2.1",
+        "load-grunt-config": "~0.19.2",
+        "morgan": "~1.9.0",
+        "node-minify": "~2.3.1",
+        "path": "~0.12.7",
+        "serve-static": "~1.13.1",
+        "squirejs": "~0.2.1",
+        "strip-json-comments": "~2.0.1",
+        "time-grunt": "~1.4.0",
+        "underscore": "~1.8.0"
+    }
+}

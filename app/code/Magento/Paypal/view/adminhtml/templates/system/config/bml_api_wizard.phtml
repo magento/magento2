@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @see \Magento\Paypal\Block\Adminhtml\System\Config\BmlApiWizard
+ * @var \Magento\Paypal\Block\Adminhtml\System\Config\BmlApiWizard $block
+ */
+?>
+<div class="pp-buttons-container">
+    <button onclick="javascript:window.open(
+            '<?= $block->escapeUrl($block->getButtonUrl()) ?>',
+            'bmlapiwizard',
+            'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,' +
+            'left=100, top=100, width=550, height=550'
+        ); return false;"
+            class="scalable" type="button" id="<?= $block->escapeHtml($block->getHtmlId()) ?>">
+        <span><span><span><?= $block->escapeHtml($block->getButtonLabel()) ?></span></span></span>
+    </button>
+</div>

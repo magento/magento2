@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="customer"
+             module="Magento_Customer"
+             type="eav"
+             entity_type="customer"
+             collection="Magento\Customer\Model\ResourceModel\Customer\Collection"
+             identifier="email"
+             repository_class="Magento\Customer\Test\Repository\Customer"
+             handler_interface="Magento\Customer\Test\Handler\Customer\CustomerInterface"
+             class="Magento\Customer\Test\Fixture\Customer">
+        <field name="address" source="Magento\Customer\Test\Fixture\Customer\Address" group="addresses" />
+        <field name="confirmation" is_required="0" />
+        <field name="id" group="null" />
+        <field name="created_at" is_required="0" />
+        <field name="created_in" is_required="0" group="account_information" />
+        <field name="default_billing" is_required="0" />
+        <field name="default_shipping" is_required="0" />
+        <field name="disable_auto_group_change" is_required="0" group="account_information" />
+        <field name="dob" is_required="0" group="account_information" />
+        <field name="email" is_required="1" group="account_information" />
+        <field name="firstname" is_required="1" group="account_information" />
+        <field name="gender" is_required="0" group="account_information" />
+        <field name="group_id" is_required="1" group="account_information" source="Magento\Customer\Test\Fixture\Customer\GroupId" />
+        <field name="lastname" is_required="1" group="account_information" />
+        <field name="middlename" is_required="0" group="account_information" />
+        <field name="password_hash" is_required="0" />
+        <field name="prefix" is_required="0" group="account_information" />
+        <field name="rp_token" is_required="0" />
+        <field name="rp_token_created_at" is_required="0" />
+        <field name="store_id" is_required="1" group="account_information" />
+        <field name="suffix" is_required="0" group="account_information" />
+        <field name="taxvat" is_required="0" group="account_information" />
+        <field name="website_id" is_required="1" group="account_information" source="Magento\Customer\Test\Fixture\Customer\WebsiteId" />
+        <field name="amount_delta" is_required="1" group="store_credit" />
+        <field name="is_subscribed" />
+        <field name="password" group="null" />
+        <field name="password_confirmation" group="null" />
+        <field name="current_password" group="null" />
+    </fixture>
+</config>

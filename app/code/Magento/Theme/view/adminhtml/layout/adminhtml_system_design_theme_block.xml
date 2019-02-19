@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="design_theme">
+            <block class="Magento\Backend\Block\Widget\Grid" name="theme.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">theme_grid</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Grid\Collection</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                    <argument name="use_ajax" xsi:type="string">1</argument>
+                    <argument name="grid_url" xsi:type="url" path="*/*/grid">
+                        <param name="_current">1</param>
+                    </argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="theme.grid.columnSet">
+                    <arguments>
+                        <argument name="id" xsi:type="string">theme_grid</argument>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">*/*/edit</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="id" xsi:type="string">getId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="theme.grid.columnSet.theme_title" as="theme_title">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Theme Title</argument>
+                            <argument name="index" xsi:type="string">theme_title</argument>
+                            <argument name="filter_index" xsi:type="string">main_table.theme_title</argument>
+                            <argument name="column_css_class" xsi:type="string">theme-title</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="theme.grid.columnSet.parent_theme_title" as="parent_theme_title">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Parent Theme</argument>
+                            <argument name="index" xsi:type="string">parent_theme_title</argument>
+                            <argument name="filter_index" xsi:type="string">parent.theme_title</argument>
+                            <argument name="column_css_class" xsi:type="string">parent-theme-title</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="theme.grid.columnSet.theme_path" as="theme_path">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Theme Path</argument>
+                            <argument name="index" xsi:type="string">theme_path</argument>
+                            <argument name="filter_index" xsi:type="string">main_table.theme_path</argument>
+                            <argument name="column_css_class" xsi:type="string">theme-path</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="catalogAttributeSet"
+             module="Magento_Catalog"
+             type="flat"
+             entity_type="eav_attribute_set"
+             collection="Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection"
+             repository_class="Magento\Catalog\Test\Repository\CatalogAttributeSet"
+             handler_interface="Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface"
+             class="Magento\Catalog\Test\Fixture\CatalogAttributeSet">
+        <field name="attribute_set_id" is_required="1" />
+        <field name="entity_type_id" is_required="" />
+        <field name="attribute_set_name" is_required="" />
+        <field name="sort_order" is_required="" />
+        <field name="skeleton_set" is_required="" source="Magento\Catalog\Test\Fixture\CatalogAttributeSet\SkeletonSet" />
+        <field name="assigned_attributes" source="Magento\Catalog\Test\Fixture\CatalogAttributeSet\AssignedAttributes" />
+        <field name="group" />
+    </fixture>
+</config>

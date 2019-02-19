@@ -1,0 +1,116 @@
+{
+    "newsletter_subscriber": {
+        "column": {
+            "subscriber_id": true,
+            "store_id": true,
+            "change_status_at": true,
+            "customer_id": true,
+            "subscriber_email": true,
+            "subscriber_status": true,
+            "subscriber_confirm_code": true
+        },
+        "index": {
+            "NEWSLETTER_SUBSCRIBER_CUSTOMER_ID": true,
+            "NEWSLETTER_SUBSCRIBER_STORE_ID": true,
+            "NEWSLETTER_SUBSCRIBER_SUBSCRIBER_EMAIL": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "NEWSLETTER_SUBSCRIBER_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "newsletter_template": {
+        "column": {
+            "template_id": true,
+            "template_code": true,
+            "template_text": true,
+            "template_styles": true,
+            "template_type": true,
+            "template_subject": true,
+            "template_sender_name": true,
+            "template_sender_email": true,
+            "template_actual": true,
+            "added_at": true,
+            "modified_at": true
+        },
+        "index": {
+            "NEWSLETTER_TEMPLATE_TEMPLATE_ACTUAL": true,
+            "NEWSLETTER_TEMPLATE_ADDED_AT": true,
+            "NEWSLETTER_TEMPLATE_MODIFIED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "newsletter_queue": {
+        "column": {
+            "queue_id": true,
+            "template_id": true,
+            "newsletter_type": true,
+            "newsletter_text": true,
+            "newsletter_styles": true,
+            "newsletter_subject": true,
+            "newsletter_sender_name": true,
+            "newsletter_sender_email": true,
+            "queue_status": true,
+            "queue_start_at": true,
+            "queue_finish_at": true
+        },
+        "index": {
+            "NEWSLETTER_QUEUE_TEMPLATE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "NEWSLETTER_QUEUE_TEMPLATE_ID_NEWSLETTER_TEMPLATE_TEMPLATE_ID": true
+        }
+    },
+    "newsletter_queue_link": {
+        "column": {
+            "queue_link_id": true,
+            "queue_id": true,
+            "subscriber_id": true,
+            "letter_sent_at": true
+        },
+        "index": {
+            "NEWSLETTER_QUEUE_LINK_SUBSCRIBER_ID": true,
+            "NEWSLETTER_QUEUE_LINK_QUEUE_ID_LETTER_SENT_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "NEWSLETTER_QUEUE_LINK_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID": true,
+            "NLTTR_QUEUE_LNK_SUBSCRIBER_ID_NLTTR_SUBSCRIBER_SUBSCRIBER_ID": true
+        }
+    },
+    "newsletter_queue_store_link": {
+        "column": {
+            "queue_id": true,
+            "store_id": true
+        },
+        "index": {
+            "NEWSLETTER_QUEUE_STORE_LINK_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "NEWSLETTER_QUEUE_STORE_LINK_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID": true,
+            "NEWSLETTER_QUEUE_STORE_LINK_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "newsletter_problem": {
+        "column": {
+            "problem_id": true,
+            "subscriber_id": true,
+            "queue_id": true,
+            "problem_error_code": true,
+            "problem_error_text": true
+        },
+        "index": {
+            "NEWSLETTER_PROBLEM_SUBSCRIBER_ID": true,
+            "NEWSLETTER_PROBLEM_QUEUE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "NEWSLETTER_PROBLEM_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID": true,
+            "NLTTR_PROBLEM_SUBSCRIBER_ID_NLTTR_SUBSCRIBER_SUBSCRIBER_ID": true
+        }
+    }
+}

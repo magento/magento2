@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="module" type="moduleDeclaration" minOccurs="1" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="uniqueModuleName">
+            <xs:annotation>
+                <xs:documentation>
+                    Module name must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="module"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="moduleDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Module declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element minOccurs="0" maxOccurs="1" name="sequence" type="moduleSequence">
+                <xs:unique name="uniqueSequenceName">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Dependency name must be unique.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:selector xpath=".//*" />
+                    <xs:field xpath="@name" />
+                </xs:unique>
+            </xs:element>
+        </xs:all>
+        <xs:attribute name="name" type="moduleName" use="required" />
+        <xs:attribute name="setup_version" type="setupVersion" use="optional" />
+    </xs:complexType>
+
+    <xs:complexType name="moduleSequence">
+        <xs:annotation>
+            <xs:documentation>
+                Module dependency root element.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="module">
+                <xs:complexType>
+                    <xs:annotation>
+                        <xs:documentation>
+                            Module dependency that represents another module.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:attribute name="name" type="moduleName" use="required" />
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="moduleName">
+        <xs:annotation>
+            <xs:documentation>
+                Module name attribute can contain only [A-Za-z0-9_].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="setupVersion">
+        <xs:annotation>
+            <xs:documentation>
+                Schema version attribute can contain only [0-9.].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9.]+" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * @var $block \Magento\Framework\View\Element\Html\Link
+ */
+?>
+<?php if (!$block->getIsDisabled()): ?>
+<li>
+    <a href="<?= $block->escapeHtml($block->getHref()) ?>"
+        <?php if ($title = $block->getTitle()):?> title="<?= $block->escapeHtml(__($title)) ?>"<?php endif;?>>
+        <?= $block->escapeHtml(__($block->getLabel())) ?>
+    </a>
+</li>
+<?php endif; ?>

@@ -1,0 +1,45 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\AdminNotification\Block\System\Messages */ ?>
+
+<?php $lastCritical = $block->getLastCritical();?>
+<div id="system_messages" class="message-system<?php if ($lastCritical): ?> message-system-unread<?php endif; ?>">
+    <div class="message-system-inner">
+        <?php if ($lastCritical): ?>
+            <ul class="message-system-list">
+                <li class="message message-warning error">
+                    <?= /* @escapeNotVerified */ $lastCritical->getText() ?>
+                </li>
+            </ul>
+        <?php endif; ?>
+        <div class="message-system-short">
+            <span class="message-system-short-label">
+                <?= /* @escapeNotVerified */ __('System Messages:') ?>
+            </span>
+
+            <?php if ($block->getCriticalCount()): ?>
+                <div class="message message-warning error">
+                    <a class="message-link" href="#" title="<?= $block->escapeHtml(__('Critical System Messages')) ?>">
+                        <?= /* @escapeNotVerified */ $block->getCriticalCount() ?>
+                    </a>
+                </div>
+            <?php endif;?>
+
+            <?php if ($block->getMajorCount()): ?>
+               <div class="message message-warning warning">
+                   <a class="message-link" href="#" title="<?= $block->escapeHtml(__('Major System Messages')) ?>">
+                       <?= /* @escapeNotVerified */ $block->getMajorCount() ?>
+                   </a>
+               </div>
+            <?php endif;?>
+        </div>
+        <div id="message-system-all" title="<?= $block->escapeHtml(__('System messages')) ?>" data-mage-init='<?= $block->escapeHtml($block->getSystemMessageDialogJson()) ?>'></div>
+    </div>
+</div>

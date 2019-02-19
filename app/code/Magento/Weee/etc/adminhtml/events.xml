@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="adminhtml_catalog_product_edit_prepare_form">
+        <observer name="weee" instance="Magento\Weee\Observer\SetWeeeRendererInFormObserver" />
+    </event>
+    <event name="adminhtml_catalog_product_form_prepare_excluded_field_list">
+        <observer name="weee" instance="Magento\Weee\Observer\UpdateExcludedFieldListObserver" />
+    </event>
+    <event name="adminhtml_product_attribute_types">
+        <observer name="weee" instance="Magento\Weee\Observer\AddWeeeTaxAttributeTypeObserver" />
+    </event>
+    <event name="adminhtml_catalog_product_edit_element_types">
+        <observer name="weee" instance="Magento\Weee\Observer\UpdateElementTypesObserver" />
+    </event>
+</config>

@@ -1,0 +1,163 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content\Uploader */
+
+$filters = $block->getConfig()->getFilters() ?? [];
+$allowedExtensions = [];
+
+foreach ($filters as $media_type) {
+    $allowedExtensions = array_merge($allowedExtensions, array_map(function ($fileExt) {
+        return ltrim($fileExt, '.*');
+    }, $media_type['files']));
+}
+
+$resizeConfig = $block->getImageUploadConfigData()->getIsResizeEnabled()
+    ? "{action: 'resize', maxWidth: "
+        . $block->escapeHtml($block->getImageUploadMaxWidth())
+        . ", maxHeight: "
+        . $block->escapeHtml($block->getImageUploadMaxHeight())
+        . "}"
+    : "{action: 'resize'}";
+?>
+
+<div id="<?= $block->getHtmlId() ?>" class="uploader">
+    <span class="fileinput-button form-buttons">
+        <span><?= $block->escapeHtml(__('Upload Images')) ?></span>
+        <input class="fileupload" type="file" name="<?= $block->escapeHtmlAttr($block->getConfig()->getFileField()) ?>" data-url="<?= $block->escapeUrl($block->getConfig()->getUrl()) ?>" multiple>
+    </span>
+    <div class="clear"></div>
+    <script type="text/x-magento-template" id="<?= $block->getHtmlId() ?>-template">
+        <div id="<%- data.id %>" class="file-row">
+            <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
+            <div class="progressbar-container">
+                <div class="progressbar upload-progress" style="width: 0%;"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </script>
+    <script>
+require([
+    'jquery',
+    'mage/template',
+    'Magento_Ui/js/lib/validation/validator',
+    'Magento_Ui/js/modal/alert',
+    'jquery/file-uploader',
+    'domReady!',
+    'mage/translate'
+], function ($, mageTemplate, validator, uiAlert) {
+    var maxFileSize = <?= $block->escapeJs($block->getFileSizeService()->getMaxFileSize()) ?>,
+        allowedExtensions = '<?= $block->escapeHtml(implode(' ', $allowedExtensions)) ?>';
+
+    $('#<?= $block->getHtmlId() ?> .fileupload').fileupload({
+        dataType: 'json',
+        formData: {
+            isAjax: 'true',
+            form_key: FORM_KEY
+        },
+        sequentialUploads: true,
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+        allowedExtensions: allowedExtensions,
+        maxFileSize: maxFileSize,
+        dropZone: $('#<?= $block->getHtmlId() ?>').closest('[role="dialog"]'),
+        add: function (e, data) {
+            var progressTmpl = mageTemplate('#<?= $block->getHtmlId() ?>-template'),
+                fileSize,
+                tmpl,
+                validationResult;
+
+            data.files = data.files.filter(function (file) {
+                fileSize = typeof file.size == "undefined" ?
+                    $.mage.__('We could not detect a size.') :
+                    byteConvert(file.size);
+
+                if (maxFileSize) {
+                    validationResult = validator('validate-max-size', file.size, maxFileSize);
+
+                    if (!validationResult.passed) {
+                        uiAlert({
+                            content: validationResult.message
+                        });
+
+                        return false;
+                    }
+                }
+
+                if (allowedExtensions) {
+                    validationResult = validator('validate-file-type', file.name, allowedExtensions);
+
+                    if (!validationResult.passed) {
+                        uiAlert({
+                            content: validationResult.message
+                        });
+
+                        return false;
+                    }
+                }
+
+                data.fileId = Math.random().toString(36).substr(2, 9);
+
+                tmpl = progressTmpl({
+                    data: {
+                        name: file.name,
+                        size: fileSize,
+                        id: data.fileId
+                    }
+                });
+
+                $(tmpl).data('image', data).appendTo('#<?= $block->getHtmlId() ?>');
+
+                return true;
+            });
+
+            if (data.files.length) {
+                $(this).fileupload('process', data).done(function () {
+                    data.submit();
+                });
+            }
+        },
+        done: function (e, data) {
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            var tempErrorMessage = document.createElement("div");
+            $(progressSelector).css('width', '100%');
+            $('[data-action="show-error"]').children(".message").remove();
+            if (data.result && !data.result.hasOwnProperty('errorcode')) {
+                $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+            } else {
+                tempErrorMessage.className = "message message-warning warning";
+                tempErrorMessage.innerHTML = data.result.error;
+
+                $('[data-action="show-error"]').append(tempErrorMessage);
+                $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+            }
+        },
+        progress: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).css('width', progress + '%');
+        },
+        fail: function (e, data) {
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+        }
+    });
+
+    $('#<?= $block->getHtmlId() ?> .fileupload').fileupload('option', {
+        process: [{
+            action: 'load',
+            fileTypes: /^image\/(gif|jpeg|png)$/,
+            maxFileSize: <?= (int) $block->getFileSizeService()->getMaxFileSize() ?> * 10
+        },
+        <?= /* @noEscape */ $resizeConfig ?>,
+        {
+            action: 'save'
+        }]
+    });
+});
+</script>
+</div>

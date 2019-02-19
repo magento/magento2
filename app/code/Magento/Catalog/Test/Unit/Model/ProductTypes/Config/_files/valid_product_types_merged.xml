@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/product_types_merged.xsd">
+    <type label="some_label" name="some_name" modelInstance="model_name">
+        <allowedSelectionTypes>
+            <type name="some_name" />
+        </allowedSelectionTypes>
+        <priceModel instance="instance_name" />
+        <indexerModel instance="instance_name" />
+        <stockIndexerModel instance="instance_name"/>
+    </type>
+    <type label="some_label" name="some_name2" modelInstance="model_name">
+        <allowedSelectionTypes>
+            <type name="some_name" />
+        </allowedSelectionTypes>
+        <priceModel instance="instance_name" />
+        <indexerModel instance="instance_name" />
+        <stockIndexerModel instance="instance_name"/>
+    </type>
+    <composableTypes>
+        <type name="some_name"/>
+        <type name="some_name2"/>
+    </composableTypes>
+</config>

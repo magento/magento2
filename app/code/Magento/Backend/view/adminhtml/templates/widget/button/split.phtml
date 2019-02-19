@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/** @var $block \Magento\Backend\Block\Widget\Button\SplitButton */
+?>
+
+<div <?= $block->getAttributesHtml() ?>>
+    <button <?= $block->getButtonAttributesHtml() ?>>
+        <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+    </button>
+    <?php if ($block->hasSplit()): ?>
+        <button <?= $block->getToggleAttributesHtml() ?>>
+            <span>Select</span>
+        </button>
+
+        <?php if (!$block->getDisabled()): ?>
+            <ul class="dropdown-menu" <?= /* @escapeNotVerified */ $block->getUiId("dropdown-menu") ?>>
+                <?php foreach ($block->getOptions() as $key => $option): ?>
+                <li>
+                    <span <?= $block->getOptionAttributesHtml($key, $option) ?>>
+                        <?= $block->escapeHtml($option['label']) ?>
+                    </span>
+                    <?php if (isset($option['hint'])): ?>
+                    <div class="tooltip" <?= /* @escapeNotVerified */ $block->getUiId('item', $key, 'tooltip') ?>>
+                        <a href="<?= $block->escapeHtml($option['hint']['href']) ?>" class="help">
+                            <?= $block->escapeHtml($option['hint']['label']) ?>
+                        </a>
+                    </div>
+                    <?php endif; ?>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    <?php endif; ?>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        ".actions-split": {
+            "Magento_Ui/js/grid/controls/button/split": {}
+        }
+    }
+</script>
+

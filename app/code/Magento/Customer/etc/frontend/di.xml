@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="customer" xsi:type="string">/customer/</item>
+            </argument>
+            <argument name="excludedUrlList" xsi:type="array">
+                <item name="customer_sections" xsi:type="string">/customer/section/load</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Layout">
+        <plugin name="customer-session-depersonalize"
+                type="Magento\Customer\Model\Layout\DepersonalizePlugin" sortOrder="10"/>
+    </type>
+    <type name="Magento\Framework\App\Action\AbstractAction">
+        <plugin name="customer-app-action-dispatchController-context-plugin"
+                type="Magento\Customer\Model\App\Action\ContextPlugin" sortOrder="10"/>
+    </type>
+    <preference for="Magento\Customer\CustomerData\SectionPoolInterface"
+                type="Magento\Customer\CustomerData\SectionPool"/>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="customer" xsi:type="string">Magento\Customer\CustomerData\Customer</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Controller\Plugin\Account">
+        <arguments>
+            <argument name="allowedActions" xsi:type="array">
+                <item name="create" xsi:type="string">create</item>
+                <item name="login" xsi:type="string">login</item>
+                <item name="logoutsuccess" xsi:type="string">logoutsuccess</item>
+                <item name="forgotpassword" xsi:type="string">forgotpassword</item>
+                <item name="forgotpasswordpost" xsi:type="string">forgotpasswordpost</item>
+                <item name="resetpassword" xsi:type="string">resetpassword</item>
+                <item name="resetpasswordpost" xsi:type="string">resetpasswordpost</item>
+                <item name="confirm" xsi:type="string">confirm</item>
+                <item name="confirmation" xsi:type="string">confirmation</item>
+                <item name="createpassword" xsi:type="string">createpassword</item>
+                <item name="createpost" xsi:type="string">createpost</item>
+                <item name="loginpost" xsi:type="string">loginpost</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Controller\AbstractAccount">
+        <plugin name="customer_account" type="Magento\Customer\Controller\Plugin\Account" />
+    </type>
+    <type name="Magento\Checkout\Block\Cart\Sidebar">
+        <plugin name="customer_cart" type="Magento\Customer\Model\Cart\ConfigPlugin" />
+    </type>
+    <type name="Magento\Framework\Session\SessionManager">
+        <plugin name="session_checker" type="Magento\Customer\CustomerData\Plugin\SessionChecker" />
+    </type>
+    <type name="Magento\Authorization\Model\CompositeUserContext">
+        <arguments>
+            <argument name="userContexts" xsi:type="array">
+                <item name="customerSessionUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Customer\Model\Authorization\CustomerSessionUserContext</item>
+                    <item name="sortOrder" xsi:type="string">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Block\CustomerData">
+        <arguments>
+            <argument name="expirableSectionNames" xsi:type="array">
+                <item name="cart" xsi:type="string">cart</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Tax\Model\Calculation">
+        <arguments>
+            <argument name="customerAccountManagement" xsi:type="object">Magento\Customer\Api\AccountManagementInterface\Proxy</argument>
+            <argument name="customerGroupManagement" xsi:type="object">Magento\Customer\Api\GroupManagementInterface\Proxy</argument>
+            <argument name="customerGroupRepository" xsi:type="object">Magento\Customer\Api\GroupRepositoryInterface\Proxy</argument>
+            <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\CustomerData\Cart">
+        <plugin name="cart_private_data_tax" type="Magento\Tax\Plugin\Checkout\CustomerData\Cart"/>
+    </type>
+    <type name="Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface">
+        <arguments>
+            <argument name="jsLayoutDataProviders" xsi:type="array">
+                <item name="checkout_totals" xsi:type="object">Magento\Tax\CustomerData\CheckoutTotalsJsLayoutDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="tax_config_provider" xsi:type="object">Magento\Tax\Model\TaxConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Layout">
+        <plugin name="tax-session-depersonalize"
+                type="Magento\Tax\Model\Layout\DepersonalizePlugin" sortOrder="20"/>
+    </type>
+    <type name="Magento\Framework\App\Action\AbstractAction">
+        <plugin name="tax-app-action-dispatchController-context-plugin"
+                type="Magento\Tax\Model\App\Action\ContextPlugin"/>
+    </type>
+</config>

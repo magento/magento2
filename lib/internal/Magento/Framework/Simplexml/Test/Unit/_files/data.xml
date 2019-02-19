@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<root>
+    <node1>
+        <node2/>
+    </node1>
+    <node3>
+        <node4/>
+    </node3>
+</root>

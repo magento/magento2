@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="reports_sales"/>
+    <body>
+        <referenceContainer name="page.main.actions">
+            <block class="Magento\Backend\Block\Store\Switcher" template="Magento_Backend::store/switcher.phtml" name="store.switcher">
+                <action method="setStoreVarName">
+                    <argument name="var_name" xsi:type="string">store_ids</argument>
+                </action>
+                <arguments>
+                    <argument name="switch_websites" xsi:type="string">1</argument>
+                    <argument name="switch_store_groups" xsi:type="string">1</argument>
+                    <argument name="switch_store_views" xsi:type="string">1</argument>
+                    <argument name="default_selection_name" xsi:type="string" translate="true">All Websites</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magento\Reports\Block\Adminhtml\Sales\Shipping" template="Magento_Reports::report/grid/container.phtml" name="sales.report.grid.container">
+                <block class="Magento\Sales\Block\Adminhtml\Report\Filter\Form" name="grid.filter.form">
+                    <action method="addReportTypeOption">
+                        <argument name="key" xsi:type="string">created_at_order</argument>
+                        <argument translate="true" name="value" xsi:type="string">Order Created</argument>
+                    </action>
+                    <action method="addReportTypeOption">
+                        <argument name="key" xsi:type="string">created_at_shipment</argument>
+                        <argument translate="true" name="value" xsi:type="string">First Invoice Created Date</argument>
+                    </action>
+                </block>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

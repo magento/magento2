@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\User\Test\TestCase\CustomAclPermissionTest" summary="Custom ACL Permission" ticketId="MAGETWO-58541">
+        <variation name="CustomVariableAclPermissionTestVariation1" summary="Custom variable ACL permission" ticketId="MAGETWO-41214">
+            <data name="user/dataset" xsi:type="string">custom_admin_with_role_without_variable</data>
+            <data name="systemVariable/dataset" xsi:type="string">default</data>
+            <data name="issue" xsi:type="string">MAGETWO-68854: CustomAclPermissionTest Fails on Jenkins, marked as unstable</data>
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableRestrictedAccess" />
+        </variation>
+    </testCase>
+</config>

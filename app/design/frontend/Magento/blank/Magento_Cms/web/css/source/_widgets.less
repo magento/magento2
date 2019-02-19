@@ -1,0 +1,28 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+@widgets-indent__bottom: @indent__base;
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .block-static-block,
+    .block-cms-link {
+        &.widget {
+            .lib-css(margin-bottom, @widgets-indent__bottom);
+            .links & {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .block-cms-link-inline {
+        &.widget {
+            margin: 0;
+        }
+    }
+}

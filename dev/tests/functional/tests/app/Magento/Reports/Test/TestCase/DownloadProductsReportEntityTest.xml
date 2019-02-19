@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Reports\Test\TestCase\DownloadProductsReportEntityTest" summary="Download Products Report" ticketId="MAGETWO-28823">
+        <variation name="DownloadProductsReportEntityTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="order/dataset" xsi:type="string">downloadable_product</data>
+            <data name="downloads" xsi:type="string">1</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertDownloadsReportResult" />
+        </variation>
+        <variation name="DownloadProductsReportEntityTestVariation2">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="order/dataset" xsi:type="string">two_downloadable_product</data>
+            <data name="downloads" xsi:type="string">2</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertDownloadsReportResult" />
+        </variation>
+        <variation name="DownloadProductsReportEntityTestVariation3">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="order/dataset" xsi:type="string">downloadable_product</data>
+            <data name="downloads" xsi:type="string">0</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertDownloadsReportResult" />
+        </variation>
+    </testCase>
+</config>

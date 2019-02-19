@@ -1,0 +1,157 @@
+"Static Blocks","Static Blocks"
+"Add New Block","Add New Block"
+Back,Back
+"Delete Block","Delete Block"
+"Are you sure you want to do this?","Are you sure you want to do this?"
+Reset,Reset
+"Save and Continue Edit","Save and Continue Edit"
+"Save Block","Save Block"
+ID,ID
+Title,Title
+Identifier,Identifier
+Status,Status
+Disabled,Disabled
+Enabled,Enabled
+"Manage Pages","Manage Pages"
+"Add New Page","Add New Page"
+"Delete Page","Delete Page"
+"Save Page","Save Page"
+"URL Key","URL Key"
+Layout,Layout
+"Store View","Store View"
+Created,Created
+Modified,Modified
+Action,Action
+Preview,Preview
+"Media Storage","Media Storage"
+"Create Folder...","Create Folder..."
+"Delete Folder","Delete Folder"
+"Delete File","Delete File"
+"Insert File","Insert File"
+"New Folder Name:","New Folder Name:"
+"Are you sure you want to delete this folder?","Are you sure you want to delete this folder?"
+"Are you sure you want to delete this file?","Are you sure you want to delete this file?"
+"Images (%1)","Images (%1)"
+"Storage Root","Storage Root"
+Home,Home
+"Go to Home Page","Go to Home Page"
+CMS,CMS
+"You deleted the block.","You deleted the block."
+"We can't find a block to delete.","We can't find a block to delete."
+"This block no longer exists.","This block no longer exists."
+"Edit Block","Edit Block"
+"New Block","New Block"
+Blocks,Blocks
+"Please correct the data sent.","Please correct the data sent."
+"A total of %1 record(s) have been deleted.","A total of %1 record(s) have been deleted."
+"You saved the block.","You saved the block."
+"You duplicated the block.","You duplicated the block."
+"Something went wrong while saving the block.","Something went wrong while saving the block."
+"The page has been deleted.","The page has been deleted."
+"We can't find a page to delete.","We can't find a page to delete."
+"This page no longer exists.","This page no longer exists."
+"Edit Page","Edit Page"
+"New Page","New Page"
+Pages,Pages
+"Something went wrong while saving the page.","Something went wrong while saving the page."
+"A total of %1 record(s) have been disabled.","A total of %1 record(s) have been disabled."
+"A total of %1 record(s) have been enabled.","A total of %1 record(s) have been enabled."
+"Page Title","Page Title"
+"To apply changes you should fill in hidden required ""%1"" field","To apply changes you should fill in hidden required ""%1"" field"
+"You saved the page.","You saved the page."
+"You duplicated the page.","You duplicated the page."
+"The directory %1 is not writable by server.","The directory %1 is not writable by server."
+"Make sure that static block content does not reference the block itself.","Make sure that static block content does not reference the block itself."
+"CMS Block with id ""%1"" does not exist.","CMS Block with id ""%1"" does not exist."
+"Enabled by Default","Enabled by Default"
+"Disabled by Default","Disabled by Default"
+"Disabled Completely","Disabled Completely"
+"This identifier is reserved for ""CMS No Route Page"" in configuration.","This identifier is reserved for ""CMS No Route Page"" in configuration."
+"This identifier is reserved for ""CMS Home Page"" in configuration.","This identifier is reserved for ""CMS Home Page"" in configuration."
+"This identifier is reserved for ""CMS No Cookies Page"" in configuration.","This identifier is reserved for ""CMS No Cookies Page"" in configuration."
+"Could not save the page: %1","Could not save the page: %1"
+"CMS Page with id ""%1"" does not exist.","CMS Page with id ""%1"" does not exist."
+"Could not delete the page: %1","Could not delete the page: %1"
+"A block identifier with the same properties already exists in the selected store.","A block identifier with the same properties already exists in the selected store."
+"The page URL key contains capital letters or disallowed symbols.","The page URL key contains capital letters or disallowed symbols."
+"The page URL key cannot be made of only numbers.","The page URL key cannot be made of only numbers."
+"Please rename the folder using only letters, numbers, underscores and dashes.","Please rename the folder using only letters, numbers, underscores and dashes."
+"We found a directory with the same name. Please try another folder name.","We found a directory with the same name. Please try another folder name."
+"We cannot create a new directory.","We cannot create a new directory."
+"We cannot delete directory %1.","We cannot delete directory %1."
+"We can't upload the file right now.","We can't upload the file right now."
+"We can't delete root directory %1 right now.","We can't delete root directory %1 right now."
+"Directory %1 is not under storage root path.","Directory %1 is not under storage root path."
+"Privacy and Cookie Policy","Privacy and Cookie Policy"
+LocalizedException,LocalizedException
+RuntimeException,RuntimeException
+Exception,Exception
+"Could not create a directory.","Could not create a directory."
+Edit,Edit
+Delete,Delete
+"Delete %1","Delete %1"
+"Are you sure you want to delete a %1 record?","Are you sure you want to delete a %1 record?"
+"All Store Views","All Store Views"
+View,View
+px.,px.
+"No files found","No files found"
+"Browse Files...","Browse Files..."
+"Collapse All","Collapse All"
+"Expand All","Expand All"
+"We could not detect a size.","We could not detect a size."
+"Media Gallery","Media Gallery"
+"Content Management","Content Management"
+"CMS Home Page","CMS Home Page"
+"CMS No Route Page","CMS No Route Page"
+"CMS No Cookies Page","CMS No Cookies Page"
+"Show Breadcrumbs for CMS Pages","Show Breadcrumbs for CMS Pages"
+"Browser Capabilities Detection","Browser Capabilities Detection"
+"Redirect to CMS-page if Cookies are Disabled","Redirect to CMS-page if Cookies are Disabled"
+"Show Notice if JavaScript is Disabled","Show Notice if JavaScript is Disabled"
+"Show Notice if Local Storage is Disabled","Show Notice if Local Storage is Disabled"
+"WYSIWYG Options","WYSIWYG Options"
+"Enable WYSIWYG Editor","Enable WYSIWYG Editor"
+"CMS Page Link","CMS Page Link"
+"Link to a CMS Page","Link to a CMS Page"
+"CMS Page","CMS Page"
+"Select Page...","Select Page..."
+"Anchor Custom Text","Anchor Custom Text"
+"If empty, the Page Title will be used","If empty, the Page Title will be used"
+"Anchor Custom Title","Anchor Custom Title"
+Template,Template
+"CMS Page Link Block Template","CMS Page Link Block Template"
+"CMS Page Link Inline Template","CMS Page Link Inline Template"
+"CMS Static Block","CMS Static Block"
+"Contents of a Static Block","Contents of a Static Block"
+Block,Block
+"Select Block...","Select Block..."
+"CMS Static Block Default Template","CMS Static Block Default Template"
+"General Information","General Information"
+"Enable Block","Enable Block"
+"Block Title","Block Title"
+"Are you sure you want to delete selected items?","Are you sure you want to delete selected items?"
+"Delete items","Delete items"
+"Page Information","Page Information"
+"Enable Page","Enable Page"
+Content,Content
+"Content Heading","Content Heading"
+"Search Engine Optimization","Search Engine Optimization"
+"Meta Title","Meta Title"
+"Meta Keywords","Meta Keywords"
+"Meta Description","Meta Description"
+"Page in Websites","Page in Websites"
+Design,Design
+"Layout Update XML","Layout Update XML"
+"Custom Design Update","Custom Design Update"
+From,From
+To,To
+"New Theme","New Theme"
+"-- Please Select --","-- Please Select --"
+"New Layout","New Layout"
+"Default Page Layout","Default Page Layout"
+Disable,Disable
+Enable,Enable
+"Custom design from","Custom design from"
+"Custom design to","Custom design to"
+"Custom Theme","Custom Theme"
+"Custom Layout","Custom Layout"

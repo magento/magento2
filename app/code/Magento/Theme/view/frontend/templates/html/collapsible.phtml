@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<div class="block <?= /* @escapeNotVerified */ $block->getBlockCss() ?>">
+    <div class="title <?= /* @escapeNotVerified */ $block->getBlockCss() ?>-title" data-mage-init='{"toggleAdvanced": {"toggleContainers": "#<?= /* @escapeNotVerified */ $block->getBlockCss() ?>", "selectorsToggleClass": "active"}}'>
+        <strong><?= /* @escapeNotVerified */ __($block->getBlockTitle()) ?></strong>
+    </div>
+    <div class="content <?= /* @escapeNotVerified */ $block->getBlockCss() ?>-content" id="<?= /* @escapeNotVerified */ $block->getBlockCss() ?>">
+        <?= $block->getChildHtml() ?>
+    </div>
+</div>

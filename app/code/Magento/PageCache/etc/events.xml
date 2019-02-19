@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="core_layout_render_element">
+        <observer name="pagecache" instance="Magento\PageCache\Observer\ProcessLayoutRenderElement" />
+    </event>
+    <event name="clean_cache_by_tags">
+        <observer name="invalidate_builtin" instance="Magento\PageCache\Observer\FlushCacheByTags" />
+    </event>
+    <event name="clean_cache_after_reindex">
+        <observer name="reindex_cache_flush" instance="Magento\PageCache\Observer\FlushCacheByTags" />
+    </event>
+    <event name="adminhtml_cache_flush_system">
+        <observer name="flush_system_pagecache" instance="Magento\PageCache\Observer\FlushAllCache" />
+    </event>
+    <event name="adminhtml_cache_flush_all">
+        <observer name="magento_all_pagecache" instance="Magento\PageCache\Observer\FlushAllCache" />
+    </event>
+    <event name="clean_media_cache_after">
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Observer\InvalidateCache" />
+    </event>
+    <event name="clean_catalog_images_cache_after">
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Observer\InvalidateCache" />
+    </event>
+    <event name="assigned_theme_changed">
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Observer\FlushCacheByTags" />
+    </event>
+    <event name="assign_theme_to_stores_after">
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Observer\InvalidateCache" />
+    </event>
+    <event name="controller_action_postdispatch_adminhtml_system_currency_saveRates">
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Observer\InvalidateCache" />
+    </event>
+    <event name="controller_action_postdispatch_adminhtml_system_config_save">
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Observer\InvalidateCache" />
+    </event>
+    <event name="controller_action_postdispatch_catalog_product_save">
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Observer\FlushCacheByTags" />
+    </event>
+    <event name="controller_action_postdispatch_adminhtml_system_currencysymbol_save">
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Observer\InvalidateCache" />
+    </event>
+    <event name="model_save_commit_after">
+        <observer name="flush_cache_after_model_save" instance="Magento\PageCache\Observer\FlushCacheByTags" />
+    </event>
+    <event name="backend_auth_user_login_success">
+        <observer name="FlushFormKey" instance="Magento\PageCache\Observer\FlushFormKey"/>
+    </event>
+    <event name="customer_login">
+        <observer name="FlushFormKey" instance="Magento\PageCache\Observer\FlushFormKey"/>
+    </event>
+    <event name="customer_logout">
+        <observer name="FlushFormKey" instance="Magento\PageCache\Observer\FlushFormKey"/>
+    </event>
+</config>

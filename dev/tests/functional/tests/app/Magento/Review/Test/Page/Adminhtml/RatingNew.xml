@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="RatingNew" area="Adminhtml" mca="review/rating/new" module="Magento_Review">
+        <block name="pageActions" class="Magento\Backend\Test\Block\FormPageActions" locator=".page-main-actions" strategy="css selector" />
+        <block name="ratingForm" class="Magento\Review\Test\Block\Adminhtml\Rating\Edit\RatingForm" locator="[id='page:main-container']" strategy="css selector" />
+    </page>
+</config>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="system">
+            <group id="mysqlmq" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>MySQL Message Queue Cleanup</label>
+                <comment>All the times are in minutes. Use "0" if you want to skip automatic clearance.</comment>
+                <field id="retry_inprogress_after" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Retry Messages In Progress After</label>
+                </field>
+                <field id="successful_messages_lifetime" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Successful Messages Lifetime</label>
+                </field>
+                <field id="failed_messages_lifetime" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Failed Messages Lifetime</label>
+                </field>
+                <field id="new_messages_lifetime" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>New Messages Lifetime</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

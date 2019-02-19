@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="1">
+    <wrapper>login</wrapper>
+    <fields>
+        <username>
+            <selector>#username</selector>
+        </username>
+        <password>
+            <selector>#login</selector>
+        </password>
+    </fields>
+</mapping>

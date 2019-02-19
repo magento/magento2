@@ -1,0 +1,46 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Helper cross js and styles classes
+//  _____________________________________________
+
+//  Can be used for disabled elements, equal disabled='disabled' attribute
+._disabled {
+    .disabled();
+    &:hover {
+        .disabled();
+    }
+}
+
+//  Text align classes
+.a-center { // ToDo UI: should be renamed to ._text-center
+    text-align: center;
+}
+
+//  No select
+._no-select {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+//  Hidden content
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+
+//  Display:none content
+input.no-display,
+.no-display {
+    display: none;
+}
+
+//  Code samples
+.code-sample {
+    font-family: monospace, serif;
+}

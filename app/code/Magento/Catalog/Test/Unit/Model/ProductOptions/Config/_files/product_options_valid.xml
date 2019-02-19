@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/product_options.xsd">
+    <option name="name_one" label="Label One" renderer="Name_One_Two">
+        <inputType name="input_name" label="Label Two" />
+    </option>
+    <option name="name_two" >
+        <inputType name="input_name_two" disabled="true" />
+    </option>
+</config>

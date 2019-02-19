@@ -1,0 +1,221 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Backend\Block\Store\Switcher */
+?>
+<?php if ($websites = $block->getWebsites()): ?>
+
+<div class="store-switcher store-view">
+    <span class="store-switcher-label"><?= /* @escapeNotVerified */ __('Store View:') ?></span>
+    <div class="actions dropdown closable">
+        <input type="hidden" name="store_switcher" id="store_switcher"
+               data-role="store-view-id" data-param="<?= /* @escapeNotVerified */ $block->getStoreVarName() ?>"
+               value="<?= $block->escapeHtml($block->getStoreId()) ?>"
+               onchange="switchScope(this);"<?= /* @escapeNotVerified */ $block->getUiId() ?> />
+        <input type="hidden" name="store_group_switcher" id="store_group_switcher"
+               data-role="store-group-id" data-param="<?= /* @escapeNotVerified */ $block->getStoreGroupVarName() ?>"
+               value="<?= $block->escapeHtml($block->getStoreGroupId()) ?>"
+               onchange="switchScope(this);"<?= /* @escapeNotVerified */ $block->getUiId() ?> />
+        <input type="hidden" name="website_switcher" id="website_switcher"
+               data-role="website-id" data-param="<?= /* @escapeNotVerified */ $block->getWebsiteVarName() ?>"
+               value="<?= $block->escapeHtml($block->getWebsiteId()) ?>"
+               onchange="switchScope(this);"<?= /* @escapeNotVerified */ $block->getUiId() ?> />
+        <button
+            type="button"
+            class="admin__action-dropdown"
+            data-mage-init='{"dropdown":{}}'
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            id="store-change-button">
+            <?= /* @escapeNotVerified */ $block->getCurrentSelectionName() ?>
+        </button>
+        <ul class="dropdown-menu" data-role="stores-list">
+            <?php if ($block->hasDefaultOption()): ?>
+                <li class="store-switcher-all <?php if ( ! ($block->getDefaultSelectionName() != $block->getCurrentSelectionName())) {
+                    echo "disabled";
+                } ?> <?php if ( ! $block->hasScopeSelected()) {
+                    ?> current<?php
+                } ?>">
+                    <?php if ($block->getDefaultSelectionName() != $block->getCurrentSelectionName()) {
+                        ?>
+                        <a data-role="store-view-id" data-value="" href="#">
+                            <?= /* @escapeNotVerified */ $block->getDefaultSelectionName() ?>
+                        </a>
+                    <?php
+                    } else {
+                        ?>
+                        <span><?= /* @escapeNotVerified */ $block->getDefaultSelectionName() ?></span>
+                    <?php
+                    } ?>
+                </li>
+            <?php endif; ?>
+            <?php foreach ($websites as $website): ?>
+                <?php $showWebsite = false; ?>
+                <?php foreach ($website->getGroups() as $group): ?>
+                    <?php $showGroup = false; ?>
+                    <?php foreach ($block->getStores($group) as $store): ?>
+                        <?php if ($showWebsite == false): ?>
+                            <?php $showWebsite = true; ?>
+                            <li class="store-switcher-website <?php if ( ! ($block->isWebsiteSwitchEnabled() && ! $block->isWebsiteSelected($website))) {
+                                echo "disabled";
+                            } ?> <?php if ($block->isWebsiteSelected($website)) {
+                                ?> current<?php
+                            } ?>">
+                                <?php if ($block->isWebsiteSwitchEnabled() && ! $block->isWebsiteSelected($website)) {
+                                    ?>
+                                    <a data-role="website-id" data-value="<?= $block->escapeHtml($website->getId()) ?>" href="#">
+                                        <?= $block->escapeHtml($website->getName()) ?>
+                                    </a>
+                                <?php
+                                } else {
+                                    ?>
+                                    <span><?= $block->escapeHtml($website->getName()) ?></span>
+                                <?php
+                                } ?>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($showGroup == false): ?>
+                            <?php $showGroup = true; ?>
+                            <li class="store-switcher-store <?php if ( ! ($block->isStoreGroupSwitchEnabled() && ! $block->isStoreGroupSelected($group))) {
+                                echo "disabled";
+                            } ?> <?php if ($block->isStoreGroupSelected($group)) {
+                                ?> current<?php
+                            } ?>">
+                                <?php if ($block->isStoreGroupSwitchEnabled() && ! $block->isStoreGroupSelected($group)) {
+                                    ?>
+                                    <a data-role="store-group-id" data-value="<?= $block->escapeHtml($group->getId()) ?>" href="#">
+                                        <?= $block->escapeHtml($group->getName()) ?>
+                                    </a>
+                                <?php
+                                } else {
+                                    ?>
+                                    <span><?= $block->escapeHtml($group->getName()) ?></span>
+                                <?php
+                                } ?>
+                            </li>
+                        <?php endif; ?>
+                        <li class="store-switcher-store-view <?php if ( ! ($block->isStoreSwitchEnabled() && ! $block->isStoreSelected($store))) {
+                            echo "disabled";
+                        } ?> <?php if ($block->isStoreSelected($store)) {
+                            ?> current<?php
+                        } ?>">
+                            <?php if ($block->isStoreSwitchEnabled() && ! $block->isStoreSelected($store)) {
+                                ?>
+                                <a data-role="store-view-id" data-value="<?= $block->escapeHtml($store->getId()) ?>" href="#">
+                                    <?= $block->escapeHtml($store->getName()) ?>
+                                </a>
+                            <?php
+                            } else {
+                                ?>
+                                <span><?= $block->escapeHtml($store->getName()) ?></span>
+                            <?php
+                            } ?>
+                        </li>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+            <?php if ($block->getShowManageStoresLink() && $block->getAuthorization()->isAllowed('Magento_Backend::store')): ?>
+                <li class="dropdown-toolbar">
+                    <a href="<?= /* @escapeNotVerified */ $block->getUrl('*/system_store') ?>"><?= /* @escapeNotVerified */ __('Stores Configuration') ?></a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </div>
+    <?= $block->getHintHtml() ?>
+</div>
+
+<script>
+require([
+    'jquery',
+    'Magento_Ui/js/modal/confirm'
+], function(jQuery, confirm){
+
+    (function($) {
+        var $storesList = $('[data-role=stores-list]');
+        $storesList.on('click', '[data-value]', function(event) {
+            var val = $(event.target).data('value');
+            var role = $(event.target).data('role');
+            var switcher = $('[data-role='+role+']');
+
+            event.preventDefault();
+
+            if (!switcher.val() || val != switcher.val()) {
+                switcher.val(val).trigger('change'); // Set the value & trigger event
+            }
+        });
+    })(jQuery);
+
+    var scopeSwitcherHandler;
+
+    function switchScope(obj) {
+        var switcher = jQuery(obj);
+        var scopeId = switcher.val();
+        var scopeParams = '';
+        if (scopeId) {
+            scopeParams = switcher.data('param') + '/' + scopeId + '/';
+        }
+
+        if (obj.switchParams) {
+            scopeParams += obj.switchParams;
+        }
+
+        if ((typeof scopeSwitcherHandler) != 'undefined') {
+            var switcherParams = {
+                scopeId: scopeId,
+                scopeParams: scopeParams,
+                useConfirm: <?= (int)$block->getUseConfirm() ?>
+            };
+            scopeSwitcherHandler(switcherParams);
+        } else {
+
+            <?php if ($block->getUseConfirm()): ?>
+
+            confirm({
+                content:  "<?= /* @escapeNotVerified */ __('Please confirm scope switching. All data that hasn\'t been saved will be lost.') ?>",
+                actions: {
+                    confirm: function() {
+                        reload();
+                    },
+                    cancel: function() {
+                        obj.value = '<?= $block->escapeHtml($block->getStoreId()) ?>';
+                    }
+                }
+            });
+
+            <?php else: ?>
+                reload();
+            <?php endif; ?>
+        }
+
+        function reload() {
+            <?php if (!$block->isUsingIframe()): ?>
+            var url = '<?= /* @escapeNotVerified */ $block->getSwitchUrl() ?>' + scopeParams;
+            setLocation(url);
+            <?php else: ?>
+            jQuery('#preview_selected_store').val(scopeId);
+            jQuery('#preview_form').submit();
+
+            jQuery('.store-switcher .dropdown-menu li a').each(function() {
+                var $this = jQuery(this);
+
+                if ($this.data('role') === 'store-view-id' && $this.data('value') == scopeId) {
+                    jQuery('#store-change-button').html($this.text());
+                }
+            });
+
+            jQuery('#store-change-button').click();
+            <?php endif; ?>
+        }
+    }
+
+    window.scopeSwitcherHandler = scopeSwitcherHandler;
+    window.switchScope = switchScope;
+
+});
+</script>
+<?php endif; ?>

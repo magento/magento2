@@ -1,0 +1,58 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\Backend\Block\Page */ ?>
+<!doctype html>
+<html lang="<?= /* @escapeNotVerified */ $block->getLang() ?>" class="no-js">
+
+<head>
+    <?= $block->getChildHtml('head') ?>
+</head>
+
+<body id="html-body"<?= $block->getBodyClass() ? ' class="' . $block->getBodyClass() . '"' : '' ?> data-container="body" data-mage-init='{"loaderAjax":{},"loader":{}}'>
+    <div class="page-wrapper">
+        <?= $block->getChildHtml('notification_window') ?>
+        <?= $block->getChildHtml('global_notices') ?>
+        <div class="page-header-wrapper">
+            <?= $block->getChildHtml('header') ?>
+        </div>
+        <?= $block->getChildHtml('menu') ?>
+        <?= $block->getChildHtml('notifications') ?>
+
+        <main class="page-content" id="anchor-content">
+            <?= $block->getChildHtml('main-top') ?>
+            <div class="messages" id="messages" data-container-for="messages">
+                <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+            </div>
+            <?= $block->getChildHtml('page_main_actions') ?>
+            <?php if ($block->getChildHtml('left')): ?>
+                <div id="page:main-container" class="<?= /* @escapeNotVerified */ $block->getContainerCssClass() ?> col-2-left-layout">
+                    <div class="main-col" id="content">
+                        <?= $block->getChildHtml('content') ?>
+                    </div>
+
+                    <div class="side-col" id="page:left">
+                        <?= $block->getChildHtml('left') ?>
+                    </div>
+                </div>
+            <?php else: ?>
+                <div id="page:main-container" class="col-1-layout">
+                    <?= $block->getChildHtml('content') ?>
+                </div>
+            <?php endif; ?>
+        </main>
+
+        <?= $block->getChildHtml('js') ?>
+        <footer class="page-footer">
+            <?= $block->getChildHtml('footer') ?>
+        </footer>
+    </div>
+    <?= $block->getChildHtml('before_body_end') ?>
+</body>
+</html>

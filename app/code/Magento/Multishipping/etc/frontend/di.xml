@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="multishipping_checkout" xsi:type="string">/multishipping/checkout</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="multishippingPaymentSpecification" type="Magento\Payment\Model\Method\Specification\Composite">
+        <arguments>
+            <argument name="specifications" xsi:type="array">
+                <item name="enabled" xsi:type="string">Magento\Multishipping\Model\Payment\Method\Specification\Enabled</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Multishipping\Block\Checkout\Billing">
+        <arguments>
+            <argument name="paymentSpecification" xsi:type="object">multishippingPaymentSpecification</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Multishipping\Model\Checkout\Type\Multishipping">
+        <arguments>
+            <argument name="paymentSpecification" xsi:type="object">multishippingPaymentSpecification</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Controller\Cart\Add">
+        <plugin name="multishipping_disabler" type="Magento\Multishipping\Controller\Checkout\Plugin" sortOrder="50" />
+    </type>
+    <type name="Magento\Checkout\Controller\Cart\UpdatePost">
+        <plugin name="multishipping_disabler" type="Magento\Multishipping\Controller\Checkout\Plugin" sortOrder="50" />
+    </type>
+    <type name="Magento\Checkout\Controller\Index\Index">
+        <plugin name="multishipping_disabler" type="Magento\Multishipping\Controller\Checkout\Plugin" sortOrder="50" />
+    </type>
+    <type name="Magento\Checkout\Model\Cart">
+        <plugin name="multishipping_session_mapper" type="Magento\Multishipping\Model\Checkout\Type\Multishipping\Plugin" sortOrder="50" />
+    </type>
+    <type name="Magento\Checkout\Controller\Cart">
+        <plugin name="multishipping_clear_addresses" type="Magento\Multishipping\Model\Cart\Controller\CartPlugin" sortOrder="50" />
+    </type>
+</config>

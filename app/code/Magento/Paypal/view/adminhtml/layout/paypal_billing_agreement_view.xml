@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="sales_order_grid_block"/>
+    <body>
+        <referenceContainer name="admin.scope.col.wrap" htmlClass="admin__old" /> <!-- ToDo UI: remove this wrapper with old styles removal. The class name "admin__old" is for tests only, we shouldn't use it in any way -->
+
+        <referenceBlock name="sales.order.grid">
+            <arguments>
+                <argument name="dataSource" xsi:type="object">
+                    <updater>Magento\Paypal\Model\Billing\Agreement\OrdersUpdater</updater>
+                </argument>
+                <argument name="grid_url" xsi:type="url" path="*/*/ordersgrid"/>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="sales.order.grid.export" remove="true"/>
+        <referenceBlock name="sales.order.grid.massaction" remove="true"/>
+        <referenceContainer name="content">
+            <block class="Magento\Paypal\Block\Adminhtml\Billing\Agreement\View" name="paypal.billing.agreement.view"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tabs" name="paypal.billing.agreement.tabs">
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">billing_agreement_info</argument>
+                    <argument name="block" xsi:type="string">Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab\Info</argument>
+                </action>
+                <block class="Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab\Orders" name="sales_order.grid.container"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">billing_agreement_orders</argument>
+                    <argument name="block" xsi:type="string">sales_order.grid.container</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

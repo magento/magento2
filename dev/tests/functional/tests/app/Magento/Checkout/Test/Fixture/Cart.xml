@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="cart"
+             module="Magento_Checkout"
+             type="flat"
+             entity_type="quote"
+             handler_interface="Magento\Checkout\Test\Handler\Cart\CartInterface"
+             class="Magento\Checkout\Test\Fixture\Cart">
+        <field name="entity_id" is_required="1" />
+        <field name="store_id" is_required="" />
+        <field name="created_at" is_required="" />
+        <field name="updated_at" is_required="" />
+        <field name="converted_at" is_required="" />
+        <field name="is_active" is_required="" />
+        <field name="is_virtual" is_required="" />
+        <field name="is_multi_shipping" is_required="" />
+        <field name="items" source="Magento\Checkout\Test\Fixture\Cart\Items" />
+        <field name="items_count" is_required="" />
+        <field name="items_qty" is_required="" />
+        <field name="orig_order_id" is_required="" />
+        <field name="store_to_base_rate" is_required="" />
+        <field name="store_to_quote_rate" is_required="" />
+        <field name="base_currency_code" is_required="" />
+        <field name="store_currency_code" is_required="" />
+        <field name="quote_currency_code" is_required="" />
+        <field name="grand_total" is_required="" />
+        <field name="base_grand_total" is_required="" />
+        <field name="checkout_method" is_required="" />
+        <field name="customer_id" is_required="" />
+        <field name="customer_tax_class_id" is_required="" />
+        <field name="customer_group_id" is_required="" />
+        <field name="customer_email" is_required="" />
+        <field name="customer_prefix" is_required="" />
+        <field name="customer_firstname" is_required="" />
+        <field name="customer_middlename" is_required="" />
+        <field name="customer_lastname" is_required="" />
+        <field name="customer_suffix" is_required="" />
+        <field name="customer_dob" is_required="" />
+        <field name="customer_note" is_required="" />
+        <field name="customer_note_notify" is_required="" />
+        <field name="customer_is_guest" is_required="" />
+        <field name="remote_ip" is_required="" />
+        <field name="applied_rule_ids" is_required="" />
+        <field name="reserved_order_id" is_required="" />
+        <field name="password_hash" is_required="" />
+        <field name="coupon_code" is_required="" />
+        <field name="global_currency_code" is_required="" />
+        <field name="base_to_global_rate" is_required="" />
+        <field name="base_to_quote_rate" is_required="" />
+        <field name="customer_taxvat" is_required="" />
+        <field name="customer_gender" is_required="" />
+        <field name="subtotal" is_required="" />
+        <field name="base_subtotal" is_required="" />
+        <field name="discount" is_required="" />
+        <field name="subtotal_with_discount" is_required="" />
+        <field name="base_subtotal_with_discount" is_required="" />
+        <field name="is_changed" is_required="" />
+        <field name="trigger_recollec" is_required="" />
+        <field name="ext_shipping_info" is_required="" />
+        <field name="is_persistent" is_required="" />
+        <field name="gift_message_id" is_required="" />
+        <field name="shipping_method" is_required="" />
+        <field name="checkout_data" group="" source="Magento\Checkout\Test\Fixture\Cart\CheckoutData" />
+    </fixture>
+</config>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Sales\Test\TestCase\MoveRecentlyComparedProductsOnOrderPageTest">
+        <variation name="MoveRecentlyComparedProductsOnOrderPageTestVariationWithBundleProduct1">
+            <data name="products/0" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+            <data name="products/1" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+            <data name="productsIsConfigured" xsi:type="boolean">true</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
+        </variation>
+    </testCase>
+</config>

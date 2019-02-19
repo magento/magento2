@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Swatches\Test\Repository\SwatchProductAttribute">
+        <dataset name="attribute_type_text_swatch">
+            <field name="attribute_code" xsi:type="string">sw_color%isolation%</field>
+            <field name="frontend_input" xsi:type="string" >Text Swatch</field>
+            <field name="frontend_label" xsi:type="string" >Text Swatch</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">R</item>
+                    <item name="view" xsi:type="string">R</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">G</item>
+                    <item name="view" xsi:type="string">G</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">B</item>
+                    <item name="view" xsi:type="string">B</item>
+                </item>
+            </field>
+            <field name="is_global" xsi:type="string">Global</field>
+            <field name="used_in_product_listing" xsi:type="string">Yes</field>
+        </dataset>
+    </repository>
+</config>

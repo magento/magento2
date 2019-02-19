@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <web>
+            <default>
+                <cms_home_page>home</cms_home_page>
+                <cms_no_route>no-route</cms_no_route>
+                <cms_no_cookies>enable-cookies</cms_no_cookies>
+                <front>cms</front>
+                <no_route>cms/noroute/index</no_route>
+                <show_cms_breadcrumbs>1</show_cms_breadcrumbs>
+            </default>
+            <default_layouts>
+                <default_cms_layout>1column</default_cms_layout>
+            </default_layouts>
+        </web>
+        <cms>
+            <wysiwyg>
+                <enabled>enabled</enabled>
+                <editor>mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter</editor>
+            </wysiwyg>
+        </cms>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <wysiwyg_image_folder>wysiwyg</wysiwyg_image_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
+    </default>
+</config>

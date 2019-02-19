@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Structure definition of validation.xml Validation files
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Magento Validation Configuration File
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="validation">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Validation group uses reference to validation rules
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="entity" type="entity" maxOccurs="unbounded">
+                    <xs:keyref name="ruleNameReference" refer="ruleNameKey">
+                        <xs:selector xpath="groups/group/uses/use"/>
+                        <xs:field xpath="@rule"/>
+                    </xs:keyref>
+                    <xs:key name="ruleNameKey">
+                        <xs:selector xpath="rules/rule"/>
+                        <xs:field xpath="@name"/>
+                    </xs:key>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="entity">
+        <xs:sequence>
+            <xs:element name="rules" type="rules" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="groups" type="groups" maxOccurs="1" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="rules">
+        <xs:sequence>
+            <xs:element name="rule" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="property_constraints" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="property" maxOccurs="unbounded" minOccurs="1">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="constraint" type="constraint"  maxOccurs="unbounded" minOccurs="1"/>
+                                            </xs:sequence>
+                                            <xs:attribute name="name" type="xs:string" use="required"/>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="entity_constraints" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="constraint" type="constraint"  maxOccurs="unbounded" minOccurs="1"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="constraint">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:choice>
+                <xs:element name="argument" type="argument" />
+                <xs:element name="method">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="argument" type="argument" maxOccurs="unbounded" minOccurs="0" />
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="callback" type="callback" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="class" type="xs:string" use="required"/>
+        <xs:attribute name="alias" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="argument" mixed="true">
+        <xs:choice>
+            <xs:sequence>
+                <xs:element name="option" maxOccurs="unbounded" minOccurs="0">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="name" type="xs:string"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:element name="callback" type="callback" />
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="callback">
+        <xs:attribute name="class" type="xs:string" use="required"/>
+        <xs:attribute name="method" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="groups">
+        <xs:sequence>
+            <xs:element name="group" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="uses" type="uses"/>
+                    </xs:sequence>
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                    <xs:attribute name="builder" type="xs:string"/>
+                </xs:complexType>
+                <xs:unique name="groupUse">
+                    <xs:selector xpath="uses/use"/>
+                    <xs:field xpath="@rule"/>
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="uses">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                All validation rules used by current group are listed in this element
+                "rule" attribute of "use" element must point to one of entity's rules
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="use" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="rule" type="xs:string"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

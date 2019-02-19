@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <wrapper>creditmemo</wrapper>
+    <fields>
+        <comment_text />
+        <shipping_amount />
+        <adjustment_positive />
+        <adjustment_negative />
+        <comment_customer_notify>
+            <input>checkbox</input>
+        </comment_customer_notify>
+        <send_email>
+            <input>checkbox</input>
+        </send_email>
+    </fields>
+</mapping>

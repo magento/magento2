@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Cms\Test\TestCase\DeleteCmsPageUrlRewriteEntityTest" summary="Delete Cms Page URL Rewrites" ticketId="MAGETWO-25915">
+        <variation name="DeleteCmsPageUrlRewriteEntityTestVariation1">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="urlRewrite/dataset" xsi:type="string">cms_default_no_redirect</data>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteDeletedMessage" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteNotInGrid" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertPageByUrlRewriteIsNotFound" />
+        </variation>
+        <variation name="DeleteCmsPageUrlRewriteEntityTestVariation2">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="urlRewrite/dataset" xsi:type="string">cms_default_permanent_redirect</data>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteDeletedMessage" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertPageByUrlRewriteIsNotFound" />
+        </variation>
+        <variation name="DeleteCmsPageUrlRewriteEntityTestVariation3">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="urlRewrite/dataset" xsi:type="string">cms_default_temporary_redirect</data>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteDeletedMessage" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertPageByUrlRewriteIsNotFound" />
+        </variation>
+    </testCase>
+</config>

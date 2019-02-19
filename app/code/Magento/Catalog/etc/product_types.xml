@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/product_types.xsd">
+    <type name="simple" label="Simple Product" modelInstance="Magento\Catalog\Model\Product\Type\Simple" indexPriority="10" sortOrder="10">
+        <indexerModel instance="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\SimpleProductPrice" />
+        <customAttributes>
+            <attribute name="refundable" value="true"/>
+        </customAttributes>
+    </type>
+    <type name="virtual" label="Virtual Product" modelInstance="Magento\Catalog\Model\Product\Type\Virtual" indexPriority="20" sortOrder="40">
+        <indexerModel instance="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\VirtualProductPrice" />
+        <customAttributes>
+            <attribute name="is_real_product" value="false"/>
+            <attribute name="refundable" value="false"/>
+        </customAttributes>
+    </type>
+    <composableTypes>
+        <type name="simple" />
+        <type name="virtual" />
+    </composableTypes>
+</config>

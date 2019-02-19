@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_template.xsd">
+    <div data-role="spinner" data-component="{{getName()}}.{{getName()}}" class="admin__form-loading-mask">
+        <div class="spinner">
+            <span/><span/><span/><span/><span/><span/><span/><span/>
+        </div>
+    </div>
+    <div data-bind="scope: '{{getName()}}.{{getName()}}'" class="entry-edit form-inline">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+</div>

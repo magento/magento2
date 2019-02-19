@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_action_predispatch_customer_account_loginPost">
+        <observer name="captcha" instance="Magento\Captcha\Observer\CheckUserLoginObserver" />
+    </event>
+    <event name="controller_action_predispatch_customer_account_createpost">
+        <observer name="captcha" instance="Magento\Captcha\Observer\CheckUserCreateObserver" />
+    </event>
+    <event name="controller_action_predispatch_customer_account_forgotpasswordpost">
+        <observer name="captcha" instance="Magento\Captcha\Observer\CheckForgotpasswordObserver"/>
+    </event>
+    <event name="admin_user_authenticate_before">
+        <observer name="captcha" instance="Magento\Captcha\Observer\CheckUserLoginBackendObserver" />
+    </event>
+    <event name="customer_customer_authenticated">
+        <observer name="captcha_reset_attempt" instance="Magento\Captcha\Observer\ResetAttemptForFrontendObserver" />
+    </event>
+    <event name="customer_account_edited">
+        <observer name="captcha_reset_attempt" instance="Magento\Captcha\Observer\ResetAttemptForFrontendAccountEditObserver" />
+    </event>
+    <event name="backend_auth_user_login_success">
+        <observer name="captcha_reset_attempt" instance="Magento\Captcha\Observer\ResetAttemptForBackendObserver" />
+    </event>
+</config>

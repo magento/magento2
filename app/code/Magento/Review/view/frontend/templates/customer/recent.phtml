@@ -1,0 +1,36 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Review\Block\Customer\Recent $block */
+?>
+<?php if ($block->getReviews() && count($block->getReviews())): ?>
+<div class="block block-reviews-dashboard">
+    <div class="block-title">
+        <strong><?= $block->escapeHtml(__('My Recent Reviews')) ?></strong>
+        <a class="action view" href="<?= $block->escapeUrl($block->getAllReviewsUrl()) ?>"><span><?= $block->escapeHtml(__('View All')) ?></span></a>
+    </div>
+    <div class="block-content">
+        <ol class="items">
+        <?php foreach ($block->getReviews() as $_review): ?>
+            <li class="item">
+                <strong class="product-name"><a href="<?= $block->escapeUrl($block->getReviewUrl($_review->getReviewId())) ?>"><?= $block->escapeHtml($_review->getName()) ?></a></strong>
+                <?php if ($_review->getSum()): ?>
+                <?php $rating = $_review->getSum() / $_review->getCount() ?>
+                    <div class="rating-summary">
+                         <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
+                         <div class="rating-result" title="<?= $block->escapeHtmlAttr($rating) ?>%">
+                             <span style="width:<?= $block->escapeHtmlAttr($rating) ?>%"><span><?= $block->escapeHtml($rating) ?>%</span></span>
+                         </div>
+                     </div>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+        </ol>
+    </div>
+</div>
+<?php endif; ?>

@@ -1,0 +1,38 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+$partners = $block->getPartners();
+?>
+<?php if ($partners) : ?>
+    <?php foreach ($partners as $partner) : ?>
+        <div class="partner">
+            <img
+                class="partner-image"
+                src="<?= $block->escapeHtml($partner['img']) ?>"
+                alt="<?= $block->escapeHtml($partner['title']) ?>"/>
+            <h3 class="partner-title"><?= $block->escapeHtml($partner['title']) ?></h3>
+            <p class="partner-description">
+                <?= $block->escapeHtml($partner['description']) ?>
+                <br />
+                <a href="<?= $block->escapeHtml($partner['url_page']) ?>" target="_blank">
+                    <?= /* @escapeNotVerified */ __('Read More') ?>
+                </a>
+                <br />
+                <a href="<?= $block->escapeHtml($partner['url_partner_page']) ?>" target="_blank">
+                    <?= /* @escapeNotVerified */ __('Partner Page') ?>
+                </a>
+            </p>
+        </div>
+    <?php endforeach; ?>
+<?php else : ?>
+    <p>
+        <?= /* @escapeNotVerified */ __('No partners were found') ?>
+    </p>
+<?php endif; ?>

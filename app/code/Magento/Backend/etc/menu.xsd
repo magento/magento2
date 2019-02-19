@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="menu">
+                     <xs:complexType>
+                        <xs:sequence>
+                            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                                <xs:element name="add">
+                                    <xs:annotation>
+                                        <xs:documentation>
+                                            Action designed for adding new item to existing items as a child
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                    <xs:complexType>
+                                        <xs:attribute name="id" type="typeId" use="required" />
+                                        <xs:attribute name="title" type="typeTitle" use="required" />
+                                        <xs:attribute name="module" type="typeModule" use="required" />
+                                        <xs:attribute name="sortOrder" type="xs:int" use="optional" />
+                                        <xs:attribute name="action" type="typeAction" use="optional" />
+                                        <xs:attribute name="parent" type="typeId" use="optional" />
+                                        <xs:attribute name="toolTip" type="typeTitle" use="optional" />
+                                        <xs:attribute name="resource" type="typeResource" use="required" />
+                                        <xs:attribute name="dependsOnModule" type="typeModule" use="optional" />
+                                        <xs:attribute name="dependsOnConfig" type="typeDependsConfig" use="optional" />
+                                        <xs:attribute name="translate" type="xs:string" use="optional" />
+                                        <xs:attribute name="target" type="xs:string" use="optional" />
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="update">
+                                    <xs:annotation>
+                                        <xs:documentation>
+                                            Action designed for updating existing menu items attributes
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                    <xs:complexType>
+                                        <xs:attribute name="id" type="typeId" use="required" />
+                                        <xs:attribute name="title" type="typeTitle" use="optional" />
+                                        <xs:attribute name="module" type="typeModule" use="optional" />
+                                        <xs:attribute name="sortOrder" type="xs:int" use="optional" />
+                                        <xs:attribute name="action" type="typeAction" use="optional" />
+                                        <xs:attribute name="parent" type="typeId" use="optional" />
+                                        <xs:attribute name="toolTip" type="typeTitle" use="optional" />
+                                        <xs:attribute name="resource" type="typeResource" use="optional" />
+                                        <xs:attribute name="dependsOnModule" type="typeModule" use="optional" />
+                                        <xs:attribute name="dependsOnConfig" type="typeDependsConfig" use="optional" />
+                                        <xs:attribute name="translate" type="xs:string" use="optional" />
+                                        <xs:attribute name="target" type="xs:string" use="optional" />
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="remove">
+                                    <xs:annotation>
+                                        <xs:documentation>
+                                            Action designed for removing existing menu item with its children
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                    <xs:complexType>
+                                        <xs:attribute name="id" type="typeId" use="required" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:choice>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:unique name="uniqueAddItemId">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Attribute id is unique under add actions
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="add"/>
+                        <xs:field xpath="@id"/>
+                    </xs:unique>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="typeId">
+        <xs:annotation>
+            <xs:documentation>
+                Item id attribute can has only [a-z0-9/_]. Minimal length 3 symbol. Case insensitive.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Za-z0-9/_:]{3,}" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="typeAction">
+        <xs:annotation>
+            <xs:documentation>
+                Item action attribute can has only [a-zA-Z0-9/_]. Minimal length 3 symbol
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9/_]{3,}" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="typeTitle">
+        <xs:annotation>
+            <xs:documentation>
+                Item title attribute minimal length 3 symbol
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="3" />
+            <xs:maxLength value="50" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="typeModule">
+        <xs:annotation>
+            <xs:documentation>
+                Item module attribute can has only [a-z0-9_]. Minimal length 3 symbol. Case insensitive.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Za-z0-9_]{3,}" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="typeResource">
+        <xs:annotation>
+            <xs:documentation>
+                Item resource attribute can has only [a-z0-9_]. Minimal length 3 symbol. Case insensitive.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="typeDependsConfig">
+        <xs:annotation>
+            <xs:documentation>
+                Item resource attribute can has only [a-z0-9_]. Minimal length 3 symbol. Case insensitive.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Za-z0-9_/]{3,}" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

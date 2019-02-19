@@ -1,0 +1,147 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Sales\Test\Repository\OrderInjectable\Price">
+        <dataset name="default_with_discount">
+            <field name="subtotal" xsi:type="string">560</field>
+            <field name="discount" xsi:type="string">280</field>
+        </dataset>
+
+        <dataset name="full_invoice">
+            <field name="invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_order_total" xsi:type="string">565</item>
+                    <item name="grand_invoice_total" xsi:type="string">565</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="captured_price_139.90">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">139.90</item>
+            </field>
+        </dataset>
+
+        <dataset name="captured_price_15.00">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">15.00</item>
+            </field>
+        </dataset>
+
+        <dataset name="captured_price_145.98">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">145.98</item>
+            </field>
+        </dataset>
+
+        <dataset name="captured_price_226.50">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">226.50</item>
+            </field>
+        </dataset>
+
+        <dataset name="capture_price_135.15">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">135.15</item>
+            </field>
+        </dataset>
+
+       <dataset name="captured_prices_108.25_118.25">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">108.25</item>
+                <item name="1" xsi:type="string">118.25</item>
+            </field>
+        </dataset>
+
+        <dataset name="captured_and_grand_invoice_price_118.25">
+            <field name="invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_invoice_total" xsi:type="string">118.25</item>
+                </item>
+            </field>
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">118.25</item>
+            </field>
+        </dataset>
+
+        <dataset name="full_invoice_with_product_10_dollar">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">15</item>
+            </field>
+            <field name="invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_order_total" xsi:type="string">15</item>
+                    <item name="grand_invoice_total" xsi:type="string">15</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="partial_invoice">
+            <field name="invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_order_total" xsi:type="string">210</item>
+                    <item name="grand_invoice_total" xsi:type="string">110</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="full_refund">
+            <field name="refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">565</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="full_refund_with_zero_shipping_refund">
+            <field name="refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">555</item>
+                </item>
+            </field>
+        </dataset>
+
+
+        <dataset name="partial_refund">
+            <field name="refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">110</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="free_invoice">
+            <field name="invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_order_total" xsi:type="string">0</item>
+                    <item name="grand_invoice_total" xsi:type="string">0</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="full_shipment">
+            <field name="0" xsi:type="array">
+                <item name="grand_shipment_total" xsi:type="string">5</item>
+            </field>
+        </dataset>
+
+        <dataset name="full_flow">
+            <field name="refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">565</item>
+                </item>
+            </field>
+            <field name="invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_order_total" xsi:type="string">565</item>
+                    <item name="grand_invoice_total" xsi:type="string">565</item>
+                </item>
+            </field>
+        </dataset>
+    </repository>
+</config>

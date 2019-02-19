@@ -1,0 +1,92 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Cache Management
+//  _____________________________________________
+
+@grid-severity-critical-background: #f9d4d4;
+@grid-severity-critical-color: #e22626;
+@grid-severity-critical-border-color: #e22626;
+
+@grid-severity-major-background: #f9d4d4;
+@grid-severity-major-color: #e22626;
+@grid-severity-major-border-color: #e22626;
+
+@grid-severity-notice-background: #d0e5a9;
+@grid-severity-notice-color: #185b00;
+@grid-severity-notice-border-color: #5b8116;
+
+@grid-severity-minor-background: #feeee1;
+@grid-severity-minor-color: #ed4f2e;
+@grid-severity-minor-border-color: #ed4f2e;
+
+@additional-cache-management-border: 1px solid #cac3b4;
+
+@additional-cache-management-heading-color: #303030;
+@additional-cache-management-heading-size: 1.7rem;
+
+@additional-cache-management-text-color: #303030;
+@additional-cache-management-text-size: 14px;
+
+@additional-cache-management-font-weight: 600;
+
+
+.grid-severity-critical,
+.grid-severity-major,
+.grid-severity-notice,
+.grid-severity-minor {
+    background: @grid-severity-minor-background none repeat scroll 0 0;
+    border: 1px solid @grid-severity-minor-border-color;
+    color: @grid-severity-minor-color;
+    display: block;
+    font-weight: bold;
+    line-height: 17px;
+    padding: 0 3px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.grid-severity-critical,
+.grid-severity-major {
+    background: @grid-severity-critical-background none repeat scroll 0 0;
+    border-color: @grid-severity-critical-border-color;
+    color: @grid-severity-critical-color;
+}
+
+.grid-severity-notice {
+    background: @grid-severity-notice-background none repeat scroll 0 0;
+    border-color: @grid-severity-notice-border-color;
+    color: @grid-severity-notice-color;
+}
+
+.additional-cache-management {
+    margin-bottom: 0;
+
+    h2 {
+        border-bottom: @additional-cache-management-border;
+        box-sizing: border-box;
+        float: left;
+        margin: 0 0 18px;
+        padding: 0;
+        position: static;
+        width: 100%;
+
+        span {
+            color: @additional-cache-management-heading-color;
+            display: inline-block;
+            font-size: @additional-cache-management-heading-size;
+            font-weight: @additional-cache-management-font-weight;
+            padding: 7px 0 10px;
+        }
+    }
+
+    span {
+        color: @additional-cache-management-text-color;
+        font-size: @additional-cache-management-text-size;
+        font-weight: @additional-cache-management-font-weight;
+        margin: 5px 0 6px;
+    }
+}

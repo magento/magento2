@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="config_integration" translate="label,description" instance="Magento\Integration\Model\Cache\Type">
+        <label>Integrations Configuration</label>
+        <description>Integration configuration file</description>
+    </type>
+    <type name="config_integration_api" translate="label,description" instance="Magento\Integration\Model\Cache\TypeIntegration">
+        <label>Integrations API Configuration</label>
+        <description>Integrations API configuration file</description>
+    </type>
+</config>

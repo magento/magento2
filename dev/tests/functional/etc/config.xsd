@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="application" maxOccurs="1" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:choice maxOccurs="unbounded">
+                                <xs:element name="reopenBrowser" type="reopenBrowserType" />
+                                <xs:element name="backendLogin" type="backendLoginType" />
+                                <xs:element name="backendPassword" type="backendPasswordType" />
+                                <xs:element name="backendLoginUrl" type="backendLoginUrlType" />
+                                <xs:element name="appBackendUrl" type="appBackendUrlType" />
+                            </xs:choice>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="isolation" maxOccurs="1" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:choice maxOccurs="unbounded">
+                                <xs:element name="resetUrlPath" type="notEmptyType" />
+                                <xs:element name="testSuite" type="isolationModeType" />
+                                <xs:element name="testCase" type="isolationModeType" />
+                                <xs:element name="test" type="isolationModeType" />
+                            </xs:choice>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="server" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:choice maxOccurs="unbounded" minOccurs="1">
+                                <xs:element name="item" type="serverItemType" />
+                            </xs:choice>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="install" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:choice maxOccurs="unbounded">
+                                <xs:element name="host" type="notEmptyType" />
+                                <xs:element name="user" type="notEmptyType" />
+                                <xs:element name="password" type="notEmptyType" />
+                                <xs:element name="dbName" type="notEmptyType" />
+                                <xs:element name="baseUrl" type="notEmptyType" />
+                                <xs:element name="backendName" type="notEmptyType" />
+                            </xs:choice>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="handler" minOccurs="1" maxOccurs="1" type="handlerTypes" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <xs:simpleType name="reopenBrowserType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="testCase|test" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="backendLoginType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="backendLoginUrlType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="appBackendUrlType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="backendPasswordType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="notEmptyType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="isolationModeType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="none|before|after|both" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="serverTypeType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="default" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="portType">
+        <xs:restriction base="xs:int" />
+    </xs:simpleType>
+    <xs:simpleType name="timeoutType">
+        <xs:restriction base="xs:int">
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="serverItemType">
+        <xs:choice>
+            <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:choice>
+        <xs:attribute name="type" type="serverTypeType" use="optional" />
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="browser" type="notEmptyType" />
+        <xs:attribute name="browserName" type="notEmptyType" />
+        <xs:attribute name="host" type="notEmptyType" />
+        <xs:attribute name="port" type="portType" />
+        <xs:attribute name="seleniumServerRequestsTimeout" type="timeoutType" use="optional" />
+        <xs:attribute name="sessionStrategy" type="notEmptyType" use="optional" />
+    </xs:complexType>
+    <xs:simpleType name="enableDisableType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="false|true" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="specificModuleType">
+        <xs:sequence>
+            <xs:choice>
+                <xs:element name="module" type="notEmptyType" maxOccurs="unbounded" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="enabled" type="enableDisableType" />
+    </xs:complexType>
+    <xs:complexType name="handlerTypes">
+        <xs:all>
+            <xs:element name="webapi" maxOccurs="1" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element type="xs:string" name="token" maxOccurs="1" minOccurs="1"/>
+                    </xs:sequence>
+                    <xs:attribute type="xs:unsignedByte" name="priority" use="required" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="curl" maxOccurs="1" minOccurs="0">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute type="xs:unsignedByte" name="priority" use="required" />
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="ui" maxOccurs="1" minOccurs="0">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute type="xs:unsignedByte" name="priority" use="required" />
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+</xs:schema>

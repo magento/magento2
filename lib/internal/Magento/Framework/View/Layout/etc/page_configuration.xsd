@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/head.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/body.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/html.xsd"/>
+
+    <xs:complexType name="pageType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="html" type="htmlType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="body" type="bodyType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="head" type="headType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="update" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute  type="xs:string" name="layout" />
+        <xs:attribute  type="xs:string" name="label" />
+        <xs:attribute  type="xs:string" name="design_abstraction" />
+    </xs:complexType>
+
+    <xs:element name="page" type="pageType">
+        <xs:unique name="blockKey">
+            <xs:selector xpath=".//block"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+        <xs:unique name="containerKey">
+            <xs:selector xpath=".//container"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="const">
+        <xs:complexContent>
+            <xs:extension base="argumentType" />
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

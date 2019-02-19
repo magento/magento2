@@ -1,0 +1,350 @@
+{
+    "customer_entity": {
+        "column": {
+            "entity_id": true,
+            "website_id": true,
+            "email": true,
+            "group_id": true,
+            "increment_id": true,
+            "store_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "is_active": true,
+            "disable_auto_group_change": true,
+            "created_in": true,
+            "prefix": true,
+            "firstname": true,
+            "middlename": true,
+            "lastname": true,
+            "suffix": true,
+            "dob": true,
+            "password_hash": true,
+            "rp_token": true,
+            "rp_token_created_at": true,
+            "default_billing": true,
+            "default_shipping": true,
+            "taxvat": true,
+            "confirmation": true,
+            "gender": true,
+            "failures_num": true,
+            "first_failure": true,
+            "lock_expired": true,
+            "lock_expires": true
+        },
+        "index": {
+            "CUSTOMER_ENTITY_STORE_ID": true,
+            "CUSTOMER_ENTITY_WEBSITE_ID": true,
+            "CUSTOMER_ENTITY_FIRSTNAME": true,
+            "CUSTOMER_ENTITY_LASTNAME": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CUSTOMER_ENTITY_STORE_ID_STORE_STORE_ID": true,
+            "CUSTOMER_ENTITY_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true,
+            "CUSTOMER_ENTITY_EMAIL_WEBSITE_ID": true
+        }
+    },
+    "customer_address_entity": {
+        "column": {
+            "entity_id": true,
+            "increment_id": true,
+            "parent_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "is_active": true,
+            "city": true,
+            "company": true,
+            "country_id": true,
+            "fax": true,
+            "firstname": true,
+            "lastname": true,
+            "middlename": true,
+            "postcode": true,
+            "prefix": true,
+            "region": true,
+            "region_id": true,
+            "street": true,
+            "suffix": true,
+            "telephone": true,
+            "vat_id": true,
+            "vat_is_valid": true,
+            "vat_request_date": true,
+            "vat_request_id": true,
+            "vat_request_success": true
+        },
+        "index": {
+            "CUSTOMER_ADDRESS_ENTITY_PARENT_ID": true,
+            "FTI_BA70344390184AC3F063AB2EB38BC0ED": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CUSTOMER_ADDRESS_ENTITY_PARENT_ID_CUSTOMER_ENTITY_ENTITY_ID": true
+        }
+    },
+    "customer_address_entity_datetime": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CUSTOMER_ADDRESS_ENTITY_DATETIME_ATTRIBUTE_ID": true,
+            "CUSTOMER_ADDRESS_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CSTR_ADDR_ENTT_DTIME_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CSTR_ADDR_ENTT_DTIME_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID": true,
+            "CUSTOMER_ADDRESS_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID": true
+        }
+    },
+    "customer_address_entity_decimal": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CUSTOMER_ADDRESS_ENTITY_DECIMAL_ATTRIBUTE_ID": true,
+            "CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CSTR_ADDR_ENTT_DEC_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CSTR_ADDR_ENTT_DEC_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID": true,
+            "CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID": true
+        }
+    },
+    "customer_address_entity_int": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CUSTOMER_ADDRESS_ENTITY_INT_ATTRIBUTE_ID": true,
+            "CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CSTR_ADDR_ENTT_INT_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CSTR_ADDR_ENTT_INT_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID": true,
+            "CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID": true
+        }
+    },
+    "customer_address_entity_text": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CUSTOMER_ADDRESS_ENTITY_TEXT_ATTRIBUTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CSTR_ADDR_ENTT_TEXT_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CSTR_ADDR_ENTT_TEXT_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID": true,
+            "CUSTOMER_ADDRESS_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID": true
+        }
+    },
+    "customer_address_entity_varchar": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CUSTOMER_ADDRESS_ENTITY_VARCHAR_ATTRIBUTE_ID": true,
+            "CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CSTR_ADDR_ENTT_VCHR_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CSTR_ADDR_ENTT_VCHR_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID": true,
+            "CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID": true
+        }
+    },
+    "customer_entity_datetime": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CUSTOMER_ENTITY_DATETIME_ATTRIBUTE_ID": true,
+            "CUSTOMER_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CUSTOMER_ENTITY_DATETIME_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true,
+            "CUSTOMER_ENTITY_DATETIME_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "CUSTOMER_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID": true
+        }
+    },
+    "customer_entity_decimal": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CUSTOMER_ENTITY_DECIMAL_ATTRIBUTE_ID": true,
+            "CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CUSTOMER_ENTITY_DECIMAL_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true,
+            "CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID": true
+        }
+    },
+    "customer_entity_int": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CUSTOMER_ENTITY_INT_ATTRIBUTE_ID": true,
+            "CUSTOMER_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CUSTOMER_ENTITY_INT_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true,
+            "CUSTOMER_ENTITY_INT_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "CUSTOMER_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID": true
+        }
+    },
+    "customer_entity_text": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CUSTOMER_ENTITY_TEXT_ATTRIBUTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CUSTOMER_ENTITY_TEXT_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true,
+            "CUSTOMER_ENTITY_TEXT_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "CUSTOMER_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID": true
+        }
+    },
+    "customer_entity_varchar": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CUSTOMER_ENTITY_VARCHAR_ATTRIBUTE_ID": true,
+            "CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CUSTOMER_ENTITY_VARCHAR_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true,
+            "CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID": true
+        }
+    },
+    "customer_group": {
+        "column": {
+            "customer_group_id": true,
+            "customer_group_code": true,
+            "tax_class_id": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "customer_eav_attribute": {
+        "column": {
+            "attribute_id": true,
+            "is_visible": true,
+            "input_filter": true,
+            "multiline_count": true,
+            "validate_rules": true,
+            "is_system": true,
+            "sort_order": true,
+            "data_model": true,
+            "is_used_in_grid": true,
+            "is_visible_in_grid": true,
+            "is_filterable_in_grid": true,
+            "is_searchable_in_grid": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CUSTOMER_EAV_ATTRIBUTE_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true
+        }
+    },
+    "customer_form_attribute": {
+        "column": {
+            "form_code": true,
+            "attribute_id": true
+        },
+        "index": {
+            "CUSTOMER_FORM_ATTRIBUTE_ATTRIBUTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CUSTOMER_FORM_ATTRIBUTE_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true
+        }
+    },
+    "customer_eav_attribute_website": {
+        "column": {
+            "attribute_id": true,
+            "website_id": true,
+            "is_visible": true,
+            "is_required": true,
+            "default_value": true,
+            "multiline_count": true
+        },
+        "index": {
+            "CUSTOMER_EAV_ATTRIBUTE_WEBSITE_WEBSITE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CSTR_EAV_ATTR_WS_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CSTR_EAV_ATTR_WS_WS_ID_STORE_WS_WS_ID": true
+        }
+    },
+    "customer_visitor": {
+        "column": {
+            "visitor_id": true,
+            "customer_id": true,
+            "session_id": true,
+            "last_visit_at": true
+        },
+        "index": {
+            "CUSTOMER_VISITOR_CUSTOMER_ID": true,
+            "CUSTOMER_VISITOR_LAST_VISIT_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "customer_log": {
+        "column": {
+            "log_id": true,
+            "customer_id": true,
+            "last_login_at": true,
+            "last_logout_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CUSTOMER_LOG_CUSTOMER_ID": true
+        }
+    }
+}

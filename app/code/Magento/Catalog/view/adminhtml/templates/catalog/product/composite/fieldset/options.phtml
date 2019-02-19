@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<?php /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options */ ?>
+<?php $options = $block->decorateArray($block->getOptions()); ?>
+<?php if (count($options)): ?>
+
+<?= $block->getChildHtml('options_js') ?>
+
+<fieldset id="product_composite_configure_fields_options" class="fieldset admin__fieldset <?= $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
+    <legend class="legend admin__legend">
+        <span><?= /* @escapeNotVerified */ __('Custom Options') ?></span>
+    </legend><br>
+    <?php foreach ($options as $option): ?>
+        <?= $block->getOptionHtml($option) ?>
+    <?php endforeach;?>
+</fieldset>
+
+<?php endif; ?>

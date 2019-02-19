@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <!-- Include section -->
+    <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/ui_component.xsd"/>
+
+    <xs:complexType name="componentWysiwyg">
+        <xs:sequence>
+            <xs:group ref="configurable" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:group ref="abstractSettings"/>
+                        <xs:group ref="componentWysiwygSettings"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
+    <xs:complexType name="formElementWysiwyg">
+        <xs:sequence>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:group ref="componentWysiwygSettings"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
+    <xs:group name="componentWysiwygSettings">
+        <xs:choice>
+            <xs:element name="content" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Initial WYSIWYG content.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="wysiwyg" type="xs:boolean">
+                <xs:annotation>
+                    <xs:documentation>
+                        If set to true - initial state of the control is WYSIWYG editor, otherwise - plain textarea.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="rows"/>
+            <xs:element ref="cols"/>
+            <xs:element name="elementSelector" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        The path Type of the HTML element that is wrapped by the WYSIWYG editor.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:choice>
+    </xs:group>
+</xs:schema>

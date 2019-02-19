@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCreditMemoOrderInformationSection">
+        <element name="orderId" type="text" selector="div.order-information span.title > a" timeout="60"/>
+        <element name="orderDate" type="text" selector=".order-information table.order-information-table tr:first-of-type > td"/>
+        <element name="orderStatus" type="text" selector=".order-information table.order-information-table #order_status"/>
+        <element name="purchasedFrom" type="text" selector=".order-information table.order-information-table tr:last-of-type > td"/>
+        <element name="customerName" type="text" selector=".order-account-information table tr:first-of-type > td span"/>
+        <element name="customerEmail" type="text" selector=".order-account-information table tr:nth-of-type(2) > td a"/>
+        <element name="customerGroup" type="text" selector=".order-account-information table tr:nth-of-type(3) > td"/>
+    </section>
+</sections>

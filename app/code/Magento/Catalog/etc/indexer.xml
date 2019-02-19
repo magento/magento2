@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
+    <indexer id="catalog_product_flat" view_id="catalog_product_flat" class="Magento\Catalog\Model\Indexer\Product\Flat">
+        <title translate="true">Product Flat Data</title>
+        <description translate="true">Reorganize EAV product structure to flat structure</description>
+    </indexer>
+    <indexer id="catalog_category_flat" view_id="catalog_category_flat" class="Magento\Catalog\Model\Indexer\Category\Flat">
+        <title translate="true">Category Flat Data</title>
+        <description translate="true">Reorganize EAV category structure to flat structure</description>
+    </indexer>
+    <indexer id="catalog_category_product" view_id="catalog_category_product" class="Magento\Catalog\Model\Indexer\Category\Product" shared_index="category_product">
+        <title translate="true">Category Products</title>
+        <description translate="true">Indexed category/products association</description>
+    </indexer>
+    <indexer id="catalog_product_category" view_id="catalog_product_category" class="Magento\Catalog\Model\Indexer\Product\Category" shared_index="category_product">
+        <title translate="true">Product Categories</title>
+        <description translate="true">Indexed product/categories association</description>
+    </indexer>
+    <indexer id="catalog_product_price" view_id="catalog_product_price" class="Magento\Catalog\Model\Indexer\Product\Price">
+        <title translate="true">Product Price</title>
+        <description translate="true">Index product prices</description>
+    </indexer>
+    <indexer id="catalog_product_attribute" view_id="catalog_product_attribute" class="Magento\Catalog\Model\Indexer\Product\Eav">
+        <title translate="true">Product EAV</title>
+        <description translate="true">Index product EAV</description>
+    </indexer>
+</config>

@@ -1,0 +1,94 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@steps-wizard-section-title__border-color: @color-gray89;
+@steps-wizard-section-title__font-size: 1.8rem;
+
+//
+//  Common
+//  _____________________________________________
+
+.product-create-configuration {
+    &:extend(.abs-clearfix all);
+    padding: @indent__s 0;
+
+    .product-create-configuration-info {
+        float: left;
+        width: 60%;
+    }
+
+    .product-create-configuration-actions {
+        float: right;
+        text-align: right;
+        width: 40%;
+        &:extend(.abs-clearfix all);
+    }
+
+    .product-create-configuration-action {
+        float: right;
+        margin-left: @indent__s;
+    }
+
+    .action-menu-item {
+        padding-right: 0;
+    }
+}
+
+.steps-wizard {
+    position: relative;
+
+    .steps-wizard-navigation {
+        &:extend(.abs-clearfix all);
+        background: @page-main-actions__background-color;
+        border-bottom: 1px solid @page-main-actions__border-color;
+        border-top: 1px solid @page-main-actions__border-color;
+        margin: 0 0 @indent__base;
+        padding: @page-main-actions__padding;
+        text-align: center;
+    }
+
+    .steps-wizard-title {
+        font-size: 2.4rem;
+        margin: 0 0 @indent__s;
+    }
+
+    .steps-wizard-info {
+        margin: 0 0 @indent__base;
+    }
+
+    .admin__data-grid-wrap {
+        .action-multicheck-wrap {
+            position: static;
+
+            .action-menu {
+                left: 0;
+                margin-top: 16px;
+                right: auto;
+                top: auto;
+                z-index: 2;
+            }
+        }
+
+        .note {
+            margin: @indent__base 0;
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    .steps-wizard {
+        .steps-wizard-navigation {
+            text-align: left;
+        }
+    }
+}

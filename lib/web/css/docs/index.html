@@ -1,0 +1,611 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<!DOCTYPE html><html><head><title>Magento UI Library
+</title><meta charset="utf-8"><style>*{-moz-box-sizing:border-box;box-sizing:border-box;margin:0;padding:0;border:0}body{padding:60px 0 40px;background-color:hsl(207,10%,90%);color:hsl(207,5%,30%)}.container{max-width:1300px;margin:0 auto;padding:0 20px}.section{position:relative;margin-bottom:20px}.docs{position:relative;z-index:2;width:68%;min-height:200px;background-color:hsl(207,0%,100%);background-clip:padding-box;border:1px solid hsla(207,5%,5%,.1);border-radius:5px;box-shadow:0 0 3px hsla(207,5%,5%,.1)}.code{position:absolute;top:5px;bottom:5px;right:0;z-index:1;width:33%;padding:10px 10px 10px 20px;border-radius:0 5px 5px 0;border:1px solid hsla(207,20%,10%,.1);background-color:hsla(207,20%,95%,.9);background-clip:padding-box;opacity:.5;-webkit-transition:opacity .4s;-moz-transition:opacity .4s;-o-transition:opacity .4s;transition:opacity .4s}.code:hover{opacity:1}.preview{background:hsl(207,0%,100%);border-top:1px solid hsl(207,30%,95%);position:relative;z-index:1}.preview-code+.preview{margin-top:0;border-top:0}.preview iframe{display:block;width:100%;height:100%;overflow:hidden}.preview-code{position:relative;z-index:2;display:block;width:100%;color:hsl(207,9%,37%);max-height:200px;padding:10px 20px;overflow-y:auto;background:hsl(207,30%,95%);border:1px solid hsl(207,30%,85%);border-left:0;border-right;box-shadow:inset 0 1px 2px hsla(207,30%,10%,.1);line-height:1.1!important;resize:none}.preview-code:focus{outline:0;background:hsl(207,30%,97%);box-shadow:inset 0 1px 2px hsla(207,30%,10%,.1),0 0 5px hsla(207,75%,75%,.9)}.preview-code:last-child{border-bottom:0;border-radius:0 0 5px 5px}.resizeable{padding:15px;overflow:auto;background:hsl(207,0%,100%);box-shadow:0 0 2px hsla(207,10%,20%,.2);resize:both}.preview-code,pre{white-space:pre-wrap;word-wrap:break-word;overflow-y:auto}.code pre{height:100%;margin-top:0}.bar{position:fixed;left:0;right:0;z-index:1010;min-height:40px;line-height:40px;background-image:-webkit-linear-gradient(hsla(207,10%,35%,.97),hsla(207,5%,25%,.92));background-image:-moz-linear-gradient(hsla(207,10%,35%,.97),hsla(207,5%,25%,.92));background-image:-o-linear-gradient(hsla(207,10%,35%,.97),hsla(207,5%,25%,.92));background-image:linear-gradient(hsla(207,10%,35%,.97),hsla(207,5%,25%,.92))}.bar.top{top:0;box-shadow:0 1px 2px hsla(207,5%,0%,.2)}.bar.bottom{bottom:0;box-shadow:0 -1px 2px hsla(207,5%,0%,.2)}.bar ul{margin:0!important}.bar li{display:block;list-style:none}.bar .icon path{fill:hsla(27,10%,75%,.75)}.docs .icon path{fill:hsla(207,10%,75%,.5)}.docs .permalink:hover .icon path{fill:hsl(207,10%,75%)}.bar button{color:hsla(27,10%,75%,.75)}.bar button:hover .icon path,.bar button.is-active .icon path{fill:hsl(27,10%,85%)}.bar button:hover,.bar button.is-active{color:hsl(27,10%,85%)}.bar .icon{vertical-align:middle;display:inline-block}.bar,.bar a,.bar a:visited{color:hsl(27,10%,85%);text-shadow:1px 1px 0 hsla(27,5%,0%,.5)}.bar a:hover,.bar a.is-active{color:hsl(27,10%,95%);text-shadow:1px 1px 0 hsla(27,5%,0%,1);text-decoration:none}.brand{float:left;margin-right:20px;font-weight:700;font-size:16px;text-decoration:none}.brand,a.brand,a.brand:visited{color:hsl(27,5%,5%);text-shadow:1px 1px 0 hsla(27,5%,100%,.2)}.brand:hover,a.brand:hover{color:hsl(27,5%,0%);text-shadow:1px 1px 0 hsla(27,5%,100%,.3);text-decoration:none}.menu{font-size:12px}.menu>li{float:left;position:relative}.menu a{display:block;margin-right:15px}.dropdown-toggle{position:relative;padding-right:15px}.dropdown-toggle:after{display:block;position:absolute;right:0;top:18px;content:'';border:4px solid;border-left-color:transparent;border-right-color:transparent;border-bottom-color:transparent}.nav-results,.dropdown{position:absolute;z-index:1020;top:32px;left:-16px;width:175px;max-height:500px;padding:10px 0;overflow-y:auto;word-wrap:break-word;font-size:11px;line-height:20px;background-color:hsla(207,10%,25%,.97);border:1px solid hsla(207,5%,70%,.3);border-radius:3px;box-shadow:0 0 3px hsla(207,5%,0%,.2)}.toc-list{width:200px}.nav-results{right:0;width:200px;left:auto;padding:5px 0}.nav-results-filename{display:block;font-size:10px;opacity:.75}.nav-results a{display:block;line-height:15px;padding:5px 10px}.nav-results li:not([hidden])~li a{border-top:1px solid hsla(27,10%,90%,.1)}.dropdown a{padding:0 15px}.dropdown li:hover{background-color:hsl(207,10%,22%)}.nav{float:right;position:relative}.nav input[type="search"]{padding:2px 4px;color:#fff;width:150px;border:1px solid hsla(207,5%,0%,.3);background:hsla(207,12%,40%,.9);box-shadow:inset 1px 1px 3px hsla(207,5%,0%,.05),1px 1px 0 hsla(207,5%,100%,.05);border-radius:10px;-webkit-appearance:textfield}.nav input[type="search"]:focus{outline:0;background:hsla(207,7%,45%,.9)}.settings{text-align:center}.bar button{display:inline-block;vertical-align:middle;padding:0 5px;margin:0 3px;background:transparent}.bar button:first-child{margin-left:0}.settings .auto{line-height:32px;font-size:11px;font-weight:700;letter-spacing:-1px;text-shadow:none;text-transform:uppercase}body{font-family:sans-serif;font-size:14px;line-height:1.618}.docs pre,p,ol,ul,dl,figure,blockquote,table{margin-left:20px;margin-right:20px}.preview,.docs pre,p,ol,ul,dl,figure,blockquote,table{margin-top:10px}ul ul,ol ol,ul ol,ol ul,blockquote p:last-child{margin-top:0}ul,ol{padding-left:1.5em}p:last-child,ol:last-child,ul:last-child,dl:last-child{margin-bottom:20px}hr,h1,h2,h3,h4,h5,h6{margin:1em 20px .5em}h1:first-of-type{margin-top:20px}h1,h2,h3,h4,h5,h6{line-height:1.2;color:hsl(207,10%,50%)}h1 a,h1 a:hover,h1 a:visited{color:inherit;text-decoration:inherit}h1{font-size:3.052em;font-weight:400;color:hsl(207,10%,45%)}h2{font-size:1.953em}h3{font-size:1.536em}h1,h2,h3{letter-spacing:-.025em}h4{font-size:1.25em}h5{font-size:1em;text-transform:uppercase}h6{font-size:1em}.permalink{position:absolute;top:15px;right:15px}a{color:hsl(207,90%,50%);text-decoration:none}a:hover{color:hsl(207,95%,40%);text-decoration:underline}a:visited{color:hsl(207,100%,35%)}.preview-code,pre,code,var{font-style:normal;font-family:"Ubuntu Mono","Andale Mono","DejaVu Sans Mono","Monaco","Bitstream Vera Sans Mono","Consolas","Lucida Console",monospace;font-size:12px}.docs pre,code,var{padding:.1em 3px;background:hsla(207,5%,0%,.025);border:1px solid hsla(207,5%,0%,.05);border-radius:3px}.code pre{line-height:1.1!important}pre code{padding:0;background:transparent;border:0}.cf:before,.cf:after{content:'';display:table}.cf:after{clear:both}[unselectable="on"]{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}[hidden]{display:none!important}small{font-size:85%;opacity:.9}.docs .vars_list{width:100%}.docs .vars_list th,.docs .vars_list td{width:33%}.docs pre th{text-align:left}.docs pre table{border-collapse:collapse;margin:0}.docs th,.docs td{border:0;padding:9px 10px 9px 0;vertical-align:top}.docs tr th:last-child,.docs tr td:last-child{padding-right:0}.docs pre th{font-weight:400}.docs pre th.vars_head{border-bottom:1px solid #e5e5e5;color:#707070;white-space:nowrap}.docs pre th.vars_section{border-bottom:1px solid #e5e5e5;color:#333;font-size:18px;padding-top:30px}.vars_value{color:#338bb8}.docs li p{margin:0 0 20px}.dropdown a{text-transform:capitalize}#default-button #default-button-big+.preview+.preview-code{display:block}#actions-toolbar-alignment .preview-code,#reverse-primary-and-secondary-blocks .preview-code,#actions-toolbar-indents-customizations .preview-code,#actionstoolbarclearfloats-mixin .preview-code,#responsive-actions-toolbar .preview-code,#button-with-gradient-background .preview-code,#primary-button .preview-code,#button-as-an-icon .preview-code,#button-with-an-icon-on-the-left-or-right-side-of-the-text .preview-code,#button-with-fixed-width .preview-code,#button-as-a-link .preview-code,#link-as-a-button .preview-code,#buttonstyled-breadcrumbs-with-gradient-background-border-and-no-separating-symbol .preview-code,#breadcrumbs-with-solid-background .preview-code,#pagination-without-label-with-solid-background .preview-code,#pagination-with-label-and-text-previousnext-links .preview-code,#pagination-with-label-and-gradient-background-on-links .preview-code,#fixed-height-popup .preview-code,#fixed-content-height-popup .preview-code,#margins-for-header-content-and-footer-block-in-popup .preview-code,#popup-titles-with-styled-as-theme-headings .preview-code,#popup-action-toolbar .preview-code,#popup-close-button-without-an-icon .preview-code,#modify-icon-of-popup-close-button .preview-code,#modify-overlay-styles .preview-code,#rating-summary-multiple-ratings .preview-code,#rating-summary-hide-label .preview-code,#rating-summary-icons-symbol .preview-code,#rating-summary-icons-color .preview-code,#rating-summary-set-number-of-icons .preview-code,#rating-summary .preview-code,#rating-with-vote-icon-symbol .preview-code,#rating-with-vote-setup-icons-colors .preview-code,#rating-with-vote-setup-number-of-icons .preview-code,#tabs-with-content-top-border .preview-code,#accordion-mixin-variables .preview-code,#tabs-base .preview-code,#accordion-base .preview-code,#warning-message .preview-code,#error-message .preview-code,#success-message .preview-code,#notice-message .preview-code,#message-with-inner-icon .preview-code,#message-with-lateral-icon .preview-code,#custom-message-style .preview-code,#modify-dropdown-list-styles .preview-code,#dropdown-with-icon-customization .preview-code,#split-button-button-styling .preview-code,#split-button-icon-customization .preview-code,#split-button-dropdown-list-customization .preview-code,#table-cells-resize .preview-code,#table-caption .preview-code,#table-typography .preview-code,#table-background-customization .preview-code,#table-borders-customization .preview-code,#table-without-borders .preview-code,#table-with-horizontal-borders .preview-code,#table-with-vertical-borders .preview-code,#striped-table .preview-code,#responsive-table-technics-1 .preview-code,#responsive-table-technics-2 .preview-code,#fontsize-mixin .preview-code,#word-breaking-mixin .preview-code,#word-breaking-mixin .preview-code,#text-overflow-mixin .preview-code,#text-hide .preview-code,#hyphens .preview-code,#font-style-and-color .preview-code,#reset-list-styles .preview-code,#inlineblock-list-item-styling .preview-code,#link-styling-mixin .preview-code,#heading-styling-mixin .preview-code,#icon-with-image-or-sprite .preview-code,#change-the-size-of-font-icon .preview-code,#sprite-and-font-icons-for-blank-theme .preview-code,#icon-position-for-an-icon-with-image-or-sprite .preview-code{display:none}article[id$="-variables"] .docs,#resets .docs,#ratings .docs,#tabs-and-accordions .docs,#messages .docs,#dropdown-and-split-buttons-mixins .docs,#font-face-mixin .docs,#layout .docs,#forms-mixins .docs,#including-magento-ui-library-to-your-theme .docs,#global-forms-elements-customization .docs,#mobile-off-canvas-navigation .docs,#desktop-navigation .docs,#utilities .docs,#layout-width .docs,#responsive-breakpoints .docs,#responsive-mixins-usage .docs{width:100%}article[id$="-variables"] .code{display:none}article[id$="-variables"] .docs pre{background:#fff;border:0;margin-top:0}</style></head><body><nav class="bar top cf"><div class="container"><a href="index.html" class="brand">Magento UI Library</a><ul class="menu"><li><a href="#" data-toggle="dropdown-1" unselectable="on" class="dropdown-toggle">files</a><ul id="dropdown-1" hidden class="dropdown"><li><a href="actions-toolbar.html">actions-toolbar</a></li><li><a href="breadcrumbs.html">breadcrumbs</a></li><li><a href="buttons.html">buttons</a></li><li><a href="components.html">components</a></li><li><a href="dropdowns.html">dropdowns</a></li><li><a href="forms.html">forms</a></li><li><a href="icons.html">icons</a></li><li><a href="layout.html">layout</a></li><li><a href="lib.html">lib</a></li><li><a href="loaders.html">loaders</a></li><li><a href="messages.html">messages</a></li><li><a href="pages.html">pages</a></li><li><a href="popups.html">popups</a></li><li><a href="rating.html">rating</a></li><li><a href="resets.html">resets</a></li><li><a href="responsive.html">responsive</a></li><li><a href="sections.html">sections</a></li><li><a href="tables.html">tables</a></li><li><a href="tooltips.html">tooltips</a></li><li><a href="typography.html">typography</a></li><li><a href="utilities.html">utilities</a></li><li><a href="variables.html">variables</a></li><li><a href="docs.html">docs</a></li></ul></li></ul><div class="nav"><button title="Table of Contents" data-toggle="nav-toc"><svg viewBox="0 0 512 512" height="22" width="22" class="icon"><path d="M108.9,403.1V462H50v-58.9H108.9z M108.9,285.4H50v58.9h58.9V285.4zM108.9,50H50v58.9h58.9V50z M108.9,167.7H50v58.9h58.9V167.7z M167.7,344.3H462v-58.9H167.7V344.3zM167.7,50v58.9H462V50H167.7z M167.7,462H462v-58.9H167.7V462z M167.7,226.6H462v-58.9H167.7V226.6z"></path></svg></button><input type="search" placeholder="Search" class="search"></div></div></nav><section class="container"><article id="magento-ui-library" class="section"><div class="docs"><a href="#magento-ui-library" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="magento-ui-library">Magento UI library</h1>
+<p>The Magento UI library is a flexible modular Magento frontend library that is designed to assist Magento theme developers. It employs a set of mixins for base elements to ease frontend theme development and customization. The Magento UI library offers the following characteristics for those who develop or customize Magento themes. It is:</p>
+<ul>
+<li>Built on LESS preprocessor</li>
+<li>Focused on web standards</li>
+<li>Customizable</li>
+<li>Easy to maintain</li>
+<li>Responsive</li>
+<li>Accessible</li>
+</ul>
+<p>The library provides the ability to customize all of the following user interface elements:</p>
+<ul>
+<li>actions-toolbar</li>
+<li>breadcrumbs</li>
+<li>buttons</li>
+<li>components</li>
+<li>drop-downs</li>
+<li>forms</li>
+<li>icons</li>
+<li>layout</li>
+<li>loaders</li>
+<li>messages</li>
+<li>pagination</li>
+<li>popups</li>
+<li>ratings</li>
+<li>resets</li>
+<li>responsive</li>
+<li>sections -  tabs and accordions</li>
+<li>tables</li>
+<li>tooltips</li>
+<li>typography</li>
+<li>utilities</li>
+<li>list of theme variables</li>
+</ul>
+</div></article><article id="magento-ui-library-file-structure" class="section"><div class="docs"><a href="#magento-ui-library-file-structure" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="magento-ui-library-file-structure">Magento UI library file structure</h1>
+<p>Magento UI library is located under <code>/lib/web/</code> folder. It and employs:</p>
+<ul>
+<li><code>css/</code> folder where the library files are placed</li>
+<li><code>fonts/</code> folder where default and icon fonts are placed</li>
+<li><code>images/</code> folder where default images are placed</li>
+<li><code>jquery/</code> folder where jQuery and jQuery widgets are placed</li>
+</ul>
+<h3 id="magento-ui-library-structure">Magento UI library structure</h3>
+<pre><code class="lang-css">/lib/web/
+    ├── css/
+    │    ├── docs/ (Library documentation)
+    │    │    ├── source/
+    │    │    │    ├── _actions-toolbar.less
+    │    │    │    ├── _breadcrumbs.less
+    │    │    │    ├── _buttons.less
+    │    │    │    ├── _dropdowns.less
+    │    │    │    ├── _forms.less
+    │    │    │    ├── _icons.less
+    │    │    │    ├── _layout.less
+    │    │    │    ├── _lib.less
+    │    │    │    ├── _loaders.less
+    │    │    │    ├── _messages.less
+    │    │    │    ├── _pages.less
+    │    │    │    ├── _popups.less
+    │    │    │    ├── _rating.less
+    │    │    │    ├── _resets.less
+    │    │    │    ├── _responsive.less
+    │    │    │    ├── _sections.less
+    │    │    │    ├── _tables.less
+    │    │    │    ├── _tooltips.less
+    │    │    │    ├── _typography.less
+    │    │    │    ├── _utilities.less
+    │    │    │    ├── _variables.less
+    │    │    │    ├── _components.less
+    │    │    │    ├── docs.less
+    │    │    │    └── README.md
+    │    │    ├─── extends.html
+    │    │    ├─── actions-toolbar.html
+    │    │    ├─── breadcrumbs.html
+    │    │    ├─── buttons.html
+    │    │    ├─── components.html
+    │    │    ├─── docs.css
+    │    │    ├─── docs.html
+    │    │    ├─── dropdowns.html
+    │    │    ├─── forms.html
+    │    │    ├─── icons.html
+    │    │    ├─── index.html
+    │    │    ├─── layout.html
+    │    │    ├─── lib.html
+    │    │    ├─── loaders.html
+    │    │    ├─── messages.html
+    │    │    ├─── pages.html
+    │    │    ├─── popups.html
+    │    │    ├─── rating.html
+    │    │    ├─── resets.html
+    │    │    ├─── responsive.html
+    │    │    ├─── sections.html
+    │    │    ├─── tables.html
+    │    │    ├─── tooltips.html
+    │    │    ├─── typography.html
+    │    │    ├─── utilities.html
+    │    │    └─── variables.html
+    │    └── source/
+    │          ├── components/ (Reusable components files)
+    │          │    └── _modals.less
+    │          ├── lib/ (Library source files)
+    │          │    └── variables/ (Decoupled variables)
+    │          │          └── ...
+    │          │    ├── _extends.less
+    │          │    ├── _actions-toolbar.less
+    │          │    ├── _breadcrumbs.less
+    │          │    ├── _buttons.less
+    │          │    ├── _dropdowns.less
+    │          │    ├── _forms.less
+    │          │    ├── _icons.less
+    │          │    ├── _layout.less
+    │          │    ├── _lib.less
+    │          │    ├── _loaders.less
+    │          │    ├── _messages.less
+    │          │    ├── _navigation.less
+    │          │    ├── _pages.less
+    │          │    ├── _popups.less
+    │          │    ├── _rating.less
+    │          │    ├── _resets.less
+    │          │    ├── _responsive.less
+    │          │    ├── _sections.less
+    │          │    ├── _tables.less
+    │          │    ├── _tooltips.less
+    │          │    ├── _typography.less
+    │          │    ├── _utilities.less
+    │          │    └── _variables.less
+    │          ├── _extend.less
+    │          └── _theme.less
+    ├── fonts/
+    │    └── Blank-Theme-Icons/ (Library custom icons font)
+    ├── images/
+    │    └── blank-theme-icons.png (Library icons sprite)
+    └── jquery/ (Library javascript files)</code></pre>
+<p>&nbsp;</p>
+</div></article><article id="magento-ui-library-naming-convention" class="section"><div class="docs"><a href="#magento-ui-library-naming-convention" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="magento-ui-library-naming-convention">Magento UI library naming convention</h1>
+<p>Magento UI library employs a variables and mixins naming convention whereby names of variables and mixins describe their purpose or functions they perform.</p>
+<p>A variable or a mixins name may only contain lowercase alphanumeric characters, &quot;-&quot; and &quot;_&quot; characters. A variable name must start with &quot;@&quot; character.</p>
+<p>If a variable or mixins name consists of more than one word, they must be concatenated with one hyphen character.</p>
+</div></article><article id="less-variables-naming" class="section"><div class="docs"><a href="#less-variables-naming" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="less-variables-naming">Less variables naming</h1>
+<p>A *.less file variable can contain lowercase letters, numbers, special characters: &quot;@&quot;, &quot;-&quot; and &quot;_&quot;. It must start with &quot;@&quot; character and consist of words concatenated with one hyphen. It should not contain capital letters. A variable name should describe its purpose.</p>
+<p>A variable name should be formed according to the following rule:</p>
+<p><code>&#39;@&#39; + &#39;object&#39; + &#39;-&#39; + &#39;property&#39; + &#39;-&#39; + &#39;state&#39; = @object-property-state</code></p>
+<p>If it is a private variable (is used only in a mixin), it must start with &quot;_&quot; character after &quot;@&quot;:</p>
+<p><code>&#39;@&#39; + &#39;_&#39; + &#39;object&#39; + &#39;-&#39; + &#39;property&#39; + &#39;-&#39; + &#39;state&#39; = @_object-property-state</code></p>
+<h4 id="examples">Examples:</h4>
+<h5 id="acceptable">Acceptable:</h5>
+<pre><code class="lang-css">    @link-color-hover;
+    @color-primary;
+    @color-2;</code></pre>
+<p>Private variables:</p>
+<pre><code class="lang-css">    @_padding-left;
+    @_font-size;</code></pre>
+<h5 id="unacceptable">Unacceptable:</h5>
+<pre><code class="lang-css">    @Link-Color-Hover;
+    @colorPrimary;
+    @color--primary;
+    @paddingleft;
+    @__font-size;</code></pre>
+<p>&nbsp;</p>
+</div></article><article id="less-mixins-naming" class="section"><div class="docs"><a href="#less-mixins-naming" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="less-mixins-naming">Less mixins naming</h1>
+<p>A less mixin name can contain lowercase letters, numbers, &quot;-&quot; and &quot;_&quot; characters. It should not contain capital letters.</p>
+<p>A mixin name can consist of one or several words, concatenated with one hyphen. If the mixin is private, its name must start with the &quot;_&quot; character. Mixin should be named after property or action it describes.</p>
+<h4 id="examples">Examples:</h4>
+<h5 id="acceptable">Acceptable:</h5>
+<pre><code class="lang-css">    .mixin-name() {}
+    .transition() {}
+    .mixin() {}
+    ._button-gradient() {}</code></pre>
+<h5 id="unacceptable">Unacceptable:</h5>
+<pre><code class="lang-css">    .mixinName() {}
+    .__transition() {}
+    .MiXiN() {}
+    ._button--gradient() {}</code></pre>
+<p>&nbsp;</p>
+</div></article><article id="less-code-standards" class="section"><div class="docs"><a href="#less-code-standards" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="less-code-standards">Less Code Standards</h1>
+<h2 id="general-rules">General rules</h2>
+<h3 id="indentation">Indentation</h3>
+<p>Please verified that you use spaces instead tabs:</p>
+<ul>
+<li>Tab size: 4 spaces</li>
+<li>Indent size: 4 spaces</li>
+<li>Continuation indent: 4 spaces</li>
+</ul>
+<pre><code class="lang-css">    .nav {
+        .nav-item {
+            ...
+        }
+    }</code></pre>
+<h3 id="format">Format</h3>
+<h4 id="braces">Braces</h4>
+<p>Add space before opening brace and line break after. And line break before closing brace.</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .nav{color: @nav__color;}</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        color: @nav__color;
+    }</code></pre>
+<h4 id="selector-delimiters">Selector delimiters</h4>
+<p>Add line break after each selector delimiter. Delimeter shouldn&#39;t have spaces before and after.</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .nav, .bar {
+        color: @color__base;
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .nav,
+    .bar {
+        color: @color__base;
+    }</code></pre>
+<h4 id="quotes">Quotes</h4>
+<p>Use single quotes</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        content: &quot;lorem ipsum&quot;;
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        content: &#39;lorem ipsum&#39;;
+    }</code></pre>
+<h4 id="combinator-indents">Combinator indents</h4>
+<p>Use spaces before and after combinators</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .nav+.bar {
+        color: @bar__color;
+    }
+
+    .nav +.bar {
+        color: @bar__color;
+    }
+
+    .nav+ .bar {
+        color: @bar__color;
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .nav + .bar {
+        color: @bar__color;
+    }</code></pre>
+<h4 id="properties-line-break">Properties line break</h4>
+<p>Use line break for each property declaration</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        color: @nav__color; background-color: @nav__background-color;
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        background-color: @nav__background-color;
+        color: @nav__color;
+    }</code></pre>
+<h4 id="properties-colon-indents">Properties colon indents</h4>
+<p>Use no space before property colon, and space after</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        color : @nav__color;
+    }
+
+    .bar {
+        color:@bar__color;
+    }
+
+    .item {
+        color :@item__color;
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        color: @nav__color;
+    }</code></pre>
+<h4 id="end-of-file">End of file</h4>
+<p>Each less file should be finished with new line</p>
+<h4 id="end-of-the-selector">End of the selector</h4>
+<p>Each selector should be finished with new line</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        background-color: @nav__background-color;
+    }
+    .bar {
+        background-color: @bar__background-color;
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        background-color: @nav__background-color;
+    }
+
+    .bar {
+        background-color: @bar__background-color;
+    }</code></pre>
+<h4 id="end-of-the-property-line">End of the property line</h4>
+<p>Each property should be finished with semicolon</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        background-color: @nav__background-color
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        background-color: @nav__background-color;
+    }</code></pre>
+<h4 id="important-property">!Important property</h4>
+<p>Basically avoid use this property at all, but if you really really need it use the following format:</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .jquery-ui-calendar-item {
+        background-color: @nav__background-color!important;
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .jquery-ui-calendar-item {
+        background-color: @nav__background-color !important;
+    }</code></pre>
+<h3 id="comments">Comments</h3>
+<p>Please follow the next format of comments</p>
+<pre><code class="lang-css">    //
+    //  First level comment
+    //  _____________________________________________
+
+    .nav {
+        background-color: @nav__background-color;
+    }
+
+    //
+    //  Second level comment
+    //  ---------------------------------------------
+
+    .nav {
+        background-color: @nav__background-color;
+    }
+
+    //  Comment
+    .nav {
+        //  New line comment
+        background-color: @nav__background-color; // ToDo UI: todo inline comment
+        color: @nav__color; // inline comment
+    }</code></pre>
+<h3 id="selectors">Selectors</h3>
+<h4 id="types">Types</h4>
+<p>According to browser support standards the oldest browser that we support is IE9+, it means that you can feel free to use almost all CSS3 selectors: descendants, attributes, pseudo classes, structural, pseudo elements, etc.
+Exeption: Please avoid to use id selector.</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    #foo {
+        ...
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        ...
+    }
+
+    .nav + bar {
+        ...
+    }
+
+    .nav:not(.bar) {
+        ...
+    }</code></pre>
+<h3 id="naming">Naming</h3>
+<h4 id="standard-classes">Standard classes</h4>
+<p>All classes should be written in lowercase, starts with letter (exept helpers), words in classes should be separated with dash (minus sign &#39;-&#39;)</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .navBar {
+       ...
+    }</code></pre>
+<h5 id="not-recommended-underscore-separation">Not recommended: underscore separation</h5>
+<pre><code class="lang-css">    .nav_bar {
+       ...
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .nav-bar {
+        ...
+    }</code></pre>
+<h4 id="helper-classes">Helper classes</h4>
+<p>Helper classes should be written in lowercase, starts with underscore (&quot;_&quot;)</p>
+<h5 id="example">Example:</h5>
+<pre><code class="lang-css">    ._active {
+        ...
+    }</code></pre>
+<h3 id="size">Size</h3>
+<p>Use class names that are as short as possible but as long as necessary.
+Try to convey what class is about while being as brief as possible.
+Using class names this way contributes to acceptable levels of understandability and code efficiency.</p>
+<h5 id="not-recommended-too-long">Not recommended: too long</h5>
+<pre><code class="lang-css">
+    .navigation-panel-in-footer {
+       ...
+    }</code></pre>
+<h5 id="not-recommended-too-short">Not recommended: too short</h5>
+<pre><code class="lang-css">    .nvpf {
+       ...
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .nav-bar {
+        ...
+    }</code></pre>
+<h3 id="writing">Writing</h3>
+<p>Write selector name together in single line, don&#39;t use concatenation</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .product {
+        ...
+        &amp;-list {
+            ...
+            &amp;-item {
+                ...
+            }
+        }
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .product-list-item {
+        ...
+    }</code></pre>
+<h3 id="meaning">Meaning</h3>
+<p><strong>Use meaningful or generic class names.</strong></p>
+<p>Instead of presentational or cryptic names, always use class names that reflect the purpose of the element in question, or that are otherwise generic.
+Names that are specific and reflect the purpose of the element should be preferred as these are most understandable and the least likely to change.
+Generic names are simply a fallback for elements that have no particular or no meaning different from their siblings. They are typically needed as “helpers.”
+Using functional or generic names reduces the probability of unnecessary document or template changes.</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .foo-1901 {
+        ...
+    }</code></pre>
+<h5 id="not-recommended-presentational">Not recommended: presentational</h5>
+<pre><code class="lang-css">    .button-green {
+       ...
+    }
+
+    .clear {
+       ...
+    }</code></pre>
+<h5 id="recommended-specific">Recommended: specific</h5>
+<pre><code class="lang-css">    .category {
+        ...
+    }
+    .category-title {
+        ...
+    }</code></pre>
+<h3 id="type-selectors">Type selectors</h3>
+<p><strong>Avoid qualifying class names with type selectors.</strong></p>
+<p>Unless necessary (for example with helper classes), do not use element names in conjunction with IDs or classes.
+Avoiding unnecessary ancestor selectors is useful for performance reasons.</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    div.error {
+       ...
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .error {
+        ...
+    }</code></pre>
+<p>Use type selectors in lowercase</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .nav &gt; LI {
+       ...
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .nav &gt; li {
+        ...
+    }</code></pre>
+<h3 id="nesting">Nesting</h3>
+<p>Be careful with selectors nesting. In general try to use 3 nested levels as max.
+Exception are pseudo elements and states</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .footer {
+        ...
+        .nav {
+            ...
+            .nav-list {
+                ...
+                .nav-list-item {
+                    ...
+                }
+            }
+        }
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .footer {
+        ...
+        .nav {
+            ...
+        }
+        .nav-list {
+            ...
+        }
+        .nav-list-item {
+            ...
+         }
+    }</code></pre>
+<h2 id="properties">Properties</h2>
+<h3 id="sort">Sort</h3>
+<p>Sort all properties alphabetical. Mixins, variables etc. should go first</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        color: @nav__color;
+        text-align: center;
+        background-color: @nav__background-color;
+    }</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    .nav {
+        background-color: @nav__background-color;
+        color: @nav__color;
+        text-align: center;
+    }</code></pre>
+<h3 id="shorthand">Shorthand</h3>
+<p>Use shortland properties where possible.</p>
+<p>CSS offers a variety of shorthand properties (like font) that should be used whenever possible, even in cases where only one value is explicitly set.
+Using shorthand properties is useful for code efficiency and understandability.</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    border-top-style: none;
+    padding-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0;</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    border-top: 0;
+    padding: 0 1em 2em;</code></pre>
+<h3 id="0-and-units">0 and units</h3>
+<p>Omit unit specification after &quot;0&quot; values.</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    border-width: 0px;
+    margin: 0rem;</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    border-width: 0;
+    margin: 0;</code></pre>
+<h3 id="floating-values">Floating values</h3>
+<p>Omit leading &quot;0&quot;s in values, use dot instead</p>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    margin-left: 0.5rem;</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    margin-left: .5rem;</code></pre>
+<h3 id="hexadecimal-notation">Hexadecimal notation</h3>
+<ul>
+<li>Use lowercase only</li>
+<li>Use 3 character hexadecimal notation where possible.</li>
+<li>For color values that permit it, 3 character hexadecimal notation is shorter and more succinct.</li>
+<li>Also please avoid hex color in properties, use only variables instead.</li>
+</ul>
+<h5 id="not-recommended">Not recommended:</h5>
+<pre><code class="lang-css">    color: #ff0000;
+    @nav__color: #FAFAFA;
+    @nav-item__color: red;</code></pre>
+<h5 id="recommended">Recommended:</h5>
+<pre><code class="lang-css">    @nav__color: #fafafa;
+    @nav-item__color: #f00;
+    ...
+    color: @nav-item__color;</code></pre>
+<h2 id="variables">Variables</h2>
+<h3 id="location">Location</h3>
+<h4 id="local-variables">Local variables</h4>
+<p>If variables are local and used only in module scope it should be located in module file, on the top of the file with general comment</p>
+<p>Example <strong>_module.less</strong>:</p>
+<pre><code class="lang-css">    ...
+
+    //
+    //  Variables
+    //  _____________________________________________
+
+    //  Colors
+    @btn__color: @color-brownie;
+    @btn-primary__color: @color-white;
+    @btn-secondary__color: @color-white;
+    ...</code></pre>
+<h4 id="theme-variables">Theme variables</h4>
+<p>If variables are common for couple modules it should be located in <strong>_theme.less</strong> file</p>
+<h4 id="global-variables">Global variables</h4>
+<p>If variables are common for couple themes it should be located in global lib in <strong>_variables.less</strong> file</p>
+<h3 id="naming">Naming</h3>
+<p>All variables should be written in lowercase.</p>
+<h4 id="value-variables">Value variables</h4>
+<h5 id="general-model-is">General model is:</h5>
+<pre><code class="lang-css">    @property-name</code></pre>
+<h5 id="examples">Examples:</h5>
+<pre><code class="lang-css">    @primary__color: @color-phoenix;
+    @indent__base: 2rem;
+    @border-radius-round: 100%;</code></pre>
+<h4 id="parameter-variables">Parameter variables</h4>
+<h5 id="general-model-is">General model is:</h5>
+<pre><code class="lang-css">    @component-element__state__property__modifier</code></pre>
+<p>Please mention that component can be not only element name, it also can be primary, secondary, tertiary
+Base is a modifier</p>
+<h5 id="examples">Examples:</h5>
+<pre><code class="lang-css">    @color-orange: &#39;&#39;;
+    @link__hover__color: &#39;&#39;;
+    @nav-element__background-color: &#39;&#39;;
+    @secondary__color: &#39;&#39;;
+    @side-nav__indent__s: &#39;&#39;;
+    @side-nav-el__background-color: &#39;&#39;;
+    @side-nav-el__active__background-color: &#39;&#39;;
+    @side-nav-el__active-focus__background-color: &#39;&#39;;
+    @side-nav-el__active-focus__font-size__xl: &#39;&#39;;
+    @text__color__base: &#39;&#39;;</code></pre>
+<h2 id="mixins">Mixins</h2>
+<h3 id="location">Location</h3>
+<p>Theme mixins (except extends) should be saved in <strong>source/utilities</strong> folder
+Extends that used in more than one theme should be saved in lib <strong>lib/source/utilities.less</strong> (will be separated into utilities folder)</p>
+<h3 id="naming">Naming</h3>
+<p>In name creation you can follow the same rules as for the creation of class names.
+For mixins grouping use prefix__</p>
+<h5 id="example">Example:</h5>
+<pre><code class="lang-css">    .extend__clearfix (...) {
+        ...
+    }
+
+    .vendor-prefix__flex-direction (...) {
+        ...
+    }</code></pre>
+<h2 id="extends">Extends</h2>
+<h3 id="location">Location</h3>
+<p>Local extends that used only in one file, should be written in this <strong>local file</strong>.
+Extends that used in more than two files should be saved in theme <strong>source/_extend.less</strong>
+Extends that used in more than one theme should be saved in lib <strong>lib/source/_abstract.less</strong> (will be renamed to _extend.less)</p>
+<h3 id="naming">Naming</h3>
+<p>Extend class names should have prefix <strong>.abs-</strong> (from abstract)</p>
+</div></article></section><div class="bar bottom"><div hidden class="settings container"><!-- Icons from http://iconmonstr.com--><button title="Desktop (1280)" data-width='1280'><svg viewBox="0 0 412 386" height="24" width="26" class="icon"><path d="m147.6,343.9c-4.5,15.9-26.2,37.6-42.1,42.1h201c-15.3,-4-38.1,-26.8-42.1,-42.1H147.6zM387,0.5H25c-13.8,0-25,11.2-25,25V294c0,13.8 11.2,25 25,25h362c13.8,0 25,-11.2 25,-25V25.5C412,11.7 400.8,0.5 387,0.5zM369.9,238.2H42.1L42.1,42.6 369.9,42.6V238.2z"></path></svg></button><button title="Laptop (1024)" data-width='1024'><svg viewBox="0 0 384 312" height="23" width="28" class="icon"><path d="m349.2,20.5c0,-11-9,-20-20,-20H53.6c-11,0-20,9-20,20v194H349.2v-194zm-27,167H60.6V27.5H322.2v160zm28,42H32.6L2.6,282.1c-3.5,6.2-3.5,13.8 0.1,19.9 3.6,6.2 10.2,9.9 17.3,9.9H363.1c7.1,0 13.7,-3.8 17.3,-10 3.6,-6.2 3.6,-13.8 0,-20l-30.2,-52.5zm-196.9,54 8,-23.5h60.5l8,23.5h-76.5z"></path></svg></button><button title="Tablet (768)" data-width='768'><svg viewBox="0 0 317 412" height="24" width="18" class="icon"><path d="M 316.5,380 V 32 c 0,-17.7 -14.3,-32 -32,-32 H 32 C 14.3,0 0,14.3 0,32 v 348 c 0,17.7 14.3,32 32,32 h 252.5 c 17.7,0 32,-14.3 32,-32 z M 40,367 V 45 H 276.5 V 367 H 40 z m 109.8,22.7 c 0,-4.7 3.8,-8.5 8.5,-8.5 4.7,0 8.5,3.8 8.5,8.5 0,4.7 -3.8,8.5 -8.5,8.5 -4.7,0 -8.5,-3.8 -8.5,-8.5 z"></path></svg></button><button title="Smart phone (320)" data-width='320'><svg viewBox="0 0 224 412" height="24" width="13" class="icon"><path d="M 190.7,0 H 33 C 14.8,0 0,14.8 0,33 v 346 c 0,18.2 14.8,33 33,33 h 157.7 c 18.2,0 33,-14.8 33,-33 V 33 c 0,-18.2 -14.8,-33 -33,-33 z M 94.3,30.2 h 37 c 2.2,0 4,1.8 4,4 0,2.2 -1.8,4 -4,4 h -37 c -2.2,0 -4,-1.8 -4,-4 0,-2.2 1.8,-4 4,-4 z m 18.5,362.8 c -8.8,0 -16,-7.2 -16,-16 0,-8.8 7.2,-16 16,-16 8.8,0 16,7.2 16,16 0,8.8 -7.2,16 -16,16 z M 198.6,343.8 H 25.1 V 68.2 h 173.5 v 275.5 z"></path></svg></button><button title="Feature phone (240)" data-width='240'><svg viewBox="0 0 201 412" height="24" width="12" class="icon"><path d="M 165.5,0.2 V 45 H 25 c -13.8,0 -25,11.2 -25,25 V 387 c 0,13.8 11.2,25 25,25 h 150.5 c 13.8,0 25,-11.2 25,-25 V 0.2 h -35 z M 65.2,366.5 H 34.2 v -24.5 h 31 v 24.5 z m 0,-44.3 H 34.2 v -24.5 h 31 v 24.5 z m 50.5,44.3 H 84.7 v -24.5 h 31 v 24.5 z m 0,-44.3 H 84.7 v -24.5 h 31 v 24.5 z m 50.5,44.3 h -31 v -24.5 h 31 v 24.5 z m 0,-44.3 h -31 v -24.5 h 31 v 24.5 z m 0,-59.3 h -132 V 95.4 h 132 V 262.9 z"></path></svg></button><button title="Auto (100%)" data-width="auto" class="auto is-active">Auto</button></div></div><script>(function(){var a=[{title:"actions-toolbar",filename:"actions-toolbar",url:"actions-toolbar.html"},{title:"Actions toolbar",filename:"actions-toolbar",url:"actions-toolbar.html#actions-toolbar"},{title:"Actions toolbar mixin variables",filename:"actions-toolbar",url:"actions-toolbar.html#actions-toolbar-mixin-variables"},{title:"Actions toolbar alignment",filename:"actions-toolbar",url:"actions-toolbar.html#actions-toolbar-alignment"},{title:"Reverse primary and secondary blocks",filename:"actions-toolbar",url:"actions-toolbar.html#reverse-primary-and-secondary-blocks"},{title:"Actions toolbar indents customizations",filename:"actions-toolbar",url:"actions-toolbar.html#actions-toolbar-indents-customizations"},{title:"Responsive actions toolbar",filename:"actions-toolbar",url:"actions-toolbar.html#responsive-actions-toolbar"},{title:"breadcrumbs",filename:"breadcrumbs",url:"breadcrumbs.html"},{title:"Breadcrumbs",filename:"breadcrumbs",url:"breadcrumbs.html#breadcrumbs"},{title:"Breadcrumbs variables",filename:"breadcrumbs",url:"breadcrumbs.html#breadcrumbs-variables"},{title:"Button-styled breadcrumbs with gradient background, border, and no separating symbol",filename:"breadcrumbs",url:"breadcrumbs.html#buttonstyled-breadcrumbs-with-gradient-background-border-and-no-separating-symbol"},{title:"Breadcrumbs with solid background",filename:"breadcrumbs",url:"breadcrumbs.html#breadcrumbs-with-solid-background"},{title:"buttons",filename:"buttons",url:"buttons.html"},{title:"Default button",filename:"buttons",url:"buttons.html#default-button"},{title:"Button variables",filename:"buttons",url:"buttons.html#button-variables"},{title:"Button as an icon",filename:"buttons",url:"buttons.html#button-as-an-icon"},{title:"Button with an icon on the left or right side of the text",filename:"buttons",url:"buttons.html#button-with-an-icon-on-the-left-or-right-side-of-the-text"},{title:"Button with fixed width",filename:"buttons",url:"buttons.html#button-with-fixed-width"},{title:"Primary button",filename:"buttons",url:"buttons.html#primary-button"},{title:"Primary button variables",filename:"buttons",url:"buttons.html#primary-button-variables"},{title:"Button with gradient background",filename:"buttons",url:"buttons.html#button-with-gradient-background"},{title:"Button as a link",filename:"buttons",url:"buttons.html#button-as-a-link"},{title:"Button as a link variables",filename:"buttons",url:"buttons.html#button-as-a-link-variables"},{title:"Link as a button",filename:"buttons",url:"buttons.html#link-as-a-button"},{title:"Button reset",filename:"buttons",url:"buttons.html#button-reset"},{title:"Button revert secondary color",filename:"buttons",url:"buttons.html#button-revert-secondary-color"},{title:"Button revert secondary color variables",filename:"buttons",url:"buttons.html#button-revert-secondary-color-variables"},{title:"Button revert secondary size",filename:"buttons",url:"buttons.html#button-revert-secondary-size"},{title:"Button revert secondary size variables",filename:"buttons",url:"buttons.html#button-revert-secondary-size-variables"},{title:"components",filename:"components",url:"components.html"},{title:"Components",filename:"components",url:"components.html#components"},{title:"Components Variables",filename:"components",url:"components.html#components-variables"},{title:"dropdowns",filename:"dropdowns",url:"dropdowns.html"},{title:"Drop-down and split buttons mixins",filename:"dropdowns",url:"dropdowns.html#dropdown-and-split-buttons-mixins"},{title:"Drop-down",filename:"dropdowns",url:"dropdowns.html#dropdown"},{title:"Drop-down variables",filename:"dropdowns",url:"dropdowns.html#dropdown-variables"},{title:"Drop-down with icon customization",filename:"dropdowns",url:"dropdowns.html#dropdown-with-icon-customization"},{title:"Modify dropdown list styles",filename:"dropdowns",url:"dropdowns.html#modify-dropdown-list-styles"},{title:"Split button",filename:"dropdowns",url:"dropdowns.html#split-button"},{title:"Split button variables",filename:"dropdowns",url:"dropdowns.html#split-button-variables"},{title:"Split button - button styling",filename:"dropdowns",url:"dropdowns.html#split-button-button-styling"},{title:"Split button icon customization",filename:"dropdowns",url:"dropdowns.html#split-button-icon-customization"},{title:"Split button drop-down list customization",filename:"dropdowns",url:"dropdowns.html#split-button-dropdown-list-customization"},{title:"forms",filename:"forms",url:"forms.html"},{title:"Forms mixins",filename:"forms",url:"forms.html#forms-mixins"},{title:"Global forms elements customization",filename:"forms",url:"forms.html#global-forms-elements-customization"},{title:"Fieldsets & fields customization",filename:"forms",url:"forms.html#fieldsets-fields-customization"},{title:"Fieldset and legend customization variables",filename:"forms",url:"forms.html#fieldset-and-legend-customization-variables"},{title:"Fields customization variables",filename:"forms",url:"forms.html#fields-customization-variables"},{title:"Required fields message customization variables",filename:"forms",url:"forms.html#required-fields-message-customization-variables"},{title:"Form element inputs customization",filename:"forms",url:"forms.html#form-element-inputs-customization"},{title:"Form element inputs customization variables",filename:"forms",url:"forms.html#form-element-inputs-customization-variables"},{title:"Form element choice",filename:"forms",url:"forms.html#form-element-choice"},{title:"Form element choice variables",filename:"forms",url:"forms.html#form-element-choice-variables"},{title:"Custom color",filename:"forms",url:"forms.html#custom-color"},{title:"Input number - input-text view",filename:"forms",url:"forms.html#input-number-inputtext-view"},{title:"Input search - input-text view",filename:"forms",url:"forms.html#input-search-inputtext-view"},{title:"Form validation",filename:"forms",url:"forms.html#form-validation"},{title:"Form validation variables",filename:"forms",url:"forms.html#form-validation-variables"},{title:"icons",filename:"icons",url:"icons.html"},{title:"Icons",filename:"icons",url:"icons.html#icons"},{title:"Icon with image or sprite",filename:"icons",url:"icons.html#icon-with-image-or-sprite"},{title:"Icon with image or sprite variables",filename:"icons",url:"icons.html#icon-with-image-or-sprite-variables"},{title:"Icon position for an icon with image or sprite",filename:"icons",url:"icons.html#icon-position-for-an-icon-with-image-or-sprite"},{title:"Position for icon with image or sprite mixin variables",filename:"icons",url:"icons.html#position-for-icon-with-image-or-sprite-mixin-variables"},{title:"Icon sprite position (with grid)",filename:"icons",url:"icons.html#icon-sprite-position-with-grid"},{title:"Icon sprite position variables",filename:"icons",url:"icons.html#icon-sprite-position-variables"},{title:"Image/sprite icon size",filename:"icons",url:"icons.html#imagesprite-icon-size"},{title:"Image/sprite icon size variables",filename:"icons",url:"icons.html#imagesprite-icon-size-variables"},{title:"Font icon",filename:"icons",url:"icons.html#font-icon"},{title:"Font icon variables",filename:"icons",url:"icons.html#font-icon-variables"},{title:"Change the size of font icon",filename:"icons",url:"icons.html#change-the-size-of-font-icon"},{title:"Change the size of font icon variables",filename:"icons",url:"icons.html#change-the-size-of-font-icon-variables"},{title:"Hide icon text",filename:"icons",url:"icons.html#hide-icon-text"},{title:"Sprite and font icons for Blank theme",filename:"icons",url:"icons.html#sprite-and-font-icons-for-blank-theme"},{title:"layout",filename:"layout",url:"layout.html"},{title:"Layout",filename:"layout",url:"layout.html#layout"},{title:"Layout global variables",filename:"layout",url:"layout.html#layout-global-variables"},{title:"Page layouts",filename:"layout",url:"layout.html#page-layouts"},{title:"Layout column",filename:"layout",url:"layout.html#layout-column"},{title:"Layout column variables",filename:"layout",url:"layout.html#layout-column-variables"},{title:"Layout width",filename:"layout",url:"layout.html#layout-width"},{title:"Layout width variables",filename:"layout",url:"layout.html#layout-width-variables"},{title:"lib",filename:"lib",url:"lib.html"},{title:"Including Magento UI library to your theme",filename:"lib",url:"lib.html#including-magento-ui-library-to-your-theme"},{title:"loaders",filename:"loaders",url:"loaders.html"},{title:"Loaders",filename:"loaders",url:"loaders.html#loaders"},{title:"Default loader variables",filename:"loaders",url:"loaders.html#default-loader-variables"},{title:"Loading",filename:"loaders",url:"loaders.html#loading"},{title:"Loading default variables",filename:"loaders",url:"loaders.html#loading-default-variables"},{title:"messages",filename:"messages",url:"messages.html"},{title:"Messages",filename:"messages",url:"messages.html#messages"},{title:"Information message",filename:"messages",url:"messages.html#information-message"},{title:"Warning message",filename:"messages",url:"messages.html#warning-message"},{title:"Error message",filename:"messages",url:"messages.html#error-message"},{title:"Success message",filename:"messages",url:"messages.html#success-message"},{title:"Notice message",filename:"messages",url:"messages.html#notice-message"},{title:"Message with inner icon",filename:"messages",url:"messages.html#message-with-inner-icon"},{title:"Message with lateral icon",filename:"messages",url:"messages.html#message-with-lateral-icon"},{title:"Custom message style",filename:"messages",url:"messages.html#custom-message-style"},{title:"Messages global variables",filename:"messages",url:"messages.html#messages-global-variables"},{title:"pages",filename:"pages",url:"pages.html"},{title:"Pagination HTML markup",filename:"pages",url:"pages.html#pagination-html-markup"},{title:"Pagination variables",filename:"pages",url:"pages.html#pagination-variables"},{title:"Pagination with label and gradient background on links",filename:"pages",url:"pages.html#pagination-with-label-and-gradient-background-on-links"},{title:'Pagination with "previous"..."next" text links and label',filename:"pages",url:"pages.html#pagination-with-previousnext-text-links-and-label"},{title:"Pagination without label, with solid background",filename:"pages",url:"pages.html#pagination-without-label-with-solid-background"},{title:"popups",filename:"popups",url:"popups.html"},{title:"Popups",filename:"popups",url:"popups.html#popups"},{title:"Popup variables",filename:"popups",url:"popups.html#popup-variables"},{title:"Window overlay mixin variables",filename:"popups",url:"popups.html#window-overlay-mixin-variables"},{title:"Fixed height popup",filename:"popups",url:"popups.html#fixed-height-popup"},{title:"Fixed content height popup",filename:"popups",url:"popups.html#fixed-content-height-popup"},{title:"Margins for header, content and footer block in popup",filename:"popups",url:"popups.html#margins-for-header-content-and-footer-block-in-popup"},{title:"Popup titles styled as theme headings",filename:"popups",url:"popups.html#popup-titles-styled-as-theme-headings"},{title:"Popup action toolbar",filename:"popups",url:"popups.html#popup-action-toolbar"},{title:"Popup Close button without an icon",filename:"popups",url:"popups.html#popup-close-button-without-an-icon"},{title:"Modify the icon of popup Close button",filename:"popups",url:"popups.html#modify-the-icon-of-popup-close-button"},{title:"Modify overlay styles",filename:"popups",url:"popups.html#modify-overlay-styles"},{title:"rating",filename:"rating",url:"rating.html"},{title:"Ratings",filename:"rating",url:"rating.html#ratings"},{title:"Global rating variables",filename:"rating",url:"rating.html#global-rating-variables"},{title:"Rating with vote",filename:"rating",url:"rating.html#rating-with-vote"},{title:"Rating with vote icons number customization",filename:"rating",url:"rating.html#rating-with-vote-icons-number-customization"},{title:"Rating with vote icons colors customization",filename:"rating",url:"rating.html#rating-with-vote-icons-colors-customization"},{title:"Rating with vote icons symbol customization",filename:"rating",url:"rating.html#rating-with-vote-icons-symbol-customization"},{title:"Accessible rating with vote",filename:"rating",url:"rating.html#accessible-rating-with-vote"},{title:"Rating summary",filename:"rating",url:"rating.html#rating-summary"},{title:"Rating summary icons number customization",filename:"rating",url:"rating.html#rating-summary-icons-number-customization"},{title:"Rating summary icons color customization",filename:"rating",url:"rating.html#rating-summary-icons-color-customization"},{title:"Rating summary icons symbol customization",filename:"rating",url:"rating.html#rating-summary-icons-symbol-customization"},{title:"Rating summary hide label",filename:"rating",url:"rating.html#rating-summary-hide-label"},{title:"Rating summary multiple ratings",filename:"rating",url:"rating.html#rating-summary-multiple-ratings"},{title:"Rating hide label mixin",filename:"rating",url:"rating.html#rating-hide-label-mixin"},{title:"resets",filename:"resets",url:"resets.html"},{title:"Resets",filename:"resets",url:"resets.html#resets"},{title:"responsive",filename:"responsive",url:"responsive.html"},{title:"Responsive",filename:"responsive",url:"responsive.html#responsive"},{title:"Responsive mixins usage",filename:"responsive",url:"responsive.html#responsive-mixins-usage"},{title:"Media query style groups separation variables",filename:"responsive",url:"responsive.html#media-query-style-groups-separation-variables"},{title:"Responsive breakpoints",filename:"responsive",url:"responsive.html#responsive-breakpoints"},{title:"sections",filename:"sections",url:"sections.html"},{title:"Tabs and accordions",filename:"sections",url:"sections.html#tabs-and-accordions"},{title:"Tabs",filename:"sections",url:"sections.html#tabs"},{title:"Tabs mixin variables",filename:"sections",url:"sections.html#tabs-mixin-variables"},{title:"Tabs with content top border",filename:"sections",url:"sections.html#tabs-with-content-top-border"},{title:"Accordion",filename:"sections",url:"sections.html#accordion"},{title:"Accordion mixin variables",filename:"sections",url:"sections.html#accordion-mixin-variables"},{title:"Responsive tabs",filename:"sections",url:"sections.html#responsive-tabs"},{title:"Tabs Base",filename:"sections",url:"sections.html#tabs-base"},{title:"Accordion Base",filename:"sections",url:"sections.html#accordion-base"},{title:"tables",filename:"tables",url:"tables.html"},{title:"Tables",filename:"tables",url:"tables.html#tables"},{title:"Table mixin variables",filename:"tables",url:"tables.html#table-mixin-variables"},{title:"Table typography",filename:"tables",url:"tables.html#table-typography"},{title:"Table typography mixin variables",filename:"tables",url:"tables.html#table-typography-mixin-variables"},{title:"Table caption",filename:"tables",url:"tables.html#table-caption"},{title:"Table caption mixin variables",filename:"tables",url:"tables.html#table-caption-mixin-variables"},{title:"Table cells resize",filename:"tables",url:"tables.html#table-cells-resize"},{title:"Table cells resize variables",filename:"tables",url:"tables.html#table-cells-resize-variables"},{title:"Table background customization",filename:"tables",url:"tables.html#table-background-customization"},{title:"Table background mixin variables",filename:"tables",url:"tables.html#table-background-mixin-variables"},{title:"Table borders customization",filename:"tables",url:"tables.html#table-borders-customization"},{title:"Table borders mixin variables",filename:"tables",url:"tables.html#table-borders-mixin-variables"},{title:"Table with horizontal borders",filename:"tables",url:"tables.html#table-with-horizontal-borders"},{title:"Table with vertical borders",filename:"tables",url:"tables.html#table-with-vertical-borders"},{title:"Table with light borders",filename:"tables",url:"tables.html#table-with-light-borders"},{title:"Table without borders",filename:"tables",url:"tables.html#table-without-borders"},{title:"Striped table",filename:"tables",url:"tables.html#striped-table"},{title:"Striped table mixin variables",filename:"tables",url:"tables.html#striped-table-mixin-variables"},{title:"Table with rows hover",filename:"tables",url:"tables.html#table-with-rows-hover"},{title:"Table with rows hover mixin variables",filename:"tables",url:"tables.html#table-with-rows-hover-mixin-variables"},{title:"Responsive table technics #1",filename:"tables",url:"tables.html#responsive-table-technics-1"},{title:"Responsive table technics #2",filename:"tables",url:"tables.html#responsive-table-technics-2"},{title:"Responsive table technics #2 mixin variables",filename:"tables",url:"tables.html#responsive-table-technics-2-mixin-variables"},{title:"tooltips",filename:"tooltips",url:"tooltips.html"},{title:"Tooltips",filename:"tooltips",url:"tooltips.html#tooltips"},{title:"Tooltips variables",filename:"tooltips",url:"tooltips.html#tooltips-variables"},{title:"typography",filename:"typography",url:"typography.html"},{title:"Typogrphy",filename:"typography",url:"typography.html#typogrphy"},{title:"Typography variables",filename:"typography",url:"typography.html#typography-variables"},{title:"Font-size mixin",filename:"typography",url:"typography.html#fontsize-mixin"},{title:"Line-height mixin",filename:"typography",url:"typography.html#lineheight-mixin"},{title:"Word breaking mixin",filename:"typography",url:"typography.html#word-breaking-mixin"},{title:"Font face mixin",filename:"typography",url:"typography.html#font-face-mixin"},{title:"Text overflow mixin",filename:"typography",url:"typography.html#text-overflow-mixin"},{title:"Text hide",filename:"typography",url:"typography.html#text-hide"},{title:"Hyphens",filename:"typography",url:"typography.html#hyphens"},{title:"Font style and color",filename:"typography",url:"typography.html#font-style-and-color"},{title:"Font style mixin variables",filename:"typography",url:"typography.html#font-style-mixin-variables"},{title:"Reset list styles",filename:"typography",url:"typography.html#reset-list-styles"},{title:"Reset list styles variables",filename:"typography",url:"typography.html#reset-list-styles-variables"},{title:"Inline-block list item styling",filename:"typography",url:"typography.html#inlineblock-list-item-styling"},{title:"Link styling mixin",filename:"typography",url:"typography.html#link-styling-mixin"},{title:"Link styling mixin variables",filename:"typography",url:"typography.html#link-styling-mixin-variables"},{title:"Heading styling mixin",filename:"typography",url:"typography.html#heading-styling-mixin"},{title:"Base typography mixins",filename:"typography",url:"typography.html#base-typography-mixins"},{title:"Base typography mixin variables",filename:"typography",url:"typography.html#base-typography-mixin-variables"},{title:"Headings typography mixin",filename:"typography",url:"typography.html#headings-typography-mixin"},{title:"Headings typography mixin variables",filename:"typography",url:"typography.html#headings-typography-mixin-variables"},{title:"Typography links mixin",filename:"typography",url:"typography.html#typography-links-mixin"},{title:"Typography lists mixin",filename:"typography",url:"typography.html#typography-lists-mixin"},{title:"Typography lists mixin variables",filename:"typography",url:"typography.html#typography-lists-mixin-variables"},{title:"Typography code elements mixin",filename:"typography",url:"typography.html#typography-code-elements-mixin"},{title:"Typography code mixin variables",filename:"typography",url:"typography.html#typography-code-mixin-variables"},{title:"Typography blockquote",filename:"typography",url:"typography.html#typography-blockquote"},{title:"Typography blockquote mixin variables",filename:"typography",url:"typography.html#typography-blockquote-mixin-variables"},{title:"utilities",filename:"utilities",url:"utilities.html"},{title:"Utilities",filename:"utilities",url:"utilities.html#utilities"},{title:".lib-clearfix()",filename:"utilities",url:"utilities.html#libclearfix"},{title:".lib-visibility-hidden()",filename:"utilities",url:"utilities.html#libvisibilityhidden"},{title:".lib-visually-hidden()",filename:"utilities",url:"utilities.html#libvisuallyhidden"},{title:".lib-visually-hidden-reset()",filename:"utilities",url:"utilities.html#libvisuallyhiddenreset"},{title:".lib-css()",filename:"utilities",url:"utilities.html#libcss"},{title:".lib-css() variables",filename:"utilities",url:"utilities.html#libcss-variables"},{title:".lib-rotate()",filename:"utilities",url:"utilities.html#librotate"},{title:".lib-rotate() variables",filename:"utilities",url:"utilities.html#librotate-variables"},{title:".lib-input-placeholder()",filename:"utilities",url:"utilities.html#libinputplaceholder"},{title:".lib-input-placeholder() variables",filename:"utilities",url:"utilities.html#libinputplaceholder-variables"},{title:".lib-background-gradient()",filename:"utilities",url:"utilities.html#libbackgroundgradient"},{title:".lib-background-gradient() variables",filename:"utilities",url:"utilities.html#libbackgroundgradient-variables"},{title:"variables",filename:"variables",url:"variables.html"},{title:"List of Global Variables",filename:"variables",url:"variables.html#list-of-global-variables"},{title:"Table with rows hover mixin variables",filename:"variables",url:"variables.html#table-with-rows-hover-mixin-variables"},{title:"docs",filename:"docs",url:"docs.html"},{title:"Documentation",filename:"docs",url:"docs.html#documentation"}];(function(){"use strict";var b=function(a,b){return Array.prototype.indexOf.call(a,b)!==-1},c=function(a,b){return Array.prototype.filter.call(a,b)},d=function(a,b){return Array.prototype.forEach.call(a,b)},e=document.getElementsByTagName("body")[0];e.addEventListener("click",function(a){var b=a.target;b.tagName.toLowerCase()==="svg"&&(b=b.parentNode);var c=!1;b.dataset.toggle!=null&&(a.preventDefault(),b.classList.contains("is-active")||(c=!0)),d(e.querySelectorAll("[data-toggle]"),function(a){a.classList.remove("is-active"),document.getElementById(a.dataset.toggle).hidden=!0}),c&&(b.classList.add("is-active"),document.getElementById(b.dataset.toggle).hidden=!1)}),function(){var f=e.getElementsByClassName("nav")[0];if(!f)return;var g=document.createElement("ul");g.className="nav-results",g.id="nav-search",g.hidden=!0,d(a,function(a){var b,c,d;b=document.createElement("li"),b._title=a.title.toLowerCase(),b.hidden=!0,b.appendChild(c=document.createElement("a")),c.href=a.url,c.innerHTML=a.title,c.appendChild(d=document.createElement("span")),d.innerHTML=a.filename,d.className="nav-results-filename",g.appendChild(b)}),f.appendChild(g);var h=g.children,i=function(a){d(h,function(a){a.hidden=!0});var b=this.value.toLowerCase(),e=[];b!==""&&(e=c(h,function(a){return a._title.indexOf(b)!==-1})),e.length>0?(d(e,function(a){a.hidden=!1}),g.hidden=!1):g.hidden=!0},j=f.querySelector('input[type="search"]');j.addEventListener("keyup",i),j.addEventListener("focus",i),e.addEventListener("click",function(a){if(a.target.classList&&a.target.classList.contains("search"))return;g.hidden=!0}),g.addEventListener("click",function(a){j.value=""});var k=document.createElement("ul");k.id="nav-toc",k.hidden=!0,k.className="nav-results toc-list",c(e.getElementsByTagName("*"),function(a){return b(["h1","h2","h3"],a.tagName.toLowerCase())}).map(function(a){var b=document.createElement("li"),c=document.createElement("a"),d=a.tagName.toLowerCase()[1];c.classList.add("level-"+d),b.appendChild(c),c.href="#"+a.id,c.innerHTML=a.innerHTML,k.appendChild(b)}),f.appendChild(k)}()})(),function(){"use strict";if(location.hash==="#__preview__"||location.protocol==="data:")return;var a=function(a,b){return Array.prototype.forEach.call(a,b)},b=function(a,b){var e=Array.prototype.slice.call(arguments,2);return d(a,function(a){return(c(b)?b||a:a[b]).apply(a,e)})},c=function(a){return Object.prototype.toString.call(a)==="[object Function]"},d=function(a,b){return Array.prototype.map.call(a,b)},e=function(a,b){return d(a,function(a){return a[b]})},f=function(a){var b={},c=a.split(";");for(var d=0;c.length>d;d++){var e=c[d].trim().split("=");b[e[0]]=e[1]}return b},g=function(a,c){return b(e(a,"classList"),"remove",c)},h=function(a,b){a.contentDocument.defaultView.postMessage(b,"*")},i=document.getElementsByTagName("head")[0],j=document.getElementsByTagName("body")[0],k=e(i.querySelectorAll('style[type="text/preview"]'),"innerHTML").join(""),l=e(i.querySelectorAll('script[type="text/preview"]'),"innerHTML").join(""),m=location.href.split("#")[0]+"#__preview__",n=document.createElement("iframe");n.src="data:text/html,",j.appendChild(n),n.addEventListener("load",function(){var b={sameOriginDataUri:!0};try{this.contentDocument,this.contentDocument||(b.sameOriginDataUri=!1)}catch(c){b.sameOriginDataUri=!1}this.parentNode.removeChild(this),a(j.getElementsByTagName("textarea"),function(a,c){o(a,b,c),q(),p(a)})});var o=function(a,b,c){var d,e,f;d=document.createElement("div"),d.appendChild(e=document.createElement("div")),d.className="preview",e.appendChild(f=document.createElement("iframe")),e.className="resizeable",f.setAttribute("scrolling","no"),f.name="iframe"+c++,f.addEventListener("load",function(){var c,d,e,f,g,i,j;j=this.contentDocument;if(!b.sameOriginDataUri&&this.src!==m)return;this.src===m&&(c=j.createElement("html"),c.appendChild(j.createElement("head")),c.appendChild(d=j.createElement("body")),d.innerHTML=a.textContent,j.replaceChild(c,j.documentElement)),g=j.createElement("head"),g.appendChild(f=j.createElement("style")),g.appendChild(e=j.createElement("script")),e.textContent=l,f.textContent=k,i=j.getElementsByTagName("head")[0],i.parentNode.replaceChild(g,i),h(this,"getHeight")});var g;b.sameOriginDataUri?g="data:text/html;charset=utf-8,"+encodeURIComponent("<!doctype html><html><head></head></body>"+a.textContent):g=m,f.setAttribute("src",g);var i=function(){f.contentDocument.body.innerHTML=this.value,h(f,"getHeight")};a.addEventListener("keypress",i),a.addEventListener("keyup",i),a.parentNode.insertBefore(d,a)},p=function(a){var b=document.createElement("div");b.className="preview-code",b.style.position="absolute",b.style.left="-9999px",j.appendChild(b);var c=parseInt(window.getComputedStyle(a).getPropertyValue("max-height"),10),d=function(a){b.textContent=this.value+"\n";var d=b.offsetHeight+2;d>=c?this.style.overflow="auto":this.style.overflow="hidden",this.style.height=b.offsetHeight+2+"px"};a.addEventListener("keypress",d),a.addEventListener("keyup",d),d.call(a)},q=function(){var b=j.getElementsByClassName("settings")[0],c=j.getElementsByClassName("resizeable"),d=30,e=function(b){document.cookie="preview-width="+b,a(c,function(a){b==="auto"&&(b=a.parentNode.offsetWidth),a.style.width=b+"px",h(a.getElementsByTagName("iframe")[0],"getHeight")})},i=f(document.cookie)["preview-width"];if(i){e(i),g(b.getElementsByClassName("is-active"),"is-active");var k=b.querySelector('button[data-width="'+i+'"]');k&&k.classList.add("is-active")}window.addEventListener("message",function(a){if(a.data==null||!a.source)return;var b=a.data,c=document.getElementsByName(a.source.name)[0];b.height!=null&&c&&(c.parentNode.style.height=b.height+d+"px")},!1),b&&c.length>0&&(b.hidden=!1,b.addEventListener("click",function(a){var c=a.target.tagName.toLowerCase(),d;if(c==="button")d=a.target;else{if(c!=="svg")return;d=a.target.parentNode}a.preventDefault(),g(b.getElementsByClassName("is-active"),"is-active"),d.classList.add("is-active");var f=d.dataset.width;e(f)}))}}()})()</script></body></html><!-- Generated with StyleDocco (http://jacobrask.github.com/styledocco). -->

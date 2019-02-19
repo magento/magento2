@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Cms\Test\TestCase\CreateCmsPageRewriteEntityTest" summary="Create CMS Page URL Rewrites" ticketId="MAGETWO-24847">
+        <variation name="CreateCmsPageRewriteEntityTestVariation1">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, severity:S1</data>
+            <data name="urlRewrite/data/entity_type" xsi:type="string">For CMS page</data>
+            <data name="urlRewrite/data/target_path/entity" xsi:type="string">cms/page/view/page_id/%cmsPage::default%</data>
+            <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%</data>
+            <data name="urlRewrite/data/redirect_type" xsi:type="string">No</data>
+            <data name="urlRewrite/data/description" xsi:type="string">test_description_default</data>
+            <data name="isRequired" xsi:type="string">Yes</data>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertUrlRewriteCmsPageRedirect" />
+        </variation>
+        <variation name="CreateCmsPageRewriteEntityTestVariation2">
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="urlRewrite/data/entity_type" xsi:type="string">For CMS page</data>
+            <data name="urlRewrite/data/target_path/entity" xsi:type="string">cms/page/view/page_id/%cmsPage::default%</data>
+            <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%.html</data>
+            <data name="urlRewrite/data/redirect_type" xsi:type="string">Temporary (302)</data>
+            <data name="urlRewrite/data/description" xsi:type="string">test description_302</data>
+            <data name="isRequired" xsi:type="string">Yes</data>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertUrlRewriteCmsPageRedirect" />
+        </variation>
+        <variation name="CreateCmsPageRewriteEntityTestVariation3">
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="urlRewrite/data/entity_type" xsi:type="string">For CMS page</data>
+            <data name="urlRewrite/data/target_path/entity" xsi:type="string">cms/page/view/page_id/%cmsPage::default%</data>
+            <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%.htm</data>
+            <data name="urlRewrite/data/redirect_type" xsi:type="string">Permanent (301)</data>
+            <data name="urlRewrite/data/description" xsi:type="string">test description_301</data>
+            <data name="isRequired" xsi:type="string">Yes</data>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertUrlRewriteCmsPageRedirect" />
+        </variation>
+        <variation name="CreateCmsPageRewriteEntityTestVariation4">
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="urlRewrite/data/entity_type" xsi:type="string">For CMS page</data>
+            <data name="urlRewrite/data/target_path/entity" xsi:type="string">cms/page/view/page_id/%cmsPage::default%</data>
+            <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%.aspx</data>
+            <data name="urlRewrite/data/redirect_type" xsi:type="string">Permanent (301)</data>
+            <data name="urlRewrite/data/description" xsi:type="string">test description_%isolation%</data>
+            <data name="isRequired" xsi:type="string">Yes</data>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertUrlRewriteCmsPageRedirect" />
+        </variation>
+    </testCase>
+</config>

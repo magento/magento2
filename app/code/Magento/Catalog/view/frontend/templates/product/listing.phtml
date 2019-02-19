@@ -1,0 +1,100 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see \Magento\Catalog\Block\Product\ListProduct
+ */
+?>
+<?php
+$start = microtime(true);
+$_productCollection = $block->getLoadedProductCollection();
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+?>
+<?php if (!$_productCollection->count()): ?>
+<p class="message note"><?= /* @escapeNotVerified */ __('We can\'t find products matching the selection.') ?></p>
+<?php else: ?>
+<?= $block->getToolbarHtml() ?>
+<?= $block->getAdditionalHtml() ?>
+<?php
+    if ($block->getMode() == 'grid') {
+        $viewMode = 'grid';
+        $image = 'category_page_grid';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $image = 'category_page_list';
+        $showDescription = true;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
+?>
+<div class="products wrapper <?= /* @escapeNotVerified */ $viewMode ?>">
+    <ol class="products list items">
+        <?php foreach ($_productCollection as $_product): ?>
+            <li class="item product">
+                <div class="product">
+                    <?php // Product Image ?>
+                    <a href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>" class="product photo">
+                        <?= $block->getImage($_product, $image)->toHtml() ?>
+                    </a>
+                    <div class="product details">
+                    <?php
+
+                        $info = [];
+                        $info['name'] = '<strong class="product name">'
+                                        . ' <a href="' . $_product->getProductUrl() . '" title="'
+                                        . $block->stripTags($_product->getName(), null, true) . '">'
+                                        . $_helper->productAttribute($_product, $_product->getName(), 'name')
+                                        . '</a></strong>';
+                        $info['price'] = $block->getProductPrice($_product);
+                        $info['review'] = $block->getReviewsSummaryHtml($_product, $templateType);
+
+                        if ($_product->isSaleable()) {
+                            $info['button'] = '<button type="button" title="' . __('Add to Cart') . '" class="action tocart"'
+                                            . ' data-mage-init=\'{ "redirectUrl": { "event": "click", url: "' . $block->getAddToCartUrl($_product) . '"} }\'>'
+                                            . '<span>' . __('Add to Cart') . '</span></button>';
+                        } else {
+                            $info['button'] = $_product->getIsSalable() ?   '<div class="stock available"><span>' . __('In stock') . '</span></div>' :
+                                                                            '<div class="stock unavailable"><span>' . __('Out of stock') . '</span></div>';
+                        }
+
+                        $info['links'] = '<div class="product links" data-role="add-to-links">'
+                                        . '<a href="#" data-post=\'' . $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($_product) . '\' class="action towishlist" data-action="add-to-wishlist">'
+                                        . '<span>' . __('Add to Wish List') . '</span></a>'
+                                        . '<a href="' . $block->getAddToCompareUrl($_product) . '" class="action tocompare">'
+                                        . '<span>' . __('Add to Compare') . '</span></a></div>';
+                        $info['actions'] = '<div class="product action">' . $info['button'] . $info['links'] . '</div>';
+
+                        if ($showDescription) {
+                            $info['description'] =  '<div class="product description">'
+                                                    . $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description')
+                                                    . ' <a href="' . $_product->getProductUrl() . '" class="action more">'
+                                                    . __('Learn More') . '</a></div>';
+                        } else {
+                            $info['description'] = '';
+                        }
+
+                        $details = $block->getInfoOrder() ?: ['name','price','review','description','actions'];
+                        foreach ($details as $detail) {
+                            /* @escapeNotVerified */ echo $info[$detail];
+                        }
+                        ?>
+
+                    </div>
+                </div>
+            </li>
+        <?php endforeach; ?>
+    </ol>
+</div>
+<?= $block->getToolbarHtml() ?>
+<?php endif; ?>
+<?= /* @escapeNotVerified */ $time_taken = microtime(true) - $start ?>

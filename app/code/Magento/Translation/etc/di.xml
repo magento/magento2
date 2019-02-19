@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline" />
+    <preference for="Magento\Framework\Translate\Inline\ConfigInterface" type="Magento\Translation\Model\Inline\Config" />
+    <preference for="Magento\Framework\Translate\Inline\ProviderInterface" type="Magento\Framework\Translate\Inline\Provider" />
+    <preference for="Magento\Framework\Translate\Inline\ParserInterface" type="Magento\Translation\Model\Inline\Parser" />
+    <preference for="Magento\Framework\Translate\ResourceInterface" type="Magento\Translation\Model\ResourceModel\Translate" />
+    <preference for="Magento\Framework\Translate\Inline\StateInterface" type="Magento\Framework\Translate\Inline\State" />
+    <preference for="Magento\Framework\Phrase\RendererInterface" type="Magento\Framework\Phrase\Renderer\Composite" />
+    <preference for="Magento\Translation\Model\Js\DataProviderInterface" type="Magento\Translation\Model\Js\DataProvider"/>
+    <preference for="Magento\Framework\Translate\Js\Config" type="Magento\Translation\Model\Js\Config"/>
+    <type name="Magento\Framework\Translate\Inline">
+        <arguments>
+            <argument name="templateFileName" xsi:type="string">Magento_Translation::translate_inline.phtml</argument>
+            <argument name="translatorRoute" xsi:type="string">translation/ajax/index</argument>
+            <argument name="layout" xsi:type="object">Magento\Framework\View\LayoutInterface\Proxy</argument>
+            <argument name="config" xsi:type="object">Magento\Framework\Translate\Inline\ConfigInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Translation\Model\Inline\Parser">
+        <arguments>
+            <argument name="inputFilter" xsi:type="object">Magento\Framework\Filter\Input\MaliciousCode</argument>
+            <argument name="relatedCacheTypes" xsi:type="array">
+                <item name="blockCache" xsi:type="string">block_html</item>
+                <item name="layoutCache" xsi:type="string">layout</item>
+                <item name="translationCache" xsi:type="string">translate</item>
+                <item name="fullPageCache" xsi:type="string">full_page</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Translate\Inline\Provider">
+        <arguments>
+            <argument name="inlineTranslate" xsi:type="object">Magento\Framework\Translate\Inline\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Phrase\Renderer\Composite">
+        <arguments>
+            <argument name="renderers" xsi:type="array">
+                <item name="translation" xsi:type="object">Magento\Framework\Phrase\Renderer\Translate</item>
+                <item name="placeholder" xsi:type="object">Magento\Framework\Phrase\Renderer\Placeholder</item>
+                <item name="inline" xsi:type="object">Magento\Framework\Phrase\Renderer\Inline</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Phrase\Renderer\Translate">
+        <arguments>
+            <argument name="translator" xsi:type="object">Magento\Framework\Translate</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Translation\Model\Js">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Translation\Model\Js\DataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Translation\Model\Js\Config">
+        <arguments>
+            <argument name="patterns" xsi:type="array">
+                <item name="i18n_translation" xsi:type="string"><![CDATA[~i18n\:\s*(["'])(.*?)(?<!\\)\1~]]></item>
+                <item name="translate_wrapping" xsi:type="string"><![CDATA[~translate\=("')([^\'].*?)\'\"~]]></item>
+                <item name="mage_translation_widget" xsi:type="string"><![CDATA[~(?:\$|jQuery)\.mage\.__\((?s)[^'"]*?(['"])(.+?)(?<!\\)\1(?s).*?\)~]]></item>
+                <item name="mage_translation_static" xsi:type="string"><![CDATA[~\$t\((?s)[^'"]*?(["'])(.+?)\1(?s).*?\)~]]></item>
+                <item name="translate_args" xsi:type="string"><![CDATA[~translate args\=("|'|"')([^\'].*?)('"|'|")~]]></item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="AssetPreProcessorPool">
+        <arguments>
+            <argument name="preprocessors" xsi:type="array">
+                <item name="js" xsi:type="array">
+                    <item name="js_translation" xsi:type="array">
+                        <item name="class" xsi:type="string">Magento\Translation\Model\Js\PreProcessor</item>
+                    </item>
+                </item>
+                <item name="json" xsi:type="array">
+                    <item name="json_generation" xsi:type="array">
+                        <item name="class" xsi:type="string">Magento\Translation\Model\Json\PreProcessor</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="uninstall_language" xsi:type="object">Magento\Translation\Console\Command\UninstallLanguageCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="translationConfigInitialDataProvider" type="Magento\Framework\App\Config\InitialConfigSource">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\App\DeploymentConfig\Reader</argument>
+            <argument name="configType" xsi:type="const">Magento\Translation\App\Config\Type\Translation::CONFIG_TYPE</argument>
+            <argument name="fileKey" xsi:type="const">Magento\Framework\Config\File\ConfigFilePool::APP_CONFIG</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="translationConfigSourceAggregated" type="Magento\Framework\App\Config\ConfigSourceAggregated">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="dynamic" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Translation\Model\Source\InitialTranslationSource\Proxy</item>
+                    <item name="sortOrder" xsi:type="string">100</item>
+                </item>
+                <item name="initial" xsi:type="array">
+                    <item name="source" xsi:type="object">translationConfigInitialDataProvider</item>
+                    <item name="sortOrder" xsi:type="string">1000</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Translation\App\Config\Type\Translation">
+        <arguments>
+            <argument name="source" xsi:type="object">translationConfigSourceAggregated</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="i18n" xsi:type="object">Magento\Translation\App\Config\Type\Translation</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\Console\Command\App\ApplicationDumpCommand">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="i18n" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Translation\Model\Source\InitialTranslationSource</item>
+                    <item name="namespace" xsi:type="const">Magento\Translation\App\Config\Type\Translation::CONFIG_TYPE</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

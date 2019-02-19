@@ -1,0 +1,21 @@
+{
+    "legacy": {
+        "options": {
+            "compressor": "yui-js"
+        },
+        "files": {
+            "<%= path.uglify.legacy %>": [
+                "lib/web/prototype/prototype.js",
+                "lib/web/prototype/window.js",
+                "lib/web/scriptaculous/builder.js",
+                "lib/web/scriptaculous/effects.js",
+                "lib/web/lib/ccard.js",
+                "lib/web/prototype/validation.js",
+                "lib/web/varien/js.js",
+                "lib/web/mage/adminhtml/varienLoader.js",
+                "lib/web/mage/adminhtml/tools.js",
+                "dev/tools/grunt/assets/legacy-build/shim.js"
+            ]
+        }
+    }
+}

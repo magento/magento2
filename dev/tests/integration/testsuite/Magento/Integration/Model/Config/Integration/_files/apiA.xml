@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<integrations>
+    <integration name="TestIntegration1">
+        <!-- List of API resources required by the integration. These are resource ids defined
+         in etc/acl.xml of modules and subsequently mapped to web APIs in webapi.xml. -->
+        <resources>
+            <resource name="Magento_Customer::manage" />
+            <resource name="Magento_Customer::online" />
+            <resource name="Magento_Sales::capture" />
+            <resource name="Magento_SalesRule::quote" />
+        </resources>
+    </integration>
+    <integration name="TestIntegration2">
+        <resources>
+            <resource name="Magento_Catalog::product_read" />
+        </resources>
+    </integration>
+</integrations>

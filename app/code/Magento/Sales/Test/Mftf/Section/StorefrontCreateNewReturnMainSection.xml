@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCreateNewReturnMainSection">
+        <element name="quantityToReturn" type="input" selector="#items:qty_requested0"/>
+        <element name="submit" type="submit" selector="//span[contains(text(), 'Submit')]"/>
+        <element name="resolutionError" type="text" selector="//*[@id='items:resolution0']/following-sibling::div[contains(text(),'Please select an option')]"/>
+        <element name="conditionError" type="text" selector="//*[@id='items:condition0']/following-sibling::div[contains(text(),'Please select an option')]"/>
+        <element name="reasonError" type="text" selector="//*[@id='items:reason0']/following-sibling::div[contains(text(),'Please select an option')]"/>
+    </section>
+</sections>

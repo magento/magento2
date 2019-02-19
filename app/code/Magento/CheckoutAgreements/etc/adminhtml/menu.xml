@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magento_CheckoutAgreements::sales_checkoutagreement" title="Terms and Conditions" translate="title" module="Magento_CheckoutAgreements" sortOrder="30" parent="Magento_Backend::stores_settings" action="checkout/agreement/" resource="Magento_CheckoutAgreements::checkoutagreement"/>
+    </menu>
+</config>

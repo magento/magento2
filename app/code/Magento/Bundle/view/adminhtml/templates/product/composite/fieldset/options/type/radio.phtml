@@ -1,0 +1,73 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /* @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Radio */ ?>
+<?php $_option = $block->getOption(); ?>
+<?php $_selections  = $_option->getSelections(); ?>
+<?php $_default = $_option->getDefaultSelection(); ?>
+<?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
+<?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
+
+<div class="field admin__field options<?php if ($_option->getRequired()) echo ' required' ?>">
+    <label class="label admin__field-label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
+    <div class="control admin__field-control">
+        <div class="nested<?php if ($_option->getDecoratedIsLast()):?> last<?php endif; ?>">
+        <?php if ($block->showSingle()): ?>
+            <?= /* @escapeNotVerified */ $block->getSelectionTitlePrice($_selections[0]) ?>
+            <input type="hidden"
+                   name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
+                   value="<?= /* @escapeNotVerified */ $_selections[0]->getSelectionId() ?>"
+                   price="<?= /* @escapeNotVerified */ $block->getSelectionPrice($_selections[0]) ?>" />
+        <?php else:?>
+            <?php if (!$_option->getRequired()): ?>
+                <div class="field choice admin__field admin__field-option">
+                    <input type="radio"
+                           class="radio admin__control-radio"
+                           id="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>"
+                           name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>]"<?= ($_default && $_default->isSalable()) ? '' : ' checked="checked" ' ?>
+                           value=""
+                           onclick="ProductConfigure.bundleControl.changeSelection(this)" />
+                    <label class="admin__field-label"
+                           for="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>"><span><?= /* @escapeNotVerified */ __('None') ?></span></label>
+                </div>
+            <?php endif; ?>
+
+            <?php foreach ($_selections as $_selection): ?>
+                <div class="field choice admin__field admin__field-option">
+                    <input type="radio"
+                           class="radio admin__control-radio <?= $_option->getRequired() ? ' validate-one-required-by-name' : '' ?> change-container-classname"
+                           id="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>"
+                           name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
+                           <?php if ($block->isSelected($_selection)) echo ' checked="checked"' ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?>
+                           value="<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>"
+                           onclick="ProductConfigure.bundleControl.changeSelection(this)"
+                           price="<?= /* @escapeNotVerified */ $block->getSelectionPrice($_selection) ?>"
+                           qtyId="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-qty-input" />
+                    <label class="admin__field-label"
+                           for="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>"><span><?= /* @escapeNotVerified */ $block->getSelectionTitlePrice($_selection) ?></span></label>
+                <?php if ($_option->getRequired()): ?>
+                    <?= /* @escapeNotVerified */ $block->setValidationContainer('bundle-option-'.$_option->getId().'-'.$_selection->getSelectionId(), 'bundle-option-'.$_option->getId().'-container') ?>
+                <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+            <div id="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-container"></div>
+        <?php endif; ?>
+            <div class="field admin__field qty">
+                <label class="label admin__field-label"
+                       for="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-qty-input"><span><?= /* @escapeNotVerified */ __('Quantity:') ?></span></label>
+                <div class="control admin__field-control"><input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
+                        id="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-qty-input"
+                        class="input-text admin__control-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>"
+                        type="text"
+                        name="bundle_option_qty[<?= /* @escapeNotVerified */ $_option->getId() ?>]" value="<?= /* @escapeNotVerified */ $_defaultQty ?>" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

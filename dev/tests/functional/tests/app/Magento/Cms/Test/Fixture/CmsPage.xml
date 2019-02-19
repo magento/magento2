@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="cmsPage"
+             module="Magento_Cms"
+             type="flat"
+             entity_type="cms_page"
+             collection="Magento\Cms\Model\ResourceModel\Page\Grid\Collection"
+             identifier="identifier"
+             repository_class="Magento\Cms\Test\Repository\CmsPage"
+             handler_interface="Magento\Cms\Test\Handler\CmsPage\CmsPageInterface"
+             class="Magento\Cms\Test\Fixture\CmsPage">
+        <field name="page_id" is_required="1" group="null" />
+        <field name="title" is_required="" group="page_information" />
+        <field name="is_active" is_required="" group="page_information" />
+        <field name="page_layout" is_required="" group="design" />
+        <field name="meta_keywords" is_required="" group="seo" />
+        <field name="meta_description" is_required="" group="seo" />
+        <field name="identifier" group="seo" is_required="" />
+        <field name="content_heading" is_required="" group="content" />
+        <field name="content" is_required="" group="content" source="Magento\Cms\Test\Fixture\CmsPage\Content" repository="Magento\Cms\Test\Repository\CmsPage\Content" />
+        <field name="creation_time" is_required="" />
+        <field name="update_time" is_required="" />
+        <field name="sort_order" is_required="" />
+        <field name="layout_update_xml" is_required="" />
+        <field name="custom_theme" is_required="" />
+        <field name="custom_page_layout" is_required="" />
+        <field name="custom_layout_update_xml" is_required="" />
+        <field name="custom_theme_from" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="custom_theme_to" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="website_root" is_required="" />
+        <field name="store_id" is_required="1" group="page_in_websites" source="Magento\Cms\Test\Fixture\CmsPage\StoreId" />
+    </fixture>
+</config>

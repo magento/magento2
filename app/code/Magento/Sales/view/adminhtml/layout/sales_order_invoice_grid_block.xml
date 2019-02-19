@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="sales_order_invoice.grid.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="sales.order_invoice.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">order_invoices</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Orders\Grid\Collection</argument>
+                    <argument name="use_ajax" xsi:type="boolean">true</argument>
+                    <argument name="default_sort" xsi:type="string">created_at</argument>
+                    <argument name="default_dir" xsi:type="string">DESC</argument>
+                    <argument name="grid_url" xsi:type="url" path="sales/order/invoices">
+                        <param name="_current">1</param>
+                    </argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="sales.order_invoice.grid.columnSet">
+                    <arguments>
+                        <argument name="id" xsi:type="string">order_invoices</argument>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">sales/order_invoice/view</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="invoice_id" xsi:type="string">getId</item>
+                                <item name="order_id" xsi:type="string">getOrderId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_invoice.grid.columnSet.increment_id" as="increment_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Invoice</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="index" xsi:type="string">increment_id</argument>
+                            <argument name="id" xsi:type="string">increment_id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-invoice-number</argument>
+                            <argument name="column_css_class" xsi:type="string">col-invoice-number</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_invoice.grid.columnSet.billing_name" as="billing_name">
+                        <arguments>
+                            <argument name="id" xsi:type="string">billing_name</argument>
+                            <argument name="header" xsi:type="string" translate="true">Bill-to Name</argument>
+                            <argument name="index" xsi:type="string">billing_name</argument>
+                            <argument name="header_css_class" xsi:type="string">col-name</argument>
+                            <argument name="column_css_class" xsi:type="string">col-name</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_invoice.grid.columnSet.created_at" as="created_at">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Invoice Date</argument>
+                            <argument name="type" xsi:type="string">datetime</argument>
+                            <argument name="index" xsi:type="string">created_at</argument>
+                            <argument name="id" xsi:type="string">created_at</argument>
+                            <argument name="header_css_class" xsi:type="string">col-period</argument>
+                            <argument name="column_css_class" xsi:type="string">col-period</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_invoice.grid.columnSet.state" as="state">
+                        <arguments>
+                            <argument name="id" xsi:type="string">state</argument>
+                            <argument name="header" xsi:type="string" translate="true">Status</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="index" xsi:type="string">state</argument>
+                            <argument name="options" xsi:type="options" model="Magento\Sales\Model\ResourceModel\Order\Invoice\Grid\StatusList"/>
+                            <argument name="header_css_class" xsi:type="string">col-status</argument>
+                            <argument name="column_css_class" xsi:type="string">col-status</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_invoice.grid.columnSet.grand_total" as="grand_total">
+                        <arguments>
+                            <argument name="id" xsi:type="string">grand_total</argument>
+                            <argument name="header" xsi:type="string" translate="true">Amount</argument>
+                            <argument name="type" xsi:type="string">currency</argument>
+                            <argument name="currency" xsi:type="string">order_currency_code</argument>
+                            <argument name="index" xsi:type="string">grand_total</argument>
+                            <argument name="header_css_class" xsi:type="string">col-qty</argument>
+                            <argument name="column_css_class" xsi:type="string">col-qty</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

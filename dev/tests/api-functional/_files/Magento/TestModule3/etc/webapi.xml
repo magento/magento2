@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route method="GET" url="/V1/errortest/success">
+        <service class="Magento\TestModule3\Service\V1\ErrorInterface" method="success" />
+        <resources>
+            <resource ref="Magento_TestModule3::resource1" />
+        </resources>
+    </route>
+    <route method="GET" url="/V1/errortest/notfound">
+        <service class="Magento\TestModule3\Service\V1\ErrorInterface" method="resourceNotFoundException" />
+        <resources>
+            <resource ref="Magento_TestModule3::resource1" />
+        </resources>
+    </route>
+    <route method="GET" url="/V1/errortest/serviceexception">
+        <service class="Magento\TestModule3\Service\V1\ErrorInterface" method="serviceException" />
+        <resources>
+            <resource ref="Magento_TestModule3::resource1" />
+        </resources>
+    </route>
+    <route method="GET" url="/V1/errortest/unauthorized">
+        <service class="Magento\TestModule3\Service\V1\ErrorInterface" method="authorizationException" />
+        <resources>
+            <resource ref="Magento_TestModule3::resource1" />
+            <resource ref="Magento_TestModule3::resource2" />
+        </resources>
+    </route>
+    <route method="GET" url="/V1/errortest/otherException">
+        <service class="Magento\TestModule3\Service\V1\ErrorInterface" method="otherException" />
+        <resources>
+            <resource ref="Magento_TestModule3::resource1" />
+        </resources>
+    </route>
+    <route method="GET" url="/V1/errortest/returnIncompatibleDataType">
+        <service class="Magento\TestModule3\Service\V1\ErrorInterface" method="returnIncompatibleDataType" />
+        <resources>
+            <resource ref="Magento_TestModule3::resource1" />
+        </resources>
+    </route>
+    <route method="GET" url="/V1/errortest/webapiException">
+        <service class="Magento\TestModule3\Service\V1\ErrorInterface" method="webapiException" />
+        <resources>
+            <resource ref="Magento_TestModule3::resource1" />
+        </resources>
+    </route>
+    <route method="POST" url="/V1/errortest/inputException">
+        <service class="Magento\TestModule3\Service\V1\ErrorInterface" method="inputException" />
+        <resources>
+            <resource ref="Magento_TestModule3::resource1" />
+        </resources>
+    </route>
+</routes>

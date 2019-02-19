@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Weee\Test\Constraint\AssertFptApplied">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute">
+        <arguments>
+            <argument name="classReferences" xsi:type="array">
+                <item name="dynamicRows" xsi:type="array">
+                    <item name="selector" xsi:type="string">[data-role="grid"]</item>
+                    <item name="type" xsi:type="string">\Magento\Weee\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails\Fpt</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

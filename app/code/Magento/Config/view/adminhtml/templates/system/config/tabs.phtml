@@ -1,0 +1,64 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Config\Block\System\Config\Tabs */
+?>
+
+<?php if ($block->getTabs()): ?>
+    <div id="<?= /* @escapeNotVerified */ $block->getId() ?>" class="config-nav">
+        <?php
+        /** @var $_tab \Magento\Config\Model\Config\Structure\Element\Tab */
+        foreach ($block->getTabs() as $_tab):
+            ?>
+
+            <?php
+                $activeCollapsible = false;
+                foreach ($_tab->getChildren() as $_section) {
+                    if ($block->isSectionActive($_section)) {
+                        $activeCollapsible = true;
+                    }
+                }
+            ?>
+
+            <div class="config-nav-block admin__page-nav _collapsed
+                <?php if ($_tab->getClass()): ?>
+                    <?= /* @escapeNotVerified */ $_tab->getClass() ?>
+                <?php endif ?>"
+                 data-mage-init='{"collapsible":{"active": "<?= /* @escapeNotVerified */ $activeCollapsible ?>",
+                 "openedState": "_show",
+                 "closedState": "_hide",
+                 "collapsible": true,
+                 "animate": 200}}'>
+                <div class="admin__page-nav-title title _collapsible" data-role="title">
+                    <strong><?= /* @escapeNotVerified */ $_tab->getLabel() ?></strong>
+                </div>
+
+                <ul class="admin__page-nav-items items" data-role="content">
+                    <?php $_iterator = 1; ?>
+                    <?php
+                    /** @var $_section \Magento\Config\Model\Config\Structure\Element\Section */
+                    foreach ($_tab->getChildren() as $_section): ?>
+                        <li class="admin__page-nav-item item
+                            <?= /* @escapeNotVerified */ $_section->getClass() ?>
+                            <?php if ($block->isSectionActive($_section)): ?> _active<?php endif ?>
+                            <?= $_tab->getChildren()->isLast($_section) ? ' _last' : '' ?>">
+                            <a href="<?= /* @escapeNotVerified */ $block->getSectionUrl($_section) ?>"
+                               class="admin__page-nav-link item-nav">
+                               <span><?= /* @escapeNotVerified */ $_section->getLabel() ?></span>
+                            </a>
+                        </li>
+                        <?php $_iterator++; ?>
+                    <?php endforeach; ?>
+                </ul>
+
+            </div>
+        <?php
+        endforeach;
+        ?>
+    </div>
+<?php endif; ?>

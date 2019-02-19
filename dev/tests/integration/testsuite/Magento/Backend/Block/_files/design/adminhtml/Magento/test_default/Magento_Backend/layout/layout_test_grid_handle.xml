@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <block class="Magento\Backend\Block\Widget\Grid" name="admin.test.grid">
+        <arguments>
+            <argument name="dataSource" xsi:type="object">Magento\Framework\Data\Collection</argument>
+        </arguments>
+        <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="admin.test.grid.columnSet">
+            <block class="Magento\Backend\Block\Widget\Grid\Column" as="product_name">
+                <arguments>
+                    <argument name="header" xsi:type="string" translate="true">Product name 1</argument>
+                    <argument name="id" xsi:type="string">product_name</argument>
+                    <argument name="index" xsi:type="string">product_name</argument>
+                    <argument name="type" xsi:type="string">text</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Backend\Block\Widget\Grid\Column" as="description">
+                <arguments>
+                    <argument name="header" xsi:type="string" translate="true">User Description</argument>
+                    <argument name="id" xsi:type="string">description</argument>
+                    <argument name="index" xsi:type="string">description</argument>
+                    <argument name="type" xsi:type="string">text</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Backend\Block\Widget\Grid\Column" as="qty">
+                <arguments>
+                    <argument name="header" xsi:type="string" translate="true">Qty</argument>
+                    <argument name="id" xsi:type="string">qty</argument>
+                    <argument name="index" xsi:type="string">qty</argument>
+                    <argument name="type" xsi:type="string">number</argument>
+                    <argument name="width" xsi:type="string">60</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Backend\Block\Widget\Grid\Column" as="added_at">
+                <arguments>
+                    <argument name="header" xsi:type="string" translate="true">Date Added</argument>
+                    <argument name="id" xsi:type="string">added_at</argument>
+                    <argument name="index" xsi:type="string">added_at</argument>
+                    <argument name="type" xsi:type="string">date</argument>
+                    <argument name="gmtoffset" xsi:type="string">1</argument>
+                </arguments>
+            </block>
+        </block>
+        <block class="Magento\Backend\Block\Widget\Grid\Massaction" as="grid.massaction" name='admin.test.grid.massaction'>
+            <arguments>
+                <argument name="massaction_id_field" xsi:type="string">test_id</argument>
+                <argument name="form_field_name" xsi:type="string">test_id</argument>
+                <argument name="use_select_all" xsi:type="string">1</argument>
+                <argument name="options" xsi:type="array">
+                    <item name="option_id1" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Option One</item>
+                        <item name="url" xsi:type="string">*/*/option1</item>
+                        <item name="complete" xsi:type="string">Test</item>
+                    </item>
+                    <item name="option_id2" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Option Two</item>
+                        <item name="url" xsi:type="string">*/*/option2</item>
+                        <item name="confirm" xsi:type="string">Are you sure?</item>
+                    </item>
+                    <item name="option_id3" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Option Three</item>
+                        <item name="url" xsi:type="string">*/*/option3</item>
+                        <item name="visible" xsi:type="object">Magento\Backend\Block\Cache\Grid\Massaction\ProductionModeVisibilityChecker</item>
+                    </item>
+                </argument>
+            </arguments>
+        </block>
+    </block>
+</layout>

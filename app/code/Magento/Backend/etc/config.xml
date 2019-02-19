@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <dev>
+            <template>
+                <minify_html>0</minify_html>
+            </template>
+            <static>
+                <sign>1</sign>
+            </static>
+        </dev>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <email_folder>email</email_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+            <emails>
+                <forgot_email_template>system_emails_forgot_email_template</forgot_email_template>
+                <forgot_email_identity>general</forgot_email_identity>
+            </emails>
+            <dashboard>
+                <enable_charts>1</enable_charts>
+            </dashboard>
+            <upload_configuration>
+                <enable_resize>1</enable_resize>
+                <max_width>1920</max_width>
+                <max_height>1200</max_height>
+            </upload_configuration>
+        </system>
+        <general>
+            <validator_data>
+                <input_types>
+                    <price>price</price>
+                    <media_image>media_image</media_image>
+                    <gallery>gallery</gallery>
+                </input_types>
+            </validator_data>
+        </general>
+        <web>
+            <seo>
+                <use_rewrites>0</use_rewrites>
+            </seo>
+        </web>
+    </default>
+    <stores>
+        <admin>
+            <design>
+                <package>
+                    <name>default</name>
+                </package>
+                <theme>
+                    <default>default</default>
+                </theme>
+            </design>
+        </admin>
+    </stores>
+    <websites>
+        <admin>
+            <web>
+                <routers>
+                    <frontend>
+                        <disabled>true</disabled>
+                    </frontend>
+                </routers>
+                <default>
+                    <no_route>admin/noroute/index</no_route>
+                </default>
+            </web>
+        </admin>
+    </websites>
+</config>

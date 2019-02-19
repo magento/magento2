@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="website"
+             module="Magento_Store"
+             type="flat"
+             entity_type="store_website"
+             collection="Magento\Store\Model\ResourceModel\Website\Collection"
+             identifier="code"
+             repository_class="Magento\Store\Test\Repository\Website"
+             handler_interface="Magento\Store\Test\Handler\Website\WebsiteInterface"
+             class="Magento\Store\Test\Fixture\Website">
+        <field name="website_id" is_required="1" />
+        <field name="code" is_required="" />
+        <field name="name" is_required="" />
+        <field name="sort_order" is_required="" />
+        <field name="default_group_id" is_required="" />
+        <field name="is_default" is_required="" />
+    </fixture>
+</config>

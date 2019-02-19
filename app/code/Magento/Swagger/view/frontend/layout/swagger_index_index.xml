@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="qwerty">
+    <head>
+        <title>Swagger UI</title>
+
+        <!--<title>Swagger UI assets</title>-->
+        <css src='Magento_Swagger::swagger-ui/css/style.css' media='screen' rel='stylesheet' type='text/css'/>
+        <css src='Magento_Swagger::swagger-ui/css/swagger-ui.css' media='screen' rel='stylesheet' type='text/css'/>
+        <link src='Magento_Swagger::swagger-ui/js/lang/translator.js' type='text/javascript' defer="defer"/>
+        <link src='Magento_Swagger::swagger-ui/js/lang/ru.js' type='text/javascript' defer="defer"/>
+        <link src='Magento_Swagger::swagger-ui/js/lang/en.js' type='text/javascript' defer="defer"/>
+        <link src='Magento_Swagger::swagger-ui/js/swagger-ui-bundle.min.js' type='text/javascript' defer="defer"/>
+        <link src='Magento_Swagger::swagger-ui/js/swagger-ui-standalone-preset.min.js' type='text/javascript' defer="defer"/>
+        <link src='Magento_Swagger::swagger-ui/js/magento-swagger.js' type='text/javascript' defer="defer"/>
+
+        <!--Remove require-js assets-->
+        <remove src="css/styles-m.css"/>
+        <remove src="css/styles-s.css"/>
+        <remove src="requirejs/require.js"/>
+        <remove src="mage/requirejs/mixins.js"/>
+        <remove src="requirejs-config.js"/>
+    </head>
+    <body>
+        <!--Remove Magento page content-->
+        <referenceContainer name="page.wrapper" remove="true"/>
+        <referenceBlock name="translate" remove="true"/>
+        <referenceBlock name="requirejs-config" remove="true"/>
+        <referenceContainer name="root">
+            <block name="swaggerUiContent" class="Magento\Swagger\Block\Index" template="Magento_Swagger::swagger-ui/index.phtml" />
+        </referenceContainer>
+    </body>
+</page>

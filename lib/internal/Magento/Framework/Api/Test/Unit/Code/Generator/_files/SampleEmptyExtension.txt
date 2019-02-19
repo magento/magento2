@@ -1,0 +1,8 @@
+namespace Magento\Catalog\Api\Data;
+
+/**
+ * Extension class for @see \Magento\Catalog\Api\Data\ProductInterface
+ */
+class ProductExtension extends \Magento\Framework\Api\AbstractSimpleObject implements ProductExtensionInterface
+{
+}

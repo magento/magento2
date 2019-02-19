@@ -1,0 +1,29 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="choice field">
+    <input type="checkbox"
+           class="checkbox"
+           data-bind="
+           checked: value,
+           attr: {
+                id: uid,
+                disabled: disabled,
+                name: inputName,
+                'aria-describedby': getDescriptionId(),
+                'aria-required': required,
+                'aria-invalid': error() ? true : 'false'
+                },
+           hasFocus: focused">
+
+    <label class="label" data-bind="checked: value, attr: { for: uid }">
+        <span data-bind="text: description || label"></span>
+    </label>
+
+    <!-- ko if: notice -->
+        <div class="field-note" data-bind="attr: {id: noticeId}"><span data-bind="text: notice"></span></div>
+    <!-- /ko -->
+</div>

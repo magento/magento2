@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/testmodule1/:id" method="GET">
+        <service class="Magento\TestModule1\Service\V1\AllSoapAndRestInterface" method="item"/>
+        <resources>
+            <resource ref="Magento_Test1::resource1"/>
+        </resources>
+    </route>
+    <route url="/V2/testmodule1/:id" method="GET">
+        <service class="Magento\TestModule1\Service\V2\AllSoapAndRestInterface" method="item"/>
+        <resources>
+            <resource ref="Magento_Test1::resource1"/>
+            <resource ref="Magento_Test1::resource2"/>
+        </resources>
+    </route>
+    <route url="/V2/testmodule1" method="POST">
+        <service class="Magento\TestModule1\Service\V2\AllSoapAndRestInterface" method="create"/>
+        <resources>
+            <resource ref="Magento_Test1::resource1"/>
+            <resource ref="Magento_Test1::resource2"/>
+        </resources>
+        <data>
+            <parameter name="id" force="true">null</parameter>
+        </data>
+    </route>
+    <route url="/V2/testmodule1/:id" method="DELETE">
+        <service class="Magento\TestModule1\Service\V2\AllSoapAndRestInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Test1::resource1"/>
+            <resource ref="Magento_Test1::resource2"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/testmoduleMSC/:itemId">
+        <service class="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" method="item" />
+        <resources>
+            <resource ref="Magento_TestModuleMSC::resource1" />
+        </resources>
+    </route>
+    <route method="POST" url="/V1/testmoduleMSC">
+        <service class="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" method="create" />
+        <resources>
+            <resource ref="Magento_TestModuleMSC::resource3" />
+        </resources>
+    </route>
+    <route method="GET" url="/V2/testmoduleMSC/itemPreconfigured">
+        <service class="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" method="getPreconfiguredItem" />
+        <resources>
+            <resource ref="Magento_TestModuleMSC::resource1" />
+            <resource ref="Magento_TestModuleMSC::resource2" />
+        </resources>
+    </route>
+</routes>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="configData"
+             module="Magento_Config"
+             type="flat"
+             entity_type="core_config_data"
+             collection="Magento\Config\Model\ResourceModel\Config\Data\Collection"
+             repository_class="Magento\Config\Test\Repository\ConfigData"
+             handler_interface="Magento\Config\Test\Handler\ConfigData\ConfigDataInterface"
+             class="Magento\Config\Test\Fixture\ConfigData">
+        <field name="section" source="Magento\Config\Test\Fixture\ConfigData\Section" />
+        <field name="config_id" is_required="1" />
+        <field name="scope" is_required="" />
+        <field name="scope_id" is_required="" />
+        <field name="path" is_required="" />
+        <field name="value" is_required="" />
+    </fixture>
+</config>

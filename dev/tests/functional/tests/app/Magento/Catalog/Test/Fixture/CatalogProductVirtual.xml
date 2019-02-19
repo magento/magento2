@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="catalogProductVirtual"
+             module="Magento_Catalog"
+             type="eav"
+             entity_type="catalog_product"
+             product_type="virtual"
+             collection="Magento\Catalog\Model\ResourceModel\Product\Collection"
+             identifier="sku"
+             repository_class="Magento\Catalog\Test\Repository\CatalogProductVirtual"
+             handler_interface="Magento\Catalog\Test\Handler\CatalogProductVirtual\CatalogProductVirtualInterface"
+             class="Magento\Catalog\Test\Fixture\CatalogProductVirtual">
+        <data_config>
+            <item name="type_id" xsi:type="string">virtual</item>
+            <item name="create_url_params" xsi:type="array">
+                <item name="type" xsi:type="string">virtual</item>
+                <item name="set" xsi:type="string">4</item>
+            </item>
+            <item name="input_prefix" xsi:type="string">product</item>
+        </data_config>
+        <field name="category_ids" is_required="0" source="Magento\Catalog\Test\Fixture\Product\CategoryIds" group="product-details" />
+        <field name="color" is_required="0" />
+        <field name="country_of_manufacture" is_required="0" />
+        <field name="created_at" is_required="1" />
+        <field name="custom_design" is_required="0" />
+        <field name="custom_design_from" is_required="0" />
+        <field name="custom_design_to" is_required="0" />
+        <field name="custom_layout_update" is_required="0" />
+        <field name="description" is_required="0" group="product-details" />
+        <field name="gallery" is_required="0" />
+        <field name="gift_message_available" is_required="0" />
+        <field name="has_options" is_required="0" />
+        <field name="image" is_required="0" />
+        <field name="image_label" is_required="0" />
+        <field name="manufacturer" is_required="0" />
+        <field name="media_gallery" is_required="0" />
+        <field name="meta_description" is_required="0" group="search-engine-optimization" />
+        <field name="meta_keyword" is_required="0" group="search-engine-optimization" />
+        <field name="meta_title" is_required="0" group="search-engine-optimization" />
+        <field name="minimal_price" is_required="0" />
+        <field name="msrp" is_required="0" />
+        <field name="msrp_display_actual_price_type" is_required="0" />
+        <field name="name" is_required="1" group="product-details" />
+        <field name="news_from_date" is_required="0" />
+        <field name="news_to_date" is_required="0" />
+        <field name="old_id" is_required="0" />
+        <field name="options_container" is_required="0" />
+        <field name="page_layout" is_required="0" />
+        <field name="price" is_required="1" group="product-details" source="Magento\Catalog\Test\Fixture\Product\Price" />
+        <field name="quantity_and_stock_status" is_required="0" group="product-details" />
+        <field name="required_options" is_required="0" />
+        <field name="sku" is_required="1" group="product-details" />
+        <field name="small_image" is_required="0" />
+        <field name="small_image_label" is_required="0" />
+        <field name="special_from_date" is_required="0" />
+        <field name="short_description" is_required="0" group="content" />
+        <field name="special_price" is_required="0" group="advanced-pricing" />
+        <field name="special_to_date" is_required="0" />
+        <field name="status" is_required="0" group="product-details" />
+        <field name="tax_class_id" is_required="0" group="product-details" source="Magento\Catalog\Test\Fixture\Product\TaxClass" />
+        <field name="thumbnail" is_required="0" />
+        <field name="thumbnail_label" is_required="0" />
+        <field name="tier_price" is_required="0" group="advanced-pricing" source="Magento\Catalog\Test\Fixture\Product\TierPrice" repository="Magento\Catalog\Test\Repository\Product\TierPrice" />
+        <field name="stock_data" group="advanced-inventory" />
+        <field name="updated_at" is_required="1" />
+        <field name="url_key" is_required="0" group="search-engine-optimization" />
+        <field name="url_path" is_required="0" />
+        <field name="visibility" is_required="0" group="product-details" />
+        <field name="id" />
+        <field name="type_id" />
+        <field name="weight" is_required="0" group="product-details" />
+        <field name="product_has_weight" group="product-details" />
+        <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />
+        <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
+        <field name="website_ids" group="websites" source="Magento\Catalog\Test\Fixture\Product\WebsiteIds" />
+        <field name="checkout_data" group="null" repository="Magento\Catalog\Test\Repository\CatalogProductVirtual\CheckoutData" />
+        <field name="cross_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
+        <field name="up_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
+        <field name="related_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
+    </fixture>
+</config>

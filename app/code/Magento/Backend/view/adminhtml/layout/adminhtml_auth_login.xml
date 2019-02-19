@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="admin_login" />
+    <body>
+        <referenceContainer name="login.content">
+            <block class="Magento\Backend\Block\Template" name="admin.login" template="Magento_Backend::admin/login.phtml">
+                <container name="form.additional.info" label="Form Additional Info"/>
+                <container name="form.buttons" label="Form Buttons">
+                    <block class="Magento\Backend\Block\Template" name="adminhtml_auth_login_buttons" template="Magento_Backend::admin/login_buttons.phtml"/>
+                </container>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

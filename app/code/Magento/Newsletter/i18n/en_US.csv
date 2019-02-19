@@ -1,0 +1,154 @@
+"Delete Selected Problems","Delete Selected Problems"
+"Unsubscribe Selected","Unsubscribe Selected"
+Back,Back
+Reset,Reset
+"Preview Template","Preview Template"
+"Save Newsletter","Save Newsletter"
+"Save and Resume","Save and Resume"
+"View Newsletter","View Newsletter"
+"Edit Newsletter","Edit Newsletter"
+"Queue Information","Queue Information"
+"Queue Date Start","Queue Date Start"
+"Subscribers From","Subscribers From"
+Subject,Subject
+"Sender Name","Sender Name"
+"Sender Email","Sender Email"
+Message,Message
+"Newsletter Styles","Newsletter Styles"
+Start,Start
+Pause,Pause
+"Do you really want to cancel the queue?","Do you really want to cancel the queue?"
+Cancel,Cancel
+Resume,Resume
+Preview,Preview
+"Add New Template","Add New Template"
+"Newsletter Templates","Newsletter Templates"
+"Convert to Plain Text","Convert to Plain Text"
+"Return HTML Version","Return HTML Version"
+"Delete Template","Delete Template"
+"Save As","Save As"
+"Save Template","Save Template"
+"Edit Newsletter Template","Edit Newsletter Template"
+"New Newsletter Template","New Newsletter Template"
+"Template Information","Template Information"
+"Template Name","Template Name"
+"Template Subject","Template Subject"
+"Template Content","Template Content"
+"Template Styles","Template Styles"
+"No Templates Found","No Templates Found"
+ID,ID
+Template,Template
+Added,Added
+Updated,Updated
+Sender,Sender
+"Template Type","Template Type"
+Action,Action
+"Queue Newsletter","Queue Newsletter"
+"We unsubscribed the people you identified.","We unsubscribed the people you identified."
+"The problems you identified have been deleted.","The problems you identified have been deleted."
+"Newsletter Problems Report","Newsletter Problems Report"
+"Newsletter Problem Reports","Newsletter Problem Reports"
+"Newsletter Queue","Newsletter Queue"
+"Edit Queue","Edit Queue"
+"Please correct the newsletter template and try again.","Please correct the newsletter template and try again."
+"You saved the newsletter queue.","You saved the newsletter queue."
+"Newsletter Subscribers","Newsletter Subscribers"
+Newsletter,Newsletter
+Subscribers,Subscribers
+"Please select one or more subscribers.","Please select one or more subscribers."
+"Total of %1 record(s) were deleted.","Total of %1 record(s) were deleted."
+"A total of %1 record(s) were updated.","A total of %1 record(s) were updated."
+"The newsletter template has been deleted.","The newsletter template has been deleted."
+"We can't delete this template right now.","We can't delete this template right now."
+"Edit Template","Edit Template"
+"New Template","New Template"
+"Create Newsletter Template","Create Newsletter Template"
+"The newsletter template has been saved.","The newsletter template has been saved."
+"Something went wrong while saving this template.","Something went wrong while saving this template."
+"Newsletter Subscription","Newsletter Subscription"
+"Something went wrong while saving your subscription.","Something went wrong while saving your subscription."
+"We have saved your subscription.","We have saved your subscription."
+"We have removed your newsletter subscription.","We have removed your newsletter subscription."
+"Your subscription has been confirmed.","Your subscription has been confirmed."
+"This is an invalid subscription confirmation code.","This is an invalid subscription confirmation code."
+"This is an invalid subscription ID.","This is an invalid subscription ID."
+"This email address is already assigned to another user.","This email address is already assigned to another user."
+"Sorry, but the administrator denied subscription for guests. Please <a href=""%1"">register</a>.","Sorry, but the administrator denied subscription for guests. Please <a href=""%1"">register</a>."
+"Please enter a valid email address.","Please enter a valid email address."
+"This email address is already subscribed.","This email address is already subscribed."
+"A confirmation request has been sent.","A confirmation request has been sent."
+"Thank you for your subscription.","Thank you for your subscription."
+"There was a problem with the subscription: %1","There was a problem with the subscription: %1"
+"Something went wrong with the subscription.","Something went wrong with the subscription."
+"You unsubscribed.","You unsubscribed."
+"Something went wrong while unsubscribing you.","Something went wrong while unsubscribing you."
+Sent,Sent
+Cancelled,Cancelled
+"Not Sent","Not Sent"
+Sending,Sending
+Paused,Paused
+"There are no subscribers selected.","There are no subscribers selected."
+"You selected an invalid queue.","You selected an invalid queue."
+"We cannot mark as received subscriber.","We cannot mark as received subscriber."
+"Duplicate template code","Duplicate template code"
+"Follow this link to unsubscribe <!-- This tag is for unsubscribe link  --><a href=""{{var subscriber.getUnsubscriptionLink()}}"">{{var subscriber.getUnsubscriptionLink()}}</a>","Follow this link to unsubscribe <!-- This tag is for unsubscribe link  --><a href=""{{var subscriber.getUnsubscriptionLink()}}"">{{var subscriber.getUnsubscriptionLink()}}</a>"
+"No such entity with %fieldName = %fieldValue","No such entity with %fieldName = %fieldValue"
+"Choose Store View:","Choose Store View:"
+"Newsletter Message Preview","Newsletter Message Preview"
+"Add to Queue","Add to Queue"
+"Are you sure that you want to strip all tags?","Are you sure that you want to strip all tags?"
+"Please enter a new template name.","Please enter a new template name."
+" Copy"," Copy"
+"Are you sure you want to delete this template?","Are you sure you want to delete this template?"
+"Sign Up for Our Newsletter:","Sign Up for Our Newsletter:"
+"Enter your email address","Enter your email address"
+Subscribe,Subscribe
+"Newsletter subscription confirmation","Newsletter subscription confirmation"
+"Thank you for subscribing to our newsletter.","Thank you for subscribing to our newsletter."
+"To begin receiving the newsletter, you must first confirm your subscription by clicking on the following link:","To begin receiving the newsletter, you must first confirm your subscription by clicking on the following link:"
+"Newsletter subscription success","Newsletter subscription success"
+"You have been successfully subscribed to our newsletter.","You have been successfully subscribed to our newsletter."
+"Newsletter unsubscription success","Newsletter unsubscription success"
+"You have been unsubscribed from the newsletter.","You have been unsubscribed from the newsletter."
+"Newsletter Template","Newsletter Template"
+"Newsletter Section","Newsletter Section"
+"Subscription Options","Subscription Options"
+"Allow Guest Subscription","Allow Guest Subscription"
+"Need to Confirm","Need to Confirm"
+"Confirmation Email Sender","Confirmation Email Sender"
+"Confirmation Email Template","Confirmation Email Template"
+"Email template chosen based on theme fallback when ""Default"" option is selected.","Email template chosen based on theme fallback when ""Default"" option is selected."
+"Success Email Sender","Success Email Sender"
+"Success Email Template","Success Email Template"
+"Unsubscription Email Sender","Unsubscription Email Sender"
+"Unsubscription Email Template","Unsubscription Email Template"
+"We found no problems.","We found no problems."
+Subscriber,Subscriber
+"Queue Start Date","Queue Start Date"
+"Queue Subject","Queue Subject"
+"Error Code","Error Code"
+"Error Text","Error Text"
+"Queue Start","Queue Start"
+"Queue End","Queue End"
+Status,Status
+Processed,Processed
+Recipients,Recipients
+Unsubscribe,Unsubscribe
+Delete,Delete
+CSV,CSV
+"Excel XML","Excel XML"
+Email,Email
+Type,Type
+Guest,Guest
+Customer,Customer
+"Customer First Name","Customer First Name"
+"Customer Last Name","Customer Last Name"
+"Not Activated","Not Activated"
+Subscribed,Subscribed
+Unsubscribed,Unsubscribed
+Unconfirmed,Unconfirmed
+"Web Site","Web Site"
+Store,Store
+"Store View","Store View"
+"Newsletter Subscriptions","Newsletter Subscriptions"
+"We have updated your subscription.","We have updated your subscription."

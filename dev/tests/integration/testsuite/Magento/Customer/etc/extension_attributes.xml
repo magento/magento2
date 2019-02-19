@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Customer\Api\Data\AddressInterface">
+        <attribute code="test_customer_group_id" type="int">
+            <join reference_table="customer_entity"
+                  reference_field="entity_id"
+                  join_on_field="parent_id"
+                    >
+                <field>group_id</field>
+            </join>
+        </attribute>
+    </extension_attributes>
+</config>

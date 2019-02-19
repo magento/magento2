@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <block class="Magento\Test\Block" name="test.block">
+            <arguments>
+                <argument name="testHelperWithParams" xsi:type="helper" helper="Magento\Framework\View\Layout\Argument\Handler\TestHelper::testMethod">
+                    <param name="firstParam">firstValue</param>
+                    <param name="secondParam">secondValue</param>
+                </argument>
+                <argument name="testHelperWithoutParams" xsi:type="helper" helper="Magento\Framework\View\Layout\Argument\Handler\TestHelper::testMethod"/>
+                <argument name="testSimpleBoolean" xsi:type="boolean">true</argument>
+                <argument name="testSimpleNumber" xsi:type="number">1.5</argument>
+                <argument name="testSimpleString" xsi:type="string">Simple Test</argument>
+                <argument name="testTranslateString" xsi:type="string" translate="true">Test Translate</argument>
+                <argument name="testUrlWithParams" xsi:type="url" path="module/controller/action">
+                    <param name="firstParam">firstValue</param>
+                    <param name="secondParam">secondValue</param>
+                </argument>
+                <argument name="testUrlWithoutParams" xsi:type="url" path="module/controller/action"/>
+                <argument name="testParseWithUpdater" xsi:type="string"><updater>Magento_Test_Updater</updater>Some Value</argument>
+                <argument name="testParseWithoutUpdater" xsi:type="string">Some Value</argument>
+                <argument name="testSimpleArray" xsi:type="array">
+                    <item name="csv" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">CSV</item>
+                    </item>
+                    <item name="urlPath" xsi:type="url" path="*/*/exportMsxml"/>
+                    <item name="label" xsi:type="string">Excel XML</item>
+                </argument>
+                <argument name="testArrayWithUpdater" xsi:type="array">
+                    <updater>Magento\Framework\View\Layout\Argument\UpdaterInterface</updater>
+                    <item name="add" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Move to Archive</item>
+                        <item name="url" xsi:type="string">*/sales_archive/massAdd</item>
+                    </item>
+                </argument>
+                <argument name="testOptions" xsi:type="options" model="Magento\Framework\View\Layout\Argument\Handler\TestOptions"/>
+                <argument name="testSimpleObject" xsi:type="object">
+                    Magento\Framework\View\Layout\Argument\Handler\TestObject
+                </argument>
+                <argument name="testComplexObject" xsi:type="object"><updater>Magento_Test_Updater</updater>Magento\Framework\View\Layout\Argument\Handler\TestObject</argument>
+            </arguments>
+            <action method="testAction">
+                <argument name="string" xsi:type="string">string</argument>
+            </action>
+        </block>
+    </body>
+</page>

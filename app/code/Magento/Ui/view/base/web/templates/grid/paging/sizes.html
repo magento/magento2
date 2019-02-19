@@ -1,0 +1,61 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="selectmenu" collapsible="">
+    <div class="selectmenu-value" openCollapsible="">
+        <input type="text" ko-value="_value" attr="id: index" autoselect/>
+    </div>
+    <button class="selectmenu-toggle" type="button" css="_active: $collapsible.opened" toggleCollapsible>
+        <span translate="'Select'"/>
+    </button>
+    <div class="selectmenu-items" css="_active: $collapsible.opened" outerClick="discardAll.bind($data)">
+        <ul>
+            <li repeat="foreach: optionsArray, item: '$size'" css="_edit: isEditing($size().value)">
+                <div class="selectmenu-item-edit" if="$size().editable" keyboard="13: updateSize.bind($data, $size().value, false)">
+                    <input class="admin__control-text" type="text"
+                        ko-value="$size()._value" hasFocus="isEditing($size().value)"/>
+                    <button class="action-save" type="button" click="updateSize.bind($data, $size().value, false)">
+                        <span translate="'Save'"/>
+                    </button>
+                    <button class="action-delete" type="button" click="removeSize.bind($data, $size().value, false)">
+                        <span translate="'Delete'"/>
+                    </button>
+                </div>
+                <div class="selectmenu-item">
+                    <button class="selectmenu-item-action" type="button" text="$size().label" click="setSize.bind($data, $size().value)"/>
+                    <button class="action-edit" type="button" if="$size().editable"
+                        data-bind="
+                            click: function () {
+                                discardCustom().edit($size().value);
+                            }">
+                        <span translate="'Edit'"/>
+                    </button>
+                </div>
+            </li>
+
+            <li css="_edit: isCustomVisible()">
+                <div class="selectmenu-item">
+                    <button class="selectmenu-item-action" type="button"
+                       translate="'Custom'"
+                       ko-visible="!isCustomVisible()"
+                       data-bind="
+                            click: function () {
+                                $data.showCustom()
+                                    .discardEditing();
+                            }"/>
+                </div>
+                <div class="selectmenu-item-edit" keyboard="13: applyCustom">
+                    <input class="admin__control-text" type="text" ko-value="customValue" hasFocus="isCustomVisible()"/>
+                    <button class="action-save" type="button" click="applyCustom">
+                        <span translate="'Save'"/>
+                    </button>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<label class="admin__control-support-text" translate="'per page'" attr="for: index"/>

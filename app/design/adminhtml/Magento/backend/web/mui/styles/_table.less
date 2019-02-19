@@ -1,0 +1,757 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Table Filters
+//  --------------------------------------
+
+.filter {
+    input.input-text {
+        width: 99%;
+        margin-right: 0;
+
+        &::-webkit-input-placeholder {
+            color: @grid-filters-placeholder-color !important;
+            text-transform: lowercase;
+        }
+
+        &::-moz-placeholder {
+            color: @grid-filters-placeholder-color!important;
+            text-transform: lowercase;
+        }
+
+        &:-moz-placeholder {
+            color: @grid-filters-placeholder-color !important;
+            text-transform: lowercase;
+        }
+
+        &:-ms-input-placeholder {
+            color: @grid-filters-placeholder-color !important;
+            text-transform: lowercase;
+        }
+    }
+}
+
+//
+//    Table Grid
+//--------------------------------------
+.grid {
+    padding: 15px;
+
+    table {
+        width: 100%;
+    }
+
+    tbody tr {
+        &.selected th,
+        &.selected td,
+        &:hover th,
+        &:hover td,
+        &:nth-child(odd):hover th,
+        &:nth-child(odd):hover td {
+            cursor: pointer;
+
+            &.empty-text {
+                cursor: default;
+            }
+        }
+    }
+
+    .empty-text {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    th.required,
+    th .required {
+        &:extend(.validation-symbol-light all);
+    }
+
+    // Dates and date ranges
+    td {
+        &.col-period,
+        &.col-date,
+        &.col-date_to,
+        &.col-date_from,
+        &.col-ended_at,
+        &.col-created_at,
+        &.col-updated_at,
+        &.col-customer_since,
+        &.col-session_start_time,
+        &.col-last_activity,
+        &.col-email,
+        &.col-name,
+        &.col-sku,
+        &.col-firstname,
+        &.col-lastname,
+        &.col-title,
+        &.col-label,
+        &.col-product,
+        &.col-set_name,
+        &.col-websites,
+        &.col-time,
+        &.col-billing_name,
+        &.col-shipping_name,
+        &.col-phone,
+        &.col-type {
+            &:extend(.ellipsis all);
+        }
+    }
+
+    .col-period,
+    .col-date,
+    .col-date_to,
+    .col-date_from,
+    .col-ended_at,
+    .col-created_at,
+    .col-updated_at,
+    .col-customer_since,
+    .col-session_start_time,
+    .col-last_activity,
+    // Email
+    .col-email,
+    // Total items
+    .col-items_total,
+    .col-firstname,
+    .col-lastname,
+    .col-status-default,
+    .col-websites,
+    .col-time,
+    .col-billing_name,
+    .col-shipping_name {
+        &:extend(.col-110-max all);
+    }
+
+    .col-name,
+    .col-product {
+        &:extend(.col-370-max all);
+    }
+
+    .col-sku {
+        max-width: 100px;
+        width: 100px;
+    }
+
+    // Order ID, Invoice number
+    .col-order-number,
+    .col-real_order_id,
+    .col-invoice-number,
+    .col-increment_id,
+    .col-transaction-id,
+    .col-parent-transaction-id,
+    .col-reference_id,
+    // Status
+    .col-status,
+    .col-price,
+    .col-position,
+    .col__base_grand_total,
+    .col-grand_total,
+    .col-sort_order,
+    // Reports
+    .col-carts,
+    .col-priority,
+    .col-severity {
+        &:extend(.col-70 all);
+    }
+
+    .col-phone {
+        &:extend(.col-70-max all);
+    }
+
+    .col-action,
+    .col-actions,
+    .col-qty,
+    .col-purchases {
+        &:extend(.col-50 all);
+    }
+
+    //  Grid columns
+    .col-select,
+    .col-id,
+    .col-number {
+        &:extend(.col-40 all);
+    }
+
+    .col-select,
+    .col-massaction {
+        text-align: center;
+    }
+
+    .editable .input-text {
+        width: 65px;
+    }
+
+    .col-actions {
+        .action-select {
+            background: @form-element-background-color;
+            border-color: @grid-controls-border;
+            height: 28px;
+            margin: 0;
+            padding: 4px 4px 5px;
+            width: 80px;
+        }
+    }
+
+    .col-position.editable {
+        white-space: nowrap;
+
+        .input-text {
+            margin: -7px 5px 0;
+            width: 70%;
+        }
+    }
+}
+
+td.col-period,
+td.col-date,
+td.col-date_to,
+td.col-date_from,
+td.col-ended_at,
+td.col-created_at,
+td.col-updated_at,
+td.col-customer_since,
+td.col-session_start_time,
+td.col-time,
+td.col-type {
+    &:extend(.nowrap all);
+}
+
+//
+//    Data table
+//--------------------------------------
+.data-table {
+    width: 100%;
+    thead,
+    tfoot,
+    th {
+        background: @grid-td-light;
+        .style2();
+    }
+
+    th {
+        text-align: left;
+    }
+
+    thead th {
+        border: solid @data-table-th-border-color;
+        border-width: 0 0 1px;
+        padding: 7px;
+    }
+
+    td,
+    tbody tr th,
+    tbody tr td {
+        background: @data-table-td-background-color;
+        border-width: 0;
+        padding: 5px 7px;
+        vertical-align: middle;
+    }
+
+    tbody {
+        tr {
+            &:nth-child(odd) th,
+            &:nth-child(odd) td {
+                background: @data-table-td-background-color-odd;
+            }
+        }
+
+        &.odd {
+            tr {
+                th,
+                td {
+                    background: @data-table-td-background-color-odd;
+                }
+            }
+        }
+
+        &.even {
+            tr {
+                th,
+                td {
+                    background: @data-table-td-background-color;
+                }
+            }
+        }
+    }
+
+    tfoot  {
+        tr {
+            &:last-child th,
+            &:last-child td {
+                border: 0;
+            }
+        }
+    }
+
+    &.order-tables {
+        tbody {
+            td {
+                vertical-align: top;
+            }
+
+            &:hover tr {
+                th,
+                td {
+                    background: @data-table-td-background-color-hover;
+                }
+            }
+        }
+
+        tfoot td {
+            background: @grid-tfoot-background-color;
+            .style2();
+        }
+    }
+
+    input[type="text"] {
+        width: 98%;
+        padding-left: 1%;
+        padding-right: 1%;
+    }
+
+    select {
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    th.required-entry,
+    td.required-entry {
+        &:extend(.validation-symbol all);
+    }
+
+    .col-actions .actions-split {
+        margin-top: 4px;
+
+        [class^='action-'] {
+            background: none;
+            border: 1px solid #c8c3b5;
+            padding: 3px 5px;
+            color: #bbb3a6;
+            font-size: 12px;
+
+            &:first-child {
+                border-right: 0;
+            }
+        }
+
+        .dropdown-menu {
+            margin-top: -1px;
+
+            a {
+                display: block;
+                color: #333;
+                text-decoration: none;
+            }
+        }
+
+        &.active .action-toggle {
+            position: relative;
+            border-bottom-right-radius: 0;
+            box-shadow: none;
+            background: @color-white;
+
+            &:after {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                height: 2px;
+                margin-top: -1px;
+                background: @color-white;
+                content: '';
+                z-index: 2;
+            }
+
+            .dropdown-menu {
+                border-top-right-radius: 0;
+            }
+        }
+    }
+
+    //
+    //    Attribute Information
+    // --------------------------------------
+    .col-default {
+        white-space: nowrap;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .col-delete {
+        text-align: center;
+        width: 32px;
+    }
+
+    .col-file {
+        white-space: nowrap;
+
+        input,
+        .input-text {
+            margin: 0 5px;
+            width: 40%;
+
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+    }
+
+    .col-actions-add {
+        padding: 10px 0;
+    }
+}
+
+.accordion .config .data-table {
+    thead th,
+    tfoot td {
+        &:extend(.data-table thead all);
+    }
+
+    td {
+        &:extend(.data-table td all);
+    }
+
+    tbody tr:nth-child(odd) td {
+        &:extend(.data-table tbody tr:nth-child(odd) td);
+    }
+
+    tfoot tr:last-child td {
+        &:extend(tfoot tr:last-child td all);
+    }
+}
+
+//
+//    Grid - Pager and Buttons row
+// --------------------------------------
+.grid-actions {
+    background: @grid-frame-background-color;
+    font-size: 13px;
+    line-height: 28px;
+    padding: 10px 15px;
+    position: relative;
+
+    + .grid {
+        padding-top: 5px;
+    }
+
+    .export,
+    .filter-actions {
+        float: right;
+        margin-left: 10px;
+        vertical-align: top;
+    }
+
+    .import {
+        display: block;
+    }
+
+    .action-reset {
+        .lib-button-as-link();
+        margin: 6px 10px 0 0;
+        vertical-align: top;
+    }
+
+    .import,
+    .export {
+        .label {
+            margin: 0 14px 0 0;
+            vertical-align: inherit;
+        }
+    }
+
+    .import,
+    .export,
+    .filter-actions {
+        .action- {
+            vertical-align: inherit;
+        }
+    }
+
+    .filter {
+        .date {
+            float: left;
+            margin: 0 15px 0 0;
+            position: relative;
+
+            .ui-datepicker-trigger {
+                &:before {
+                    color: @color-middle;
+                    top: 1px;
+                }
+
+                &:hover {
+                    &:before {
+                        color: @color-dark;
+                    }
+                }
+            }
+        }
+
+        .label {
+            margin: 0;
+        }
+
+        ._has-datepicker {
+            margin: 0 5px;
+            width: 80px;
+        }
+
+        .show-by {
+            .select {
+                margin-left: 5px;
+                padding: 4px 44px 5px 4px;
+                vertical-align: top;
+                width: auto;
+            }
+        }
+
+        &.required {
+            &:after {
+                content: '';
+            }
+
+            .label span {
+                &:extend(.validation-symbol all);
+            }
+        }
+    }
+
+    .required {
+        &:extend(.validation-symbol all);
+    }
+
+    img {
+        vertical-align: middle;
+        height: 22px;
+        width: 22px;
+    }
+
+    .validation-advice {
+        background: @validation-background-color;
+        border: 1px solid @validation__color;
+        border-radius: 3px;
+        color: @validation__color;
+        margin: 5px 0 0;
+        padding: 3px 7px;
+        position: absolute;
+        white-space: nowrap;
+        z-index: 5;
+
+        &:before {
+            .arrow(up, 5px, @validation__color);
+            content: '';
+            left: 50%;
+            margin-left: -5px;
+            position: absolute;
+            top: -11px;
+        }
+    }
+
+    input[type="text"].validation-failed {
+        border-color: @validation__color;
+        box-shadow: 0 0 8px @validation__color-rgba;
+    }
+
+    .link-feed {
+        white-space: nowrap;
+    }
+}
+
+.form-inline .grid-actions {
+    &:extend(.massaction-form-inline-label-reset all);
+}
+
+.pager {
+    .link-feed {
+        font-size: 12px;
+        margin: 7px 15px 0 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+}
+
+//
+//    Grid - Mass Action
+// --------------------------------------
+.massaction {
+    background: @grid-frame-background-color;
+    border-top: @grid-massaction-border;
+    font-size: 13px;
+    line-height: 28px;
+    padding: 15px 15px 0;
+    &:extend(.add-clearer all);
+
+    > .entry-edit {
+        float: right;
+
+        .field-row {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .validation-advice {
+            display: none !important;
+        }
+
+        .form-inline {
+            display: inline-block;
+        }
+
+        .label {
+            &:extend(.grid-actions .export .label);
+            padding: 0;
+            width: auto;
+        }
+
+        .action- {
+            &:extend(.grid-actions .export .action-);
+            vertical-align: top;
+        }
+    }
+
+    .select.validation-failed {
+        border: @validation-border;
+        background: @validation-background-color;
+    }
+}
+
+.form-inline .massaction {
+    &:extend(.massaction-form-inline-label-reset all);
+}
+
+//
+//    Grid - status and severity
+// --------------------------------------
+.grid-severity-critical,
+.grid-severity-major,
+.grid-severity-notice,
+.grid-severity-minor {
+    background: @grid-severity-minor-background-color;
+    border: 1px solid @grid-severity-minor-border;
+    color: @grid-severity-minor-color;
+    display: block;
+    padding: 0 3px;
+    font-weight: bold;
+    line-height: 17px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.grid-severity-critical,
+.grid-severity-major {
+    border-color: @grid-severity-critical-border;
+    background: @grid-severity-critical-background-color;
+    color: @grid-severity-critical-color;
+}
+
+.grid-severity-notice {
+    border-color: @grid-severity-notice-border;
+    background: @grid-severity-notice-background-color;
+    color: @grid-severity-notice-color;
+}
+
+//
+//    Inputs and selects in tables
+// --------------------------------------
+.grid,
+.data-table {
+    tbody {
+        td,
+        th {
+            input[type="text"],
+            .input-text,
+            select,
+            .select {
+                width: 99%;
+            }
+        }
+    }
+}
+
+//
+//    Grids for pages
+// --------------------------------------
+.ui-tabs-panel {
+    .grid .col-sku {
+        max-width: 150px;
+        width: 150px;
+    }
+}
+
+.col-indexer_status,
+.col-indexer_mode {
+    width: 160px;
+}
+
+.fieldset-wrapper {
+    .grid-actions + .grid {
+        padding-top: 15px;
+    }
+
+    .grid-actions {
+        padding: 10px 0 0;
+    }
+
+    .grid {
+        padding: 0;
+    }
+
+    .massaction {
+        padding: 0;
+        border-top: none;
+        margin-bottom: 15px;
+    }
+}
+
+.accordion .grid {
+    padding: 0;
+}
+
+.ui-dialog-content {
+    .grid-actions,
+    .grid {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+//
+//    Sales
+// --------------------------------------
+
+.product-options .grouped-items-table {
+    .col-name,
+    .col-sku {
+        &:extend(.ellipsis all);
+        &:extend(.col-110-max all);
+    }
+}
+
+//
+//    Sales -> Qty - table
+//--------------------------------------
+.qty-table {
+    td {
+        border: 0;
+        padding: 0 5px 3px;
+    }
+}
+
+//
+//    Sales -> Create Order
+//--------------------------------------
+
+.order-account-information {
+    &:extend(.data-table-td-max all);
+}
+
+//
+//  Content -> Banners
+// --------------------------------------
+.col-banner_name {
+    &:extend(.col-370-max all);
+    &:extend(.ellipsis all);
+}

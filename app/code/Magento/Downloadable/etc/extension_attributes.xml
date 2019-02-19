@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
+        <attribute code="downloadable_product_links" type="Magento\Downloadable\Api\Data\LinkInterface[]" />
+        <attribute code="downloadable_product_samples" type="Magento\Downloadable\Api\Data\SampleInterface[]" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Quote\Api\Data\ProductOptionInterface">
+        <attribute code="downloadable_option" type="Magento\Downloadable\Api\Data\DownloadableOptionInterface" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductOptionInterface">
+        <attribute code="downloadable_option" type="Magento\Downloadable\Api\Data\DownloadableOptionInterface" />
+    </extension_attributes>
+</config>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="GeneralCustomerGroup" type="customerGroup">
+        <data key="code">General</data>
+        <data key="tax_class_id">3</data>
+        <data key="tax_class_name">Retail Customer</data>
+    </entity>
+    <entity name="DefaultCustomerGroup" type="customerGroup">
+        <array key="group_names">
+            <item>General</item>
+        </array>
+    </entity>
+</entities>

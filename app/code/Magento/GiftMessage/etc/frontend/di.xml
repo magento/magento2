@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\GiftMessage\Model\Plugin\QuoteItem" shared="false" />
+    <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
+        <plugin name="gift_message_quote_item_conversion" type="Magento\GiftMessage\Model\Plugin\QuoteItem"/>
+    </type>
+    <type name="Magento\Multishipping\Block\Checkout\Shipping">
+        <plugin name="getItemsBoxTextAfter" type="Magento\GiftMessage\Block\Message\Multishipping\Plugin\ItemsBox"/>
+    </type>
+    <type name="Magento\GiftMessage\Helper\Message">
+        <arguments>
+            <argument name="skipMessageCheck" xsi:type="array">
+                <item name="checkout_page" xsi:type="string">onepage_checkout</item>
+                <item name="multishipping_page" xsi:type="string">multishipping_address</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GiftMessage\Model\Type\Plugin\Onepage" shared="false" />
+    <type name="Magento\GiftMessage\Model\Type\Plugin\Multishipping" shared="false" />
+    <type name="Magento\Checkout\Model\Type\Onepage">
+        <plugin name="save_gift_message" type="Magento\GiftMessage\Model\Type\Plugin\Onepage"/>
+    </type>
+    <type name="Magento\Multishipping\Model\Checkout\Type\Multishipping">
+        <plugin name="save_gift_messages" type="Magento\GiftMessage\Model\Type\Plugin\Multishipping"/>
+    </type>
+    <type name="Magento\GiftMessage\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="gift_message_config_provider" xsi:type="object">Magento\GiftMessage\Model\GiftMessageConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="itemIdProcessor" xsi:type="object">Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\ItemIdProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\Processor">
+        <plugin name="mergeQuoteItems" type="Magento\GiftMessage\Model\Plugin\MergeQuoteItems"/>
+    </type>
+</config>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Newsletter\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">newsletter</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Newsletter\Model\Session">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Newsletter\Model\Session\Storage</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Newsletter\Helper\Data">
+        <arguments>
+            <argument name="frontendUrlBuilder" xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="update_newsletter_subscription_on_customer_update"
+                type="Magento\Newsletter\Model\Plugin\CustomerPlugin"/>
+    </type>
+</config>

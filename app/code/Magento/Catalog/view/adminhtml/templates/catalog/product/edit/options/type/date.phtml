@@ -1,0 +1,47 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Date */ ?>
+<script id="custom-option-date-type-template" type="text/x-magento-template">
+    <div id="product_option_<%- data.option_id %>_type_<%- data.group %>" class="fieldset">
+        <table class="data-table">
+            <thead>
+            <tr class="headings">
+                <?php if ($block->getCanReadPrice() !== false) : ?>
+                <th><?= /* @escapeNotVerified */ __('Price') ?></th>
+                <th><?= /* @escapeNotVerified */ __('Price Type') ?></th>
+                <?php endif; ?>
+                <th><?= /* @escapeNotVerified */ __('SKU') ?></th>
+            </tr>
+            </thead>
+            <tr>
+                <?php if ($block->getCanReadPrice() !== false) : ?>
+                <td class="opt-price">
+                    <input id="product_option_<%- data.option_id %>_price"
+                           name="product[options][<%- data.option_id %>][price]"
+                           class="input-text validate-number product-option-price"
+                           type="text" value="<%- data.price %>" data-store-label="<%- data.price %>"
+                        <?php if ($block->getCanEditPrice() === false) : ?>
+                           disabled="disabled"
+                        <?php endif; ?>>
+                </td>
+                <td class="opt-price-type">
+                    <?= $block->getPriceTypeSelectHtml('data-attr="price-type"') ?><%- data.checkboxScopePrice %>
+                </td>
+                <?php else : ?>
+                <input id="product_option_<%- data.option_id %>_price" name="product[options][<%- data.option_id %>][price]" type="hidden">
+                <input id="product_option_<%- data.option_id %>_price_type" name="product[options][<%- data.option_id %>][price_type]" type="hidden">
+                <?php endif; ?>
+                <td>
+                    <input name="product[options][<%- data.option_id %>][sku]" class="input-text type-sku" value="<%- data.sku %>" type="text">
+                </td>
+            </tr>
+        </table>
+    </div>
+</script>

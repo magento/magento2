@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="checkout_onepage_controller_success_action">
+        <observer name="googleadwords_order_success" instance="Magento\GoogleAdwords\Observer\SetConversionValueObserver" />
+    </event>
+    <event name="multishipping_checkout_controller_success_action">
+        <observer name="googleadwords_order_success" instance="Magento\GoogleAdwords\Observer\SetConversionValueObserver" />
+    </event>
+</config>

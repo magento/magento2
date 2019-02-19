@@ -1,0 +1,268 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Framework\App\TemplateTypesInterface;
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Email\Block\Adminhtml\Template\Edit */
+?>
+<?php if (!$block->getEditMode()): ?>
+<form action="<?= $block->escapeUrl($block->getLoadUrl()) ?>" method="post" id="email_template_load_form">
+    <?= $block->getBlockHtml('formkey') ?>
+    <fieldset class="admin__fieldset form-inline">
+        <legend class="admin__legend"><span><?= $block->escapeHtml(__('Load default template')) ?></span></legend><br>
+        <div class="admin__field">
+            <label class="admin__field-label" for="template_select"><?= $block->escapeHtml(__('Template')) ?></label>
+            <div class="admin__field-control">
+                <select id="template_select" name="code" class="admin__control-select required-entry">
+                    <?php foreach ($block->getTemplateOptions() as $group => $options): ?>
+                        <?php if ($group): ?>
+                            <optgroup label="<?= $block->escapeHtmlAttr($group) ?>">
+                        <?php endif; ?>
+                        <?php foreach ($options as $option): ?>
+                            <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"<?= /* @noEscape */ $block->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?= $block->escapeHtml($option['label']) ?></option>
+                        <?php endforeach; ?>
+                        <?php if ($group): ?>
+                            </optgroup>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+        <div class="admin__field required">
+            <span class="admin__field-label"></span>
+            <div class="admin__field-control">
+                <?= /* @noEscape */ $block->getLoadButtonHtml() ?>
+            </div>
+        </div>
+    </fieldset>
+</form>
+<?php endif ?>
+
+<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="email_template_edit_form">
+    <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
+    <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
+    <input type="hidden" id="orig_template_code" name="orig_template_code" value="<?= $block->escapeHtmlAttr($block->getOrigTemplateCode()) ?>" />
+    <?= /* @noEscape */ $block->getFormHtml() ?>
+</form>
+
+<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="email_template_preview_form" target="_blank">
+    <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
+    <div class="no-display">
+        <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->isTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_text" name="text" value="" />
+        <input type="hidden" id="preview_styles" name="styles" value="" />
+    </div>
+</form>
+<script>
+require([
+    "jquery",
+    "wysiwygAdapter",
+    "Magento_Ui/js/modal/alert",
+    "mage/mage",
+    "Magento_Email/js/variables",
+    "prototype"
+], function(jQuery, tinyMCE, alert){
+
+//<![CDATA[
+    jQuery('#email_template_edit_form').mage('form').mage('validation');
+    jQuery('#email_template_preview_form').mage('form').mage('validation');
+    jQuery('#email_template_load_form').mage('validation');
+    templateControl = {
+        unconvertedText: '',
+        typeChange: false,
+        variables: null,
+
+        events: {
+            'click [data-role=template-save]' : 'save',
+            'click [data-role=template-preview]' : 'preview',
+            'click [data-role=template-unstrip]' : 'unStripTags',
+            'click [data-role=template-strip]' : 'stripTags',
+            'click [data-role=template-delete]': 'deleteTemplate',
+            'click [data-role=template-load]': 'load'
+        },
+
+        init: function () {
+            if ($('convert_button_back')) {
+                $('convert_button_back').hide();
+            }
+
+            this.bindEvents();
+
+            this.renderPaths(<?= /* @noEscape */ $block->getCurrentlyUsedForPaths() ?>, 'currently_used_for');
+        },
+
+        bindEvents: function(){
+            var events = this.events,
+                eventName,
+                selector,
+                callback,
+                key;
+
+            for( key in events ){
+                callback    = this[events[key]];
+                key         = key.split(' ');
+
+                eventName   = key[0];
+                selector    = key.slice(1).join(' ');
+
+                jQuery(selector).on(eventName, jQuery.proxy(callback, this) );
+            }
+        },
+
+        stripTags: function () {
+            if(!window.confirm("<?= $block->escapeJs($block->escapeHtml(__('Are you sure you want to strip tags?'))) ?>")) {
+                return false;
+            }
+            this.unconvertedText = $('template_text').value;
+            $('convert_button').hide();
+            $('template_text').value =  $('template_text').value.stripScripts().replace(
+                new RegExp('<style[^>]*>[\\S\\s]*?</style>', 'img'), ''
+            ).stripTags().strip();
+            $('convert_button_back').show();
+            $('field_template_styles').hide();
+            this.typeChange = true;
+            return false;
+        },
+        unStripTags: function () {
+            $('convert_button').show();
+            $('convert_button_back').hide();
+            $('template_text').value =  this.unconvertedText;
+            $('field_template_styles').show();
+            this.typeChange = false;
+            return false;
+        },
+        save: function() {
+            if (this.typeChange) {
+                $('change_flag_element').value = '1';
+            }
+            // Temporary solution will be replaced after refactoring of email templates functionality
+            jQuery('#email_template_edit_form').triggerHandler('save');
+            return false;
+        },
+        preview: function() {
+            if (this.typeChange) {
+                $('preview_type').value = <?= /* @noEscape */ TemplateTypesInterface::TYPE_TEXT ?>;
+            } else {
+                $('preview_type').value = <?= (int) $block->getTemplateType() ?>;
+            }
+            if (typeof tinyMCE == 'undefined' || !tinyMCE.get('template_text')) {
+                $('preview_text').value = $('template_text').value;
+            } else {
+                $('preview_text').value = tinyMCE.get('template_text').getHTML();
+            }
+
+            if ($('template_styles') != undefined) {
+                $('preview_styles').value = $('template_styles').value;
+            }
+
+            // Temporary solution will be replaced after refactoring of email templates functionality
+            jQuery('#email_template_preview_form').triggerHandler('save');
+            return false;
+        },
+
+        deleteTemplate: function() {
+            if(window.confirm("<?= $block->escapeJs($block->escapeHtml(__('Are you sure you want to delete this template?'))) ?>")) {
+                   window.location.href = '<?= $block->escapeJs($block->escapeUrl($block->getDeleteUrl())) ?>';
+            }
+        },
+
+        load: function() {
+            // Temporary solution will be replaced after refactoring of email templates functionality
+            if (!jQuery('#email_template_load_form').valid()) {
+                return;
+            }
+
+            this.variables = null;
+
+            new Ajax.Request($('email_template_load_form').action, {
+               parameters: Form.serialize($('email_template_load_form'), true),
+               area: $('email_template_load_form'),
+               onComplete: function (transport) {
+                   if (transport.responseText.isJSON()) {
+                       var fields = $H(transport.responseText.evalJSON());
+                       fields.each(function(pair) {
+                          if ($(pair.key)) {
+                              $(pair.key).value = pair.value.strip();
+                          }
+                          if (pair.key == 'template_type') {
+                              if (pair.value == 1) {
+                                  this.typeChange = true;
+                                  $('convert_button').hide();
+                                  $('convert_button_back').hide();
+                              } else {
+                                  this.typeChange = false;
+                                  $('convert_button_back').hide();
+                                  $('convert_button').show();
+                              }
+                          }
+                          if (pair.key == 'orig_template_currently_used_for') {
+                               if(pair.value.length){
+                                   $('currently_used_for').show();
+                                   this.renderPaths(pair.value, 'currently_used_for');
+                               }
+                               else{
+                                   $('currently_used_for').hide();
+                               }
+                          }
+                       }.bind(this));
+                   } else {
+                       alert({
+                           content: '<?= $block->escapeJs($block->escapeHtml(__('The template did not load. Please review the log for details.'))) ?>'
+                       });
+                   }
+               }.bind(this)
+            });
+
+        },
+
+        renderPaths: function(paths, fieldId) {
+            var field = $(fieldId);
+            if (field) {
+                field.down('div').down('div').update(this.parsePath(paths, '<span class="path-delimiter">&nbsp;-&gt;&nbsp;</span>', '<br />'));
+            }
+        },
+
+        parsePath: function (value, pathDelimiter, lineDelimiter) {
+            if (Object.isArray(value)) {
+                var result = [];
+                for (var i = 0, len = value.length; i < len; i++) {
+                    result.push(this.parsePath(value[i], pathDelimiter, pathDelimiter));
+                }
+                return result.join(lineDelimiter);
+            }
+
+            if(!Object.isString(value) && value.title) {
+                value = (value.url ? '<a href="' + value.url + '">' + value.title + '</a>' : value.title) + (value.scope ? '&nbsp;&nbsp;<span class="path-scope-label">(' + value.scope + ')</span>' : '');
+            }
+
+            return value;
+        },
+
+        openVariableChooser: function() {
+            Variables.init('template_text');
+            if (this.variables == null) {
+                Variables.resetData();
+                this.variables = $('variables').value.evalJSON();
+                var templateVariablesValue = $('template_variables').value;
+                if (this.variables && templateVariablesValue) {
+                    if (templateVariables = templateVariablesValue.evalJSON()) {
+                        this.variables.push(templateVariables);
+                    }
+                }
+            }
+            if (this.variables) {
+                Variables.openVariableChooser(this.variables);
+            }
+        }
+    };
+
+    templateControl.init();
+//]]>
+
+});
+</script>

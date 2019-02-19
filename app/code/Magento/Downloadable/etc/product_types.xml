@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/product_types.xsd">
+    <type name="downloadable" label="Downloadable Product" modelInstance="Magento\Downloadable\Model\Product\Type" composite="false" isQty="true" canUseQtyDecimals="false" sortOrder="60">
+        <priceModel instance="Magento\Downloadable\Model\Product\Price" />
+        <indexerModel instance="Magento\Downloadable\Model\ResourceModel\Indexer\Price" />
+        <customAttributes>
+            <attribute name="refundable" value="false"/>
+            <attribute name="is_real_product" value="false"/>
+        </customAttributes>
+    </type>
+    <composableTypes>
+        <type name="downloadable" />
+    </composableTypes>
+</config>

@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <email>
+            <selector>#customer-email</selector>
+        </email>
+        <firstname />
+        <lastname />
+        <company />
+        <street>
+            <selector>input[name="street[0]"]</selector>
+        </street>
+        <city />
+        <region_id>
+            <input>select</input>
+        </region_id>
+        <country_id>
+            <input>select</input>
+        </country_id>
+        <telephone />
+        <postcode />
+    </fields>
+</mapping>

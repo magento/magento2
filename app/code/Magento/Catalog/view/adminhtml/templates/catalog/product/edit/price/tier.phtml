@@ -1,0 +1,167 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier */
+$element = $block->getElement();
+?>
+<?php $_htmlId      = $block->getElement()->getHtmlId() ?>
+<?php $_htmlClass   = $block->getElement()->getClass() ?>
+<?php $_htmlName    = $block->getElement()->getName() ?>
+<?php $_readonly    = $block->getElement()->getReadonly() ?>
+<?php $_showWebsite = $block->isShowWebsiteColumn(); ?>
+<?php $_editWebsite = $block->isAllowChangeWebsite(); ?>
+<?php $_priceValueValidation = $block->getPriceValidation('validate-greater-than-zero'); ?>
+
+
+<?php $_showWebsite = $block->isShowWebsiteColumn(); ?>
+<?php $_showWebsite = $block->isMultiWebsites(); ?>
+<div class="field" id="attribute-<?= /* @escapeNotVerified */ $_htmlId ?>-container" data-attribute-code="<?= /* @escapeNotVerified */ $_htmlId ?>"
+     data-apply-to="<?= $block->escapeHtml(
+         $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
+             $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : []
+         )
+     )?>">
+    <label class="label"><span><?= /* @escapeNotVerified */ $block->getElement()->getLabel() ?></span></label>
+    <div class="control">
+        <table class="admin__control-table tiers_table" id="tiers_table">
+            <thead>
+                <tr>
+                    <th class="col-websites" <?php if (!$_showWebsite): ?>style="display:none"<?php endif; ?>><?= /* @escapeNotVerified */ __('Web Site') ?></th>
+                    <th class="col-customer-group"><?= /* @escapeNotVerified */ __('Customer Group') ?></th>
+                    <th class="col-qty required"><?= /* @escapeNotVerified */ __('Quantity') ?></th>
+                    <th class="col-price required"><?= /* @escapeNotVerified */ $block->getPriceColumnHeader(__('Item Price')) ?></th>
+                    <th class="col-delete"><?= /* @escapeNotVerified */ __('Action') ?></th>
+                </tr>
+            </thead>
+            <tbody id="<?= /* @escapeNotVerified */ $_htmlId ?>_container"></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="<?php if (!$_showWebsite): ?>4<?php else: ?>5<?php endif; ?>" class="col-actions-add"><?= $block->getAddButtonHtml() ?></td>
+                </tr>
+            </tfoot>
+        </table>
+
+<script>
+require([
+    'mage/template',
+    "prototype",
+    "mage/adminhtml/form"
+], function (mageTemplate) {
+
+//<![CDATA[
+var tierPriceRowTemplate = '<tr>'
+    + '<td class="col-websites"<?php if (!$_showWebsite): ?> style="display:none"<?php endif; ?>>'
+    + '<select class="<?= /* @escapeNotVerified */ $_htmlClass ?> required-entry" name="<?= /* @escapeNotVerified */ $_htmlName ?>[<%- data.index %>][website_id]" id="tier_price_row_<%- data.index %>_website">'
+    <?php foreach ($block->getWebsites() as $_websiteId => $_info): ?>
+    + '<option value="<?= /* @escapeNotVerified */ $_websiteId ?>"><?= $block->escapeJs($_info['name']) ?><?php if (!empty($_info['currency'])): ?> [<?= $block->escapeHtml($_info['currency']) ?>]<?php endif; ?></option>'
+    <?php endforeach ?>
+    + '</select></td>'
+    + '<td class="col-customer-group"><select class="<?= /* @escapeNotVerified */ $_htmlClass ?> custgroup required-entry" name="<?= /* @escapeNotVerified */ $_htmlName ?>[<%- data.index %>][cust_group]" id="tier_price_row_<%- data.index %>_cust_group">'
+    <?php foreach ($block->getCustomerGroups() as $_groupId => $_groupName): ?>
+    + '<option value="<?= /* @escapeNotVerified */ $_groupId ?>"><?= $block->escapeJs($_groupName) ?></option>'
+    <?php endforeach ?>
+    + '</select></td>'
+    + '<td class="col-qty">'
+        + '<input class="<?= /* @escapeNotVerified */ $_htmlClass ?> qty required-entry validate-greater-than-zero" type="text" name="<?= /* @escapeNotVerified */ $_htmlName ?>[<%- data.index %>][price_qty]" value="<%- data.qty %>" id="tier_price_row_<%- data.index %>_qty" />'
+        + '<span><?= /* @escapeNotVerified */ __("and above") ?></span>'
+    + '</td>'
+    + '<td class="col-price"><input class="<?= /* @escapeNotVerified */ $_htmlClass ?> required-entry <?= /* @escapeNotVerified */ $_priceValueValidation ?>" type="text" name="<?= /* @escapeNotVerified */ $_htmlName ?>[<%- data.index %>][price]" value="<%- data.price %>" id="tier_price_row_<%- data.index %>_price" /></td>'
+    + '<td class="col-delete"><input type="hidden" name="<?= /* @escapeNotVerified */ $_htmlName ?>[<%- data.index %>][delete]" class="delete" value="" id="tier_price_row_<%- data.index %>_delete" />'
+    + '<button title="<?= /* @escapeNotVerified */ $block->escapeHtml(__('Delete Tier')) ?>" type="button" class="action- scalable delete icon-btn delete-product-option" id="tier_price_row_<%- data.index %>_delete_button" onclick="return tierPriceControl.deleteItem(event);">'
+    + '<span><?= /* @escapeNotVerified */ __("Delete") ?></span></button></td>'
+    + '</tr>';
+
+var tierPriceControl = {
+    template: mageTemplate(tierPriceRowTemplate),
+    itemsCount: 0,
+    addItem : function () {
+        <?php if ($_readonly): ?>
+        if (arguments.length < 4) {
+            return;
+        }
+        <?php endif; ?>
+        var data = {
+            website_id: '<?= /* @escapeNotVerified */ $block->getDefaultWebsite() ?>',
+            group: '<?= /* @escapeNotVerified */ $block->getDefaultCustomerGroup() ?>',
+            qty: '',
+            price: '',
+            readOnly: false,
+            index: this.itemsCount++
+        };
+
+        if(arguments.length >= 4) {
+            data.website_id = arguments[0];
+            data.group      = arguments[1];
+            data.qty        = arguments[2];
+            data.price      = arguments[3];
+        }
+        if (arguments.length == 5) {
+            data.readOnly = arguments[4];
+        }
+
+        Element.insert($('<?= /* @escapeNotVerified */ $_htmlId ?>_container'), {
+            bottom : this.template({
+                data: data
+            })
+        });
+
+        $('tier_price_row_' + data.index + '_cust_group').value = data.group;
+        $('tier_price_row_' + data.index + '_website').value    = data.website_id;
+
+        <?php if ($block->isShowWebsiteColumn() && !$block->isAllowChangeWebsite()):?>
+        var wss = $('tier_price_row_' + data.index + '_website');
+        var txt = wss.options[wss.selectedIndex].text;
+
+        wss.insert({after:'<span class="website-name">' + txt + '</span>'});
+        wss.hide();
+        <?php endif;?>
+
+        if (data.readOnly == '1') {
+            ['website', 'cust_group', 'qty', 'price', 'delete'].each(function(idx){
+                $('tier_price_row_'+data.index+'_'+idx).disabled = true;
+            });
+            $('tier_price_row_'+data.index+'_delete_button').hide();
+        }
+
+        <?php if ($_readonly): ?>
+        $('<?= /* @escapeNotVerified */ $_htmlId ?>_container').select('input', 'select').each(this.disableElement);
+        $('<?= /* @escapeNotVerified */ $_htmlId ?>_container').up('table').select('button').each(this.disableElement);
+        <?php else: ?>
+        $('<?= /* @escapeNotVerified */ $_htmlId ?>_container').select('input', 'select').each(function(el){ Event.observe(el, 'change', el.setHasChanges.bind(el)); });
+        <?php endif; ?>
+    },
+    disableElement: function(el) {
+        el.disabled = true;
+        el.addClassName('disabled');
+    },
+    deleteItem: function(event) {
+        var tr = Event.findElement(event, 'tr');
+        if (tr) {
+            Element.select(tr, '.delete').each(function(elem){elem.value='1'});
+            Element.select(tr, ['input', 'select']).each(function(elem){elem.hide()});
+            Element.hide(tr);
+            Element.addClassName(tr, 'no-display template');
+        }
+        return false;
+    }
+};
+<?php foreach ($block->getValues() as $_item): ?>
+tierPriceControl.addItem('<?= /* @escapeNotVerified */ $_item['website_id'] ?>', '<?= /* @escapeNotVerified */ $_item['cust_group'] ?>', '<?= /* @escapeNotVerified */ $_item['price_qty']*1 ?>', '<?= /* @escapeNotVerified */ $_item['price'] ?>', <?= (int)!empty($_item['readonly']) ?>);
+<?php endforeach; ?>
+<?php if ($_readonly): ?>
+$('<?= /* @escapeNotVerified */ $_htmlId ?>_container').up('table').select('button')
+    .each(tierPriceControl.disableElement);
+<?php endif; ?>
+
+window.tierPriceControl = tierPriceControl;
+//]]>
+
+});
+</script>
+    </div>
+</div>

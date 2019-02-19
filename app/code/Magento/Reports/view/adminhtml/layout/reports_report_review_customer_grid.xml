@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.report.grid.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.block.report.review.customer.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">customers_grid</argument>
+                    <argument name="default_sort" xsi:type="string">review_cnt</argument>
+                    <argument name="default_dir" xsi:type="string">desc</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Reports\Model\ResourceModel\Review\Customer\Collection</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Export" name="adminhtml.block.report.review.customer.export" as="grid.export">
+                    <arguments>
+                        <argument name="exportTypes" xsi:type="array">
+                            <item name="csv" xsi:type="array">
+                                <item name="urlPath" xsi:type="string">*/*/exportCustomerCsv</item>
+                                <item name="label" xsi:type="string" translate="true">CSV</item>
+                            </item>
+                            <item name="excel" xsi:type="array">
+                                <item name="urlPath" xsi:type="string">*/*/exportCustomerExcel</item>
+                                <item name="label" xsi:type="string" translate="true">Excel XML</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="adminhtml.block.report.review.customer.grid.columnSet">
+                    <arguments>
+                        <argument name="filter_visibility" xsi:type="string">1</argument>
+                        <argument name="id" xsi:type="string">customers_grid</argument>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">review/product</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="customerId" xsi:type="string">getCustomerId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.report.review.customer.grid.columnSet.customer_name" as="customer_name">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Customer</argument>
+                            <argument name="index" xsi:type="string">customer_name</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="id" xsi:type="string">customer_name</argument>
+                            <argument name="default" xsi:type="string" translate="true">Guest</argument>
+                            <argument name="column_css_class" xsi:type="string">col-name</argument>
+                            <argument name="header_css_class" xsi:type="string">col-name</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.report.review.customer.grid.columnSet.review_cnt" as="review_cnt">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Reviews</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="index" xsi:type="string">review_cnt</argument>
+                            <argument name="column_css_class" xsi:type="string">col-qty</argument>
+                            <argument name="header_css_class" xsi:type="string">col-qty</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.report.review.customer.grid.columnSet.action" as="action">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Action</argument>
+                            <argument name="filter" xsi:type="string">0</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="is_system" xsi:type="string">1</argument>
+                            <argument name="renderer" xsi:type="string">Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Customer</argument>
+                            <argument name="id" xsi:type="string">action</argument>
+                            <argument name="column_css_class" xsi:type="string">col-actions</argument>
+                            <argument name="header_css_class" xsi:type="string">col-actions</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

@@ -1,0 +1,669 @@
+.overlay___invisible__ {
+  background-color: #666;
+	filter:alpha(opacity=0);
+	-moz-opacity: 0;
+	opacity: 0;
+}
+
+.top_draggable, .bottom_draggable {
+	cursor:move;
+}
+
+.status_bar {
+	font-size:12px;
+}
+.status_bar input{
+	font-size:12px;
+}
+
+.wired_frame {
+	display:block;
+	position:absolute;
+	border:1px #000 dashed;
+}
+
+
+
+.overlay_bluelighting {
+	background-color:#FFF;
+	filter:alpha(opacity=60);
+	-moz-opacity:0.6;
+	opacity:0.6;
+}
+
+.bluelighting_wired_frame {
+	background:#FFF;
+	filter:alpha(opacity=60);
+	-moz-opacity:0.6;
+	opacity:0.6;	
+}
+
+.bluelighting_nw {
+	background:transparent url(lighting/top-left-blue.png) no-repeat 0 0;			
+	width:9px;
+	height:28px;
+}
+
+.bluelighting_n {
+	background:transparent url(lighting/top-middle-blue.png) repeat-x 0 0;			
+	height:28px;
+}
+
+.bluelighting_ne {
+	background:transparent url(lighting/top-right-blue.png) no-repeat 0 0;			
+	width:15px;	  
+	height:28px;
+}
+
+.bluelighting_w {
+	background:transparent url(lighting/left-blue.png) repeat-y top left;			
+	width:9px;
+}
+
+.bluelighting_e {
+	background:transparent url(lighting/right-blue.png) repeat-y top right;			
+	width:15px;	  
+}
+
+.bluelighting_sw {
+	background:transparent url(lighting/bottom-left-blue.png) no-repeat 0 0;			
+	width:9px;
+	height:15px;
+}
+
+.bluelighting_s {
+	background:transparent url(lighting/bottom-middle-blue.png) repeat-x 0 0;			
+	height:15px;
+}
+
+.bluelighting_se, .bluelighting_sizer  {
+	background:transparent url(lighting/bottom-right-blue.png) no-repeat 0 0;			
+	width:15px;
+	height:15px;
+}
+
+.bluelighting_sizer {
+	cursor:se-resize;	
+}
+
+.bluelighting_close {
+	width:15px;
+	height:9px;
+	background:transparent url(lighting/button-close-blue.png) no-repeat 0 0;			
+	position:absolute;
+	top:11px;
+	right:10px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.bluelighting_maximize {
+	width:15px;
+	height:9px;
+	background:transparent url(lighting/button-maximize-blue.png) no-repeat 0 0;			
+	position:absolute;
+	top:11px;
+	right:25px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.bluelighting_minimize {
+	width:15px;
+	height:9px;
+	background:transparent url(lighting/button-minimize-blue.png) no-repeat 0 0;			
+	position:absolute;
+	top:11px;
+	right:40px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.bluelighting_title {
+	float:left;
+	height:14px;
+	font-size:14px;
+	font-weight:bold;
+	font-family:Verdana, Arial, sans-serif;
+	text-align:center;
+	margin-top:2px;
+	width:100%;
+	color:#17385B;
+}
+
+.bluelighting_content {
+	overflow:auto;
+	color:#000;
+	font-family:Verdana, Arial, sans-serif;
+	font-size:12px;
+	background:#BFDBFF;
+}
+
+/* For alert/confirm dialog */
+.bluelighting_window {
+	border:1px solid #F00;	
+	background:#FFF;
+	padding:20px;
+	margin-left:auto;
+	margin-right:auto;
+	width:400px;
+}
+
+.bluelighting_message {
+  	font-size:12px;
+	text-align:center;
+	width:100%;
+	padding-bottom:10px;
+}
+
+.bluelighting_buttons {
+	text-align:center;
+	width:100%;
+}
+
+.bluelighting_buttons input {
+	border:1px solid #999;
+	border-top-color:#CCC;
+	border-left-color:#CCC;
+	padding:2px;
+	background-color:#FFF;
+	color:#333;
+	background-image:url(lighting/background_buttons.gif);
+	background-repeat:repeat-x;
+	font-family:Verdana, Arial, sans-serif;
+	font-size:10px;
+	font-weight:bold;
+	text-align:center;
+}
+
+.bluelighting_progress {
+	float:left;
+	margin:auto;
+	text-align:center;
+	width:100%;
+	height:16px;
+	background:transparent url('lighting/spinner.gif') no-repeat center center
+}
+
+.overlay_greylighting {
+	background-color:#FFF;
+	filter:alpha(opacity=60);
+	-moz-opacity:0.6;
+	opacity:0.6;
+}
+
+.greylighting_wired_frame {
+	background:#FFF;
+	filter:alpha(opacity=60);
+	-moz-opacity:0.6;
+	opacity:0.6;	
+}
+
+.greylighting_nw {
+	background:transparent url(lighting/top-left-grey.png) no-repeat 0 0;			
+	width:9px;
+	height:28px;
+}
+
+.greylighting_n {
+	background:transparent url(lighting/top-middle-grey.png) repeat-x 0 0;			
+	height:28px;
+}
+
+.greylighting_ne {
+	background:transparent url(lighting/top-right-grey.png) no-repeat 0 0;			
+	width:15px;	  
+	height:28px;
+}
+
+.greylighting_w {
+	background:transparent url(lighting/left-grey.png) repeat-y top left;			
+	width:9px;
+}
+
+.greylighting_e {
+	background:transparent url(lighting/right-grey.png) repeat-y top right;			
+	width:15px;	  
+}
+
+.greylighting_sw {
+	background:transparent url(lighting/bottom-left-grey.png) no-repeat 0 0;			
+	width:9px;
+	height:15px;
+}
+
+.greylighting_s {
+	background:transparent url(lighting/bottom-middle-grey.png) repeat-x 0 0;			
+	height:15px;
+}
+
+.greylighting_se, .greylighting_sizer  {
+	background:transparent url(lighting/bottom-right-grey.png) no-repeat 0 0;			
+	width:15px;
+	height:15px;
+}
+
+.greylighting_sizer {
+	cursor:se-resize;	
+}
+
+.greylighting_close {
+	width:15px;
+	height:9px;
+	background:transparent url(lighting/button-close-grey.png) no-repeat 0 0;			
+	position:absolute;
+	top:11px;
+	right:10px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.greylighting_maximize {
+	width:15px;
+	height:9px;
+	background:transparent url(lighting/button-maximize-grey.png) no-repeat 0 0;			
+	position:absolute;
+	top:11px;
+	right:25px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.greylighting_minimize {
+	width:15px;
+	height:9px;
+	background:transparent url(lighting/button-minimize-grey.png) no-repeat 0 0;			
+	position:absolute;
+	top:11px;
+	right:40px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.greylighting_title {
+	float:left;
+	height:14px;
+	font-size:14px;
+	font-weight:bold;
+	font-family:Verdana, Arial, sans-serif;
+	text-align:center;
+	margin-top:2px;
+	width:100%;
+	color:#525252;
+}
+
+.greylighting_content {
+	overflow:auto;
+	color:#000;
+	font-family:Verdana, Arial, sans-serif;
+	font-size:12px;
+	background:#CDCDCD;
+}
+
+/* For alert/confirm dialog */
+.greylighting_window {
+	border:1px solid #F00;	
+	background:#FFF;
+	padding:20px;
+	margin-left:auto;
+	margin-right:auto;
+	width:400px;
+}
+
+.greylighting_message {
+  	font-size:12px;
+	text-align:center;
+	width:100%;
+	padding-bottom:10px;
+}
+
+.greylighting_buttons {
+	text-align:center;
+	width:100%;
+}
+
+.greylighting_buttons input {
+	border:1px solid #999;
+	border-top-color:#CCC;
+	border-left-color:#CCC;
+	padding:2px;
+	background-color:#FFF;
+	color:#333;
+	background-image:url(lighting/background_buttons.gif);
+	background-repeat:repeat-x;
+	font-family:Verdana, Arial, sans-serif;
+	font-size:10px;
+	font-weight:bold;
+	text-align:center;
+}
+
+.greylighting_progress {
+	float:left;
+	margin:auto;
+	text-align:center;
+	width:100%;
+	height:16px;
+	background:transparent url('lighting/spinner.gif') no-repeat center center
+}
+
+.overlay_greenlighting {
+	background-color:#FFF;
+	filter:alpha(opacity=60);
+	-moz-opacity:0.6;
+	opacity:0.6;
+}
+
+.greenlighting_wired_frame {
+	background:#FFF;
+	filter:alpha(opacity=60);
+	-moz-opacity:0.6;
+	opacity:0.6;	
+}
+
+.greenlighting_nw {
+	background:transparent url(lighting/top-left-green.png) no-repeat 0 0;			
+	width:9px;
+	height:28px;
+}
+
+.greenlighting_n {
+	background:transparent url(lighting/top-middle-green.png) repeat-x 0 0;			
+	height:28px;
+}
+
+.greenlighting_ne {
+	background:transparent url(lighting/top-right-green.png) no-repeat 0 0;			
+	width:15px;	  
+	height:28px;
+}
+
+.greenlighting_w {
+	background:transparent url(lighting/left-green.png) repeat-y top left;			
+	width:9px;
+}
+
+.greenlighting_e {
+	background:transparent url(lighting/right-green.png) repeat-y top right;			
+	width:15px;	  
+}
+
+.greenlighting_sw {
+	background:transparent url(lighting/bottom-left-green.png) no-repeat 0 0;			
+	width:9px;
+	height:15px;
+}
+
+.greenlighting_s {
+	background:transparent url(lighting/bottom-middle-green.png) repeat-x 0 0;			
+	height:15px;
+}
+
+.greenlighting_se, .greenlighting_sizer  {
+	background:transparent url(lighting/bottom-right-green.png) no-repeat 0 0;			
+	width:15px;
+	height:15px;
+}
+
+.greenlighting_sizer {
+	cursor:se-resize;	
+}
+
+.greenlighting_close {
+	width:15px;
+	height:9px;
+	background:transparent url(lighting/button-close-green.png) no-repeat 0 0;			
+	position:absolute;
+	top:11px;
+	right:10px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.greenlighting_maximize {
+	width:15px;
+	height:9px;
+	background:transparent url(lighting/button-maximize-green.png) no-repeat 0 0;			
+	position:absolute;
+	top:11px;
+	right:25px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.greenlighting_minimize {
+	width:15px;
+	height:9px;
+	background:transparent url(lighting/button-minimize-green.png) no-repeat 0 0;			
+	position:absolute;
+	top:11px;
+	right:40px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.greenlighting_title {
+	float:left;
+	height:14px;
+	font-size:14px;
+	font-weight:bold;
+	font-family:Verdana, Arial, sans-serif;
+	text-align:center;
+	margin-top:2px;
+	width:100%;
+	color:#2A6002;
+}
+
+.greenlighting_content {
+	overflow:auto;
+	color:#000;
+	font-family:Verdana, Arial, sans-serif;
+	font-size:12px;
+	background:#ACFCAF;
+}
+
+/* For alert/confirm dialog */
+.greenlighting_window {
+	border:1px solid #F00;	
+	background:#FFF;
+	padding:20px;
+	margin-left:auto;
+	margin-right:auto;
+	width:400px;
+}
+
+.greenlighting_message {
+  	font-size:12px;
+	text-align:center;
+	width:100%;
+	padding-bottom:10px;
+}
+
+.greenlighting_buttons {
+	text-align:center;
+	width:100%;
+}
+
+.greenlighting_buttons input {
+	border:1px solid #999;
+	border-top-color:#CCC;
+	border-left-color:#CCC;
+	padding:2px;
+	background-color:#FFF;
+	color:#333;
+	background-image:url(lighting/background_buttons.gif);
+	background-repeat:repeat-x;
+	font-family:Verdana, Arial, sans-serif;
+	font-size:10px;
+	font-weight:bold;
+	text-align:center;
+}
+
+.greenlighting_progress {
+	float:left;
+	margin:auto;
+	text-align:center;
+	width:100%;
+	height:16px;
+	background:transparent url('lighting/spinner.gif') no-repeat center center
+}
+
+.overlay_darkbluelighting {
+	background-color:#FFF;
+	filter:alpha(opacity=60);
+	-moz-opacity:0.6;
+	opacity:0.6;
+}
+
+.darkbluelighting_wired_frame {
+	background:#FFF;
+	filter:alpha(opacity=60);
+	-moz-opacity:0.6;
+	opacity:0.6;	
+}
+
+.darkbluelighting_nw {
+	background:transparent url(lighting/top-left-darkblue.png) no-repeat 0 0;			
+	width:9px;
+	height:28px;
+}
+
+.darkbluelighting_n {
+	background:transparent url(lighting/top-middle-darkblue.png) repeat-x 0 0;			
+	height:28px;
+}
+
+.darkbluelighting_ne {
+	background:transparent url(lighting/top-right-darkblue.png) no-repeat 0 0;			
+	width:15px;	  
+	height:28px;
+}
+
+.darkbluelighting_w {
+	background:transparent url(lighting/left-darkblue.png) repeat-y top left;			
+	width:9px;
+}
+
+.darkbluelighting_e {
+	background:transparent url(lighting/right-darkblue.png) repeat-y top right;			
+	width:15px;	  
+}
+
+.darkbluelighting_sw {
+	background:transparent url(lighting/bottom-left-darkblue.png) no-repeat 0 0;			
+	width:9px;
+	height:15px;
+}
+
+.darkbluelighting_s {
+	background:transparent url(lighting/bottom-middle-darkblue.png) repeat-x 0 0;			
+	height:15px;
+}
+
+.darkbluelighting_se, .darkbluelighting_sizer  {
+	background:transparent url(lighting/bottom-right-darkblue.png) no-repeat 0 0;			
+	width:15px;
+	height:15px;
+}
+
+.darkbluelighting_sizer {
+	cursor:se-resize;	
+}
+
+.darkbluelighting_close {
+	width:15px;
+	height:9px;
+	background:transparent url(lighting/button-close-darkblue.png) no-repeat 0 0;			
+	position:absolute;
+	top:11px;
+	right:10px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.darkbluelighting_maximize {
+	width:15px;
+	height:9px;
+	background:transparent url(lighting/button-maximize-darkblue.png) no-repeat 0 0;			
+	position:absolute;
+	top:11px;
+	right:25px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.darkbluelighting_minimize {
+	width:15px;
+	height:9px;
+	background:transparent url(lighting/button-minimize-darkblue.png) no-repeat 0 0;			
+	position:absolute;
+	top:11px;
+	right:40px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.darkbluelighting_title {
+	float:left;
+	height:14px;
+	font-size:14px;
+	font-weight:bold;
+	font-family:Verdana, Arial, sans-serif;
+	text-align:center;
+	margin-top:2px;
+	width:100%;
+	color:#E4EFFD;
+}
+
+.darkbluelighting_content {
+	overflow:auto;
+	color:#FFF;
+	font-family:Verdana, Arial, sans-serif;
+	font-size:12px;
+	background:#0413C0;
+}
+
+/* For alert/confirm dialog */
+.darkbluelighting_window {
+	border:1px solid #F00;	
+	background:#FFF;
+	padding:20px;
+	margin-left:auto;
+	margin-right:auto;
+	width:400px;
+}
+
+.darkbluelighting_message {
+  	font-size:12px;
+	text-align:center;
+	width:100%;
+	padding-bottom:10px;
+}
+
+.darkbluelighting_buttons {
+	text-align:center;
+	width:100%;
+}
+
+.darkbluelighting_buttons input {
+	border:1px solid #999;
+	border-top-color:#CCC;
+	border-left-color:#CCC;
+	padding:2px;
+	background-color:#FFF;
+	color:#333;
+	background-image:url(lighting/background_buttons.gif);
+	background-repeat:repeat-x;
+	font-family:Verdana, Arial, sans-serif;
+	font-size:10px;
+	font-weight:bold;
+	text-align:center;
+}
+
+.darkbluelighting_progress {
+	float:left;
+	margin:auto;
+	text-align:center;
+	width:100%;
+	height:16px;
+	background:transparent url('lighting/spinner.gif') no-repeat center center
+}

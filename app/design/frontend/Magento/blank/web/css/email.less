@@ -1,0 +1,44 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+//
+//  Styles for emails
+//  _____________________________________________
+
+//  See comments in source/_email-base.less for explanation of email styles
+
+@import 'source/lib/_lib.less'; // Global lib
+@import 'source/lib/variables/_email.less'; // Global email variables
+@import 'source/_theme.less'; // Global variables override
+@import 'source/_variables.less'; // Local theme variables
+@import 'source/_email-variables.less'; // Theme variables for emails
+
+//  Import these file by reference so that only the styles included in the .email-non-inline() and .media-width()
+//  mixins will be output. All other styles will be output via the email-inline.less file.
+
+@import (reference) 'source/_email-base.less'; // Contains primary email styles
+@import (reference) 'source/_email-extend.less'; // Contains theme-specific adjustments to email styles
+
+//
+//  Module-specific styles for emails
+//  ---------------------------------------------
+
+//  Import files using (reference) for the same reason stated above
+//@magento_import (reference) 'source/_email.less';
+
+//
+//  Media queries collector
+//  ---------------------------------------------
+
+@import 'source/lib/_responsive.less';
+//  It is impossible to apply media queries as inline styles, so all media queries must be output in this file
+@media-target: 'all';
+
+//
+//  Non-inline styles
+//  ---------------------------------------------
+
+//  Include all styles that have been indicated as non-inline styles
+.email-non-inline();

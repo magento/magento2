@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magento_Theme::design_config" title="Configuration" translate="title" module="Magento_Theme" sortOrder="10" parent="Magento_Backend::system_design" action="theme/design_config" resource="Magento_Config::config_design"/>
+        <add id="Magento_Theme::system_design_theme" title="Themes" translate="title" module="Magento_Theme" sortOrder="20" parent="Magento_Backend::system_design" action="adminhtml/system_design_theme" resource="Magento_Theme::theme"/>
+    </menu>
+</config>

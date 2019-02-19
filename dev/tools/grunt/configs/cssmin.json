@@ -1,0 +1,16 @@
+{
+    "options": {
+        "report": "gzip",
+        "keepSpecialComments": 0
+    },
+    "setup": {
+        "files": {
+            "<%= path.css.setup %>/setup.css": "<%= path.css.setup %>/setup.css"
+        }
+    },
+    "updater": {
+        "files": {
+            "<%= path.css.updater %>/updater.css": "<%= path.css.updater %>/updater.css"
+        }
+    }
+}

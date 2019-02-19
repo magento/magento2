@@ -1,0 +1,12 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+interface ProductInterface {
+    only_x_left_in_stock: Float @doc(description: "Product stock only x left count") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\OnlyXLeftInStockResolver")
+    stock_status: ProductStockStatus @doc(description: "Stock status of the product") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\StockStatusProvider")
+}
+
+enum ProductStockStatus @doc(description: "This enumeration states whether a product stock status is in stock or out of stock") {
+    IN_STOCK
+    OUT_OF_STOCK
+}

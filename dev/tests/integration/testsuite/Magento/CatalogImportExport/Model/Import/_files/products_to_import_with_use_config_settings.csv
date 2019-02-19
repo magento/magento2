@@ -1,0 +1,4 @@
+sku,product_type,store_view_code,name,price,attribute_set_code,manage_stock,use_config_manage_stock
+simple1,simple,,simple 1,25,Default,1,1
+simple2,simple,,simple 2,58,Default,Use Config,
+simple3,simple,,simple 3,34,Default,1,0

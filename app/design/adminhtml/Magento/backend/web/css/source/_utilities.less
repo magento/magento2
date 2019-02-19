@@ -1,0 +1,39 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+@import 'utilities/_grid-framework.less';
+@import 'utilities/_grid.less';
+@import 'utilities/_actions.less';
+@import 'utilities/_animations.less';
+@import 'utilities/_spinner.less';
+
+.hidden() {
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
+    position: absolute;
+}
+
+.disabled() {
+    box-shadow: none;
+    cursor: default;
+    opacity: .5;
+    outline: 0;
+}
+
+.lib-text-overflow-ellipsis() {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.appearing__off() {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.appearing__on() {
+    opacity: 1;
+    visibility: visible;
+}

@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:framework:Search/etc/search_request.xsd">
+    <request query="bool_query" index="bool_query_index">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="bool_query" boost="1">
+                <queryReference clause="must" ref="must_query"/>
+                <queryReference clause="should" ref="should_query"/>
+                <queryReference clause="not" ref="not_query"/>
+            </query>
+            <query xsi:type="matchQuery" value="$match_term$" name="match_query">
+                <match field="match_field"/>
+                <match field="*"/>
+            </query>
+            <query xsi:type="filteredQuery" name="must_query">
+                <filterReference clause="must" ref="must_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="should_query">
+                <filterReference clause="should" ref="should_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="not_query">
+                <filterReference clause="not" ref="not_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="termFilter" name="must_filter" field="field_1" value="$value_1$"/>
+            <filter xsi:type="rangeFilter" name="should_filter" field="field_2" from="$value_2.from$"
+                    to="$value_2.to$"/>
+            <filter xsi:type="wildcardFilter" name="not_filter" field="field_3" value="$field_3$"/>
+        </filters>
+        <aggregations>
+            <bucket name="bucket_1" field="field_1" xsi:type="dynamicBucket" method="$field_1_dynamic_algorithm$">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+            <bucket name="bucket_2" field="field_2" xsi:type="termBucket">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+            <bucket name="bucket_3" field="field_2" xsi:type="rangeBucket">
+                <ranges>
+                    <range from="$value_2.from$" to="value_2.to$"/>
+                </ranges>
+            </bucket>
+        </aggregations>
+        <from>0</from>
+        <size>10000</size>
+    </request>
+    <request query="filter_query" index="filter_query_index">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="filteredQuery" name="filter_query">
+                <filterReference clause="must" ref="bool_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="boolFilter" name="bool_filter">
+                <filterReference clause="must" ref="must_filter"/>
+                <filterReference clause="should" ref="should_filter"/>
+                <filterReference clause="not" ref="not_filter"/>
+            </filter>
+            <filter xsi:type="termFilter" name="must_filter" field="field_1" value="$value_1$"/>
+            <filter xsi:type="rangeFilter" name="should_filter" field="field_2" from="$value_2.from$"
+                    to="$value_2.to$"/>
+            <filter xsi:type="wildcardFilter" name="not_filter" field="field_3" value="$field_3$"/>
+        </filters>
+        <from>0</from>
+        <size>10000</size>
+    </request>
+</requests>

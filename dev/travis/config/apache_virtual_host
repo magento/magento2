@@ -1,0 +1,20 @@
+<VirtualHost *:80>
+    DocumentRoot %TRAVIS_BUILD_DIR%
+    ServerName %MAGENTO_HOST_NAME%
+
+    <Directory "%TRAVIS_BUILD_DIR%">
+        Options FollowSymLinks MultiViews ExecCGI
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    <IfModule mod_fastcgi.c>
+        AddHandler php7-fcgi .php
+        Action php7-fcgi /php7-fcgi
+        Alias /php7-fcgi /usr/lib/cgi-bin/php7-fcgi
+        FastCgiExternalServer /usr/lib/cgi-bin/php7-fcgi -host 127.0.0.1:9000 -pass-header Authorization
+        <Directory /usr/lib/cgi-bin>
+            Require all granted
+        </Directory>
+    </IfModule>
+</VirtualHost>

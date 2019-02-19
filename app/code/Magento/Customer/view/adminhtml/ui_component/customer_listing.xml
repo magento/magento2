@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">customer_listing.customer_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="*/*/new"/>
+                <class>primary</class>
+                <label translate="true">Add New Customer</label>
+            </button>
+        </buttons>
+        <spinner>customer_columns</spinner>
+        <deps>
+            <dep>customer_listing.customer_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="customer_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_Customer::manage</aclResource>
+        <dataProvider class="Magento\Customer\Ui\Component\DataProvider" name="customer_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <exportButton name="export_button"/>
+        <filterSearch name="fulltext"/>
+        <filters name="listing_filters"/>
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure you want to delete the selected customers?</message>
+                        <title translate="true">Delete items</title>
+                    </confirm>
+                    <url path="customer/index/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+            <action name="subscribe">
+                <settings>
+                    <url path="customer/index/massSubscribe"/>
+                    <type>subscribe</type>
+                    <label translate="true">Subscribe to Newsletter</label>
+                </settings>
+            </action>
+            <action name="unsubscribe">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure you want to unsubscribe the selected customers from the newsletter?</message>
+                        <title translate="true">Unsubscribe from Newsletter</title>
+                    </confirm>
+                    <url path="customer/index/massUnsubscribe"/>
+                    <type>unsubscribe</type>
+                    <label translate="true">Unsubscribe from Newsletter</label>
+                </settings>
+            </action>
+            <action name="assign_to_group">
+                <settings>
+                    <type>assign_to_group</type>
+                    <label translate="true">Assign a Customer Group</label>
+                    <actions class="Magento\Customer\Ui\Component\MassAction\Group\Options"/>
+                </settings>
+            </action>
+            <action name="edit">
+                <settings>
+                    <callback>
+                        <target>editSelected</target>
+                        <provider>customer_listing.customer_listing.customer_columns_editor</provider>
+                    </callback>
+                    <type>edit</type>
+                    <label translate="true">Edit</label>
+                </settings>
+            </action>
+        </massaction>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="customer_columns" class="Magento\Customer\Ui\Component\Listing\Columns">
+        <settings>
+            <editorConfig>
+                <param name="clientConfig" xsi:type="array">
+                    <item name="saveUrl" xsi:type="url" path="customer/index/inlineEdit"/>
+                    <item name="validateBeforeSave" xsi:type="boolean">false</item>
+                </param>
+                <param name="indexField" xsi:type="string">entity_id</param>
+                <param name="enabled" xsi:type="boolean">true</param>
+                <param name="selectProvider" xsi:type="string">customer_listing.customer_listing.customer_columns.ids</param>
+            </editorConfig>
+            <childDefaults>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">customer_listing.customer_listing.customer_columns_editor</item>
+                    <item name="target" xsi:type="string">startEdit</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
+                        <item name="1" xsi:type="boolean">true</item>
+                    </item>
+                </param>
+            </childDefaults>
+        </settings>
+        <selectionsColumn name="ids" sortOrder="10">
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="entity_id" sortOrder="20">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="name" sortOrder="30">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Name</label>
+            </settings>
+        </column>
+        <column name="email" sortOrder="40">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">Email</label>
+            </settings>
+        </column>
+        <column name="group_id" component="Magento_Ui/js/grid/columns/select" sortOrder="50">
+            <settings>
+                <filter>select</filter>
+                <editor>
+                    <editorType>select</editorType>
+                </editor>
+                <dataType>select</dataType>
+                <label translate="true">Group</label>
+            </settings>
+        </column>
+        <column name="billing_telephone" sortOrder="60">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">Phone</label>
+            </settings>
+        </column>
+        <column name="billing_postcode" sortOrder="70">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">ZIP</label>
+            </settings>
+        </column>
+        <column name="billing_country_id" component="Magento_Ui/js/grid/columns/select" sortOrder="80">
+            <settings>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Country</label>
+            </settings>
+        </column>
+        <column name="billing_region" sortOrder="90">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">State/Province</label>
+            </settings>
+        </column>
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date" sortOrder="100">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Customer Since</label>
+            </settings>
+        </column>
+        <column name="website_id" class="Magento\Customer\Ui\Component\Listing\Column\Websites" component="Magento_Ui/js/grid/columns/select" sortOrder="110">
+            <settings>
+                <filter>select</filter>
+                <editor>
+                    <editorType>select</editorType>
+                </editor>
+                <dataType>select</dataType>
+                <label translate="true">Web Site</label>
+            </settings>
+        </column>
+        <column name="confirmation" class="Magento\Customer\Ui\Component\Listing\Column\Confirmation" sortOrder="130">
+            <settings>
+                <dataType>select</dataType>
+                <label translate="true">Confirmed email</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="created_in" sortOrder="140">
+            <settings>
+                <label translate="true">Account Created in</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="billing_full" sortOrder="150">
+            <settings>
+                <label translate="true">Billing Address</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="shipping_full" sortOrder="160">
+            <settings>
+                <label translate="true">Shipping Address</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="dob" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date" sortOrder="170">
+            <settings>
+                <timezone>false</timezone>
+                <dateFormat>MMM d, y</dateFormat>
+                <skipTimeZoneConversion>true</skipTimeZoneConversion>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Date of Birth</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="taxvat" sortOrder="180">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">Tax VAT Number</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="gender" component="Magento_Ui/js/grid/columns/select" sortOrder="190">
+            <settings>
+                <filter>select</filter>
+                <editor>
+                    <editorType>select</editorType>
+                </editor>
+                <dataType>select</dataType>
+                <label translate="true">Gender</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="billing_street" sortOrder="200">
+            <settings>
+                <label translate="true">Street Address</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="billing_city" sortOrder="210">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">City</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="billing_fax" sortOrder="220">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">Fax</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="billing_vat_id" sortOrder="230">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">VAT Number</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="billing_company" sortOrder="240">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">Company</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="billing_firstname" sortOrder="250">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">Billing Firstname</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="billing_lastname" sortOrder="260">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">Billing Lastname</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="lock_expires" class="Magento\Customer\Ui\Component\Listing\Column\AccountLock" sortOrder="270">
+            <settings>
+                <label translate="true">Account Lock</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Magento\Customer\Ui\Component\Listing\Column\Actions">
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

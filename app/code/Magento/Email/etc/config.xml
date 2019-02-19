@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <design>
+            <email>
+                <header_template>design_email_header_template</header_template>
+                <footer_template>design_email_footer_template</footer_template>
+            </email>
+        </design>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <email_folder>email</email_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+            <emails>
+                <forgot_email_template>system_emails_forgot_email_template</forgot_email_template>
+                <forgot_email_identity>general</forgot_email_identity>
+            </emails>
+            <smtp>
+                <disable>0</disable>
+                <host>localhost</host>
+                <port>25</port>
+            </smtp>
+        </system>
+        <trans_email>
+            <ident_custom1>
+                <email>custom1@example.com</email>
+                <name>Custom 1</name>
+            </ident_custom1>
+            <ident_custom2>
+                <email>custom2@example.com</email>
+                <name>Custom 2</name>
+            </ident_custom2>
+            <ident_general>
+                <email>owner@example.com</email>
+                <name>Owner</name>
+            </ident_general>
+            <ident_sales>
+                <email>sales@example.com</email>
+                <name>Sales</name>
+            </ident_sales>
+            <ident_support>
+                <email>support@example.com</email>
+                <name>CustomerSupport</name>
+            </ident_support>
+        </trans_email>
+    </default>
+</config>

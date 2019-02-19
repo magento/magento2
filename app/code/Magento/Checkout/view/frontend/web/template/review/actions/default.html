@@ -1,0 +1,21 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="actions-toolbar" id="review-buttons-container">
+    <div class="primary">
+        <button data-role="review-save" type="submit"
+            data-bind="click: placeOrder($parents[1]), attr: {title: $t('Place Order')}"
+            class="button action primary checkout"><span data-bind="i18n: 'Place Order'"></span></button>
+    </div>
+    <div class="secondary">
+        <span id="checkout-review-edit-label" data-bind="i18n: 'Forgot an Item?'"></span>
+        <a data-bind="attr: {href: $parents[1].cartUrl}"
+           aria-describedby="checkout-review-edit-label"
+           class="action edit">
+            <span data-bind="i18n: 'Edit Your Cart'"></span>
+        </a>
+    </div>
+</div>

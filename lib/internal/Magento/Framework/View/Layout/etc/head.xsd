@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:complexType name="linkType">
+        <xs:attribute name="src" type="xs:string" use="required"/>
+        <xs:attribute name="defer" type="xs:string"/>
+        <xs:attribute name="ie_condition" type="xs:string"/>
+        <xs:attribute name="charset" type="xs:string"/>
+        <xs:attribute name="hreflang" type="xs:string"/>
+        <xs:attribute name="media" type="xs:string"/>
+        <xs:attribute name="rel" type="xs:string"/>
+        <xs:attribute name="rev" type="xs:string"/>
+        <xs:attribute name="sizes" type="xs:string"/>
+        <xs:attribute name="target" type="xs:string"/>
+        <xs:attribute name="type" type="xs:string"/>
+        <xs:attribute name="order" type="xs:integer"/>
+        <xs:attribute name="src_type" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="metaType">
+        <xs:attribute name="content" type="xs:string" use="required"/>
+        <xs:attribute name="charset" type="xs:string" />
+        <xs:attribute name="http-equiv" type="xs:string"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="scheme" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="scriptType">
+        <xs:attribute name="src" type="xs:string" use="required"/>
+        <xs:attribute name="defer" type="xs:string"/>
+        <xs:attribute name="ie_condition" type="xs:string"/>
+        <xs:attribute name="async" type="xs:string"/>
+        <xs:attribute name="charset" type="xs:string"/>
+        <xs:attribute name="type" type="xs:string"/>
+        <xs:attribute name="src_type" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="headAttributeType">
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="value"/>
+    </xs:complexType>
+
+    <xs:complexType name="srcRemoveType">
+        <xs:attribute name="src" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="headType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="title" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="css" type="linkType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="link" type="linkType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="meta" type="metaType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="script" type="scriptType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="remove" type="srcRemoveType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="attribute" type="headAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<payment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/payment.xsd">
+    <credit_cards>
+        <type id="SM" order="60">
+            <label>Switch/Maestro</label>
+        </type>
+        <type id="SO" order="31">
+            <label>Solo</label>
+        </type>
+    </credit_cards>
+    <groups>
+        <group id="any_payment">
+            <label>Any Payment</label>
+        </group>
+    </groups>
+    <methods>
+        <method name="checkmo">
+            <allow_multiple_address>1</allow_multiple_address>
+        </method>
+    </methods>
+</payment>

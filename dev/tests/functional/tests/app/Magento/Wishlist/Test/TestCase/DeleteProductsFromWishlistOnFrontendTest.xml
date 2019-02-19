@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Wishlist\Test\TestCase\DeleteProductsFromWishlistOnFrontendTest" summary="Delete Products from Wishlist" ticketId="MAGETWO-28874">
+        <variation name="DeleteProductsFromWishlistOnFrontendTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
+            <data name="products/1" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
+            <data name="removedProductsIndex" xsi:type="array">
+                <item name="0" xsi:type="string">1</item>
+            </data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
+        </variation>
+        <variation name="DeleteProductsFromWishlistOnFrontendTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="products/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
+            <data name="removedProductsIndex" xsi:type="array">
+                <item name="0" xsi:type="string">1</item>
+            </data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistIsEmpty" />
+        </variation>
+        <variation name="DeleteProductsFromWishlistOnFrontendTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/1" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
+            <data name="products/2" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/3" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
+            <data name="removedProductsIndex" xsi:type="array">
+                <item name="0" xsi:type="string">1</item>
+                <item name="1" xsi:type="string">2</item>
+                <item name="2" xsi:type="string">3</item>
+                <item name="3" xsi:type="string">4</item>
+            </data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistIsEmpty" />
+        </variation>
+        <variation name="DeleteProductsFromWishlistOnFrontendTestVariation4">
+            <data name="products/0" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+            <data name="removedProductsIndex" xsi:type="array">
+                <item name="0" xsi:type="string">1</item>
+            </data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistIsEmpty" />
+        </variation>
+        <variation name="DeleteProductsFromWishlistOnFrontendTestVariation5">
+            <data name="products/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
+            <data name="removedProductsIndex" xsi:type="array">
+                <item name="0" xsi:type="string">1</item>
+            </data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistIsEmpty" />
+        </variation>
+        <variation name="DeleteProductsFromWishlistOnFrontendTestVariation6">
+            <data name="products/0" xsi:type="string">configurableProduct::default</data>
+            <data name="removedProductsIndex" xsi:type="array">
+                <item name="0" xsi:type="string">1</item>
+            </data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistIsEmpty" />
+        </variation>
+        <variation name="DeleteProductsFromWishlistOnFrontendTestVariation7">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="products/0" xsi:type="string">downloadableProduct::with_two_separately_links</data>
+            <data name="removedProductsIndex" xsi:type="array">
+                <item name="0" xsi:type="string">1</item>
+            </data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistIsEmpty" />
+        </variation>
+        <variation name="DeleteProductsFromWishlistOnFrontendTestVariation8">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="products/0" xsi:type="string">groupedProduct::three_simple_products</data>
+            <data name="removedProductsIndex" xsi:type="array">
+                <item name="0" xsi:type="string">1</item>
+            </data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistIsEmpty" />
+        </variation>
+    </testCase>
+</config>

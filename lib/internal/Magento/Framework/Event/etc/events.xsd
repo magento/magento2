@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="event" type="eventDeclaration" minOccurs="0" maxOccurs="unbounded">
+                    <xs:unique name="uniqueObserverName">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Observer name must be unique.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="observer"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="uniqueEventName">
+            <xs:annotation>
+                <xs:documentation>
+                    Event name must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="event" />
+            <xs:field xpath="@name" />
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="eventDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Event declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="observer" type="observerDeclaration" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="name" type="eventName" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="observerDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Observer declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="instance" type="xs:string" use="optional" />
+        <xs:attribute name="disabled" type="xs:boolean" use="optional" />
+        <xs:attribute name="shared" type="xs:boolean" use="optional" />
+    </xs:complexType>
+
+    <xs:simpleType name="eventName">
+        <xs:annotation>
+            <xs:documentation>
+                Event name can contain only [a-zA-Z0-9_].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

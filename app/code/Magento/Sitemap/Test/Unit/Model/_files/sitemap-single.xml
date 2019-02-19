@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:content="http://www.google.com/schemas/sitemap-content/1.0"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+    <url>
+        <loc>http://store.com/category.html</loc>
+        <lastmod>2012-12-21T00:00:00-08:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>http://store.com/category/sub-category.html</loc>
+        <lastmod>2012-12-21T00:00:00-08:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>http://store.com/product.html</loc>
+        <lastmod>0000-01-01T00:00:00-08:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>http://store.com/product2.html</loc>
+        <lastmod>2012-12-21T00:00:00-08:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+        <image:image>
+            <image:loc>http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/i/m/image1.png</image:loc>
+            <image:title>Product &amp; &gt; title &lt; &quot;</image:title>
+            <image:caption>caption &amp; &gt; title &lt; &quot;</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/i/m/image_no_caption.png</image:loc>
+            <image:title>Product &amp; &gt; title &lt; &quot;</image:title>
+        </image:image>
+        <PageMap xmlns="http://www.google.com/schemas/sitemap-pagemap/1.0">
+            <DataObject type="thumbnail">
+                <Attribute name="name" value="Product &amp; &gt; title &lt; &quot;"/>
+                <Attribute name="src" value="http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/t/h/thumbnail.jpg"/>
+            </DataObject>
+        </PageMap>
+    </url>
+</urlset>

@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<div class="footer-container">
+    <div class="footer">
+        <?= $block->getChildHtml() ?>
+        <p class="bugs"><?= /* @escapeNotVerified */ __('Help Us Keep Magento Healthy') ?> - <a
+            href="http://www.magentocommerce.com/bug-tracking"
+            target="_blank"><strong><?= /* @escapeNotVerified */ __('Report All Bugs') ?></strong></a>
+        </p>
+        <address><?= /* @escapeNotVerified */ $block->getCopyright() ?></address>
+    </div>
+</div>

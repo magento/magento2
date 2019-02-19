@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\SalesRule\Test\TestCase\DeleteSalesRuleEntityTest" summary="Delete Sales Rule" ticketId="MAGETWO-24985">
+        <variation name="DeleteSalesRuleEntityTestVariation1">
+            <data name="salesRule/dataset" xsi:type="string">active_sales_rule_with_percent_price_discount_coupon</data>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessDeleteMessage" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleIsNotPresentedInGrid" />
+        </variation>
+        <variation name="DeleteSalesRuleEntityTestVariation2">
+            <data name="salesRule/dataset" xsi:type="string">active_sales_rule_with_complex_conditions</data>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessDeleteMessage" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleIsNotPresentedInGrid" />
+        </variation>
+        <variation name="DeleteSalesRuleEntityTestVariation3" summary="Assert That Cart Price Rule Condition Is Not Applied" ticketId="MAGETWO-16987">
+            <data name="salesRule/dataset" xsi:type="string">inactive_sales_rule</data>
+            <data name="productForSalesRule1/dataset" xsi:type="string">simple_for_salesrule_1</data>
+            <data name="productQuantity/productForSalesRule1" xsi:type="string">1</data>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessDeleteMessage" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleIsNotPresentedInGrid" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsNotApplied" />
+        </variation>
+    </testCase>
+</config>

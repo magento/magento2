@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.user.role.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.role.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">roleGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Authorization\Model\ResourceModel\Role\Grid\Collection</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                    <argument name="default_sort" xsi:type="string">role_id</argument>
+                    <argument name="default_dir" xsi:type="string">asc</argument>
+                    <argument name="use_ajax" xsi:type="string">1</argument>
+                    <argument name="grid_url" xsi:type="url" path="*/*/roleGrid">
+                        <param name="_current">1</param>
+                    </argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="permission.role.grid.columnSet">
+                    <arguments>
+                        <argument name="id" xsi:type="string">roleGrid</argument>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">*/*/editrole</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="rid" xsi:type="string">getId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="permission.role.grid.columnSet.role_id" as="role_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">ID</argument>
+                            <argument name="index" xsi:type="string">role_id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="permission.role.grid.columnSet.role_name" as="role_name">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Role</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="escape" xsi:type="string">1</argument>
+                            <argument name="index" xsi:type="string">role_name</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

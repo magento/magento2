@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/**
+ * @var $block \Magento\Catalog\Block\Adminhtml\Category\Tree
+ */
+?>
+
+<?php $divId = $block->escapeHtml('tree-div_' . time()) ?>
+<div id="<?= /* @noEscape */ $divId ?>" class="tree"></div>
+<script id="ie-deferred-loader" defer="defer" src="//:"></script>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "categoryCheckboxTree": {
+                "dataUrl":       "<?= $block->escapeUrl($block->getLoadTreeUrl()) ?>",
+                "divId":         "<?= /* @noEscape */ $divId ?>",
+                "rootVisible":   <?= /* @noEscape */ $block->getRoot()->getIsVisible() ? 'true' : 'false' ?>,
+                "useAjax":       <?= $block->escapeHtml($block->getUseAjax()) ?>,
+                "currentNodeId": <?= (int)$block->getCategoryId() ?>,
+                "jsFormObject":  "<?= /* @noEscape */ $block->getJsFormObject() ?>",
+                "name":          "<?= $block->escapeHtml($block->getRoot()->getName()) ?>",
+                "checked":       "<?= $block->escapeHtml($block->getRoot()->getChecked()) ?>",
+                "allowdDrop":    <?= /* @noEscape */ $block->getRoot()->getIsVisible() ? 'true' : 'false' ?>,
+                "rootId":        <?= (int)$block->getRoot()->getId() ?>,
+                "expanded":      <?= (int)$block->getIsWasExpanded() ?>,
+                "categoryId":    <?= (int)$block->getCategoryId() ?>,
+                "treeJson":      <?= /* @noEscape */ $block->getTreeJson() ?>
+            }
+        }
+    }
+</script>

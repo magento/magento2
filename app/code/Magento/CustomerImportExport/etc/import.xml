@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_ImportExport:etc/import.xsd">
+    <entity name="customer_composite" label="Customers and Addresses (single file)" model="Magento\CustomerImportExport\Model\Import\CustomerComposite" behaviorModel="Magento\ImportExport\Model\Source\Import\Behavior\Basic" />
+    <entity name="customer" label="Customers Main File" model="Magento\CustomerImportExport\Model\Import\Customer" behaviorModel="Magento\ImportExport\Model\Source\Import\Behavior\Custom" />
+    <entity name="customer_address" label="Customer Addresses" model="Magento\CustomerImportExport\Model\Import\Address" behaviorModel="Magento\ImportExport\Model\Source\Import\Behavior\Custom" />
+    <relatedIndexer entity="customer" name="customer_grid" />
+    <relatedIndexer entity="customer_address" name="customer_grid" />
+    <relatedIndexer entity="customer_composite" name="customer_grid" />
+</config>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
+        <attribute code="gift_message" type="Magento\GiftMessage\Api\Data\MessageInterface" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Sales\Api\Data\OrderItemInterface">
+        <attribute code="gift_message" type="Magento\GiftMessage\Api\Data\MessageInterface" />
+    </extension_attributes>
+    <extension_attributes for="Magento\GiftMessage\Api\Data\MessageInterface">
+        <attribute code="entity_id" type="string" />
+        <attribute code="entity_type" type="string" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Quote\Api\Data\TotalsAdditionalDataInterface">
+        <attribute code="gift_messages" type="Magento\GiftMessage\Api\Data\MessageInterface[]" />
+    </extension_attributes>
+</config>

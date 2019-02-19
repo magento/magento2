@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="js">
+           <block class="Magento\Framework\View\Element\Template" name="js.bundle_stock_disabler" template="Magento_Bundle::product/stock/disabler.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

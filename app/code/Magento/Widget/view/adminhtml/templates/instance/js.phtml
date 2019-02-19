@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<script>
+require([
+    'jquery',
+    'mage/template',
+], function($, mageTemplate){
+
+setSettings = function(urlTemplate, codeElement, themeElement) {
+    var url;
+
+    if (!$('#edit_form').valid()) {
+        return false;
+    }
+
+    url = mageTemplate(urlTemplate, {
+        data: {
+            'code': $('#' + codeElement).val(),
+            'theme_id': $('#' + themeElement).val()
+        }
+    });
+
+    setLocation(url);
+};
+});
+</script>

@@ -1,0 +1,551 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Typography
+//  _____________________________________________
+
+.lib-font-face(
+    @family-name,
+    @font-path,
+    @font-weight: normal,
+    @font-style: normal
+) {
+    @font-face {
+        font-family: @family-name;
+        src: url('@{font-path}.woff2') format('woff2'),
+        url('@{font-path}.woff') format('woff');
+        font-weight: @font-weight;
+        font-style: @font-style;
+    }
+}
+
+//  Rem font size
+.lib-font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, @font-size-unit)) {
+    .lib-css(font-size, @sizeValue);
+}
+
+.lib-font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, em)) {
+    .lib-css(font-size, @sizeValue);
+}
+
+.lib-font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and not (isunit(@sizeValue, em)) and not (isunit(@sizeValue, @font-size-unit)) {
+    .lib-font-size-value(@sizeValue);
+    .lib-css(font-size, @fontValue);
+}
+
+//  Rem line height
+.lib-line-height(@heightValue) when not (@heightValue = false) and not (@heightValue = normal) and not (ispercentage(@heightValue)) {
+    .lib-font-size-value(@heightValue);
+    .lib-css(line-height, @fontValue);
+}
+
+.lib-line-height(@heightValue) when (ispercentage(@heightValue)) and not (@heightValue = false) {
+    .lib-css(line-height, @heightValue);
+}
+
+.lib-line-height(@heightValue) when (@heightValue = normal) {
+    .lib-css(line-height, @heightValue);
+}
+
+.lib-wrap-words() {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-word;
+    .lib-hyphens();
+}
+
+.lib-text-overflow() {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lib-text-hide() {
+    background-color: transparent;
+    border: 0;
+    color: transparent;
+    font: ~'0/0' a;
+    text-shadow: none;
+}
+
+//  Optional hyphenation
+.lib-hyphens(@mode: auto) {
+    -webkit-hyphens: @mode;
+       -moz-hyphens: @mode;
+        -ms-hyphens: @mode; // IE10+
+            hyphens: @mode;
+}
+
+.lib-typography(
+    @_font-size: @font-size__base,
+    @_color: @text__color,
+    @_font-family: @font-family__base,
+    @_font-weight: @font-weight__regular,
+    @_line-height: @line-height__base,
+    @_font-style: @font-style__base
+) {
+    .lib-css(color, @_color);
+    .lib-css(font-family, @_font-family);
+    .lib-css(font-style, @_font-style);
+    .lib-css(font-weight, @_font-weight);
+    .lib-css(line-height, @_line-height);
+    .lib-font-size(@_font-size);
+}
+
+.lib-list-reset-styles(@_margin: 0, @_padding: 0) {
+    .lib-css(margin, @_margin);
+    .lib-css(padding, @_padding);
+    list-style: none none;
+}
+
+.lib-list-inline() {
+    .lib-list-reset-styles();
+
+    > li {
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+.lib-link(
+    @_link-color: @link__color,
+    @_link-text-decoration: @link__text-decoration,
+    @_link-color-visited: @link__visited__color,
+    @_link-text-decoration-visited: @link__visited__text-decoration,
+    @_link-color-hover: @link__hover__color,
+    @_link-text-decoration-hover: @link__hover__text-decoration,
+    @_link-color-active: @link__active__color,
+    @_link-text-decoration-active: @link__active__text-decoration
+) {
+    .lib-css(color, @_link-color);
+    .lib-css(text-decoration, @_link-text-decoration);
+
+    &:visited {
+        .lib-css(color, @_link-color-visited);
+        .lib-css(text-decoration, @_link-text-decoration-visited);
+    }
+
+    &:hover {
+        .lib-css(color, @_link-color-hover);
+        .lib-css(text-decoration, @_link-text-decoration-hover);
+    }
+
+    &:active {
+        .lib-css(color,@_link-color-active);
+        .lib-css(text-decoration, @_link-text-decoration-active);
+    }
+}
+
+.lib-heading(@_heading_level: h1) {
+    @_font-color: "@{_heading_level}__font-color";
+    @_font-size: "@{_heading_level}__font-size";
+    @_font-family: "@{_heading_level}__font-family";
+    @_font-weight: "@{_heading_level}__font-weight";
+    @_line-height: "@{_heading_level}__line-height";
+    @_font-style: "@{_heading_level}__font-style";
+    @_margin-top: "@{_heading_level}__margin-top";
+    @_margin-bottom: "@{_heading_level}__margin-bottom";
+    .lib-typography(
+        @@_font-size,
+        @@_font-color,
+        @@_font-family,
+        @@_font-weight,
+        @@_line-height,
+        @@_font-style
+    );
+
+    & {
+        .lib-font-size-value(@@_margin-top);
+        .lib-css(margin-top, @fontValue);
+    }
+
+    & {
+        .lib-font-size-value(@@_margin-bottom);
+        .lib-css(margin-bottom, @fontValue);
+    }
+}
+
+//
+//  Base typography
+//  ---------------------------------------------
+
+.lib-typography__base(
+    @_abbr-border-color: @abbr__border-color,
+    @_dfn-font-style: @font-style__emphasis,
+    @_emphasis-font-style: @font-style__emphasis,
+    @_hr-border-color: @hr__border-color,
+    @_hr-border-style: @hr__border-style,
+    @_hr-border-width: @hr__border-width,
+    @_hr-margin-bottom: @line-height__computed,
+    @_hr-margin-top: @line-height__computed,
+    @_mark-background-color: @mark__background-color,
+    @_mark-color: @mark__color,
+    @_p-margin-bottom: @p__margin-bottom,
+    @_p-margin-top: @p__margin-top,
+    @_root-font-size: @root__font-size,
+    @_small-font-size: @font-size__s,
+    @_strong-font-weight: @font-weight__bold,
+    @_sub-sup-font-size: (@font-size__xs/@font-size__base)*100%
+) {
+    html {
+        .lib-css(font-size, @_root-font-size);
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        font-size-adjust: 100%;
+    }
+
+    body {
+        .lib-typography();
+    }
+
+    p {
+        & {
+            .lib-font-size-value(@_p-margin-top);
+            .lib-css(margin-top, @fontValue);
+        }
+
+        & {
+            .lib-font-size-value(@_p-margin-bottom);
+            .lib-css(margin-bottom, @fontValue);
+        }
+    }
+
+    //  Abbreviations and acronyms
+    abbr[title] {
+        .lib-css(border-bottom, 1px dotted @_abbr-border-color);
+        cursor: help;
+    }
+
+    b,
+    strong {
+        .lib-css(font-weight, @_strong-font-weight);
+    }
+
+    em,
+    i {
+        .lib-css(font-style, @_emphasis-font-style);
+    }
+
+    mark {
+        .lib-css(background, @_mark-background-color);
+        .lib-css(color, @_mark-color);
+    }
+
+    small,
+    .small {
+        .lib-css(font-size, @_small-font-size);
+    }
+
+    hr {
+        border: 0;
+        .lib-css(border-top, @_hr-border-width @_hr-border-style @_hr-border-color);
+        .lib-css(margin-bottom, @_hr-margin-bottom);
+        .lib-css(margin-top, @_hr-margin-top);
+    }
+
+    sub,
+    sup {
+        .lib-css(font-size, @_sub-sup-font-size);
+        line-height: 0;
+        position: relative;
+        vertical-align: baseline;
+    }
+
+    sup {
+        top: -.5em;
+    }
+
+    sub {
+        bottom: -.25em;
+    }
+
+    dfn {
+        .lib-css(font-style, @_dfn-font-style);
+    }
+}
+
+//
+//  Headings
+//  ---------------------------------------------
+
+.lib-typography-headings(
+    @_heading-small-color: @heading__small-color,
+    @_heading-small-line-height: @heading__small-line-height,
+    @_heading-small-size: @heading__small-size
+) {
+    h1 {
+        .lib-heading(h1);
+    }
+
+    h2 {
+        .lib-heading(h2);
+    }
+
+    h3 {
+        .lib-heading(h3);
+    }
+
+    h4 {
+        .lib-heading(h4);
+    }
+
+    h5 {
+        .lib-heading(h5);
+    }
+
+    h6 {
+        .lib-heading(h6);
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        small,
+        .small {
+            .lib-typography(
+            @_heading-small-size,
+            @_heading-small-color,
+            @_line-height: @_heading-small-line-height
+            );
+        }
+    }
+}
+
+
+//
+//  Links
+//  ---------------------------------------------
+
+.lib-typography-links() {
+    a,
+    .alink {
+        .lib-link();
+    }
+}
+
+//
+//  Unordered and Ordered lists
+//  ---------------------------------------------
+
+.lib-typography-lists(
+    @_list-margin-bottom: @list__margin-bottom,
+    @_list-margin-top: @list__margin-top,
+    @_list-item-margin-bottom: @list-item__margin-bottom,
+    @_list-item-margin-top: @list-item__margin-top,
+    @_dl-margin-bottom: @dl__margin-bottom,
+    @_dl-margin-top: @dl__margin-top,
+    @_dd-margin-bottom: @dd__margin-bottom,
+    @_dd-margin-top: @dd__margin-top,
+    @_dt-font-weight: @dt__font-weight,
+    @_dt-margin-bottom: @dt__margin-bottom,
+    @_dt-margin-top: @dt__margin-top
+) {
+    ul,
+    ol {
+        & {
+            .lib-font-size-value(@_list-margin-top);
+            .lib-css(margin-top, @fontValue);
+        }
+
+        & {
+            .lib-font-size-value(@_list-margin-bottom);
+            .lib-css(margin-bottom, @fontValue);
+        }
+
+        > li {
+            & {
+                .lib-font-size-value(@_list-item-margin-top);
+                .lib-css(margin-top, @fontValue);
+            }
+
+            & {
+                .lib-font-size-value(@_list-item-margin-bottom);
+                .lib-css(margin-bottom, @fontValue);
+            }
+        }
+
+        ul,
+        ol {
+            margin-bottom: 0;
+        }
+    }
+
+    dl {
+        .lib-css(margin-bottom, @_dl-margin-bottom);
+        .lib-css(margin-top, @_dl-margin-top);
+    }
+
+    dt {
+        .lib-css(font-weight, @_dt-font-weight);
+        .lib-css(margin-bottom, @_dt-margin-bottom);
+        .lib-css(margin-top, @_dt-margin-top);
+    }
+
+    dd {
+        .lib-css(margin-bottom, @_dd-margin-bottom);
+        .lib-css(margin-top, @_dd-margin-top);
+        margin-left: 0;
+    }
+}
+
+//
+//  Code (inline and block)
+//  ---------------------------------------------
+
+.lib-typography-code(
+    @_font-family-monospace: @font-family__monospace,
+    @_code-background-color: @code__background-color,
+    @_code-color: @code__color,
+    @_code-font-size: @code__font-size,
+    @_code-padding: @code__padding,
+    @_kbd-background-color: @kbd__background-color,
+    @_kbd-color: @kbd__color,
+    @_kbd-font-size: @code__font-size,
+    @_kbd-padding: @code__padding,
+    @_pre-background-color: @pre__background-color,
+    @_pre-border-color: @pre__border-color,
+    @_pre-border-width: @pre__border-width,
+    @_pre-color: @pre__color,
+    @_pre-font-size: @code__font-size,
+    @_pre-line-height: @line-height__base,
+    @_pre-margin: 0 0 @indent__s,
+    @_pre-padding: @indent__s
+) {
+    code,
+    kbd,
+    pre,
+    samp {
+        .lib-css(font-family, @_font-family-monospace);
+    }
+
+    //  Inline code
+    code {
+        .lib-css(background, @_code-background-color);
+        .lib-css(color, @_code-color);
+        .lib-css(padding, @_code-padding);
+        .lib-font-size(@_code-font-size);
+        white-space: nowrap;
+    }
+
+    //  User input typically entered via keyboard
+    kbd {
+        .lib-css(background, @_kbd-background-color);
+        .lib-css(color, @_kbd-color);
+        .lib-css(padding, @_kbd-padding);
+        .lib-font-size(@_kbd-font-size);
+    }
+
+    //  Blocks of code
+    pre {
+        .lib-css(background, @_pre-background-color);
+        .lib-css(border, @_pre-border-width solid @_pre-border-color);
+        .lib-css(color, @_pre-color);
+        .lib-css(line-height, @_pre-line-height);
+        .lib-css(margin, @_pre-margin);
+        .lib-css(padding, @_pre-padding);
+        .lib-font-size(@_pre-font-size);
+        display: block;
+        word-wrap: break-word;
+
+        code {
+            background-color: transparent;
+            border-radius: 0;
+            color: inherit;
+            font-size: inherit;
+            padding: 0;
+            white-space: pre-wrap;
+        }
+    }
+}
+
+//
+//  Blockquotes
+//  ---------------------------------------------
+
+.lib-typography-blockquote(
+    @_blockquote-border-color: @blockquote__border-color,
+    @_blockquote-border-width: @blockquote__border-width,
+    @_blockquote-font-size: @blockquote__font-size,
+    @_blockquote-font-style: @blockquote__font-style,
+    @_blockquote-margin: @blockquote__margin,
+    @_blockquote-padding: @blockquote__padding,
+    @_blockquote-small-before-content: @blockquote__content-before,
+    @_blockquote-small-color: @blockquote-small__color,
+    @_blockquote-small-font-size: @blockquote-small__font-size,
+    @_blockquote-small-line-height: @line-height__base,
+    @_blockquote-cite: @cite__font-style,
+    @_cite: @cite__font-style
+) {
+    blockquote {
+        .lib-css(border-left, @_blockquote-border-width solid @_blockquote-border-color);
+        .lib-css(margin, @_blockquote-margin);
+        .lib-css(padding, @_blockquote-padding);
+        .lib-typography(
+            @_font-size: @_blockquote-font-size,
+            @_font-style: @_blockquote-font-style
+        );
+
+        p,
+        ul,
+        ol {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        footer,
+        small,
+        .small {
+            .lib-css(color, @_blockquote-small-color);
+            .lib-css(line-height, @_blockquote-small-line-height);
+            .lib-font-size(@_blockquote-small-font-size);
+            display: block;
+
+            &:before {
+                .lib-css(content, @_blockquote-small-before-content);
+            }
+        }
+
+        cite {
+            .lib-css(font-style, @_blockquote-cite);
+        }
+    }
+
+    //  Quotes
+    blockquote {
+        &:before,
+        &:after {
+            content: '';
+        }
+    }
+
+    q {
+        quotes: none;
+
+        &:before,
+        &:after {
+            content: '';
+            content: none;
+        }
+    }
+
+    //  Undo browser default styling
+    cite {
+        .lib-css(font-style, @_cite);
+    }
+}
+
+//
+//  All typography
+//  ---------------------------------------------
+
+.lib-typography-all() {
+    .lib-typography__base();
+    .lib-typography-headings();
+    .lib-typography-links();
+    .lib-typography-lists();
+    .lib-typography-code();
+    .lib-typography-blockquote();
+}

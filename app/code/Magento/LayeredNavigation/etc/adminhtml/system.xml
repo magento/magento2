@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="catalog" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="layered_navigation" translate="label" sortOrder="490" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Layered Navigation</label>
+                <field id="display_product_count" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Display Product Count</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="price_range_calculation" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Price Navigation Step Calculation</label>
+                    <source_model>Magento\Catalog\Model\Config\Source\Price\Step</source_model>
+                </field>
+                <field id="price_range_step" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Default Price Navigation Step</label>
+                    <validate>validate-number validate-number-range number-range-0.01-9999999999999999</validate>
+                    <depends>
+                        <field id="price_range_calculation">manual</field>
+                    </depends>
+                </field>
+                <field id="price_range_max_intervals" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Maximum Number of Price Intervals</label>
+                    <comment>Maximum number of price intervals is 100</comment>
+                    <validate>validate-digits validate-digits-range digits-range-2-100</validate>
+                    <depends>
+                        <field id="price_range_calculation">manual</field>
+                    </depends>
+                </field>
+                <field id="one_price_interval" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Display Price Interval as One Price</label>
+                    <comment>This setting will be applied when all prices in the specific price interval are equal.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="price_range_calculation">improved</field>
+                    </depends>
+                </field>
+                <field id="interval_division_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Interval Division Limit</label>
+                    <comment>Please specify the number of products, that will not be divided into subintervals.</comment>
+                    <validate>validate-digits validate-digits-range digits-range-1-10000</validate>
+                    <depends>
+                        <field id="price_range_calculation">improved</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

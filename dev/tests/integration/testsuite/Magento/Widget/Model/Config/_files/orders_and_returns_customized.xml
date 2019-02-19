@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="new_products" class="Magento\Sales\Block\Widget\Guest\Form" is_email_compatible="true" >
+        <label translate="true">Orders and Returns</label>
+        <description translate="true">Orders and Returns Search Form</description>
+        <parameters>
+            <parameter name="title" xsi:type="text" visible="false">
+                <label translate="true">Anchor Custom Title</label>
+            </parameter>
+            <parameter name="template" xsi:type="select" visible="false">
+                <options>
+                    <option name="default_template" value="widget/guest/form.phtml">
+                        <label translate="true">Default Template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+        <containers>
+            <container name="left">
+                <template name="default" value="default_template" />
+            </container>
+            <container name="right">
+                <template name="default" value="default_template" />
+            </container>
+        </containers>
+    </widget>
+</widgets>

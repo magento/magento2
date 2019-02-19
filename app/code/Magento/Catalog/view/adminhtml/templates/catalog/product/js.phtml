@@ -1,0 +1,95 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Js $block */
+?>
+<script>
+require([
+    "jquery",
+    "prototype",
+    "mage/backend/tabs"
+], function(jQuery){
+
+//<![CDATA[
+Event.observe(window, 'load', recalculateTax);
+Event.observe(window, 'load', registerTaxRecalcs);
+
+function registerTaxRecalcs() {
+    if (typeof dynamicTaxes == 'undefined') {
+        return;
+    }
+
+    for (var i = 0; i < dynamicTaxes.length; i++) {
+        Event.observe($(dynamicTaxes[i]), 'change', recalculateTax);
+    }
+    Event.observe($('tax_class_id'), 'change', recalculateTax);
+}
+
+var priceFormat = <?= /* @escapeNotVerified */ $this->helper('Magento\Tax\Helper\Data')->getPriceFormat($block->getStore()) ?>;
+var taxRates = <?= /* @escapeNotVerified */ $block->getAllRatesByProductClassJson() ?>;
+
+function recalculateTax() {
+    if (typeof dynamicTaxes == 'undefined') {
+        return;
+    }
+
+    for (var i = 0; i < dynamicTaxes.length; i++) {
+        var code = dynamicTaxes[i];
+        var span = $('dynamic-tax-' + code);
+        var input = $(code);
+
+        if (!input.value) {
+            span.innerHTML = '';
+            continue;
+        }
+
+        var rate = 0,
+            taxClass = $('tax_class_id').options[$('tax_class_id').selectedIndex].value,
+            value = taxRates['value_' + taxClass];
+
+        if (value != undefined) {
+            rate = value;
+        }
+
+        var spanValue = '';
+        if (rate != 0) {
+            spanValue = ' ' + formatCurrency(input.value / (100 + rate) * rate, priceFormat);
+        }
+        span.innerHTML = spanValue;
+    }
+}
+
+// Bind tab changes
+function bindActiveProductTab(event, ui) {
+    var anchor = jQuery(ui.newTab).find('a');
+    if (anchor && anchor.name && $('store_switcher')) {
+        $('store_switcher').switchParams = 'active_tab/' + anchor.name + '/';
+    }
+}
+//varienGlobalEvents.attachEventHandler('showTab', bindActiveProductTab);
+jQuery(document).on('tabsactivate', bindActiveProductTab);
+
+// bind active tab
+<?php if ($tabsBlock = $block->getLayout()->getBlock('product_tabs')): ?>
+jQuery(function () {
+    if (jQuery('#<?= /* @escapeNotVerified */ $tabsBlock->getId() ?>').length && jQuery('#<?= /* @escapeNotVerified */ $tabsBlock->getId() ?>').is(':mage-tabs')) {
+        var activeAnchor = jQuery('#<?= /* @escapeNotVerified */ $tabsBlock->getId() ?>').tabs('activeAnchor');
+        if (activeAnchor && $('store_switcher')) {
+            $('store_switcher').switchParams = 'active_tab/' + activeAnchor.prop('name') + '/';
+        }
+    }
+});
+<?php endif; ?>
+
+window.recalculateTax = recalculateTax;
+window.bindActiveProductTab = bindActiveProductTab;
+window.registerTaxRecalcs = registerTaxRecalcs;
+//]]>
+
+});
+</script>

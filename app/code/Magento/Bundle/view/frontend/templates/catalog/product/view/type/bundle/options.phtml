@@ -1,0 +1,44 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block Magento\Bundle\Block\Catalog\Product\View\Type\Bundle */ ?>
+<?php
+$product = $block->getProduct();
+$helper = $this->helper('Magento\Catalog\Helper\Output');
+$stripSelection = $product->getConfigureMode() ? true : false;
+$options = $block->decorateArray($block->getOptions($stripSelection));
+?>
+<?php if ($product->isSaleable()):?>
+    <?php if (count($options)): ?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "priceBundle": {
+                "optionConfig": <?= /* @escapeNotVerified */ $block->getJsonConfig() ?>,
+                "controlContainer": ".field.option"
+            }
+        }
+    }
+</script>
+        <fieldset class="fieldset fieldset-bundle-options">
+            <legend id="customizeTitle" class="legend title">
+                <span><?= /* @escapeNotVerified */ __('Customize %1', $helper->productAttribute($product, $product->getName(), 'name')) ?></span>
+            </legend><br />
+            <?= $block->getChildHtml('product_info_bundle_options_top') ?>
+            <?php foreach ($options as $option): ?>
+                <?php if (!$option->getSelections()): ?>
+                    <?php continue; ?>
+                <?php endif; ?>
+                <?= $block->getOptionHtml($option) ?>
+            <?php endforeach; ?>
+        </fieldset>
+    <?php else: ?>
+        <p class="empty"><?= /* @escapeNotVerified */ __('No options of this product are available.') ?></p>
+    <?php endif; ?>
+<?php endif;?>

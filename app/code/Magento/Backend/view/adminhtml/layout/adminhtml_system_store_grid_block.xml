@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.system.store.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.system.store.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">storeGrid</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Store\Model\ResourceModel\Website\Grid\Collection</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.system.store.grid.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <argument name="id" xsi:type="string">storeGrid</argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.store.grid.columnSet.website_title" as="website_title">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Web Site</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="index" xsi:type="string">name</argument>
+                            <argument name="filter_index" xsi:type="string">main_table.name</argument>
+                            <argument name="renderer" xsi:type="string">Magento\Backend\Block\System\Store\Grid\Render\Website</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.store.grid.columnSet.group_title" as="group_title">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Store</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="index" xsi:type="string">group_title</argument>
+                            <argument name="filter_index" xsi:type="string">group_table.name</argument>
+                            <argument name="renderer" xsi:type="string">Magento\Backend\Block\System\Store\Grid\Render\Group</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.store.grid.columnSet.store_title" as="store_title">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Store View</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="index" xsi:type="string">store_title</argument>
+                            <argument name="filter_index" xsi:type="string">store_table.name</argument>
+                            <argument name="renderer" xsi:type="string">Magento\Backend\Block\System\Store\Grid\Render\Store</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

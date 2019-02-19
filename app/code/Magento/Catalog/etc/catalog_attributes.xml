@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/catalog_attributes.xsd">
+    <group name="catalog_category">
+        <attribute name="name"/>
+        <attribute name="is_active"/>
+    </group>
+    <group name="catalog_product">
+        <attribute name="name"/>
+        <attribute name="price"/>
+        <attribute name="special_price"/>
+        <attribute name="special_from_date"/>
+        <attribute name="special_to_date"/>
+        <attribute name="short_description"/>
+        <attribute name="thumbnail"/>
+        <attribute name="small_image"/>
+        <attribute name="image_label"/>
+        <attribute name="thumbnail_label"/>
+        <attribute name="small_image_label"/>
+        <attribute name="tax_class_id"/>
+        <attribute name="status"/>
+        <attribute name="news_from_date"/>
+        <attribute name="news_to_date"/>
+        <attribute name="created_at"/>
+        <attribute name="updated_at"/>
+    </group>
+    <group name="unassignable">
+        <attribute name="image" />
+        <attribute name="name" />
+        <attribute name="description" />
+        <attribute name="short_description" />
+        <attribute name="sku" />
+        <attribute name="price" />
+        <attribute name="status" />
+        <attribute name="visibility" />
+        <attribute name="weight" />
+        <attribute name="category_ids" />
+        <attribute name="quantity_and_stock_status" />
+        <attribute name="available_sort_by" />
+        <attribute name="default_sort_by" />
+        <attribute name="filter_price_range" />
+        <attribute name="image" />
+        <attribute name="media_gallery_content" />
+        <attribute name="tier_price" />
+        <attribute name="gift_message_available" />
+        <attribute name="inventory_manage_stock" />
+    </group>
+    <group name="used_in_autogeneration">
+        <attribute name="name" />
+        <attribute name="description" />
+        <attribute name="sku" />
+    </group>
+</config>

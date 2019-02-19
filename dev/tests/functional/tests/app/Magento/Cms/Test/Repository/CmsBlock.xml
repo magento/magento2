@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Cms\Test\Repository\CmsBlock">
+        <dataset name="default">
+            <field name="title" xsi:type="string">block_%isolation%</field>
+            <field name="identifier" xsi:type="string">identifier_%isolation%</field>
+            <field name="stores" xsi:type="array">
+                <item name="dataset" xsi:type="array">
+                    <item name="0" xsi:type="string">all_store_views</item>
+                </item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="content" xsi:type="string">description_%isolation%</field>
+        </dataset>
+    </repository>
+</config>

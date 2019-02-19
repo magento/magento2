@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <admin>
+            <emails>
+                <forgot_email_template>admin_emails_forgot_email_template</forgot_email_template>
+                <new_user_notification_template>admin_emails_new_user_notification_template</new_user_notification_template>
+                <forgot_email_identity>general</forgot_email_identity>
+                <user_notification_template>admin_emails_user_notification_template</user_notification_template>
+            </emails>
+            <security>
+                <password_reset_link_expiration_period>2</password_reset_link_expiration_period>
+                <lockout_failures>6</lockout_failures>
+                <lockout_threshold>30</lockout_threshold>
+                <password_lifetime>90</password_lifetime>
+                <password_is_forced>1</password_is_forced>
+            </security>
+        </admin>
+    </default>
+</config>

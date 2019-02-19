@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="credit_card"
+             module="Magento_Payment"
+             type="virtual"
+             entity_type="credit_card"
+             repository_class="Magento\Payment\Test\Repository\CreditCard"
+             class="Magento\Payment\Test\Fixture\CreditCard">
+        <field name="card_name" />
+        <field name="payment_code" />
+        <field name="cc_type" />
+        <field name="cc_number" />
+        <field name="cc_exp_month" />
+        <field name="cc_exp_year" />
+        <field name="cc_cid" />
+    </fixture>
+</config>

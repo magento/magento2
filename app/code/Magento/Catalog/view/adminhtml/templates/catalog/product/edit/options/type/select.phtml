@@ -1,0 +1,72 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Select */ ?>
+<script id="custom-option-select-type-template" type="text/x-magento-template">
+    <div id="product_option_<%- data.option_id %>_type_<%- data.group %>" class="fieldset">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th class="col-draggable">&nbsp;</th>
+                    <th class="col-name required"><?= /* @escapeNotVerified */ __('Title') ?><span class="required">*</span></th>
+                    <?php if ($block->getCanReadPrice() !== false) : ?>
+                    <th class="col-price"><?= /* @escapeNotVerified */ __('Price') ?></th>
+                    <th class="col-price-type"><?= /* @escapeNotVerified */ __('Price Type') ?></th>
+                    <?php endif; ?>
+                    <th class="col-sku"><?= /* @escapeNotVerified */ __('SKU') ?></th>
+                    <th class="col-actions">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody id="select_option_type_row_<%- data.option_id %>"></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6"><?= $block->getAddButtonHtml() ?>
+                        <input name="validation_<%- data.option_id %>_result" class="required-option-select-type-rows" type="hidden" value="">
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</script>
+<script id="custom-option-select-type-row-template" type="text/x-magento-template">
+    <tr id="product_option_<%- data.id %>_select_<%- data.select_id %>">
+        <td class="col-draggable">
+            <div data-role="draggable-handle" class="draggable-handle"
+                 title="<?= /* @escapeNotVerified */ __('Sort Custom Option') ?>"></div>
+            <input name="product[options][<%- data.id %>][values][<%- data.select_id %>][sort_order]" type="hidden" value="<%- data.sort_order %>">
+        </td>
+        <td class="col-name select-opt-title">
+            <input name="product[options][<%- data.id %>][values][<%- data.select_id %>][option_type_id]" type="hidden" value="<%- data.option_type_id %>">
+            <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_is_delete" name="product[options][<%- data.id %>][values][<%- data.select_id %>][is_delete]" type="hidden" value="">
+            <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_title" <% if (typeof data.scopeTitleDisabled != 'undefined' && data.scopeTitleDisabled != null) { %> disabled="disabled" <% } %> name="product[options][<%- data.id %>][values][<%- data.select_id %>][title]" class="required-entry input-text select-type-title <% if (typeof data.scopeTitleDisabled != 'undefined' && data.scopeTitleDisabled != null) { %> disabled <% } %>" type="text" value="<%- data.title %>" data-store-label="<%- data.title %>"><%- data.checkboxScopeTitle %>
+        </td>
+        <?php if ($block->getCanReadPrice() !== false) : ?>
+        <td class="col-price select-opt-price">
+            <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_price"
+                   <% if (typeof data.scopePriceDisabled != 'undefined' && data.scopePriceDisabled != null) { %> disabled="disabled" <% } %>
+                   name="product[options][<%- data.id %>][values][<%- data.select_id %>][price]"
+                   class="input-text validate-number product-option-price"
+                   type="text" value="<%- data.price %>" data-store-label="<%- data.price %>"
+                <?php if ($block->getCanEditPrice() === false) : ?>
+                   disabled="disabled"
+                <?php endif; ?>>
+        </td>
+        <td class="col-price-type select-opt-price-type">
+            <?= /* @escapeNotVerified */ $block->getPriceTypeSelectHtml('data-attr="price-type" <% if (typeof data.scopePriceDisabled != "undefined" && data.scopePriceDisabled != null) { %> disabled="disabled" <% } %>') ?><%- data.checkboxScopePrice %>
+        </td>
+        <?php else : ?>
+        <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_price" name="product[options][<%- data.id %>][values][<%- data.select_id %>][price]" type="hidden">
+        <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_price_type" name="product[options][<%- data.id %>][values][<%- data.select_id %>][price_type]" type="hidden">
+        <?php endif; ?>
+        <td class="col-sku">
+            <input name="product[options][<%- data.id %>][values][<%- data.select_id %>][sku]" class="input-text" type="text" value="<%- data.sku %>">
+        </td>
+        <td class="col-actions col-delete"> <?= $block->getDeleteButtonHtml() ?></td>
+    </tr>
+</script>

@@ -1,0 +1,354 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Sales\Test\Repository\OrderInjectable">
+        <dataset name="default">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">catalogProductSimple::default</item>
+            </field>
+            <field name="customer_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+        </dataset>
+
+        <dataset name="two_simple_product">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</item>
+            </field>
+            <field name="customer_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+        </dataset>
+
+        <dataset name="virtual_product">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">catalogProductVirtual::default</item>
+            </field>
+            <field name="customer_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+        </dataset>
+
+        <dataset name="downloadable_product">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">downloadableProduct::with_two_bought_links</item>
+            </field>
+            <field name="customer_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+        </dataset>
+
+        <dataset name="two_downloadable_product">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">downloadableProduct::with_two_bought_links, downloadableProduct::with_two_bought_links</item>
+            </field>
+            <field name="customer_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+        </dataset>
+
+        <dataset name="with_coupon">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">catalogProductSimple::default</item>
+            </field>
+            <field name="customer_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+            <field name="coupon_code" xsi:type="array">
+                <item name="dataset" xsi:type="string">active_sales_rule_for_all_groups</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_with_discount</item>
+            </field>
+        </dataset>
+
+        <dataset name="with_coupon">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">catalogProductSimple::default</item>
+            </field>
+            <field name="customer_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+            <field name="coupon_code" xsi:type="array">
+                <item name="dataset" xsi:type="string">active_sales_rule_for_all_groups</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_with_discount</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_big_qty">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">catalogProductSimple::simple_big_qty</item>
+            </field>
+            <field name="customer_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">johndoe_unique</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+        </dataset>
+
+        <dataset name="virtual_big_qty">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">catalogProductVirtual::virtual_big_qty</item>
+            </field>
+            <field name="customer_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">johndoe_unique</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+        </dataset>
+
+        <dataset name="guest">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">catalogProductSimple::default</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+        </dataset>
+
+        <dataset name="custom_store_order">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">catalogProductSimple::default</item>
+            </field>
+            <field name="customer_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">custom_store</item>
+            </field>
+            <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+            <field name="price" xsi:type="array">
+                <item name="dataset" xsi:type="string">full_flow</item>
+            </field>
+        </dataset>
+
+        <dataset name="twenty_products">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default</item>
+            </field>
+            <field name="customer_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+        </dataset>
+
+        <dataset name="twenty_one_products">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default</item>
+            </field>
+            <field name="customer_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+        </dataset>
+
+        <dataset name="configurable_product">
+            <field name="entity_id" xsi:type="array">
+                <item name="products" xsi:type="string">configurableProduct::with_only_two_options</item>
+            </field>
+            <field name="customer_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="billing_address_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address</item>
+            </field>
+            <field name="store_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="payment_auth_expiration" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo</item>
+            </field>
+            <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
+            <field name="payment_authorization_amount" xsi:type="array">
+                <item name="method" xsi:type="string">free</item>
+            </field>
+            <field name="base_currency_code" xsi:type="string">0</field>
+            <field name="order_currency_code" xsi:type="string">USD</field>
+        </dataset>
+    </repository>
+</config>

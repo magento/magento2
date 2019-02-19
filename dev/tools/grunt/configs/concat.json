@@ -1,0 +1,10 @@
+{
+    "options": {
+        "stripBanners": true,
+        "banner": "/**\n * Copyright © <%= grunt.template.today(\"yyyy\") %> Magento. All rights reserved.\n * See COPYING.txt for license details.\n */\n"
+    },
+    "setup": {
+        "src": "<%= path.css.setup %>/setup.css",
+        "dest": "<%= path.css.setup %>/setup.css"
+    }
+}

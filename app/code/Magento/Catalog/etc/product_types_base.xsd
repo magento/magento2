@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:complexType name="composableTypesDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Composable product types declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="type" type="composableTypeDeclaration" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="composableTypeDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Composable product type declaration (used to describe possible composite product items).
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="priceModelDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Price model declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="instance" type="modelName" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="indexerModelDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Indexer model declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="instance" type="modelName" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="allowedSelectionTypesDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Allowed selection types declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="type" type="allowedSelectionTypeDeclaration" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="stockIndexerModelDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Stock indexer model declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="instance" type="modelName" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="customAttributesDeclaration">
+        <xs:sequence>
+            <xs:element name="attribute" type="customAttributeDeclaration" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="customAttributeDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Custom attribute definition
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="value" type="xs:string" use="optional" default=""/>
+    </xs:complexType>
+
+    <xs:complexType name="allowedSelectionTypeDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Allowed selection type declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:simpleType name="modelName">
+        <xs:annotation>
+            <xs:documentation>
+                Model name can contain only [a-zA-Z_\\].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z_\\]+" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="customer_address_save_before">
+        <observer name="customer_address_before_save_viv_observer" instance="Magento\Customer\Observer\BeforeAddressSaveObserver" />
+    </event>
+    <event name="customer_address_save_after">
+        <observer name="customer_address_after_save_viv_observer" instance="Magento\Customer\Observer\AfterAddressSaveObserver" />
+    </event>
+    <event name="sales_quote_save_after">
+        <observer name="customer_visitor" instance="Magento\Customer\Observer\Visitor\BindQuoteCreateObserver" />
+    </event>
+</config>

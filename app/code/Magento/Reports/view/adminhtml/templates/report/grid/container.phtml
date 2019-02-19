@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+
+<div class="reports-content">
+    <?= $block->getChildHtml('grid.filter.form') ?>
+</div>
+
+<?= $block->getGridHtml() ?>
+
+<script>
+require([
+    'jquery',
+    'mage/backend/validation',
+    "prototype"
+], function(jQuery){
+
+//<![CDATA[
+    jQuery('#filter_form').mage('validation', {errorClass: 'mage-error'});
+    function filterFormSubmit() {
+        var filters = $$('#filter_form input', '#filter_form select'),
+            elements = [];
+
+        for (var i in filters) {
+            if (filters[i].value && filters[i].value.length && !filters[i].disabled) {
+                elements.push(filters[i]);
+            }
+        }
+
+        if (jQuery('#filter_form').valid()) {
+            setLocation('<?= /* @escapeNotVerified */ $block->getFilterUrl() ?>filter/'+
+                Base64.encode(Form.serializeElements(elements))+'/'
+            );
+        }
+    }
+//]]>
+    window.filterFormSubmit = filterFormSubmit;
+});
+</script>

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::all" title="Allow everything" translate="title" sortOrder="10" />
+            <resource id="Magento_Backend::admin" title="Magento Admin" translate="title" sortOrder="20">
+                <resource id="Magento_Backend::dashboard" title="Dashboard" translate="title" sortOrder="0" />
+                <resource id="Magento_Backend::global_search" title="Global Search" translate="title" sortOrder="100" />
+                <resource id="Magento_Backend::myaccount" title="My Account" translate="title" sortOrder="50" />
+                <resource id="Magento_Backend::marketing" title="Marketing" translate="title" sortOrder="50">
+                    <resource id="Magento_Backend::marketing_seo" title="SEO &amp; Search" translate="title" sortOrder="40" />
+                    <resource id="Magento_Backend::marketing_user_content" title="User Content" translate="title" sortOrder="50" />
+                </resource>
+                <resource id="Magento_Backend::content" title="Content" translate="title" sortOrder="60">
+                    <resource id="Magento_Backend::content_elements" title="Elements" translate="title" sortOrder="10" />
+                    <resource id="Magento_Backend::design"  title="Design" translate="title" sortOrder="20">
+                        <resource id="Magento_Backend::schedule" title="Schedule" translate="title" sortOrder="30" />
+                    </resource>
+                    <resource id="Magento_Backend::content_translation" title="Content translation" translate="title" sortOrder="40" />
+                </resource>
+                <resource id="Magento_Backend::stores" title="Stores" translate="title" sortOrder="80">
+                    <resource id="Magento_Backend::stores_settings" title="Settings" translate="title" sortOrder="10">
+                        <resource id="Magento_Backend::store" title="All Stores" translate="title" sortOrder="10"/>
+                    </resource>
+                    <resource id="Magento_Backend::stores_attributes" title="Attributes" translate="title" sortOrder="40" />
+                    <resource id="Magento_Backend::stores_other_settings" title="Other Settings" translate="title" sortOrder="50" />
+                </resource>
+                <resource id="Magento_Backend::system" title="System" translate="title" sortOrder="90">
+                    <resource id="Magento_Backend::convert" title="Data Transfer" translate="title" sortOrder="10" />
+                    <resource id="Magento_Backend::extensions" title="Magento Connect" translate="title" sortOrder="20">
+                        <resource id="Magento_Backend::local" title="Connect Manager" translate="title" sortOrder="10" />
+                        <resource id="Magento_Backend::custom" title="Package Extensions" translate="title" sortOrder="20" />
+                    </resource>
+                    <resource id="Magento_Backend::tools" title="Tools" translate="title" sortOrder="50">
+                        <resource id="Magento_Backend::cache" title="Cache Management" translate="title"  sortOrder="10">
+                            <resource id="Magento_Backend::main_actions" title="Clean Cache Actions" translate="title" sortOrder="10">
+                                <resource id="Magento_Backend::flush_cache_storage" title="Flush Cache Storage" translate="title" sortOrder="10" />
+                                <resource id="Magento_Backend::flush_magento_cache" title="Flush Magento Cache" translate="title" sortOrder="20" />
+                            </resource>
+                            <resource id="Magento_Backend::mass_actions" title="Cache Types Management" translate="title" sortOrder="20">
+                                <resource id="Magento_Backend::toggling_cache_type" title="Toggle Cache Type" translate="title" sortOrder="10" />
+                                <resource id="Magento_Backend::refresh_cache_type" title="Refresh Cache Type" translate="title" sortOrder="20" />
+                            </resource>
+                            <resource id="Magento_Backend::additional_cache_management" title="Additional Cache Management" translate="title" sortOrder="30">
+                                <resource id="Magento_Backend::flush_catalog_images" title="Catalog Images Cache" translate="title" sortOrder="10" />
+                                <resource id="Magento_Backend::flush_js_css" title="Flush Js/Css" translate="title" sortOrder="20" />
+                                <resource id="Magento_Backend::flush_static_files" title="Flush Static Files" translate="title" sortOrder="30" />
+                            </resource>
+                        </resource>
+                        <resource id="Magento_Backend::setup_wizard" title="Web Setup Wizard" translate="title" sortOrder="20" />
+                    </resource>
+                    <resource id="Magento_Backend::system_other_settings" title="Other Settings" translate="title"  sortOrder="80" />
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

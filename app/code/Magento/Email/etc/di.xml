@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Mail\TemplateInterface" type="Magento\Email\Model\Template" />
+    <preference for="Magento\Framework\Mail\Template\FactoryInterface" type="Magento\Framework\Mail\Template\Factory" />
+    <preference for="Magento\Framework\Mail\TransportInterface" type="Magento\Email\Model\Transport" />
+    <preference for="Magento\Framework\Mail\MessageInterface" type="Magento\Framework\Mail\Message" />
+    <preference for="Magento\Framework\Mail\Template\SenderResolverInterface" type="Magento\Email\Model\Template\SenderResolver" />
+    <type name="Magento\Email\Model\BackendTemplate">
+        <arguments>
+            <argument name="urlModel" xsi:type="object" shared="false">Magento\Backend\Model\Url</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Email\Model\Template">
+        <arguments>
+            <argument name="urlModel" xsi:type="object" shared="false">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="email_logo" xsi:type="array">
+                    <item name="path" xsi:type="string">design/email/logo</item>
+                    <item name="fieldset" xsi:type="string">other_settings/email</item>
+                    <item name="backend_model" xsi:type="string">Magento\Email\Model\Design\Backend\Logo</item>
+                    <item name="base_url" xsi:type="array">
+                        <item name="type" xsi:type="string">media</item>
+                        <item name="scope_info" xsi:type="string">1</item>
+                        <item name="value" xsi:type="string">email/logo</item>
+                    </item>
+                </item>
+                <item name="email_logo_alt" xsi:type="array">
+                    <item name="path" xsi:type="string">design/email/logo_alt</item>
+                    <item name="fieldset" xsi:type="string">other_settings/email</item>
+                </item>
+                <item name="email_logo_width" xsi:type="array">
+                    <item name="path" xsi:type="string">design/email/logo_width</item>
+                    <item name="fieldset" xsi:type="string">other_settings/email</item>
+                </item>
+                <item name="email_logo_height" xsi:type="array">
+                    <item name="path" xsi:type="string">design/email/logo_height</item>
+                    <item name="fieldset" xsi:type="string">other_settings/email</item>
+                </item>
+                <item name="email_header_template" xsi:type="array">
+                    <item name="path" xsi:type="string">design/email/header_template</item>
+                    <item name="fieldset" xsi:type="string">other_settings/email</item>
+                </item>
+                <item name="email_footer_template" xsi:type="array">
+                    <item name="path" xsi:type="string">design/email/footer_template</item>
+                    <item name="fieldset" xsi:type="string">other_settings/email</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Mail\TransportInterface">
+        <plugin name="WindowsSmtpConfig" type="Magento\Email\Model\Plugin\WindowsSmtpConfig" />
+        <plugin name="EmailDisable" type="Magento\Email\Model\Mail\TransportInterfacePlugin" />
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="system/smtp/host" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="system/smtp/host" xsi:type="string">1</item>
+                <item name="system/smtp/port" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

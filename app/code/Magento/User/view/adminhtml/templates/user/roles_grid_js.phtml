@@ -1,0 +1,88 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<script>
+require([
+    "mage/adminhtml/grid",
+    "prototype"
+], function(){
+
+<?php $myBlock = $block->getLayout()->getBlock('user.roles.grid'); ?>
+<?php if (is_object($myBlock) && $myBlock->getJsObjectName()): ?>
+    var radioBoxes = $H({});
+    var warning = false;
+    var userRoles = $H(<?= /* @escapeNotVerified */ $myBlock->getSelectedRoles(true) ?>);
+    if (userRoles.size() > 0) warning = true;
+    $('user_user_roles').value = userRoles.toQueryString();
+
+    function registerUserRole(grid, element, checked){
+        if(checked){
+            userRoles.each(function(o){userRoles.remove(o[0]);});
+            userRoles[element.value] = 0;
+        } else {
+            userRoles.remove(element.value);
+        }
+        $('user_user_roles').value = userRoles.toQueryString();
+        grid.reloadParams = {'user_roles[]':userRoles.keys()};
+    }
+
+    function roleRowClick(grid, event){
+        var trElement = Event.findElement(event, 'tr');
+        var isInput   = Event.element(event).tagName == 'INPUT';
+        if(trElement){
+            var checkbox = Element.getElementsBySelector(trElement, 'input');
+            if(checkbox[0] && !checkbox[0].checked){
+                var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
+                if (checked && warning && radioBoxes.size() > 0) {
+                    if ( !confirm("<?= /* @escapeNotVerified */ __('Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?') ?>") ) {
+                        checkbox[0].checked = false;
+                        for(i in radioBoxes) {
+                            if( radioBoxes[i].status == 1) {
+                                radioBoxes[i].object.checked = true;
+                            }
+                        }
+                        return false;
+                    }
+                    warning = false;
+                }
+                <?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.setCheckboxChecked(checkbox[0], checked);
+            }
+        }
+    }
+
+    function rolesRowInit(grid, row){
+        var checkbox = $(row).getElementsByClassName('radio')[0];
+        if (checkbox) {
+            radioBoxes[checkbox.value] = {'status' : ((checkbox.checked) ? 1 : 0), 'object' : checkbox};
+        }
+    }
+
+<?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.rowClickCallback = roleRowClick;
+<?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.initRowCallback = rolesRowInit;
+<?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.checkboxCheckCallback = registerUserRole;
+<?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.rows.each(function(row){rolesRowInit(<?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>, row)});
+<?php endif; ?>
+
+});
+</script>
+
+<?php $editBlock = $block->getLayout()->getBlock('adminhtml.user.edit'); ?>
+<?php if (is_object($editBlock)): ?>
+    <script type="text/x-magento-init">
+        {
+            "[data-role=delete-user]" : {
+                "deleteUserAccount" : {
+                    "message": "<?= $editBlock->escapeHtml($editBlock->getDeleteMessage()) ?>",
+                    "url": "<?= /* @noEscape */ $editBlock->getDeleteUrl() ?>",
+                    "objId": "<?= $editBlock->escapeHtml($editBlock->getObjectId()) ?>"
+                }
+            }
+        }
+    </script>
+<?php endif; ?>

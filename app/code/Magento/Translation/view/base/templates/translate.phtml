@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Translation\Block\Js $block */
+?>
+<?php if ($block->dictionaryEnabled()): ?>
+
+<?php
+  $version = $block->getTranslationFileVersion();
+  $fileName = Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME;
+?>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "mage/translate-init": {
+                    "dictionaryFile": "text!<?= $block->escapeJs($fileName); ?>",
+                    "version": "<?= $block->escapeJs($version) ?>"
+                }
+            }
+        }
+    </script>
+<?php endif; ?>

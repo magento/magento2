@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="cms_wysiwyg_images_static_urls_allowed">
+        <observer name="catalog_wysiwyg" instance="Magento\Catalog\Observer\CatalogCheckIsUsingStaticUrlsAllowedObserver" />
+    </event>
+    <event name="catalog_category_change_products">
+        <observer name="category_product_indexer" instance="Magento\Catalog\Observer\CategoryProductIndexer"/>
+    </event>
+</config>

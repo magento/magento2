@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Store\Test\TestCase\DeleteStoreEntityTest" summary="Delete Store View" ticketId="MAGETWO-27942">
+        <variation name="DeleteStoreEntityTestVariation1">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="store/dataset" xsi:type="string">custom</data>
+            <data name="createBackup" xsi:type="string">Yes</data>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessDeleteAndBackupMessages" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreNotInGrid" />
+            <constraint name="Magento\Backup\Test\Constraint\AssertBackupInGrid" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreNotOnFrontend" />
+        </variation>
+        <variation name="DeleteStoreEntityTestVariation2">
+            <data name="tag" xsi:type="string">severity:S2, stable:no</data>
+            <data name="store/dataset" xsi:type="string">custom</data>
+            <data name="createBackup" xsi:type="string">No</data>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessDeleteMessage" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreNotOnFrontend" />
+        </variation>
+    </testCase>
+</config>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="CatalogProductIndex" area="Adminhtml" mca="catalog/product/index" module="Magento_Catalog">
+        <block name="productGrid" class="Magento\Catalog\Test\Block\Adminhtml\Product\Grid" locator="//div[contains(@data-bind, 'product_listing')]" strategy="xpath"/>
+        <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages" strategy="css selector"/>
+        <block name="gridPageActionBlock" class="Magento\Catalog\Test\Block\Adminhtml\Product\GridPageAction" locator="#add_new_product" strategy="css selector"/>
+    </page>
+</config>

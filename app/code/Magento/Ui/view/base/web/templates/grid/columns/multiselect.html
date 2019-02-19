@@ -1,0 +1,31 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<th class="data-grid-multicheck-cell">
+    <div class="action-multicheck-wrap" css="_disabled: !totalRecords()" collapsible="">
+        <input class="admin__control-checkbox" type="checkbox"
+            data-bind="
+                checked: allSelected(),
+                attr: {id: ++ko.uid},
+                event: { change: togglePage },
+                css: { '_indeterminate': indetermine },
+                enable: totalRecords">
+        <label attr="for: ko.uid"/>
+        <button class="action-multicheck-toggle" data-toggle="dropdown"
+            data-bind="css: { '_active': $collapsible.opened },
+                       enable: totalRecords,
+                       toggleCollapsible">
+            <span translate="'Options'"/>
+        </button>
+        <ul class="action-menu" each="actions" closeCollapsible="">
+            <li data-bind="click: $parent[value].bind($parent),
+                           visible: $parent.isActionRelevant(value)">
+                <span class="action-menu-item" text="label"/>
+            </li>
+        </ul>
+    </div>
+</th>

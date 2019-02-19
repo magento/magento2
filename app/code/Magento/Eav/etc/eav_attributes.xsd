@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="entity" type="entityDeclaration" minOccurs="1" maxOccurs="unbounded">
+                    <xs:unique name="uniqueAttributeCode">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Attribute code must be unique
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="attribute" />
+                        <xs:field xpath="@code" />
+                    </xs:unique>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="uniqueEntityType">
+            <xs:annotation>
+                <xs:documentation>
+                    Entity type must be unique
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="entity" />
+            <xs:field xpath="@type" />
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="entityDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Entity declaration
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="attribute" type="attributeDeclaration" minOccurs="1" maxOccurs="unbounded">
+                <xs:unique name="uniqueFieldCode">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Field code must be unique
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:selector xpath="field" />
+                    <xs:field xpath="@code" />
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="type" type="identifierType" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="attributeDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Attribute declaration
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="field" type="fieldDeclaration" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="code" type="identifierType" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="fieldDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Field declaration
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="code" type="identifierType" use="required" />
+        <xs:attribute name="locked" type="xs:boolean" use="required" />
+    </xs:complexType>
+
+    <xs:simpleType name="identifierType">
+        <xs:annotation>
+            <xs:documentation>
+                Identifier can contain only [a-z_].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

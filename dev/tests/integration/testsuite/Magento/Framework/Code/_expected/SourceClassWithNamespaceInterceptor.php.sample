@@ -1,0 +1,121 @@
+<?php
+namespace Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace;
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace implements \Magento\Framework\Interception\InterceptorInterface
+{
+    use \Magento\Framework\Interception\Interceptor;
+
+    public function __construct($param1 = '', $param2 = '\\', $param3 = '\'')
+    {
+        $this->___init();
+        parent::__construct($param1, $param2, $param3);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function publicChildMethod(\Zend\Code\Generator\ClassGenerator $classGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicChildMethod');
+        if (!$pluginInfo) {
+            return parent::publicChildMethod($classGenerator, $param1, $param2, $param3, $array);
+        } else {
+            return $this->___callPlugins('publicChildMethod', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function publicMethodWithReference(\Zend\Code\Generator\ClassGenerator &$classGenerator, &$param1, array &$array)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicMethodWithReference');
+        if (!$pluginInfo) {
+            return parent::publicMethodWithReference($classGenerator, $param1, $array);
+        } else {
+            return $this->___callPlugins('publicMethodWithReference', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function publicChildWithoutParameters()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicChildWithoutParameters');
+        if (!$pluginInfo) {
+            return parent::publicChildWithoutParameters();
+        } else {
+            return $this->___callPlugins('publicChildWithoutParameters', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function public71($arg1, string $arg2, ?int $arg3, ?int $arg4 = null) : void
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'public71');
+        if (!$pluginInfo) {
+            parent::public71($arg1, $arg2, $arg3, $arg4);
+        } else {
+            $this->___callPlugins('public71', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function public71Another(?\DateTime $arg1, $arg2 = false) : ?string
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'public71Another');
+        if (!$pluginInfo) {
+            return parent::public71Another($arg1, $arg2);
+        } else {
+            return $this->___callPlugins('public71Another', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function publicWithSelf($arg = false) : \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicWithSelf');
+        if (!$pluginInfo) {
+            return parent::publicWithSelf($arg);
+        } else {
+            return $this->___callPlugins('publicWithSelf', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicParentMethod');
+        if (!$pluginInfo) {
+            return parent::publicParentMethod($docBlockGenerator, $param1, $param2, $param3, $array);
+        } else {
+            return $this->___callPlugins('publicParentMethod', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function publicParentWithoutParameters()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicParentWithoutParameters');
+        if (!$pluginInfo) {
+            return parent::publicParentWithoutParameters();
+        } else {
+            return $this->___callPlugins('publicParentWithoutParameters', func_get_args(), $pluginInfo);
+        }
+    }
+}

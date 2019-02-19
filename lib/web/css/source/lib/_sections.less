@@ -1,0 +1,291 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Sections
+//  _____________________________________________
+
+.lib-data-tabs__base(@_tab-control-height__base: @tab-control__height__base) {
+    .lib-clearfix();
+    position: relative;
+    z-index: 1;
+
+    > .item.title {
+        float: left;
+        width: auto;
+
+        > .switch {
+            .lib-css(height, @_tab-control-height__base);
+            display: block;
+            position: relative;
+            z-index: 2;
+        }
+    }
+
+    > .item.content {
+        .lib-clearfix();
+        .lib-css(margin-top, @_tab-control-height__base);
+        box-sizing: border-box;
+        float: right;
+        margin-left: -100%;
+        width: 100%;
+
+        &.active {
+            display: block;
+        }
+    }
+}
+
+.lib-data-tabs(
+    @_tab-control-font-family: @tab-control__font-family,
+    @_tab-control-font-size: @tab-control__font-size,
+    @_tab-control-font-style: @tab-control__font-style,
+    @_tab-control-font-weight: @tab-control__font-weight,
+    @_tab-control-line-height: @tab-control__line-height,
+
+    @_tab-control-background-color: @tab-control__background-color,
+    @_tab-control-color: @tab-control__color,
+    @_tab-control-text-decoration: @tab-control__text-decoration,
+
+    @_tab-control-color-visited: @tab-control__visited__color,
+    @_tab-control-text-decoration-visited: @tab-control__visited__text-decoration,
+
+    @_tab-control-background-color-hover: @tab-control__hover__background-color,
+    @_tab-control-color-hover: @tab-control__hover__color,
+    @_tab-control-text-decoration-hover: @tab-control__hover__text-decoration,
+
+    @_tab-control-background-color-active: @tab-control__active__background-color,
+    @_tab-control-color-active: @tab-control__active__color,
+    @_tab-control-text-decoration-active: @tab-control__active__text-decoration,
+
+    @_tab-control-height: @tab-control__height,
+    @_tab-control-margin-right: @tab-control__margin-right,
+
+    @_tab-control-padding-top: @tab-control__padding-top,
+    @_tab-control-padding-right: @tab-control__padding-right,
+    @_tab-control-padding-bottom: @tab-control__padding-bottom,
+    @_tab-control-padding-left: @tab-control__padding-left,
+
+    @_tab-control-border-width: @tab-control__border-width,
+    @_tab-control-border-color: @tab-control__border-color,
+
+    @_tab-content-background-color: @tab-content__background-color,
+    @_tab-content-border: @tab-content__border,
+    @_tab-content-border-top-status: @tab-content__border-top-status,
+    @_tab-content-margin-top: @tab-content__margin-top,
+
+    @_tab-content-padding-top: @tab-content__padding-top,
+    @_tab-content-padding-right: @tab-content__padding-right,
+    @_tab-content-padding-bottom: @tab-content__padding-bottom,
+    @_tab-content-padding-left: @tab-content__padding-left
+) {
+    .lib-data-tabs__base();
+    > .item.title {
+        .lib-css(margin, 0 @_tab-control-margin-right 0 0);
+        > .switch {
+            .lib-typography(
+                @_color: @_tab-control-color,
+                @_font-size: @_tab-control-font-size,
+                @_font-family: @_tab-control-font-family,
+                @_font-weight: @_tab-control-font-weight,
+                @_font-style: @_tab-control-font-style,
+                @_line-height: @_tab-control-line-height
+            );
+            .lib-link(
+                @_link-color: @_tab-control-color,
+                @_link-text-decoration: @_tab-control-text-decoration,
+                @_link-color-visited: @_tab-control-color-visited,
+                @_link-text-decoration-visited: @_tab-control-text-decoration-visited,
+                @_link-color-hover: @_tab-control-color-hover,
+                @_link-text-decoration-hover: @_tab-control-text-decoration-hover,
+                @_link-color-active: @_tab-control-color-active,
+                @_link-text-decoration-active: @_tab-control-text-decoration-active
+            );
+            .lib-css(background, @_tab-control-background-color);
+            .lib-css(border, @_tab-content-border);
+            border-bottom: none;
+            .lib-css(height, @_tab-control-height);
+            .lib-css(padding, @_tab-control-padding-top @_tab-control-padding-right @_tab-control-padding-bottom @_tab-control-padding-left);
+        }
+
+        &:not(.disabled) > .switch:focus,
+        &:not(.disabled) > .switch:hover {
+            .lib-css(background, @_tab-control-background-color-hover);
+        }
+
+        &:not(.disabled) > .switch:active,
+        &.active > .switch,
+        &.active > .switch:focus,
+        &.active > .switch:hover {
+            .lib-css(background, @_tab-control-background-color-active);
+            .lib-css(color, @_tab-control-color-active);
+            .lib-css(text-decoration, @_tab-control-text-decoration-active);
+        }
+
+        &.active > .switch,
+        &.active > .switch:focus,
+        &.active > .switch:hover {
+            .lib-css(padding-bottom, @_tab-control-padding-bottom + @_tab-control-border-width);
+        }
+    }
+
+    > .item.content {
+        .lib-css(background, @_tab-content-background-color);
+        margin-top: @_tab-content-margin-top;
+        padding: @_tab-content-padding-top @_tab-content-padding-right @_tab-content-padding-bottom @_tab-content-padding-left;
+
+        ._lib-tab-content-border(
+            @_tab-content-border-top-status: @_tab-content-border-top-status,
+            @_tab-content-border: @_tab-content-border
+        );
+    }
+}
+
+._lib-tab-content-border(
+    @_tab-content-border-top-status,
+    @_tab-content-border
+) when (@_tab-content-border-top-status = false){
+    .lib-css(border, @_tab-content-border);
+}
+
+._lib-tab-content-border(
+    @_tab-content-border-top-status,
+    @_tab-content-border
+) when (@_tab-content-border-top-status = true){
+    border: 0;
+    .lib-css(border-top, @_tab-content-border);
+}
+
+.lib-data-accordion__base() {
+    margin: 0;
+    padding: 0;
+
+    > .item.title {
+        box-sizing: border-box;
+        float: none;
+        width: 100%;
+
+        > .switch {
+            display: block;
+        }
+    }
+
+    > .item.content {
+        .lib-clearfix();
+        box-sizing: border-box;
+        display: block;
+        float: none;
+        margin: 0;
+
+        &.active {
+            display: block;
+        }
+    }
+}
+
+.lib-data-accordion(
+    @_accordion-control-font-family: @accordion-control__font-family,
+    @_accordion-control-font-size: @accordion-control__font-size,
+    @_accordion-control-font-style: @accordion-control__font-style,
+    @_accordion-control-font-weight: @accordion-control__font-weight,
+    @_accordion-control-line-height: @accordion-control__line-height,
+
+    @_accordion-control-border-top: @accordion-control__border-top,
+    @_accordion-control-border-right: @accordion-control__border-right,
+    @_accordion-control-border-bottom: @accordion-control__border-bottom,
+    @_accordion-control-border-left: @accordion-control__border-left,
+
+    @_accordion-control-background-color: @accordion-control__background-color,
+    @_accordion-control-color: @accordion-control__color,
+    @_accordion-control-text-decoration: @accordion-control__text-decoration,
+
+    @_accordion-control-color-visited: @accordion-control__visited__color,
+    @_accordion-control-text-decoration-visited: @accordion-control__visited__text-decoration,
+
+    @_accordion-control-background-color-hover: @accordion-control__hover__background-color,
+    @_accordion-control-color-hover: @accordion-control__hover__color,
+    @_accordion-control-text-decoration-hover: @accordion-control__hover__text-decoration,
+
+    @_accordion-control-background-color-active: @accordion-control__active__background-color,
+    @_accordion-control-color-active: @accordion-control__active__color,
+    @_accordion-control-text-decoration-active: @accordion-control__active__text-decoration,
+
+    @_accordion-control-height: @accordion-control__height,
+    @_accordion-control-margin-bottom: @accordion-control__margin-bottom,
+
+    @_accordion-control-padding-top: @accordion-control__padding-top,
+    @_accordion-control-padding-right: @accordion-control__padding-right,
+    @_accordion-control-padding-bottom: @accordion-control__padding-bottom,
+    @_accordion-control-padding-left: @accordion-control__padding-left,
+
+    @_accordion-content-background-color: @accordion-content__background-color,
+    @_accordion-content-border: @accordion-content__border,
+
+    @_accordion-content-margin: @accordion-content__margin,
+    @_accordion-content-padding: @accordion-content__padding
+) {
+    .lib-data-accordion__base();
+    & when (@_accordion-control-margin-bottom = 0) {
+        > .item.title {
+            .lib-css(margin, 0);
+        }
+    }
+    & when not (@_accordion-control-margin-bottom = 0) {
+        > .item.title {
+            .lib-css(margin, 0 0 @_accordion-control-margin-bottom);
+        }
+    }
+    > .item.title {
+        > .switch {
+            .lib-css(background, @_accordion-control-background-color);
+            .lib-css(border-bottom,@_accordion-control-border-bottom);
+            .lib-css(border-left,@_accordion-control-border-left);
+            .lib-css(border-right,@_accordion-control-border-right);
+            .lib-css(border-top,@_accordion-control-border-top);
+            .lib-css(height, @_accordion-control-height);
+            .lib-css(padding, @_accordion-control-padding-top @_accordion-control-padding-right @_accordion-control-padding-bottom @_accordion-control-padding-left);
+            .lib-typography(
+                @_color: @_accordion-control-color,
+                @_font-family: @_accordion-control-font-family,
+                @_font-size: @_accordion-control-font-size,
+                @_font-style: @_accordion-control-font-style,
+                @_font-weight: @_accordion-control-font-weight,
+                @_line-height: @_accordion-control-line-height
+            );
+            .lib-link(
+                @_link-color: @_accordion-control-color,
+                @_link-text-decoration: @_accordion-control-text-decoration,
+                @_link-color-visited: @_accordion-control-color-visited,
+                @_link-text-decoration-visited: @_accordion-control-text-decoration-visited,
+                @_link-color-hover: @_accordion-control-color-hover,
+                @_link-text-decoration-hover: @_accordion-control-text-decoration-hover,
+                @_link-color-active: @_accordion-control-color-active,
+                @_link-text-decoration-active: @_accordion-control-text-decoration-active
+            );
+        }
+
+        &:not(.disabled) > .switch:focus,
+        &:not(.disabled) > .switch:hover {
+            .lib-css(background, @_accordion-control-background-color-hover);
+        }
+
+        &:not(.disabled) > .switch:active,
+        &.active > .switch,
+        &.active > .switch:focus,
+        &.active > .switch:hover {
+            .lib-css(background, @_accordion-control-background-color-active);
+            .lib-css(color, @_accordion-control-color-active);
+            .lib-css(text-decoration, @_accordion-control-text-decoration-active);
+            .lib-css(padding-bottom, @_accordion-control-padding-bottom);
+        }
+    }
+
+    > .item.content {
+        .lib-css(background, @_accordion-content-background-color);
+        .lib-css(border, @_accordion-content-border);
+        .lib-css(margin, @_accordion-content-margin);
+        .lib-css(padding, @_accordion-content-padding);
+    }
+}

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Sales\Test\TestCase\CreateInvoiceEntityTest" summary="Create Invoice for Offline Payment Methods" ticketId="MAGETWO-28209, MAGETWO-45491">
+        <variation name="CreateInvoiceEntityTestVariation1" summary="Create Invoice for Offline Payment Methods and check invoiced order on admin dashboard" ticketId="MAGETWO-28209, MAGETWO-45491">
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
+            <data name="order/data/total_qty_ordered/0" xsi:type="string">1</data>
+            <data name="order/data/invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="form_data" xsi:type="array">
+                        <item name="do_shipment" xsi:type="string">Yes</item>
+                        <item name="comment_text" xsi:type="string">comments</item>
+                    </item>
+                </item>
+            </data>
+            <data name="expectedOrdersQuantityOnDashboard" xsi:type="number">1</data>
+            <data name="argumentsList/0" xsi:type="string">Quantity</data>
+            <data name="configData" xsi:type="string">checkmo,enable_charts</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceWithShipmentSuccessMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedOrderOnDashboard" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGraphImageIsVisible" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertNoInvoiceButton" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesTab" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertNoShipButton" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentInShipmentsTab" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
+        </variation>
+        <variation name="CreateInvoiceEntityTestVariation2">
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">partial_invoice</data>
+            <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
+            <data name="order/data/total_qty_ordered/0" xsi:type="string">-</data>
+            <data name="order/data/payment_auth_expiration/method" xsi:type="string">banktransfer</data>
+            <data name="order/data/invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="items_data" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="qty" xsi:type="string">1</item>
+                        </item>
+                    </item>
+                    <item name="form_data" xsi:type="array">
+                        <item name="do_shipment" xsi:type="string">No</item>
+                        <item name="comment_text" xsi:type="string">comments</item>
+                    </item>
+                </item>
+            </data>
+            <data name="configData" xsi:type="string">banktransfer</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesTab" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend" />
+        </variation>
+        <variation name="CreateInvoiceEntityTestVariationWithCashOnDeliveryPaymentMethod">
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">partial_invoice</data>
+            <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
+            <data name="order/data/total_qty_ordered/0" xsi:type="string">-</data>
+            <data name="order/data/payment_auth_expiration/method" xsi:type="string">cashondelivery</data>
+            <data name="order/data/invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="items_data" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="qty" xsi:type="string">1</item>
+                        </item>
+                    </item>
+                    <item name="form_data" xsi:type="array">
+                        <item name="do_shipment" xsi:type="string">No</item>
+                        <item name="comment_text" xsi:type="string">comments</item>
+                    </item>
+                </item>
+            </data>
+            <data name="configData" xsi:type="string">cashondelivery</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend" />
+        </variation>
+        <variation name="CreateInvoiceEntityTestVariationWithPurchaseOrderPaymentMethod">
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">partial_invoice</data>
+            <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
+            <data name="order/data/total_qty_ordered/0" xsi:type="string">-</data>
+            <data name="order/data/payment_auth_expiration/method" xsi:type="string">purchaseorder</data>
+            <data name="order/data/payment_auth_expiration/po_number" xsi:type="string">po_number</data>
+            <data name="order/data/invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="items_data" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="qty" xsi:type="string">1</item>
+                        </item>
+                    </item>
+                    <item name="form_data" xsi:type="array">
+                        <item name="do_shipment" xsi:type="string">No</item>
+                        <item name="comment_text" xsi:type="string">comments</item>
+                    </item>
+                </item>
+            </data>
+            <data name="configData" xsi:type="string">purchaseorder</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend" />
+        </variation>
+        <variation name="CreateInvoiceEntityTestVariationWithZeroSubtotalCheckout">
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">free_invoice</data>
+            <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="order/data/total_qty_ordered/0" xsi:type="string">-</data>
+            <data name="order/data/payment_auth_expiration/method" xsi:type="string">free</data>
+            <data name="order/data/shipping_method" xsi:type="string">freeshipping_freeshipping</data>
+            <data name="order/data/coupon_code/dataset" xsi:type="string">active_sales_rule_with_fixed_price_discount_coupon</data>
+            <data name="order/data/invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="items_data" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="qty" xsi:type="string">1</item>
+                        </item>
+                    </item>
+                    <item name="form_data" xsi:type="array">
+                        <item name="do_shipment" xsi:type="string">No</item>
+                        <item name="comment_text" xsi:type="string">comments</item>
+                    </item>
+                </item>
+            </data>
+            <data name="configData" xsi:type="string">zero_subtotal_checkout, freeshipping</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend" />
+        </variation>
+    </testCase>
+</config>

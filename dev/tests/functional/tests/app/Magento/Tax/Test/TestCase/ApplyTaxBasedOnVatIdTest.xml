@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Tax\Test\TestCase\ApplyTaxBasedOnVatIdTest" summary="Automatic Apply Tax Based on VAT ID " ticketId="MAGETWO-13436">
+        <variation name="ApplyTaxBasedOnVatIdTestVariation1" summary="Automatic Apply Tax Based on VAT ID" ticketId="MAGETWO-13436">
+            <data name="vatConfig/dataset" xsi:type="string">enable_VAT_on_frontend</data>
+            <data name="configData" xsi:type="string">default_tax_configuration, flatrate, checkmo, store_information_DE_with_VAT, enable_VAT_on_frontend</data>
+            <data name="customer/dataset" xsi:type="string">customer_UK_address_with_VAT</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="order/data/customer_id/dataset" xsi:type="string">customer_UK_address_with_VAT</data>
+            <data name="order/data/billing_address_id/dataset" xsi:type="string">UK_address_with_VAT</data>
+            <data name="taxRule/dataset" xsi:type="string">retailer_uk_full_tax_rule</data>
+            <data name="customerGroup" xsi:type="string">valid_intra_union_group</data>
+            <data name="cart/data/subtotal" xsi:type="string">10</data>
+            <data name="cart/data/tax_amount" xsi:type="string">2</data>
+            <data name="cart/data/grand_total" xsi:type="string">17</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">17</item>
+            </data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertEstimateShippingAndTax" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+        </variation>
+    </testCase>
+</config>

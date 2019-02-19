@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @see \Magento\Backend\Block\Denied
+ */
+?>
+<hr class="access-denied-hr"/>
+<div class="access-denied-page">
+    <h2 class="page-heading"><?= $block->escapeHtml(__('Sorry, you need permissions to view this content.')) ?></h2>
+    <strong><?= $block->escapeHtml(__('Next steps')) ?></strong>
+    <ul>
+        <li><span><?= $block->escapeHtml(__('If you think this is an error, try signing out and signing in again.'))  ?></span></li>
+        <li><span><?= $block->escapeHtml(__('Contact a system administrator or store owner to gain permissions.')) ?></span></li>
+        <li>
+            <span><?= $block->escapeHtml(__('Return to ')) ?>
+                <?php if(isset($_SERVER['HTTP_REFERER'])): ?>
+                    <a href="<?= $block->escapeUrl(__($_SERVER['HTTP_REFERER'])) ?>">
+                        <?= $block->escapeHtml(__('previous page')) ?></a><?= $block->escapeHtml(__('.')) ?>
+                <?php else: ?>
+                    <a href="<?= $block->escapeHtmlAttr(__('javascript:history.back()')) ?>">
+                        <?= $block->escapeHtml(__('previous page')) ?></a><?= $block->escapeHtml(__('.')) ?>
+                <?php endif ?>
+            </span>
+        </li>
+    </ul>
+</div>

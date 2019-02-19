@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$attributes = $block->getCssClass() ? ' class="' . $block->getCssClass() . '"' : '';
+$attr = $block->getAttributes();
+if (!empty($attr)) {
+    foreach ($block->getAttributes() as $attribute => $value) {
+        $attributes .= ' ' . $attribute . '="' . $value . '"';
+    }
+}
+echo
+    '<' . $block->getTag() . $attributes . '>' . $block->getText() . '</' . $block->getTag() . '>';

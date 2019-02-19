@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/product_types.xsd">
+    <type name="configurable" label="Configurable Product" modelInstance="Magento\ConfigurableProduct\Model\Product\Type\Configurable" composite='true' indexPriority="30" sortOrder="20">
+        <priceModel instance="Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price" />
+        <indexerModel instance="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable" />
+        <stockIndexerModel instance="Magento\ConfigurableProduct\Model\ResourceModel\Indexer\Stock\Configurable" />
+        <customAttributes>
+            <attribute name="refundable" value="true"/>
+        </customAttributes>
+    </type>
+</config>

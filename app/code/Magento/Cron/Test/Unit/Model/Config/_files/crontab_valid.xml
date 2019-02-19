@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="job1" instance="Model1" method="method1">
+            <schedule>30 2 * * *</schedule>
+        </job>
+        <job name="job2" instance="Model2" method="method2">
+            <schedule>* * * * *</schedule>
+        </job>
+        <job name="job3" instance="Model3" method="method3">
+            <config_path>some/config/path</config_path>
+        </job>
+    </group>
+</config>

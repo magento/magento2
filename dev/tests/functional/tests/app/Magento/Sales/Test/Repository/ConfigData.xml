@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="checkmo_custom_new_order_status">
+            <field name="payment/checkmo/order_status" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">custom</item>
+                <item name="value" xsi:type="string">custom</item>
+            </field>
+        </dataset>
+
+        <dataset name="checkmo_custom_new_order_status_rollback">
+            <field name="payment/checkmo/order_status" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Pending</item>
+                <item name="value" xsi:type="string">Pending</item>
+            </field>
+        </dataset>
+
+        <dataset name="enable_charts">
+            <field name="admin/dashboard/enable_charts" xsi:type="array">
+                <item name="scope" xsi:type="string">admin</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="string">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="enable_charts_rollback">
+            <field name="admin/dashboard/enable_charts" xsi:type="array">
+                <item name="scope" xsi:type="string">admin</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="string">0</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="urn:magento:module:Magento_Catalog:etc/product_types_base.xsd" />
+
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element name="type" type="typeDeclaration" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="composableTypes" type="composableTypesDeclaration" minOccurs="0" maxOccurs="unbounded" />
+            </xs:choice>
+        </xs:complexType>
+        <xs:unique name="uniqueTypeName">
+            <xs:annotation>
+                <xs:documentation>
+                    Product type name must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="type" />
+            <xs:field xpath="@name" />
+        </xs:unique>
+        <xs:unique name="uniquecomposableTypes">
+            <xs:annotation>
+                <xs:documentation>
+                    Composable type name must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="composableTypes/type" />
+            <xs:field xpath="@name" />
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="typeDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Product type declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:all minOccurs="0">
+            <xs:element name="allowedSelectionTypes" type="allowedSelectionTypesDeclaration" minOccurs="0">
+                <xs:unique name="uniqueAllowedSelectionTypeName">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Allowed selection type name must be unique.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:selector xpath="type" />
+                    <xs:field xpath="@name" />
+                </xs:unique>
+            </xs:element>
+            <xs:element name="priceModel" type="priceModelDeclaration" minOccurs="0" />
+            <xs:element name="indexerModel" type="indexerModelDeclaration" minOccurs="0" />
+            <xs:element name="stockIndexerModel" type="stockIndexerModelDeclaration" minOccurs="0" />
+            <xs:element name="customAttributes" type="customAttributesDeclaration" minOccurs="0">
+                <xs:unique name="uniqueAttributeName">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Attribute name should be unique.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:selector xpath="attribute" />
+                    <xs:field xpath="@name" />
+                </xs:unique>
+            </xs:element>
+        </xs:all>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="label" type="xs:string" use="optional" />
+        <xs:attribute name="modelInstance" type="modelName" use="optional" />
+        <xs:attribute name="composite" type="xs:boolean" use="optional" />
+        <xs:attribute name="indexPriority" type="xs:nonNegativeInteger" use="optional" />
+        <xs:attribute name="canUseQtyDecimals" type="xs:boolean" use="optional" />
+        <xs:attribute name="isQty" type="xs:boolean" use="optional" />
+        <xs:attribute name="sortOrder" type="xs:integer" use="optional" />
+    </xs:complexType>
+</xs:schema>

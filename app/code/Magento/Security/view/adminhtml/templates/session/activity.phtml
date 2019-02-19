@@ -1,0 +1,75 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * Account activity template
+ *
+ * @codingStandardsIgnoreFile
+ * @var $block \Magento\Security\Block\Adminhtml\Session\Activity
+ */
+
+$sessionInfoCollection = $block->getSessionInfoCollection();
+?>
+<header>
+    <div class="page-title-wrapper">
+        <h1 class="page-title" align="center"><?= $block->escapeHtml(__('Account Activity')) ?></h1>
+        <?php
+        if ($block->areMultipleSessionsActive()) {
+            echo $block->escapeHtml(__(
+                'This administrator account is open in more than one location. '
+                .'Note that other locations might be different browsers or sessions on the same computer.'
+            ));
+        } ?>
+    </div>
+</header>
+
+<div class="page-content">
+    <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+    <div>
+        <div class="information-title"><?= $block->escapeHtml(__('Concurrent session information:')) ?></div>
+        <table cellspacing="0" border="1" class="information-table">
+            <thead>
+                <tr>
+                    <th><?= $block->escapeHtml(__('IP Address')) ?></th>
+                    <th><?= $block->escapeHtml(__('Time of session start')) ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach ($sessionInfoCollection as $item): ?>
+                <tr>
+                    <td><?= $block->escapeHtml($item->getFormattedIp()) ?></td>
+                    <td><?= $block->escapeHtml($block->formatDateTime($item->getCreatedAt())) ?></td>
+                </tr>
+            <?php
+            endforeach;
+            ?>
+            </tbody>
+        </table>
+
+        <div class="button-container">
+            <button type="button"
+                <?php
+                if ($block->areMultipleSessionsActive()): ?>
+                    data-mage-init='{"confirmRedirect":{
+                        "message": "<?=
+                            $block->escapeJs(__('Are you sure that you want to log out all other sessions?'))
+                        ?>",
+                        "url":"<?=
+                            $block->escapeJs($block->escapeUrl($block->getUrl('security/session/logoutAll')))
+                        ?>"
+                    }}'
+                <?php
+                else: ?>disabled<?php
+                endif ?>
+                title="<?= $block->escapeHtmlAttr(__('Log out all other sessions')) ?>">
+                <?= $block->escapeHtml(__('Log out all other sessions')) ?>
+            </button>
+        </div>
+
+        <div><?= $block->escapeHtml(__('This computer is using IP address %1.', $block->getRemoteIp())) ?></div>
+    </div>
+</div>

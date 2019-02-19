@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <sitemap>
+            <limit>
+                <max_lines>50000</max_lines>
+                <max_file_size>10485760</max_file_size>
+            </limit>
+            <page>
+                <priority>0.25</priority>
+                <changefreq>daily</changefreq>
+            </page>
+            <category>
+                <priority>0.5</priority>
+                <changefreq>daily</changefreq>
+            </category>
+            <product>
+                <priority>1</priority>
+                <changefreq>daily</changefreq>
+                <image_include>all</image_include>
+            </product>
+            <generate>
+                <enabled>0</enabled>
+                <error_email />
+                <error_email_template>sitemap_generate_error_email_template</error_email_template>
+                <error_email_identity>general</error_email_identity>
+            </generate>
+            <search_engines>
+                <submission_robots>0</submission_robots>
+            </search_engines>
+            <file>
+                <valid_paths>
+                    <available>
+                        <any_path>/*/*.xml</any_path>
+                    </available>
+                </valid_paths>
+            </file>
+        </sitemap>
+        <crontab>
+            <default>
+                <jobs>
+                    <sitemap_generate>
+                        <schedule>
+                            <cron_expr>0 0 * * *</cron_expr>
+                        </schedule>
+                    </sitemap_generate>
+                </jobs>
+            </default>
+        </crontab>
+    </default>
+</config>

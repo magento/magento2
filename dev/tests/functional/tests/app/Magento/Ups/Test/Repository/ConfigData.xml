@@ -1,0 +1,162 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="disable_shipping_all">
+            <field name="carriers/ups/active" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="ups">
+            <field name="carriers/ups/active" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="carriers/ups/active_rma" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="carriers/ups/type" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">United Parcel Service XML</item>
+                <item name="value" xsi:type="string">UPS_XML</item>
+            </field>
+            <field name="carriers/ups/is_account_live" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="carriers/ups/password" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">CARRIERS_UPS_PASSWORD</item>
+            </field>
+            <field name="carriers/ups/username" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">CARRIERS_UPS_USERNAME</item>
+            </field>
+            <field name="carriers/ups/mode_xml" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Development</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="carriers/ups/gateway_xml_url" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">https://wwwcie.ups.com/ups.app/xml/Rate</item>
+            </field>
+            <field name="carriers/ups/origin_shipment" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">Shipments Originating in United States</item>
+            </field>
+            <field name="carriers/ups/access_license_number" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">CARRIERS_UPS_ACCESS_LICENSE_NUMBER</item>
+            </field>
+            <field name="carriers/ups/negotiated_active" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="carriers/ups/shipper_number" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">CARRIERS_UPS_SHIPPER_NUMBER</item>
+            </field>
+            <field name="carriers/ups/container" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Customer Packaging</item>
+                <item name="value" xsi:type="string">CP</item>
+            </field>
+            <field name="carriers/ups/dest_type" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Residential</item>
+                <item name="value" xsi:type="string">RES</item>
+            </field>
+            <field name="carriers/ups/tracking_xml_url" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">https://wwwcie.ups.com/ups.app/xml/Track</item>
+            </field>
+            <field name="carriers/ups/unit_of_measure" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">LBS</item>
+                <item name="value" xsi:type="string">LBS</item>
+            </field>
+            <field name="carriers/ups/allowed_methods" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="UPS Standard" xsi:type="string">11</item>
+                    <item name="UPS Three-Day Select" xsi:type="string">12</item>
+                    <item name="UPS Next Day Air Early A.M." xsi:type="string">14</item>
+                    <item name="UPS Worldwide Express Plus" xsi:type="string">54</item>
+                    <item name="UPS Second Day Air A.M." xsi:type="string">59</item>
+                    <item name="UPS Worldwide Saver" xsi:type="string">65</item>
+                    <item name="UPS Next Day Air" xsi:type="string">01</item>
+                    <item name="UPS Second Day Air" xsi:type="string">02</item>
+                    <item name="UPS Ground" xsi:type="string">03</item>
+                    <item name="UPS Worldwide Express" xsi:type="string">07</item>
+                    <item name="UPS Worldwide Expedited" xsi:type="string">08</item>
+                </item>
+            </field>
+            <field name="carriers/ups/sallowspecific" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">All Allowed Countries</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="carriers/ups/showmethod" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="carriers/ups/debug" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="ups_rollback">
+            <field name="carriers/ups/active" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

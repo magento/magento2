@@ -1,0 +1,55 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\Downloadable\Block\Sales\Order\Email\Items\Order\Downloadable */ ?>
+<?php $_item = $block->getItem() ?>
+<?php $_order = $block->getItem()->getOrder() ?>
+<tr>
+    <td class="item-info has-extra">
+        <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
+        <p class="sku"><?= /* @escapeNotVerified */  __('SKU') ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+        <?php if ($block->getItemOptions()): ?>
+        <dl>
+            <?php foreach ($block->getItemOptions() as $option): ?>
+            <dt><strong><em><?= /* @escapeNotVerified */  $option['label'] ?></em></strong></dt>
+            <dd><?= /* @escapeNotVerified */  $option['value'] ?></dd>
+            <?php endforeach; ?>
+        </dl>
+        <?php endif; ?>
+        <?php if ($links = $block->getLinks()->getPurchasedItems()): ?>
+        <dl>
+            <dt><strong><em><?= /* @escapeNotVerified */  $block->getLinksTitle() ?></em></strong></dt>
+            <?php foreach ($links as $link): ?>
+                <dd>
+                    <?= $block->escapeHtml($link->getLinkTitle()) ?>&nbsp;
+                    (<a href="<?= /* @escapeNotVerified */  $block->getPurchasedLinkUrl($link) ?>"><?= /* @escapeNotVerified */  __('download') ?></a>)
+                </dd>
+            <?php endforeach; ?>
+        </dl>
+        <?php endif; ?>
+        <?= $block->escapeHtml($_item->getDescription()) ?>
+        <?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
+            <table class="message-gift">
+                <tr>
+                    <td>
+                        <h3><?= /* @escapeNotVerified */  __('Gift Message') ?></h3>
+                        <strong><?= /* @escapeNotVerified */  __('From:') ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                        <br /><strong><?= /* @escapeNotVerified */  __('To:') ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                        <br /><strong><?= /* @escapeNotVerified */  __('Message:') ?></strong>
+                        <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
+                    </td>
+                </tr>
+            </table>
+        <?php endif; ?>
+    </td>
+    <td class="item-qty"><?= /* @escapeNotVerified */  $_item->getQtyOrdered() * 1 ?></td>
+    <td class="item-price">
+        <?= /* @escapeNotVerified */  $block->getItemPrice($_item) ?>
+    </td>
+</tr>

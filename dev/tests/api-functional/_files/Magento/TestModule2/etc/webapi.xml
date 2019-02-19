@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route method="GET" url="/V1/testModule2SubsetRest/:id">
+        <service class="Magento\TestModule2\Service\V1\SubsetRestInterface" method="item" />
+        <resources>
+            <resource ref="Magento_TestModule2::resource1" />
+        </resources>
+    </route>
+    <route method="GET" url="/V1/testModule2SubsetRest">
+        <service class="Magento\TestModule2\Service\V1\SubsetRestInterface" method="items" />
+        <resources>
+            <resource ref="Magento_TestModule2::resource2" />
+            <resource ref="Magento_TestModule2::resource3" />
+        </resources>
+    </route>
+</routes>

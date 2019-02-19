@@ -1,0 +1,45 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div if="isMsrpApplicable($row())"
+     class="price-box" data-role="msrp-price-box"
+     afterRender="initListeners">
+    <span class="old-price map-old-price">
+        <span class="price-container price-msrp">
+            <span class="price-wrapper"
+                  data-price-amount=""
+                  data-price-type=""
+                  html="getPrice($row())['msrp_price']"/>
+        </span>
+    </span>
+
+    <if args="isShowPriceOnGesture($row())">
+        <button type="button"
+                class="action map-show-info"
+                data-role="msrp-popup-trigger"
+                aria-haspopup="true">
+            <span translate="'Click for price'"/>
+        </button>
+
+        <render args="popupTmpl"/>
+    </if>
+
+    <ifnot args="isShowPriceOnGesture($row())">
+        <span class="msrp-message"
+              html="getMsrpPriceMessage($row())" />
+    </ifnot>
+</div>
+
+<ifnot args="isMsrpApplicable($row())">
+    <div class="price-box"
+         if="isAllowed()">
+        <each args="data: getPrices($row()), as: '$price'">
+            <with args="$price">
+                <render args="getBody()"/>
+            </with>
+        </each>
+    </div>
+</ifnot>

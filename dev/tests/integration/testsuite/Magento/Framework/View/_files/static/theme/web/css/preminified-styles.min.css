@@ -1,0 +1,9 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/*
+ * Magento/backend
+ * semi-minified file to check that .min.css files are not minified with library
+ */
+table > caption {  margin-bottom: 5px;}table thead {  background: #676056;  color: #f7f3eb;}table thead .headings {  background: #807a6e;}

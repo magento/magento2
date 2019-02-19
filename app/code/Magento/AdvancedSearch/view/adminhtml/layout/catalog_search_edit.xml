@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="catalog_search_block"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\AdvancedSearch\Block\Adminhtml\Search\Edit" name="related_grid_edit"/>
+            <block class="Magento\Backend\Block\Widget\Grid\Serializer" name="related_grid_serializer">
+                <arguments>
+                    <argument name="grid_block" xsi:type="string">search.edit.grid</argument>
+                    <argument name="callback" xsi:type="string">getSelectedQueries</argument>
+                    <argument name="input_element_name" xsi:type="string">selected_queries_grid</argument>
+                    <argument name="reload_param_name" xsi:type="string">selected_queries_grid</argument>
+                </arguments>
+                <referenceBlock name="related_grid_serializer">
+                    <action method="setFormId">
+                        <argument name="value" xsi:type="string">edit_form</argument>
+                    </action>
+                </referenceBlock>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

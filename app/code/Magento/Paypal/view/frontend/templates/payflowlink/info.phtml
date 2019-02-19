@@ -1,0 +1,14 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Paypal\Block\Payflow\Link\Form $block
+ */
+?>
+<div class="payflowlink items" id="payment_form_<?= $block->escapeHtml($block->getMethodCode()) ?>"
+     style="display:none">
+    <?= $block->escapeHtml(__('You will be required to enter your payment details after you place an order.')) ?>
+</div>

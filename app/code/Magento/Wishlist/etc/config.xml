@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <wishlist>
+            <general>
+                <active>1</active>
+                <show_in_sidebar>1</show_in_sidebar>
+            </general>
+            <email>
+                <email_identity>general</email_identity>
+                <email_template>wishlist_email_email_template</email_template>
+                <number_limit>10</number_limit>
+                <text_limit>255</text_limit>
+            </email>
+        </wishlist>
+    </default>
+</config>

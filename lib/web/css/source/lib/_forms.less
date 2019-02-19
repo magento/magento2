@@ -1,0 +1,1109 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Forms
+//  _____________________________________________
+
+.lib-form-element-input(
+    @_type: @form-element-input-type,
+    @_background: ~"@{@{_type}__background}",
+    @_border: ~"@{@{_type}__border}",
+    @_border-radius: ~"@{@{_type}__border-radius}",
+    @_height: ~"@{@{_type}__height}",
+    @_width: ~"@{@{_type}__width}",
+    @_padding: ~"@{@{_type}__padding}",
+    @_margin: ~"@{@{_type}__margin}",
+    @_vertical-align: ~"@{@{_type}__vertical-align}",
+    @_background-clip: ~"@{@{_type}__background-clip}",
+
+    @_font-size:  ~"@{@{_type}__font-size}",
+    @_color: ~"@{@{_type}__color}",
+    @_font-family: ~"@{@{_type}__font-family}",
+    @_font-weight: ~"@{@{_type}__font-weight}",
+    @_line-height: ~"@{@{_type}__line-height}",
+    @_font-style: ~"@{@{_type}__font-style}",
+
+    @_placeholder-color: ~"@{@{_type}-placeholder__color}",
+    @_placeholder-font-style: ~"@{@{_type}-placeholder__font-style}",
+
+    @_disabled-background: ~"@{@{_type}__disabled__background}",
+    @_disabled-border: ~"@{@{_type}__disabled__border}",
+    @_disabled-opacity: ~"@{@{_type}__disabled__opacity}",
+    @_disabled-color: ~"@{@{_type}__disabled__color}",
+    @_disabled-font-style: ~"@{@{_type}__disabled__font-style}",
+
+    @_focus-background: ~"@{@{_type}__focus__background}",
+    @_focus-border: ~"@{@{_type}__focus__border}",
+    @_focus-color: ~"@{@{_type}__focus__color}",
+    @_focus-font-style: ~"@{@{_type}__focus__font-style}"
+) {
+    .lib-css(background, @_background);
+    .lib-css(background-clip, @_background-clip);
+    .lib-css(border, @_border);
+    .lib-css(border-radius, @_border-radius);
+    .lib-css(color, @_color);
+    .lib-css(font-family, @_font-family);
+    .lib-css(font-size, @_font-size);
+    .lib-css(font-style, @_font-style);
+    .lib-css(font-weight, @_font-weight);
+    .lib-css(height, @_height);
+    .lib-css(line-height, @_line-height);
+    .lib-css(margin, @_margin);
+    .lib-css(padding, @_padding);
+    .lib-css(vertical-align, @_vertical-align);
+    .lib-css(width, @_width);
+    box-sizing: border-box;
+
+    ._lib-form-element-focus(
+        @_background,
+        @_focus-background,
+        @_border,
+        @_focus-border,
+        @_color,
+        @_focus-color,
+        @_font-style,
+        @_focus-font-style
+    );
+
+    ._lib-form-element-disabled(
+        @_background,
+        @_disabled-background,
+        @_border,
+        @_disabled-border,
+        @_color,
+        @_disabled-color,
+        @_font-style,
+        @_disabled-font-style,
+        @_disabled-opacity
+    );
+
+    ._lib-form-element-placeholder(
+        @_type,
+        @_placeholder-color,
+        @_font-style,
+        @_placeholder-font-style
+    );
+}
+
+.lib-form-element-choice(
+    @_type: @form-element-choice__type,
+    @_vertical-align: ~"@{@{_type}__vertical-align}",
+    @_margin: ~"@{@{_type}__margin}",
+    @_disabled-opacity: ~"@{@{_type}__disabled__opacity}"
+) {
+    .lib-css(margin, @_margin);
+    .lib-css(vertical-align, @_vertical-align);
+
+    &:disabled {
+        ._lib-form-element-add-opacity(@_disabled-opacity);
+    }
+}
+
+.lib-form-element-number-reset() {
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    -moz-appearance: textfield;
+}
+
+.lib-form-element-search-reset() {
+    -webkit-appearance: none;
+    &::-webkit-search-cancel-button,
+    &::-webkit-search-decoration,
+    &::-webkit-search-results-button,
+    &::-webkit-search-results-decoration {
+        -webkit-appearance: none;
+    }
+}
+
+.lib-form-element-textarea-resize(@_textarea-resize: @textarea__resize) {
+    .lib-css(resize, @_textarea-resize);
+}
+
+.lib-form-element-color(
+    @_border-color: '',
+    @_background: '',
+    @_color: '',
+    @_focus-border-color: '',
+    @_focus-background: '',
+    @_focus-color: '',
+    @_disabled-border-color: '',
+    @_disabled-background: '',
+    @_disabled-color: '',
+    @_placeholder-color: ''
+) {
+    .lib-css(background, @_background);
+    .lib-css(border-color, @_border-color);
+    .lib-css(color, @_color);
+
+    &:focus {
+        ._lib-form-element-state-add-border-color(@_focus-border-color, @_border-color);
+        ._lib-form-element-state-add-background(@_focus-background, @_background);
+        ._lib-form-element-state-add-font-color(@_focus-color, @_color);
+    }
+
+    &:disabled {
+        ._lib-form-element-state-add-border-color(@_disabled-border-color, @_border-color);
+        ._lib-form-element-state-add-background(@_disabled-background, @_background);
+        ._lib-form-element-state-add-font-color(@_disabled-color, @_color);
+    }
+
+    &::-moz-placeholder {
+        .lib-css(color, @_placeholder-color);
+    }
+
+    &::-webkit-input-placeholder {
+        .lib-css(color, @_placeholder-color);
+    }
+
+    &:-ms-input-placeholder {
+        .lib-css(color, @_placeholder-color);
+    }
+}
+
+.lib-form-validation(
+    @_element-color-error: @form-element-validation__color-error,
+    @_element-color-valid: @form-element-validation__color-valid,
+    @_element-border-color-error: @form-element-validation__border-error,
+    @_element-border-color-valid: @form-element-validation__border-valid,
+    @_element-background-error: @form-element-validation__background-error,
+    @_element-background-valid: @form-element-validation__background-valid
+) {
+    &.mage-error {
+        .lib-form-element-color(
+            @_border-color: @_element-border-color-error,
+            @_background: @_element-background-error,
+            @_color: @_element-color-error
+        );
+    }
+
+    &.valid {
+        .lib-form-element-color(
+            @_border-color: @_element-border-color-valid,
+            @_background: @_element-background-valid,
+            @_color: @_element-color-valid
+        );
+    }
+}
+
+.lib-form-validation-note(
+    @_note-color: @form-validation-note__color-error,
+    @_note-font-size: @form-validation-note__font-size,
+    @_note-font-family: @form-validation-note__font-family,
+    @_note-font-style: @form-validation-note__font-style,
+    @_note-font-weight: @form-validation-note__font-weight,
+    @_note-line-height: @form-validation-note__line-height,
+    @_note-margin: @form-validation-note__margin,
+    @_note-padding: @form-validation-note__padding,
+    @_note-icon-use: @form-validation-note-icon__use,
+
+    @_note-icon-font-content: @form-validation-note-icon__font-content,
+    @_note-icon-font: @form-validation-note-icon__font,
+    @_note-icon-font-size: @form-validation-note-icon__font-size,
+    @_note-icon-font-line-height: @form-validation-note-icon__font-line-height,
+    @_note-icon-font-color: @form-validation-note-icon__font-color,
+    @_note-icon-font-color-hover: @form-validation-note-icon__font-color-hover,
+    @_note-icon-font-color-active: @form-validation-note-icon__font-color-active,
+    @_note-icon-font-margin: @form-validation-note-icon__font-margin,
+    @_note-icon-font-vertical-align: @form-validation-note-icon__font-vertical-align,
+    @_note-icon-font-position: @form-validation-note-icon__font-position,
+    @_note-icon-font-text-hide: @form-validation-note-icon__font-text-hide
+) {
+    .lib-typography(
+        @_font-size: @_note-font-size,
+        @_color: @_note-color,
+        @_font-family: @_note-font-family,
+        @_font-weight: @_note-font-weight,
+        @_line-height: @_note-line-height,
+        @_font-style: @_note-font-style
+    );
+    ._lib-form-validation-icon(
+        @_note-icon-use,
+        @_note-icon-font-content,
+        @_note-icon-font,
+        @_note-icon-font-size,
+        @_note-icon-font-line-height,
+        @_note-icon-font-color,
+        @_note-icon-font-color-hover,
+        @_note-icon-font-color-active,
+        @_note-icon-font-margin,
+        @_note-icon-font-vertical-align,
+        @_note-icon-font-position,
+        @_note-icon-font-text-hide
+    );
+}
+
+.lib-form-validation-color(
+    @_element-border-color-error: '',
+    @_element-background-error: '',
+    @_element-color-error: '',
+    @_element-border-color-valid: '',
+    @_element-background-valid: '',
+    @_element-color-valid: ''
+) {
+    &.mage-error {
+        .lib-form-element-color(
+            @_border-color: @_element-border-color-error,
+            @_background: @_element-background-error,
+            @_color: @_element-color-error
+        );
+    }
+
+    &.valid {
+        .lib-form-element-color(
+            @_border-color: @_element-border-color-valid,
+            @_background: @_element-background-valid,
+            @_color: @_element-color-valid
+        );
+    }
+}
+
+.lib-form-element-all() {
+    input[type="text"],
+    input[type="password"],
+    input[type="url"],
+    input[type="tel"],
+    input[type="search"],
+    input[type="number"],
+    input[type="datetime"],
+    input[type="email"] {
+        .lib-form-element-input(@_type: input-text);
+    }
+
+    input[type="number"] {
+        .lib-form-element-number-reset();
+    }
+
+    input[type="search"] {
+        .lib-form-element-search-reset();
+    }
+
+    select {
+        .lib-form-element-input(@_type: select);
+    }
+
+    select[multiple] {
+        .lib-css(height, auto);
+        background-image: none;
+    }
+
+    textarea {
+        .lib-form-element-input(@_type: textarea);
+        .lib-form-element-textarea-resize();
+    }
+
+    input[type="checkbox"] {
+        .lib-form-element-choice(@_type: input-checkbox);
+        position: relative;
+        top: 2px;
+    }
+
+    input[type="radio"] {
+        .lib-form-element-choice(@_type: input-radio);
+    }
+
+    input,
+    select,
+    textarea {
+        .lib-form-validation();
+    }
+
+    div.mage-error[generated] {
+        .lib-form-validation-note();
+    }
+
+    input[type="button"],
+    input[type="reset"],
+    input[type="submit"] {
+        cursor: pointer;
+        -webkit-appearance: button;
+    }
+
+    input::-moz-focus-inner {
+        border: 0;
+        padding: 0;
+    }
+}
+
+//
+//  Internal use mixins
+//  ---------------------------------------------
+
+._lib-form-validation-icon(
+    @_note-icon-use,
+    @_note-icon-font-content,
+    @_note-icon-font,
+    @_note-icon-font-size,
+    @_note-icon-font-line-height,
+    @_note-icon-font-color,
+    @_note-icon-font-color-hover,
+    @_note-icon-font-color-active,
+    @_note-icon-font-margin,
+    @_note-icon-font-vertical-align,
+    @_note-icon-font-position,
+    @_note-icon-font-text-hide
+) when (@_note-icon-use = true) {
+    .lib-icon-font(
+        @_icon-font-content: @_note-icon-font-content,
+        @_icon-font: @_note-icon-font,
+        @_icon-font-size: @_note-icon-font-size,
+        @_icon-font-line-height: @_note-icon-font-line-height,
+        @_icon-font-color: @_note-icon-font-color,
+        @_icon-font-color-hover: @_note-icon-font-color-hover,
+        @_icon-font-color-active: @_note-icon-font-color-active,
+        @_icon-font-margin: @_note-icon-font-margin,
+        @_icon-font-vertical-align: @_note-icon-font-vertical-align,
+        @_icon-font-position: @_note-icon-font-position,
+        @_icon-font-text-hide: @_note-icon-font-text-hide
+    );
+}
+
+._lib-form-element-add-opacity(@_opacity) when not (@_opacity = 1) {
+    .lib-css(opacity, @_opacity);
+}
+
+//  Only for states :disabled, :focus, placeholder
+._lib-form-element-focus(
+    @_background-default,
+    @_background-state,
+    @_border-default,
+    @_border-state,
+    @_color-default,
+    @_color-state,
+    @_font-style-default,
+    @_font-style-state
+) {
+    &:focus {
+        ._lib-form-element-state-add-background(@_background-state, @_background-default);
+        ._lib-form-element-state-add-border(@_border-state, @_border-default);
+        ._lib-form-element-state-add-font-color(@_color-state, @_color-default);
+        ._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+    }
+}
+
+._lib-form-element-disabled(
+    @_background-default,
+    @_background-state,
+    @_border-default,
+    @_border-state,
+    @_color-default,
+    @_color-state,
+    @_font-style-default,
+    @_font-style-state,
+    @_opacity
+) {
+    &:disabled {
+        ._lib-form-element-add-opacity(@_opacity);
+        ._lib-form-element-state-add-background(@_background-state, @_background-default);
+        ._lib-form-element-state-add-border(@_border-state, @_border-default);
+        ._lib-form-element-state-add-font-color(@_color-state, @_color-default);
+        ._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+    }
+}
+
+._lib-form-element-placeholder(
+    @_type,
+    @_color,
+    @_font-style-default,
+    @_font-style-state
+) when not (@_type = select) {
+    &::-moz-placeholder {
+        .lib-css(color, @_color);
+        ._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+    }
+
+    &::-webkit-input-placeholder {
+        .lib-css(color, @_color);
+        ._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+    }
+
+    &:-ms-input-placeholder {
+        .lib-css(color, @_color);
+        ._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+    }
+}
+
+._lib-form-element-state-add-background(@_background-state, @_background-default) when not (@_background-state = @_background-default) {
+    .lib-css(background, @_background-state);
+}
+
+._lib-form-element-state-add-border(@_border-state, @_border-default) when not ('@{_border-state}' = '@{_border-default}') {
+    .lib-css(border, @_border-state);
+}
+
+._lib-form-element-state-add-border-color(@_border-state, @_border-default) when not (@_border-state = @_border-default) {
+    .lib-css(border-color, @_border-state);
+}
+
+._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default) when not (@_font-style-state = @_font-style-default) {
+    .lib-css(font-style, @_font-style-state);
+}
+
+._lib-form-element-state-add-font-color(@_color-state, @_color-default) when not (@_color-state = @_color-default) {
+    .lib-css(color, @_color-state);
+}
+
+.lib-form-fieldset(
+    @_border: @form-fieldset__border,
+    @_margin: @form-fieldset__margin,
+    @_padding: @form-fieldset__padding,
+    @_legend-color: @form-fieldset-legend__color,
+    @_legend-font-size: @form-fieldset-legend__font-size,
+    @_legend-font-family: @form-fieldset-legend__font-family,
+    @_legend-font-weight: @form-fieldset-legend__font-weight,
+    @_legend-font-style: @form-fieldset-legend__font-style,
+    @_legend-line-height: @form-fieldset-legend__line-height,
+    @_legend-margin: @form-fieldset-legend__margin,
+    @_legend-padding: @form-fieldset-legend__padding,
+    @_legend-width: @form-fieldset-legend__width
+) {
+    .lib-css(border, @_border);
+    .lib-css(margin, @_margin);
+    .lib-css(padding, @_padding);
+    letter-spacing: -.31em;
+
+    > * {
+        letter-spacing: normal;
+    }
+
+    > .legend {
+        .lib-css(margin, @_legend-margin);
+        .lib-css(padding, @_legend-padding);
+        .lib-css(width, @_legend-width);
+        box-sizing: border-box;
+        float: left;
+
+        .lib-typography(
+            @_font-size: @_legend-font-size,
+            @_color: @_legend-color,
+            @_font-family: @_legend-font-family,
+            @_font-weight: @_legend-font-weight,
+            @_line-height: @_legend-line-height,
+            @_font-style: @_legend-font-style
+        );
+
+        & + br {
+            clear: both;
+            display: block;
+            height: 0;
+            overflow: hidden;
+            visibility: hidden;
+        }
+    }
+}
+
+.lib-form-field(
+    @_type: @form-field-type,
+    @_type-inline-margin: @form-field-type-inline__margin,
+    @_type-inline-label-margin: @form-field-type-label-inline__margin,
+    @_type-inline-label-padding: @form-field-type-label-inline__padding,
+    @_type-inline-label-align: @form-field-type-label-inline__align,
+    @_type-inline-label-width: @form-field-type-label-inline__width,
+    @_type-inline-control-width: @form-field-type-control-inline__width,
+    @_vertical-indent: @form-field__vertical-indent,
+    @_additional-vertical-indent: @form-field__additional-vertical-indent,
+    @_type-block-margin: @form-field-type-block__margin,
+    @_type-block-label-margin: @form-field-type-label-block__margin,
+    @_type-block-label-padding: @form-field-type-label-block__padding,
+    @_type-block-label-align: @form-field-type-label-block__align,
+
+    @_border: @form-field__border,
+    @_column: @form-field-column,
+    @_column-padding: @form-field-column__padding,
+    @_column-number: @form-field-column__number,
+
+    @_label-color: @form-field-label__color,
+    @_label-font-size: @form-field-label__font-size,
+    @_label-font-family: @form-field-label__font-family,
+    @_label-font-weight: @form-field-label__font-weight,
+    @_label-font-style: @form-field-label__font-style,
+    @_label-line-height: @form-field-label__line-height,
+
+    @_label-asterisk-color: @form-field-label-asterisk__color,
+    @_label-asterisk-font-size: @form-field-label-asterisk__font-size,
+    @_label-asterisk-font-family: @form-field-label-asterisk__font-family,
+    @_label-asterisk-font-weight: @form-field-label-asterisk__font-weight,
+    @_label-asterisk-font-style: @form-field-label-asterisk__font-style,
+    @_label-asterisk-line-height: @form-field-label-asterisk__line-height,
+    @_label-asterisk-margin: @form-field-label-asterisk__margin,
+
+    @_note-color: @form-field-note__color,
+    @_note-font-size: @form-field-note__font-size,
+    @_note-font-family: @form-field-note__font-family,
+    @_note-font-weight: @form-field-note__font-weight,
+    @_note-line-height: @form-field-note__line-height,
+    @_note-font-style: @form-field-note__font-style,
+    @_note-margin: @form-field-note__margin,
+    @_note-padding: @form-field-note__padding,
+    @_note-icon-font-content: @form-field-note-icon-font__content,
+    @_note-icon-font: @form-field-note-icon-font,
+    @_note-icon-font-size: @form-field-note-icon-font__size,
+    @_note-icon-font-line-height: @form-field-note-icon-font__line-height,
+    @_note-icon-font-color: @form-field-note-icon-font__color,
+    @_note-icon-font-color-hover: @form-field-note-icon-font__color-hover,
+    @_note-icon-font-color-active: @form-field-note-icon-font__color-active,
+    @_note-icon-font-margin: @form-field-note-icon-font__margin,
+    @_note-icon-font-vertical-align: @form-field-note-icon-font__vertical-align,
+    @_note-icon-font-position: @form-field-note-icon-font__position,
+    @_note-icon-font-text-hide: @form-field-note-icon-font__text-hide
+) {
+    .lib-css(border, @_border);
+
+    .lib-form-field-type(
+        @_type,
+        @_type-inline-margin,
+        @_type-inline-label-margin,
+        @_type-inline-label-padding,
+        @_type-inline-label-align,
+        @_type-inline-label-width,
+        @_type-inline-control-width,
+        @_vertical-indent,
+        @_type-block-margin,
+        @_type-block-label-margin,
+        @_type-block-label-padding,
+        @_type-block-label-align
+    );
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .lib-form-field-column(
+        @_column,
+        @_column-padding,
+        @_column-number
+    );
+
+    > .label {
+        .lib-typography(
+            @_font-size: @_label-font-size,
+            @_color: @_label-color,
+            @_font-family: @_label-font-family,
+            @_font-weight: @_label-font-weight,
+            @_line-height: @_label-line-height,
+            @_font-style: @_label-font-style
+        );
+        & + br {
+            display: none;
+        }
+    }
+
+    .choice {
+        input {
+            vertical-align: top;
+        }
+    }
+
+    .fields.group {
+        .lib-clearfix();
+        .field {
+            box-sizing: border-box;
+            float: left;
+        }
+
+        &.group-2 .field {
+            width: 50% !important;
+        }
+
+        &.group-3 .field {
+            width: 33.3% !important;
+        }
+
+        &.group-4 .field {
+            width: 25% !important;
+        }
+
+        &.group-5 .field {
+            width: 20% !important;
+        }
+    }
+
+    .addon {
+        .lib-vendor-prefix-display(inline-flex);
+        .lib-vendor-prefix-flex-wrap(nowrap);
+        padding: 0;
+        width: 100%;
+
+        textarea,
+        select,
+        input {
+            .lib-vendor-prefix-order(2);
+            .lib-vendor-prefix-flex-basis(100%);
+            display: inline-block;
+            margin: 0;
+            width: auto;
+        }
+
+        .addbefore,
+        .addafter {
+            .lib-form-element-input(@_type: input-text);
+            .lib-vendor-prefix-order(3);
+            display: inline-block;
+            vertical-align: middle;
+            white-space: nowrap;
+            width: auto;
+        }
+
+        .addbefore {
+            float: left;
+            .lib-vendor-prefix-order(1);
+        }
+    }
+
+    .additional {
+        .lib-css(margin-top, @_additional-vertical-indent);
+    }
+
+    ._lib-form-field-required(
+        @_label-asterisk-color,
+        @_label-asterisk-font-size,
+        @_label-asterisk-font-family,
+        @_label-asterisk-font-weight,
+        @_label-asterisk-font-style,
+        @_label-asterisk-line-height,
+        @_label-asterisk-margin
+    );
+
+    ._lib-form-field-note(
+        @_note-font-size,
+        @_note-color,
+        @_note-font-family,
+        @_note-font-weight,
+        @_note-line-height,
+        @_note-font-style,
+        @_note-margin,
+        @_note-padding,
+
+        @_note-icon-font-content,
+        @_note-icon-font,
+        @_note-icon-font-size,
+        @_note-icon-font-line-height,
+        @_note-icon-font-color,
+        @_note-icon-font-color-hover,
+        @_note-icon-font-color-active,
+        @_note-icon-font-margin,
+        @_note-icon-font-vertical-align,
+        @_note-icon-font-position,
+        @_note-icon-font-text-hide
+    );
+}
+
+.lib-form-field-type(
+    @_type: @form-field-type,
+    @_type-inline-margin: @form-field-type-inline__margin,
+    @_type-inline-label-margin: @form-field-type-label-inline__margin,
+    @_type-inline-label-padding: @form-field-type-label-inline__padding,
+    @_type-inline-label-align: @form-field-type-label-inline__align,
+    @_type-inline-label-width: @form-field-type-label-inline__width,
+    @_type-inline-control-width: @form-field-type-control-inline__width,
+    @_vertical-indent: @form-field__vertical-indent,
+    @_type-block-margin: @form-field-type-block__margin,
+    @_type-block-label-margin: @form-field-type-label-block__margin,
+    @_type-block-label-padding: @form-field-type-label-block__padding,
+    @_type-block-label-align: @form-field-type-label-block__align
+) when (@_type = inline) {
+    ._lib-form-field-type-inline(
+        @_type-inline-margin,
+        @_type-inline-label-margin,
+        @_type-inline-label-padding,
+        @_type-inline-label-width,
+        @_type-inline-control-width,
+        @_type-inline-label-align,
+        @_vertical-indent
+    );
+}
+
+.lib-form-field-type(
+    @_type: @form-field-type,
+    @_type-inline-margin: @form-field-type-inline__margin,
+    @_type-inline-label-margin: @form-field-type-label-inline__margin,
+    @_type-inline-label-padding: @form-field-type-label-inline__padding,
+    @_type-inline-label-align: @form-field-type-label-inline__align,
+    @_type-inline-label-width: @form-field-type-label-inline__width,
+    @_type-inline-control-width: @form-field-type-control-inline__width,
+    @_vertical-indent: @form-field__vertical-indent,
+    @_type-block-margin: @form-field-type-block__margin,
+    @_type-block-label-margin: @form-field-type-label-block__margin,
+    @_type-block-label-padding: @form-field-type-label-block__padding,
+    @_type-block-label-align: @form-field-type-label-block__align
+) when (@_type = block) {
+    ._lib-form-field-type-block(
+        @_type-block-margin,
+        @_type-block-label-margin,
+        @_type-block-label-padding,
+        @_type-block-label-align
+    );
+}
+
+._lib-form-field-type-inline(
+    @_type-inline-margin,
+    @_type-inline-label-margin,
+    @_type-inline-label-padding,
+    @_type-inline-label-width,
+    @_type-inline-control-width,
+    @_type-inline-label-align,
+    @_vertical-indent
+) {
+    .lib-clearfix();
+    .lib-css(margin, @_type-inline-margin);
+    box-sizing: border-box;
+
+    &.choice:before,
+    &.no-label:before {
+        .lib-css(padding, @_type-inline-label-padding);
+        .lib-css(width, @_type-inline-label-width);
+        box-sizing: border-box;
+        content: ' ';
+        float: left;
+        height: 1px;
+    }
+
+    .description {
+        .lib-css(padding, @_type-inline-label-padding);
+        .lib-css(text-align, @_type-inline-label-align);
+        .lib-css(width, @_type-inline-label-width);
+        box-sizing: border-box;
+        float: left;
+    }
+
+    &:not(.choice) {
+        > .label {
+            .lib-css(margin, @_type-inline-label-margin);
+            .lib-css(padding, @_type-inline-label-padding);
+            .lib-css(text-align, @_type-inline-label-align);
+            .lib-css(width, @_type-inline-label-width);
+            box-sizing: border-box;
+            float: left;
+        }
+
+        > .control {
+            .lib-css(width, @_type-inline-control-width);
+            float: left;
+        }
+    }
+}
+
+._lib-form-field-type-block(
+    @_type-block-margin,
+    @_type-block-label-margin,
+    @_type-block-label-padding,
+    @_type-block-label-align
+) {
+    .lib-css(margin, @_type-block-margin);
+    > .label {
+        .lib-css(margin, @_type-block-label-margin);
+        .lib-css(padding, @_type-block-label-padding);
+        .lib-css(text-align, @_type-block-label-align);
+        display: inline-block;
+    }
+}
+
+._lib-form-field-required(
+    @_color: @form-field-label-asterisk__color,
+    @_font-size: @form-field-label-asterisk__font-size,
+    @_font-family: @form-field-label-asterisk__font-family,
+    @_font-weight: @form-field-label-asterisk__font-weight,
+    @_font-style: @form-field-label-asterisk__font-style,
+    @_line-height: @form-field-label-asterisk__line-height,
+    @_margin: @form-field-label-asterisk__margin
+) {
+    &.required > .label,
+    &._required > .label {
+        &:after {
+            content: '*';
+            .lib-typography(
+            @_font-size: @_font-size,
+            @_color: @_color,
+            @_font-family: @_font-family,
+            @_font-weight: @_font-weight,
+            @_line-height: @_line-height,
+            @_font-style: @_font-style
+            );
+            .lib-css(margin, @_margin);
+        }
+    }
+}
+
+._lib-form-field-note(
+    @_note-font-size,
+    @_note-color,
+    @_note-font-family,
+    @_note-font-weight,
+    @_note-line-height,
+    @_note-font-style,
+    @_note-margin,
+    @_note-padding,
+
+    @_note-icon-font-content,
+    @_note-icon-font,
+    @_note-icon-font-size,
+    @_note-icon-font-line-height,
+    @_note-icon-font-color,
+    @_note-icon-font-color-hover,
+    @_note-icon-font-color-active,
+    @_note-icon-font-margin,
+    @_note-icon-font-vertical-align,
+    @_note-icon-font-position,
+    @_note-icon-font-text-hide
+) {
+    .note {
+        .lib-typography(
+            @_font-size: @_note-font-size,
+            @_color: @_note-color,
+            @_font-family: @_note-font-family,
+            @_font-weight: @_note-font-weight,
+            @_line-height: @_note-line-height,
+            @_font-style: @_note-font-style
+        );
+
+        .lib-css(margin, @_note-margin);
+        .lib-css(padding, @_note-padding);
+
+        .lib-icon-font(
+            @_icon-font-content: @_note-icon-font-content,
+            @_icon-font: @_note-icon-font,
+            @_icon-font-size: @_note-icon-font-size,
+            @_icon-font-line-height: @_note-icon-font-line-height,
+            @_icon-font-color: @_note-icon-font-color,
+            @_icon-font-color-hover: @_note-icon-font-color-hover,
+            @_icon-font-color-active: @_note-icon-font-color-active,
+            @_icon-font-margin: @_note-icon-font-margin,
+            @_icon-font-vertical-align: @_note-icon-font-vertical-align,
+            @_icon-font-position: @_note-icon-font-position,
+            @_icon-font-text-hide: @_note-icon-font-text-hide
+        );
+    }
+}
+
+.lib-form-field-type-revert(
+    @_type: @form-field-type-revert,
+    @_type-inline-margin: @form-field-type-inline__margin,
+    @_type-inline-label-margin: @form-field-type-label-inline__margin,
+    @_type-inline-label-padding: @form-field-type-label-inline__padding,
+    @_type-inline-label-align: @form-field-type-label-inline__align,
+    @_type-inline-label-width: @form-field-type-label-inline__width,
+    @_type-inline-control-width: @form-field-type-control-inline__width,
+    @_vertical-indent: @form-field__vertical-indent,
+    @_type-block-margin: @form-field-type-block__margin,
+    @_type-block-label-margin: @form-field-type-label-block__margin,
+    @_type-block-label-padding: @form-field-type-label-block__padding,
+    @_type-block-label-align: @form-field-type-label-block__align
+) when (@_type = block) and not (@_type = false) {
+    &:not(.choice) {
+        > .label {
+            box-sizing: content-box;
+            float: none;
+            width: auto;
+
+            ._lib-revert-type-block-label-align(
+                @_type-block-label-align
+            );
+
+            ._lib-revert-type-block-label-padding(
+                @_type-block-label-padding
+            );
+        }
+
+        > .control {
+            float: none;
+            width: auto;
+        }
+    }
+
+    ._lib-form-field-type-block(
+        @_type-block-margin,
+        @_type-block-label-margin,
+        @_type-block-label-padding,
+        @_type-block-label-align
+    );
+
+    &.choice,
+    &.no-label {
+        &:before {
+            display: none;
+        }
+    }
+}
+
+.lib-form-field-type-revert(
+    @_type: @form-field-type-revert,
+    @_type-inline-margin: @form-field-type-inline__margin,
+    @_type-inline-label-margin: @form-field-type-label-inline__margin,
+    @_type-inline-label-padding: @form-field-type-label-inline__padding,
+    @_type-inline-label-align: @form-field-type-label-inline__align,
+    @_type-inline-label-width: @form-field-type-label-inline__width,
+    @_type-inline-control-width: @form-field-type-control-inline__width,
+    @_vertical-indent: @form-field__vertical-indent,
+    @_type-block-margin: @form-field-type-block__margin,
+    @_type-block-label-margin: @form-field-type-label-block__margin,
+    @_type-block-label-padding: @form-field-type-label-block__padding,
+    @_type-block-label-align: @form-field-type-label-block__align
+) when (@_type = inline) and not (@_type = false) {
+    > .label {
+        ._lib-revert-type-inline-label-margin(
+            @_type-inline-label-margin
+        );
+    }
+    ._lib-form-field-type-inline(
+        @_type-inline-margin,
+        @_type-inline-label-margin,
+        @_type-inline-label-padding,
+        @_type-inline-label-width,
+        @_type-inline-control-width,
+        @_type-inline-label-align,
+        @_vertical-indent
+    );
+}
+
+.lib-form-field-column(
+    @_column: @form-field-column,
+    @_column-padding: @form-field-column__padding,
+    @_column-number: @form-field-column__number
+) when (@_column = true) {
+    .lib-css(padding, @_column-padding);
+    box-sizing: border-box;
+    display: inline-block;
+
+    .lib-form-field-column-number(@_column-number);
+    vertical-align: top;
+
+    & + .fieldset {
+        clear: both;
+    }
+}
+
+.lib-form-field-column-number(@_column-number: @form-field-column__number) {
+    .lib-css(width, 100% / @_column-number);
+}
+
+._lib-revert-type-block-label-padding(
+    @_type-block-label-padding
+) when (@_type-block-label-padding = false) {
+    padding: 0;
+}
+
+._lib-revert-type-block-label-align(
+    @_type-block-label-align
+) when (@_type-block-label-align = false) {
+    text-align: left;
+}
+
+._lib-revert-type-inline-label-margin(
+    @_type-inline-label-margin
+) when (@_type-inline-label-margin = false) {
+    margin: 0;
+}
+
+.lib-form-hasrequired(
+    @_position: @form-hasrequired__position,
+    @_color: @form-hasrequired__color,
+    @_font-size: @form-hasrequired__font-size,
+    @_font-family: @form-hasrequired__font-family,
+    @_font-weight: @form-hasrequired__font-weight,
+    @_font-style: @form-hasrequired__font-style,
+    @_line-height: @form-hasrequired__line-height,
+    @_border: @form-hasrequired__border,
+    @_margin: @form-hasrequired__margin,
+    @_padding: @form-hasrequired__padding
+) {
+    ._lib-form-hasrequired-position(
+        @_position,
+        @_border,
+        @_margin,
+        @_padding,
+        @_font-size,
+        @_color,
+        @_font-family,
+        @_font-weight,
+        @_line-height,
+        @_font-style
+    );
+}
+
+._lib-form-hasrequired-position(
+    @_position,
+    @_border,
+    @_margin,
+    @_padding,
+    @_font-size,
+    @_color,
+    @_font-family,
+    @_font-weight,
+    @_line-height,
+    @_font-style
+) when (@_position = top) {
+    &:before {
+        ._lib-form-hasrequired-position-any(
+            @_border,
+            @_margin,
+            @_padding,
+            @_font-size,
+            @_color,
+            @_font-family,
+            @_font-weight,
+            @_line-height,
+            @_font-style
+        );
+    }
+}
+
+._lib-form-hasrequired-position(
+    @_position,
+    @_border,
+    @_margin,
+    @_padding,
+    @_font-size,
+    @_color,
+    @_font-family,
+    @_font-weight,
+    @_line-height,
+    @_font-style
+) when (@_position = bottom) {
+    &:after {
+        ._lib-form-hasrequired-position-any(
+            @_border,
+            @_margin,
+            @_padding,
+            @_font-size,
+            @_color,
+            @_font-family,
+            @_font-weight,
+            @_line-height,
+            @_font-style
+        );
+    }
+}
+
+._lib-form-hasrequired-position-any(
+    @_border,
+    @_margin,
+    @_padding,
+    @_font-size,
+    @_color,
+    @_font-family,
+    @_font-weight,
+    @_line-height,
+    @_font-style
+) {
+    .lib-css(border, @_border);
+    .lib-css(margin, @_margin);
+    .lib-css(padding, @_padding);
+    content: attr(data-hasrequired);
+    display: block;
+    letter-spacing: normal;
+    word-spacing: normal;
+    .lib-typography(
+        @_font-size: @_font-size,
+        @_color: @_color,
+        @_font-family: @_font-family,
+        @_font-weight: @_font-weight,
+        @_line-height: @_line-height,
+        @_font-style: @_font-style
+    );
+}

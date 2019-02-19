@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="config_webservice" translate="label,description" instance="Magento\Webapi\Model\Cache\Type\Webapi">
+        <label>Web Services Configuration</label>
+        <description>REST and SOAP configurations, generated WSDL file</description>
+    </type>
+</config>

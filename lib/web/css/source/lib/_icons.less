@@ -1,0 +1,366 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Icons
+//  _____________________________________________
+
+//
+//  Icons using font
+//  ---------------------------------------------
+
+.lib-icon-font(
+    @_icon-font-content,
+    @_icon-font: @icon-font,
+    @_icon-font-size: @icon-font__size,
+    @_icon-font-line-height: @icon-font__line-height,
+    @_icon-font-color: @icon-font__color,
+    @_icon-font-color-hover: @icon-font__color-hover,
+    @_icon-font-color-active: @icon-font__color-active,
+    @_icon-font-margin: @icon-font__margin,
+    @_icon-font-vertical-align: @icon-font__vertical-align,
+    @_icon-font-position: @icon-font__position,
+    @_icon-font-text-hide: @icon-font__text-hide,
+    @_icon-font-display: @icon-font__display
+) when (@_icon-font-position = before) {
+    ._lib-icon-text-hide(@_icon-font-text-hide);
+    .lib-css(display, @_icon-font-display);
+    text-decoration: none;
+
+    &:before {
+        ._lib-icon-font(
+            @_icon-font-content,
+            @_icon-font,
+            @_icon-font-size,
+            @_icon-font-line-height,
+            @_icon-font-color,
+            @_icon-font-margin,
+            @_icon-font-vertical-align
+        );
+    }
+
+    &:hover {
+        &:before {
+            .lib-css(color, @_icon-font-color-hover);
+        }
+    }
+
+    &:active {
+        &:before {
+            .lib-css(color, @_icon-font-color-active);
+        }
+    }
+}
+
+.lib-icon-font(
+    @_icon-font-content,
+    @_icon-font: @icon-font,
+    @_icon-font-size: @icon-font__size,
+    @_icon-font-line-height: @icon-font__line-height,
+    @_icon-font-color: @icon-font__color,
+    @_icon-font-color-hover: @icon-font__color-hover,
+    @_icon-font-color-active: @icon-font__color-active,
+    @_icon-font-margin: @icon-font__margin,
+    @_icon-font-vertical-align: @icon-font__vertical-align,
+    @_icon-font-position: @icon-font__position,
+    @_icon-font-text-hide: @icon-font__text-hide,
+    @_icon-font-display: @icon-font__display
+) when (@_icon-font-position = after) {
+    ._lib-icon-text-hide(@_icon-font-text-hide);
+    .lib-css(display, @_icon-font-display);
+    text-decoration: none;
+
+    &:after {
+        ._lib-icon-font(
+            @_icon-font-content,
+            @_icon-font,
+            @_icon-font-size,
+            @_icon-font-line-height,
+            @_icon-font-color,
+            @_icon-font-margin,
+            @_icon-font-vertical-align
+        );
+    }
+
+    &:hover {
+        &:after {
+            .lib-css(color, @_icon-font-color-hover);
+        }
+    }
+
+    &:active {
+        &:after {
+            .lib-css(color, @_icon-font-color-active);
+        }
+    }
+}
+
+.lib-icon-font-size(
+    @_icon-font-size: @icon-font__size,
+    @_icon-font-line-height: @icon-font__line-height,
+    @_icon-font-position: @icon-font__position
+) when (@_icon-font-position = before) {
+    &:before {
+        ._lib-icon-font-size(@_icon-font-size, @_icon-font-line-height);
+    }
+}
+
+.lib-icon-font-size(
+    @_icon-font-size: @icon-font__size,
+    @_icon-font-line-height: @icon-font__line-height,
+    @_icon-font-position: @icon-font__position
+) when (@_icon-font-position = after) {
+    &:after {
+        ._lib-icon-font-size(@_icon-font-size, @_icon-font-line-height);
+    }
+}
+
+.lib-icon-font-symbol(
+    @_icon-font-content,
+    @_icon-font-position: @icon-font__position
+) when (@_icon-font-position = before) {
+    &:before {
+        .lib-css(content, @_icon-font-content);
+    }
+}
+
+.lib-icon-font-symbol(
+    @_icon-font-content,
+    @_icon-font-position: @icon-font__position
+) when (@_icon-font-position = after) {
+    &:after {
+        .lib-css(content, @_icon-font-content);
+    }
+}
+
+//
+//  Icons using image or sprite
+//  ---------------------------------------------
+
+.lib-icon-image(
+    @_icon-image,
+    @_icon-image-width: @icon__width,
+    @_icon-image-height: @icon__height,
+    @_icon-image-margin: @icon__margin,
+    @_icon-image-vertical-align: @icon__vertical-align,
+    @_icon-image-position-x: @icon-image__position-x,
+    @_icon-image-position-y: @icon-image__position-y,
+    @_icon-image-position: @icon__position,
+    @_icon-image-text-hide: @icon__text-hide
+) when (@_icon-image-position = before) {
+    display: inline-block;
+    ._lib-icon-text-hide(@_icon-image-text-hide);
+
+    &:before {
+        ._lib-icon-image(
+            @_icon-image,
+            @_icon-image-width,
+            @_icon-image-height,
+            @_icon-image-margin,
+            @_icon-image-vertical-align,
+            @_icon-image-position-x,
+            @_icon-image-position-y
+        );
+        .lib-css(margin, @_icon-image-margin);
+    }
+}
+
+.lib-icon-image(
+    @_icon-image,
+    @_icon-image-width: @icon__width,
+    @_icon-image-height: @icon__height,
+    @_icon-image-margin: @icon__margin,
+    @_icon-image-vertical-align: @icon__vertical-align,
+    @_icon-image-position-x: @icon-image__position-x,
+    @_icon-image-position-y: @icon-image__position-y,
+    @_icon-image-position: @icon__position,
+    @_icon-image-text-hide: @icon__text-hide
+) when (@_icon-image-position = after) {
+    display: inline-block;
+    ._lib-icon-text-hide(@_icon-image-text-hide);
+
+    &:after {
+        ._lib-icon-image(
+            @_icon-image,
+            @_icon-image-width,
+            @_icon-image-height,
+            @_icon-image-margin,
+            @_icon-image-vertical-align,
+            @_icon-image-position-x,
+            @_icon-image-position-y
+        );
+        .lib-css(margin, @_icon-image-margin);
+    }
+}
+
+.lib-icon-image-position(
+    @_icon-image-position-x: @icon-image__position-x,
+    @_icon-image-position-y: @icon-image__position-y,
+    @_icon-image-position: @icon__position
+) when (@_icon-image-position = before) {
+    &:before {
+        ._lib-icon-image-position(
+            @_icon-image-position-x,
+            @_icon-image-position-y
+        );
+    }
+}
+
+.lib-icon-image-position(
+    @_icon-image-position-x: @icon-image__position-x,
+    @_icon-image-position-y: @icon-image__position-y,
+    @_icon-image-position: @icon__position
+) when (@_icon-image-position = after) {
+    &:after {
+        ._lib-icon-image-position(
+            @_icon-image-position-x,
+            @_icon-image-position-y
+        );
+    }
+}
+
+.lib-icon-sprite-position(
+    @_icon-sprite-position-x: @icon-sprite__position-x,
+    @_icon-sprite-position-y: @icon-sprite__position-y,
+    @_icon-sprite-grid: @icon-sprite__grid,
+    @_icon-sprite-position: @icon__position
+) when (@_icon-sprite-position = before) {
+    &:before {
+        ._lib-icon-sprite-position(
+            @_icon-sprite-position-x,
+            @_icon-sprite-position-y,
+            @_icon-sprite-grid
+        );
+    }
+}
+
+.lib-icon-sprite-position(
+    @_icon-sprite-position-x: @icon-sprite__position-x,
+    @_icon-sprite-position-y: @icon-sprite__position-y,
+    @_icon-sprite-grid: @icon-sprite__grid,
+    @_icon-sprite-position: @icon__position
+) when (@_icon-sprite-position = after) {
+    &:after {
+        ._lib-icon-sprite-position(
+            @_icon-sprite-position-x,
+            @_icon-sprite-position-y,
+            @_icon-sprite-grid
+        );
+    }
+}
+
+.lib-icon-image-size(
+    @_icon-image-width: @icon__width,
+    @_icon-image-height: @icon__height,
+    @_icon-image-position: @icon__position
+) when (@_icon-image-position = before) {
+    &:before {
+        ._lib-icon-image-size(@_icon-image-width, @_icon-image-height);
+    }
+}
+
+.lib-icon-image-size(
+    @_icon-image-width: @icon__width,
+    @_icon-image-height: @icon__height,
+    @_icon-image-position: @icon__position
+) when (@_icon-image-position = before) {
+    &:after {
+        ._lib-icon-image-size(@_icon-image-width, @_icon-image-height);
+    }
+}
+
+.lib-icon-text-hide() {
+    > span {
+        .lib-visually-hidden();
+    }
+}
+
+//
+//  Internal use mixins
+//  ---------------------------------------------
+
+._lib-icon-text-hide(@_icon-text-hide) when (@_icon-text-hide = true) {
+    .lib-icon-text-hide();
+}
+
+._lib-icon-image-url(@_path) when not (@_path = false) {
+    .lib-css(background-image, url(@_path));
+}
+
+._lib-icon-image(
+    @_icon-image,
+    @_icon-image-width,
+    @_icon-image-height,
+    @_icon-image-margin,
+    @_icon-image-vertical-align,
+    @_icon-image-position-x,
+    @_icon-image-position-y
+) {
+    ._lib-icon-image-url(@_icon-image);
+    .lib-css(background-position-x, @_icon-image-position-x);
+    .lib-css(background-position-y, @_icon-image-position-y);
+    .lib-css(line-height, @_icon-image-height);
+    .lib-css(margin, @_icon-image-margin);
+    .lib-css(vertical-align, @_icon-image-vertical-align);
+    ._lib-icon-image-size(
+        @_icon-image-width,
+        @_icon-image-height
+    );
+    background-repeat: no-repeat;
+    content: '';
+    display: inline-block;
+}
+
+._lib-icon-image-position(
+    @_icon-image-position-x,
+    @_icon-image-position-y
+) {
+    .lib-css(background-position, @_icon-image-position-x @_icon-image-position-y);
+}
+
+._lib-icon-image-size(
+    @icon__width,
+    @icon__height
+) {
+    .lib-css(height, @icon__height);
+    .lib-css(width, @icon__width);
+}
+
+._lib-icon-sprite-position(
+    @_icon-sprite-position-x,
+    @_icon-sprite-position-y,
+    @_icon-sprite-grid
+) {
+    .lib-css(background-position, -(@_icon-sprite-position-x*@_icon-sprite-grid) -(@_icon-sprite-position-y*@_icon-sprite-grid));
+}
+
+._lib-icon-font(
+    @_icon-font-content,
+    @_icon-font,
+    @_icon-font-size,
+    @_icon-font-line-height,
+    @_icon-font-color,
+    @_icon-font-margin,
+    @_icon-font-vertical-align
+) {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    ._lib-icon-font-size(@_icon-font-size, @_icon-font-line-height);
+    .lib-css(color, @_icon-font-color);
+    .lib-css(content, @_icon-font-content);
+    .lib-css(font-family, @_icon-font);
+    .lib-css(margin, @_icon-font-margin);
+    .lib-css(vertical-align, @_icon-font-vertical-align);
+    display: inline-block;
+    font-weight: normal;
+    overflow: hidden;
+    speak: none;
+    text-align: center;
+}
+
+._lib-icon-font-size(@_icon-font-size, @_icon-font-line-height) {
+    .lib-css(font-size, @_icon-font-size);
+    .lib-css(line-height, @_icon-font-line-height);
+}

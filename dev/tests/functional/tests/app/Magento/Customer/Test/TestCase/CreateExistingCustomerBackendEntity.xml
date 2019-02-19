@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Customer\Test\TestCase\CreateExistingCustomerBackendEntity" summary="Create Existing Customer from Backend" ticketId="MAGETWO-43685">
+        <variation name="CreateExistingCustomerBackendEntity1" summary="Create existing customer on Backend.">
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="issue" xsi:type="string">MAGETWO-81744: [Jenkins] Random fail of Requisition List Test and CreateExistingCustomerBackendEntity</data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendDuplicateErrorMessage" />
+        </variation>
+    </testCase>
+</config>

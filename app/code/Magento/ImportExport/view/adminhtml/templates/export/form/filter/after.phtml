@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<script>
+require([
+    'mage/adminhtml/grid'
+], function(){
+    if (window['export_filter_gridJsObject'] != undefined) {
+        export_filter_gridJsObject.resetFilter = function () {
+            return varienGrid.prototype.resetFilter.call(this, varienExport.modifyFilterGrid);
+        };
+        export_filter_gridJsObject.doFilter = function () {
+            return varienGrid.prototype.doFilter.call(this, varienExport.modifyFilterGrid);
+        };
+    }
+});
+</script>

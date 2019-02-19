@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\DeleteProductsFromShoppingCartTest" summary="Delete Products from Shopping Cart" ticketId="MAGETWO-25218">
+        <variation name="DeleteProductsFromShoppingCartTestVariation1">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="productsData/0" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation2">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="productsData/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation3">
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S1</data>
+            <data name="productsData/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation4">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="productsData/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation5">
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="productsData/0" xsi:type="string">configurableProduct::default</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation6">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="productsData/0" xsi:type="string">downloadableProduct::with_two_separately_links</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation7">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="productsData/0" xsi:type="string">groupedProduct::three_simple_products</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation8">
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S1</data>
+            <data name="productsData/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
+            <data name="productsData/1" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
+            <data name="productsData/2" xsi:type="string">downloadableProduct::with_two_separately_links</data>
+            <data name="productsData/3" xsi:type="string">groupedProduct::three_simple_products</data>
+            <data name="productsData/4" xsi:type="string">configurableProduct::default</data>
+            <data name="productsData/5" xsi:type="string">bundleProduct::bundle_fixed_product</data>
+            <data name="productsData/6" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+        </variation>
+    </testCase>
+</config>

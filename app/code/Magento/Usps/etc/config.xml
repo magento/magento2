@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <usps>
+                <active>0</active>
+                <sallowspecific>0</sallowspecific>
+                <allowed_methods>0_FCLE,0_FCL,0_FCP,1,2,3,4,6,7,13,16,17,22,23,25,27,28,33,34,35,36,37,42,43,53,55,56,57,61,INT_1,INT_2,INT_4,INT_6,INT_7,INT_8,INT_9,INT_10,INT_11,INT_12,INT_13,INT_14,INT_15,INT_16,INT_20,INT_26</allowed_methods>
+                <container>VARIABLE</container>
+                <cutoff_cost />
+                <free_method />
+                <gateway_url>http://production.shippingapis.com/ShippingAPI.dll</gateway_url>
+                <gateway_secure_url>https://secure.shippingapis.com/ShippingAPI.dll</gateway_secure_url>
+                <shipment_requesttype>0</shipment_requesttype>
+                <handling />
+                <machinable>true</machinable>
+                <methods></methods>
+                <model>Magento\Usps\Model\Carrier</model>
+                <size>REGULAR</size>
+                <title>United States Postal Service</title>
+                <userid backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <isproduction>0</isproduction>
+                <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
+                <max_package_weight>70</max_package_weight>
+                <handling_type>F</handling_type>
+                <handling_action>O</handling_action>
+                <active_rma>0</active_rma>
+                <is_online>1</is_online>
+            </usps>
+        </carriers>
+    </default>
+</config>

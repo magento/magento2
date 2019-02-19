@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <design>
+            <invalid_caches>
+                <full_page/>
+            </invalid_caches>
+        </design>
+        <system>
+            <full_page_cache>
+                <varnish5>
+                    <path>varnish5.vcl</path>
+                </varnish5>
+                <varnish4>
+                    <path>varnish4.vcl</path>
+                </varnish4>
+                <ttl>86400</ttl>
+                <caching_application>1</caching_application>
+                <default>
+                    <access_list>localhost</access_list>
+                    <backend_host>localhost</backend_host>
+                    <backend_port>8080</backend_port>
+                    <ttl>86400</ttl>
+                    <grace_period>300</grace_period>
+                </default>
+            </full_page_cache>
+        </system>
+    </default>
+</config>

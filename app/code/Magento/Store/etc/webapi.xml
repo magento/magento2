@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <!-- StoreView -->
+    <route url="/V1/store/storeViews" method="GET">
+        <service class="Magento\Store\Api\StoreRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Backend::store"/>
+        </resources>
+    </route>
+
+    <!-- Store Groups-->
+    <route url="/V1/store/storeGroups" method="GET">
+        <service class="Magento\Store\Api\GroupRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Backend::store"/>
+        </resources>
+    </route>
+
+    <!-- Website -->
+    <route url="/V1/store/websites" method="GET">
+        <service class="Magento\Store\Api\WebsiteRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Backend::store"/>
+        </resources>
+    </route>
+
+    <!-- Store Config -->
+    <route url="/V1/store/storeConfigs" method="GET">
+        <service class="Magento\Store\Api\StoreConfigManagerInterface" method="getStoreConfigs"/>
+        <resources>
+            <resource ref="Magento_Backend::store"/>
+        </resources>
+    </route>
+</routes>

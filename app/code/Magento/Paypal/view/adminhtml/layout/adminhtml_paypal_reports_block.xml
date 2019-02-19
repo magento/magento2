@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.paypal.report.grid.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="paypal.report.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">settlementGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Paypal\Model\ResourceModel\Report\Settlement\Row\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">row_id</argument>
+                    <argument name="default_dir" xsi:type="string">DESC</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                    <argument name="use_ajax" xsi:type="string">1</argument>
+                    <argument name="grid_url" xsi:type="url" path="*/*/grid"/>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="paypal.report.grid.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">*/*/details</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="id" xsi:type="string">getId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.report_date" as="report_date">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Report Date</argument>
+                            <argument name="index" xsi:type="string">report_date</argument>
+                            <argument name="type" xsi:type="string">date</argument>
+                            <argument name="header_css_class" xsi:type="string">col-date</argument>
+                            <argument name="column_css_class" xsi:type="string">col-date</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.account_id" as="account_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Merchant Account</argument>
+                            <argument name="index" xsi:type="string">account_id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-merchant</argument>
+                            <argument name="column_css_class" xsi:type="string">col-merchant</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.transaction_id" as="transaction_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Transaction ID</argument>
+                            <argument name="index" xsi:type="string">transaction_id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-transaction</argument>
+                            <argument name="column_css_class" xsi:type="string">col-transaction</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.invoice_id" as="invoice_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Invoice ID</argument>
+                            <argument name="index" xsi:type="string">invoice_id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-invoice</argument>
+                            <argument name="column_css_class" xsi:type="string">col-invoice</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.paypal_reference_id" as="paypal_reference_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">PayPal Reference ID</argument>
+                            <argument name="index" xsi:type="string">paypal_reference_id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-reference</argument>
+                            <argument name="column_css_class" xsi:type="string">col-reference</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.transaction_event_code" as="transaction_event_code">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Event</argument>
+                            <argument name="index" xsi:type="string">transaction_event_code</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="options" xsi:type="options" model="Magento\Paypal\Model\ResourceModel\Report\Settlement\Options\TransactionEvents"/>
+                            <argument name="header_css_class" xsi:type="string">ol-event</argument>
+                            <argument name="column_css_class" xsi:type="string">ol-event</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.transaction_initiation_date" as="transaction_initiation_date">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Start Date</argument>
+                            <argument name="index" xsi:type="string">transaction_initiation_date</argument>
+                            <argument name="type" xsi:type="string">datetime</argument>
+                            <argument name="header_css_class" xsi:type="string">col-initiation</argument>
+                            <argument name="column_css_class" xsi:type="string">col-initiation</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.transaction_completion_date" as="transaction_completion_date">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Finish Date</argument>
+                            <argument name="index" xsi:type="string">transaction_completion_date</argument>
+                            <argument name="type" xsi:type="string">datetime</argument>
+                            <argument name="header_css_class" xsi:type="string">col-completion</argument>
+                            <argument name="column_css_class" xsi:type="string">col-completion</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.gross_transaction_amount" as="gross_transaction_amount">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Gross Amount</argument>
+                            <argument name="index" xsi:type="string">gross_transaction_amount</argument>
+                            <argument name="type" xsi:type="string">currency</argument>
+                            <argument name="currency" xsi:type="string">gross_transaction_currency</argument>
+                            <argument name="header_css_class" xsi:type="string">col-amount</argument>
+                            <argument name="column_css_class" xsi:type="string">col-amount</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.fee_amount" as="fee_amount">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Fee Amount</argument>
+                            <argument name="index" xsi:type="string">fee_amount</argument>
+                            <argument name="type" xsi:type="string">currency</argument>
+                            <argument name="currency" xsi:type="string">gross_transaction_currency</argument>
+                            <argument name="header_css_class" xsi:type="string">col-fee-amount</argument>
+                            <argument name="column_css_class" xsi:type="string">col-fee-amount</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

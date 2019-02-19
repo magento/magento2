@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @var $block \Magento\Ui\Component\Control\Button
+ */
+?>
+<?= $block->getBeforeHtml() ?>
+<button <?= /* @escapeNotVerified */ $block->getAttributesHtml(), $block->getUiId() ?>>
+    <span><?= /* @escapeNotVerified */ $block->getLabel() ?></span>
+</button>
+<?= $block->getAfterHtml() ?>

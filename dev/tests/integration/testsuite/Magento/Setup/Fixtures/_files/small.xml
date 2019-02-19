@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xi="http://www.w3.org/2001/XInclude">
+    <profile>
+        <di>di.xml</di>
+        <websites>1</websites>
+        <store_groups>1</store_groups>
+        <store_views>1</store_views>
+        <simple_products>2</simple_products>
+        <bundle_products>2</bundle_products>
+        <bundle_products_options>2</bundle_products_options>
+        <bundle_products_variation>2</bundle_products_variation>
+        <product-images>
+            <images-count>3</images-count>
+            <images-per-product>1</images-per-product>
+        </product-images>
+        <configurable_products>
+            <config>
+                <attributeSet>Default</attributeSet>
+                <sku>Configurable Product - Default %s</sku>
+                <products>2</products>
+            </config>
+            <config>
+                <attributeSet>Attribute Set 1</attributeSet>
+                <sku>Configurable Product - Color-Size %s</sku>
+                <products>2</products>
+            </config>
+            <config>
+                <attributes>2</attributes>
+                <options>2</options>
+                <sku>Configurable Product 2-2 %s</sku>
+                <products>2</products>
+            </config>
+        </configurable_products>
+        <configurable_products_variation>3</configurable_products_variation>
+        <categories>30</categories>
+        <categories_nesting_level>3</categories_nesting_level>
+        <catalog_price_rules>10</catalog_price_rules>
+        <configs> <!-- Config variables and values for change -->
+            <config>
+                <path>admin/security/use_form_key</path>
+                <scope>default</scope>
+                <scopeId>0</scopeId>
+                <value>0</value>
+            </config>
+            <config>
+                <path>carriers/flatrate/active</path>
+                <scope>default</scope>
+                <scopeId>0</scopeId>
+                <value>1</value>
+            </config>
+            <config>
+                <path>system/full_page_cache/ttl</path>
+                <scope>default</scope>
+                <scopeId>0</scopeId>
+                <value>7200</value>
+            </config>
+            <config>
+                <path>system/full_page_cache/caching_application</path>
+                <scope>default</scope>
+                <scopeId>0</scopeId>
+                <value>2</value>
+            </config>
+            <config>
+                <path>checkout/cart/redirect_to_cart</path>
+                <scope>default</scope>
+                <scopeId>0</scopeId>
+                <value>0</value>
+            </config>
+            <config>
+                <path>system/full_page_cache/varnish/access_list</path>
+                <scope>default</scope>
+                <scopeId>0</scopeId>
+                <value>localhost</value>
+            </config>
+            <config>
+                <path>system/full_page_cache/varnish/backend_host</path>
+                <scope>default</scope>
+                <scopeId>0</scopeId>
+                <value>localhost</value>
+            </config>
+            <config>
+                <path>system/full_page_cache/varnish/backend_port</path>
+                <scope>default</scope>
+                <scopeId>0</scopeId>
+                <value>8080</value>
+            </config>
+        </configs>
+        <indexers> <!-- Indexer mode value (true - Update by Schedule, false - Update on Save) -->
+            <indexer>
+                <id>catalog_category_product</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalog_product_category</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalog_product_price</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalog_product_attribute</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>cataloginventory_stock</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalogrule_rule</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalogrule_product</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalogsearch_fulltext</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+        </indexers>
+        <xi:include href="./attributeSets.xml"/>
+    </profile>
+</config>

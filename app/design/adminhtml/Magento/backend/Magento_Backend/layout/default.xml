@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <meta name="robots" content="NOINDEX,NOFOLLOW"/>
+        <css src="jquery/jstree/themes/default/style.css"/>
+        <css src="css/styles-old.css"/>
+        <css src="css/styles.css"/>
+    </head>
+
+    <body>
+
+        <referenceContainer name="root">
+            <container name="menu.wrapper" before="-" htmlTag="div" htmlClass="menu-wrapper"/>
+        </referenceContainer>
+
+        <referenceContainer name="header" htmlClass="page-header row">
+            <container name="header.inner.left" before="-" htmlTag="div" htmlClass="page-header-hgroup col-l-8 col-m-6"/>
+            <container name="header.inner.right" after="header.inner.left" htmlTag="div" htmlClass="page-header-actions col-l-4 col-m-6"/>
+        </referenceContainer>
+
+        <move element="page.menu" destination="menu.wrapper" />
+        <move element="logo" before="-" destination="menu.wrapper" />
+
+        <move element="page.title" before="-" destination="header.inner.left" />
+        <move element="user" before="-" destination="header.inner.right" />
+        <move element="notification.messages" after="user" destination="header.inner.right" />
+        <move element="global.search" destination="header.inner.right" />
+
+    </body>
+</page>

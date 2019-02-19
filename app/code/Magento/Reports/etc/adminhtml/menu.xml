@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magento_Reports::report" title="Reports" translate="title" module="Magento_Reports" sortOrder="60" resource="Magento_Reports::report"/>
+        <add id="Magento_Reports::report_marketing" title="Marketing" translate="title" module="Magento_Backend" sortOrder="10" parent="Magento_Reports::report" resource="Magento_Reports::report_marketing"/>
+        <add id="Magento_Reports::report_salesroot" title="Sales" translate="title" module="Magento_Reports" sortOrder="40" parent="Magento_Reports::report" resource="Magento_Reports::salesroot"/>
+        <add id="Magento_Reports::report_salesroot_sales" title="Orders" translate="title" module="Magento_Reports" sortOrder="10" parent="Magento_Reports::report_salesroot" action="reports/report_sales/sales" resource="Magento_Reports::salesroot_sales"/>
+        <add id="Magento_Reports::report_salesroot_tax" title="Tax" translate="title" module="Magento_Reports" sortOrder="20" parent="Magento_Reports::report_salesroot" action="reports/report_sales/tax" resource="Magento_Reports::tax"/>
+        <add id="Magento_Reports::report_salesroot_invoiced" title="Invoiced" translate="title" module="Magento_Reports" sortOrder="30" parent="Magento_Reports::report_salesroot" action="reports/report_sales/invoiced" resource="Magento_Reports::invoiced"/>
+        <add id="Magento_Reports::report_salesroot_shipping" title="Shipping" translate="title" module="Magento_Reports" sortOrder="40" parent="Magento_Reports::report_salesroot" action="reports/report_sales/shipping" resource="Magento_Reports::shipping"/>
+        <add id="Magento_Reports::report_salesroot_refunded" title="Refunds" translate="title" module="Magento_Reports" sortOrder="50" parent="Magento_Reports::report_salesroot" action="reports/report_sales/refunded" resource="Magento_Reports::refunded"/>
+        <add id="Magento_Reports::report_salesroot_coupons" title="Coupons" translate="title" module="Magento_Reports" sortOrder="60" parent="Magento_Reports::report_salesroot" action="reports/report_sales/coupons" resource="Magento_Reports::coupons"/>
+        <add id="Magento_Reports::report_shopcart_product" title="Products in Cart" translate="title" module="Magento_Reports" sortOrder="10" parent="Magento_Reports::report_marketing" action="reports/report_shopcart/product" resource="Magento_Reports::product"/>
+        <add id="Magento_Reports::report_shopcart_abandoned" title="Abandoned Carts" translate="title" module="Magento_Reports" sortOrder="20" parent="Magento_Reports::report_marketing" action="reports/report_shopcart/abandoned" resource="Magento_Reports::abandoned"/>
+        <add id="Magento_Reports::report_products" title="Products" translate="title" module="Magento_Reports" sortOrder="60" parent="Magento_Reports::report" resource="Magento_Reports::report_products"/>
+        <add id="Magento_Reports::report_products_bestsellers" title="Bestsellers" translate="title" module="Magento_Reports" sortOrder="20" parent="Magento_Reports::report_products" action="reports/report_sales/bestsellers" resource="Magento_Reports::bestsellers"/>
+        <add id="Magento_Reports::report_products_sold" title="Ordered" translate="title" module="Magento_Reports" sortOrder="40" parent="Magento_Reports::report_products" action="reports/report_product/sold" resource="Magento_Reports::sold"/>
+        <add id="Magento_Reports::report_products_viewed" title="Views" translate="title" module="Magento_Reports" sortOrder="10" parent="Magento_Reports::report_products" action="reports/report_product/viewed" resource="Magento_Reports::viewed"/>
+        <add id="Magento_Reports::report_products_lowstock" title="Low Stock" translate="title" module="Magento_Reports" sortOrder="30" parent="Magento_Reports::report_products" action="reports/report_product/lowstock" resource="Magento_Reports::lowstock"/>
+        <add id="Magento_Reports::report_customers" title="Customers" translate="title" module="Magento_Reports" sortOrder="50" parent="Magento_Reports::report" resource="Magento_Reports::customers"/>
+        <add id="Magento_Reports::report_customers_accounts" title="New" translate="title" sortOrder="30" module="Magento_Reports" parent="Magento_Reports::report_customers" action="reports/report_customer/accounts" resource="Magento_Reports::accounts"/>
+        <add id="Magento_Reports::report_customers_totals" title="Order Total" translate="title" module="Magento_Reports" sortOrder="10" parent="Magento_Reports::report_customers" action="reports/report_customer/totals" resource="Magento_Reports::totals"/>
+        <add id="Magento_Reports::report_customers_orders" title="Order Count" translate="title" module="Magento_Reports" sortOrder="20" parent="Magento_Reports::report_customers" action="reports/report_customer/orders" resource="Magento_Reports::customers_orders"/>
+        <add id="Magento_Reports::report_statistics" title="Statistics" translate="title" module="Magento_Reports" sortOrder="80" parent="Magento_Reports::report" resource="Magento_Reports::statistics"/>
+        <add id="Magento_Reports::report_statistics_refresh" title="Refresh Statistics" translate="title" module="Magento_Reports" sortOrder="10" parent="Magento_Reports::report_statistics" action="reports/report_statistics" resource="Magento_Reports::statistics_refresh"/>
+        <add id="Magento_Search::report_search_term" title="Search Terms" translate="title" module="Magento_Search" sortOrder="10" parent="Magento_Reports::report_marketing" action="search/term/report" resource="Magento_Reports::report_search" />
+    </menu>
+</config>

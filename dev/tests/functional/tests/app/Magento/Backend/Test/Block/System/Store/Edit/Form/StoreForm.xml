@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <wrapper>store</wrapper>
+    <fields>
+        <group_id>
+            <input>optgroupselect</input>
+        </group_id>
+        <name />
+        <code />
+        <is_active>
+            <input>select</input>
+        </is_active>
+    </fields>
+</mapping>

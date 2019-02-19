@@ -1,0 +1,178 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Breadcrumbs
+//  _____________________________________________
+
+.lib-breadcrumbs(
+    @_breadcrumbs-font-size: @breadcrumbs__font-size,
+    @_breadcrumbs-display: @breadcrumbs__display,
+    @_breadcrumbs-container-margin: @breadcrumbs__container-margin,
+    @_breadcrumbs-padding: @breadcrumbs__padding,
+
+    //  Breadcrumbs separating symbol
+    @_breadcrumbs-separator-symbol: @breadcrumbs-separator__symbol,
+    @_breadcrumbs-separator-color: @breadcrumbs-separator__color,
+
+    //  Use icon as a separating symbol
+    @_breadcrumbs-icon-use: @breadcrumbs-icon__use,
+    @_breadcrumbs-icon-font-content: @breadcrumbs-icon__font-content,
+    @_icon-font: @breadcrumbs-icon__font,
+    @_icon-font-size: @breadcrumbs-icon__font-size,
+    @_icon-font-line-height: @breadcrumbs-icon__font-line-height,
+    @_icon-font-color: @breadcrumbs-icon__font-color,
+    @_icon-font-margin: @breadcrumbs-icon__font-margin,
+    @_icon-font-vertical-align: @breadcrumbs-icon__font-vertical-align,
+
+    //  Breadcrumbs current
+    @_breadcrumbs-current-color: @breadcrumbs-current__color,
+    @_breadcrumbs-current-font-weight: @breadcrumbs-current__font-weight,
+    @_breadcrumbs-current-background: @breadcrumbs-current__background,
+    @_breadcrumbs-current-border: @breadcrumbs-current__border,
+    @_breadcrumbs-current-gradient: @breadcrumbs-current__gradient,
+    @_breadcrumbs-current-gradient-direction: @breadcrumbs-current__gradient-direction,
+    @_breadcrumbs-current-gradient-color-start: @breadcrumbs-current__gradient-color-start,
+    @_breadcrumbs-current-gradient-color-end: @breadcrumbs-current__gradient-color-end,
+
+    //  Breadcrumbs link - gradient
+    @_breadcrumbs-link-gradient: @breadcrumbs-link__gradient,
+    @_breadcrumbs-link-gradient-direction: @breadcrumbs-link__gradient-direction,
+
+    //  Breadcrumbs link color - default
+    @_breadcrumbs-link-color: @breadcrumbs-link__color,
+    @_breadcrumbs-link-background: @breadcrumbs-link__background,
+    @_breadcrumbs-link-border: @breadcrumbs-link__border,
+    @_breadcrumbs-link-text-decoration: @breadcrumbs-link__text-decoration,
+    @_breadcrumbs-link-gradient-color-start: @breadcrumbs-link__gradient-color-start,
+    @_breadcrumbs-link-gradient-color-end: @breadcrumbs-link__gradient-color-end,
+
+    //  Breadcrumbs link - visited
+    @_breadcrumbs-link-color-visited: @breadcrumbs-link__visited__color,
+    @_breadcrumbs-link-background-visited: @breadcrumbs-link__visited__background,
+    @_breadcrumbs-link-border-visited: @breadcrumbs-link__visited__border,
+    @_breadcrumbs-link-text-decoration-visited: @breadcrumbs-link__visited__text-decoration,
+    @_breadcrumbs-link-gradient-color-start-visited: @breadcrumbs-link__visited__gradient-color-start,
+    @_breadcrumbs-link-gradient-color-end-visited: @breadcrumbs-link__visited__gradient-color-end,
+
+    //  Breadcrumbs link - hover
+    @_breadcrumbs-link-color-hover: @breadcrumbs-link__hover__color,
+    @_breadcrumbs-link-background-hover: @breadcrumbs-link__hover__background,
+    @_breadcrumbs-link-border-hover: @breadcrumbs-link__hover__border,
+    @_breadcrumbs-link-text-decoration-hover: @breadcrumbs-link__hover__text-decoration,
+    @_breadcrumbs-link-gradient-color-start-hover: @breadcrumbs-link__hover__gradient-color-start,
+    @_breadcrumbs-link-gradient-color-end-hover: @breadcrumbs-link__hover__gradient-color-end,
+
+    //  Breadcrumbs link - active
+    @_breadcrumbs-link-color-active: @breadcrumbs-link__active__color,
+    @_breadcrumbs-link-background-active: @breadcrumbs-link__active__background,
+    @_breadcrumbs-link-border-active: @breadcrumbs-link__active__border,
+    @_breadcrumbs-link-text-decoration-active: @breadcrumbs-link__active__text-decoration,
+    @_breadcrumbs-link-gradient-color-start-active: @breadcrumbs-link__active__gradient-color-start,
+    @_breadcrumbs-link-gradient-color-end-active: @breadcrumbs-link__active__gradient-color-end
+) {
+    .lib-css(margin, @_breadcrumbs-container-margin);
+    .items {
+        .lib-font-size(@_breadcrumbs-font-size);
+        .lib-css(color, @_breadcrumbs-current-color);
+        .lib-list-inline();
+    }
+
+    .item {
+        margin: 0;
+    }
+
+    a {
+        .lib-css(background, @_breadcrumbs-link-background);
+        .lib-background-gradient(
+            @_breadcrumbs-link-gradient-color-start,
+            @_breadcrumbs-link-gradient-color-end,
+            @_breadcrumbs-link-gradient-direction,
+            @_breadcrumbs-link-gradient
+        );
+        .lib-css(border, @_breadcrumbs-link-border);
+        .lib-css(color, @_breadcrumbs-link-color);
+        .lib-css(display, @_breadcrumbs-display);
+        .lib-css(padding, @_breadcrumbs-padding);
+        .lib-css(text-decoration, @_breadcrumbs-link-text-decoration);
+
+        &:visited {
+            .lib-css(background, @_breadcrumbs-link-background-visited);
+            .lib-background-gradient(
+                @_breadcrumbs-link-gradient-color-start-visited,
+                @_breadcrumbs-link-gradient-color-end-visited,
+                @_breadcrumbs-link-gradient-direction,
+                @_breadcrumbs-link-gradient
+            );
+            .lib-css(border, @_breadcrumbs-link-border-visited);
+            .lib-css(color, @_breadcrumbs-link-color-visited);
+            .lib-css(text-decoration, @_breadcrumbs-link-text-decoration-visited);
+        }
+
+        &:hover {
+            .lib-css(background, @_breadcrumbs-link-background-hover);
+            .lib-background-gradient(
+                @_breadcrumbs-link-gradient-color-start-hover,
+                @_breadcrumbs-link-gradient-color-end-hover,
+                @_breadcrumbs-link-gradient-direction,
+                @_breadcrumbs-link-gradient
+            );
+            .lib-css(border, @_breadcrumbs-link-border-hover);
+            .lib-css(color, @_breadcrumbs-link-color-hover);
+            .lib-css(text-decoration, @_breadcrumbs-link-text-decoration-hover);
+        }
+
+        &:active {
+            .lib-css(background, @_breadcrumbs-link-background-active);
+            .lib-background-gradient(
+                @_breadcrumbs-link-gradient-color-start-active,
+                @_breadcrumbs-link-gradient-color-end-active,
+                @_breadcrumbs-link-gradient-direction,
+                @_breadcrumbs-link-gradient
+            );
+            .lib-css(border, @_breadcrumbs-link-border-active);
+            .lib-css(color, @_breadcrumbs-link-color-active);
+            .lib-css(text-decoration, @_breadcrumbs-link-text-decoration-active);
+        }
+    }
+
+    strong {
+        .lib-css(background, @_breadcrumbs-current-background);
+        .lib-background-gradient(
+            @_breadcrumbs-current-gradient-color-start,
+            @_breadcrumbs-current-gradient-color-end,
+            @_breadcrumbs-current-gradient-direction,
+            @_breadcrumbs-current-gradient
+        );
+        .lib-css(border, @_breadcrumbs-current-border);
+        .lib-css(display, @_breadcrumbs-display);
+        .lib-css(font-weight, @_breadcrumbs-current-font-weight);
+        .lib-css(padding, @_breadcrumbs-padding);
+    }
+
+    & when not (@_breadcrumbs-separator-symbol = '') and not (@_breadcrumbs-separator-symbol = false) { // Insert separating symbol to "content"
+        .item:not(:last-child) {
+            &:after {
+                .lib-css(color, @_breadcrumbs-separator-color);
+                .lib-css(content, @_breadcrumbs-separator-symbol);
+            }
+        }
+    }
+
+    & when (@_breadcrumbs-icon-use = true) {  // Use font icon as a separating symbol
+        .item:not(:last-child) {
+            .lib-icon-font(
+                @_icon-font-content: @_breadcrumbs-icon-font-content,
+                @_icon-font: @_icon-font,
+                @_icon-font-size: @_icon-font-size,
+                @_icon-font-line-height: @_icon-font-line-height,
+                @_icon-font-color: @_icon-font-color,
+                @_icon-font-margin: @_icon-font-margin,
+                @_icon-font-vertical-align: @_icon-font-vertical-align,
+                @_icon-font-position: after
+            );
+        }
+    }
+}

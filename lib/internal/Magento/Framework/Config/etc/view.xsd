@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="view">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element name="vars" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="var" type="varType" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                        <xs:attribute name="module" type="xs:string" use="required"/>
+                    </xs:complexType>
+                    <xs:unique name="varNameIdentifier">
+                        <xs:selector xpath="var"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
+                <xs:element name="exclude" minOccurs="0" type="excludeType"/>
+                <xs:element name="media" minOccurs="0" type="mediaType"/>
+            </xs:choice>
+        </xs:complexType>
+        <xs:unique name="varsModuleIdentifier">
+            <xs:selector xpath="vars"/>
+            <xs:field xpath="@module"/>
+        </xs:unique>
+    </xs:element>
+    <xs:complexType name="varType" mixed="true">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="var" type="varType"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
+    <xs:complexType name="mediaType" mixed="true">
+        <xs:sequence>
+            <xs:element name="images" type="imageType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="videos" type="videoType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="imageType">
+        <xs:sequence>
+            <xs:element name="image" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="width" type="xs:positiveInteger" minOccurs="0" nillable="true"/>
+                        <xs:element name="height" type="xs:positiveInteger" minOccurs="0" nillable="true"/>
+                        <xs:element name="constrain" type="xs:boolean" minOccurs="0" nillable="true"/>
+                        <xs:element name="aspect_ratio" type="xs:boolean" minOccurs="0" nillable="true"/>
+                        <xs:element name="frame" type="xs:boolean" minOccurs="0" nillable="true"/>
+                        <xs:element name="transparency" type="xs:boolean" minOccurs="0" nillable="true"/>
+                        <xs:element name="background" minOccurs="0" nillable="true">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:pattern value="\[(\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\]"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="id" type="xs:string" use="required"/>
+                    <xs:attribute name="type">
+                        <xs:simpleType>
+                            <xs:union>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="thumbnail"/>
+                                        <xs:enumeration value="small_image"/>
+                                        <xs:enumeration value="image"/>
+                                        <xs:enumeration value="swatch_image"/>
+                                        <xs:enumeration value="swatch_thumb"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:pattern value="[a-z]+(_?[a-z])+"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:union>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="module" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="videoType">
+        <xs:sequence>
+            <xs:element name="video" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="play_if_base" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="show_related" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="video_auto_restart" type="xs:boolean" minOccurs="0"/>
+                    </xs:sequence>
+                    <xs:attribute name="id" type="xs:string" use="required"/>
+                    <xs:attribute name="type" use="required">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="play_if_base"/>
+                                <xs:enumeration value="show_related"/>
+                                <xs:enumeration value="video_auto_restart"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="module" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="excludeType">
+        <xs:sequence>
+            <xs:element name="item" type="itemType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="itemType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="type" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="file"/>
+                            <xs:enumeration value="directory"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:schema>

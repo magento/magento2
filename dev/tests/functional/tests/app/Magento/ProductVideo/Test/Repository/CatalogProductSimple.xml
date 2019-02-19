@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Catalog\Test\Repository\CatalogProductSimple">
+        <dataset name="product_with_video_youtube">
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Simple Product with video %isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_with_video_%isolation%</field>
+            <field name="is_virtual" xsi:type="string">No</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">1000</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">10</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="url_key" xsi:type="string">simple-product-with-video-%isolation%</field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+            <field name="media_gallery" xsi:type="array">
+                <item name="images" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="video_url" xsi:type="string">https://youtu.be/bpOSxM0rNPM</item>
+                        <item name="video_title" xsi:type="string">Some title</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="product_with_video_vimeo">
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Simple Product with video %isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_with_video_%isolation%</field>
+            <field name="is_virtual" xsi:type="string">No</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">1000</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">10</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="url_key" xsi:type="string">simple-product-with-video-%isolation%</field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+            <field name="media_gallery" xsi:type="array">
+                <item name="images" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="video_url" xsi:type="string">https://vimeo.com/16342611</item>
+                        <item name="video_title" xsi:type="string">Some title</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+    </repository>
+</config>

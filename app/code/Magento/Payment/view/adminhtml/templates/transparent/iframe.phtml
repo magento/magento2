@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/**
+ * @var \Magento\Payment\Block\Transparent\Iframe $block
+ */
+$params = $block->getParams();
+
+?>
+<html>
+<head>
+<script>
+<?php if (isset($params['redirect'])): ?>
+    window.location="<?= $block->escapeUrl($params['redirect']) ?>";
+<?php elseif (isset($params['redirect_parent'])): ?>
+    window.top.location="<?= $block->escapeUrl($params['redirect_parent']) ?>";
+<?php elseif (isset($params['error_msg'])): ?>
+    window.top.alert(<?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']) ?>);
+<?php elseif (isset($params['order_success'])): ?>
+    window.top.location = "<?= $block->escapeUrl($params['order_success']) ?>";
+<?php else: ?>
+    var require = window.top.require;
+    require(['jquery'], function($) {
+        $('#edit_form').trigger('processStop');
+
+        $("input[name='payment[cc_number]']").prop('disabled', true);
+        $("select[name='payment[cc_type]']").prop('disabled', true);
+        $("select[name='payment[cc_exp_month]']").prop('disabled', true);
+        $("select[name='payment[cc_exp_year]']").prop('disabled', true);
+        $("input[name='payment[cc_cid]']").prop('disabled', true);
+
+        $('#edit_form').trigger('realOrder');
+    });
+<?php endif; ?>
+</script>
+</head>
+<body>
+</body>
+</html>

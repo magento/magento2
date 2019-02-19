@@ -1,0 +1,14 @@
+{
+    "catalogsearch_recommendations": {
+        "column": {
+            "id": true,
+            "query_id": true,
+            "relation_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CATALOGSEARCH_RECOMMENDATIONS_QUERY_ID_SEARCH_QUERY_QUERY_ID": true,
+            "CATALOGSEARCH_RECOMMENDATIONS_RELATION_ID_SEARCH_QUERY_QUERY_ID": true
+        }
+    }
+}

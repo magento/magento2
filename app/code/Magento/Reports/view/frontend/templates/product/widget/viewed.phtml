@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Reports\Block\Product\Widget\Viewed */
+?>
+
+<?php
+$mode = $block->getViewMode();
+$type = $block->getType() . '-' . $mode;
+$class = 'widget viewed' . ' ' . $mode;
+$title = __('Recently Viewed');
+?>
+<div class="block <?= /* @escapeNotVerified */ $class ?>" id="recently_viewed_container" data-mage-init='{"recentlyViewedProducts":{}}' data-count="<?= /* @escapeNotVerified */ $block->getCount() ?>" style="display: none;">
+    <div class="title">
+        <strong><?= /* @escapeNotVerified */ $title ?></strong>
+    </div>
+    <div class="content">
+        <ol class="products list items <?= /* @escapeNotVerified */ $type ?>">
+        </ol>
+    </div>
+</div>

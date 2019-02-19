@@ -1,0 +1,81 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+?>
+
+<section class="page-partners">
+    <h2 class="page-sub-title"><?= /* @escapeNotVerified */ __('Platinum Partners') ?></h2>
+    <p class="partners-description">
+        <?php /* @escapeNotVerified */
+        echo __(
+            'Representing Magento\'s highest level of partner engagement, Magento Platinum Partners have established themselves as leaders and innovators of key products and services designed to help merchants and brands grow their business. ' .
+            'Magento reserves the Platinum level for select trusted partners that are committed to offering integrations of commerce features, functions, and tools, as well as back-end systems and operations, to extend and enhance the power of the Magento commerce platform.'
+        ); ?>
+    </p>
+    <h3 class="page-sub-sub-title"><?= /* @escapeNotVerified */ __('Featured Platinum Partners') ?></h3>
+    <div data-role="partners-block" class="partners-block">
+        <div data-role="spinner" class="admin__data-grid-loading-mask">
+            <div class="spinner">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+    <hr class="page-separator" />
+    <div class="row row-gutter partners-footer">
+        <div class="col-m-5">
+            <div class="partners-search">
+                <h2 class="page-sub-title"><?= /* @escapeNotVerified */ __('Partner search') ?></h2>
+                <p>
+                    <?php /* @escapeNotVerified */
+                    echo __(
+                        'Magento has a thriving ecosystem of technology partners to help merchants and brands deliver the best possible customer experiences. ' .
+                        'They are recognized as experts in eCommerce, search, email marketing, payments, tax, fraud, optimization and analytics, fulfillment, and more. ' .
+                        'Visit the Magento Partner Directory to see all of our trusted partners.'
+                    ); ?>
+                </p>
+                <a class="action-secondary" target="_blank"
+                   href="http://partners.magento.com/partner_locator/search.aspx">
+                    <?= /* @escapeNotVerified */ __('More Partners') ?>
+                </a>
+            </div>
+        </div>
+        <div class="col-m-3">
+            <img
+                class="magento-marketplace-logo"
+                src="<?php /* @escapeNotVerified */ echo $block
+                    ->getViewFileUrl('Magento_Marketplace::partners/images/magento-marketplace.svg');
+                ?>"
+                alt="Partner"/>
+        </div>
+        <div class="col-m-4">
+            <h2 class="page-sub-title"><?= /* @escapeNotVerified */ __('Magento Marketplace') ?></h2>
+            <p class="partner-description">
+                <?php /* @escapeNotVerified */ echo __(
+                    'Extensions and Themes are an essential component of the Magento Ecosystem. ' .
+                    'Please visit the Magento Marketplace to see the latest innovations that developers have created to enhance your Magento Store.'
+                ); ?>
+            </p>
+            <a class="action-secondary" target="_blank"
+               href="https://marketplace.magento.com/">
+                <?= /* @escapeNotVerified */ __('Visit Magento Marketplaces') ?>
+            </a>
+        </div>
+    </div>
+</section>
+
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Marketplace/default": {
+                "url": "<?= $block->getUrl('marketplace/partners/index',
+                    ['_current' => true, 'block' => '', 'period' => '']) ?>"
+            }
+        }
+    }
+</script>

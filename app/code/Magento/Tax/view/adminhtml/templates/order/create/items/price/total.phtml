@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/** @var \Magento\Tax\Block\Adminhtml\Items\Price\Renderer $block */
+
+$_item = $block->getItem();
+?>
+
+<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
+    <?php $_rowTotalWithoutDiscount = $_item->getRowTotal() - $_item->getTotalDiscountAmount(); ?>
+    <?php if ($block->displayBothPrices()): ?>
+        <span class="label"><?= /* @escapeNotVerified */ __('Excl. Tax') ?>:</span>
+    <?php endif; ?>
+    <?= /* @escapeNotVerified */ $block->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>
+<?php endif; ?>
+
+
+<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
+    <?php if ($block->displayBothPrices($block->getStore())): ?>
+        <br /><span class="label"><?= /* @escapeNotVerified */ __('Incl. Tax') ?>:</span>
+    <?php endif; ?>
+    <?php $_incl = $block->getTotalAmount($_item); ?>
+    <?= /* @escapeNotVerified */ $block->formatPrice($_incl) ?>
+<?php endif; ?>

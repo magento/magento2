@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="1">
+    <fields>
+        <card_number>
+            <selector>[name=cardNumber]</selector>
+        </card_number>
+        <expiry_date>
+            <selector>[name=expiryDate]</selector>
+        </expiry_date>
+        <csc />
+    </fields>
+</mapping>

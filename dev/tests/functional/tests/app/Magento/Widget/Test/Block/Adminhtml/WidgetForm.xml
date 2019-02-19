@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <wrapper>parameters</wrapper>
+    <fields>
+        <widget_type>
+            <selector>#select_widget_type</selector>
+            <input>select</input>
+        </widget_type>
+        <anchor_text />
+        <title />
+        <template>
+            <input>select</input>
+        </template>
+        <chosen_option>
+            <selector>.control button</selector>
+            <class>\Magento\Widget\Test\Block\Adminhtml\Widget\ChosenOption</class>
+        </chosen_option>
+        <display_type>
+            <input>select</input>
+        </display_type>
+        <show_pager>
+            <input>select</input>
+        </show_pager>
+        <products_count />
+        <cache_lifetime />
+        <page_size />
+        <show_attributes>
+            <selector>
+                .control [name="parameters[show_attributes][]"]
+            </selector>
+            <input>multiselect</input>
+        </show_attributes>
+        <show_buttons>
+            <selector>
+                .control [name="parameters[show_buttons][]"]
+            </selector>
+            <input>multiselect</input>
+        </show_buttons>
+    </fields>
+</mapping>

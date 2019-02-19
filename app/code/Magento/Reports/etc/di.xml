@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Customer\Model\ResourceModel\Visitor">
+        <plugin name="reportLog" type="Magento\Reports\Model\Plugin\Log" />
+    </type>
+    <virtualType name="Magento\Reports\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">reports</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Reports\Model\Session" type="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Reports\Model\Session\Storage</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Reports\Model\Product\Index\AbstractIndex">
+        <arguments>
+            <argument name="reportSession" xsi:type="object">Magento\Reports\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Reports\Model\ResourceModel\Helper">
+        <arguments>
+            <argument name="modulePrefix" xsi:type="string">reports</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Reports\Model\ResourceModel\Quote\CollectionFactoryInterface" type="Magento\Reports\Model\ResourceModel\Quote\CollectionFactory"/>
+</config>

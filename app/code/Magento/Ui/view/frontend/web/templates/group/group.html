@@ -1,0 +1,36 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<fieldset class="field" data-bind="css: additionalClasses">
+    <legend class="label">
+        <span translate="element.label"></span>
+    </legend>
+    <div class="control">
+        <!-- ko foreach: { data: elems, as: 'element' } -->
+
+            <!-- ko if: element.visible() -->
+
+                <!-- ko ifnot: (element.input_type == 'checkbox' || element.input_type == 'radio') -->
+                    <!-- ko template: $parent.fieldTemplate --><!-- /ko -->
+                <!-- /ko -->
+
+                <!-- ko if: (element.input_type == 'checkbox' || element.input_type == 'radio') -->
+                    <!-- ko template: element.elementTmpl --><!-- /ko -->
+                <!-- /ko -->
+
+            <!-- /ko -->
+
+        <!-- /ko -->
+
+        <!-- ko if: validateWholeGroup -->
+        <!-- ko  foreach: { data: elems, as: 'element' } -->
+            <!-- ko if: element.error() && element.visible() -->
+                <label class="error" data-bind="attr: { for: uid }, text: element.error"></label>
+            <!-- /ko -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </div>
+</fieldset>

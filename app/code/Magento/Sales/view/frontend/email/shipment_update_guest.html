@@ -1,0 +1,52 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "Update to your %store_name shipment" store_name=$store.getFrontendName()}} @-->
+<!--@vars {
+"var billing.getName()":"Guest Customer Name",
+"var comment":"Order Comment",
+"var order.increment_id":"Order Id",
+"var order.getFrontendStatusLabel()":"Order Status",
+"var shipment.increment_id":"Shipment Id"
+} @-->
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "%name," name=$billing.getName()}}</p>
+            <p>
+                {{trans
+                    "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."
+
+                    increment_id=$order.increment_id
+                    order_status=$order.getFrontendStatusLabel()
+                |raw}}
+            </p>
+            <p>
+                {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>' store_email=$store_email |raw}}{{depend store_phone}} {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}{{/depend}}.
+                {{depend store_hours}}
+                    {{trans 'Our hours are <span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
+                {{/depend}}
+            </p>
+        </td>
+    </tr>
+    <tr class="email-information">
+        <td>
+            {{depend comment}}
+            <table class="message-info">
+                <tr>
+                    <td>
+                        {{var comment|escape|nl2br}}
+                    </td>
+                </tr>
+            </table>
+            {{/depend}}
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

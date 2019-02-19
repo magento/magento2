@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\Downloadable\Block\Sales\Order\Email\Items\Downloadable */ ?>
+<?php $_item = $block->getItem() ?>
+<?php $_order = $block->getItem()->getOrder() ?>
+<tr>
+    <td class="item-info has-extra">
+        <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
+        <p class="sku"><?= /* @escapeNotVerified */  __('SKU') ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+        <?php if ($block->getItemOptions()): ?>
+        <dl>
+            <?php foreach ($block->getItemOptions() as $option): ?>
+            <dt><strong><em><?= /* @escapeNotVerified */  $option['label'] ?></em></strong></dt>
+            <dd><?= /* @escapeNotVerified */  $option['value'] ?></dd>
+            <?php endforeach; ?>
+        </dl>
+        <?php endif; ?>
+        <?php if ($links = $block->getLinks()->getPurchasedItems()): ?>
+        <dl>
+            <dt><strong><em><?= /* @escapeNotVerified */  $block->getLinksTitle() ?></em></strong></dt>
+            <?php foreach ($links as $link): ?>
+                <dd>
+                    <?= $block->escapeHtml($link->getLinkTitle()) ?>&nbsp;
+                    (<a href="<?= /* @escapeNotVerified */  $block->getPurchasedLinkUrl($link) ?>"><?= /* @escapeNotVerified */  __('download') ?></a>)
+                </dd>
+            <?php endforeach; ?>
+        </dl>
+        <?php endif; ?>
+        <?= $block->escapeHtml($_item->getDescription()) ?>
+    </td>
+    <td class="item-qty"><?= /* @escapeNotVerified */  $_item->getQty() * 1 ?></td>
+    <td class="item-price">
+        <?= /* @escapeNotVerified */  $block->getItemPrice($_item) ?>
+    </td>
+</tr>

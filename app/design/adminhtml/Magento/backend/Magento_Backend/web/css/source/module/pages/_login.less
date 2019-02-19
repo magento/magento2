@@ -1,0 +1,135 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@login-box__background-color: @color-white;
+@login-box__border: 1px solid @color-gray89;
+@login-box__max-width: 45rem;
+@login-box__min-height: 30rem;
+@login-box__shadow: 0 5px 30px 0 rgba(0, 0, 0, 1);
+@login-page__background-color: @color-very-dark-grayish-orange;
+
+//
+//  Admin user auth pages layout
+//  ---------------------------------------------
+
+//  Header
+.login-header {
+    margin: 0 0 3rem;
+}
+
+//  Login box
+.page-layout-admin-login {
+    .lib-vendor-box-align(center);
+    .lib-vendor-prefix-display(flex);
+    background-color: @login-page__background-color;
+    height: 101%;
+    max-height: 100%;
+    min-width: 50rem;
+
+
+    .page-wrapper {
+        .lib-vendor-prefix-flex-grow(0);
+        .lib-vendor-prefix-flex-shrink(0);
+        background-color: @login-box__background-color;
+        border: @login-box__border;
+        box-shadow: @login-box__shadow;
+        display: block;
+        float: none;
+        margin: auto;
+        max-width: @login-box__max-width;
+        min-height: @login-box__min-height;
+        min-width: 0;
+        padding: 40px 80px 50px;
+        position: relative;
+        width: 100%;
+        z-index: 1;
+    }
+
+    :-ms-input-placeholder {
+        color: transparent;
+    }
+
+    ::-webkit-input-placeholder {
+        color: transparent;
+    }
+
+    ::-moz-placeholder {
+        color: transparent;
+    }
+
+    .admin__legend {
+        color: @color-phoenix;
+        font-size: 2.6rem;
+        font-weight: @font-weight__light;
+        line-height: @line-height__s;
+        margin: -1rem 0 2.5rem;
+    }
+
+    .admin__field-info {
+        margin-bottom: 3rem;
+    }
+
+    .admin__field {
+        &:extend(.abs-field-rows all);
+    }
+
+    .messages {
+        margin-top: .5rem;
+
+        + form .admin__legend {
+            display: none;
+        }
+    }
+
+    .actions {
+        padding: 0 0 3rem;
+    }
+
+    .action-primary {
+        &:extend(.abs-action-l all);
+    }
+}
+
+//  Footer
+.login-footer {
+    color: @color-heathered-grey;
+    font-size: @font-size__xs;
+    font-weight: @font-weight__regular;
+    left: 0;
+    margin: 5rem 0 2rem;
+    position: absolute;
+    text-align: center;
+    top: 100%;
+    width: 100%;
+
+    .link-copyright {
+        &:before {
+            display: none;
+        }
+    }
+}
+
+//
+//  Login page features
+//  ---------------------------------------------
+
+.adminhtml-auth-login {
+    .form-actions {
+        display: table;
+        margin-top: -2rem;
+
+        .links {
+            display: table-header-group;
+        }
+
+        .actions {
+            padding: 3rem 0 0;
+        }
+    }
+}

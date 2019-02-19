@@ -1,0 +1,99 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+
+    .map-popup-wrapper.popup {
+        .action.close {
+            .lib-css(top, @popup-button-close__position-top);
+        }
+    }
+
+    .map-popup {
+        .lib-popup(
+            @_popup-margin-top: @indent__s,
+            @_popup-margin-left: false,
+            @_popup-content-margin: @indent__s 0 0,
+            @_popup-position-bottom: false,
+            @_popup-position-right: false,
+            @_popup-position: absolute
+        );
+        box-sizing: border-box;
+
+        .map-info-price {
+            &:extend(.abs-add-clearfix all);
+            margin-bottom: 15px;
+
+            .price-box {
+                margin: 0 0 @indent__base;
+
+                .label {
+                    &:after {
+                        content: ': ';
+                    }
+                }
+            }
+        }
+
+        .regular-price {
+            .price-label {
+                display: none;
+            }
+        }
+    }
+
+    .map-old-price,
+    .product-info-price .map-show-info {
+        &:not(:last-child) {
+            margin-right: @indent__s;
+        }
+    }
+
+    .map-old-price {
+        text-decoration: none;
+
+        .price-wrapper {
+            text-decoration: line-through;
+        }
+    }
+
+    .map-form-addtocart {
+        display: inline-block;
+        text-align: center;
+
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+    }
+
+    button.map-show-info {
+        .lib-button-reset();
+        .lib-button-as-link();
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .map-popup {
+        max-width: 100%;
+    }
+
+    .map-old-price,
+    .map-show-info {
+        display: inline-block;
+
+        &:not(:last-child) {
+            margin-bottom: @indent__s;
+        }
+    }
+}

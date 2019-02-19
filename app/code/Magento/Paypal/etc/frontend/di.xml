@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Paypal\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">paypal</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Paypal\Model\Session" type="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Paypal\Model\Session\Storage</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Paypal\Controller\Express\AbstractExpress">
+        <arguments>
+            <argument name="paypalSession" xsi:type="object">Magento\Paypal\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Controller\Express\GetToken">
+        <arguments>
+            <argument name="paypalSession" xsi:type="object">Magento\Paypal\Model\Session</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Paypal\Model\PayflowSession\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">paypal_payflow</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Paypal\Model\PayflowSession" type="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Paypal\Model\PayflowSession\Storage</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="paypal_billing" xsi:type="string">/paypal/billing/</item>
+                <item name="paypal_bml" xsi:type="string">/paypal/bml/</item>
+                <item name="paypal_hostedpro" xsi:type="string">/paypal/hostedpro/</item>
+                <item name="paypal_ipn" xsi:type="string">/paypal/ipn/</item>
+                <item name="paypal_payflow" xsi:type="string">/paypal/payflow/</item>
+                <item name="paypal_payflowadvanced" xsi:type="string">/paypal/payflowadvanced/</item>
+                <item name="paypal_payflowbml" xsi:type="string">/paypal/payflowbml/</item>
+                <item name="paypal_payflowexpress" xsi:type="string">/paypal/payflowexpress/</item>
+                <item name="paypal_transparent" xsi:type="string">/paypal/transparent/</item>
+                <item name="paypal_express" xsi:type="string">/paypal/express/</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Controller\Transparent\RequestSecureToken">
+        <arguments>
+            <argument name="sessionManager" xsi:type="object">Magento\Checkout\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Block\Payment\Info">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item xsi:type="string" name="is_secure_mode">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Payment\Model\CcGenericConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="payflowpro" xsi:type="const">Magento\Paypal\Model\Config::METHOD_PAYFLOWPRO</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="PaypalIframeCcConfigProvider" type="Magento\Payment\Model\IframeConfigProvider">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_PAYFLOWPRO</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="paypal_express_config_provider" xsi:type="object">Magento\Paypal\Model\ExpressConfigProvider</item>
+                <item name="paypal_iframe_config_provider" xsi:type="object">Magento\Paypal\Model\IframeConfigProvider</item>
+                <item name="paypal_billing_agreement_config_provider" xsi:type="object">Magento\Paypal\Model\BillingAgreementConfigProvider</item>
+                <item name="paypal_iframe_cc_config_provider" xsi:type="object">PaypalIframeCcConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Block\Express\InContext\Minicart\Button">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="template" xsi:type="string">Magento_Paypal::express/in-context/shortcut/button.phtml</item>
+                <item name="alias" xsi:type="string">paypal.express-in-context.mini-cart</item>
+                <item name="button_id" xsi:type="string">paypal-express-in-context-mini-cart</item>
+                <item name="link_data_action" xsi:type="string">paypal-in-context-checkout</item>
+            </argument>
+            <argument name="payment" xsi:type="object">Magento\Paypal\Model\Express</argument>
+        </arguments>
+    </type>
+
+
+    <type name="Magento\Vault\Model\Ui\TokensConfigProvider">
+        <arguments>
+            <argument name="tokenUiComponentProviders" xsi:type="array">
+                <item name="payflowpro" xsi:type="object">Magento\Paypal\Model\Payflow\Ui\TokenUiComponentProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\CustomerData\SectionPool">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="paypal-billing-agreement" xsi:type="string">Magento\Paypal\CustomerData\BillingAgreement</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\QuoteRepository\SaveHandler">
+        <plugin name="paypal-cartitem" type="Magento\Paypal\Model\Express\QuotePlugin"/>
+    </type>
+</config>

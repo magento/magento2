@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<sections>
+    <variations>
+        <class>\Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config</class>
+        <selector>[data-index="configurable"]</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <attributes_data>
+                <selector>[data-index="configurable"] fieldset</selector>
+            </attributes_data>
+            <matrix>
+                <selector>[data-index="configurable-matrix"]</selector>
+            </matrix>
+        </fields>
+    </variations>
+</sections>

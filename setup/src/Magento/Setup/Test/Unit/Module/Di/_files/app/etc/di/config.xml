@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding="utf-8" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\App\Cache">
+        <arguments>
+            <argument name="storeManager" xsi:type="object">customStoreManagerProxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Action\Context">
+        <arguments>
+            <argument name="layoutFactory" xsi:type="object">customLayoutFactory</argument>
+        </arguments>
+        <plugin name="first" type="Magento\Store\Model\Action\Plugin" />
+    </type>
+    <virtualType name="customStoreManagerProxy" type="Magento\Store\Model\StoreManager\Proxy" />
+    <virtualType name="customLayoutFactory" type="Magento\Framework\View\LayoutFactory" />
+</config>

@@ -1,0 +1,66 @@
+"Save & Generate","Save & Generate"
+"Edit Sitemap","Edit Sitemap"
+"New Sitemap","New Sitemap"
+"Sitemap Information","Sitemap Information"
+Sitemap,Sitemap
+Filename,Filename
+"example: sitemap.xml","example: sitemap.xml"
+Path,Path
+"example: ""/sitemap/"" or ""/"" for base path (path must be writeable)","example: ""/sitemap/"" or ""/"" for base path (path must be writeable)"
+"Store View","Store View"
+Generate,Generate
+"XML Sitemap","XML Sitemap"
+"Add Sitemap","Add Sitemap"
+Catalog,Catalog
+"You deleted the sitemap.","You deleted the sitemap."
+"We can't find a sitemap to delete.","We can't find a sitemap to delete."
+"This sitemap no longer exists.","This sitemap no longer exists."
+"Site Map","Site Map"
+"New Site Map","New Site Map"
+"The sitemap ""%1"" has been generated.","The sitemap ""%1"" has been generated."
+"We can't generate the sitemap right now.","We can't generate the sitemap right now."
+"We can't find a sitemap to generate.","We can't find a sitemap to generate."
+"You saved the sitemap.","You saved the sitemap."
+"The priority must be between 0 and 1.","The priority must be between 0 and 1."
+Always,Always
+Hourly,Hourly
+Daily,Daily
+Weekly,Weekly
+Monthly,Monthly
+Yearly,Yearly
+Never,Never
+"File handler unreachable","File handler unreachable"
+"Please define a correct path.","Please define a correct path."
+"Please create the specified folder ""%1"" before saving the sitemap.","Please create the specified folder ""%1"" before saving the sitemap."
+"Please make sure that ""%1"" is writable by the web-server.","Please make sure that ""%1"" is writable by the web-server."
+"Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.","Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed."
+None,None
+"Base Only","Base Only"
+All,All
+"Sitemap generate Warnings","Sitemap generate Warnings"
+"Sitemap Generation Warnings","Sitemap Generation Warnings"
+"XML Sitemap Section","XML Sitemap Section"
+"Categories Options","Categories Options"
+Frequency,Frequency
+Priority,Priority
+"Valid values range from 0.0 to 1.0.","Valid values range from 0.0 to 1.0."
+"Products Options","Products Options"
+"Add Images into Sitemap","Add Images into Sitemap"
+"CMS Pages Options","CMS Pages Options"
+"Generation Settings","Generation Settings"
+Enabled,Enabled
+"Error Email Recipient","Error Email Recipient"
+"Error Email Sender","Error Email Sender"
+"Error Email Template","Error Email Template"
+"Email template chosen based on theme fallback when ""Default"" option is selected.","Email template chosen based on theme fallback when ""Default"" option is selected."
+"Start Time","Start Time"
+"Sitemap File Limits","Sitemap File Limits"
+"Maximum No of URLs Per File","Maximum No of URLs Per File"
+"Maximum File Size","Maximum File Size"
+"File size in bytes.","File size in bytes."
+"Search Engine Submission Settings","Search Engine Submission Settings"
+"Enable Submission to Robots.txt","Enable Submission to Robots.txt"
+ID,ID
+"Link for Google","Link for Google"
+"Last Generated","Last Generated"
+Action,Action

@@ -1,0 +1,348 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+//  Colors
+@btn__base__background-color: @color-gray89;
+@btn__base__color: @color-brownie;
+@btn__base__active__background-color: darken(@btn__base__background-color, 5%);
+@btn__base__disabled__background-color: lighten(@btn__base__background-color, 5%);
+@btn__base__hover__background-color: darken(@btn__base__background-color, 3%);
+
+@btn-prime__color: @color-white;
+@btn-prime__background-color: @color-prime;
+@btn-prime__color-gradient-start: @color-phoenix-down;
+@btn-prime__color-gradient-end: @color-phoenix-rise;
+@btn-prime__border-color: @color-gray79;
+@btn-prime__disabled__background-color: lighten(@btn-prime__background-color, 10%);
+
+@btn-secondary__color: @color-white;
+@btn-secondary__background-color: @color-brownie;
+@btn-secondary__hover__background-color: lighten(@btn-secondary__background-color, 5%);
+@btn-secondary__disabled__background-color: lighten(@btn-secondary__background-color, 0%);
+@btn-secondary__active__background-color: lighten(@btn-secondary__background-color, 2%);
+
+@triangle__base__size: @btn__height__base / 2;
+
+//  Expand button
+@color-btn-expand: @base__color;
+@color-btn-expand-hover: lighten(@base__color, 5%);
+@height-triangle-btn-expand: .36em;
+@width-triangle-btn-expand: .57em;
+
+//
+//  Common
+//  _____________________________________________
+
+.btn-wrap {
+    margin: 0 auto;
+
+    .btn {
+        width: 100%;
+    }
+}
+
+.btn {
+    background: @btn__base__background-color none;
+    border: none;
+    color: @btn__base__color;
+    display: inline-block;
+    font-size: @btn__base__font-size;
+    font-weight: @font-weight__semibold;
+    padding: @btn__base__padding-top .9em;
+    text-align: center;
+
+    &:hover {
+        background-color: @btn__base__hover__background-color;
+        color: @color-brownie;
+        text-decoration: none;
+    }
+
+    &:active {
+        background-color: @btn__base__active__background-color;
+    }
+
+    //  Disabled state
+    &[disabled],
+    &.disabled {
+        cursor: default;
+        opacity: @disabled__opacity;
+        pointer-events: none;
+    }
+}
+
+.btn-large {
+    padding: .75em 1.25em;
+}
+
+.btn-medium {
+    font-size: @btn__medium__font-size;
+    padding: .5em 1.5em .6em;
+}
+
+//
+//  Buttons
+//  ---------------------------------------------
+
+.btn-link {
+    background-color: transparent;
+    border: none;
+    color: @link__color;
+    font-family: @font-family__base;
+    font-size: @base__font-size;
+
+    &:hover,
+    &:active,
+    &:focus {
+        background-color: transparent;
+        color: @link__hover__color;
+    }
+}
+
+.btn-prime {
+    background-color: @btn-prime__background-color;
+    color: @btn-prime__color;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, .25);
+
+    &:focus,
+    &:hover {
+        .lib-background-gradient(
+        @_background-gradient: true,
+        @_background-gradient-direction: horizontal,
+        @_background-gradient-color-start: @btn-prime__color-gradient-start,
+        @_background-gradient-color-end: @btn-prime__color-gradient-end
+        );
+        color: @btn-prime__color;
+    }
+
+    &:active {
+        .lib-background-gradient(
+        @_background-gradient: true,
+        @_background-gradient-direction: horizontal,
+        @_background-gradient-color-start: @btn-prime__color-gradient-end,
+        @_background-gradient-color-end: @btn-prime__color-gradient-start
+        );
+        color: @btn-prime__color;
+    }
+}
+
+.btn-secondary {
+    background-color: @btn-secondary__background-color;
+    color: @btn-secondary__color;
+
+    &:hover {
+        background-color: @btn-secondary__hover__background-color;
+        color: @btn-secondary__color;
+    }
+
+    &:active,
+    &:focus {
+        background-color: @btn-secondary__active__background-color;
+        color: @btn-secondary__color;
+    }
+}
+
+//
+//  Triangle modification
+//  ---------------------------------------------
+
+[class*='btn-wrap-triangle'] {
+    overflow: hidden;
+    position: relative;
+
+    .btn {
+        &:after {
+            border-style: solid;
+            content: '';
+            height: 0;
+            position: absolute;
+            top: 0;
+            width: 0;
+        }
+    }
+}
+
+//  Right
+.btn-wrap-triangle-right {
+    display: inline-block;
+    padding-right: @triangle__base__size - .1;
+    position: relative;
+
+    .btn {
+        text-indent: @triangle__base__size / 2;
+
+        &:after {
+            border-color: transparent transparent transparent @btn__base__background-color;
+            border-width: @triangle__base__size 0 @triangle__base__size @triangle__base__size;
+            left: 100%;
+            margin-left: -@triangle__base__size + .1;
+        }
+
+        &:focus,
+        &:hover {
+            &:after {
+                border-left-color: @btn__base__hover__background-color;
+            }
+        }
+
+        &:active {
+            &:after {
+                border-left-color: @btn__base__active__background-color;
+            }
+        }
+
+        &:not([disabled]),
+        &:not(.disabled) {
+            &:active {
+                left: 1px;
+            }
+        }
+    }
+
+    .btn-prime {
+        &:after {
+            border-color: transparent transparent transparent @btn-prime__background-color;
+        }
+
+        &:focus,
+        &:hover {
+            &:after {
+                border-left-color: @btn-prime__color-gradient-end;
+            }
+        }
+
+        &:active {
+            &:after {
+                border-left-color: @btn-prime__color-gradient-start;
+            }
+        }
+
+        &:not([disabled]),
+        &:not(.disabled) {
+            &:active {
+                left: 1px;
+            }
+        }
+    }
+}
+
+//  Left
+
+.btn-wrap-triangle-left {
+    display: inline-block;
+    padding-left: @triangle__base__size - .1;
+
+    .btn {
+        text-indent: -@triangle__base__size / 2;
+
+        &:after {
+            border-color: transparent @btn__base__background-color transparent transparent;
+            border-width: @triangle__base__size @triangle__base__size @triangle__base__size 0;
+            margin-right: -@triangle__base__size + .1;
+            right: 100%;
+        }
+
+        &:focus,
+        &:hover {
+            &:after {
+                border-right-color: @btn__base__hover__background-color;
+            }
+        }
+
+        &:active {
+            &:after {
+                border-right-color: @btn__base__active__background-color;
+            }
+        }
+
+        &:not([disabled]),
+        &:not(.disabled) {
+            &:active {
+                right: 1px;
+            }
+        }
+    }
+
+    .btn-prime {
+        &:after {
+            border-color: transparent @btn-prime__background-color transparent transparent;
+        }
+
+        &:focus,
+        &:hover {
+            &:after {
+                border-right-color: @btn-prime__color-gradient-start;
+            }
+        }
+
+        &:active {
+            &:after {
+                border-right-color: @btn-prime__color-gradient-end;
+            }
+        }
+
+        &:not([disabled]),
+        &:not(.disabled) {
+            &:active {
+                right: 1px;
+            }
+        }
+    }
+}
+
+//
+//  Expand button
+//  ---------------------------------------------
+
+.btn-expand {
+    background-color: transparent;
+    border: none;
+    color: @color-btn-expand;
+    font-family: @font-family__base;
+    font-size: @base__font-size;
+    font-weight: @font-weight__bold;
+    padding: 0;
+    position: relative;
+
+    &.expanded {
+        &:after {
+            border-color: transparent transparent @color-btn-expand transparent;
+            border-width: 0 @width-triangle-btn-expand / 2 @height-triangle-btn-expand @width-triangle-btn-expand / 2;
+        }
+
+        &:hover {
+            &:after {
+                border-color: transparent transparent @color-btn-expand-hover transparent;
+            }
+        }
+    }
+
+    &:hover {
+        background-color: transparent;
+        border: none;
+        color: @color-btn-expand-hover;
+
+        &:after {
+            border-color: @color-btn-expand-hover transparent transparent transparent;
+        }
+    }
+
+    &:after {
+        border-color: @color-btn-expand transparent transparent transparent;
+        border-style: solid;
+        border-width: @height-triangle-btn-expand @width-triangle-btn-expand / 2 0 @width-triangle-btn-expand / 2;
+        content: '';
+        height: 0;
+        left: 100%;
+        margin-left: .5em;
+        margin-top: -(@height-triangle-btn-expand / 2);
+        position: absolute;
+        top: 50%;
+        width: 0;
+    }
+}

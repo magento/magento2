@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
+    <!-- Despite reference element is not declared yet, it will "save this action for later" -->
+    <referenceBlock name="block_one">
+        <action method="addText">
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="value" xsi:type="string">1</argument>
+        </action>
+    </referenceBlock>
+    <container name="container_one" label="Container 1">
+        <block class="Magento\Framework\View\Element\Text" name="block_one">
+            <action method="addText">
+                <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="value" xsi:type="string">2</argument>
+            </action>
+        </block>
+        <block class="Magento\Framework\View\Element\Text" name="block_two">
+            <action method="setText">
+                <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="value" xsi:type="string">3</argument>
+            </action>
+        </block>
+    </container>
+    <!-- A conventional use of reference - after element is declared -->
+    <referenceBlock name="block_two">
+        <action method="setText">
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="value" xsi:type="string">4</argument>
+        </action>
+    </referenceBlock>
+    <!-- Reference to non-existing element will remain ignored -->
+    <referenceBlock name="nonexistent">
+        <action method="addText">
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="value" xsi:type="string">5</argument>
+        </action>
+    </referenceBlock>
+</layout>

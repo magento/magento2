@@ -1,0 +1,181 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@order-create-sidebar__font-size: 1.5rem;
+@order-create-sidebar__font-size__xs: 1.1rem;
+@order-create-sidebar__color: @color-very-dark-gray;
+@order-create-sidebar__margin: 2.4rem;
+@order-create-sidebar__padding: @indent__base;
+@order-create-sidebar__margin__s: .5rem;
+@order-create-sidebar__margin__m: 1rem;
+@order-create-sidebar__margin__reqular: 1.7rem;
+@order-create-sidebar__border-color: @border__color;
+
+@order-create-sidebar-scroll__height: 24rem;
+
+//
+//  Order Sidebar
+//  ---------------------------------------------
+
+.order-sidebar {
+    &:extend(.admin__page-nav);
+    color: @order-create-sidebar__color;
+    padding: 3rem @order-create-sidebar__padding;
+
+    .order-currency {
+        float: none;
+        font-size: @font-size__base;
+        margin: 0 0 @order-create-sidebar__margin;
+        .admin__field-label {
+            display: block;
+            margin: 0 0 @order-create-sidebar__margin__m;
+            text-align: left;
+        }
+    }
+    .customer-activity-title {
+        border-bottom: 1px solid @order-create-sidebar__border-color;
+        font-size: 1.9rem;
+        font-weight: @font-weight__bold;
+        margin: 0 0 @order-create-sidebar__margin;
+        padding: 0 0 @order-create-sidebar__margin;
+    }
+    .admin__control-select {
+        margin: 0 0 @order-create-sidebar__margin__s;
+        width: 100%;
+    }
+    .order-sidebar-block {
+        border-bottom: 1px solid @order-create-sidebar__border-color;
+        margin: 0 0 @order-create-sidebar__margin;
+        padding: 0 0 @order-create-sidebar__margin;
+    }
+    .admin__table-primary {
+        color: @order-create-sidebar__color;
+        width: 100%;
+        th,
+        td {
+            &:first-child {
+                padding-left: @order-create-sidebar__padding;
+            }
+        }
+        .icon {
+            &:extend(.abs-icon all);
+            display: inline-block;
+            font-size: @order-create-sidebar__font-size + .1rem;
+            text-decoration: none;
+            vertical-align: middle;
+            &:after {
+                color: @order-create-sidebar__color;
+            }
+            &.icon-remove {
+                margin-left: -3px;
+                &:after {
+                    content: @order-create-icon-remove__content;
+                }
+            }
+            &.icon-add {
+                &:after {
+                    content: @order-create-icon-add__content;
+                }
+            }
+            &.icon-configure {
+                &:after {
+                    content: @order-create-icon-configure__content;
+                }
+                &:hover {
+                    &:after {
+                        color: @order-create-icon-plus__hover__color;
+                    }
+                }
+            }
+            > span {
+                &:extend(.abs-visually-hidden all);
+            }
+        }
+        .col-add {
+            text-align: right;
+            .icon-configure,
+            .icon-add {
+                margin-right: @order-create-sidebar__margin__m;
+            }
+        }
+    }
+    .action-refresh {
+        &:extend(.abs-icon all);
+        display: table-cell;
+        font-size: @order-create-icon-refresh__font-size;
+        padding-right: @order-create-sidebar__margin__m;
+        vertical-align: middle;
+        &:after {
+            color: @order-create-icon-refresh__color;
+            content: @order-create-icon-refresh__content;
+        }
+        &:hover {
+            &:after {
+                color: @order-create-icon-refresh__hover__color;
+            }
+            text-decoration: none;
+        }
+        > span {
+            &:extend(.abs-visually-hidden all);
+        }
+    }
+
+    .create-order-sidebar-block {
+        .sidebar-title-block {
+            margin: 0 0 @order-create-sidebar__margin;
+        }
+
+        .auto-scroll {
+            margin: 0 -@order-create-sidebar__padding @order-create-sidebar__margin__s;
+            max-height: @order-create-sidebar-scroll__height;
+            overflow: auto;
+            position: relative;
+
+            //  Force a scroll bar to appear on IOS devices
+            &::-webkit-scrollbar {
+                -webkit-appearance: none;
+                height: 4px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+                background-color: rgba(0,0,0,.5);
+                border-radius: 4px;
+            }
+
+            + .action-default {
+                margin-top: @order-create-sidebar__margin__reqular;
+            }
+
+            .no-items {
+                padding-left: @order-create-sidebar__padding;
+            }
+        }
+
+        .admin__field-option {
+            padding-top: 0;
+        }
+    }
+
+    .create-order-sidebar-label {
+        display: table-cell;
+        font-size: @order-create-sidebar__font-size;
+        font-weight: @font-weight__regular;
+        margin: 0;
+        vertical-align: middle;
+        + .admin__control-select {
+            margin-top: @order-create-sidebar__margin__reqular;
+        }
+    }
+    .actions {
+        .action-secondary {
+            width: 100%;
+        }
+    }
+}

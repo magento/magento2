@@ -1,0 +1,94 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@select-check__background-color: @color-gray89;
+@select-check__height: 5px;
+@select-check__size: 2.36em;
+@select-check__width: 8px;
+
+//
+//  Customized select with label wrap
+//  ---------------------------------------------
+
+.form-select-label {
+    border: 1px solid @form-el__border-color;
+    color: @form-el__color;
+    cursor: pointer;
+    display: block;
+    overflow: hidden;
+    position: relative;
+    z-index: 0;
+
+    &:hover,
+    &:hover:after {
+        border-color: @form-el__hover__border-color;
+    }
+
+    &:focus,
+    &:focus:after,
+    &:active,
+    &:active:after {
+        border-color: @form-el__focus__border-color;
+    }
+
+    &:after {
+        background: @select-check__background-color;
+        border-left: 1px solid @form-el__border-color;
+        bottom: 0;
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: @select-check__size;
+        z-index: -2;
+    }
+
+    &:before {
+        border-color: @form-el__color transparent transparent transparent;
+        border-style: solid;
+        border-width: @select-check__height @select-check__width / 2 0 @select-check__width / 2;
+        content: '';
+        height: 0;
+        margin-right: -(@select-check__width / 2);
+        margin-top: -(@select-check__height / 2);
+        position: absolute;
+        right: @select-check__size / 2;
+        top: 50%;
+        width: 0;
+        z-index: -1;
+    }
+
+    .form-el-select {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        content: '';
+        display: block;
+        margin: 0;
+        padding: @form-el__padding-top ~'calc(@{select-check__size} + 10%)' @form-el__padding-bottom @form-el__padding-side;
+        width: 110%;
+
+        &::-ms-expand {
+            display: none;
+        }
+    }
+}
+
+//
+//  Light customized select
+//  ---------------------------------------------
+
+.form-el-select {
+    background: @color-white;
+    border: 1px solid @form-el__border-color;
+    border-radius: @form-el__border-radius;
+    color: @form-el__color;
+    display: block;
+    padding: @form-el__padding-top @form-el__padding-side;
+}

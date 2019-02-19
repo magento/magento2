@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * This schema must be used to validate config.xml files
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config" type="configType" />
+    <xs:complexType name="configType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element name="default"  type="mixedDataType" />
+            <xs:element name="stores"   type="mixedDataType" />
+            <xs:element name="websites" type="mixedDataType" />
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="mixedDataType">
+        <xs:choice>
+            <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:choice>
+    </xs:complexType>
+</xs:schema>

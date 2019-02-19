@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\UrlRewrite\Test\TestCase\UpdateCustomUrlRewriteEntityTest" summary="Update Custom URL Rewrites" ticketId="MAGETWO-25784">
+        <variation name="UpdateCustomUrlRewriteEntityTestVariation1">
+            <data name="initialRewrite/dataset" xsi:type="string">default</data>
+            <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="urlRewrite/data/request_path" xsi:type="string">wishlist/%isolation%</data>
+            <data name="urlRewrite/data/target_path/entity" xsi:type="string">https://marketplace.magento.com/</data>
+            <data name="urlRewrite/data/redirect_type" xsi:type="string">Permanent (301)</data>
+            <data name="urlRewrite/data/description" xsi:type="string">test_description_relative path</data>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSuccessOutsideRedirect" />
+        </variation>
+        <variation name="UpdateCustomUrlRewriteEntityTestVariation2">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="initialRewrite/dataset" xsi:type="string">custom_rewrite_wishlist</data>
+            <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="urlRewrite/data/request_path" xsi:type="string">wishlist/%isolation%</data>
+            <data name="urlRewrite/data/target_path/entity" xsi:type="string">catalogsearch/result/?q=$%catalogProductSimple::defaul%sku$</data>
+            <data name="urlRewrite/data/redirect_type" xsi:type="string">Temporary (302)</data>
+            <data name="urlRewrite/data/description" xsi:type="string">test_description_relative path</data>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCustomSearchRedirect" />
+        </variation>
+    </testCase>
+</config>

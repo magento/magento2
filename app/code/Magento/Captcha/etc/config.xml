@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <captcha_folder>captcha</captcha_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
+        <admin>
+            <captcha>
+                <type>default</type>
+                <enable>1</enable>
+                <font>linlibertine</font>
+                <mode>after_fail</mode>
+                <forms>backend_forgotpassword,backend_login</forms>
+                <failed_attempts_login>3</failed_attempts_login>
+                <failed_attempts_ip>1000</failed_attempts_ip>
+                <timeout>7</timeout>
+                <length>4-5</length>
+                <symbols>ABCDEFGHJKMnpqrstuvwxyz23456789</symbols>
+                <case_sensitive>0</case_sensitive>
+                <shown_to_logged_in_user />
+                <always_for>
+                    <backend_forgotpassword>1</backend_forgotpassword>
+                </always_for>
+            </captcha>
+        </admin>
+        <customer>
+            <captcha>
+                <type>default</type>
+                <enable>1</enable>
+                <font>linlibertine</font>
+                <mode>after_fail</mode>
+                <forms>user_forgotpassword,user_login</forms>
+                <failed_attempts_login>3</failed_attempts_login>
+                <failed_attempts_ip>1000</failed_attempts_ip>
+                <timeout>7</timeout>
+                <length>4-5</length>
+                <symbols>ABCDEFGHJKMnpqrstuvwxyz23456789</symbols>
+                <case_sensitive>0</case_sensitive>
+                <shown_to_logged_in_user>
+                    <contact_us>1</contact_us>
+                    <user_edit>1</user_edit>
+                </shown_to_logged_in_user>
+                <always_for>
+                    <user_create>1</user_create>
+                    <user_forgotpassword>1</user_forgotpassword>
+                    <contact_us>1</contact_us>
+                </always_for>
+            </captcha>
+        </customer>
+        <captcha translate="label">
+            <fonts>
+                <linlibertine>
+                    <label>LinLibertine</label>
+                    <path>LinLibertineFont/LinLibertine_Bd-2.8.1.ttf</path>
+                </linlibertine>
+            </fonts>
+            <frontend>
+                <areas>
+                    <user_create>
+                        <label>Create user</label>
+                    </user_create>
+                    <user_login>
+                        <label>Login</label>
+                    </user_login>
+                    <user_forgotpassword>
+                        <label>Forgot password</label>
+                    </user_forgotpassword>
+                    <contact_us>
+                        <label>Contact Us</label>
+                    </contact_us>
+                    <user_edit>
+                        <label>Change password</label>
+                    </user_edit>
+                </areas>
+            </frontend>
+            <backend>
+                <areas>
+                    <backend_login>
+                        <label>Admin Login</label>
+                    </backend_login>
+                    <backend_forgotpassword>
+                        <label>Admin Forgot Password</label>
+                    </backend_forgotpassword>
+                </areas>
+            </backend>
+        </captcha>
+    </default>
+</config>

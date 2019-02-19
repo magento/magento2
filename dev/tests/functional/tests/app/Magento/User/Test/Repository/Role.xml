@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\User\Test\Repository\Role">
+        <dataset name="default">
+            <field name="rolename" xsi:type="string">RoleName%isolation%</field>
+            <field name="resource_access" xsi:type="string">All</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+        </dataset>
+
+        <dataset name="Administrators">
+            <field name="rolename" xsi:type="string">Administrators</field>
+            <field name="resource_access" xsi:type="string">All</field>
+            <field name="role_id" xsi:type="string">1</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+        </dataset>
+
+        <dataset name="role_sales">
+            <field name="rolename" xsi:type="string">RoleName%isolation%</field>
+            <field name="resource_access" xsi:type="string">Custom</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="roles_resources" xsi:type="array">
+                <item name="Sales" xsi:type="string">Magento_Sales::sales</item>
+                <item name="Operation" xsi:type="string">Magento_Sales::sales_operation</item>
+                <item name="Actions" xsi:type="string">Magento_Sales::actions</item>
+                <item name="Orders" xsi:type="string">Magento_Sales::sales_order</item>
+                <item name="Create" xsi:type="string">Magento_Sales::create</item>
+                <item name="View" xsi:type="string">Magento_Sales::actions_view</item>
+                <item name="Send Order Email" xsi:type="string">Magento_Sales::email</item>
+                <item name="Reorder" xsi:type="string">Magento_Sales::reorder</item>
+                <item name="Edit" xsi:type="string">Magento_Sales::actions_edit</item>
+                <item name="Cancel" xsi:type="string">Magento_Sales::cancel</item>
+                <item name="Accept or Deny Payment" xsi:type="string">Magento_Sales::review_payment</item>
+                <item name="Capture" xsi:type="string">Magento_Sales::capture</item>
+                <item name="Invoice" xsi:type="string">Magento_Sales::invoice</item>
+                <item name="Credit Memos" xsi:type="string">Magento_Sales::creditmemo</item>
+                <item name="Hold" xsi:type="string">Magento_Sales::hold</item>
+                <item name="Unhold" xsi:type="string">Magento_Sales::unhold</item>
+                <item name="Ship" xsi:type="string">Magento_Sales::ship</item>
+                <item name="Comment" xsi:type="string">Magento_Sales::comment</item>
+                <item name="Send Sales Emails" xsi:type="string">Magento_Sales::emails</item>
+                <item name="System" xsi:type="string">Magento_Backend::system</item>
+                <item name="Other Settings" xsi:type="string">Magento_Backend::system_other_settings</item>
+                <item name="Notifications" xsi:type="string">Magento_AdminNotification::adminnotification</item>
+                <item name="Show list" xsi:type="string">Magento_AdminNotification::show_list</item>
+            </field>
+        </dataset>
+
+        <dataset name="role_without_variable">
+            <field name="rolename" xsi:type="string">RoleName%isolation%</field>
+            <field name="resource_access" xsi:type="string">Custom</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="roles_resources" xsi:type="array">
+                <item name="Dashboard" xsi:type="string">Magento_Backend::dashboard</item>
+                <item name="AdminNotification" xsi:type="string">Magento_AdminNotification::adminnotification</item>
+                <item name="EncryptionKey" xsi:type="string">Magento_EncryptionKey::crypt_key</item>
+                <item name="Content" xsi:type="string">Magento_Backend::content</item>
+                <item name="ContentElements" xsi:type="string">Magento_Backend::content_elements</item>
+                <item name="Page" xsi:type="string">Magento_Cms::page</item>
+                <item name="SavePage" xsi:type="string">Magento_Cms::save</item>
+                <item name="DeletePage" xsi:type="string">Magento_Cms::page_delete</item>
+            </field>
+        </dataset>
+
+        <dataset name="role_without_synonym">
+            <field name="rolename" xsi:type="string">RoleName%isolation%</field>
+            <field name="resource_access" xsi:type="string">Custom</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="roles_resources" xsi:type="array">
+                <item name="Dashboard" xsi:type="string">Magento_Backend::dashboard</item>
+                <item name="Marketing" xsi:type="string">Magento_Backend::marketing</item>
+                <item name="Seo" xsi:type="string">Magento_Backend::marketing_seo</item>
+                <item name="SearchTerms" xsi:type="string">Magento_Search::search</item>
+                <item name="UrlRewrite" xsi:type="string">Magento_UrlRewrite::urlrewrite</item>
+                <item name="Sitemap" xsi:type="string">Magento_Sitemap::sitemap</item>
+            </field>
+        </dataset>
+
+        <dataset name="role_empty_config">
+            <field name="rolename" xsi:type="string">RoleName%isolation%</field>
+            <field name="resource_access" xsi:type="string">Custom</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="roles_resources" xsi:type="array">
+                <item name="Dashboard" xsi:type="string">Magento_Backend::dashboard</item>
+                <item name="Configuration" xsi:type="string">Magento_Config::config</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

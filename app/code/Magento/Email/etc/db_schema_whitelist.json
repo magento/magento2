@@ -1,0 +1,26 @@
+{
+    "email_template": {
+        "column": {
+            "template_id": true,
+            "template_code": true,
+            "template_text": true,
+            "template_styles": true,
+            "template_type": true,
+            "template_subject": true,
+            "template_sender_name": true,
+            "template_sender_email": true,
+            "added_at": true,
+            "modified_at": true,
+            "orig_template_code": true,
+            "orig_template_variables": true
+        },
+        "index": {
+            "EMAIL_TEMPLATE_ADDED_AT": true,
+            "EMAIL_TEMPLATE_MODIFIED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EMAIL_TEMPLATE_TEMPLATE_CODE": true
+        }
+    }
+}

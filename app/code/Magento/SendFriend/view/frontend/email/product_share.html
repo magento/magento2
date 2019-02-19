@@ -1,0 +1,36 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "Welcome, %name" name=$name}} @-->
+<!--@vars {
+"var product_name":"Product name",
+"var email":"Recipient Email address",
+"var name":"Recipient name",
+"var message|raw":"Sender custom message",
+"var sender_email":"Sender email",
+"var sender_name":"Sender name",
+"var product_url":"URL for Product",
+"var product_image":"URL for product small image (75 px)"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<p class="greeting">{{trans "%name," name=$name}}</p>
+<p>{{trans "%sender_name wants to share this product with you:" sender_name=$sender_name}} <a href="{{var product_url}}">{{var product_name}}</a></p>
+
+{{depend message}}
+<table class="message-info">
+    <tr>
+        <td>
+            <h3>{{trans "Message from %sender_name:" sender_name=$sender_name}}</h3>
+            {{var message|raw}}
+        </td>
+    </tr>
+</table>
+<br />
+{{/depend}}
+
+{{template config_path="design/email/footer_template"}}

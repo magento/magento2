@@ -1,0 +1,29 @@
+"Add Tax","Add Tax"
+"Delete Tax","Delete Tax"
+"All Websites","All Websites"
+FPT,FPT
+"You must set unique country-state combinations within the same fixed product tax","You must set unique country-state combinations within the same fixed product tax"
+"Including FPT only","Including FPT only"
+"Including FPT and FPT description","Including FPT and FPT description"
+"Excluding FPT. Including FPT description and final price","Excluding FPT. Including FPT description and final price"
+"Excluding FPT","Excluding FPT"
+label_value,label_value
+frontend_label,frontend_label
+"Fixed Product Tax","Fixed Product Tax"
+Country/State,Country/State
+Tax,Tax
+Website,Website
+Action,Action
+"Excl. Tax","Excl. Tax"
+Total,Total
+"Incl. Tax","Incl. Tax"
+"Total Incl. Tax","Total Incl. Tax"
+"Final Price","Final Price"
+"Fixed Product Taxes","Fixed Product Taxes"
+"Enable FPT","Enable FPT"
+"Display Prices In Product Lists","Display Prices In Product Lists"
+"Display Prices On Product View Page","Display Prices On Product View Page"
+"Display Prices In Sales Modules","Display Prices In Sales Modules"
+"Display Prices In Emails","Display Prices In Emails"
+"Apply Tax To FPT","Apply Tax To FPT"
+"Include FPT In Subtotal","Include FPT In Subtotal"

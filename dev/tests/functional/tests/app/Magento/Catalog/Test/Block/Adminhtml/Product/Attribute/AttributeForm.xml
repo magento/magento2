@@ -1,0 +1,91 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<sections>
+    <properties>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>.product_form_product_form_add_attribute_modal_create_new_attribute_modal_product_attribute_add_form</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <frontend_label>
+                <selector>[name^='frontend_label']</selector>
+            </frontend_label>
+            <frontend_input>
+                <input>select</input>
+            </frontend_input>
+            <is_required>
+                <input>switcher</input>
+            </is_required>
+            <options>
+                <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Options</class>
+                <selector>[data-index="attribute_options_select_container"]</selector>
+                <strategy>css selector</strategy>
+            </options>
+        </fields>
+    </properties>
+    <advanced-properties>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index="advanced_fieldset"]</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <attribute_code/>
+            <is_global>
+                <input>select</input>
+            </is_global>
+            <is_unique>
+                <input>switcher</input>
+            </is_unique>
+        </fields>
+    </advanced-properties>
+    <manage-labels>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index="manage-titles"]</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <manage_frontend_label>
+                <selector>[name^='frontend_label']</selector>
+            </manage_frontend_label>
+        </fields>
+    </manage-labels>
+    <frontend-properties>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index="front_fieldset"]</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <is_searchable>
+                <input>switcher</input>
+            </is_searchable>
+            <is_visible_in_advanced_search>
+                <input>switcher</input>
+            </is_visible_in_advanced_search>
+            <is_comparable>
+                <input>switcher</input>
+            </is_comparable>
+            <is_filterable>
+                <input>select</input>
+            </is_filterable>
+            <is_filterable_in_search>
+                <input>switcher</input>
+            </is_filterable_in_search>
+            <is_used_for_promo_rules>
+                <input>switcher</input>
+            </is_used_for_promo_rules>
+            <is_html_allowed_on_front>
+                <input>switcher</input>
+            </is_html_allowed_on_front>
+            <is_visible_on_front>
+                <input>switcher</input>
+            </is_visible_on_front>
+            <used_in_product_listing>
+                <input>switcher</input>
+            </used_in_product_listing>
+            <used_for_sort_by>
+                <input>switcher</input>
+            </used_for_sort_by>
+        </fields>
+    </frontend-properties>
+</sections>

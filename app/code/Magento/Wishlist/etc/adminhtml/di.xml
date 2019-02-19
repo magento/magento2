@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Wishlist\Model\Wishlist">
+        <arguments>
+            <argument name="useCurrentWebsite" xsi:type="boolean">false</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Wishlist\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">wishlist</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Wishlist\Model\Session" type="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Wishlist\Model\Session\Storage</argument>
+        </arguments>
+    </virtualType>
+</config>

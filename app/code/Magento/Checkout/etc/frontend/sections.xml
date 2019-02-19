@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Customer:etc/sections.xsd">
+    <action name="checkout/cart/add">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/delete">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/updatePost">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/updateItemOptions">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/couponPost">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/estimatePost">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/estimateUpdatePost">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/onepage/saveOrder">
+        <section name="cart"/>
+        <section name="checkout-data"/>
+        <section name="last-ordered-items"/>
+    </action>
+    <action name="checkout/sidebar/removeItem">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/sidebar/updateItemQty">
+        <section name="cart"/>
+    </action>
+    <action name="rest/*/V1/carts/*/payment-information">
+        <section name="cart"/>
+        <section name="checkout-data"/>
+        <section name="last-ordered-items"/>
+    </action>
+    <action name="rest/*/V1/guest-carts/*/payment-information">
+        <section name="cart"/>
+    </action>
+    <action name="rest/*/V1/guest-carts/*/selected-payment-method">
+        <section name="cart"/>
+        <section name="checkout-data"/>
+    </action>
+    <action name="rest/*/V1/carts/*/selected-payment-method">
+        <section name="cart"/>
+        <section name="checkout-data"/>
+    </action>
+</config>

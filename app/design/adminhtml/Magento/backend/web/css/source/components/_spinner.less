@@ -1,0 +1,104 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Spinner
+//  _____________________________________________
+
+//  Base spinner
+
+.spinner {
+    ._spinner-loop(
+    @spinner-spin-count,
+    @spinner-rotate,
+    @spinner-delay
+    );
+    ._spinner-keyframes();
+    display: inline-block;
+    font-size: @spinner__base-size;
+    height: 1em;
+    margin-right: 1.5rem;
+    position: relative;
+    width: 1em;
+
+    > span {
+        ._spinner_transform();
+        background-color: @spinner-second-color;
+        border-radius: @spinner-border-radius;
+        clip: rect(0 1em/3.5 .1em 0);
+        height: .1em;
+        margin-top: 1em / 2;
+        position: absolute;
+        width: 1em;
+    }
+}
+
+//  ToDo UI: remove old loaders style while loaders redesign
+
+.popup-loading {
+    background: rgba(255, 255, 255, .8);
+    border-color: @color-light-phoenix;
+    color: @color-light-phoenix;
+    font-size: 14px;
+    font-weight: bold;
+    left: 50%;
+    margin-left: -100px;
+    padding: 100px 0 10px;
+    position: fixed;
+    text-align: center;
+    top: 40%;
+    width: 200px;
+    z-index: 1003;
+
+    &:after {
+        background-image: url('@{baseDir}images/loader-1.gif');
+        content: '';
+        height: 64px;
+        left: 50%;
+        margin: -32px 0 0 -32px;
+        position: absolute;
+        top: 40%;
+        width: 64px;
+        z-index: 2;
+    }
+}
+
+//  Loading mask
+.loading-old,
+.loading-mask {
+    background: rgba(255, 255, 255, .4);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 2003;
+
+    img {
+        display: none;
+    }
+
+    p {
+        margin-top: 118px;
+    }
+
+    .loader {
+        background: @color-ivory url('@{baseDir}images/loader-1.gif') no-repeat 50% 30%;
+        border-radius: 5px;
+        bottom: 0;
+        color: @color-gray34;
+        font-size: 14px;
+        font-weight: bold;
+        height: 160px;
+        left: 0;
+        margin: auto;
+        opacity: .95;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        top: 0;
+        width: 160px;
+    }
+}

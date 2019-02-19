@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/catalog_attributes.xsd">
+    <group name="quote_item">
+        <attribute name="sku"/>
+        <attribute name="type_id"/>
+        <attribute name="name"/>
+        <attribute name="status"/>
+        <attribute name="visibility"/>
+        <attribute name="price"/>
+        <attribute name="weight"/>
+        <attribute name="url_path"/>
+        <attribute name="url_key"/>
+        <attribute name="thumbnail"/>
+        <attribute name="small_image"/>
+        <attribute name="tax_class_id"/>
+        <attribute name="special_from_date"/>
+        <attribute name="special_to_date"/>
+        <attribute name="special_price"/>
+        <attribute name="cost"/>
+        <attribute name="gift_message_available"/>
+    </group>
+</config>

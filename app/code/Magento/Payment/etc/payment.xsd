@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema elementFormDefault="qualified"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="payment">
+        <xs:annotation>
+            <xs:documentation>
+                The root node for payment configuration
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="credit_cards" type="credit_cardsType" minOccurs="0" />
+                <xs:element name="groups" type="groupsType" minOccurs="0" />
+                <xs:element name="methods" type="methodsType" minOccurs="0" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="credit_cardsType">
+        <xs:annotation>
+            <xs:documentation>
+                The containing node for a list of credit card types.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="type" type="typeType" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="typeType">
+        <xs:annotation>
+            <xs:documentation>
+                The definition of a credit card type.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element name="label" type="xs:string" />
+        </xs:all>
+        <xs:attribute name="id" type="xs:ID" use="required" />
+        <xs:attribute name="order" type="xs:integer" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="groupsType">
+        <xs:annotation>
+            <xs:documentation>
+                The containing node for a list of payment groups.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="group" type="groupType" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="groupType">
+        <xs:annotation>
+            <xs:documentation>
+                The definition of a payment group.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element name="label" type="xs:string" />
+        </xs:all>
+        <xs:attribute name="id" type="xs:ID" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="methodsType">
+        <xs:annotation>
+            <xs:documentation>
+                The containing node for a list of payment methods.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="method" type="methodType" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="methodType">
+        <xs:annotation>
+            <xs:documentation>
+                The definition of a payment method.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element name="allow_multiple_address" type="xs:integer" minOccurs="0" />
+        </xs:all>
+        <xs:attribute name="name" type="xs:ID" use="required" />
+    </xs:complexType>
+
+</xs:schema>

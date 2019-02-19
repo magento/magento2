@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Magento_GroupedProduct::css/grouped-product.css"/>
+    </head>
+    <update handle="groupedproduct_popup_grid"/>
+    <body>
+        <referenceBlock name="product_tabs">
+            <block class="Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts" name="catalog.product.edit.tab.grouped.container" template="Magento_GroupedProduct::product/grouped/grouped.phtml">
+                <block class="Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts" name="catalog.product.edit.tab.super.list" as="list" template="Magento_GroupedProduct::product/grouped/list.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="catalog.product.edit.tab.super.grid.popup.container" as="catalog.product.group.grid.popup.container"/>
+            </block>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">grouped</argument>
+                <argument name="block" xsi:type="string">catalog.product.edit.tab.grouped.container</argument>
+            </action>
+            <referenceBlock name="product_tabs.customer_options">
+                <arguments>
+                    <argument name="can_show" xsi:type="boolean">false</argument>
+                </arguments>
+            </referenceBlock>
+            <referenceBlock name="product_tabs.product-alerts">
+                <arguments>
+                    <argument name="can_show" xsi:type="boolean">false</argument>
+                </arguments>
+            </referenceBlock>
+        </referenceBlock>
+    </body>
+</page>

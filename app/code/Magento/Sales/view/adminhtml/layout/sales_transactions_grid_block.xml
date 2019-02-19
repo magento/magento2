@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="sales_transactions.grid.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="sales.transactions.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">sales_transactions_grid</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Sales\Model\ResourceModel\Transaction\Grid\Collection</argument>
+                    <argument name="use_ajax" xsi:type="string">true</argument>
+                    <argument name="default_sort" xsi:type="string">created_at</argument>
+                    <argument name="default_dir" xsi:type="string">DESC</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                    <argument name="grid_url" xsi:type="url" path="*/*/grid">
+                        <param name="_current">1</param>
+                    </argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="sales.transactions.grid.columnSet">
+                    <arguments>
+                        <argument name="id" xsi:type="string">sales_transactions_grid</argument>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">sales/*/view</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="txn_id" xsi:type="string">getId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="transaction_id" as="transaction_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">ID</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                            <argument name="index" xsi:type="string">transaction_id</argument>
+                            <argument name="id" xsi:type="string">transaction_id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="increment_id" as="increment_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Order ID</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="index" xsi:type="string">increment_id</argument>
+                            <argument name="id" xsi:type="string">increment_id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-order-id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-order-id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="txn_id" as="txn_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Transaction ID</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="index" xsi:type="string">txn_id</argument>
+                            <argument name="id" xsi:type="string">txn_id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-transaction-id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-transaction-id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="parent_txn_id" as="parent_txn_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Parent Transaction ID</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="index" xsi:type="string">parent_txn_id</argument>
+                            <argument name="id" xsi:type="string">parent_txn_id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-parent-transaction-id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-parent-transaction-id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="method" as="method">
+                        <arguments>
+                            <argument name="id" xsi:type="string">method</argument>
+                            <argument name="header" xsi:type="string" translate="true">Payment Method</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="index" xsi:type="string">method</argument>
+                            <argument name="options" xsi:type="options" model="Magento\Payment\Model\ResourceModel\Grid\TypeList"/>
+                            <argument name="option_groups" xsi:type="options" model="Magento\Payment\Model\ResourceModel\Grid\GroupList"/>
+                            <argument name="header_css_class" xsi:type="string">col-method</argument>
+                            <argument name="column_css_class" xsi:type="string">col-method</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="txn_type" as="txn_type">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Transaction Type</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="index" xsi:type="string">txn_type</argument>
+                            <argument name="id" xsi:type="string">txn_type</argument>
+                            <argument name="options" xsi:type="options" model="Magento\Sales\Model\ResourceModel\Transaction\Grid\TypeList"/>
+                            <argument name="header_css_class" xsi:type="string">col-transaction-type</argument>
+                            <argument name="column_css_class" xsi:type="string">col-transaction-type</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="is_closed" as="is_closed">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Closed</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="index" xsi:type="string">is_closed</argument>
+                            <argument name="id" xsi:type="string">is_closed</argument>
+                            <argument name="options" xsi:type="options" model="Magento\Config\Model\Config\Source\Yesno"/>
+                            <argument name="header_css_class" xsi:type="string">col-closed</argument>
+                            <argument name="column_css_class" xsi:type="string">col-closed</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="created_at" as="created_at">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Created</argument>
+                            <argument name="type" xsi:type="string">datetime</argument>
+                            <argument name="index" xsi:type="string">created_at</argument>
+                            <argument name="id" xsi:type="string">created_at</argument>
+                            <argument name="header_css_class" xsi:type="string">col-period</argument>
+                            <argument name="column_css_class" xsi:type="string">col-period</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

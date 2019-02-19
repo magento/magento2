@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
+    <scenario name="UpdateConfigurableProductEntityTest" firstStep="createProduct">
+        <step name="createProduct" module="Magento_Catalog" next="updateConfigurableProduct">
+            <item name="product" value="configurableProduct::default"/>
+        </step>
+        <step name="updateConfigurableProduct" module="Magento_ConfigurableProduct" next="saveProduct"/>
+        <step name="saveProduct" module="Magento_Catalog"/>
+    </scenario>
+    <scenario name="VerifyConfigurableProductEntityPriceTest" firstStep="createProduct">
+        <step name="createProduct" module="Magento_Catalog" next="updateChildProduct" />
+        <step name="updateChildProduct" module="Magento_ConfigurableProduct" />
+    </scenario>
+    <scenario name="VerifyConfigurableProductLayeredNavigationTest" firstStep="createProduct">
+        <step name="createProduct" module="Magento_Catalog" next="updateChildProduct" />
+        <step name="updateChildProduct" module="Magento_ConfigurableProduct" />
+    </scenario>
+</config>

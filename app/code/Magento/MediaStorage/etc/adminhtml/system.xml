@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="system" type="text" sortOrder="900" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="media_storage_configuration" translate="label" type="text" sortOrder="900" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Storage Configuration for Media</label>
+                <field id="media_storage" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Media Storage</label>
+                    <source_model>Magento\MediaStorage\Model\Config\Source\Storage\Media\Storage</source_model>
+                </field>
+                <field id="media_database" translate="label" type="select" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Select Media Database</label>
+                    <source_model>Magento\MediaStorage\Model\Config\Source\Storage\Media\Database</source_model>
+                    <backend_model>Magento\MediaStorage\Model\Config\Backend\Storage\Media\Database</backend_model>
+                    <depends>
+                        <field id="media_storage">1</field>
+                    </depends>
+                </field>
+                <field id="synchronize" translate="label comment" type="button" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <frontend_model>Magento\MediaStorage\Block\System\Config\System\Storage\Media\Synchronize</frontend_model>
+                    <comment>After selecting a new media storage location, press the Synchronize button to transfer all media to that location. Media will not be available in the new location until the synchronization process is complete.</comment>
+                </field>
+                <field id="configuration_update_time" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Environment Update Time</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

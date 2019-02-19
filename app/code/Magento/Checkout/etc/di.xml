@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Checkout\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">checkout</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Checkout\Model\Session">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Checkout\Model\Session\Storage</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Checkout\Api\GuestShippingInformationManagementInterface" type="Magento\Checkout\Model\GuestShippingInformationManagement" />
+    <preference for="Magento\Checkout\Api\ShippingInformationManagementInterface" type="Magento\Checkout\Model\ShippingInformationManagement" />
+    <preference for="Magento\Checkout\Api\Data\ShippingInformationInterface" type="Magento\Checkout\Model\ShippingInformation" />
+    <preference for="Magento\Checkout\Api\Data\PaymentDetailsInterface" type="Magento\Checkout\Model\PaymentDetails" />
+    <preference for="Magento\Checkout\Api\GuestPaymentInformationManagementInterface" type="Magento\Checkout\Model\GuestPaymentInformationManagement" />
+    <preference for="Magento\Checkout\Api\PaymentInformationManagementInterface" type="Magento\Checkout\Model\PaymentInformationManagement" />
+    <preference for="Magento\Checkout\Api\Data\TotalsInformationInterface" type="Magento\Checkout\Model\TotalsInformation" />
+    <preference for="Magento\Checkout\Api\GuestTotalsInformationManagementInterface" type="Magento\Checkout\Model\GuestTotalsInformationManagement" />
+    <preference for="Magento\Checkout\Api\TotalsInformationManagementInterface" type="Magento\Checkout\Model\TotalsInformationManagement" />
+    <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\Checkout\Model\AgreementsValidator" />
+    <preference for="Magento\Checkout\Model\Cart\RequestInfoFilterInterface"
+                type="Magento\Checkout\Model\Cart\RequestInfoFilterComposite"/>
+    <type name="Magento\Checkout\Model\Cart\RequestInfoFilter">
+        <arguments>
+            <argument name="filterList" xsi:type="array">
+                <item name="form_key" xsi:type="string">form_key</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Model\Cart\RequestInfoFilterComposite">
+        <arguments>
+            <argument name="filters" xsi:type="array">
+                <item name="filter" xsi:type="object">Magento\Checkout\Model\Cart\RequestInfoFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="checkout/payment_failed/copy_to" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="clear_addresses_after_product_delete" type="Magento\Checkout\Plugin\Model\Quote\ResetQuoteAddresses"/>
+    </type>
+</config>

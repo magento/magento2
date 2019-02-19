@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+ /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\AttributeSet */
+?>
+<script id="product-template-selector-template" type="text/x-magento-template">
+<% if (!data.term && data.items.length && !data.allShown()) { %>
+<h5 class="title">Recent Items</h5>
+<% } %>
+<ul data-mage-init='{"menu":[]}'>
+    <% _.each(data.items, function(value) { %>
+    <li <%= data.optionData(value) %>><a href="#"><%- value.label %></a></li>
+    <% }); %>
+</ul>
+<% if (!data.term && data.items.length && !data.allShown()) { %>
+<button type="button" data-mage-init='{"actionLink":{"event":"showAll"}}' class="action-show-all">
+    <span>Show all Templates...</span>
+</button>
+<% } %>
+</script>
+<script>
+    require(["jquery","mage/mage","mage/backend/suggest"],function ($) {
+        var $suggest = $('#product-template-suggest');
+        $suggest.closest('.dropdown-menu').siblings('[data-toggle=dropdown]').on('click.toggleDropdown', function () {
+            if ($(this).hasClass('active')) {
+                $suggest.click();
+            }
+        });
+        $suggest
+            .mage('suggest',<?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getSelectorOptions()) ?>)
+            .on('suggestselect', function (e, ui) {
+                if (ui.item.id) {
+                    $('[data-form=edit-product]').trigger('changeAttributeSet', ui.item);
+                    $('#product-template-suggest-container .action-toggle.active ').trigger('click');
+                }
+            });
+    });
+</script>

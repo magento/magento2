@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="1">
+    <fields>
+        <username>
+            <selector>[name='adminUsername']</selector>
+        </username>
+        <email>
+            <selector>[name='adminEmail']</selector>
+        </email>
+        <password>
+            <selector>[name='adminPassword']</selector>
+        </password>
+        <password_confirmation>
+            <selector>[name='adminConfirm']</selector>
+        </password_confirmation>
+    </fields>
+</mapping>

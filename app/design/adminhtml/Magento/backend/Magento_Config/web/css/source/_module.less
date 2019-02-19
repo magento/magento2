@@ -1,0 +1,150 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Stores -> Configuration
+//  _____________________________________________
+
+.section-config {
+    .__collapsible-block-wrapper-pattern();
+
+    .admin__collapsible-block {
+        tr {
+            &:last-child {
+                > td {
+                    > .section-config {
+                        border-bottom-color: transparent;
+                        padding-bottom: 0;
+
+                        > .config {
+                            padding-bottom: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //  Sub blocks
+    .section-config {
+        .__collapsible-sub-block-wrapper-pattern();
+        .entry-edit-head {
+            > a {
+                .__collapsible-sub-title-pattern();
+            }
+        }
+    }
+
+    &.complex .section-config.with-button.enabled > .entry-edit-head, // PayPal connected
+    .config td.label label.enabled {
+        &:before {
+            &:extend(.abs-icon all);
+            background-color: @success__color;
+            border-radius: 100%;
+            color: @color-white;
+            content: @icon-check-mage__content;
+            display: block;
+            float: left;
+            font-size: 1.6rem;
+            font-weight: @font-weight__regular;
+            height: 1em;
+            margin-left: -25px;
+            margin-top: .2rem;
+            overflow: hidden;
+            width: 1em;
+        }
+    }
+
+    &.config-advanced {
+        padding-top: @collapsible-content__indent;
+
+        .section-config {
+            padding-top: @collapsible-content__indent;
+        }
+    }
+
+    &.with-button {
+        padding: 2rem 0;
+
+        &.active {
+            padding-bottom: 0;
+
+            .config-heading {
+                margin-bottom: 2rem;
+            }
+        }
+
+        .section-config {
+            margin-left: 0;
+
+            .section-config {
+                margin-left: @collapsible-sub-block__indent;
+            }
+        }
+
+        .config-heading {
+            strong {
+                display: block;
+                font-size: @font-size__base;
+                font-weight: @font-weight__bold;
+                margin-bottom: .5rem;
+            }
+
+            .button-container {
+                margin: 1.5rem 0 0;
+            }
+        }
+
+        .button-container {
+            line-height: 28px;
+
+            a {
+                margin-left: 20px;
+            }
+        }
+
+        .action-configure {
+            &.open {
+                .state-opened {
+                    height: auto;
+                    overflow: auto;
+                    visibility: visible;
+                }
+            }
+
+            &.open .state-closed,
+            .state-opened {
+                height: 0;
+                overflow: hidden;
+                visibility: hidden;
+            }
+
+            span {
+                display: block;
+                position: relative;
+                text-align: center;
+            }
+        }
+    }
+
+    .config {
+        padding-bottom: @collapsible-content__indent;
+
+        h4 {
+            color: @collapsible-title__color;
+            font-size: @collapsible-title__font-size;
+            font-weight: @font-weight__semibold;
+            margin-bottom: 0;
+            padding-left: (@collapsible-title-icon__size + 1rem);
+            padding-top: @collapsible-content__indent;
+        }
+    }
+
+    > .config {
+        &.admin__collapsible-block {
+            display: none;
+        }
+    }
+}

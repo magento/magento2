@@ -1,0 +1,75 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?= $block->getButtonsHtml() ?></div>
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?= /* @escapeNotVerified */ __('Transaction Data') ?></span>
+    </div>
+    <div id="log_details_fieldset" class="admin__page-section-content log-details">
+        <table class="log-info data-table admin__table-secondary">
+            <tbody>
+            <tr>
+                <th><?= /* @escapeNotVerified */ __('Transaction ID') ?></th>
+                <td><?= $block->getTxnIdHtml() ?></td>
+            </tr>
+            <tr>
+                <th><?= /* @escapeNotVerified */ __('Parent Transaction ID') ?></th>
+                <td>
+                    <?php if ($block->getParentTxnIdHtml()): ?>
+                    <a href="<?= $block->getParentTxnIdUrlHtml() ?>">
+                        <?= $block->getParentTxnIdHtml() ?>
+                    </a>
+                    <?php else : ?>
+                    <?= /* @escapeNotVerified */ __('N/A') ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <th><?= /* @escapeNotVerified */ __('Order ID') ?></th>
+                <td>
+                    <a href="<?= $block->getOrderIdUrlHtml() ?>">
+                        <?= $block->getOrderIncrementIdHtml() ?>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <th><?= /* @escapeNotVerified */ __('Transaction Type') ?></th>
+                <td><?= $block->getTxnTypeHtml() ?></td>
+            </tr>
+            <tr>
+                <th><?= /* @escapeNotVerified */ __('Is Closed') ?></th>
+                <td><?= $block->getIsClosedHtml() ?></td>
+            </tr>
+            <tr>
+                <th><?= /* @escapeNotVerified */ __('Created At') ?></th>
+                <td><?= $block->getCreatedAtHtml() ?></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?= /* @escapeNotVerified */ __('Child Transactions') ?></span>
+    </div>
+    <div class="admin__page-section-content log-details-grid">
+        <?= $block->getChildHtml('child_grid') ?>
+    </div>
+</section>
+
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?= /* @escapeNotVerified */ __('Transaction Details') ?></span>
+    </div>
+    <div class="admin__page-section-content log-details-grid">
+        <?= $block->getChildHtml('detail_grid') ?>
+    </div>
+</section>

@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * This file contains errors that will fail schema validation.
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer_merged.xsd">
+    <indexer id="indexer_0" view_id="catalogsearch_fulltext" class="NotAClass">
+        <title translate="true">Test Indexer Declaration</title>
+        <description translate="true">Invalid provider attribute value</description>
+    </indexer>
+    <indexer id="indexer_0" view_id="catalogsearch_fulltext" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <title translate="true">Test Indexer Declaration</title>
+        <description translate="true">Duplicate indexer id</description>
+    </indexer>
+    <indexer id="indexer_10" view_id="catalogsearch_fulltext_10" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <title translate="true">Test Indexer Declaration</title>
+        <description translate="true">Duplicate 'view_id' in indexer declaration</description>
+    </indexer>
+    <indexer id="indexer_11" view_id="catalogsearch_fulltext_11" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <title translate="true">Test Indexer Declaration</title>
+        <description translate="true">Empty fields</description>
+        <fieldset source="Collection" provider="Magento\Framework\Search\Index\Fieldset\Default" name="default"/>
+    </indexer>
+    <indexer id="indexer_1" view_id="catalogsearch_fulltext_1" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <title translate="true">Test Indexer Declaration</title>
+        <description translate="true">Invalid handler attribute value</description>
+        <fieldset source="Collection" provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="Magento\Framework\Search\Index\Field\Handler\Class" xsi:type="filterable" dataType="int" />
+        </fieldset>
+    </indexer>
+    <indexer id="indexer_2" view_id="catalogsearch_fulltext_2" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <title translate="true">Test Indexer Declaration</title>
+        <description translate="true">Duplicate field declaration</description>
+        <fieldset source="Collection" provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="defaultHandler" xsi:type="filterable" dataType="int" />
+            <field name="visibility" handler="defaultHandler">
+                <filter class="Magento\Framework\Search\Index\Filter\StopWordsFilter"/>
+            </field>
+        </fieldset>
+    </indexer>
+    <indexer id="indexer_3" view_id="catalogsearch_fulltext_3" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <title translate="true">Test Indexer Declaration</title>
+        <description translate="true">Invalid source attribute value</description>
+        <fieldset source="Collection" provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="defaultHandler"/>
+        </fieldset>
+    </indexer>
+    <indexer id="indexer_4" view_id="catalogsearch_fulltext_4" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <title translate="true">Test Indexer Declaration</title>
+        <description translate="true">Invalid field handler attribute value</description>
+        <fieldset source="Collection" provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="handler" xsi:type="filterable" dataType="int"/>
+        </fieldset>
+    </indexer>
+    <indexer id="indexer_5" view_id="catalogsearch_fulltext_5" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <title translate="true">Test Indexer Declaration</title>
+        <description translate="true">Invalid field type</description>
+        <fieldset source="Collection" provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="defaultHandler" xsi:type="any"/>
+        </fieldset>
+    </indexer>
+    <indexer id="indexer_6" view_id="catalogsearch_fulltext_6" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <title translate="true">Test Indexer Declaration</title>
+        <description translate="true">No dataType attribute for 'filterable' type field</description>
+        <fieldset source="Collection" provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="defaultHandler" xsi:type="filterable"/>
+        </fieldset>
+    </indexer>
+    <indexer id="indexer_12" view_id="catalogsearch_fulltext_12" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <title translate="true">Test Indexer Declaration</title>
+        <description translate="true">Invalid field dataType attribute value</description>
+        <fieldset source="Collection" provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="defaultHandler" xsi:type="filterable" dataType="string"/>
+        </fieldset>
+    </indexer>
+    <indexer id="indexer_13" view_id="catalogsearch_fulltext_13" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <title translate="true">Test Indexer Declaration</title>
+        <description translate="true">No dataType attribute for 'filterable' type field</description>
+        <fieldset source="Collection" provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="defaultHandler" xsi:type="filterable"/>
+        </fieldset>
+    </indexer>
+</config>

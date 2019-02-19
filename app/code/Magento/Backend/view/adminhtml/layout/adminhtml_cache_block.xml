@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.cache.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.cache.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">cache_grid</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Backend\Model\Cache\ResourceModel\Grid\Collection</argument>
+                    <argument name="pager_visibility" xsi:type="string">0</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="adminhtml.cache.massaction" as="grid.massaction">
+                    <arguments>
+                        <argument name="massaction_id_field" xsi:type="string">id</argument>
+                        <argument name="form_field_name" xsi:type="string">types</argument>
+                        <argument name="use_select_all" xsi:type="string">1</argument>
+                        <argument name="options" xsi:type="array">
+                            <item name="enable" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Enable</item>
+                                <item name="url" xsi:type="string">adminhtml/*/massEnable</item>
+                                <item name="visible" xsi:type="object">Magento\Backend\Block\Cache\Grid\Massaction\ProductionModeVisibilityChecker</item>
+                            </item>
+                            <item name="disable" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Disable</item>
+                                <item name="url" xsi:type="string">adminhtml/*/massDisable</item>
+                                <item name="visible" xsi:type="object">Magento\Backend\Block\Cache\Grid\Massaction\ProductionModeVisibilityChecker</item>
+                            </item>
+                            <item name="refresh" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Refresh</item>
+                                <item name="url" xsi:type="string">adminhtml/*/massRefresh</item>
+                                <item name="selected" xsi:type="string">1</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.cache.grid.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <argument name="filter_visibility" xsi:type="string">0</argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.cache.grid.columnSet.cache_type" as="cache_type">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Cache Type</argument>
+                            <argument name="index" xsi:type="string">cache_type</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="width" xsi:type="string">180</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="translate" xsi:type="boolean">true</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.cache.grid.columnSet.description" as="description">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Description</argument>
+                            <argument name="index" xsi:type="string">description</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="translate" xsi:type="boolean">true</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.cache.grid.columnSet.tags" as="tags">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Tags</argument>
+                            <argument name="index" xsi:type="string">tags</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="width" xsi:type="string">180</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Cache\Grid\Column\Statuses" name="adminhtml.cache.grid.columnSet.status" as="status">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Status</argument>
+                            <argument name="index" xsi:type="string">status</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="width" xsi:type="string">120</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="options" xsi:type="array">
+                                <item name="disabled" xsi:type="array">
+                                    <item name="value" xsi:type="string">0</item>
+                                    <item name="label" xsi:type="string" translate="true">Disabled</item>
+                                </item>
+                                <item name="enabled" xsi:type="array">
+                                    <item name="value" xsi:type="string">1</item>
+                                    <item name="label" xsi:type="string" translate="true">Enabled</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

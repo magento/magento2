@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="TemplatePreview" area="Adminhtml" mca="newsletter/template/preview" module="Magento_Newsletter">
+    <block name="content" class="Magento\Newsletter\Test\Block\Adminhtml\Template\Preview" locator="body" strategy="css selector"/>
+  </page>
+</config>

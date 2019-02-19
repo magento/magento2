@@ -1,0 +1,20 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+input.mage-error, textarea.mage-error, ul.mage-error, select.mage-error {
+    background: none repeat scroll 0 0 #FAEBE7 !important;
+    border: 1px dashed #EB340A !important;
+
+}
+div.mage-error {
+    background: url("../images/validation_advice_bg.gif") no-repeat scroll 2px 1px transparent;
+    clear: both;
+    font-size: 0.95em;
+    font-weight: bold;
+    line-height: 1.25em;
+    margin-top: 3px;
+    min-height: 15px;
+    padding-left: 17px;
+    color: #DF280A;
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/product_options.xsd">
+    <option name="text" label="Text" renderer="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Text">
+        <inputType name="field" label="Field" />
+        <inputType name="area"  label="Area" />
+    </option>
+    <option name="file" label="File" renderer="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\File">
+        <inputType name="file" label="File" />
+    </option>
+    <option name="select" label="Select" renderer="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Select">
+        <inputType name="drop_down" label="Drop-down" />
+        <inputType name="radio"     label="Radio Buttons" />
+        <inputType name="checkbox"  label="Checkbox" />
+        <inputType name="multiple"  label="Multiple Select" />
+    </option>
+    <option name="date" label="Date" renderer="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Date">
+        <inputType name="date"      label="Date" />
+        <inputType name="date_time" label="Date &amp; Time" />
+        <inputType name="time"      label="Time" />
+    </option>
+</config>

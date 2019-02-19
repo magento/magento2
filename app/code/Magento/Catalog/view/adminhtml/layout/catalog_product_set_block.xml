@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.catalog.product.set.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.catalog.product.set.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">setGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Eav\Model\ResourceModel\Entity\Attribute\Grid\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">set_name</argument>
+                    <argument name="default_dir" xsi:type="string">ASC</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.catalog.product.set.grid.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <argument name="id" xsi:type="string">setGrid</argument>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">catalog/*/edit</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="id" xsi:type="string">getAttributeSetId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.product.set.grid.columnSet.set_name" as="set_name">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Set</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="sortable" xsi:type="string">1</argument>
+                            <argument name="index" xsi:type="string">attribute_set_name</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

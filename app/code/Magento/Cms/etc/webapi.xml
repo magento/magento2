@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <!-- Cms Page -->
+    <route url="/V1/cmsPage/:pageId" method="GET">
+        <service class="Magento\Cms\Api\PageRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="Magento_Cms::page"/>
+        </resources>
+    </route>
+    <route url="/V1/cmsPage/search" method="GET">
+        <service class="Magento\Cms\Api\PageRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Cms::page"/>
+        </resources>
+    </route>
+    <route url="/V1/cmsPage" method="POST">
+        <service class="Magento\Cms\Api\PageRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_Cms::page"/>
+        </resources>
+    </route>
+    <route url="/V1/cmsPage/:id" method="PUT">
+        <service class="Magento\Cms\Api\PageRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_Cms::page"/>
+        </resources>
+    </route>
+    <route url="/V1/cmsPage/:pageId" method="DELETE">
+        <service class="Magento\Cms\Api\PageRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Magento_Cms::page"/>
+        </resources>
+    </route>
+    <!-- Cms Block -->
+    <route url="/V1/cmsBlock/:blockId" method="GET">
+        <service class="Magento\Cms\Api\BlockRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="Magento_Cms::block"/>
+        </resources>
+    </route>
+    <route url="/V1/cmsBlock/search" method="GET">
+        <service class="Magento\Cms\Api\BlockRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Cms::block"/>
+        </resources>
+    </route>
+    <route url="/V1/cmsBlock" method="POST">
+        <service class="Magento\Cms\Api\BlockRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_Cms::block"/>
+        </resources>
+    </route>
+    <route url="/V1/cmsBlock/:id" method="PUT">
+        <service class="Magento\Cms\Api\BlockRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_Cms::block"/>
+        </resources>
+    </route>
+    <route url="/V1/cmsBlock/:blockId" method="DELETE">
+        <service class="Magento\Cms\Api\BlockRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Magento_Cms::block"/>
+        </resources>
+    </route>
+</routes>

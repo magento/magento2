@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?= $block->getChildHtml('grid') ?>
+
+<div class="switcher f-left" style="margin: 10px 10px 10px 0px; padding:15px;">
+<?php
+    /* @escapeNotVerified */ echo __('Customers that have Wish List: %1', $block->getCustomerWithWishlist())
+?>
+</div>
+
+<div class="switcher" style="float: right; margin: 10px 0px 10px 10px; padding:15px;">
+    <?php
+        /* @escapeNotVerified */ echo __('Number of Wish Lists: %1', $block->getWishlistsCount())
+    ?><br />
+    <?php
+        /* @escapeNotVerified */ echo __('Number of items bought from a Wish List: %1', $block->getItemsBought())
+    ?><br />
+    <?php /* @escapeNotVerified */ echo __('Number of times Wish Lists have been shared (emailed): %1', $block->getSharedCount())
+    ?><br />
+    <?php /* @escapeNotVerified */ echo __('Number of Wish List referrals: %1', $block->getReferralsCount())
+    ?><br />
+    <?php /* @escapeNotVerified */ echo __('Number of Wish List conversions: %1', $block->getConversionsCount())
+    ?><br />
+</div>

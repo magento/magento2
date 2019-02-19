@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Catalog\Test\Repository\CatalogProductSimple\Price">
+        <dataset name="drop_down_with_one_option_fixed_price">
+            <field name="category_price" xsi:type="string">100.00</field>
+            <field name="product_price" xsi:type="string">100.00</field>
+            <field name="cart_price" xsi:type="string">130.00</field>
+        </dataset>
+
+        <dataset name="drop_down_with_one_option_percent_price">
+            <field name="category_price" xsi:type="string">100.00</field>
+            <field name="product_price" xsi:type="string">100.00</field>
+            <field name="cart_price" xsi:type="string">140.00</field>
+        </dataset>
+
+        <dataset name="MAGETWO-23029">
+            <field name="category_price" xsi:type="string">100.00</field>
+            <field name="category_special_price" xsi:type="string">90.00</field>
+            <field name="product_price" xsi:type="string">100.00</field>
+            <field name="product_special_price" xsi:type="string">90.00</field>
+            <field name="cart_price" xsi:type="string">120.00</field>
+        </dataset>
+
+        <dataset name="MAGETWO-23030">
+            <field name="category_price" xsi:type="string">100.00</field>
+            <field name="category_special_price" xsi:type="string">90.00</field>
+            <field name="product_price" xsi:type="string">100.00</field>
+            <field name="product_special_price" xsi:type="string">90.00</field>
+            <field name="cart_price" xsi:type="string">126.00</field>
+        </dataset>
+
+        <dataset name="MAGETWO-23036">
+            <field name="category_price" xsi:type="string">100.00</field>
+            <field name="category_special_price" xsi:type="string">90.00</field>
+            <field name="product_price" xsi:type="string">100.00</field>
+            <field name="product_special_price" xsi:type="string">90.00</field>
+            <field name="cart_price" xsi:type="string">90.00</field>
+        </dataset>
+    </repository>
+</config>

@@ -1,0 +1,69 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Inline translations
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@translate-inline-title__z-index: @menu__z-index + 1;
+
+//
+//  Form
+//  ---------------------------------------------
+
+.translate-table-container {
+    table {
+        width: 100%;
+    }
+
+    td {
+        background: none;
+        padding: @indent__xs;
+        text-align: left;
+
+        &.value {
+            .input-text {
+                width: 100%;
+            }
+        }
+    }
+
+    th {
+        &.label {
+            border: none;
+            font-weight: @font-weight__bold;
+            padding: @indent__xs;
+            text-align: left;
+            width: 150px;
+        }
+    }
+}
+
+//
+//  Special tags
+//  ---------------------------------------------
+
+.translate-inline-title {
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 0;
+    z-index: @translate-inline-title__z-index;
+}
+
+//  Script tag that placed between menu and page wrapper
+.translate-inline-script {
+    .menu-wrapper ~ & {
+        display: block;
+        left: @menu__width;
+        position: absolute;
+        top: 0;
+        z-index: @translate-inline-title__z-index;
+    }
+}

@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<?php /** @var \Magento\Tax\Pricing\Render\Adjustment $block */ ?>
+<?php if ($block->displayPriceIncludingTax()): ?>
+    <?= /* @escapeNotVerified */ $block->getDisplayAmount() ?>
+<?php elseif ($block->displayPriceExcludingTax()): ?>
+    <?= /* @escapeNotVerified */ $block->getDisplayAmountExclTax() ?>
+<?php elseif ($block->displayBothPrices()): ?>
+    <?= /* @escapeNotVerified */ $block->getDisplayAmount() ?>
+    <?php if ($block->getDisplayAmountExclTax() !== $block->getDisplayAmount()): ?>
+        (+<?= /* @escapeNotVerified */ $block->getDisplayAmountExclTax() ?> Excl. Tax)
+    <?php endif; ?>
+<?php endif; ?>

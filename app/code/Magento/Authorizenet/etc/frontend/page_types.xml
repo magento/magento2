@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page_types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_types.xsd">
+    <type id="authorizenet_directpost_payment_redirect" label="AuthorizeNet Directpost Redirect"/>
+    <type id="authorizenet_directpost_payment_response" label="AuthorizeNet Directpost Response"/>
+</page_types>

@@ -1,0 +1,154 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * Multishipping checkout billing information
+ *
+ * @var $block \Magento\Multishipping\Block\Checkout\Billing
+ */
+?>
+<div id="checkout-loader" data-role="checkout-loader" class="loading-mask" data-mage-init='{"billingLoader": {}}'>
+    <div class="loader">
+        <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')); ?>"
+             alt="<?= $block->escapeHtml(__('Loading...')); ?>"
+             style="position: absolute;">
+    </div>
+</div>
+<script>
+    window.checkoutConfig = <?= /* @noEscape */ $block->getCheckoutData()->getSerializedCheckoutConfigs(); ?>;
+    window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
+    window.customerData = window.checkoutConfig.customerData;
+</script>
+<div id="checkout" data-bind="scope:'checkoutMessages'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "#checkout": {
+                "Magento_Ui/js/core/app": {
+                   "components": {
+                        "checkoutMessages": {
+                            "component": "Magento_Ui/js/view/messages",
+                            "displayArea": "messages"
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</div>
+<form action="<?= $block->escapeUrl($block->getPostActionUrl()); ?>"
+      method="post"
+      id="multishipping-billing-form"
+      class="form multicheckout billing">
+    <div class="block block-billing">
+        <div class="block-content">
+            <div class="box box-billing-address">
+                <strong class="box-title">
+                    <span><?= $block->escapeHtml(__('Billing Address')); ?></span>
+                    <a href="<?= $block->escapeUrl($block->getSelectAddressUrl()); ?>" class="action">
+                        <span><?= $block->escapeHtml(__('Change')); ?></span>
+                    </a>
+                </strong>
+                <div class="box-content">
+                    <address>
+                        <?= /* @noEscape */ $block->getCheckoutData()->getAddressHtml($block->getAddress()); ?>
+                    </address>
+                </div>
+            </div>
+            <div class="box box-billing-method">
+                <fieldset class="fieldset">
+                    <legend class="legend box-title">
+                        <span><?= $block->escapeHtml(__('Payment Method')); ?></span>
+                    </legend><br>
+                    <div class="box-content">
+                        <?= $block->getChildHtml('payment_methods_before') ?>
+                        <?php /* Payment methods forms list */ ?>
+                        <dl class="checkout-payment-method" id="payment-methods">
+                            <?php
+                            $methods = $block->getMethods();
+                            $methodsCount = count($methods);
+                            $methodsForms = $block->hasFormTemplates() ? $block->getFormTemplates(): [];
+
+                            foreach ($methods as $_method) :
+                                    $code = $_method->getCode();
+                                    $checked = $block->getSelectedMethodCode() === $code;
+
+                                if (isset($methodsForms[$code])) {
+                                    $block->setMethodFormTemplate($code, $methodsForms[$code]);
+                                }
+                                ?>
+                            <dt class="item-title">
+                                <?php if ($methodsCount > 1) : ?>
+                                    <input type="radio"
+                                           id="p_method_<?= $block->escapeHtml($code); ?>"
+                                           value="<?= $block->escapeHtml($code); ?>"
+                                           name="payment[method]"
+                                           title="<?= $block->escapeHtml($_method->getTitle()) ?>"
+                                        <?php if ($checked) : ?>
+                                           checked="checked"
+                                        <?php endif; ?>
+                                           class="radio"/>
+                                <?php else : ?>
+                                    <input type="radio"
+                                           id="p_method_<?= $block->escapeHtml($code); ?>"
+                                           value="<?= $block->escapeHtml($code); ?>"
+                                           name="payment[method]"
+                                           checked="checked"
+                                           class="radio solo method" />
+                                <?php endif; ?>
+                                    <label for="p_method_<?= $block->escapeHtml($code); ?>">
+                                        <?= $block->escapeHtml($_method->getTitle()) ?>
+                                    </label>
+                            </dt>
+                                <?php if ($html = $block->getChildHtml('payment.method.' . $code)) : ?>
+                                    <dd class="item-content <?= $checked ? '' : 'no-display'; ?>"
+                                        data-bind="scope: 'payment_method_<?= $block->escapeHtml($code);?>'">
+                                        <?= /* @noEscape */ $html; ?>
+                                    </dd>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </dl>
+                        <?= $block->getChildHtml('payment_methods_after') ?>
+                        <?= $block->getChildHtml('checkout_billing_items') ?>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button id="payment-continue"
+                    type="button"
+                    class="action primary continue">
+                <span><?= $block->escapeHtml(__('Go to Review Your Order')); ?></span>
+            </button>
+        </div>
+        <div class="secondary">
+            <a href="<?= $block->escapeUrl($block->getBackUrl()); ?>" class="action back">
+                <span><?= $block->escapeHtml(__('Back to Shipping Information')); ?></span>
+            </a>
+        </div>
+    </div>
+</form>
+<script>
+    require(['jquery', 'mage/mage'], function(jQuery) {
+        var addtocartForm = jQuery('#multishipping-billing-form');
+
+        addtocartForm.mage('payment', {
+            checkoutPrice: <?= (float)$block->getQuoteBaseGrandTotal() ?>
+        });
+
+        addtocartForm.mage('validation', {
+            errorPlacement: function(error, element) {
+                if (element.attr('data-validate') && element.attr('data-validate').indexOf('validate-cc-ukss') >= 0) {
+                    element.parents('form').find('[data-validation-msg="validate-cc-ukss"]').html(error);
+                } else {
+                    element.after(error);
+                }
+            }
+        });
+    });
+</script>

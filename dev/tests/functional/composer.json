@@ -1,0 +1,23 @@
+{
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.1.3||~7.2.0",
+        "magento/mtf": "1.0.0-rc61",
+        "allure-framework/allure-phpunit": "~1.2.0",
+        "doctrine/annotations": "1.4.*",
+        "phpunit/phpunit": "~6.5.0",
+        "phpunit/phpunit-selenium": "~4.1.0"
+    },
+    "suggest": {
+        "netwing/selenium-server-standalone": "dev-master",
+        "facebook/webdriver": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\": ["lib/Magento/", "testsuites/Magento", "generated/Magento/", "tests/app/Magento/"],
+            "Test\\": "generated/Test/"
+        }
+    }
+}

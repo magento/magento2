@@ -1,0 +1,83 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\Shipping\Block\Adminhtml\Order\Packaging */ ?>
+<?php
+$shippingMethod = $block->getShipment()->getOrder()->getShippingMethod();
+$sizeSource = $block->getSourceSizeModel()->toOptionArray();
+$girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 0;
+?>
+<script>
+    require([
+        "jquery",
+        "prototype",
+        "Magento_Shipping/order/packaging",
+        "Magento_Ui/js/modal/modal"
+    ], function(jQuery){
+
+        window.packaging = new Packaging(<?= /* @escapeNotVerified */ $block->getConfigDataJson() ?>);
+        packaging.changeContainerType($$('select[name=package_container]')[0]);
+        packaging.checkSizeAndGirthParameter(
+            $$('select[name=package_container]')[0],
+            <?= /* @escapeNotVerified */ $girthEnabled ?>
+        );
+        packaging.setConfirmPackagingCallback(function(){
+            packaging.setParamsCreateLabelRequest($('edit_form').serialize(true));
+            packaging.sendCreateLabelRequest();
+        });
+        packaging.setLabelCreatedCallback(function(response){
+            setLocation("<?php /* @escapeNotVerified */ echo $block->getUrl(
+                'sales/order/view',
+                ['order_id' => $block->getShipment()->getOrderId()]
+            ); ?>");
+        });
+        packaging.setCancelCallback(function() {
+            if ($('create_shipping_label')) {
+                packaging.cleanPackages();
+                $('create_shipping_label').checked = false;
+                toggleCreateLabelCheckbox();
+            }
+        });
+        packaging.setItemQtyCallback(function(itemId){
+            var item = $$('[name="shipment[items]['+itemId+']"]')[0];
+            if (item && !isNaN(item.value)) {
+                return item.value;
+            }
+        });
+        jQuery('#packaging_window').modal({
+            type: 'slide',
+            title: '<?= /* @escapeNotVerified */ __('Create Packages') ?>',
+            buttons: [{
+                text: '<?= /* @escapeNotVerified */ __('Cancel') ?>',
+                'class': 'action-secondary',
+                click: function () {
+                    packaging.cancelPackaging();
+                    this.closeModal();
+                    }
+                }, {
+                text: '<?= /* @escapeNotVerified */ __('Save') ?>',
+                'attr': {'disabled':'disabled', 'data-action':'save-packages'},
+                'class': 'action-primary _disabled',
+                click: function () {
+                    packaging.confirmPackaging();
+                    }
+                }, {
+                    text: '<?= /* @escapeNotVerified */ __('Add Package') ?>',
+                    'attr': {'data-action':'add-packages'},
+                    'class': 'action-secondary',
+                    click: function () {
+                        packaging.newPackage();
+                    }
+            }]
+        });
+        jQuery(document).trigger('packaging:inited');
+        jQuery(document).data('packagingInited', true);
+    });
+</script>
+<?php include ($block->getTemplateFile('Magento_Shipping::order/packaging/popup_content.phtml')) ?>

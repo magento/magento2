@@ -1,0 +1,65 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<form class="form form-orders-search" id="oar-widget-orders-and-returns-form" data-mage-init='{"ordersReturns":{}, "validation":{}}' action="<?= /* @escapeNotVerified */ $block->getActionUrl() ?>"
+      method="post" name="guest_post">
+    <fieldset class="fieldset">
+        <legend class="legend"><span><?= /* @escapeNotVerified */ __('Order Information') ?></span></legend>
+        <br>
+
+        <div class="field id required">
+            <label class="label" for="oar-order-id"><span><?= /* @escapeNotVerified */ __('Order ID') ?></span></label>
+
+            <div class="control">
+                <input type="text" class="input-text" id="oar-order-id" name="oar_order_id"
+                       data-validate="{required:true}"/>
+            </div>
+        </div>
+        <div class="field lastname required">
+            <label class="label" for="oar-billing-lastname"><span><?= /* @escapeNotVerified */ __('Billing Last Name') ?></span></label>
+
+            <div class="control">
+                <input type="text" class="input-text" id="oar-billing-lastname" name="oar_billing_lastname"
+                       data-validate="{required:true}"/>
+            </div>
+        </div>
+        <div class="field find required">
+            <label class="label" for="quick-search-type-id"><span><?= /* @escapeNotVerified */ __('Find Order By') ?></span></label>
+
+            <div class="control">
+                <select name="oar_type" id="quick-search-type-id" class="select">
+                    <option value="email"><?= /* @escapeNotVerified */ __('Email') ?></option>
+                    <option value="zip"><?= /* @escapeNotVerified */ __('ZIP Code') ?></option>
+                </select>
+            </div>
+        </div>
+        <div id="oar-email" class="field email required">
+            <label class="label" for="oar_email"><span><?= /* @escapeNotVerified */ __('Email') ?></span></label>
+
+            <div class="control">
+                <input type="email" class="input-text" id="oar_email" name="oar_email"
+                       data-validate="{required:true, 'validate-email':true}"/>
+            </div>
+        </div>
+        <div id="oar-zip" class="field zip required">
+            <label class="label" for="oar_zip"><span><?= /* @escapeNotVerified */ __('Billing ZIP Code') ?></span></label>
+
+            <div class="control">
+                <input type="text" class="input-text" id="oar_zip" name="oar_zip" data-validate="{required:true}"/>
+            </div>
+        </div>
+    </fieldset>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" title="<?= /* @escapeNotVerified */ __('Continue') ?>" class="action submit primary">
+                <span><?= /* @escapeNotVerified */ __('Continue') ?></span>
+            </button>
+        </div>
+    </div>
+</form>

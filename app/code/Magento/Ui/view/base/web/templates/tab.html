@@ -1,0 +1,30 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__page-nav">
+    <div class="admin__page-nav-title" css="_collapsible: collapsible, _opened: opened && collapsible" click="toggleOpened" keyboard="13: toggleOpened">
+        <strong tabindex="1" text="label" keyboard="13: toggleOpened"/>
+    </div>
+    <ul class="admin__page-nav-items items" each="elems" visible="opened">
+        <li class="admin__page-nav-item" tabindex="2" css="_active: active, _loading: loading" click="activate" keyboard="13: activate">
+            <a class="admin__page-nav-link" href="#" css="_changed: changed" attr="id: 'tab_' + index">
+                <span text="label"/>
+                <span class="admin__page-nav-item-messages">
+                    <span class="admin__page-nav-item-message _changed">
+                        <span class="admin__page-nav-item-message-icon"/>
+                        <span class="admin__page-nav-item-message-tooltip"
+                               translate="'Changes have been made to this section that have not been saved.'"/>
+                    </span>
+                    <span class="admin__page-nav-item-message-loader">
+                        <span class="spinner">
+                           <span repeat="8"/>
+                        </span>
+                   </span>
+                </span>
+            </a>
+        </li>
+    </ul>
+</div>

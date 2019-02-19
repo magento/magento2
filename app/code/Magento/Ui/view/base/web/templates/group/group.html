@@ -1,0 +1,33 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<fieldset class="admin__field"
+          visible="visible"
+          css="_required: required"
+          attr="'data-index': index">
+    <legend class="admin__field-label" if="showLabel">
+        <span translate="label" attr="'data-config-scope': $data.scopeLabel"/>
+    </legend>
+
+    <div class="admin__field-control" css="$data.additionalClasses">
+        <each args="elems">
+            <if args="visible()" if="!$data.additionalForGroup">
+                <render args="$parent.fieldTemplate" if="element.input_type != 'checkbox' || element.input_type != 'radio'"/>
+                <render args="elementTmpl" if="element.input_type == 'checkbox' || element.input_type == 'radio'"/>
+            </if>
+        </each>
+
+        <each args="getRegion('insideGroup')" render=""/>
+
+        <each args="elems" if="validateWholeGroup">
+            <if args="!$data.additionalForGroup">
+                <label class="admin__field-error" if="error() && visible()" attr="for: uid" text="error"/>
+            </if>
+        </each>
+    </div>
+
+    <each args="getRegion('outsideGroup')" render=""/>
+</fieldset>

@@ -1,0 +1,204 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  UI -> Data Grid -> Header -> Action Default View
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@action-dropdown-menu__font-size: 1.3rem;
+
+@action-dropdown-menu-item__background-color: @page-wrapper__background-color;
+@action-dropdown-menu-item__padding-vertical: 1rem;
+@action-dropdown-menu-item__padding-left: 2rem;
+@action-dropdown-menu-item__hover__background-color: @color-gray89;
+
+@action-dropdown-menu-item-actions__size: 1.7rem;
+@action-dropdown-menu-item-actions__width: 5rem;
+
+@action-dropdown-menu-item-action-icon__padding-horizontal: 1.4rem;
+@action-dropdown-menu-item-action-icon__padding-vertical: .6rem;
+
+//
+
+.admin__data-grid-action-bookmarks {
+    .admin__action-dropdown-menu__align(right);
+    opacity: @component-modal__opacity;
+
+    &._active {
+        z-index: @data-grid-action__z-index;
+    }
+
+    .admin__action-dropdown {
+        .admin__action-dropdown-text {
+            display: inline-block;
+            max-width: 15rem;
+            min-width: 4.9rem;
+            vertical-align: top;
+            .lib-text-overflow();
+        }
+
+        &:before {
+            &:extend(.abs-icon all);
+            content: @icon-views__content;
+        }
+    }
+
+    .admin__action-dropdown-menu {
+        font-size: @action-dropdown-menu__font-size;
+        left: 0;
+        padding: 1rem 0 @action-dropdown-menu-item__padding-vertical;
+        right: auto;
+
+        > li {
+            padding: 0 @action-dropdown-menu-item-actions__width 0 0;
+            position: relative;
+            white-space: nowrap;
+
+            &:not(.action-dropdown-menu-action) {
+                transition: @smooth__background-color;
+
+                &:hover {
+                    background-color: @action-dropdown-menu-item__hover__background-color;
+                }
+            }
+        }
+
+        .action-dropdown-menu-item {
+            max-width: 23rem;
+            min-width: 18rem;
+            white-space: normal;
+            word-break: break-all;
+        }
+
+        .action-dropdown-menu-item-edit {
+            display: none;
+            padding-bottom: @action-dropdown-menu-item__padding-vertical;
+            padding-left: @action-dropdown-menu-item__padding-left / 2;
+            padding-top: @action-dropdown-menu-item__padding-vertical;
+
+            .action-dropdown-menu-item-actions {
+                padding-bottom: @action-dropdown-menu-item__padding-vertical;
+                padding-top: @action-dropdown-menu-item__padding-vertical;
+            }
+        }
+
+        //  Menu actions
+        .action-dropdown-menu-action {
+            padding-left: @action-dropdown-menu-item__padding-left / 2;
+            padding-top: @action-dropdown-menu-item__padding-vertical;
+
+            + .action-dropdown-menu-item-last {
+                padding-top: .5rem;
+            }
+
+            > a {
+                .link-pattern();
+                display: inline-block;
+                padding-left: 1.1rem;
+            }
+        }
+
+        //  Save action
+        .action-dropdown-menu-item-last {
+            padding-bottom: 0;
+        }
+
+        //  Edit state
+        ._edit {
+            .action-dropdown-menu-item {
+                display: none;
+            }
+
+            .action-dropdown-menu-item-edit {
+                display: block;
+            }
+        }
+
+        //  Active item
+        ._active {
+            .action-dropdown-menu-link {
+                font-weight: @font-weight__semibold;
+            }
+        }
+
+        //  Edit item
+        .admin__control-text {
+            font-size: @action-dropdown-menu__font-size;
+            min-width: 15rem;
+            width: ~'calc(100% - 4rem)';
+        }
+
+        .action-dropdown-menu-item-actions {
+            border-left: 1px solid @action-dropdown-menu-item__background-color;
+            bottom: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: @action-dropdown-menu-item-actions__width;
+        }
+
+        .action-dropdown-menu-link {
+            .action-dropdown-menu-link-pattern();
+            padding: @action-dropdown-menu-item__padding-vertical 1rem @action-dropdown-menu-item__padding-vertical @action-dropdown-menu-item__padding-left + .1rem;
+        }
+    }
+
+    //  Icon actions
+    .action-submit,
+    .action-delete,
+    .action-edit {
+        .action-reset();
+        vertical-align: top;
+
+        &:before {
+            &:extend(.abs-icon all);
+            font-size: @action-dropdown-menu-item-actions__size;
+        }
+
+        > span {
+            .hidden();
+        }
+    }
+
+    .action-delete,
+    .action-edit {
+        padding: @action-dropdown-menu-item-action-icon__padding-vertical @action-dropdown-menu-item-action-icon__padding-horizontal;
+
+        &:active {
+            .scale();
+        }
+    }
+
+    .action-submit {
+        padding: @action-dropdown-menu-item-action-icon__padding-vertical 1rem @action-dropdown-menu-item-action-icon__padding-vertical .8rem;
+
+        &:active {
+            position: relative;
+            right: -1px;
+        }
+
+        &:before {
+            content: @icon-arrow-right__content;
+        }
+    }
+
+    .action-delete {
+        &:before {
+            content: @icon-delete__content;
+        }
+    }
+
+    .action-edit {
+        padding-top: @action-dropdown-menu-item-action-icon__padding-vertical + .2rem;
+
+        &:before {
+            content: @icon-edit__content;
+        }
+    }
+}

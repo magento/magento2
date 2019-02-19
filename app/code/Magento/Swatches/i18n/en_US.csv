@@ -1,0 +1,44 @@
+"Admin is a required field in each row","Admin is a required field in each row"
+"Update Product Preview Image","Update Product Preview Image"
+"Filtering by this attribute will update the product image on catalog page","Filtering by this attribute will update the product image on catalog page"
+"Use Product Image for Swatch if Possible","Use Product Image for Swatch if Possible"
+"Allows use fallback logic for replacing swatch image with product swatch or base image","Allows use fallback logic for replacing swatch image with product swatch or base image"
+"Visual Swatch","Visual Swatch"
+"Text Swatch","Text Swatch"
+"Manage Swatch (Values of Your Attribute)","Manage Swatch (Values of Your Attribute)"
+"Is Default","Is Default"
+"Add Swatch","Add Swatch"
+"Sort Option","Sort Option"
+Swatch,Swatch
+Description,Description
+Delete,Delete
+"The value of Admin must be unique.","The value of Admin must be unique."
+"Choose a color","Choose a color"
+"Upload a file","Upload a file"
+Clear,Clear
+"Step 2: Attribute Values","Step 2: Attribute Values"
+"Select from the following attribute values for this product. Each unique combination of values creates a unique product SKU.","Select from the following attribute values for this product. Each unique combination of values creates a unique product SKU."
+"Sort Variations","Sort Variations"
+Options,Options
+"Select All","Select All"
+"Deselect All","Deselect All"
+"Remove Attribute","Remove Attribute"
+"Save Option","Save Option"
+"Remove Option","Remove Option"
+"Create New Value","Create New Value"
+"These changes affect all related products.","These changes affect all related products."
+"Swatches per Product","Swatches per Product"
+"Show Swatches in Product List","Show Swatches in Product List"
+"Swatch Image","Swatch Image"
+"Allowed file types: jpeg, gif, png.","Allowed file types: jpeg, gif, png."
+Image,Image
+"Image Opacity","Image Opacity"
+"Example format: 200x300.","Example format: 200x300."
+"Image Size","Image Size"
+"Image Position","Image Position"
+"Default Store View","Default Store View"
+Admin,Admin
+"The value of Admin must be unique.","The value of Admin must be unique."
+"The value of Admin must be unique. (%1)","The value of Admin must be unique. (%1)"
+Description,Description
+More,More

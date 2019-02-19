@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<form action="<?= /* @escapeNotVerified */ $block->getUrl('*/*/saverole') ?>" method="post" id="role-edit-form">
+    <?= $block->getBlockHtml('formkey') ?>
+</form>
+<script>
+require([
+    "jquery",
+    "mage/mage"
+], function(jQuery){
+
+    jQuery(document).ready(function() {
+        jQuery('#role-edit-form').mage('form').mage('validation');
+    });
+
+});
+</script>

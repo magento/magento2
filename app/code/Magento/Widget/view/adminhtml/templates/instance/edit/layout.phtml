@@ -1,0 +1,502 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout $block */
+
+?>
+<fieldset class="fieldset">
+    <legend class="legend"><span><?= $block->escapeHtml(__('Layout Updates')) ?></span></legend>
+    <br />
+    <div class="widget-layout-updates">
+        <div id="page_group_container"></div>
+        <div class="actions"><?= $block->getAddLayoutButtonHtml() ?></div>
+    </div>
+</fieldset>
+<script id="ie-deferred-loader" defer="defer" src="//:"></script>
+<script>
+require([
+    'jquery',
+    'mage/template',
+    'Magento_Ui/js/modal/alert',
+    "prototype",
+    "extjs/ext-tree-checkbox"
+], function (jQuery, mageTemplate, alert) {
+
+//<![CDATA[
+
+var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="page_group_container_<%- data.id %>">'+
+    '<div class="fieldset-wrapper-title">'+
+        '<label for="widget_instance[<%- data.id %>][page_group]">Display on <span class="required">*</span></label>'+
+        '<?= $block->getDisplayOnSelectHtml() ?>'+
+        '<div class="actions">'+
+        <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getRemoveLayoutButtonHtml()) ?> +
+        '</div>'+
+    '</div>'+
+    '<div class="fieldset-wrapper-content">'+
+<?php foreach ($block->getDisplayOnContainers() as $container): ?>
+    '<div class="no-display <?= $block->escapeJs($container['code']) ?> group_container" id="<?= $block->escapeJs($container['name']) ?>_<%- data.id %>">'+
+        '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[<%- data.id %>][<?= $block->escapeJs($container['name']) ?>]" />'+
+        '<input disabled="disabled" type="hidden" name="widget_instance[<%- data.id %>][<?= $block->escapeJs($container['name']) ?>][page_id]" value="<%- data.page_id %>" />'+
+        '<input disabled="disabled" type="hidden" class="layout_handle_pattern" name="widget_instance[<%- data.id %>][<?= $block->escapeJs($container['name']) ?>][layout_handle]" value="<?= $block->escapeJs($container['layout_handle']) ?>" />'+
+        '<table class="data-table">'+
+            '<col width="200" />'+
+            '<thead>'+
+                '<tr>'+
+                    '<th><label><?= $block->escapeJs(__('%1', $container['label'])) ?></label></th>'+
+                    '<th><label><?= $block->escapeJs(__('Container')) ?> <span class="required">*</span></label></th>'+
+                    '<th><label><?= $block->escapeJs(__('Template')) ?></label></th>'+
+                '</tr>'+
+            '</thead>'+
+            '<tbody>'+
+                '<tr>'+
+                    '<td>'+
+                        '<input disabled="disabled" type="radio" class="radio for_all" id="all_<?= $block->escapeJs($container['name']) ?>_<%- data.id %>" name="widget_instance[<%- data.id %>][<?= $block->escapeJs($container['name']) ?>][for]" value="all" onclick="WidgetInstance.togglePageGroupChooser(this)" checked="checked" />&nbsp;'+
+                        '<label for="all_<?= $block->escapeJs($container['name']) ?>_<%- data.id %>"><?= $block->escapeJs(__('All')) ?></label><br />'+
+                        '<input disabled="disabled" type="radio" class="radio for_specific" id="specific_<?= $block->escapeJs($container['name']) ?>_<%- data.id %>" name="widget_instance[<%- data.id %>][<?= $block->escapeJs($container['name']) ?>][for]" value="specific" onclick="WidgetInstance.togglePageGroupChooser(this)" />&nbsp;'+
+                        '<label for="specific_<?= $block->escapeJs($container['name']) ?>_<%- data.id %>"><?= $block->escapeJs(__('Specific %1', $container['label'])) ?></label>'+
+                    '</td>'+
+                    '<td>'+
+                        '<div class="block_reference_container">'+
+                            '<div class="block_reference"></div>'+
+                        '</div>'+
+                    '</td>'+
+                    '<td>'+
+                        '<div class="block_template_container">'+
+                            '<div class="block_template"></div>'+
+                        '</div>'+
+                    '</td>'+
+                '</tr>'+
+            '</tbody>'+
+        '</table>'+
+        '<div class="no-display chooser_container" id="<?= $block->escapeJs($container['name']) ?>_ids_<%- data.id %>">'+
+            '<input disabled="disabled" type="hidden" class="is_anchor_only" name="widget_instance[<%- data.id %>][<?= $block->escapeJs($container['name']) ?>][is_anchor_only]" value="<?= $block->escapeJs($container['is_anchor_only']) ?>" />'+
+            '<input disabled="disabled" type="hidden" class="product_type_id" name="widget_instance[<%- data.id %>][<?= $block->escapeJs($container['name']) ?>][product_type_id]" value="<?= $block->escapeJs($container['product_type_id']) ?>" />'+
+            '<p>' +
+                '<input disabled="disabled" type="text" class="input-text entities" name="widget_instance[<%- data.id %>][<?= $block->escapeJs($container['name']) ?>][entities]" value="<%- data.<?= $block->escapeJs($container['name']) ?>_entities %>" readonly="readonly" />&nbsp;' +
+                '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?= $block->escapeJs($container['code']) ?>\', \'<?= $block->escapeJs($container['name']) ?>_ids_<%- data.id %>\')"  title="<?= $block->escapeJs(__('Open Chooser')) ?>">' +
+                    '<img src="<?= $block->escapeUrl($block->getViewFileUrl('images/rule_chooser_trigger.gif')) ?>" alt="<?= $block->escapeJs(__('Open Chooser')) ?>" />' +
+                '</a>&nbsp;' +
+                '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?= $block->escapeJs($container['name']) ?>_ids_<%- data.id %>\')" title="<?= $block->escapeJs(__('Apply')) ?>">' +
+                    '<img src="<?= $block->escapeUrl($block->getViewFileUrl('images/rule_component_apply.gif')) ?>" alt="<?= $block->escapeJs(__('Apply')) ?>" />' +
+                '</a>' +
+            '</p>'+
+            '<div class="chooser"></div>'+
+        '</div>'+
+    '</div>'+
+<?php endforeach; ?>
+'<div class="no-display all_pages group_container" id="all_pages_<%- data.id %>">'+
+    '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[<%- data.id %>][all_pages]" />'+
+    '<input disabled="disabled" type="hidden" name="widget_instance[<%- data.id %>][all_pages][page_id]" value="<%- data.page_id %>" />'+
+    '<input disabled="disabled" type="hidden" class="layout_handle_pattern" name="widget_instance[<%- data.id %>][all_pages][layout_handle]" value="default" />'+
+    '<input disabled="disabled" type="hidden" class="for_all" name="widget_instance[<%- data.id %>][all_pages][for]" value="all" />'+
+    '<table class="data-table">'+
+        '<col width="200" />'+
+        '<thead>'+
+            '<tr>'+
+                '<th><label><?= $block->escapeJs(__('Container')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?= $block->escapeJs(__('Template')) ?></label></th>'+
+                '<th>&nbsp;</th>'+
+            '</tr>'+
+        '</thead>'+
+        '<tbody>'+
+            '<tr>'+
+                '<td>'+
+                    '<div class="block_reference_container">'+
+                        '<div class="block_reference"></div>'+
+                    '</div>'+
+                '</td>'+
+                '<td>'+
+                    '<div class="block_template_container">'+
+                        '<div class="block_template"></div>'+
+                    '</div>'+
+                '</td>'+
+                '<td>&nbsp;</td>'+
+            '</tr>'+
+        '</tbody>'+
+    '</table>'+
+'</div>'+
+'<div class="no-display ignore-validate pages group_container" id="pages_<%- data.id %>">'+
+    '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[<%- data.id %>][pages]" />'+
+    '<input disabled="disabled" type="hidden" name="widget_instance[<%- data.id %>][pages][page_id]" value="<%- data.page_id %>" />'+
+    '<input disabled="disabled" type="hidden" class="for_all" name="widget_instance[<%- data.id %>][pages][for]" value="all" />'+
+    '<table class="data-table">'+
+        '<col width="200" />'+
+        '<thead>'+
+            '<tr>'+
+                '<th><label><?= $block->escapeJs(__('Page')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?= $block->escapeJs(__('Container')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?= $block->escapeJs(__('Template')) ?></label></th>'+
+            '</tr>'+
+        '</thead>'+
+        '<tbody>'+
+            '<tr>'+
+                '<td><?= /* @noEscape */ $block->getLayoutsChooser() ?></td>'+
+                '<td>'+
+                    '<div class="block_reference_container">'+
+                        '<div class="block_reference"></div>'+
+                    '</div>'+
+                '</td>'+
+                '<td>'+
+                    '<div class="block_template_container">'+
+                        '<div class="block_template"></div>'+
+                    '</div>'+
+                '</td>'+
+                '<td>&nbsp;</td>'+
+            '</tr>'+
+        '</tbody>'+
+    '</table>'+
+'</div>'+
+'<div class="no-display ignore-validate pages group_container" id="page_layouts_<%- data.id %>">'+
+    '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[<%- data.id %>][page_layouts]" />'+
+    '<input disabled="disabled" type="hidden" name="widget_instance[<%- data.id %>][page_layouts][page_id]" value="<%- data.page_id %>" />'+
+    '<input disabled="disabled" type="hidden" class="for_all" name="widget_instance[<%- data.id %>][page_layouts][for]" value="all" />'+
+    '<table class="data-table">'+
+        '<col width="200" />'+
+        '<thead>'+
+            '<tr>'+
+                '<th><label><?= $block->escapeJs(__('Page')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?= $block->escapeJs(__('Container')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?= $block->escapeJs(__('Template')) ?></label></th>'+
+            '</tr>'+
+        '</thead>'+
+        '<tbody>'+
+            '<tr>'+
+                '<td><?= /* @noEscape */ $block->getPageLayoutsPageChooser() ?></td>'+
+                '<td>'+
+                    '<div class="block_reference_container">'+
+                        '<div class="block_reference"></div>'+
+                    '</div>'+
+                '</td>'+
+                '<td>'+
+                    '<div class="block_template_container">'+
+                        '<div class="block_template"></div>'+
+                    '</div>'+
+                '</td>'+
+                '<td>&nbsp;</td>'+
+            '</tr>'+
+        '</tbody>'+
+    '</table>'+
+'</div>'+
+'</div>'+
+'</div>';
+
+window.pageGroupTemplate = pageGroupTemplate;
+
+var WidgetInstance = {
+    pageGroupTemplate    : pageGroupTemplate,
+    pageGroupContainerId : 'page_group_container',
+    count : 0,
+    activePageGroups : $H({}),
+    selectedItems : {},
+
+    addPageGroup : function(data) {
+        if (this.pageGroupTemplate && (pageGroupContainer = $(this.pageGroupContainerId))) {
+            if (!data.page_id) {
+                data = {};
+                data.page_id = 0;
+                data.entities = '';
+            }
+            data.id = this.count++;
+            if (data[data.group + '_entities']) {
+                var selected_entities = data[data.group + '_entities'].split(',');
+                if (selected_entities.length > 0) {
+                    for (var i = 0; i < selected_entities.length; i++) {
+                        this.addProductItemToSelection(data.group + '_ids_' + data.id, selected_entities[i]);
+                    }
+                }
+            }
+            pageGroupTemplateObj = mageTemplate(this.pageGroupTemplate);
+                Element.insert(pageGroupContainer, {
+                    'bottom': pageGroupTemplateObj({
+                        data: data
+                    })
+                });
+                if (data.group) {
+                pageGroup = $(data.group+'_'+data.id);
+                additional = {};
+                additional.selectedLayoutHandle = data.layout_handle;
+                additional.selectedBlock = data.block;
+                additional.selectedTemplate = data.template;
+                additional.position = data.position;
+                additional.for_value = data.for_value;
+                additional.template = '';
+                if (data.group == 'pages' || data.group == 'page_layouts') {
+                    layoutSelect = pageGroup.down('select#layout_handle');
+                    if (layoutSelect) {
+                        for (var i = 0; i < layoutSelect.options.length; i++) {
+                            if (layoutSelect.options[i].value == data.layout_handle) {
+                                layoutSelect.options[i].selected = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if ($(this.pageGroupContainerId+'_'+data.id)) {
+                    selectGroupElm = $(this.pageGroupContainerId+'_'+data.id).down('select.page_group_select');
+                    for (var i = 0; i < selectGroupElm.options.length; i++) {
+                        if (selectGroupElm.options[i].value == data.group) {
+                            selectGroupElm.options[i].selected = true;
+                            break;
+                        }
+                    }
+                }
+                forElm = pageGroup.down('input.for_'+data.for_value);
+                if (forElm) {
+                    /**
+                     * IE browsers fix: remove default checked attribute in radio form element
+                     * to check others radio form elements in future
+                     */
+                    pageGroup.down('input.for_all').defaultChecked = false;
+                    forElm.defaultChecked = true;
+                    forElm.checked = true;
+                    this.togglePageGroupChooser(forElm);
+                }
+                this.displayPageGroup(pageGroup, additional);
+            }
+        }
+    },
+    removePageGroup : function(element) {
+        container = element.up('div.page_group_container');
+        if (container) {
+            container.remove();
+        }
+    },
+    addProductItemToSelection: function(groupId, item) {
+        if (undefined == this.selectedItems[groupId]) {
+            this.selectedItems[groupId] = $H({});
+        }
+        if (!isNaN(parseInt(item))) {
+            this.selectedItems[groupId].set(item, 1);
+        }
+    },
+    removeProductItemFromSelection: function(groupId, item) {
+        if (undefined !== this.selectedItems[groupId]) {
+            this.selectedItems[groupId].unset(item);
+        }
+    },
+    showBlockContainer : function(container) {
+        container = $(container);
+        if (container) {
+            container.removeClassName('no-display');
+            container.removeClassName('ignore-validate');
+            container.up('.fieldset-wrapper').addClassName('opened');
+            container.select('input', 'select').each(function(element) {
+                $(element).removeAttribute('disabled');
+            });
+            container.show();
+        }
+    },
+    hideBlockContainer : function(container) {
+        container = $(container);
+        if (container) {
+            container.addClassName('no-display');
+            container.addClassName('ignore-validate');
+            container.select('input', 'select').each(function(element) {
+                $(element).writeAttribute('disabled', 'disabled');
+            });
+            container.hide();
+        }
+    },
+    displayPageGroup : function(container, additional) {
+        container = $(container);
+        if (!additional) {
+            additional = {};
+        }
+        if (activePageGroupId = this.activePageGroups.get(container.up('div.page_group_container').id)) {
+            this.hideBlockContainer(activePageGroupId);
+        }
+        this.activePageGroups.set(container.up('div.page_group_container').id, container.id);
+        this.showBlockContainer(container);
+        blockContainer = container.down('div.block_reference');
+        if (blockContainer && blockContainer.innerHTML == '') {
+            layoutHandle = '';
+            if (layoutHandleField = container.down('input.layout_handle_pattern')) {
+                layoutHandle = layoutHandleField.value;
+            } else if (additional.selectedLayoutHandle) {
+                layoutHandle = additional.selectedLayoutHandle;
+            }
+            this.loadSelectBoxByType('block_reference', container, layoutHandle, additional);
+        }
+        this.loadSelectBoxByType('block_template', container, additional.selectedBlock, additional);
+    },
+    displayEntityChooser : function(type, chooser, additional) {
+        if (!additional) {
+            additional = {};
+        }
+        if (type == 'categories') {
+            additional.url = '<?= $block->escapeUrl($block->getCategoriesChooserUrl()) ?>';
+            additional.post_parameters = $H({'is_anchor_only':$(chooser).down('input.is_anchor_only').value});
+        } else if (type == 'products') {
+            additional.url = '<?= $block->escapeUrl($block->getProductsChooserUrl()) ?>';
+            additional.post_parameters = $H({'product_type_id':$(chooser).down('input.product_type_id').value});
+        }
+        if (chooser && additional) {
+            this.displayChooser(chooser, additional);
+        }
+    },
+    hideEntityChooser : function(chooser) {
+        chooser = $(chooser).down('div.chooser');
+        if (chooser) {
+            chooser.addClassName('no-display');
+            chooser.hide();
+        }
+    },
+    displayChooser : function(chooser, additional) {
+        chooser = $(chooser).down('div.chooser');
+        entities = chooser.up('div.chooser_container').down('input[type="text"].entities').value;
+        postParameters = $H({selected:entities});
+        url = '';
+        if (additional) {
+            if (additional.url) url = additional.url;
+            if (additional.post_parameters) {
+                additional.post_parameters.each(function(pair){
+                    postParameters.set(pair.key,pair.value);
+                });
+            }
+        }
+        if (chooser && url) {
+            if (chooser.innerHTML == '') {
+                new Ajax.Request(url, {
+                    method: 'post',
+                    parameters: postParameters,
+                    onSuccess: function(transport) {
+                        try {
+                            if (transport.responseText) {
+                                Element.insert(chooser, transport.responseText);
+                                chooser.removeClassName('no-display');
+                                chooser.show();
+                            }
+                        } catch (e) {
+                            alert({
+                                content: 'Error occurs during loading chooser.'
+                            });
+                        }
+                    }
+                });
+            } else {
+                chooser.removeClassName('no-display');
+                chooser.show();
+            }
+        }
+    },
+    checkProduct : function(event) {
+        var elm = event.memo.element,
+            container = event.target.up('div.chooser').up('div.chooser_container'),
+            selectionId = container.id,
+            entitiesElm = container.down('input[type="text"].entities');
+        if (elm.checked) {
+            this.addProductItemToSelection(selectionId, elm.value);
+        } else {
+            this.removeProductItemFromSelection(selectionId, elm.value);
+        }
+        if (entitiesElm) {
+            entitiesElm.value = this.selectedItems[selectionId].keys().join(',');
+        }
+    },
+    checkCategory : function(event) {
+        node = event.memo.node;
+        container = event.target.up('div.chooser_container');
+        value = container.down('input[type="text"].entities').value.strip();
+        if (node.attributes.checked) {
+            if (value) ids = value.split(',');
+            else ids = [];
+            if (-1 == ids.indexOf(node.id)) {
+                ids.push(node.id);
+                container.down('input[type="text"].entities').value = ids.join(',');
+            }
+        } else {
+            ids = value.split(',');
+            while (-1 != ids.indexOf(node.id)) {
+                ids.splice(ids.indexOf(node.id), 1);
+                container.down('input[type="text"].entities').value = ids.join(',');
+            }
+        }
+    },
+    togglePageGroupChooser : function(element) {
+        element = $(element);
+        if (element && (chooser = element.up('div.group_container').down('div.chooser_container'))) {
+            if (element.value == 'all') {
+                chooser.addClassName('no-display');
+                chooser.hide();
+            } else {
+                chooser.removeClassName('no-display');
+                chooser.show();
+            }
+        }
+    },
+    loadSelectBoxByType : function (type, element, value, additional) {
+        if (!additional) {
+            additional = {};
+        }
+        if (element && (containerElm = element.down('div.'+type))) {
+            url = '';
+            selected = '';
+            parameters = {};
+            if (type == 'block_reference') {
+                url = '<?= $block->escapeUrl($block->getBlockChooserUrl()) ?>';
+                if (additional.selectedBlock) {
+                    selected = additional.selectedBlock;
+                }
+                parameters.layout = value;
+            } else if (type == 'block_template') {
+                url = '<?= $block->escapeUrl($block->getTemplateChooserUrl()) ?>';
+                if (additional.selectedTemplate) {
+                    selected = additional.selectedTemplate;
+                }
+                parameters.block = value;
+            }
+            parameters.selected = selected;
+            if (url) {
+                new Ajax.Request(url, {
+                    method: 'post',
+                    parameters: parameters,
+                    containerElm: containerElm,
+                    onSuccess: function(transport) {
+                        containerElm = transport.request.options.containerElm;
+                        try {
+                            if (transport.responseText) {
+                                containerElm.update(transport.responseText);
+                                formElm = containerElm.down('select, input[type="hidden"]');
+                                if (formElm) {
+                                    formElm.name = element.down('input.container_name').value+'['+formElm.name+']';
+                                }
+                            }
+                        } catch (e) {
+                            alert({
+                                content: 'Error occurs during loading chooser.'
+                            });
+                        }
+                    }
+                });
+            }
+        }
+    }
+};
+
+window.WidgetInstance = WidgetInstance;
+
+jQuery(function(){
+    <?php foreach ($block->getPageGroups() as $pageGroup): ?>
+        WidgetInstance.addPageGroup(<?= /* @noEscape */ $pageGroup ?>);
+    <?php endforeach; ?>
+    Event.observe(document, 'product:changed', function(event){
+        WidgetInstance.checkProduct(event);
+    });
+    Event.observe(document, 'node:changed', function(event){
+        WidgetInstance.checkCategory(event);
+    });
+    Event.observe(document, 'category:beforeLoad', function(event) {
+        container = event.target.up('div.chooser_container');
+        value = container.down('input[type="text"].entities').value.strip();
+        event.memo.treeLoader.baseParams.selected = value;
+    });
+});
+//]]>
+
+});
+</script>

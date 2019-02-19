@@ -1,0 +1,114 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+#grouped_grid .col-name {
+    width: 25%;
+}
+
+#grouped_grid .col-sku {
+    width: 10%;
+}
+
+#grouped_grid .col-qty {
+    width: 7%;
+}
+
+.ui-dialog.grouped .massaction {
+    display: none;
+}
+
+.ui-dialog.grouped .data {
+    table-layout: auto;
+}
+
+.ui-dialog.grouped .col-entity_id {
+    width: 2%;
+}
+
+#grouped-product-container .col-name {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#grouped-product-container .col-sku {
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#product_info_tabs_grouped_content .grid-container {
+    margin-bottom: 10px;
+}
+
+#product_info_tabs_grouped_content .col-draggable {
+    width: 10px;
+}
+
+#product_info_tabs_grouped_content .col-qty {
+    width: 80px;
+}
+
+#product_info_tabs_grouped_content .col-actions {
+    width: 50px;
+}
+
+#product_info_tabs_grouped_content .col-name {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#product_info_tabs_grouped_content .col-sku {
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.position {
+    width: 100px;
+}
+
+.icon-rearrange-position > span {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.icon-forward,
+.icon-backward {
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Admin Icons';
+    font-size: 17px;
+    speak: none;
+}
+
+.position > * {
+    float: left;
+    margin: 3px;
+}
+
+.position-widget-input {
+    text-align: center;
+    width: 40px;
+}
+
+.icon-forward:before {
+    content: '\e618';
+}
+
+.icon-backward:before {
+    content: '\e619';
+}
+
+.icon-rearrange-position, .icon-rearrange-position:hover   {
+    color: #d9d9d9;
+    text-decoration: none;
+}

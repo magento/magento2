@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<strong class="product name product-item-name"><a href="<?= /* @escapeNotVerified */ $block->getProductUrl() ?>"><?= $block->escapeHtml($block->getProductName()) ?></a></strong>
+<?php if ($_options = $block->getOptionList()): ?>
+    <dl class="item-options">
+        <?php foreach ($_options as $_option) : ?>
+            <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
+            <dt><?= $block->escapeHtml($_option['label']) ?></dt>
+            <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
+                <?= /* @escapeNotVerified */ $_formatedOptionValue['value'] ?>
+                <?php if (isset($_formatedOptionValue['full_view'])): ?>
+                    <dl class="item options tooltip content">
+                        <dt><?= $block->escapeHtml($_option['label']) ?></dt>
+                        <dd><?= /* @escapeNotVerified */ $_formatedOptionValue['full_view'] ?></dd>
+                    </dl>
+                <?php endif; ?>
+            </dd>
+        <?php endforeach; ?>
+    </dl>
+<?php endif; ?>
+<?php if ($addtInfoBlock = $block->getProductAdditionalInformationBlock()): ?>
+    <?= $addtInfoBlock->setItem($block->getItem())->toHtml() ?>
+<?php endif; ?>

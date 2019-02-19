@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <catalog>
+            <navigation>
+                <max_depth>0</max_depth>
+            </navigation>
+            <recently_products>
+                <recently_viewed_lifetime>1000</recently_viewed_lifetime>
+                <recently_compared_lifetime>1000</recently_compared_lifetime>
+            </recently_products>
+            <fields_masks>
+                <sku>{{name}}</sku>
+                <meta_title>{{name}}</meta_title>
+                <meta_keyword>{{name}}</meta_keyword>
+                <meta_description>{{name}} {{description}}</meta_description>
+            </fields_masks>
+            <frontend>
+                <list_mode>grid-list</list_mode>
+                <grid_per_page_values>9,15,30</grid_per_page_values>
+                <list_per_page_values>5,10,15,20,25</list_per_page_values>
+                <grid_per_page>9</grid_per_page>
+                <list_per_page>10</list_per_page>
+                <flat_catalog_category>0</flat_catalog_category>
+                <default_sort_by>position</default_sort_by>
+                <parse_url_directives>1</parse_url_directives>
+                <remember_pagination>0</remember_pagination>
+            </frontend>
+            <product>
+                <flat>
+                    <max_index_count>64</max_index_count>
+                </flat>
+                <default_tax_group>2</default_tax_group>
+            </product>
+            <seo>
+                <product_url_suffix>.html</product_url_suffix>
+                <category_url_suffix>.html</category_url_suffix>
+                <product_use_categories>0</product_use_categories>
+                <save_rewrites_history>1</save_rewrites_history>
+                <title_separator>-</title_separator>
+                <category_canonical_tag>0</category_canonical_tag>
+                <product_canonical_tag>0</product_canonical_tag>
+            </seo>
+            <custom_options>
+                <date_fields_order>m,d,y</date_fields_order>
+                <time_format>12h</time_format>
+                <forbidden_extensions>php,exe</forbidden_extensions>
+            </custom_options>
+        </catalog>
+        <indexer>
+            <catalog_product_price>
+                <dimensions_mode>none</dimensions_mode>
+            </catalog_product_price>
+        </indexer>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <tmp_images_folder>tmp</tmp_images_folder>
+                    <catalog_product_images>media/catalog/product/cache/</catalog_product_images>
+                    <catalog_images_folder>catalog</catalog_images_folder>
+                    <product_custom_options_fodler>custom_options</product_custom_options_fodler>
+                </allowed_resources>
+            </media_storage_configuration>
+            <upload_configuration>
+                <jpeg_quality>80</jpeg_quality>
+            </upload_configuration>
+        </system>
+        <design>
+            <watermark>
+                <image_position>stretch</image_position>
+                <small_image_position>stretch</small_image_position>
+                <thumbnail_position>stretch</thumbnail_position>
+            </watermark>
+        </design>
+    </default>
+</config>

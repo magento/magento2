@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="system">
+            <group id="full_page_cache" translate="label" showInDefault="1" showInWebsite="0" showInStore="0" sortOrder="600">
+                <label>Full Page Cache</label>
+                <field id="caching_application" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Caching Application</label>
+                    <source_model>Magento\PageCache\Model\System\Config\Source\Application</source_model>
+                </field>
+                <group id="varnish" translate="label" showInDefault="1" showInWebsite="0" showInStore="0" sortOrder="605">
+                    <label>Varnish Configuration</label>
+                    <field id="access_list" type="text" translate="label comment" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Access list</label>
+                        <comment>IPs access list separated with ',' that can purge Varnish configuration for config file generation.
+                            If field is empty default value localhost will be saved.</comment>
+                        <backend_model>Magento\PageCache\Model\System\Config\Backend\AccessList</backend_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
+                    <field id="backend_host" type="text" translate="label comment" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Backend host</label>
+                        <comment>Specify backend host for config file generation. If field is empty default value localhost will be saved.</comment>
+                        <backend_model>Magento\PageCache\Model\System\Config\Backend\Varnish</backend_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
+                    <field id="backend_port" type="text" translate="label comment" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Backend port</label>
+                        <comment>Specify backend port for config file generation. If field is empty default value 8080 will be saved.</comment>
+                        <backend_model>Magento\PageCache\Model\System\Config\Backend\Varnish</backend_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
+                    <field id="grace_period" type="text" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Grace period</label>
+                        <comment>Specify grace period in seconds for config file generation. If field is empty default value 300 will be saved. This grace period will be used to serve cached content when the server is healthy. If the server is not healthy, cached content will be served for 3 days before failing.</comment>
+                        <backend_model>Magento\PageCache\Model\System\Config\Backend\Varnish</backend_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
+                    <field id="export_button_version4" translate="label" type="button" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Export Configuration</label>
+                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish4</frontend_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
+                    <field id="export_button_version5" type="button" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish5</frontend_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
+                    <depends>
+                        <field id="caching_application">2</field>
+                    </depends>
+                </group>
+                <field id="ttl" type="text" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>TTL for public content</label>
+                    <comment>Public content cache lifetime in seconds. If field is empty default value 86400 will be saved. </comment>
+                    <backend_model>Magento\PageCache\Model\System\Config\Backend\Ttl</backend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

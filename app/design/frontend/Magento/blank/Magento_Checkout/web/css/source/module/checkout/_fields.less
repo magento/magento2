@@ -1,0 +1,85 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@checkout-field-validation__border-color: @form-element-validation__border-error;
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .field {
+        .control {
+            &._with-tooltip {
+                &:extend(.abs-field-tooltip all);
+            }
+        }
+
+        &.choice {
+            .field-tooltip {
+                display: inline-block;
+                margin-left: @indent__s;
+                position: relative;
+                top: -3px;
+            }
+
+            .field-tooltip-action {
+                .lib-css(line-height, @checkout-tooltip-icon__font-size);
+            }
+        }
+
+        &._error {
+            .control {
+                input,
+                select,
+                textarea {
+                    .lib-css(border-color, @checkout-field-validation__border-color);
+                }
+            }
+        }
+    }
+
+    .opc-wrapper {
+        .fieldset {
+            > .field {
+                > .label {
+                    font-weight: @font-weight__regular;
+                }
+            }
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    //  ToDo UI: remove with global blank theme .field.required update
+    .opc-wrapper {
+        .fieldset {
+            > .field {
+                &.required,
+                &._required {
+                    position: relative;
+
+                    > label {
+                        padding-right: 25px;
+
+                        &:after {
+                            margin-left: @indent__s;
+                            position: absolute;
+                            top: 9px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

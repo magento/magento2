@@ -1,0 +1,62 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<div class="import-export-tax-rates">
+    <?php if (!$block->getIsReadonly()): ?>
+    <div class="import-tax-rates">
+        <?php if ($block->getUseContainer()): ?>
+        <form id="import-form" class="admin__fieldset" action="<?= /* @escapeNotVerified */ $block->getUrl('tax/rate/importPost') ?>" method="post" enctype="multipart/form-data">
+        <?php endif; ?>
+            <?= $block->getBlockHtml('formkey') ?>
+            <div class="fieldset admin__field">
+                <label for="import_rates_file" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Import Tax Rates') ?></span></label>
+                <div class="admin__field-control">
+                    <input type="file" id="import_rates_file" name="import_rates_file" class="input-file required-entry"/>
+                    <?= $block->getButtonHtml(__('Import Tax Rates'), '', 'import-submit') ?>
+                </div>
+            </div>
+        <?php if ($block->getUseContainer()): ?>
+        </form>
+        <?php endif; ?>
+        <script>
+require(['jquery', "mage/mage", "loadingPopup"], function(jQuery){
+
+    jQuery('#import-form').mage('form').mage('validation');
+    (function ($) {
+        $('.import-submit').click(function(){
+            if($(':input[name="import_rates_file"]').val()) {
+                $('body').loadingPopup({
+                    timeout: false
+                });
+
+                $(this.form).submit();
+            }
+        });
+    })(jQuery);
+
+});
+</script>
+    </div>
+    <?php endif; ?>
+    <div class="export-tax-rates <?php if ($block->getIsReadonly()): ?>box-left<?php else: ?>box-right<?php endif; ?>">
+        <?php if ($block->getUseContainer()): ?>
+        <form id="export_form" class="admin__fieldset" action="<?= /* @escapeNotVerified */ $block->getUrl('tax/rate/exportPost') ?>" method="post" enctype="multipart/form-data">
+        <?php endif; ?>
+            <?= $block->getBlockHtml('formkey') ?>
+            <div class="fieldset admin__field">
+                <span class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Export Tax Rates') ?></span></span>
+                <div class="admin__field-control">
+                    <?= $block->getButtonHtml(__('Export Tax Rates'), "this.form.submit()") ?>
+                </div>
+            </div>
+        <?php if ($block->getUseContainer()): ?>
+        </form>
+        <?php endif; ?>
+    </div>
+</div>

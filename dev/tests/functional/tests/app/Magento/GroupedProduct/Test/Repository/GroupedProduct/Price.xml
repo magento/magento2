@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\GroupedProduct\Test\Repository\GroupedProduct\Price">
+        <dataset name="starting-100">
+            <field name="compare_price" xsi:type="array">
+                <item name="price_starting" xsi:type="string">100.00</item>
+            </field>
+        </dataset>
+
+        <dataset name="starting-560">
+            <field name="compare_price" xsi:type="array">
+                <item name="price_starting" xsi:type="string">560.00</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

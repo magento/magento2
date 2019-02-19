@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Sales:etc/sales.xsd">
+    <section name="quote">
+        <group name="totals">
+            <item name="tax_subtotal" instance="Magento\Tax\Model\Sales\Total\Quote\Subtotal" sort_order="200"/>
+            <item name="tax_shipping" instance="Magento\Tax\Model\Sales\Total\Quote\Shipping" sort_order="300"/>
+            <item name="tax" instance="Magento\Tax\Model\Sales\Total\Quote\Tax" sort_order="450">
+                <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Tax"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Tax"/>
+            </item>
+            <item name="subtotal">
+                <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Subtotal"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Subtotal"/>
+            </item>
+            <item name="shipping">
+                <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Shipping"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Shipping"/>
+            </item>
+            <item name="discount">
+                <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Discount"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Discount"/>
+            </item>
+            <item name="grand_total">
+                <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Grandtotal"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Grandtotal"/>
+            </item>
+        </group>
+    </section>
+</config>

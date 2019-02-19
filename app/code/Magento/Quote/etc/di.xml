@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Quote\Api\ShippingMethodManagementInterface" type="Magento\Quote\Model\ShippingMethodManagement" />
+    <preference for="Magento\Quote\Api\ShipmentEstimationInterface" type="Magento\Quote\Model\ShippingMethodManagement" />
+    <preference for="Magento\Quote\Api\Data\ShippingMethodInterface" type="Magento\Quote\Model\Cart\ShippingMethod" />
+    <preference for="Magento\Quote\Api\BillingAddressManagementInterface" type="Magento\Quote\Model\BillingAddressManagement" />
+    <preference for="Magento\Quote\Model\ShippingAddressManagementInterface" type="Magento\Quote\Model\ShippingAddressManagement" />
+    <preference for="Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface" type="Magento\Quote\Model\MaskedQuoteIdToQuoteId" />
+    <preference for="Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface" type="Magento\Quote\Model\QuoteIdToMaskedQuoteId" />
+    <preference for="Magento\Quote\Api\Data\AddressInterface" type="Magento\Quote\Model\Quote\Address" />
+    <preference for="Magento\Quote\Api\Data\CartItemInterface" type="Magento\Quote\Model\Quote\Item" />
+    <preference for="Magento\Quote\Api\Data\CartInterface" type="Magento\Quote\Model\Quote" />
+    <preference for="Magento\Quote\Api\CartItemRepositoryInterface" type="Magento\Quote\Model\Quote\Item\Repository" />
+    <preference for="Magento\Quote\Api\CartRepositoryInterface" type="Magento\Quote\Model\QuoteRepository" />
+    <preference for="Magento\Quote\Api\Data\CartSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Quote\Api\PaymentMethodManagementInterface" type="Magento\Quote\Model\PaymentMethodManagement" />
+    <preference for="Magento\Quote\Api\Data\PaymentInterface" type="Magento\Quote\Model\Quote\Payment" />
+    <preference for="Magento\Quote\Api\CouponManagementInterface" type="Magento\Quote\Model\CouponManagement" />
+    <preference for="Magento\Quote\Api\CartManagementInterface" type="Magento\Quote\Model\QuoteManagement" />
+    <preference for="Magento\Quote\Api\CartTotalRepositoryInterface" type="Magento\Quote\Model\Cart\CartTotalRepository" />
+    <preference for="Magento\Quote\Api\ChangeQuoteControlInterface" type="Magento\Quote\Model\ChangeQuoteControl" />
+    <preference for="Magento\Quote\Api\CartTotalManagementInterface" type="Magento\Quote\Model\Cart\CartTotalManagement" />
+    <preference for="Magento\Quote\Api\Data\TotalsInterface" type="Magento\Quote\Model\Cart\Totals" />
+    <preference for="Magento\Quote\Api\Data\TotalSegmentInterface" type="Magento\Quote\Model\Cart\TotalSegment" />
+    <preference for="Magento\Quote\Api\Data\TotalsItemInterface" type="Magento\Quote\Model\Cart\Totals\Item" />
+    <preference for="Magento\Quote\Api\Data\CurrencyInterface" type="Magento\Quote\Model\Cart\Currency" />
+    <preference for="Magento\Quote\Api\GuestCartManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCartManagement" />
+    <preference for="Magento\Quote\Api\GuestCartRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartRepository" />
+    <preference for="Magento\Quote\Api\GuestCartItemRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartItemRepository" />
+    <preference for="Magento\Quote\Api\GuestCouponManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCouponManagement" />
+    <preference for="Magento\Quote\Api\GuestPaymentMethodManagementInterface" type="Magento\Quote\Model\GuestCart\GuestPaymentMethodManagement" />
+    <preference for="Magento\Quote\Api\GuestCartTotalRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartTotalRepository" />
+    <preference for="Magento\Quote\Model\GuestCart\GuestShippingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingAddressManagement" />
+    <preference for="Magento\Quote\Api\GuestShippingMethodManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement" />
+    <preference for="Magento\Quote\Api\GuestShipmentEstimationInterface" type="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement" />
+    <preference for="Magento\Quote\Api\GuestBillingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestBillingAddressManagement" />
+    <preference for="Magento\Quote\Api\GuestCartTotalManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCartTotalManagement" />
+    <preference for="Magento\Quote\Api\Data\EstimateAddressInterface" type="Magento\Quote\Model\EstimateAddress" />
+    <preference for="Magento\Quote\Api\Data\ProductOptionInterface" type="Magento\Quote\Model\Quote\ProductOption" />
+    <preference for="Magento\Quote\Model\ValidationRules\QuoteValidationRuleInterface" type="Magento\Quote\Model\ValidationRules\QuoteValidationComposite\Proxy"/>
+    <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
+        <arguments>
+            <argument name="paramOverriders" xsi:type="array">
+                <item name="%cart_id%" xsi:type="object">Magento\Quote\Model\Webapi\ParamOverriderCartId\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\QuoteRepository">
+        <arguments>
+            <argument name="quoteCollection" xsi:type="object">Magento\Quote\Model\ResourceModel\Quote\Collection\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Address">
+        <arguments>
+            <argument name="addressConfig" xsi:type="object">Magento\Customer\Model\Address\Config\Proxy</argument>
+        </arguments>
+    </type>
+    <virtualType name="QuoteAddressRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Quote\Model\Quote\Address\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Quote\Model\ResourceModel\Quote\Address">
+        <arguments>
+            <argument name="entityRelationComposite" xsi:type="object">QuoteAddressRelationsComposite</argument>
+        </arguments>
+    </type>
+    <virtualType name="QuoteRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Quote\Model\Quote\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Quote\Model\ResourceModel\Quote">
+        <arguments>
+            <argument name="entityRelationComposite" xsi:type="object">QuoteRelationsComposite</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Quote\Api\Data\AddressAdditionalDataInterface" type="Magento\Quote\Model\AddressAdditionalData" />
+    <preference for="Magento\Quote\Api\Data\TotalsAdditionalDataInterface" type="Magento\Quote\Model\Cart\TotalsAdditionalData" />
+    <preference for="Magento\Quote\Model\Quote\Address\CustomAttributeListInterface" type="Magento\Quote\Model\Quote\Address\CustomAttributeList" />
+    <preference for="Magento\Quote\Model\Quote\Address\FreeShippingInterface" type="Magento\Quote\Model\Quote\Address\FreeShipping" />
+    <preference for="Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement" />
+    <preference for="Magento\Quote\Model\ShippingMethodManagementInterface" type="Magento\Quote\Model\ShippingMethodManagement" />
+    <preference for="Magento\Quote\Api\Data\ShippingInterface" type="Magento\Quote\Model\Shipping" />
+    <preference for="Magento\Quote\Api\Data\ShippingAssignmentInterface" type="Magento\Quote\Model\ShippingAssignment" />
+    <preference for="Magento\Quote\Model\Product\QuoteItemsCleanerInterface" type="Magento\Quote\Model\Product\QuoteItemsCleaner" />
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
+        <plugin name="clean_quote_items_after_product_delete" type="Magento\Quote\Model\Product\Plugin\RemoveQuoteItems"/>
+        <plugin name="update_quote_items_after_product_save" type="Magento\Quote\Model\Product\Plugin\UpdateQuoteItems"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Action">
+        <plugin name="quoteProductMassChange" type="Magento\Quote\Model\Product\Plugin\MarkQuotesRecollectMassDisabled"/>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\QuoteValidationComposite">
+        <arguments>
+            <argument name="validationRules" xsi:type="array">
+                <item name="AllowedCountryValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\AllowedCountryValidationRule</item>
+                <item name="ShippingAddressValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\ShippingAddressValidationRule</item>
+                <item name="ShippingMethodValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\ShippingMethodValidationRule</item>
+                <item name="BillingAddressValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\BillingAddressValidationRule</item>
+                <item name="PaymentMethodValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\PaymentMethodValidationRule</item>
+                <item name="MinimumAmountValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\MinimumAmountValidationRule</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\AllowedCountryValidationRule">
+        <arguments>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Some addresses can't be used due to the configurations for specific countries.</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\ShippingAddressValidationRule">
+        <arguments>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Please check the shipping address information.</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\ShippingMethodValidationRule">
+        <arguments>
+            <argument name="generalMessage" xsi:type="string" translatable="true">The shipping method is missing. Select the shipping method and try again.</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\BillingAddressValidationRule">
+        <arguments>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Please check the billing address information.</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\PaymentMethodValidationRule">
+        <arguments>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Enter a valid payment method and try again.</argument>
+        </arguments>
+    </type>
+</config>

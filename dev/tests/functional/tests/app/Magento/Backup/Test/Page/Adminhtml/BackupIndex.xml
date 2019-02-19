@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="BackupIndex" area="Adminhtml" mca="backup/index" module="Magento_Backup">
+    <block name="backupGrid" class="Magento\Backup\Test\Block\Adminhtml\BackupGrid" locator="[data-grid-id='backupsGrid']" strategy="css selector"/>
+  </page>
+</config>

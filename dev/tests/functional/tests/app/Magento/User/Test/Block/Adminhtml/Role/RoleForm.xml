@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tabs>
+    <role-info>
+        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <selector>#role_info_tabs_info</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <role_name>
+                <selector>[name='rolename']</selector>
+                <strategy>css selector</strategy>
+            </role_name>
+            <current_password>
+                <selector>[name='current_password']</selector>
+                <strategy>css selector</strategy>
+            </current_password>
+        </fields>
+    </role-info>
+    <role-resources>
+        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <selector>#role_info_tabs_account</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <resource_access>
+                <input>select</input>
+                <selector>[name="all"]</selector>
+                <strategy>css selector</strategy>
+            </resource_access>
+            <roles_resources>
+                <input>jquerytree</input>
+                <selector>[data-role="resource-tree"]</selector>
+                <strategy>css selector</strategy>
+            </roles_resources>
+        </fields>
+    </role-resources>
+    <in_role_users>
+        <class>\Magento\User\Test\Block\Adminhtml\Role\Tab\Role</class>
+        <selector>#role_info_tabs_roles</selector>
+        <strategy>css selector</strategy>
+    </in_role_users>
+</tabs>

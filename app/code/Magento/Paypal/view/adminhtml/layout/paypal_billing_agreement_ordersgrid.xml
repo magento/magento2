@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
+    <update handle="sales_order_grid_block"/>
+    <referenceBlock name="sales.order.grid">
+        <arguments>
+            <argument name="dataSource" xsi:type="object">
+                <updater>Magento\Paypal\Model\Billing\Agreement\OrdersUpdater</updater>
+            </argument>
+            <argument name="grid_url" xsi:type="url" path="*/*/ordersgrid"/>
+        </arguments>
+    </referenceBlock>
+    <referenceBlock name="sales.order.grid.export" remove="true"/>
+    <referenceBlock name="sales.order.grid.massaction" remove="true"/>
+    <container name="root">
+        <block class="Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab\Orders" name="sales_order.grid.container"/>
+    </container>
+</layout>

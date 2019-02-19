@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Sales\Test\TestCase\UnassignCustomOrderStatusTest" summary="Unassign Custom Order Status" ticketId="MAGETWO-29450">
+        <variation name="UnassignCustomOrderStatusTestVariation1">
+            <data name="description" xsi:type="string">unassign order status</data>
+            <data name="orderStatus/dataset" xsi:type="string">assign_to_pending</data>
+            <data name="defaultState" xsi:type="string">Pending</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusSuccessUnassignMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusInGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusNotAssigned" />
+        </variation>
+    </testCase>
+</config>

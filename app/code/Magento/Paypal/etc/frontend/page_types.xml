@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page_types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_types.xsd">
+    <type id="paypal_billing_agreement_index" label="Billing Agreements"/>
+    <type id="paypal_billing_agreement_view" label="Billing Agreement View"/>
+    <type id="paypal_express_review" label="PayPal Express Order Review Form"/>
+    <type id="paypal_hostedpro_cancel" label="Paypal Hosted Pro Frame"/>
+    <type id="paypal_payflow_cancelpayment" label="Paypal Payflow Cancel Payment"/>
+    <type id="paypal_payflow_form" label="Paypal Payflow Form"/>
+    <type id="transparent" label="Paypal Payflow TR Form"/>
+    <type id="transparent_payment_response" label="Paypal Payflow TR Response"/>
+    <type id="paypal_payflow_returnurl" label="Paypal Payflow Return URL"/>
+    <type id="paypal_payflowadvanced_cancelpayment" label="Paypal Payflow Advanced Cancel Payment"/>
+    <type id="paypal_payflowadvanced_form" label="Paypal Payflow Advanced Form"/>
+    <type id="paypal_payflowadvanced_returnurl" label="Paypal Payflow Advanced Return URL"/>
+    <type id="paypal_payflowexpress_review" label="PayPal Payflow Express Order Review Form"/>
+</page_types>

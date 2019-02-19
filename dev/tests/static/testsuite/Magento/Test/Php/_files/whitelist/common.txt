@@ -1,0 +1,7 @@
+# Format: <componentType=module|library|theme|language|*> <componentName> <globPattern> or simply <globPattern>
+* * /
+dev/tests
+phpserver
+pub
+setup
+*.php

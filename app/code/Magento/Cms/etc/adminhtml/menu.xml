@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magento_Cms::cms_page" title="Pages" translate="title" module="Magento_Cms" sortOrder="0" parent="Magento_Backend::content_elements" action="cms/page" resource="Magento_Cms::page"/>
+        <add id="Magento_Cms::cms_block" title="Blocks" translate="title" module="Magento_Cms" sortOrder="30" parent="Magento_Backend::content_elements" action="cms/block" resource="Magento_Cms::block"/>
+    </menu>
+</config>

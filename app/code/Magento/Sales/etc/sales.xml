@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Sales:etc/sales.xsd">
+    <section name="order_invoice">
+        <group name="totals">
+            <item name="subtotal" instance="Magento\Sales\Model\Order\Invoice\Total\Subtotal" sort_order="50"/>
+            <item name="discount" instance="Magento\Sales\Model\Order\Invoice\Total\Discount" sort_order="100"/>
+            <item name="shipping" instance="Magento\Sales\Model\Order\Invoice\Total\Shipping" sort_order="150"/>
+            <item name="tax" instance="Magento\Sales\Model\Order\Invoice\Total\Tax" sort_order="200"/>
+            <item name="cost_total" instance="Magento\Sales\Model\Order\Invoice\Total\Cost" sort_order="250"/>
+            <item name="grand_total" instance="Magento\Sales\Model\Order\Invoice\Total\Grand" sort_order="350"/>
+        </group>
+    </section>
+    <section name="order_creditmemo">
+        <group name="totals">
+            <item name="subtotal" instance="Magento\Sales\Model\Order\Creditmemo\Total\Subtotal" sort_order="50"/>
+            <item name="discount" instance="Magento\Sales\Model\Order\Creditmemo\Total\Discount" sort_order="150"/>
+            <item name="shipping" instance="Magento\Sales\Model\Order\Creditmemo\Total\Shipping" sort_order="200"/>
+            <item name="tax" instance="Magento\Sales\Model\Order\Creditmemo\Total\Tax" sort_order="250"/>
+            <item name="cost_total" instance="Magento\Sales\Model\Order\Creditmemo\Total\Cost" sort_order="300"/>
+            <item name="grand_total" instance="Magento\Sales\Model\Order\Creditmemo\Total\Grand" sort_order="400"/>
+        </group>
+    </section>
+    <order>
+        <available_product_type name="simple"/>
+        <available_product_type name="virtual"/>
+    </order>
+</config>

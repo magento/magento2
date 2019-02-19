@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\UrlRewrite\Test\Repository\UrlRewrite">
+        <dataset name="cms_default_no_redirect">
+            <field name="request_path" xsi:type="string">test_request%isolation%</field>
+            <field name="target_path" xsi:type="array">
+                <item name="entity" xsi:type="string">cms_page/%cmsPage::default%</item>
+            </field>
+            <field name="description" xsi:type="string">test description</field>
+            <field name="redirect_type" xsi:type="string">No</field>
+            <field name="store_id" xsi:type="string">Default Store View</field>
+        </dataset>
+
+        <dataset name="cms_default_temporary_redirect">
+            <field name="request_path" xsi:type="string">test_request%isolation%</field>
+            <field name="redirect_type" xsi:type="string">Temporary (302)</field>
+            <field name="store_id" xsi:type="string">Default Store View</field>
+            <field name="target_path" xsi:type="array">
+                <item name="entity" xsi:type="string">cms_page/%cmsPage::default%</item>
+            </field>
+            <field name="description" xsi:type="string">test description</field>
+        </dataset>
+
+        <dataset name="cms_default_permanent_redirect">
+            <field name="request_path" xsi:type="string">test_request%isolation%</field>
+            <field name="redirect_type" xsi:type="string">Permanent (301)</field>
+            <field name="store_id" xsi:type="string">Default Store View</field>
+            <field name="target_path" xsi:type="array">
+                <item name="entity" xsi:type="string">cms_page/%cmsPage::default%</item>
+            </field>
+            <field name="description" xsi:type="string">test description</field>
+        </dataset>
+    </repository>
+</config>

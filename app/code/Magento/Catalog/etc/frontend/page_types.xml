@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page_types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_types.xsd">
+    <type id="catalog_category_view" label="Catalog Category"/>
+    <type id="catalog_product_compare_index" label="Catalog Product Compare List"/>
+    <type id="catalog_product_gallery" label="Catalog Product Image Gallery Popup"/>
+    <type id="catalog_product_view" label="Catalog Product View (Any)"/>
+</page_types>

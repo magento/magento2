@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\CurrencySymbol\Test\TestCase\ResetCurrencySymbolEntityTest" summary="Reset Currency Symbol" ticketId="MAGETWO-26638">
+        <variation name="ResetCurrencySymbolEntityTestVariation1" firstConstraint="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolSuccessSaveMessage" method="test">
+            <data name="configData" xsi:type="string">config_currency_symbols_usd_and_uah</data>
+            <data name="currencySymbolOriginal/dataset" xsi:type="string">currency_symbols_uah</data>
+            <data name="currencySymbol/data/code" xsi:type="string">UAH</data>
+            <data name="currencySymbolDefault" xsi:type="string">₴</data>
+            <data name="currencySymbol/data/inherit_custom_currency_symbol" xsi:type="string">Yes</data>
+            <data name="currencySymbol/data/custom_currency_symbol" xsi:type="string">-</data>
+            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolSuccessSaveMessage" next="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPage" />
+            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPage" next="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnCatalogPage" prev="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolSuccessSaveMessage" />
+            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnCatalogPage" prev="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPage" />
+        </variation>
+    </testCase>
+</config>

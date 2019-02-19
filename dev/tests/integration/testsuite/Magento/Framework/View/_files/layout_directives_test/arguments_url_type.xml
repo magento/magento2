@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <block class="Magento\Framework\View\Element\Text" name="block_with_url_args">
+        <arguments>
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="one" xsi:type="url" path="customer/account/login">
+                <param name="_current">1</param>
+                <param name="_secure">1</param>
+            </argument>
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="two" xsi:type="url" path="customer/account/logout">
+                <param name="_current">1</param>
+                <param name="_secure">1</param>
+                <param name="customer_id">2</param>
+            </argument>
+        </arguments>
+    </block>
+    <referenceBlock name="block_with_url_args">
+        <arguments>
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="two" xsi:type="url" path="customer/account/logout">
+                <param name="customer_id">3</param>
+            </argument>
+        </arguments>
+    </referenceBlock>
+</layout>

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Html\Links" as="links" name="sales.order.info.links" before="-">
+                <arguments>
+                    <argument name="css_class" xsi:type="string">items order-links</argument>
+                </arguments>
+                <block class="Magento\Sales\Block\Order\Link" name="sales.order.info.links.information">
+                    <arguments>
+                        <argument name="path" xsi:type="string">sales/guest/view</argument>
+                        <argument name="label" xsi:type="string" translate="true">Order Information</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Sales\Block\Order\Link" name="sales.order.info.links.invoice">
+                    <arguments>
+                        <argument name="key" xsi:type="string">Invoices</argument>
+                        <argument name="path" xsi:type="string">sales/guest/invoice</argument>
+                        <argument name="label" xsi:type="string" translate="true">Invoices</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Sales\Block\Order\Link" name="sales.order.info.links.shipment">
+                    <arguments>
+                        <argument name="key" xsi:type="string">Shipments</argument>
+                        <argument name="path" xsi:type="string">sales/guest/shipment</argument>
+                        <argument name="label" xsi:type="string" translate="true">Order Shipments</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Sales\Block\Order\Link" name="sales.order.info.links.creditmemo">
+                    <arguments>
+                        <argument name="key" xsi:type="string">Creditmemos</argument>
+                        <argument name="path" xsi:type="string">sales/guest/creditmemo</argument>
+                        <argument name="label" xsi:type="string" translate="true">Refunds</argument>
+                    </arguments>
+                </block>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

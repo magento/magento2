@@ -1,0 +1,129 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/**
+ * @var \Magento\Shipping\Block\Adminhtml\View\Form $block
+ */
+$order = $block->getShipment()->getOrder();
+?>
+<?= $block->getChildHtml('order_info'); ?>
+<section class="admin__page-section order-shipment-billing-shipping">
+    <div class="admin__page-section-title">
+        <span class="title"><?= $block->escapeHtml(__('Payment &amp; Shipping Method')); ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item order-payment-method">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?= $block->escapeHtml(__('Payment Information')); ?></span>
+            </div>
+            <div class="admin__page-section-item-content">
+                <div><?= $block->getChildHtml('order_payment') ?></div>
+                <div class="order-payment-currency">
+                    <?= $block->escapeHtml(__('The order was placed using %1.', $order->getOrderCurrencyCode())); ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin__page-section-item order-shipping-address">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?= $block->escapeHtml(__('Shipping and Tracking Information')); ?></span>
+            </div>
+            <div class="admin__page-section-item-content">
+                <div class="shipping-description-wrapper">
+                    <?php if ($block->getShipment()->getTracksCollection()->count()): ?>
+                        <p>
+                            <a href="#" id="linkId" onclick="popWin('<?= $block->escapeUrl($this->helper(\Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($block->getShipment())); ?>','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')"
+                               title="<?= $block->escapeHtml(__('Track this shipment')); ?>">
+                                <?= $block->escapeHtml(__('Track this shipment')); ?>
+                            </a>
+                        </p>
+                    <?php endif; ?>
+                    <div class="shipping-description-title">
+                        <?= $block->escapeHtml($order->getShippingDescription()); ?>
+                    </div>
+
+                    <?= $block->escapeHtml(__('Total Shipping Charges')); ?>:
+
+                    <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingPriceIncludingTax()): ?>
+                        <?php $excl = $block->displayShippingPriceInclTax($order); ?>
+                    <?php else: ?>
+                        <?php $excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
+                    <?php endif; ?>
+                    <?php $incl = $block->displayShippingPriceInclTax($order); ?>
+
+                    <?= /* @noEscape */ $excl; ?>
+                    <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $incl != $excl): ?>
+                        (<?= $block->escapeHtml(__('Incl. Tax')); ?> <?= /* @noEscape */ $incl; ?>)
+                    <?php endif; ?>
+                </div>
+
+                <p>
+                    <?php if ($block->canCreateShippingLabel()): ?>
+                        <?= /* @noEscape */ $block->getCreateLabelButton(); ?>
+                    <?php endif ?>
+                    <?php if ($block->getShipment()->getShippingLabel()): ?>
+                        <?= /* @noEscape */ $block->getPrintLabelButton(); ?>
+                    <?php endif ?>
+                    <?php if ($block->getShipment()->getPackages()): ?>
+                        <?= /* @noEscape */ $block->getShowPackagesButton(); ?>
+                    <?php endif ?>
+                </p>
+                <?= $block->getChildHtml('shipment_tracking'); ?>
+
+                <?= $block->getChildHtml('shipment_packaging'); ?>
+                <script>
+                    require([
+                        'jquery',
+                        'prototype'
+                    ], function (jQuery) {
+                        var setCallbacks = function () {
+                            window.packaging.setConfirmPackagingCallback(function () {
+                                window.packaging.sendCreateLabelRequest();
+                            });
+                            window.packaging.setLabelCreatedCallback(function () {
+                                setLocation("<?php echo $block->escapeUrl($block->getUrl(
+                                    'adminhtml/order_shipment/view',
+                                    ['shipment_id' => $block->getShipment()->getId()])
+                                ); ?>");
+                            });
+                        };
+
+                        if (jQuery(document).data('packagingInited')) {
+                            setCallbacks();
+                        } else {
+                            jQuery(document).on('packaging:inited', setCallbacks);
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</section>
+<div><?= $block->getChildHtml('extra_shipment_info') ?></div>
+
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?= $block->escapeHtml(__('Items Shipped')); ?></span>
+    </div>
+    <?= $block->getChildHtml('shipment_items'); ?>
+</section>
+
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?= $block->escapeHtml(__('Order Total')); ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <?= $block->getChildHtml('shipment_packed'); ?>
+
+        <div class="admin__page-section-item order-comments-history">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?= $block->escapeHtml(__('Shipment History')); ?></span>
+            </div>
+            <div class="admin__page-section-item-content"><?= $block->getChildHtml('order_comments'); ?></div>
+        </div>
+    </div>
+</section>

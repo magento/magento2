@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="sales_widget_guestform" class="Magento\Sales\Block\Widget\Guest\Form" is_email_compatible="true" >
+        <label translate="true">Orders and Returns</label>
+        <description translate="true">Orders and Returns Search Form</description>
+        <parameters>
+            <parameter name="title" xsi:type="text" visible="false">
+                <label translate="true">Anchor Custom Title</label>
+            </parameter>
+            <parameter name="template" xsi:type="select" visible="false">
+                <options>
+                    <option name="default" value="hierarchy/widget/link/link_block.phtml" selected="true">
+                        <label translate="true">CMS Page Link Block Template</label>
+                    </option>
+                    <option name="link_inline" value="hierarchy/widget/link/link_inline.phtml">
+                        <label translate="true">CMS Page Link Inline Template</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="link_display" xsi:type="select" visible="true" sort_order="10"
+                       source_model="Magento\Config\Model\Config\Source\Yesno">
+                <label translate="true">Display a Link to Loading a Spreadsheet</label>
+                <description translate="true">Defines whether a link to My Account</description>
+            </parameter>
+            <parameter name="link_text" xsi:type="text" required="true" visible="true" sort_order="20">
+                <label translate="true">Link Text</label>
+                <description translate="true">The text of the link to the My Account &amp;gt; Order by SKU page</description>
+                <depends>
+                    <parameter name="link_display" value="1" />
+                </depends>
+                <value translate="true">Load a list of SKUs</value>
+            </parameter>
+            <parameter name="id_path" xsi:type="block" visible="true" required="true" sort_order="10">
+                <label translate="true">Product</label>
+                <block class="Magento\Backend\Block\Catalog\Product\Widget\Chooser">
+                    <data>
+                        <item name="button" xsi:type="array">
+                            <item name="open" xsi:type="string">Select Product...</item>
+                        </item>
+                    </data>
+                </block>
+            </parameter>
+        </parameters>
+        <containers>
+            <container name="left">
+                <template name="default" value="default_template" />
+            </container>
+            <container name="right">
+                <template name="default" value="default_template" />
+            </container>
+        </containers>
+    </widget>
+</widgets>

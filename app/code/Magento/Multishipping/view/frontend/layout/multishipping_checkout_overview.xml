@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="multishipping_checkout"/>
+    <update handle="checkout_cart_item_renderers"/>
+    <body>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="label" xsi:type="string">Review Order</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Magento\Multishipping\Block\Checkout\Overview" name="checkout_overview" template="Magento_Multishipping::checkout/overview.phtml" cacheable="false">
+                <arguments>
+                    <argument name="checkout_data" xsi:type="object">Magento\Multishipping\Block\DataProviders\Overview</argument>
+                    <argument name="renderer_template" xsi:type="string">Magento_Multishipping::checkout/item/default.phtml</argument>
+                    <argument name="row_renderer_template" xsi:type="string">Magento_Multishipping::checkout/overview/item.phtml</argument>
+                </arguments>
+                <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list"/>
+                <block class="Magento\Multishipping\Block\Checkout\Payment\Info" name="payment_info">
+                    <action method="setInfoTemplate">
+                        <argument name="method" xsi:type="string"/>
+                        <argument name="template" xsi:type="string"/>
+                    </action>
+                </block>
+                <block class="Magento\Checkout\Block\Cart\Totals" name="totals"/>
+                <container name="checkout.multishipping.overview.items.after" as="items_after" label="Overview Items After"/>
+            </block>
+        </referenceContainer>
+        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Theme::template.phtml"/>
+    </body>
+</page>

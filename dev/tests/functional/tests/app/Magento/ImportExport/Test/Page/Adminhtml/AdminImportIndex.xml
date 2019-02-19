@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="AdminImportIndex" area="Adminhtml" mca="admin/import/index" module="Magento_ImportExport">
+        <block name="importForm" class="Magento\ImportExport\Test\Block\Adminhtml\Import\Edit\Form" locator="#edit_form" strategy="css selector" />
+        <block name="customImportForm" class="Magento\ImportExport\Test\Block\Adminhtml\Import\Edit\CustomForm" locator="#edit_form" strategy="css selector" />
+        <block name="formPageActions" class="Magento\ImportExport\Test\Block\Adminhtml\Import\FormPageActions" locator=".page-main-actions" strategy="css selector" />
+        <block name="importResult" class="Magento\ImportExport\Test\Block\Adminhtml\Import\Frame\Result" locator="#import_validation_container" strategy="css selector" />
+        <block name="messagesBlock" class="Magento\ImportExport\Test\Block\Adminhtml\Import\Messages" locator="#import_validation_container" strategy="css selector" />
+    </page>
+</config>

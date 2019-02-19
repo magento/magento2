@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--
+@deprecated Not used since related products grid moved to UI components.
+@see Magento_Catalog::view/adminhtml/ui_component/related_product_listing.xml
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
+    <container name="root" label="Root">
+        <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Related" name="catalog.product.edit.tab.related"/>
+        <block class="Magento\Backend\Block\Widget\Grid\Serializer" name="related_grid_serializer">
+            <arguments>
+                <argument name="input_names" xsi:type="string">position</argument>
+                <argument name="grid_block" xsi:type="string">catalog.product.edit.tab.related</argument>
+                <argument name="callback" xsi:type="string">getSelectedRelatedProducts</argument>
+                <argument name="input_element_name" xsi:type="string">links[related]</argument>
+                <argument name="reload_param_name" xsi:type="string">products_related</argument>
+            </arguments>
+        </block>
+    </container>
+</layout>

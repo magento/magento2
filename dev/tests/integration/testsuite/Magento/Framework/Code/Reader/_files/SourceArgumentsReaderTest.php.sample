@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Some\Testing\Name\Space;
+
+use Imported\Name\Space\One as FirstImport;
+use Imported\Name\Space\ClassName;
+use Imported\Name\Space\Test as Testing, \Imported\Name\Space\AnotherTest ;
+
+class AnotherSimpleClass
+{
+    public function __construct(
+        \Some\Testing\Name\Space\Item $itemOne,
+        FirstImport $itemTwo,
+        AnotherTest\Extended $itemThree,
+        Testing $itemFour,
+        ClassName\Under\Test $itemFive,
+        ClassName $itemSix,
+        Test $itemSeven,
+        ?\Exception $optionalException,
+        $defaultString = '$default),value;',
+        ?ClassName $optionalWithDefaultValue = null,
+        array $itemEight = [],
+        $itemNine = 'test'
+    ) {
+    }
+}

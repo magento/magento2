@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Notification\MessageList">
+        <arguments>
+            <argument name="messages" xsi:type="array">
+                <item name="security" xsi:type="string">Magento\AdminNotification\Model\System\Message\Security</item>
+                <item name="cacheOutdated" xsi:type="string">Magento\AdminNotification\Model\System\Message\CacheOutdated</item>
+                <item name="media_synchronization_error" xsi:type="string">Magento\AdminNotification\Model\System\Message\Media\Synchronization\Error</item>
+                <item name="media_synchronization_success" xsi:type="string">Magento\AdminNotification\Model\System\Message\Media\Synchronization\Success</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Module\Setup\Migration">
+        <arguments>
+            <argument name="compositeModules" xsi:type="array">
+                <item name="adminnotification" xsi:type="string">Magento_AdminNotification</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

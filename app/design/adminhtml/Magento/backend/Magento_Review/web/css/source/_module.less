@@ -1,0 +1,79 @@
+﻿// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@rating-star__font-size: 18px;
+@rating-star__height: 13px;
+@rating-star__width: 18px;
+
+//
+//  Customer Reviews
+//  ---------------------------------------------
+
+.field-detailed-rating {
+    .admin__field-rating {
+        margin: 15px 0 0;
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        .admin__field-label {
+            display: inline-block;
+            line-height: @line-height__base;
+            text-align: left;
+            vertical-align: top;
+            width: 75px;
+        }
+
+        .admin__field-control {
+            direction: rtl;
+            display: inline-block;
+            margin: -1px 0 0;
+            unicode-bidi: bidi-override;
+            vertical-align: top;
+            width: 125px;
+
+            label {
+                color: @color-gray80;
+                cursor: pointer;
+                float: right;
+                font-size: @rating-star__font-size;
+                overflow: hidden;
+                transition: color 150ms linear;
+                white-space: nowrap;
+                width: @rating-star__width;
+
+                &:before {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    input[type='radio'] {
+        display: none;
+    }
+}
+
+.field-summary-rating {
+    .rating-box {
+        background: url('@{baseDir}images/rating-bg.png') repeat-x 0 0;
+        font-size: 0;
+        height: @rating-star__height;
+        line-height: 0;
+        margin: 4px 0 0;
+        overflow: hidden;
+        width: @rating-star__width*5;
+
+        .rating {
+            background: url('@{baseDir}images/rating-bg.png') repeat-x 0 -@rating-star__height;
+            height: @rating-star__height;
+        }
+    }
+}

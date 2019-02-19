@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<payment>
+    <credit_cards>
+        <type order="0">
+            <label>ABC Credit Card Company</label>
+        </type>
+        <type order="10">
+            <label>ABC Credit Card Company</label>
+        </type>
+    </credit_cards>
+    <groups>
+        <group>
+            <label>Other Payment Methods</label>
+        </group>
+    </groups>
+</payment>

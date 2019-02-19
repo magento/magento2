@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Persistent\Test\TestCase\CheckoutWithPersistentShoppingCartTest" summary="Checkout with Persistent Shopping Cart" ticketId="MAGETWO-45381">
+        <variation name="RedirectCustomerToCheckoutTestVariation1" summary="Checkout with Persistent Shopping Cart">
+            <data name="issue" xsi:type="string">MAGETWO-59976: Customer can't open Product on Storefront if Persistent Cart is enabled</data>
+            <data name="customer/dataset" xsi:type="string">register_customer</data>
+            <data name="configData" xsi:type="string">clearpersistence_on_signout</data>
+            <constraint name="Magento\Persistent\Test\Constraint\AssertCustomerIsRedirectedToCheckout" />
+        </variation>
+    </testCase>
+</config>

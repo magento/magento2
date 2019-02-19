@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">search_synonyms_grid.search_synonyms_grid_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="*/*/new"/>
+                <class>primary</class>
+                <label translate="true">New Synonym Group</label>
+            </button>
+        </buttons>
+        <spinner>search_synonyms_columns</spinner>
+        <deps>
+            <dep>search_synonyms_grid.search_synonyms_grid_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="search_synonyms_grid_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">group_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_Search::synonyms</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="search_synonyms_grid_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>group_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="synonyms_columns_controls"/>
+        <exportButton name="export_button"/>
+        <filterSearch name="fulltext"/>
+        <filters name="synonyms_listing_filters">
+            <settings>
+                <templates>
+                    <filters>
+                        <select>
+                            <param name="template" xsi:type="string">ui/grid/filters/elements/ui-select</param>
+                            <param name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</param>
+                        </select>
+                    </filters>
+                </templates>
+            </settings>
+            <filterSelect name="store_id" provider="${ $.parentName }" sortOrder="40">
+                <settings>
+                    <captionValue>--</captionValue>
+                    <options class="Magento\Search\Ui\Component\Listing\Column\Store\Options"/>
+                    <label translate="true">Store View</label>
+                    <dataScope>store_id</dataScope>
+                    <imports>
+                        <link name="visible">ns = ${ $.ns }, componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
+            </filterSelect>
+            <filterSelect name="website_id" provider="${ $.parentName }" sortOrder="30">
+                <settings>
+                    <captionValue>--</captionValue>
+                    <options class="Magento\Search\Ui\Component\Listing\Column\Website\Options"/>
+                    <label translate="true">Website</label>
+                    <dataScope>website_id</dataScope>
+                    <imports>
+                        <link name="visible">ns = ${ $.ns }, componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
+            </filterSelect>
+        </filters>
+        <massaction name="listing_massaction">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure you want to delete the selected synonym groups?</message>
+                        <title translate="true">Delete items</title>
+                    </confirm>
+                    <url path="search/synonyms/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+        </massaction>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="search_synonyms_columns">
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>group_id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="group_id" sortOrder="10">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">ID</label>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="synonyms" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Synonyms</label>
+            </settings>
+        </column>
+        <column name="website_id" class="Magento\Search\Ui\Component\Listing\Column\Website" sortOrder="30">
+            <settings>
+                <label translate="true">Website</label>
+            </settings>
+        </column>
+        <column name="store_id" class="Magento\Search\Ui\Component\Listing\Column\StoreView" sortOrder="40">
+            <settings>
+                <label translate="true">Store View</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Magento\Search\Ui\Component\Listing\Column\SynonymActions">
+            <settings>
+                <indexField>group_id</indexField>
+                <resizeEnabled>false</resizeEnabled>
+                <resizeDefaultWidth>107</resizeDefaultWidth>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

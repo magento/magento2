@@ -1,0 +1,42 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@multiselect__height: 45.2rem;
+@multiselect__border-color: @form-el__border-color;
+@multiselect-items__padding: 1rem 1.4rem;
+@multiselect-items__selected__background-color: @color-cyan-light;
+
+//
+//  Customized multiselect
+//  _____________________________________________
+
+.multiselect-custom {
+    border: 1px solid @multiselect__border-color;
+    height: @multiselect__height;
+    margin: 0 0 1.5rem;
+    overflow: auto;
+    position: relative;
+
+    ul {
+        .lib-list-reset-styles();
+        min-width: 29rem;
+    }
+
+    .item {
+        padding: @multiselect-items__padding;
+    }
+
+    .selected {
+        background-color: @multiselect-items__selected__background-color;
+    }
+
+    .form-label {
+        margin-bottom: 0;
+    }
+}

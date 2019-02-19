@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Catalog\Test\TestCase\Product\DuplicateProductEntityTest" summary="Duplicate Product" ticketId="MAGETWO-23294">
+        <variation name="DuplicateProductEntityTestVariation1">
+            <data name="productType" xsi:type="string">catalogProductSimple::default</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicateMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicateForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicatedInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicateIsNotDisplayingOnFrontend" />
+        </variation>
+    </testCase>
+</config>

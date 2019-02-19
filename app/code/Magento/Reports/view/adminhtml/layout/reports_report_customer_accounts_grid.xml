@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="reports_report_grid"/>
+    <body>
+        <referenceBlock name="adminhtml.report.grid">
+            <arguments>
+                <argument name="id" xsi:type="string">gridAccounts</argument>
+                <argument name="dataSource" xsi:type="object">Magento\Reports\Model\ResourceModel\Accounts\Collection\Initial</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="adminhtml.report.grid.export">
+            <arguments>
+                <argument name="exportTypes" xsi:type="array">
+                    <item name="csv" xsi:type="array">
+                        <item name="urlPath" xsi:type="string">*/*/exportAccountsCsv</item>
+                    </item>
+                    <item name="excel" xsi:type="array">
+                        <item name="urlPath" xsi:type="string">*/*/exportAccountsExcel</item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="adminhtml.report.grid.columnSet">
+            <arguments>
+                <argument name="id" xsi:type="string">gridAccounts</argument>
+                <argument name="count_totals" xsi:type="string">1</argument>
+            </arguments>
+            <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.report.grid.columnSet.accounts" as="accounts">
+                <arguments>
+                    <argument name="header" xsi:type="string" translate="true">New Accounts</argument>
+                    <argument name="index" xsi:type="string">accounts</argument>
+                    <argument name="total" xsi:type="string">sum</argument>
+                    <argument name="type" xsi:type="string">number</argument>
+                    <argument name="id" xsi:type="string">accounts</argument>
+                    <argument name="column_css_class" xsi:type="string">col-qty</argument>
+                    <argument name="header_css_class" xsi:type="string">col-qty</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

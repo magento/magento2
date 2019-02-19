@@ -1,0 +1,26 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- ko if:  isDisplayShippingPriceExclTax -->
+<span class="price"><span class="price" data-bind="text: getFormattedPrice(method.price_excl_tax)"></span></span>
+<!-- /ko -->
+<!-- ko ifnot: isDisplayShippingPriceExclTax -->
+<!-- ko if:  (isDisplayShippingBothPrices && (method.price_excl_tax != method.price_incl_tax))-->
+<span class="price-including-tax" data-bind = "attr: {'data-label': $t('Incl. Tax')}">
+    <span class="price"><span class="price" data-bind="text: getFormattedPrice(method.price_incl_tax)"></span></span>
+</span>
+<!-- /ko -->
+
+<!-- ko ifnot:  (isDisplayShippingBothPrices && (method.price_excl_tax != method.price_incl_tax))-->
+    <span class="price"><span class="price" data-bind="text: getFormattedPrice(method.price_incl_tax)"></span></span>
+<!-- /ko -->
+
+<!-- /ko -->
+<!-- ko if:  (isDisplayShippingBothPrices && (method.price_excl_tax != method.price_incl_tax))-->
+<span class="price-excluding-tax" data-bind = "attr: {'data-label': $t('Excl. Tax')}">
+    <span class="price"><span class="price" data-bind="text: getFormattedPrice(method.price_excl_tax)"></span></span>
+</span>
+<!-- /ko -->

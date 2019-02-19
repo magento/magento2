@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout>
+    <container name="container1" label="Container 1">
+        <block class="Magento\Framework\View\Element\Text" name="no.name2" as="no.name2"/>
+    </container>
+    <container name="container2" label="Container 2"/>
+    <move element="container1" destination="container2"/>
+    <block class="Magento\Framework\View\Element\Text" name="block_container" as="block.container">
+        <block class="Magento\Framework\View\Element\Text" name="child_block1"/>
+        <block class="Magento\Framework\View\Element\Text" name="child_block2"/>
+    </block>
+    <container name="container3" label="Container 3">
+        <block class="Magento\Framework\View\Element\Text" name="no_name"/>
+    </container>
+    <move element="no_name" destination="block_container" after="child_block1"/>
+    <block class="Magento\Framework\View\Element\Text" name="no_name4"/>
+    <move element="no_name4" destination="block_container" before="child_block2"/>
+    <move element="no_name3" destination="block_container"/>
+    <block class="Magento\Framework\View\Element\Text" name="no_name3"/>
+</layout>

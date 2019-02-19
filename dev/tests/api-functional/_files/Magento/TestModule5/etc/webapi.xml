@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route method="GET" url="/V1/TestModule5/:entityId">
+        <service class="Magento\TestModule5\Service\V1\AllSoapAndRestInterface" method="item" />
+        <resources>
+            <resource ref="Magento_TestModule5::resource1" />
+        </resources>
+    </route>
+    <route method="GET" url="/V1/TestModule5">
+        <service class="Magento\TestModule5\Service\V1\AllSoapAndRestInterface" method="items" />
+        <resources>
+            <resource ref="Magento_TestModule5::resource2" />
+        </resources>
+    </route>
+    <route method="POST" url="/V1/TestModule5">
+        <service class="Magento\TestModule5\Service\V1\AllSoapAndRestInterface" method="create" />
+        <resources>
+            <resource ref="Magento_TestModule5::resource3" />
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/TestModule5/:entityId">
+        <service class="Magento\TestModule5\Service\V1\AllSoapAndRestInterface" method="update" />
+        <resources>
+            <resource ref="Magento_TestModule5::resource1" />
+            <resource ref="Magento_TestModule5::resource2" />
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/TestModule5/:parentId/nestedResource/:entityId">
+        <service class="Magento\TestModule5\Service\V1\AllSoapAndRestInterface" method="nestedUpdate" />
+        <resources>
+            <resource ref="Magento_TestModule5::resource1" />
+            <resource ref="Magento_TestModule5::resource2" />
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/TestModule5/OverrideService/:parentId/nestedResource/:entityId">
+        <service class="Magento\TestModule5\Service\V1\OverrideServiceInterface" method="scalarUpdate" />
+        <resources>
+            <resource ref="Magento_TestModule5::resource1" />
+            <resource ref="Magento_TestModule5::resource2" />
+        </resources>
+    </route>
+    <route method="GET" url="/V2/TestModule5/:id">
+        <service class="Magento\TestModule5\Service\V2\AllSoapAndRestInterface" method="item" />
+        <resources>
+            <resource ref="Magento_TestModule5::resource1" />
+        </resources>
+    </route>
+    <route method="GET" url="/V2/TestModule5">
+        <service class="Magento\TestModule5\Service\V2\AllSoapAndRestInterface" method="items" />
+        <resources>
+            <resource ref="Magento_TestModule5::resource2" />
+        </resources>
+    </route>
+    <route method="POST" url="/V2/TestModule5">
+        <service class="Magento\TestModule5\Service\V2\AllSoapAndRestInterface" method="create" />
+        <resources>
+            <resource ref="Magento_TestModule5::resource3" />
+        </resources>
+    </route>
+    <route method="PUT" url="/V2/TestModule5/:id">
+        <service class="Magento\TestModule5\Service\V2\AllSoapAndRestInterface" method="update" />
+        <resources>
+            <resource ref="Magento_TestModule5::resource1" />
+            <resource ref="Magento_TestModule5::resource2" />
+        </resources>
+    </route>
+    <route method="DELETE" url="/V2/TestModule5/:id">
+        <service class="Magento\TestModule5\Service\V2\AllSoapAndRestInterface" method="delete" />
+        <resources>
+            <resource ref="Magento_TestModule5::resource1" />
+        </resources>
+    </route>
+</routes>

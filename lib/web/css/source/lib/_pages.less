@@ -1,0 +1,455 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Pager
+//  _____________________________________________
+
+//
+//  When pager items have solid or don't have background
+//  ---------------------------------------------
+
+.lib-pager(
+    @_pager-label-display: @pager-label__display,
+    @_pager-item-display: @pager-item__display,
+    @_pager-reset-spaces: @pager-reset-spaces,
+    @_pager-font-size: @pager__font-size,
+    @_pager-font-weight: @pager__font-weight,
+    @_pager-line-height: @pager__line-height,
+    @_pager-item-margin: @pager-item__margin,
+    @_pager-item-padding: @pager-item__padding,
+    @_pager-actions-padding: @pager-actions__padding,
+
+    //  Page current
+    @_pager-current-font-weight: @pager-current__font-weight,
+    @_pager-current-color: @pager-current__color,
+    @_pager-current-background: @pager-current__background,
+    @_pager-current-border: @pager-current__border,
+    @_pager-current-gradient: @pager-current__gradient,
+    @_pager-current-gradient-direction: @pager-current__gradient-direction,
+    @_pager-current-gradient-color-start: @pager-current__gradient-color-start,
+    @_pager-current-gradient-color-end: @pager-current__gradient-color-end,
+
+    //  Page item - text color
+    @_pager-color: @pager__color,
+    @_pager-color-visited: @pager__visited__color,
+    @_pager-color-hover: @pager__hover__color,
+    @_pager-color-active: @pager__active__color,
+
+    //  Page item - background
+    @_pager-background: @pager__background,
+    @_pager-background-visited: @pager__visited__background,
+    @_pager-background-hover: @pager__hover__background,
+    @_pager-background-active: @pager__active__background,
+
+    //  Page item - border
+    @_pager-border: @pager__border,
+    @_pager-border-visited: @pager__visited__border,
+    @_pager-border-hover: @pager__hover__border,
+    @_pager-border-active: @pager__active__border,
+
+    //  Page item - text decoration
+    @_pager-text-decoration: @pager__text-decoration,
+    @_pager-text-decoration-hover: @pager__text-decoration,
+
+    //  Page item gradient
+    @_pager-gradient: @pager__gradient,
+    @_pager-gradient-direction: @pager__gradient-direction,
+    @_pager-gradient-color-start: @pager__gradient-color-start,
+    @_pager-gradient-color-end: @pager__gradient-color-end,
+    @_pager-gradient-color-start-visited: @pager__visited__gradient-color-start,
+    @_pager-gradient-color-end-visited: @pager__visited__gradient-color-end,
+    @_pager-gradient-color-start-hover: @pager__hover__gradient-color-start,
+    @_pager-gradient-color-end-hover: @pager__hover__gradient-color-end,
+    @_pager-gradient-color-start-active: @pager__active__gradient-color-start,
+    @_pager-gradient-color-end-active: @pager__active__gradient-color-end,
+
+    //  Page action item (previous-next)
+    @_pager-action-text-decoration: @pager-action__text-decoration,
+    @_pager-action-text-decoration-hover: @pager-action__hover__text-decoration,
+
+    //  Page action item (previous-next) - default
+    @_pager-action-color: @pager-action__color,
+    @_pager-action-border: @pager-action__border,
+    @_pager-action-background: @pager-action__background,
+    @_pager-action-gradient-color-start: @pager__gradient-color-start,
+    @_pager-action-gradient-color-end: @pager__gradient-color-end,
+    @_pager-action-text-decoration: @pager-action__text-decoration,
+
+    //  Page action item (previous-next) - visited
+    @_pager-action-color-visited: @pager-action__visited__color,
+    @_pager-action-border-visited: @pager-action__visited__border,
+    @_pager-action-background-visited: @pager-action__visited__background,
+    @_pager-action-gradient-color-start-visited: @pager__visited__gradient-color-start,
+    @_pager-action-gradient-color-end-visited: @pager__visited__gradient-color-end,
+
+    //  Page action item (previous-next) - hover
+    @_pager-action-color-hover: @pager-action__hover__color,
+    @_pager-action-border-hover: @pager-action__hover__border,
+    @_pager-action-background-hover: @pager-action__hover__background,
+    @_pager-action-gradient-color-start-hover: @pager__hover__gradient-color-start,
+    @_pager-action-gradient-color-end-hover: @pager__hover__gradient-color-end,
+    @_pager-action-text-decoration-hover: @pager-action__text-decoration,
+
+    //  Page action item (previous-next) - active
+    @_pager-action-color-active: @pager-action__active__color,
+    @_pager-action-border-active: @pager-action__active__border,
+    @_pager-action-background-active: @pager-action__active__background,
+    @_pager-action-gradient-color-start-active: @pager__active__gradient-color-start,
+    @_pager-action-gradient-color-end-active: @pager__active__gradient-color-end,
+
+    //  Page action item (previous-next) - gradient
+    @_pager-action-gradient: @pager__gradient,
+    @_pager-action-gradient-direction: @pager__gradient-direction,
+
+    //  Page action icons
+    @_pager-icon-use: @pager-icon__use,
+    @_pager-icon-previous-content: @pager-icon__previous-content,
+    @_pager-icon-next-content: @pager-icon__next-content,
+    @_pager-icon-font: @pager-icon__font,
+    @_pager-icon-font-size: @pager-icon__font-size,
+    @_pager-icon-font-line-height: @pager-icon__font-line-height,
+    @_pager-icon-font-margin: @pager-icon__font-margin,
+    @_pager-icon-font-vertical-align: @pager-icon__font-vertical-align,
+    @_pager-icon-font-position: @pager-icon__position,
+    @_pager-icon-font-text-hide: @pager-icon__text-hide
+) {
+    ._lib-pager-label-display(  // To hide or to display label
+        @_pager-label-display: @_pager-label-display,
+        @_pager-font-size: @_pager-font-size,
+        @_pager-font-weight: @_pager-font-weight,
+        @_pager-line-height: @_pager-line-height
+    );
+
+    .items {
+        ._lib-pager-inline-block-spaces-container(
+            @_pager-reset-spaces,
+            @_pager-item-display
+        );
+        .lib-list-reset-styles();
+        .lib-css(display, @_pager-item-display);
+        .lib-css(font-weight, @_pager-font-weight);
+    }
+
+    .item {
+        ._lib-pager-inline-block-spaces-item(
+            @_pager-reset-spaces,
+            @_pager-item-display,
+            @_pager-font-size,
+            @_pager-line-height
+        );
+        .lib-css(margin, @_pager-item-margin);
+        .lib-css(display, @_pager-item-display);
+
+        .label {
+            .lib-visually-hidden();
+        }
+    }
+
+    a.page {
+        .lib-css(background, @_pager-background);
+        .lib-background-gradient(
+            @_pager-gradient-color-start,
+            @_pager-gradient-color-end,
+            @_pager-gradient-direction,
+            @_pager-gradient
+        );
+        .lib-css(border, @_pager-border);
+        .lib-css(color, @_pager-color);
+        .lib-css(display, @_pager-item-display);
+        .lib-css(padding, @_pager-item-padding);
+        .lib-css(text-decoration, @_pager-text-decoration);
+
+        &:visited {
+            .lib-css(background, @_pager-background-visited);
+            .lib-background-gradient(
+                @_pager-gradient-color-start-visited,
+                @_pager-gradient-color-end-visited,
+                @_pager-gradient-direction,
+                @_pager-gradient
+            );
+            .lib-css(border, @_pager-border-visited);
+            .lib-css(color, @_pager-color-visited);
+        }
+
+        &:hover {
+            .lib-css(background, @_pager-background-hover);
+            .lib-background-gradient(
+                @_pager-gradient-color-start-hover,
+                @_pager-gradient-color-end-hover,
+                @_pager-gradient-direction,
+                @_pager-gradient
+            );
+            .lib-css(border, @_pager-border-hover);
+            .lib-css(color, @_pager-color-hover);
+            .lib-css(text-decoration, @_pager-text-decoration-hover);
+        }
+
+        &:active {
+            .lib-css(background, @_pager-background-active);
+            .lib-background-gradient(
+                @_pager-gradient-color-start-active,
+                @_pager-gradient-color-end-active,
+                @_pager-gradient-direction,
+                @_pager-gradient
+            );
+            .lib-css(border, @_pager-border-active);
+            .lib-css(color, @_pager-color-active);
+        }
+    }
+
+    strong.page {
+        .lib-css(background, @_pager-current-background);
+        .lib-background-gradient(
+            @_pager-current-gradient-color-start,
+            @_pager-current-gradient-color-end,
+            @_pager-current-gradient-direction,
+            @_pager-current-gradient
+        );
+        .lib-css(border, @_pager-current-border);
+        ._lib-pager-inline-block-spaces-item(
+            @_pager-reset-spaces,
+            @_pager-item-display,
+            @_pager-font-size,
+            @_pager-line-height
+        );
+        .lib-css(color, @_pager-current-color);
+        .lib-css(display, @_pager-item-display);
+        .lib-css(font-weight, @_pager-current-font-weight);
+        .lib-css(padding, @_pager-item-padding);
+    }
+
+    .action {
+        .lib-css(background, @_pager-action-background);
+        .lib-background-gradient(
+            @_pager-action-gradient-color-start,
+            @_pager-action-gradient-color-end,
+            @_pager-gradient-direction,
+            @_pager-action-gradient
+        );
+        .lib-css(border, @_pager-action-border);
+        .lib-css(color, @_pager-action-color);
+        .lib-css(display, @_pager-item-display);
+        .lib-css(padding, @_pager-actions-padding);
+        .lib-css(text-decoration, @_pager-action-text-decoration);
+
+        &:visited {
+            .lib-css(background, @_pager-action-background-visited);
+            .lib-background-gradient(
+                @_pager-action-gradient-color-start-visited,
+                @_pager-action-gradient-color-end-visited,
+                @_pager-action-gradient-direction,
+                @_pager-action-gradient
+            );
+            .lib-css(border, @_pager-action-border-visited);
+            .lib-css(color, @_pager-action-color-visited);
+        }
+
+        &:hover {
+            .lib-css(background, @_pager-action-background-hover);
+            .lib-background-gradient(
+                @_pager-action-gradient-color-start-hover,
+                @_pager-action-gradient-color-end-hover,
+                @_pager-action-gradient-direction,
+                @_pager-action-gradient
+            );
+            .lib-css(border, @_pager-action-border-hover);
+            .lib-css(color, @_pager-action-color-hover);
+            .lib-css(text-decoration, @_pager-action-text-decoration-hover);
+        }
+
+        &:active {
+            .lib-css(background, @_pager-action-background-active);
+            .lib-background-gradient(
+                @_pager-action-gradient-color-start-active,
+                @_pager-action-gradient-color-end-active,
+                @_pager-action-gradient-direction,
+                @_pager-action-gradient
+            );
+            .lib-css(border, @_pager-action-border-active);
+            .lib-css(color, @_pager-action-color-active);
+        }
+
+        &.next {
+            ._lib-pager-icon (
+                @_icon-font-content: @_pager-icon-next-content,
+                @_pager-icon-use: @_pager-icon-use,
+                @_icon-font: @_pager-icon-font,
+                @_icon-font-size: @_pager-icon-font-size,
+                @_icon-font-line-height: @_pager-icon-font-line-height,
+                @_icon-font-color: @_pager-action-color,
+                @_icon-font-color-visited: @_pager-action-color-visited,
+                @_icon-font-color-hover: @_pager-action-color-hover,
+                @_icon-font-color-active: @_pager-action-color-active,
+                @_icon-font-margin: @_pager-icon-font-margin,
+                @_icon-font-vertical-align: @_pager-icon-font-vertical-align,
+                @_icon-font-position: @_pager-icon-font-position,
+                @_icon-font-text-hide: @_pager-icon-font-text-hide
+            );
+        }
+
+        &.previous {
+            ._lib-pager-icon (
+                @_icon-font-content: @_pager-icon-previous-content,
+                @_pager-icon-use: @_pager-icon-use,
+                @_icon-font: @_pager-icon-font,
+                @_icon-font-size: @_pager-icon-font-size,
+                @_icon-font-line-height: @_pager-icon-font-line-height,
+                @_icon-font-color: @_pager-action-color,
+                @_icon-font-color-visited: @_pager-action-color-visited,
+                @_icon-font-color-hover: @_pager-action-color-hover,
+                @_icon-font-color-active: @_pager-action-color-active,
+                @_icon-font-margin: @_pager-icon-font-margin,
+                @_icon-font-vertical-align: @_pager-icon-font-vertical-align,
+                @_icon-font-position: @_pager-icon-font-position,
+                @_icon-font-text-hide: @_pager-icon-font-text-hide
+            );
+        }
+    }
+}
+
+//  Delete spaces between elements when pager items have display: inline-block
+._lib-pager-inline-block-spaces-container(
+    @_pager-reset-spaces,
+    @_pager-item-display
+) when (@_pager-reset-spaces = true) and (@_pager-item-display = inline-block) {
+    .lib-inline-block-space-container();
+    white-space: nowrap;
+}
+
+._lib-pager-inline-block-spaces-item(
+    @_pager-reset-spaces,
+    @_pager-item-display,
+    @_pager-font-size,
+    @_pager-line-height
+) when (@_pager-reset-spaces = true) and (@_pager-item-display = inline-block) {
+    .lib-inline-block-space-item(
+        @_font-size: @_pager-font-size,
+        @_line-height: @_pager-line-height
+    );
+}
+
+// Display or hide "page" label
+._lib-pager-label-display(
+    @_pager-label-display,
+    @_pager-font-size,
+    @_pager-font-weight,
+    @_pager-line-height
+) when not (@_pager-label-display = none){
+    > .label {
+        .lib-css(display, @_pager-label-display);
+        .lib-css(font-weight, @_pager-font-weight);
+        .lib-inline-block-space-item(
+            @_font-size: @_pager-font-size,
+            @_line-height: @_pager-line-height
+        );
+
+        &:after {
+            content: ': ';
+        }
+    }
+}
+
+._lib-pager-label-display(
+    @_pager-label-display,
+    @_pager-font-size,
+    @_pager-font-weight,
+    @_pager-line-height
+) when (@_pager-label-display = none) {
+    > .label {
+        .lib-visually-hidden();
+    }
+}
+
+._lib-pager-label-display(
+    @_pager-label-display,
+    @_pager-font-size,
+    @_pager-font-weight,
+    @_pager-line-height
+) when (@_pager-label-display = false) {
+    > .label {
+        .lib-visually-hidden();
+    }
+}
+
+._lib-pager-icon (
+    @_pager-icon-use,
+    @_icon-font-content,
+    @_icon-font,
+    @_icon-font-size,
+    @_icon-font-line-height,
+    @_icon-font-color,
+    @_icon-font-color-visited,
+    @_icon-font-color-hover,
+    @_icon-font-color-active,
+    @_icon-font-margin,
+    @_icon-font-vertical-align,
+    @_icon-font-position,
+    @_icon-font-text-hide
+) when (@_pager-icon-use = true) and (@_icon-font-position = before) {
+    &:visited {
+        &:before {
+            .lib-css(color, @_icon-font-color-visited);
+        }
+    }
+
+    &:active {
+        &:before {
+            .lib-css(color, @_icon-font-color-active);
+        }
+    }
+
+    .lib-icon-font(
+        @_icon-font-content: @_icon-font-content,
+        @_icon-font: @_icon-font,
+        @_icon-font-size: @_icon-font-size,
+        @_icon-font-line-height: @_icon-font-line-height,
+        @_icon-font-color: @_icon-font-color,
+        @_icon-font-color-hover: @_icon-font-color-hover,
+        @_icon-font-color-active: @_icon-font-color-active,
+        @_icon-font-margin: @_icon-font-margin,
+        @_icon-font-vertical-align: @_icon-font-vertical-align,
+        @_icon-font-position: @_icon-font-position,
+        @_icon-font-text-hide: @_icon-font-text-hide
+    );
+}
+
+._lib-pager-icon (
+    @_icon-font-content,
+    @_pager-icon-use,
+    @_icon-font,
+    @_icon-font-size,
+    @_icon-font-line-height,
+    @_icon-font-color,
+    @_icon-font-color-visited,
+    @_icon-font-color-hover,
+    @_icon-font-color-active,
+    @_icon-font-margin,
+    @_icon-font-vertical-align,
+    @_icon-font-position,
+    @_icon-font-text-hide
+) when (@_pager-icon-use = true) and (@_icon-font-position = after) {
+    .lib-icon-font(
+        @_icon-font-content: @_icon-font-content,
+        @_icon-font: @_icon-font,
+        @_icon-font-size: @_icon-font-size,
+        @_icon-font-line-height: @_icon-font-line-height,
+        @_icon-font-color: @_icon-font-color,
+        @_icon-font-color-hover: @_icon-font-color-hover,
+        @_icon-font-color-active: @_icon-font-color-active,
+        @_icon-font-margin: @_icon-font-margin,
+        @_icon-font-vertical-align: @_icon-font-vertical-align,
+        @_icon-font-position: @_icon-font-position,
+        @_icon-font-text-hide: @_icon-font-text-hide
+    );
+
+    &:visited:after {
+        .lib-css(color, @_icon-font-color-visited);
+    }
+
+    &:active:after {
+        .lib-css(color, @_icon-font-color-active);
+    }
+}
