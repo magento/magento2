@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\Filter;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\AbstractModel;
+
 /**
  * Template filter
  *
@@ -66,7 +69,14 @@ class Template implements \Zend_Filter_Interface
     /**
      * @var string[]
      */
-    private $restrictedMethods = ['addafterfiltercallback'];
+    private $restrictedMethods = [
+        'addafterfiltercallback',
+        'getresourcecollection',
+        'load',
+        'save',
+        'getcollection',
+        'getresource'
+    ];
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -392,6 +402,27 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Check allowed methods for data objects.
+     *
+     * Deny calls for methods that may disrupt template processing.
+     *
+     * @param object $object
+     * @param string $method
+     * @return bool
+     * @throws \InvalidArgumentException
+     */
+    private function isAllowedDataObjectMethod($object, string $method): bool
+    {
+        if ($object instanceof AbstractExtensibleModel || $object instanceof AbstractModel) {
+            if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
+                throw new \InvalidArgumentException("Method $method cannot be called from template.");
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Return variable value for var construction
      *
      * @param string $value raw parameters
@@ -429,14 +460,20 @@ class Template implements \Zend_Filter_Interface
                             || substr($stackVars[$i]['name'], 0, 3) == 'get'
                     ) {
                         $stackVars[$i]['args'] = $this->getStackArgs($stackVars[$i]['args']);
-                        $stackVars[$i]['variable'] = call_user_func_array(
-                            [$stackVars[$i - 1]['variable'], $stackVars[$i]['name']],
-                            $stackVars[$i]['args']
-                        );
+
+                        if ($this->isAllowedDataObjectMethod($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])) {
+                            $stackVars[$i]['variable'] = call_user_func_array(
+                                [$stackVars[$i - 1]['variable'], $stackVars[$i]['name']],
+                                $stackVars[$i]['args']
+                            );
+                        }
                     }
                 }
                 $last = $i;
-            } elseif (isset($stackVars[$i - 1]['variable']) && $stackVars[$i]['type'] == 'method') {
+            } elseif (isset($stackVars[$i - 1]['variable'])
+                && is_object($stackVars[$i - 1]['variable'])
+                && $stackVars[$i]['type'] == 'method'
+            ) {
                 // Calling object methods
                 $object = $stackVars[$i - 1]['variable'];
                 $method = $stackVars[$i]['name'];

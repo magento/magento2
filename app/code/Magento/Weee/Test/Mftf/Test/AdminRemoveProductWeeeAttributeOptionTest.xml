@@ -45,6 +45,7 @@
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
         </after>
+
         <!--  Test Steps  -->
         <!--  Step 1: Open created product edit page  -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">

@@ -134,16 +134,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const COL_NAME = 'name';
 
     /**
-     * Column new_from_date.
-     */
-    const COL_NEW_FROM_DATE = 'new_from_date';
-
-    /**
-     * Column new_to_date.
-     */
-    const COL_NEW_TO_DATE = 'new_to_date';
-
-    /**
      * Column product website.
      */
     const COL_PRODUCT_WEBSITES = '_product_websites';
@@ -309,7 +299,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
         ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually',
         ValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES => 'Value for multiselect attribute %s contains duplicated values',
-        ValidatorInterface::ERROR_NEW_TO_DATE => 'Make sure new_to_date is later than or the same as new_from_date',
+        'invalidNewToDateValue' => 'Make sure new_to_date is later than or the same as new_from_date',
     ];
     //@codingStandardsIgnoreEnd
 
@@ -331,8 +321,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         Product::COL_TYPE => 'product_type',
         Product::COL_PRODUCT_WEBSITES => 'product_websites',
         'status' => 'product_online',
-        'news_from_date' => self::COL_NEW_FROM_DATE,
-        'news_to_date' => self::COL_NEW_TO_DATE,
+        'news_from_date' => 'new_from_date',
+        'news_to_date' => 'new_to_date',
         'options_container' => 'display_product_options_in',
         'minimal_price' => 'map_price',
         'msrp' => 'msrp_price',
@@ -2564,16 +2554,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
         }
 
-        if (!empty($rowData[self::COL_NEW_FROM_DATE]) && !empty($rowData[self::COL_NEW_TO_DATE])
+        if (!empty($rowData['new_from_date']) && !empty($rowData['new_to_date'])
         ) {
-            $newFromTimestamp = strtotime($this->dateTime->formatDate($rowData[self::COL_NEW_FROM_DATE], false));
-            $newToTimestamp = strtotime($this->dateTime->formatDate($rowData[self::COL_NEW_TO_DATE], false));
+            $newFromTimestamp = strtotime($this->dateTime->formatDate($rowData['new_from_date'], false));
+            $newToTimestamp = strtotime($this->dateTime->formatDate($rowData['new_to_date'], false));
             if ($newFromTimestamp > $newToTimestamp) {
                 $this->skipRow(
                     $rowNum,
-                    ValidatorInterface::ERROR_NEW_TO_DATE,
+                    'invalidNewToDateValue',
                     $errorLevel,
-                    $rowData[self::COL_NEW_TO_DATE]
+                    $rowData['new_to_date']
                 );
             }
         }
