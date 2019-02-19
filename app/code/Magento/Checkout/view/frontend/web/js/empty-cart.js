@@ -9,6 +9,7 @@ define([
     'use strict';
 
     var cartData = customerData.get('cart');
+
     if (cartData()['items'] && cartData()['items'].length !== 0) {
         customerData.reload(['cart'], false);
     }
