@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-10894"/>
             <group value="Catalog"/>
+            <group value="mtf_migrated"/>
         </annotations>
 
         <before>
@@ -75,6 +76,7 @@
             <skip>
                 <issueId value="MC-13817"/>
             </skip>
+            <group value="mtf_migrated"/>
         </annotations>
 
         <before>
@@ -134,6 +136,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-10897"/>
             <group value="Catalog"/>
+            <group value="mtf_migrated"/>
         </annotations>
 
         <before>
@@ -187,6 +190,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-10896"/>
             <group value="Catalog"/>
+            <group value="mtf_migrated"/>
         </annotations>
 
         <before>
@@ -273,6 +277,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-10898"/>
             <group value="Catalog"/>
+            <group value="mtf_migrated"/>
         </annotations>
 
         <before>
@@ -341,6 +346,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-10888"/>
             <group value="Catalog"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
