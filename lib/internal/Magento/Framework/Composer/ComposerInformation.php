@@ -148,7 +148,6 @@ class ComposerInformation
             /** @var CompletePackageInterface $package */
             foreach ($this->getLocker()->getLockedRepository()->getPackages() as $package) {
                 $requires = array_keys($package->getRequires());
-                $requires = array_merge($requires, array_keys($package->getDevRequires()));
                 $allPlatformReqs = array_merge($allPlatformReqs, $requires);
             }
         }
