@@ -1433,6 +1433,7 @@
                 <item name="longtext" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\LongText</item>
                 <item name="mediumtext" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\MediumText</item>
                 <item name="text" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Text</item>
+                <item name="tinytext" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Text</item>
                 <item name="varchar" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\StringBinary</item>
                 <item name="varbinary" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\StringBinary</item>
                 <item name="blob" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Blob</item>
@@ -1458,6 +1459,7 @@
                 <item name="float" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Real</item>
                 <item name="double" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Real</item>
                 <item name="text" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
+                <item name="tinytext" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
                 <item name="blob" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
                 <item name="mediumblob" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
                 <item name="longblob" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
