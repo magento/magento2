@@ -70,8 +70,6 @@
         </annotations>
 
         <remove keyForRemoval="filterCustomer"/>
-        <actionGroup ref="AdminSelectAllCustomers" stepKey="selectCustomer">
-            <argument name="customerEmail" value="$customer.email$"/>
-        </actionGroup>
+        <actionGroup ref="AdminSelectAllCustomers" stepKey="selectCustomer"/>
     </test>
 </tests>
