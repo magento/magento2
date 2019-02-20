@@ -38,6 +38,9 @@ class ZookeeperTest extends TestCase
      */
     protected function setUp()
     {
+        if (!extension_loaded('zookeeper')) {
+            $this->markTestSkipped('Test was skipped because php extension Zookeeper is not installed.');
+        }
         $this->zookeeperProvider = new ZookeeperProvider($this->host, '/some/path/');
     }
 
@@ -49,6 +52,4 @@ class ZookeeperTest extends TestCase
     {
         $this->zookeeperProvider = new ZookeeperProvider('some host', '');
     }
-
-
 }
