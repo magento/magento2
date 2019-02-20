@@ -13,6 +13,8 @@ use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * MySQL search query match.
@@ -28,7 +30,7 @@ class Match implements QueryInterface
      */
     const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^';
 
-    const MINIMAL_CHARACTER_LENGTH = 1;
+    const MINIMAL_CHARACTER_LENGTH = 3;
 
     /**
      * @var string[]
@@ -73,6 +75,9 @@ class Match implements QueryInterface
         $this->fulltextHelper = $fulltextHelper;
         $this->fulltextSearchMode = $fulltextSearchMode;
         $this->preprocessors = $preprocessors;
+        $this->_ConfigInterface = $ConfigInterface;
+        $this->minQueryLength = (int)$this->_ConfigInterface->getValue(
+            'catalog/search/min_query_length', ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -146,7 +151,7 @@ class Match implements QueryInterface
             if (empty($queryValue)) {
                 unset($queryValues[$queryKey]);
             } else {
-                $stringSuffix = self::MINIMAL_CHARACTER_LENGTH > strlen($queryValue) ? '' : '*';
+                $stringSuffix = $this->minQueryLength > strlen($queryValue) ? '' : '*';
                 $queryValues[$queryKey] = $stringPrefix . $queryValue . $stringSuffix;
             }
         }
