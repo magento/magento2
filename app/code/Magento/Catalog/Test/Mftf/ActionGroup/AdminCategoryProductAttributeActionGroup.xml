@@ -14,16 +14,17 @@
             <argument name="productAttribute"/>
         </arguments>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributesGridPage"/>
+        <waitForPageLoad time="30" stepKey="waitForProductAttributesGridPageLoad"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFiltersBeforeDelete"/>
         <fillField selector="{{AdminProductAttributeGridSection.gridFilterFrontEndLabel}}"
                    userInput="{{productAttribute.default_label}}" stepKey="fillAttributeDefaultLabelInput"/>
-        <click selector="{{AdminProductAttributeGridSection.search}}" stepKey="searchForAttribute"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="applyFilters"/>
         <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="clickFirstRow"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
-        <click selector="{{AdminProductAttributeEditSection.deleteAttribute}}" stepKey="deleteProductAttribute"/>
+        <click selector="{{AdminMainActionsSection.delete}}" stepKey="deleteProductAttribute"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitingForWarningModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFiltersAfterDelete"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the product attribute." stepKey="seeSuccessMessage"/>
     </actionGroup>
 
     <actionGroup name="navigateToProductAttribute">

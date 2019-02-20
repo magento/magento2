@@ -104,9 +104,14 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     private $layoutFactory;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface|null
+     * @var \Magento\Framework\Url\EncoderInterface
      */
     private $urlEncoder;
+
+    /**
+     * @var \Magento\Framework\View\Element\RendererList
+     */
+    private $rendererListBlock;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
@@ -238,13 +243,17 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      */
     protected function getDetailsRendererList()
     {
-        /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = $this->layoutFactory->create(['cacheable' => false]);
-        $layout->getUpdate()->addHandle('catalog_widget_product_list')->load();
-        $layout->generateXml();
-        $layout->generateElements();
+        if (empty($this->rendererListBlock)) {
+            /** @var $layout \Magento\Framework\View\LayoutInterface */
+            $layout = $this->layoutFactory->create(['cacheable' => false]);
+            $layout->getUpdate()->addHandle('catalog_widget_product_list')->load();
+            $layout->generateXml();
+            $layout->generateElements();
 
-        return $layout->getBlock('category.product.type.widget.details.renderers');
+            $this->rendererListBlock = $layout->getBlock('category.product.type.widget.details.renderers');
+        }
+
+        return $this->rendererListBlock;
     }
 
     /**
@@ -253,7 +262,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * @param Product $product
      * @return array
      */
-    public function getAddToCartPostParams(Product $product)
+    public function getAddToCartPostParams(Product $product): array
     {
         $url = $this->getAddToCartUrl($product);
 
