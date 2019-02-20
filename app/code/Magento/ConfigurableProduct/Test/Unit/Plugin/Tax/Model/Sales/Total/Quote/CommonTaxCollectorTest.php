@@ -78,7 +78,7 @@ class CommonTaxCollectorTest extends \PHPUnit\Framework\TestCase
 
         /* @var TaxClassKeyInterface|MockObject $taxClassObjectMock */
         $taxClassObjectMock = $this->createMock(TaxClassKeyInterface::class);
-        $taxClassObjectMock->method('setValue')->with($childTaxClassId);
+        $taxClassObjectMock->expects($this->once())->method('setValue')->with($childTaxClassId);
 
         /* @var QuoteDetailsItemInterface|MockObject $quoteDetailsItemMock */
         $quoteDetailsItemMock = $this->createMock(QuoteDetailsItemInterface::class);
