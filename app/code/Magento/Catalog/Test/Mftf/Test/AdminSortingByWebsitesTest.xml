@@ -82,13 +82,13 @@
 
         <!--Sort Ascending-->
         <click selector="{{AdminProductGridSection.columnHeader('Websites')}}" stepKey="clickWebsitesHeaderToSortAsc"/>
-        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('Ukraine', 'Country of Manufacture')}}" stepKey="getFirstWebsitesSortAsc"/>
-        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('Cameroon', 'Country of Manufacture')}}" stepKey="getSecondWebsitesSortAsc"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('Main Website', 'Country of Manufacture')}}" stepKey="getFirstWebsitesSortAsc"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('Second Website', 'Country of Manufacture')}}" stepKey="getSecondWebsitesSortAsc"/>
         <assertLessThanOrEqual expected="$getSecondPriceSortAsc" actual="$getFirstPriceSortAsc" stepKey="checkPriceAscSortCorrect"/>
         <!--Sort Descending-->
-        <click selector="{{AdminProductGridSection.columnHeader('Country of Manufacture')}}" stepKey="clickWebsitesHeaderToSortDesc"/>
-        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('Ukraine', 'Country of Manufacture')}}" stepKey="getFirstWebsitesSortDesc"/>
-        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('Cameroon', 'Country of Manufacture')}}" stepKey="getSecondWebsitesSortDesc"/>
+        <click selector="{{AdminProductGridSection.columnHeader('Websites')}}" stepKey="clickWebsitesHeaderToSortDesc"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('Main Website', 'Country of Manufacture')}}" stepKey="getFirstWebsitesSortDesc"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('Second Website', 'Country of Manufacture')}}" stepKey="getSecondWebsitesSortDesc"/>
         <assertGreaterThanOrEqual expected="$getSecondWebsitesSortDesc" actual="$getFirstWebsitesSortDesc" stepKey="checkWebsitesDescSortCorrect"/>
     </test>
 </tests>
