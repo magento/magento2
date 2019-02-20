@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 
 /**
  * Extract data from cart
@@ -16,10 +18,25 @@ use Magento\Quote\Model\Quote\Item as QuoteItem;
 class ExtractDataFromCart
 {
     /**
+     * @var QuoteIdToMaskedQuoteIdInterface
+     */
+    private $quoteIdToMaskedQuoteId;
+
+    /**
+     * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
+     */
+    public function __construct(
+        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
+    ) {
+        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
+    }
+
+    /**
      * Extract data from cart
      *
      * @param Quote $cart
      * @return array
+     * @throws NoSuchEntityException
      */
     public function execute(Quote $cart): array
     {
@@ -40,8 +57,12 @@ class ExtractDataFromCart
             ];
         }
 
+        $appliedCoupon = $cart->getCouponCode();
+
         return [
+            'cart_id' => $this->quoteIdToMaskedQuoteId->execute((int)$cart->getId()),
             'items' => $items,
+            'applied_coupon' => $appliedCoupon ? ['code' => $appliedCoupon] : null
         ];
     }
 }

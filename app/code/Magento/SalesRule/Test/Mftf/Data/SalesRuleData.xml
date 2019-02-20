@@ -89,6 +89,16 @@
         <data key="apply">Percent of product price discount</data>
         <data key="discountAmount">50</data>
     </entity>
+    <entity name="CatPriceRule" type="SalesRule">
+        <data key="name" unique="suffix">CartPriceRule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
+        <data key="coupon_type">Specific Coupon</data>
+        <data key="coupon_code" unique="suffix">CouponCode</data>
+        <data key="apply">Percent of product price discount</data>
+        <data key="discountAmount">10</data>
+    </entity>
+
     <entity name="SalesRuleSpecificCoupon" type="SalesRule">
         <data key="name" unique="suffix">SimpleSalesRule</data>
         <data key="description">Sales Rule Description</data>

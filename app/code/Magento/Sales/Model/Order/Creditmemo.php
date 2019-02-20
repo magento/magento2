@@ -43,11 +43,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     const REPORT_DATE_TYPE_REFUND_CREATED = 'refund_created';
 
     /**
-     * Allow Zero Grandtotal for Creditmemo path
-     */
-    const XML_PATH_ALLOW_ZERO_GRANDTOTAL = 'sales/zerograndtotal_creditmemo/allow_zero_grandtotal';
-
-    /**
      * Identifier for order history item
      *
      * @var string
@@ -655,10 +650,10 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      *
      * @return bool
      */
-    public function isAllowZeroGrandTotal()
+    private function isAllowZeroGrandTotal()
     {
         $isAllowed = $this->scopeConfig->getValue(
-            self::XML_PATH_ALLOW_ZERO_GRANDTOTAL,
+            'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return $isAllowed;
