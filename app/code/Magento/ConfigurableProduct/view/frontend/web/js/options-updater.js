@@ -61,6 +61,7 @@ define([
             this.setProductOptions(cartData());
             this.updateOptions();
         }.bind(this));
+        this.updateOptions();
     },
 
     /**

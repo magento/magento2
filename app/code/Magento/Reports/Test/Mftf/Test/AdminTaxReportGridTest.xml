@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminTaxReportGridTest">
+        <annotations>
+            <stories value="MAGETWO-86649: Reports / Sales / Tax report show incorrect amount"/>
+            <title value="Checking Tax Report grid"/>
+            <description value="Checking Tax Report grid with tax rates and same zip code"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-97018"/>
+            <group value="tax_report"/>
+            <group value="reports"/>
+        </annotations>
+        <before>
+            <!--Log in as Admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create Customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Create Product-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Create product Tax Class and Tax Rates-->
+            <createData entity="ProductTaxClass" stepKey="createProductTaxClass"/>
+            <createData entity="TexasTaxRate" stepKey="createStateTaxRate"/>
+            <createData entity="AustinTaxRate" stepKey="createCityTaxRate"/>
+            <!--Get Data from product Tax Class-->
+            <getData entity="ProductTaxClassGetter" stepKey="getProductTaxClass">
+                <requiredEntity createDataKey="createProductTaxClass"/>
+            </getData>
+        </before>
+        <after>
+            <!--Delete Tax Rules-->
+            <actionGroup ref="DeleteTaxRule" stepKey="deleteCityTaxRule">
+                <argument name="taxRuleName" value="CityTaxRule"/>
+            </actionGroup>
+            <actionGroup ref="DeleteTaxRule" stepKey="deleteStateTaxRule">
+                <argument name="taxRuleName" value="StateTaxRule"/>
+            </actionGroup>
+            <!--Delete Customer-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Delete Product-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <!--Delete Tax Rates and product Tax Class-->
+            <deleteData createDataKey="createStateTaxRate" stepKey="deleteTaxClass1"/>
+            <deleteData createDataKey="createCityTaxRate" stepKey="deleteTaxClass2"/>
+            <deleteData createDataKey="createProductTaxClass" stepKey="deleteProductTaxClass"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Adding Tax Rule with all (*) zip code-->
+        <actionGroup ref="AddTaxRule" stepKey="addStateTaxRule">
+            <argument name="taxRuleName" value="StateTaxRule"/>
+            <argument name="taxRate" value="$$createStateTaxRate$$"/>
+            <argument name="productTaxClass" value="$$getProductTaxClass$$"/>
+        </actionGroup>
+        <!--Adding Tax Rule with zip code-->
+        <actionGroup ref="AddTaxRule" stepKey="addCityTaxRule">
+            <argument name="taxRuleName" value="CityTaxRule"/>
+            <argument name="taxRate" value="$$createCityTaxRate$$"/>
+            <argument name="productTaxClass" value="$$getProductTaxClass$$"/>
+        </actionGroup>
+        <!-- Open Product Edit -->
+        <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToEditPage"/>
+        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="$$getProductTaxClass.class_name$$" stepKey="selectCustomTaxClass"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <!--Create new order with existing Customer -->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrder">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!--Add product to order-->
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!--Select shipping-->
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+        <!--Select payment-->
+        <actionGroup ref="SelectCheckMoneyPaymentMethod" stepKey="selectCheckMoneyPayment"/>
+        <!--Submit order-->
+        <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="clickSubmitOrder"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." stepKey="seeOrderSuccessMessage"/>
+        <!--Create and submit Invoice-->
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="createInvoice"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+        <!--Create and submit Shipment -->
+        <actionGroup ref="StartCreateShipmentFromOrderPage" stepKey="createShipment"/>
+        <actionGroup ref="SubmitShipment" stepKey="submitShipment"/>
+        <!--Go to Report -> Tax -->
+        <amOnPage url="{{AdminReportSalesTaxPage.url}}" stepKey="goToReportTax"/>
+        <click selector="{{AdminReportTaxSection.refreshStatistics}}" stepKey="clickRefreshStatistics"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="Recent statistics have been updated." stepKey="seeReportSuccessMessage"/>
+        <!--Select Date From-->
+        <click selector="{{AdminReportTaxSection.dataPickerFrom}}" stepKey="clickOnDatePickerFrom"/>
+        <waitForElementVisible selector="{{AdminReportTaxSection.goTodayButton}}" stepKey="waitForGoTodayButton1"/>
+        <click selector="{{AdminReportTaxSection.goTodayButton}}" stepKey="selectToday1"/>
+        <click selector="{{AdminReportTaxSection.closeButton}}" stepKey="selectClose1"/>
+        <!--Select Date To-->
+        <click selector="{{AdminReportTaxSection.dataPickerTo}}" stepKey="clickOnDatePickerTo"/>
+        <waitForElementVisible selector="{{AdminReportTaxSection.goTodayButton}}" stepKey="waitForGoTodayButton2"/>
+        <click selector="{{AdminReportTaxSection.goTodayButton}}" stepKey="selectToday2"/>
+        <click selector="{{AdminReportTaxSection.closeButton}}" stepKey="selectClose2"/>
+        <click selector="{{AdminReportMainActionSection.showReport}}" stepKey="clickOnShowReportButton"/>
+        <!--Assert taxes-->
+        <grabTextFrom selector="{{AdminReportTaxSection.row($$createStateTaxRate.code$$)}}" stepKey="grabStateTax"/>
+        <assertEquals stepKey="checkStateTaxForProduct">
+            <expectedResult type="string">$2.00</expectedResult>
+            <actualResult type="variable">$grabStateTax</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{AdminReportTaxSection.row($$createCityTaxRate.code$$)}}" stepKey="grabCityTax"/>
+        <assertEquals stepKey="checkCityTaxForProduct">
+            <expectedResult type="string">$10.00</expectedResult>
+            <actualResult type="variable">$grabCityTax</actualResult>
+        </assertEquals>
+        <!--Assert total-->
+        <grabTextFrom selector="{{AdminReportTaxSection.row('Subtotal')}}" stepKey="grabTotalTax"/>
+        <assertEquals stepKey="checkTotalTaxForProduct">
+            <expectedResult type="string">$12.00</expectedResult>
+            <actualResult type="variable">$grabTotalTax</actualResult>
+        </assertEquals>
+    </test>
+</tests>

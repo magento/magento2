@@ -42,12 +42,7 @@ class Validate extends ImportResultController
             /** @var $import \Magento\ImportExport\Model\Import */
             $import = $this->getImport()->setData($data);
             try {
-                $source = ImportAdapter::findAdapterFor(
-                    $import->uploadSource(),
-                    $this->_objectManager->create(\Magento\Framework\Filesystem::class)
-                        ->getDirectoryWrite(DirectoryList::ROOT),
-                    $data[$import::FIELD_FIELD_SEPARATOR]
-                );
+                $source = $import->uploadFileAndGetSource();
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $resultBlock->addError($e->getMessage());

@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Shipping\Test\TestCase\SalesShippingReportEntityTest" summary="Sales Shipping Report" ticketId="MAGETWO-40914">
         <variation name="SalesShippingReportEntityTestVariation1">
+            <data name="issue" xsi:type="string">MAGETWO-97404: 2019-01-02: Tests fail Magento\Reports\Test\TestCase\SalesOrderReportEntityTest</data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/price/dataset" xsi:type="string">full_shipment</data>
             <data name="shippingReport/report_type" xsi:type="string">Order Created</data>

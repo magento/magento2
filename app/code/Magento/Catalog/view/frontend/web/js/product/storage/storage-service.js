@@ -47,7 +47,7 @@ define([
                  * @param {*} data
                  */
                 add: function (data) {
-                    if (!_.isEmpty(data) && !utils.compare(data, this.data()).equal) {
+                    if (!_.isEmpty(data)) {
                         this.data(_.extend(utils.copy(this.data()), data));
                     }
                 },

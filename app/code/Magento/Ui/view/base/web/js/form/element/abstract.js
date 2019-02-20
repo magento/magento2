@@ -57,6 +57,9 @@ define([
                 '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate',
                 'isUseDefault': 'toggleUseDefault'
             },
+            ignoreTmpls: {
+                value: true
+            },
 
             links: {
                 value: '${ $.provider }:${ $.dataScope }'
@@ -405,6 +408,7 @@ define([
                 isValid = this.disabled() || !this.visible() || result.passed;
 
             this.error(message);
+            this.error.valueHasMutated();
             this.bubble('error', message);
 
             //TODO: Implement proper result propagation for form

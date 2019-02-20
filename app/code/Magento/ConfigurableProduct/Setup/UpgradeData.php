@@ -7,11 +7,11 @@ namespace Magento\ConfigurableProduct\Setup;
 
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Upgrade Data script
@@ -62,6 +62,10 @@ class UpgradeData implements UpgradeDataInterface
             }
         }
 
+        if (version_compare($context->getVersion(), '2.2.2', '<')) {
+            $this->upgradeQuoteItemPrice($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -96,5 +100,31 @@ class UpgradeData implements UpgradeDataInterface
             'apply_to',
             implode(',', $relatedProductTypes)
         );
+    }
+
+    /**
+     * Update 'price' value for quote items without price of configurable products subproducts.
+     *
+     * @param ModuleDataSetupInterface $setup
+     */
+    private function upgradeQuoteItemPrice(ModuleDataSetupInterface $setup)
+    {
+        $connection = $setup->getConnection();
+        $quoteItemTable = $setup->getTable('quote_item');
+        $select = $connection->select();
+        $select->joinLeft(
+            ['qi2' => $quoteItemTable],
+            'qi1.parent_item_id = qi2.item_id',
+            ['price']
+        )->where(
+            'qi1.price = 0'
+            . ' AND qi1.parent_item_id IS NOT NULL'
+            . ' AND qi2.product_type = "' . Configurable::TYPE_CODE . '"'
+        );
+        $updateQuoteItem = $setup->getConnection()->updateFromSelect(
+            $select,
+            ['qi1' => $quoteItemTable]
+        );
+        $setup->getConnection()->query($updateQuoteItem);
     }
 }

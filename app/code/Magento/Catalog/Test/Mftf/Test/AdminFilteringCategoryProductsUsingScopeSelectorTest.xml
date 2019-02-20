@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminFilteringCategoryProductsUsingScopeSelectorTest">
+        <annotations>
+            <features value="Catalog"/>
+            <title value="Filtering Category Products using scope selector"/>
+            <description value="Filtering Category Products using scope selector"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-78408"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create website, Sore and Store View-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
+                <argument name="newWebsiteName" value="{{SecondWebsite.name}}"/>
+                <argument name="websiteCode" value="{{SecondWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStoreGroup">
+                <argument name="website" value="{{SecondWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+                <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="storeGroup" value="SecondStoreGroupUnique"/>
+                <argument name="customStore" value="SecondStoreUnique"/>
+            </actionGroup>
+
+            <!--Create Simple Product and Category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct0">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createProduct12">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Set filter to product name and product0 not assigned to any website-->
+            <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions">
+                <argument name="product" value="_defaultProduct"/>
+            </actionGroup>
+
+            <click selector="{{AdminProductGridSection.productGridNameProduct('$$createProduct0.name$$')}}"
+                   stepKey="clickOpenProductForEdit"/>
+            <waitForPageLoad time="30" stepKey="waitForProductEditOpen"/>
+
+            <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToWebsitesSection"/>
+            <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="clickToOpenWebsiteSection"/>
+            <waitForPageLoad stepKey="waitForToOpenedWebsiteSection"/>
+            <uncheckOption selector="{{ProductInWebsitesSection.website('Main Website')}}" stepKey="uncheckWebsite"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+            <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."
+                 stepKey="seeSuccessMessage"/>
+
+            <!-- Set filter to product name and product2 in website 2 only -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <waitForPageLoad time="30" stepKey="waitForProductsPageToLoad"/>
+            <click selector="{{AdminProductGridSection.productGridNameProduct('$$createProduct2.name$$')}}"
+                   stepKey="clickOpenProductForEdit1"/>
+            <waitForPageLoad time="30" stepKey="waitForProductEditOpen1"/>
+
+            <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectProductInWebsites">
+                <argument name="website" value="{{SecondWebsite.name}}"/>
+            </actionGroup>
+            <uncheckOption selector="{{ProductInWebsitesSection.website('Main Website')}}" stepKey="uncheckWebsite1"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct1"/>
+            <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."
+                 stepKey="seeSuccessMessage1"/>
+
+            <!-- Set filter to product name and product12 assigned to both websites 1 and 2 -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
+            <waitForPageLoad time="30" stepKey="waitForProductsPageToLoad1"/>
+            <click selector="{{AdminProductGridSection.productGridNameProduct('$$createProduct12.name$$')}}"
+                   stepKey="clickOpenProductForEdit2"/>
+            <waitForPageLoad time="30" stepKey="waitForProductEditOpen2"/>
+
+            <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectProductInWebsites1">
+                <argument name="website" value="{{SecondWebsite.name}}"/>
+            </actionGroup>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct2"/>
+            <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."
+                 stepKey="seeSuccessMessage2"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct0" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createProduct12" stepKey="deleteProduct3"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!--Delete website-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
+                <argument name="websiteName" value="{{SecondWebsite.name}}"/>
+            </actionGroup>
+            <!--Clear products filter-->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsFilters"/>
+
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- Step 1-2: Open Category page and Set scope selector to All Store Views-->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
+               stepKey="clickCategoryName"/>
+        <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection"/>
+        <grabTextFrom selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
+                      stepKey="grabTextFromCategory"/>
+        <assertRegExp expected="/\(4\)$/" expectedType="string" actual="$grabTextFromCategory" actualType="variable"
+                      message="wrongCountProductOnAllStoreViews" stepKey="checkCountProducts"/>
+        <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct0.name$$)}}"
+             userInput="$$createProduct0.name$$" stepKey="seeProductName"/>
+        <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct1.name$$)}}"
+             userInput="$$createProduct1.name$$" stepKey="seeProductName1"/>
+        <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"
+             userInput="$$createProduct2.name$$" stepKey="seeProductName2"/>
+        <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct12.name$$)}}"
+             userInput="$$createProduct12.name$$" stepKey="seeProductName3"/>
+
+        <!-- Step 3: Set scope selector to Website1( Storeview for the Website 1) -->
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewDropdownToggle}}"
+               stepKey="clickStoresList"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad1"/>
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewOption('Default Store View')}}"
+               stepKey="clickStoreView"/>
+        <waitForElementVisible selector="{{AdminCategoryMainActionsSection.categoryStoreViewModalAccept}}"
+                               stepKey="waitForPopup1"/>
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewModalAccept}}" stepKey="clickActionAccept"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad2"/>
+        <grabTextFrom selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
+                      stepKey="grabTextFromCategory1"/>
+        <assertRegExp expected="/\(2\)$/" expectedType="string" actual="$grabTextFromCategory1" actualType="variable"
+                      message="wrongCountProductOnWebsite1" stepKey="checkCountProducts1"/>
+        <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection1"/>
+        <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct1.name$$)}}"
+             userInput="$$createProduct1.name$$" stepKey="seeProductName4"/>
+        <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct12.name$$)}}"
+             userInput="$$createProduct12.name$$" stepKey="seeProductName5"/>
+        <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct0.name$$)}}"
+                 userInput="$$createProduct0.name$$" stepKey="dontSeeProductName"/>
+        <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"
+                 userInput="$$createProduct2.name$$" stepKey="dontSeeProductName1"/>
+
+        <!-- Step 4: Set scope selector to Website2 ( StoreView for Website 2) -->
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewDropdownToggle}}"
+               stepKey="clickStoresList1"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad3"/>
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewOption(SecondStoreUnique.name)}}"
+               stepKey="clickStoreView1"/>
+        <waitForElementVisible selector="{{AdminCategoryMainActionsSection.categoryStoreViewModalAccept}}"
+               stepKey="waitForPopup2"/>
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewModalAccept}}"
+               stepKey="clickActionAccept1"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad4"/>
+        <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection2"/>
+        <grabTextFrom selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
+                      stepKey="grabTextFromCategory2"/>
+        <assertRegExp expected="/\(2\)$/" expectedType="string" actual="$grabTextFromCategory2" actualType="variable"
+                      message="wrongCountProductOnWebsite2" stepKey="checkCountProducts2"/>
+        <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"
+             userInput="$$createProduct2.name$$" stepKey="seeProductName6"/>
+        <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct12.name$$)}}"
+             userInput="$$createProduct12.name$$" stepKey="seeProductName7"/>
+        <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct0.name$$)}}"
+                 userInput="$$createProduct0.name$$" stepKey="dontSeeProductName2"/>
+        <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"
+                 userInput="$$createProduct1.name$$" stepKey="dontSeeProductName3"/>
+    </test>
+</tests>

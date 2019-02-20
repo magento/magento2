@@ -11,5 +11,6 @@
     <section name="AdminOrderAddressInformationSection">
         <element name="billingAddress" type="text" selector=".order-billing-address address"/>
         <element name="shippingAddress" type="text" selector=".order-shipping-address address"/>
+        <element name="editBillingAddress" type="text" selector="//div[@class='admin__page-section-item order-billing-address']//a[contains(text(),'Edit')]"/>
     </section>
 </sections>

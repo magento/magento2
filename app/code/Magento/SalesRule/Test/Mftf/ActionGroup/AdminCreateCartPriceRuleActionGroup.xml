@@ -23,4 +23,31 @@
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
     </actionGroup>
+
+    <actionGroup name="AdminCreateCartPriceRuleWithProductSubselectionCondition" extends="AdminCreateCartPriceRuleActionGroup">
+        <arguments>
+            <argument name="condition" type="string" defaultValue="Category" />
+            <argument name="operation" type="string" defaultValue="equals or greater than" />
+            <argument name="totalQuantity" type="string" defaultValue="2" />
+            <argument name="value" type="string" defaultValue="_defaultCategory.name" />
+        </arguments>
+        <!--Go to Conditions section-->
+        <click selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" after="selectActionType" stepKey="openConditionsSection"/>
+        <click selector="{{AdminCartPriceRulesFormSection.addCondition('1')}}" after="openConditionsSection" stepKey="addFirstCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleCondition('1')}}" userInput="Products subselection" after="addFirstCondition" stepKey="selectRule"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleParameter('is')}}" after="selectRule" stepKey="waitForFirstRuleElement"/>
+        <click selector="{{AdminCartPriceRulesFormSection.ruleParameter('is')}}" after="waitForFirstRuleElement" stepKey="clickToChangeRule"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleOperatorSelect('1--1')}}" userInput="{{operation}}" after="clickToChangeRule" stepKey="selectRule1"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleParameter('...')}}" after="selectRule1" stepKey="waitForSecondRuleElement"/>
+        <click selector="{{AdminCartPriceRulesFormSection.ruleParameter('...')}}" after="waitForSecondRuleElement" stepKey="clickToChangeRule1"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleValueInput('1--1')}}" userInput="{{totalQuantity}}" after="clickToChangeRule1" stepKey="fillRule"/>
+        <click selector="{{AdminCartPriceRulesFormSection.addCondition('1--1')}}" after="fillRule" stepKey="addSecondCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleCondition('1--1')}}" userInput="{{condition}}" after="addSecondCondition" stepKey="selectSecondCondition"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleParameter('...')}}" after="selectSecondCondition" stepKey="waitForThirdRuleElement"/>
+        <click selector="{{AdminCartPriceRulesFormSection.ruleParameter('...')}}" after="waitForThirdRuleElement" stepKey="addThirdCondition"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.chooseValue('1--1--1')}}" after="addThirdCondition" stepKey="waitForForthRuleElement"/>
+        <click selector="{{AdminCartPriceRulesFormSection.chooseValue('1--1--1')}}" after="waitForForthRuleElement" stepKey="chooseValue"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.categoryCheckbox(value)}}" after="chooseValue" stepKey="waitForCategoryVisible"/>
+        <checkOption selector="{{AdminCartPriceRulesFormSection.categoryCheckbox(value)}}" after="waitForCategoryVisible" stepKey="checkCategoryName"/>
+    </actionGroup>
 </actionGroups>

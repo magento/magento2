@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerCheckoutTestWithRestrictedCountriesForPaymentTest"
+        extends="StorefrontGuestCheckoutTestWithRestrictedCountriesForPaymentTest">
+        <annotations>
+            <stories value="Checkout via the Storefront"/>
+            <title value="Checkout via Customer Checkout with restricted countries for payment"/>
+            <description value="Should be able to place an order as a Customer with restricted countries for payment."/>
+            <testCaseId value="MC-10831"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer"/>
+        </before>
+        <after>
+            <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="customerLogoutStorefront"/>
+            <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <remove keyForRemoval="guestCheckoutFillingShippingSection"/>
+        <remove keyForRemoval="guestCheckoutFillingShippingSectionUK"/>
+        <remove keyForRemoval="guestPlaceOrder"/>
+
+        <!-- Login as Customer -->
+        <actionGroup ref="CustomerLoginOnStorefront" before="goToProductPage" stepKey="customerLogin">
+            <argument name="customer" value="$$createSimpleUsCustomer$$" />
+        </actionGroup>
+
+        <!-- Select address and go to payments page-->
+        <see selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{US_Address_TX.state}}" after="shippingStepIsOpened" stepKey="seeRegion" />
+        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" after="seeRegion" stepKey="waitNextButton"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" after="waitNextButton" stepKey="selectShippingMethod"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" after="selectShippingMethod" stepKey="clickNextButton" />
+        <waitForPageLoad after="clickNextButton" stepKey="waitBillingForm"/>
+        <seeElement selector="{{CheckoutPaymentSection.isPaymentSection}}" after="waitBillingForm" stepKey="checkoutPaymentStepIsOpened"/>
+
+        <!-- Fill UK Address and verify that payment available and checkout successful -->
+        <click selector="{{CheckoutShippingSection.newAdress}}" after="shippingStepIsOpened1" stepKey="fillNewAddress" />
+        <actionGroup ref="LoggedInUserCheckoutAddNewShippingSectionWithoutRegionActionGroup" after="fillNewAddress" stepKey="customerCheckoutFillingShippingSectionUK">
+            <argument name="customerVar" value="$$createSimpleUsCustomer$$" />
+            <argument name="customerAddressVar" value="UK_Default_Address" />
+        </actionGroup>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" after="customerCheckoutFillingShippingSectionUK" stepKey="waitNextButton1"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" after="waitNextButton1" stepKey="selectShippingMethod1"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" after="selectShippingMethod1" stepKey="clickNextButton1" />
+
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" after="selectCheckMoneyOrderPayment" stepKey="customerPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+    </test>
+</tests>

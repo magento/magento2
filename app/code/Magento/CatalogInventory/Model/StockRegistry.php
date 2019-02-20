@@ -171,6 +171,16 @@ class StockRegistry implements StockRegistryInterface
         $productId = $this->resolveProductId($productSku);
         $websiteId = $stockItem->getWebsiteId() ?: null;
         $origStockItem = $this->getStockItem($productId, $websiteId);
+
+        if ($stockItem->getManageStock()
+            && !$stockItem->getIsInStock()
+            && $stockItem->getQty() > 0
+            && $stockItem->getOrigData(\Magento\CatalogInventory\Api\Data\StockItemInterface::QTY) <= 0
+            && $stockItem->getOrigData(\Magento\CatalogInventory\Api\Data\StockItemInterface::QTY) !== null
+        ) {
+            $stockItem->setIsInStock(true)->setStockStatusChangedAutomaticallyFlag(true);
+        }
+
         $data = $stockItem->getData();
         if ($origStockItem->getItemId()) {
             unset($data['item_id']);

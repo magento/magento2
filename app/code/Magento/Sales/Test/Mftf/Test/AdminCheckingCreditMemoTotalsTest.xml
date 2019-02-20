@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckingCreditMemoTotalsTest">
+        <annotations>
+            <features value="CreditMemo"/>
+            <stories value="MAGETWO-82400: Credit Memo - Wrong tax calculation! #10982"/>
+            <title value="Checking Credit Memo Totals"/>
+            <description value="Checking Credit Memo Totals"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-97140"/>
+            <group value="sales"/>
+            <group value="tax"/>
+            <skip>
+                <issueId value="MAGETWO-97826"/>
+            </skip>
+        </annotations>
+        <before>
+            <!--Create category-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!--Create simple product-->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100</field>
+            </createData>
+            <!--Create Tax Rule-->
+            <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
+            <!--Create customer-->
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+            <!--Configure Tax Class for shipping-->
+            <createData entity="TaxClassForShippingConfig" stepKey="configureTaxClassForShipping"/>
+            <!--Configure Braintree-->
+            <createData entity="SandboxBraintreeConfig" stepKey="configureBraintree"/>
+            <!--Login to admin page-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Delete category-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!--Delete simple product-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <!--Delete Tax Rule-->
+            <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
+            <!--Delete customer-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Restore default configuration for Tax Class for shipping-->
+            <createData entity="DefaultTaxClassForShippingConfig" stepKey="restoreTaxClassForShippingConfig"/>
+            <!--Restore default configuration for Braintree-->
+            <createData entity="DefaultBraintreeConfig" stepKey="restoreBraintreeConfig"/>
+            <!--Logout from admin page-->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create new order with existing customer-->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderPage">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!--Add simple product to order-->
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!--Select Flat Rate shipping method-->
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+        <!--Fill Braintree credit card for payment method-->
+        <actionGroup ref="AdminOrderFillBraintreeCreditCardActionGroup" stepKey="fillBraintreeCreditCard"/>
+        <!--Submit order-->
+        <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="submitOrder"/>
+        <waitForPageLoad stepKey="waitForSubmitOrder"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the order."
+             stepKey="seeSuccessMessage"/>
+
+        <!--Create invoice-->
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
+        <!--Submit invoice-->
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+
+        <!--Go to invoice page-->
+        <click selector="{{AdminOrderViewTabsSection.invoices}}" stepKey="clickInvoicesTab"/>
+        <waitForPageLoad stepKey="waitForInvoiceGridToLoad"/>
+        <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="$113.66" stepKey="seeInvoiceInGrid"/>
+        <click selector="{{AdminDataGridTableSection.rowViewAction('1')}}" stepKey="clickViewInvoice"/>
+
+        <!--Create Credit Memo-->
+        <click selector="{{AdminOrderInvoiceViewMainActionsSection.creditMemo}}" stepKey="clickCreditMemo"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoPageTitle"/>
+        <fillField selector="{{AdminCreditMemoTotalSection.refundShipping}}" userInput="0" stepKey="setRefundShipping"/>
+        <click selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="clickUpdateTotals"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForUpdateTotals"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
+        <waitForElementVisible
+                selector="{{AdminMessagesSection.success}}"
+                time="10"
+                stepKey="waitForMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo."
+             stepKey="seeCreatedCreditMemoSuccessMessage"/>
+
+        <!--Go to Credit Memo tab-->
+        <click selector="{{AdminOrderViewTabsSection.creditMemos}}" stepKey="clickCreditMemosTab"/>
+        <waitForPageLoad stepKey="waitForCreditMemosGridToLoad"/>
+
+        <!--Check refunded total -->
+        <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="$108.25"
+             stepKey="seeCreditMemoInGrid"/>
+    </test>
+</tests>

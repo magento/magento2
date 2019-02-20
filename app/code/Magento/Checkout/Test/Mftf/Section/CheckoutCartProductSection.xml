@@ -32,5 +32,8 @@
                  parameterized="true"/>
         <element name="removeItem" type="button"
                  selector="//table[@id='shopping-cart-table']//tbody//tr[contains(@class,'item-actions')]//a[contains(@class,'action-delete')]"/>
+        <element name="productPriceByName" type="text"
+                 selector="//table[@id='shopping-cart-table']//tbody//tr[//a/text()='{{var1}}']//ancestor::td[contains(@class,'price')]//span[@class='price']"
+                 parameterized="true"/>
     </section>
 </sections>

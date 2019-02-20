@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateProductVideoYouTubeApiKeyConfig" dataType="product_video_config" type="create" auth="adminFormKey" url="admin/system_config/save/section/catalog/" method="POST" successRegex="/messages-message-success/">
+        <object key="groups" dataType="product_video_config">
+            <object key="product_video" dataType="product_video_config">
+                <object key="fields" dataType="product_video_config">
+                    <object key="youtube_api_key" dataType="youtube_api_key_config">
+                        <field key="value">string</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

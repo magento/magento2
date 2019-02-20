@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductAvailableAfterEnablingSubCategoriesTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Show category products on storefront"/>
+            <title value="Check that parent categories are showing products after enabling subcategories"/>
+            <description value="Check that parent categories are showing products after enabling subcategories"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-13914"/>
+            <useCaseId value="MAGETWO-96489"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SubCategoryWithParent" stepKey="createSubCategory">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="is_active">false</field>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Check anchor category is empty-->
+        <actionGroup ref="StorefrontCheckEmptyCategoryActionGroup" stepKey="checkEmptyAnchorCategory">
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="productCount" value="0"/>
+        </actionGroup>
+        <!--Enable subcategory-->
+        <actionGroup ref="AdminNavigateToCategoryInTree" stepKey="openCreatedSubCategory">
+            <argument name="category" value="$$createSubCategory$$"/>
+        </actionGroup>
+        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="enableCategory"/>
+        <actionGroup ref="saveCategoryForm" stepKey="saveCategory"/>
+        <!--Check created product in anchor category on storefront-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
+        <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="seeCreatedProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+    </test>
+</tests>
