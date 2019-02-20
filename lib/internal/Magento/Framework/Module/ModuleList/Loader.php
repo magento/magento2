@@ -134,7 +134,7 @@ class Loader
         $modules = $this->prearrangeModules($origList);
 
         $expanded = [];
-        foreach ($modules as $moduleName => $value) {
+        foreach (array_keys($modules) as $moduleName) {
             $sequence = $this->expandSequence($origList, $moduleName);
             asort($sequence);
 
