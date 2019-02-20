@@ -16,13 +16,15 @@ use Magento\Shipping\Block\DataProviders\Tracking\DeliveryDateTitle as Subject;
 class ChangeTitle
 {
     /**
+     * Title modification in case if FedEx used as carrier
+     *
      * @param Subject $subject
      * @param \Magento\Framework\Phrase|string $result
      * @param Status $trackingStatus
      * @return \Magento\Framework\Phrase|string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetTitle(Subject $subject, $result, Status $trackingStatus): string
+    public function afterGetTitle(Subject $subject, $result, Status $trackingStatus)
     {
         if ($trackingStatus->getCarrier() === Carrier::CODE) {
             $result = __('Expected Delivery:');
