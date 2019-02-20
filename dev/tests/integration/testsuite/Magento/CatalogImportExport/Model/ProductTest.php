@@ -11,17 +11,9 @@ namespace Magento\CatalogImportExport\Model;
 class ProductTest extends AbstractProductExportImportTestCase
 {
     /**
-     * Set up
-     */
-    protected function setUp()
-    {
-        $this->markTestSkipped('MAGETWO-97378');
-    }
-
-    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function exportImportDataProvider()
+    public function exportImportDataProvider(): array
     {
         return [
             'product_export_data' => [
@@ -144,11 +136,6 @@ class ProductTest extends AbstractProductExportImportTestCase
         ];
     }
 
-    public function importReplaceDataProvider()
-    {
-        return $this->exportImportDataProvider();
-    }
-
     /**
      * Fixing https://github.com/magento-engcom/import-export-improvements/issues/50 means that during import images
      * can now get renamed for this we need to skip the attribute checking and instead check that the images contain
@@ -158,8 +145,10 @@ class ProductTest extends AbstractProductExportImportTestCase
      * @param \Magento\Catalog\Model\Product $expectedProduct
      * @param \Magento\Catalog\Model\Product $actualProduct
      */
-    protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
-    {
+    protected function assertEqualsSpecificAttributes(
+        \Magento\Catalog\Model\Product $expectedProduct,
+        \Magento\Catalog\Model\Product $actualProduct
+    ): void {
         if (!empty($actualProduct->getImage())
             && !empty($expectedProduct->getImage())
         ) {

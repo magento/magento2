@@ -18,10 +18,13 @@
         <element name="currentVariationsQuantityCells" type="textarea" selector=".admin__control-fields[data-index='quantity_container']"/>
         <element name="currentVariationsAttributesCells" type="textarea" selector=".admin__control-fields[data-index='attributes']"/>
         <element name="currentVariationsStatusCells" type="textarea" selector="._no-header[data-index='status']"/>
+        <element name="firstSKUInConfigurableProductsGrid" type="input" selector="//input[@name='configurable-matrix[0][sku]']"/>
         <element name="actionsBtn" type="button" selector="(//button[@class='action-select']/span[contains(text(), 'Select')])[{{var1}}]" parameterized="true"/>
         <element name="removeProductBtn" type="button" selector="//a[text()='Remove Product']"/>
         <element name="disableProductBtn" type="button" selector="//a[text()='Disable Product']"/>
         <element name="enableProductBtn" type="button" selector="//a[text()='Enable Product']"/>
+        <element name="confProductSku" type="input" selector="//*[@name='configurable-matrix[{{arg}}][sku]']" parameterized="true"/>
+        <element name="confProductSkuMessage" type="text" selector="//*[@name='configurable-matrix[{{arg}}][sku]']/following-sibling::label" parameterized="true"/>
         <element name="variationsSkuInputByRow" selector="[data-index='configurable-matrix'] table > tbody > tr:nth-of-type({{row}}) input[name*='sku']" type="input" parameterized="true"/>
         <element name="variationsSkuInputErrorByRow" selector="[data-index='configurable-matrix'] table > tbody > tr:nth-of-type({{row}}) .admin__field-error" type="text" parameterized="true"/>
     </section>
