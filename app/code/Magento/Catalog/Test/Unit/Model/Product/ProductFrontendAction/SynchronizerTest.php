@@ -81,10 +81,11 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider filterProductActionsDataProvider
      *
-     * @param $productsData
+     * @param array $productsData
+     * @param bool $correct
      * @return void
      */
-    public function testFilterProductActions($productsData, $correct)
+    public function testFilterProductActions(array $productsData, bool $correct)
     {
         $frontendConfiguration = $this->createMock(\Magento\Catalog\Model\FrontendStorageConfigurationInterface::class);
         $frontendConfiguration->expects($this->once())
@@ -160,6 +161,11 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
                 ->willReturnOnConsecutiveCalls($action1, $action2);
+        } else {
+            $this->entityManagerMock->expects($this->never())
+                ->method('delete');
+            $this->entityManagerMock->expects($this->never())
+                ->method('save');
         }
 
         $this->model->syncActions($productsData, 'recently_compared_product');
