@@ -19,5 +19,6 @@
         <element name="redirectTypeColumn" type="text" selector="//tr[@data-role='row'][{{var1}}]/td[@data-column='redirect_type']" parameterized="true"/>
         <element name="requestPathColumn" type="text" selector="//tr[@data-role='row'][{{var1}}]/td[@data-column='request_path']" parameterized="true"/>
         <element name="emptyRecords" type="text" selector="//td[@class='empty-text']"/>
+        <element name="storeView" type="text" selector="//tr[@data-role='row'][{{var1}}]/td[@data-column='store_id']" parameterized="true"/>
     </section>
 </sections>
