@@ -84,6 +84,7 @@ class Match implements QueryInterface
      * @inheritdoc
      */
     public function build(
+        ScopeConfigInterface  $ConfigInterface,
         ScoreBuilder $scoreBuilder,
         Select $select,
         RequestQueryInterface $query,
