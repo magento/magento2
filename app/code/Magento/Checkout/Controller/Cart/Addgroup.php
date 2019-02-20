@@ -75,7 +75,7 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
             }
             $this->cart->save();
         } else {
-            $this->messageManager->addErrorMessage(__('Please select atleast one product to add to cart'));
+            $this->messageManager->addErrorMessage(__('Please select at least one product to add to cart'));
         }
         return $this->_goBack();
     }
