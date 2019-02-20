@@ -126,7 +126,8 @@ class Zookeeper implements LockManagerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @throws RuntimeException
      */
     public function unlock(string $name): bool
     {
@@ -138,7 +139,8 @@ class Zookeeper implements LockManagerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @throws RuntimeException
      */
     public function isLocked(string $name): bool
     {
