@@ -52,7 +52,11 @@ class ChangeOutputArray
         $result[OrderItemInterface::ROW_TOTAL] = $this->priceRenderer->getTotalAmount($dataObject);
         $result[OrderItemInterface::BASE_ROW_TOTAL] = $this->priceRenderer->getBaseTotalAmount($dataObject);
         $result[OrderItemInterface::ROW_TOTAL_INCL_TAX] = $this->defaultRenderer->getTotalAmount($dataObject);
-        $result[OrderItemInterface::BASE_ROW_TOTAL_INCL_TAX] = $this->defaultRenderer->getBaseTotalAmount($dataObject);
+        $result[OrderItemInterface::BASE_ROW_TOTAL_INCL_TAX] = $dataObject->getBaseRowTotal()
+            + $dataObject->getBaseTaxAmount()
+            + $dataObject->getBaseDiscountTaxCompensationAmount()
+            + $dataObject->getBaseWeeeTaxAppliedAmount()
+            - $dataObject->getBaseDiscountAmount();
 
         return $result;
     }

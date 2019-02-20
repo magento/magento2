@@ -111,10 +111,10 @@ class GraphQl implements FrontControllerInterface
             $data = $this->jsonSerializer->unserialize($request->getContent());
 
             $query = isset($data['query']) ? $data['query'] : '';
-
+            $variables = isset($data['variables']) ? $data['variables'] : null;
             // We have to extract queried field names to avoid instantiation of non necessary fields in webonyx schema
             // Temporal coupling is required for performance optimization
-            $this->queryFields->setQuery($query);
+            $this->queryFields->setQuery($query, $variables);
             $schema = $this->schemaGenerator->generate();
 
             $result = $this->queryProcessor->process(

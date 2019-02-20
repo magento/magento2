@@ -87,8 +87,6 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
 
     const ERROR_DUPLICATE_MULTISELECT_VALUES = 'duplicatedMultiselectValues';
 
-    const ERROR_NEW_TO_DATE = 'invalidNewToDateValue';
-
     /**
      * Value that means all entities (e.g. websites, groups etc.)
      */

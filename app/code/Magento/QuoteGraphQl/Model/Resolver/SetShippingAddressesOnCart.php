@@ -12,7 +12,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\ShippingAddressManagementInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCartInterface;
@@ -24,11 +23,6 @@ use Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCartInterface;
  */
 class SetShippingAddressesOnCart implements ResolverInterface
 {
-    /**
-     * @var MaskedQuoteIdToQuoteIdInterface
-     */
-    private $maskedQuoteIdToQuoteId;
-
     /**
      * @var ShippingAddressManagementInterface
      */
@@ -50,20 +44,17 @@ class SetShippingAddressesOnCart implements ResolverInterface
     private $setShippingAddressesOnCart;
 
     /**
-     * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param ShippingAddressManagementInterface $shippingAddressManagement
      * @param GetCartForUser $getCartForUser
      * @param ArrayManager $arrayManager
      * @param SetShippingAddressesOnCartInterface $setShippingAddressesOnCart
      */
     public function __construct(
-        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         ShippingAddressManagementInterface $shippingAddressManagement,
         GetCartForUser $getCartForUser,
         ArrayManager $arrayManager,
         SetShippingAddressesOnCartInterface $setShippingAddressesOnCart
     ) {
-        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->shippingAddressManagement = $shippingAddressManagement;
         $this->getCartForUser = $getCartForUser;
         $this->arrayManager = $arrayManager;
@@ -76,16 +67,16 @@ class SetShippingAddressesOnCart implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $shippingAddresses = $this->arrayManager->get('input/shipping_addresses', $args);
-        $maskedCartId = $this->arrayManager->get('input/cart_id', $args);
+        $maskedCartId = (string) $this->arrayManager->get('input/cart_id', $args);
 
         if (!$maskedCartId) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
+
         if (!$shippingAddresses) {
             throw new GraphQlInputException(__('Required parameter "shipping_addresses" is missing'));
         }
 
-        $maskedCartId = $args['input']['cart_id'];
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
 
         $this->setShippingAddressesOnCart->execute($context, $cart, $shippingAddresses);
