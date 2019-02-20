@@ -33,4 +33,23 @@
         <click selector="{{AdminUrlRewriteEditSection.saveButton}}" stepKey="clickOnSaveButton"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.successMessage}}" stepKey="seeSuccessSaveMessage"/>
     </actionGroup>
+    <actionGroup name="AdminAddUrlRewriteForProduct">
+        <arguments>
+            <argument name="storeValue" type="string"/>
+            <argument name="requestPath" type="string"/>
+            <argument name="redirectTypeValue" type="string"/>
+            <argument name="description" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminUrlRewriteProductSection.skipCategoryButton}}" stepKey="waitForSkipCategoryButton"/>
+        <click selector="{{AdminUrlRewriteProductSection.skipCategoryButton}}" stepKey="clickOnSkipCategoryButton"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoad"/>
+        <click selector="{{AdminUrlRewriteEditSection.store}}" stepKey="clickOnStore"/>
+        <click selector="{{AdminUrlRewriteEditSection.storeValue('storeValue')}}" stepKey="clickOnStoreValue"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{requestPath}}" stepKey="fillRequestPath"/>
+        <click selector="{{AdminUrlRewriteEditSection.redirectType}}" stepKey="selectRedirectType"/>
+        <click selector="{{AdminUrlRewriteEditSection.redirectTypeValue('redirectTypeValue')}}" stepKey="clickOnRedirectTypeValue"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <click selector="{{AdminUrlRewriteEditSection.saveButton}}" stepKey="clickOnSaveButton"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.successMessage}}" stepKey="seeSuccessSaveMessage"/>
+    </actionGroup>
 </actionGroups>
