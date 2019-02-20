@@ -39,7 +39,7 @@ class Partners extends \Magento\Backend\Block\Template
     /**
      * Gets partners
      *
-     * @return bool|string
+     * @return array
      */
     public function getPartners()
     {
