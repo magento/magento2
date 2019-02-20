@@ -78,19 +78,27 @@ class LockBackendFactoryTest extends TestCase
         $this->assertSame($lockManagerMock, $this->factory->create());
     }
 
+    /**
+     * @return array
+     */
     public function createDataProvider(): array
     {
-        return [
-            [
+        $data = [
+            'db' => [
                 'lockProvider' => LockBackendFactory::LOCK_DB,
                 'lockProviderClass' => DatabaseLock::class,
                 'config' => ['prefix' => 'somePrefix'],
             ],
-            [
+        ];
+
+        if (extension_loaded('zookeeper')) {
+            $data['zookeeper'] = [
                 'lockProvider' => LockBackendFactory::LOCK_ZOOKEEPER,
                 'lockProviderClass' => ZookeeperLock::class,
                 'config' => ['host' => 'some host'],
-            ],
-        ];
+            ];
+        }
+
+        return $data;
     }
 }
