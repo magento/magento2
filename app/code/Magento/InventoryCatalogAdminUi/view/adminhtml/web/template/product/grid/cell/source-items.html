@@ -8,8 +8,8 @@
 <div class="data-grid-cell-content" attr="'data-tooltip-trigger': ++ko.uid">
     <ul data-bind="foreach: { data: $col.getSourceItemsDataCut($row()), as: '$sourceItemData' }">
         <li>
-            <span data-bind="text: $sourceItemData.source_name"></span>
-            (<span data-bind="text: $sourceItemData.qty"></span>)
+            <strong data-bind="text: $sourceItemData.source_name"></strong>:
+            <span data-bind="text: $sourceItemData.qty"></span>
         </li>
     </ul>
 </div>
@@ -26,7 +26,7 @@
         <div class="data-tooltip-title" data-bind="i18n: 'Quantity per Source:'"></div>
         <div class="data-tooltip-content">
             <!-- ko foreach: { data: $col.getSourceItemsData($row()), as: '$sourceItemData' } -->
-            <div><span data-bind="text: $sourceItemData.source_name"></span>: <span
+            <div><strong data-bind="text: $sourceItemData.source_name"></strong>: <span
                     data-bind="text: $sourceItemData.qty"></span></div>
             <!-- /ko -->
         </div>

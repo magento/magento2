@@ -37,6 +37,8 @@ class ApplyStockConditionToSelectWithDefaultStockTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalogSearch/Test/_files/clean_catalog_product_index_eav_table.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalogSearch/Test/_files/clean_cataloginventory_stock_status_table.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
      *
