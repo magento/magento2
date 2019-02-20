@@ -7,6 +7,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\Store;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
@@ -67,6 +68,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->addFieldStrategies = $addFieldStrategies;
         $this->addFilterStrategies = $addFilterStrategies;
         $this->modifiersPool = $modifiersPool ?: ObjectManager::getInstance()->get(PoolInterface::class);
+        $this->setDefaultStoreToCollection();
     }
 
     /**
@@ -139,5 +141,13 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
 
         return $meta;
+    }
+
+    /**
+     * Filter the product collection by Default Store if no filter is applied
+     */
+    private function setDefaultStoreToCollection()
+    {
+        $this->getCollection()->setStoreId(Store::DEFAULT_STORE_ID);
     }
 }
