@@ -1239,6 +1239,11 @@ define([
 
                 if (!_.isUndefined(gallery)) {
                     gallery.updateData(imagesToUpdate);
+                } else {
+                    context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
+                        loadedGallery = context.find(this.options.mediaGallerySelector).data('gallery');
+                        loadedGallery.updateData(imagesToUpdate);
+                    }.bind(this));
                 }
 
                 if (isInitial) {
@@ -1249,6 +1254,7 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
+
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
