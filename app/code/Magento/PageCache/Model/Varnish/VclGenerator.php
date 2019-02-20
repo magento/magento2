@@ -119,7 +119,7 @@ class VclGenerator implements VclGeneratorInterface
     private function getRegexForDesignExceptions()
     {
         $result = '';
-        $tpl = "%s (req.http.user-agent ~ \"%s\") {\n"."        hash_data(\"%s\");\n"."    }";
+        $tpl = "%s (req.http.user-agent ~ \"%s\") {\n" . "        hash_data(\"%s\");\n" . "    }";
 
         $expressions = $this->getDesignExceptions();
 
@@ -157,7 +157,7 @@ class VclGenerator implements VclGeneratorInterface
         $result = array_reduce(
             $this->getAccessList(),
             function ($ips, $ip) use ($tpl) {
-                return $ips.sprintf($tpl, trim($ip)) . "\n";
+                return $ips . sprintf($tpl, trim($ip)) . "\n";
             },
             ''
         );
