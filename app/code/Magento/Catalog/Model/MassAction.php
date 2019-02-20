@@ -4,12 +4,13 @@ namespace Magento\Catalog\Model;
 class MassAction implements \Magento\Catalog\Api\Data\MassActionInterface
 {
     private $inventory;
-    private $attributes;
+    private $attributeKeys;
     private $websiteRemove;
     private $websiteAdd;
     private $storeId;
     private $productIds;
     private $websiteId;
+    private $attributeValues;
 
     /**
      * Set data value.
@@ -41,9 +42,9 @@ class MassAction implements \Magento\Catalog\Api\Data\MassActionInterface
      * @return void
      * @since 101.1.0
      */
-    public function setAttributes($data)
+    public function setAttributeKeys($data)
     {
-        $this->attributes = $data;
+        $this->attributeKeys = $data;
     }
 
     /**
@@ -52,9 +53,32 @@ class MassAction implements \Magento\Catalog\Api\Data\MassActionInterface
      * @return string[]
      * @since 101.1.0
      */
-    public function getAttributes():array
+    public function getAttributeKeys():array
     {
-        return $this->attributes;
+        return $this->attributeKeys;
+    }
+
+    /**
+     * Set data value.
+     *
+     * @param string $data
+     * @return void
+     * @since 101.1.0
+     */
+    public function setAttributeValues($data)
+    {
+        $this->attributeValues = $data;
+    }
+
+    /**
+     * Get data value.
+     *
+     * @return string[]
+     * @since 101.1.0
+     */
+    public function getAttributeValues():array
+    {
+        return $this->attributeValues;
     }
 
     /**

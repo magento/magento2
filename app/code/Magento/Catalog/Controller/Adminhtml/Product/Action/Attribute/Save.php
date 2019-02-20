@@ -6,10 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
-use Magento\Catalog\Api\Data\MassActionInterface;
 use Magento\Catalog\Api\Data\MassActionInterfaceFactory;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\App\ObjectManager;
@@ -51,7 +50,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         parent::__construct($context, $attributeHelper);
         $this->messagePublisher = $publisher ?: ObjectManager::getInstance()->get(PublisherInterface::class);
         $this->massActionFactory = $massAction ?: ObjectManager::getInstance()->get(MassActionInterfaceFactory::class);
-        $this->stockConfiguration = $stockConfiguration;
+        $this->stockConfiguration = $stockConfiguration
+            ?: ObjectManager::getInstance()->get(StockConfigurationInterface::class);
     }
 
     /**
@@ -78,7 +78,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         /* Create DTO for queue */
         $massAction = $this->massActionFactory->create();
         $massAction->setInventory($inventoryData);
-        $massAction->setAttributes($attributesData);
+        $massAction->setAttributeValues(array_values($attributesData));
+        $massAction->setAttributeKeys(array_keys($attributesData));
         $massAction->setWebsiteRemove($websiteRemoveData);
         $massAction->setWebsiteAdd($websiteAddData);
         $massAction->setStoreId($storeId);

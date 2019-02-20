@@ -38,7 +38,7 @@ interface MassActionInterface
      * @return void
      * @since 101.1.0
      */
-    public function setAttributes($data);
+    public function setAttributeKeys($data);
 
     /**
      * Get data value.
@@ -46,7 +46,24 @@ interface MassActionInterface
      * @return string[]
      * @since 101.1.0
      */
-    public function getAttributes():array;
+    public function getAttributeKeys():array;
+
+    /**
+     * Set data value.
+     *
+     * @param string[] $data
+     * @return void
+     * @since 101.1.0
+     */
+    public function setAttributeValues($data);
+
+    /**
+     * Get data value.
+     *
+     * @return string[]
+     * @since 101.1.0
+     */
+    public function getAttributeValues():array;
 
     /**
      * Set data value.

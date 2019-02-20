@@ -32,36 +32,31 @@ class Consumer
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
      */
-    protected $productFlatIndexerProcessor;
+    private $productFlatIndexerProcessor;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
      */
-    protected $productPriceIndexerProcessor;
+    private $productPriceIndexerProcessor;
 
     /**
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
      */
-    protected $catalogProduct;
-
-    /**
-     * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory
-     */
-    protected $stockItemFactory;
+    private $catalogProduct;
 
     /**
      * Stock Indexer
      *
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
-    protected $stockIndexerProcessor;
+    private $stockIndexerProcessor;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
      */
-    protected $dataObjectHelper;
+    private $dataObjectHelper;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
@@ -93,7 +88,6 @@ class Consumer
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
-     * @param \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Product\Action $action
@@ -106,7 +100,6 @@ class Consumer
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
-        \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Product\Action $action,
@@ -118,7 +111,6 @@ class Consumer
         $this->productFlatIndexerProcessor = $productFlatIndexerProcessor;
         $this->productPriceIndexerProcessor = $productPriceIndexerProcessor;
         $this->stockIndexerProcessor = $stockIndexerProcessor;
-        $this->stockItemFactory = $stockItemFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->notifier = $notifier;
         $this->eventManager = $eventManager;
@@ -139,8 +131,13 @@ class Consumer
                 $this->updateWebsiteInProducts($data->getProductIds(), $data->getWebsiteRemove(), $data->getWebsiteAdd());
             }
 
-            if ($data->getAttributes()) {
-                $attributesData = $this->getAttributesData($data->getProductIds(), $data->getStoreId(), $data->getAttributes());
+            if ($data->getAttributeValues()) {
+                $attributesData = $this->getAttributesData(
+                    $data->getProductIds(),
+                    $data->getStoreId(),
+                    $data->getAttributeValues(),
+                    $data->getAttributeKeys()
+                );
                 $this->reindex($data->getProductIds(), $attributesData, $data->getWebsiteRemove(), $data->getWebsiteAdd());
             }
 
@@ -162,11 +159,13 @@ class Consumer
     /**
      * @param $productIds
      * @param $storeId
-     * @param $attributesData
+     * @param $attributeValuesData
+     * @param $attributeKeysData
      * @return mixed
      */
-    private function getAttributesData($productIds, $storeId, $attributesData)
+    private function getAttributesData($productIds, $storeId, $attributeValuesData, $attributeKeysData)
     {
+        $attributesData = array_combine($attributeKeysData, $attributeValuesData);
         $dateFormat = $this->objectManager->get(TimezoneInterface::class)->getDateFormat(\IntlDateFormatter::SHORT);
         $config = $this->objectManager->get(\Magento\Eav\Model\Config::class);
 
