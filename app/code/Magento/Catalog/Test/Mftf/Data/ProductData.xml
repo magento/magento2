@@ -149,6 +149,15 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+    <entity name="ApiSimpleProductWithPrice50" type="product2" extends="ApiSimpleOne">
+        <data key="price">50</data>
+    </entity>
+    <entity name="ApiSimpleProductWithPrice60" type="product2" extends="ApiSimpleTwo">
+        <data key="price">60</data>
+    </entity>
+    <entity name="ApiSimpleProductWithPrice70" type="product2" extends="SimpleOne">
+        <data key="price">70</data>
+    </entity>
     <entity name="ApiSimpleTwoHidden" type="product2">
         <data key="sku" unique="suffix">api-simple-product-two</data>
         <data key="type_id">simple</data>
