@@ -113,6 +113,16 @@
         .lib-form-validation-note();
     }
 
+    .product-options-wrapper {
+        .required {
+            div[for*='options'] {
+                &.mage-error {
+                    display: none !important;
+                }
+            }
+        }
+    }
+
     //  TEMP
 
     .field .tooltip {
