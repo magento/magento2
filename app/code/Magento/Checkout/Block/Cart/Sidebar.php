@@ -133,6 +133,7 @@ class Sidebar extends AbstractCart
      *
      * @return string
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getUpdateItemQtyUrl()
     {
@@ -144,6 +145,7 @@ class Sidebar extends AbstractCart
      *
      * @return string
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getRemoveItemUrl()
     {
