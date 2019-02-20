@@ -68,7 +68,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->addFieldStrategies = $addFieldStrategies;
         $this->addFilterStrategies = $addFilterStrategies;
         $this->modifiersPool = $modifiersPool ?: ObjectManager::getInstance()->get(PoolInterface::class);
-        $this->setDefaultStoreToCollection();
+        $this->getCollection()->setStoreId(Store::DEFAULT_STORE_ID);
     }
 
     /**
@@ -141,13 +141,5 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
 
         return $meta;
-    }
-
-    /**
-     * Filter the product collection by Default Store if no filter is applied
-     */
-    private function setDefaultStoreToCollection()
-    {
-        $this->getCollection()->setStoreId(Store::DEFAULT_STORE_ID);
     }
 }
