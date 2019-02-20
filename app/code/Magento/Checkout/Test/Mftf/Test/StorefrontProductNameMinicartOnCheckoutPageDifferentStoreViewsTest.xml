@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductNameMinicartOnCheckoutPageDifferentStoreViewsTest">
+        <annotations>
+            <features value="Checkout"/>
+            <title value="Checking Product name in Minicart and on Checkout page with different store views"/>
+            <description value="Checking Product name in Minicart and on Checkout page with different store views"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96466"/>
+            <useCaseId value="MAGETWO-96421"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!--Create a product-->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create store view -->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+            <argument name="customStore" value="customStore"/>
+        </actionGroup>
+
+        <!--Go to created product page-->
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToEditPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+
+        <!--Switch to second store view and change the product name-->
+        <actionGroup ref="SwitchToTheNewStoreView" stepKey="switchToCustomStoreView">
+            <argument name="storeViewName" value="{{customStore.name}}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="uncheckUseDefault"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="$$createProduct.name$$-new" stepKey="fillProductName"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+
+        <!--Add product to cart-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$createProduct.name$$"/>
+        </actionGroup>
+
+        <!--Switch to second store view-->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreView">
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForStoreView"/>
+
+        <!--Check product name in Minicart-->
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <grabTextFrom selector="{{StorefrontMinicartSection.productName}}" stepKey="grabProductNameMinicart"/>
+        <assertContains expected="$$createProduct.name$$" actual="$grabProductNameMinicart" stepKey="assertProductNameMinicart"/>
+        <assertContains expectedType="string" expected="-new" actual="$grabProductNameMinicart" stepKey="assertProductNameMinicart1"/>
+
+        <!--Check product name in Shopping Cart page-->
+        <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="clickViewAndEdit"/>
+        <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
+        <grabTextFrom selector="{{CheckoutCartProductSection.productName}}" stepKey="grabProductNameCart"/>
+        <assertContains expected="$$createProduct.name$$" actual="$grabProductNameCart" stepKey="assertProductNameCart"/>
+        <assertContains expectedType="string" expected="-new" actual="$grabProductNameCart" stepKey="assertProductNameCart1"/>
+
+        <!--Proceed to checkout and check product name in Order Summary area-->
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="proceedToCheckout"/>
+        <waitForPageLoad stepKey="waitForShippingPageLoad"/>
+        <click selector="{{CheckoutShippingGuestInfoSection.itemInCart}}" stepKey="clickItemInCart"/>
+        <grabTextFrom selector="{{CheckoutShippingGuestInfoSection.productName}}" stepKey="grabProductNameShipping"/>
+        <assertContains expected="$$createProduct.name$$" actual="$grabProductNameShipping" stepKey="assertProductNameShipping"/>
+        <assertContains expectedType="string" expected="-new" actual="$grabProductNameShipping" stepKey="assertProductNameShipping1"/>
+    </test>
+</tests>
