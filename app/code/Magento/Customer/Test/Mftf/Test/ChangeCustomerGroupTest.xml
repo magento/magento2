@@ -41,7 +41,7 @@
         <actionGroup ref="AdminSelectCustomerByEmail" stepKey="selectCustomer">
             <argument name="customerEmail" value="$createCustomer.email$"/>
         </actionGroup>
-        <actionGroup ref="SetCustomerGroupForSelectedCustomer" stepKey="setCustomerGroup">
+        <actionGroup ref="SetCustomerGroupForSelectedCustomersViaGrid" stepKey="setCustomerGroup">
             <argument name="groupName" value="{{CustomerGroupChange.code}}"/>
         </actionGroup>
         <actionGroup ref="AdminFilterCustomerByName" stepKey="filterCustomerAfterGroupChange">
