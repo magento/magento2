@@ -201,6 +201,12 @@ function (
                 this.isAddressDetailsVisible(true);
             }
         },
+        /**
+         * Manage cancel button visibility
+         */
+        canUseCancelBillingAddress: ko.computed(function () {
+            return quote.billingAddress() || lastSelectedBillingAddress;
+        }),
 
         /**
          * Restore billing address
