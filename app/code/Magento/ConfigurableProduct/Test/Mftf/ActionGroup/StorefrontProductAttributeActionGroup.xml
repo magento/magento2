@@ -14,7 +14,7 @@
             <argument name="categoryName" type="string"/>
             <argument name="attributeDefaultLabel" type="string"/>
         </arguments>
-        <amOnPage url="categoryName" stepKey="openCategoryStoreFrontPage"/>
+        <amOnPage url="{{categoryName}}" stepKey="openCategoryStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryName)}}" stepKey="seeCategoryInFrontPage"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryName)}}" stepKey="clickOnCategory"/>

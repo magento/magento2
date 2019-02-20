@@ -5,6 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontVerifyConfigurableProductLayeredNavigationTest">
@@ -131,7 +132,7 @@
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToProductQuantity"/>
         <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="disableProduct"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="clickOnSaveButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 
         <!--Open Category in Store Front and select product attribute option from sidebar -->
