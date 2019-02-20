@@ -60,11 +60,15 @@ input CartAddressInput {
 
 input SetShippingMethodsOnCartInput {
     cart_id: String!
-    shipping_methods: [ShippingMethodForAddressInput!]!
+    shipping_addresses: [ShippingMethodForAddressInput!]!
 }
 
 input ShippingMethodForAddressInput {
     cart_address_id: Int!
+    shipping_method: ShippingMethodInput!
+}
+
+input ShippingMethodInput {
     carrier_code: String!
     method_code: String!
 }
@@ -140,7 +144,10 @@ type CartAddressCountry {
 }
 
 type SelectedShippingMethod {
-    amount: Float!
+    carrier_code: String
+    method_code: String
+    label: String
+    amount: Float
 }
 
 type AvailableShippingMethod {
@@ -245,4 +252,9 @@ type CartItemSelectedOptionValuePrice {
     value: Float!
     units: String!
     type: PriceTypeEnum!
+}
+
+input CartItemDetailsInput {
+    sku: String!
+    qty: Float!
 }
