@@ -203,6 +203,7 @@ class Samples extends AbstractModifier
             'showLabel' => false,
             'label' => __('Title'),
             'dataScope' => '',
+            'sortOrder' => 10,
         ];
         $titleField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
@@ -229,6 +230,7 @@ class Samples extends AbstractModifier
             'label' => __('File'),
             'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => 20,
         ];
         $sampleType['arguments']['data']['config'] = [
             'formElement' => Form\Element\Select::NAME,

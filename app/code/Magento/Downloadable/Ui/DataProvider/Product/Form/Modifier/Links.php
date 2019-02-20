@@ -232,6 +232,7 @@ class Links extends AbstractModifier
             'label' => __('Title'),
             'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => 10,
         ];
         $titleField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
@@ -258,6 +259,7 @@ class Links extends AbstractModifier
             'label' => __('Price'),
             'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => 20,
         ];
         $priceField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
@@ -292,6 +294,7 @@ class Links extends AbstractModifier
             'label' => __('File'),
             'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => 30,
         ];
         $fileTypeField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Select::NAME,
@@ -355,6 +358,7 @@ class Links extends AbstractModifier
             'label' => __('Sample'),
             'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => 40,
         ];
         $sampleTypeField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Select::NAME,
@@ -413,6 +417,7 @@ class Links extends AbstractModifier
             'componentType' => Form\Field::NAME,
             'dataType' => Form\Element\DataType\Number::NAME,
             'dataScope' => 'is_shareable',
+            'sortOrder' => 50,
             'options' => $this->shareable->toOptionArray(),
         ];
 
@@ -431,6 +436,7 @@ class Links extends AbstractModifier
             'label' => __('Max. Downloads'),
             'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => 60,
         ];
         $numberOfDownloadsField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
