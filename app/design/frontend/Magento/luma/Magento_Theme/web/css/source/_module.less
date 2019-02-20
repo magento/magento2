@@ -77,6 +77,14 @@
         .lib-vendor-prefix-flex-grow(1);
     }
 
+    .page-main {
+        > .page-title-wrapper {
+            .page-title {
+                word-break: break-all;
+            }
+        }
+    }
+
     //
     //  Header
     //  ---------------------------------------------
@@ -503,7 +511,6 @@
         > .page-title-wrapper {
             .page-title {
                 display: inline-block;
-                word-break: break-all;
             }
 
             .page-title + .action {
