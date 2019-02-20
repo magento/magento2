@@ -78,27 +78,19 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testFilterProductActions()
+    /**
+     * @dataProvider filterProductActionsDataProvider
+     *
+     * @param $productsData
+     * @return void
+     */
+    public function testFilterProductActions($productsData, $correct)
     {
-        $productsData = [
-            1 => [
-                'added_at' => 12,
-                'product_id' => 1,
-            ],
-            2 => [
-                'added_at' => 13,
-                'product_id' => 2,
-            ],
-            3 => [
-                'added_at' => 14,
-                'product_id' => 3,
-            ]
-        ];
         $frontendConfiguration = $this->createMock(\Magento\Catalog\Model\FrontendStorageConfigurationInterface::class);
         $frontendConfiguration->expects($this->once())
             ->method('get')
             ->willReturn([
-                'lifetime' => 2
+                'lifetime' => 2,
             ]);
         $this->frontendStorageConfigurationPoolMock->expects($this->once())
             ->method('get')
@@ -110,7 +102,6 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $action2 = $this->getMockBuilder(ProductFrontendActionInterface::class)
             ->getMockForAbstractClass();
 
-        $frontendAction = $this->createMock(ProductFrontendActionInterface::class);
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -126,47 +117,86 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $collection->expects($this->once())
             ->method('addFilterByUserIdentities')
             ->with(1, 34);
-        $collection->expects($this->any())
-            ->method('addFieldToFilter')
-            ->withConsecutive(['type_id'], ['product_id']);
 
-        $iterator = new \IteratorIterator(new \ArrayIterator([$frontendAction]));
-        $collection->expects($this->once())
-            ->method('getIterator')
-            ->willReturn($iterator);
-        $this->entityManagerMock->expects($this->once())
-            ->method('delete')
-            ->with($frontendAction);
-        $this->productFrontendActionFactoryMock->expects($this->exactly(2))
-            ->method('create')
-            ->withConsecutive(
-                [
+        if ($correct) {
+            $frontendAction = $this->createMock(ProductFrontendActionInterface::class);
+            $iterator = new \IteratorIterator(new \ArrayIterator([$frontendAction]));
+            $collection->expects($this->any())
+                ->method('addFieldToFilter')
+                ->withConsecutive(['type_id'], ['product_id']);
+            $collection->expects($this->once())
+                ->method('getIterator')
+                ->willReturn($iterator);
+            $this->entityManagerMock->expects($this->once())
+                ->method('delete')
+                ->with($frontendAction);
+            $this->entityManagerMock->expects($this->exactly(2))
+                ->method('save')
+                ->withConsecutive([$action1], [$action2]);
+            $this->productFrontendActionFactoryMock->expects($this->exactly(2))
+                ->method('create')
+                ->withConsecutive(
                     [
-                        'data' => [
-                            'visitor_id' => null,
-                            'customer_id' => 1,
-                            'added_at' => 12,
-                            'product_id' => 1,
-                            'type_id' => 'recently_compared_product'
-                        ]
-                    ]
-                ],
-                [
+                        [
+                            'data' => [
+                                'visitor_id' => null,
+                                'customer_id' => 1,
+                                'added_at' => 12,
+                                'product_id' => 1,
+                                'type_id' => 'recently_compared_product',
+                            ],
+                        ],
+                    ],
                     [
-                        'data' => [
-                            'visitor_id' => null,
-                            'customer_id' => 1,
-                            'added_at' => 13,
-                            'product_id' => 2,
-                            'type_id' => 'recently_compared_product'
-                        ]
+                        [
+                            'data' => [
+                                'visitor_id' => null,
+                                'customer_id' => 1,
+                                'added_at' => 13,
+                                'product_id' => 2,
+                                'type_id' => 'recently_compared_product',
+                            ],
+                        ],
                     ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($action1, $action2);
-        $this->entityManagerMock->expects($this->exactly(2))
-            ->method('save')
-            ->withConsecutive([$action1], [$action2]);
+                )
+                ->willReturnOnConsecutiveCalls($action1, $action2);
+        }
+
         $this->model->syncActions($productsData, 'recently_compared_product');
+    }
+
+    /**
+     * @return array
+     */
+    public function filterProductActionsDataProvider(): array
+    {
+        return [
+            [
+                'productsData' => [
+                    1 => [
+                        'added_at' => 12,
+                        'product_id' => 1,
+                    ],
+                    2 => [
+                        'added_at' => 13,
+                        'product_id' => 2,
+                    ],
+                    3 => [
+                        'added_at' => 14,
+                        'product_id' => 3,
+                    ],
+                ],
+                'correct' => true,
+            ],
+            [
+                'productsData' => [
+                    1 => [
+                        'added_at' => 12,
+                        'product_id' => 'test',
+                    ],
+                ],
+                'correct' => false,
+            ],
+        ];
     }
 }
