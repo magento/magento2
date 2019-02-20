@@ -242,7 +242,7 @@ class Zookeeper implements LockManagerInterface
 
         $children = $this->getProvider()->getChildren($parent);
 
-        foreach($children as $childKey) {
+        foreach ($children as $childKey) {
 
             if (is_null($indexKey)) {
                 return true;
