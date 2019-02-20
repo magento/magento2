@@ -112,4 +112,14 @@
         <fillField stepKey="fillZip" selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{taxCode.zip}}"/>
         <waitForPageLoad stepKey="waitForFormUpdate"/>
     </actionGroup>
+    <!-- Add Product to Cart from the category page and check message -->
+    <actionGroup name="StorefrontAddCategorySimpleProductToCartActionGroup">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart" />
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage" />
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{product.name}} to your shopping cart." stepKey="assertSuccessMessage"/>
+    </actionGroup>
 </actionGroups>
