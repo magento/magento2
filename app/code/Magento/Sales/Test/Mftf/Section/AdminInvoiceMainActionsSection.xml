@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminInvoiceMainActionsSection">
-        <element name="submitInvoice" type="button" selector=".action-default.scalable.save.submit-button.primary" timeout="30"/>
+        <element name="submitInvoice" type="button" selector=".action-default.scalable.save.submit-button.primary" timeout="60"/>
     </section>
 </sections>

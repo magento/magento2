@@ -534,6 +534,15 @@
             }
         }
 
+        .block-compare {
+            .action {
+                &.delete {
+                    &:extend(.abs-remove-button-for-blocks all);
+                    right: initial;
+                }
+            }
+        }
+
         .action.tocart {
             border-radius: 0;
         }
@@ -563,6 +572,7 @@
 
         .product-items-names {
             .product-item {
+                display: flex;
                 margin-bottom: @indent__s;
             }
 

@@ -332,15 +332,11 @@ class Context
     }
 
     /**
-     * Retrieve the module name
-     *
-     * @return string
-     *
-     * @todo alias of getModuleName
+     * @see getModuleName
      */
     public function getFrontName()
     {
-        return $this->getRequest()->getModuleName();
+        return $this->getModuleName();
     }
 
     /**

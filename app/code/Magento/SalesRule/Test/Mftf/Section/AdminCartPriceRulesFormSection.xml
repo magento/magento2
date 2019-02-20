@@ -24,6 +24,19 @@
         <element name="userPerCustomer" type="input" selector="//input[@name='uses_per_customer']"/>
         <element name="priority" type="input" selector="//*[@name='sort_order']"/>
 
+        <!-- Conditions sub-form -->
+        <element name="conditionsHeader" type="button" selector="div[data-index='conditions']" timeout="30"/>
+        <element name="conditionsHeaderOpen" type="button" selector="div[data-index='conditions'] div[data-state-collapsible='open']" timeout="30"/>
+        <element name="addCondition" type="button" selector="//*[@id='conditions__{{arg}}__children']//span" parameterized="true"/>
+        <element name="ruleCondition" type="select" selector="rule[conditions][{{arg}}][new_child]" parameterized="true"/>
+        <element name="ruleParameter" type="text" selector="//span[@class='rule-param']/a[contains(text(), '{{arg}}')]" parameterized="true"/>
+        <element name="ruleOperatorSelect" type="select" selector="rule[conditions][{{arg}}][operator]" parameterized="true"/>
+        <element name="ruleValueInput" type="input" selector="rule[conditions][{{arg}}][value]" parameterized="true"/>
+        <element name="chooseValue" type="button" selector="label[for='conditions__{{arg}}__value']" parameterized="true"/>
+        <element name="categoryCheckbox" type="checkbox" selector="//span[contains(text(), '{{arg}}')]/parent::a/preceding-sibling::input[@type='checkbox']" parameterized="true"/>
+        <element name="conditionsValue" type="input" selector=".rule-param-edit input"/>
+        <element name="conditionsOperator" type="select" selector=".rule-param-edit select"/>
+
         <!-- Actions sub-form -->
         <element name="actionsHeader" type="button" selector="div[data-index='actions']" timeout="30"/>
         <element name="actionsHeaderOpen" type="button" selector="div[data-index='actions'] div[data-state-collapsible='open']" timeout="30"/>
@@ -35,10 +48,13 @@
         <element name="freeShipping" type="select" selector="select[name='simple_free_shipping']"/>
         <element name="conditions" type="button" selector=".rule-param.rule-param-new-child > a"/>
         <element name="condition" type="text" selector="//span[@class='rule-param']/a[text()='{{arg}}']" parameterized="true"/>
+        <element name="actionsAggregator" type="select" selector="#actions__1__aggregator"/>
+        <element name="actionsValue" type="select" selector="#actions__1__value"/>
         <element name="operator" type="select" selector="select[name*='[operator]']"/>
         <element name="childAttribute" type="select" selector="select[name*='new_child']"/>
         <element name="optionInput" type="input" selector="ul[class*='rule-param-children'] input[name*='[value]']"/>
         <element name="actionValue" type="input" selector=".rule-param-edit input"/>
+        <element name="applyAction" type="text" selector=".rule-param-apply" timeout="30"/>
         <element name="actionOperator" type="select" selector=".rule-param-edit select"/>
 
         <!-- Manage Coupon Codes sub-form -->

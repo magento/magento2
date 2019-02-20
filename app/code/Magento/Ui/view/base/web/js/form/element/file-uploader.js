@@ -13,8 +13,9 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/lib/validation/validator',
     'Magento_Ui/js/form/element/abstract',
+    'mage/translate',
     'jquery/file-uploader'
-], function ($, _, utils, uiAlert, validator, Element) {
+], function ($, _, utils, uiAlert, validator, Element, $t) {
     'use strict';
 
     return Element.extend({
@@ -327,6 +328,12 @@ define([
             var file     = data.files[0],
                 allowed  = this.isFileAllowed(file),
                 target   = $(e.target);
+
+            if (this.disabled()) {
+                this.notifyError($t('The file upload field is disabled.'));
+
+                return;
+            }
 
             if (allowed.passed) {
                 target.on('fileuploadsend', function (event, postData) {
