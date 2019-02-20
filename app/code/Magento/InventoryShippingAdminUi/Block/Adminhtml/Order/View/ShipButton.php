@@ -80,6 +80,7 @@ class ShipButton extends Container
      * Source Selection URL getter
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getSourceSelectionUrl()
     {

@@ -11,7 +11,8 @@
     "magento/module-inventory-source-selection-api": "*",
     "magento/module-sales": "*",
     "magento/module-shipping": "*",
-    "magento/module-ui": "*"
+    "magento/module-ui": "*",
+    "magento/module-catalog-inventory": "*"
   },
   "type": "magento2-module",
   "license": [
