@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8094d9cb504698da62351046929d4b8f",
+    "content-hash": "87ae97b2da2504eaa90e4f56a3b968cb",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6591,16 +6591,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.3.13",
+            "version": "2.3.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "2c8a4c3557c9a8412eb2ea50ce3f69abc2f47ba1"
+                "reference": "b4002b3fe53884895921b44cf519d42918e3c7c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/2c8a4c3557c9a8412eb2ea50ce3f69abc2f47ba1",
-                "reference": "2c8a4c3557c9a8412eb2ea50ce3f69abc2f47ba1",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/b4002b3fe53884895921b44cf519d42918e3c7c6",
+                "reference": "b4002b3fe53884895921b44cf519d42918e3c7c6",
                 "shasum": ""
             },
             "require": {
@@ -6660,7 +6660,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2019-01-29T15:31:14+00:00"
+            "time": "2019-02-19T16:03:22+00:00"
         },
         {
             "name": "mikey179/vfsStream",
