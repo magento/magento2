@@ -13,12 +13,42 @@
         <arguments>
             <argument name="phrase"/>
         </arguments>
-        <submitForm selector="#search_mini_form" parameterArray="['q' => '{{phrase}}']" stepKey="fillQuickSearch" />
+        <fillField stepKey="fillInput" selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{phrase}}"/>
+        <submitForm selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" parameterArray="[]" stepKey="submitQuickSearch" />
         <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
         <dontSeeInCurrentUrl url="form_key=" stepKey="checkUrlFormKey"/>
         <seeInTitle userInput="Search results for: '{{phrase}}'" stepKey="assertQuickSearchTitle"/>
         <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
     </actionGroup>
+
+    <!-- Opens product from QuickSearch and performs assertions-->
+    <actionGroup name="StorefrontOpenProductFromQuickSearch">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productUrlKey" type="string"/>
+            <argument name="index" defaultValue="1"/>
+        </arguments>
+        <click stepKey="openProduct" selector="{{StorefrontQuickSearchResultsSection.productByIndex('1')}}"/>
+        <waitForPageLoad stepKey="waitForProductLoad"/>
+        <seeInCurrentUrl url="{{productUrlKey}}" stepKey="checkUrl"/>
+        <see stepKey="checkName" selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{productName}}"/>
+    </actionGroup>
+
+
+    <!-- Adds product from Quicksearch page and perform assertions-->
+    <actionGroup name="StorefrontAddToCartFromQuickSearch">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="index" defaultValue="1"/>
+        </arguments>
+        <moveMouseOver stepKey="hoverOverProduct" selector="{{StorefrontQuickSearchResultsSection.productByIndex('1')}}"/>
+        <click selector="{{StorefrontQuickSearchResultsSection.productByIndex('1')}} {{StorefrontQuickSearchResultsSection.addToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.messageSection}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddedToCartMessage"/>
+    </actionGroup>
+
+
+
 
     <!-- Open advanced search page -->
     <actionGroup name="StorefrontOpenAdvancedSearchActionGroup">

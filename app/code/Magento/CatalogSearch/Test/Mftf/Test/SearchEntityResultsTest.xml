@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="QuickSearchProductBySku">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="User should be able to use Quick Search to find products"/>
+            <description value="Use Quick Search to find a product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14783"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData stepKey="deleteProduct" createDataKey="createSimpleProduct"/>
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+        </after>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="$createSimpleProduct.sku$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="openAndCheckProduct">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+            <argument name="productUrlKey" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+    </test>
+    <test name="QuickSearchAndAddToCart">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="User should be able to use Quick Search to find a simple product and add it to cart"/>
+            <description value="Use Quick Search to find simple Product and Add to Cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14784"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData stepKey="deleteProduct" createDataKey="createSimpleProduct"/>
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+        </after>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+    </test>
+    <test name="QuickSearchAndAddToCartVirtual">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="User should be able to use Quick Search to find a virtual product and add it to cart"/>
+            <description value="Use Quick Search to find virtual Product and Add to Cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14785"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData stepKey="deleteProduct" createDataKey="createVirtualProduct"/>
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+        </after>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="$createVirtualProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
+            <argument name="productName" value="$createVirtualProduct.name$"/>
+        </actionGroup>
+    </test>
+    <test name="QuickSearchAndAddToCartConfigurable">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="User should be able to use Quick Search to find a configurable product and add it to cart"/>
+            <description value="Use Quick Search to find configurable Product and Add to Cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14786"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+        </after>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="openAndCheckProduct">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+            <argument name="productUrlKey" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+        <actionGroup ref="SelectSingleAttributeAndAddToCart" stepKey="addProductToCart">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+            <argument name="attributeCode" value="{{colorProductAttribute.default_label}}"/>
+            <argument name="optionName" value="{{colorProductAttribute1.name}}"/>
+        </actionGroup>
+    </test>
+
+    <test name="QuickSearchAndAddToCartDownloadable">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="User should be able to use Quick Search to find a downloadable product and add it to cart"/>
+            <description value="Use Quick Search to find downloadable Product and Add to Cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14787"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="DownloadableProductWithOneLink" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="downloadableLink1" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+        </after>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="$createProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>
