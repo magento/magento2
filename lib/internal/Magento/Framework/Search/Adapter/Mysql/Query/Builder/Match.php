@@ -65,6 +65,7 @@ class Match implements QueryInterface
      * @param PreprocessorInterface[] $preprocessors
      */
     public function __construct(
+        ScopeConfigInterface  $ConfigInterface,
         ResolverInterface $resolver,
         Fulltext $fulltextHelper,
         $fulltextSearchMode = Fulltext::FULLTEXT_MODE_BOOLEAN,
@@ -84,7 +85,6 @@ class Match implements QueryInterface
      * @inheritdoc
      */
     public function build(
-        ScopeConfigInterface  $ConfigInterface,
         ScoreBuilder $scoreBuilder,
         Select $select,
         RequestQueryInterface $query,
