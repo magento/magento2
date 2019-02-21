@@ -204,6 +204,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ),
             []
         )->columns([
+            'store_id' => $this->getConnection()->getIfNullSql('`value`.`store_id`', '`default_value`.`store_id`'),
             'label' => $this->getConnection()->getIfNullSql('`value`.`label`', '`default_value`.`label`'),
             'position' => $this->getConnection()->getIfNullSql('`value`.`position`', '`default_value`.`position`'),
             'disabled' => $this->getConnection()->getIfNullSql('`value`.`disabled`', '`default_value`.`disabled`'),
@@ -304,26 +305,40 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $this->getConnection()->lastInsertId($this->getMainTable());
     }
-
+    
     /**
+     *
      * Deletes gallery value in Db.
      *
      * @param array|integer $valueId
+     * @param null|integer $storeId
+     * @return $this
      * @return $this
      * @since 101.0.0
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteGallery($valueId)
+    public function deleteGallery($valueId, $storeId = null)
     {
+        $conditionList = [];
         if (is_array($valueId) && count($valueId) > 0) {
-            $condition = $this->getConnection()->quoteInto('value_id IN(?) ', $valueId);
+            $conditionList[] = $this->getConnection()->quoteInto('value_id IN(?) ', $valueId);
         } elseif (!is_array($valueId)) {
-            $condition = $this->getConnection()->quoteInto('value_id = ? ', $valueId);
+            $conditionList[] = $this->getConnection()->quoteInto('value_id = ? ', $valueId);
         } else {
             return $this;
         }
+        
+        if ($storeId === null) {
+            $table = $this->getMainTable();
+        } else {
+            $table = self::GALLERY_VALUE_TABLE;
+            $conditionList[] = $this->getConnection()->quoteInto('store_id = ?', $storeId);
+        }
 
-        $this->getConnection()->delete($this->getMainTable(), $condition);
-
+        $condition = implode(' AND ', $conditionList);
+        
+        $this->getConnection()->delete($table, $condition);
+        
         return $this;
     }
 

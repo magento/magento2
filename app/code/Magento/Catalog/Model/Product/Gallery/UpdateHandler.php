@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
-use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Update handler for catalog product gallery.
@@ -50,6 +50,24 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
         $this->resourceModel->deleteGallery($recordsToDelete);
 
         $this->removeDeletedImages($filesToDelete);
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    protected function processNewAndExistingImages($product, array &$images)
+    {
+        $storeId = $product->getStoreId();
+        
+        if ($product->getData('use_default_media_gallery') && $storeId !== Store::DEFAULT_STORE_ID) {
+            $valuesToDelete = array_column($images, 'value_id');
+            
+            $this->resourceModel->deleteGallery($valuesToDelete, $storeId);
+            
+            return;
+        }
+        
+        parent::processNewAndExistingImages($product, $images);
     }
 
     /**

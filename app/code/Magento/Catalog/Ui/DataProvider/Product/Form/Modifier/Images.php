@@ -64,11 +64,19 @@ class Images extends AbstractModifier
             && !empty($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery'])
             && !empty($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'])
         ) {
+            $useDefaultGallery = true;
+    
             foreach ($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'] as $index => $image) {
                 if (!isset($image['label'])) {
                     $data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'][$index]['label'] = "";
                 }
+        
+                if ($useDefaultGallery && (int)$image['store_id'] !== \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+                    $useDefaultGallery = false;
+                }
             }
+    
+            $data[$modelId][self::DATA_SOURCE_DEFAULT]['use_default_media_gallery'] = $useDefaultGallery;
         }
 
         return $data;
