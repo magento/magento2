@@ -17,6 +17,8 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 
 /**
  * Adds captcha data related to coupons.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CaptchaConfigProvider implements ConfigProviderInterface
 {
@@ -76,7 +78,8 @@ class CaptchaConfigProvider implements ConfigProviderInterface
                     'imageHeight' => $captchaModel->getHeight(),
                     'imageSrc' => $imageSrc,
                     'refreshUrl' => $store->getUrl('captcha/refresh', ['_secure' => $store->isCurrentlySecure()]),
-                    'isRequired' => $required
+                    'isRequired' => $required,
+                    'timestamp' => time()
                 ]
             ]
         ];

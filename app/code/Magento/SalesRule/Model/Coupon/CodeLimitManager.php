@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Coupon;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\SalesRule\Api\CouponRepositoryInterface;
@@ -16,7 +17,7 @@ use Magento\SalesRule\Model\Spi\CodeLimitManagerInterface;
 use Magento\Captcha\Helper\Data as CaptchaHelper;
 use Magento\Captcha\Observer\CaptchaStringResolver as CaptchaResolver;
 use Magento\Captcha\Model\DefaultModel as Captcha;
-use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * @inheritDoc
@@ -51,9 +52,14 @@ class CodeLimitManager implements CodeLimitManagerInterface
     private $request;
 
     /**
-     * @var CustomerSession
+     * @var UserContextInterface
      */
-    private $customerSession;
+    private $userContext;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
 
     /**
      * Needed to avoid confusion in case of duplicate checks.
@@ -77,7 +83,8 @@ class CodeLimitManager implements CodeLimitManagerInterface
      * @param CaptchaHelper $captchaHelper
      * @param CaptchaResolver $captchaResolver
      * @param RequestInterface $request
-     * @param CustomerSession $customerSession
+     * @param UserContextInterface $userContext
+     * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         CouponRepositoryInterface $repository,
@@ -85,14 +92,16 @@ class CodeLimitManager implements CodeLimitManagerInterface
         CaptchaHelper $captchaHelper,
         CaptchaResolver $captchaResolver,
         RequestInterface $request,
-        CustomerSession $customerSession
+        UserContextInterface $userContext,
+        CustomerRepositoryInterface $customerRepository
     ) {
         $this->repository = $repository;
         $this->criteriaBuilder = $criteriaBuilder;
         $this->captchaHelper = $captchaHelper;
         $this->captchaResolver = $captchaResolver;
         $this->request = $request;
-        $this->customerSession = $customerSession;
+        $this->userContext = $userContext;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -116,8 +125,8 @@ class CodeLimitManager implements CodeLimitManagerInterface
     private function getLogin(): ?string
     {
         $login = null;
-        if ($this->customerSession->isLoggedIn()) {
-            $login = $this->customerSession->getCustomerData()->getEmail();
+        if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
+            $login = $this->customerRepository->getById($this->userContext->getUserId())->getEmail();
         }
 
         return $login;
