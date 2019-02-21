@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Customer\Api\Data\AddressInterface;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\ShippingAddressManagementInterface;
-use Magento\Customer\Api\AddressRepositoryInterface;
 
 /**
  * Set single shipping address for a specified shopping cart
@@ -27,11 +25,6 @@ class SetShippingAddressOnCart implements SetShippingAddressesOnCartInterface
     private $shippingAddressManagement;
 
     /**
-     * @var AddressRepositoryInterface
-     */
-    private $addressRepository;
-
-    /**
      * @var Address
      */
     private $addressModel;
@@ -42,25 +35,35 @@ class SetShippingAddressOnCart implements SetShippingAddressesOnCartInterface
     private $checkCustomerAccount;
 
     /**
+     * @var GetCustomerAddress
+     */
+    private $getCustomerAddress;
+
+    /**
      * @param ShippingAddressManagementInterface $shippingAddressManagement
-     * @param AddressRepositoryInterface $addressRepository
      * @param Address $addressModel
      * @param CheckCustomerAccount $checkCustomerAccount
+     * @param GetCustomerAddress $getCustomerAddress
      */
     public function __construct(
         ShippingAddressManagementInterface $shippingAddressManagement,
-        AddressRepositoryInterface $addressRepository,
         Address $addressModel,
-        CheckCustomerAccount $checkCustomerAccount
+        CheckCustomerAccount $checkCustomerAccount,
+        GetCustomerAddress $getCustomerAddress
     ) {
         $this->shippingAddressManagement = $shippingAddressManagement;
-        $this->addressRepository = $addressRepository;
         $this->addressModel = $addressModel;
         $this->checkCustomerAccount = $checkCustomerAccount;
+        $this->getCustomerAddress = $getCustomerAddress;
     }
 
     /**
      * @inheritdoc
+     *
+     * @param ContextInterface $context
+     * @param CartInterface $cart
+     * @param array $shippingAddresses
+     * @throws GraphQlInputException
      */
     public function execute(ContextInterface $context, CartInterface $cart, array $shippingAddresses): void
     {
@@ -87,9 +90,7 @@ class SetShippingAddressOnCart implements SetShippingAddressesOnCartInterface
             $shippingAddress = $this->addressModel->addData($addressInput);
         } else {
             $this->checkCustomerAccount->execute($context->getUserId(), $context->getUserType());
-
-            /** @var AddressInterface $customerAddress */
-            $customerAddress = $this->addressRepository->getById($customerAddressId);
+            $customerAddress = $this->getCustomerAddress->execute((int)$customerAddressId, (int)$context->getUserId());
             $shippingAddress = $this->addressModel->importCustomerAddressData($customerAddress);
         }
 
