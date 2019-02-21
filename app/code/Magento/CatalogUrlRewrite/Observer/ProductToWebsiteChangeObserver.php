@@ -84,9 +84,9 @@ class ProductToWebsiteChangeObserver implements ObserverInterface
             );
 
             if (!empty($this->productUrlRewriteGenerator->generate($product))) {
-                if($this->request->getParam('remove_website_ids')) {
-                    foreach($this->request->getParam('remove_website_ids') as $webId){
-                        foreach($this->storeWebsiteRelation->getStoreByWebsiteId($webId) as $storeId){
+                if ($this->request->getParam('remove_website_ids')) {
+                    foreach ($this->request->getParam('remove_website_ids') as $webId) {
+                        foreach ($this->storeWebsiteRelation->getStoreByWebsiteId($webId) as $storeId) {
                             $this->urlPersist->deleteByData([
                                 UrlRewrite::ENTITY_ID => $product->getId(),
                                 UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
