@@ -32,11 +32,11 @@
         <waitForPageLoad stepKey="waitForClearFilters"/>
         <fillField selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="{{email}}" stepKey="filterEmail"/>
         <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
         <click selector="{{AdminCustomerGridSection.selectFirstRow}}" stepKey="clickOnEditButton1"/>
         <click selector="{{CustomersPageSection.actions}}" stepKey="clickActionsDropdown"/>
         <click selector="{{CustomersPageSection.delete}}" stepKey="clickDelete"/>
         <click selector="{{CustomersPageSection.ok}}" stepKey="clickOkConfirmationButton"/>
-        <waitForElementVisible stepKey="waitForSuccessfullyDeletedMessage" selector="{{CustomersPageSection.deletedSuccessMessage}}" time="10"/>
+        <waitForPageLoad time="30" stepKey="waitForPageToLoad2"/>
     </actionGroup>
 </actionGroups>

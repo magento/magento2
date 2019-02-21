@@ -30,12 +30,13 @@
 
         <!--Filter the customer From grid-->
         <amOnPage url="{{AdminNewCustomerPage.url}}" stepKey="navigateToNewCustomerPage"/>
-        <waitForPageLoad stepKey="waitToCustomerPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitToCustomerPageLoad"/>
         <selectOption selector="{{AdminCustomerAccountInformationSection.group}}" userInput="Retailer" stepKey="fillCustomerGroup"/>
         <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
         <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
         <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
         <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
         <reloadPage stepKey="reloadPage"/>
 
