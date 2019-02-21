@@ -105,7 +105,9 @@
         .date {
             &.required {
                 div[for*='options'] {
-                    display: none !important;
+                    &.mage-error {
+                        display: none !important;
+                    }
                 }
             }
         }
