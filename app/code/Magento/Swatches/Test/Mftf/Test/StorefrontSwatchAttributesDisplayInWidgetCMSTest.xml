@@ -68,6 +68,7 @@
         </after>
         <!--Open Storefront page for the new created page-->
         <amOnPage url="{{StorefrontCmsPage.url(_defaultCmsPage.identifier)}}" stepKey="goToCreatedCmsPage"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(VisualSwatchOption1.default_label)}}" stepKey="waitForSwatchOptionsAppear"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(VisualSwatchOption1.default_label)}}" stepKey="assertAddedWidgetS"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(VisualSwatchOption2.default_label)}}" stepKey="assertAddedWidgetM"/>
     </test>
