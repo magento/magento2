@@ -12,11 +12,6 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Authorization\Model\Rules;
-use Magento\Authorization\Model\RulesFactory;
-use Magento\Authorization\Model\RoleFactory;
-use Magento\Authorization\Model\Role;
-use Magento\Integration\Model\AdminTokenService;
 
 /**
  * Tests for cms page service.
@@ -53,21 +48,6 @@ class PageRepositoryTest extends WebapiAbstract
     protected $currentPage;
 
     /**
-     * @var RulesFactory
-     */
-    private $rulesFactory;
-
-    /**
-     * @var RoleFactory
-     */
-    private $roleFactory;
-
-    /**
-     * @var AdminTokenService
-     */
-    private $adminTokenService;
-
-    /**
      * Execute per test initialization.
      */
     public function setUp()
@@ -77,9 +57,6 @@ class PageRepositoryTest extends WebapiAbstract
         $this->dataObjectHelper = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\DataObjectHelper::class);
         $this->dataObjectProcessor = Bootstrap::getObjectManager()
             ->create(\Magento\Framework\Reflection\DataObjectProcessor::class);
-        $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
-        $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
-        $this->adminTokenService = Bootstrap::getObjectManager()->get(AdminTokenService::class);
     }
 
     /**
@@ -401,101 +378,5 @@ class PageRepositoryTest extends WebapiAbstract
         ];
 
         $this->_webApiCall($serviceInfo, [PageInterface::PAGE_ID => $pageId]);
-    }
-
-    /**
-     * Load page data.
-     *
-     * @param string $id
-     * @return array
-     */
-    private function getPageData(string $id): array
-    {
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder = Bootstrap::getObjectManager()
-            ->create(SearchCriteriaBuilder::class);
-        $searchCriteriaBuilder->addFilter(PageInterface::IDENTIFIER, $id);
-        $searchData = $searchCriteriaBuilder->create()->__toArray();
-        $requestData = ['searchCriteria' => $searchData];
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . "/search" . '?' . http_build_query($requestData),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'GetList',
-            ],
-        ];
-
-        $searchResult = $this->_webApiCall($serviceInfo, $requestData);
-
-        return $searchResult['items'][0];
-    }
-
-    /**
-     * Update a page.
-     *
-     * @param array $pageData
-     * @return array
-     */
-    private function updatePage(array $pageData, ?string $token = null): array
-    {
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Save',
-            ],
-        ];
-        if ($token) {
-            $serviceInfo['rest']['token'] = $token;
-            $serviceInfo['soap']['token'] = $token;
-        }
-
-        return $this->_webApiCall($serviceInfo, ['page' => $pageData]);
-    }
-
-    /**
-     * Test authorization when saving page's design settings.
-     *
-     * @magentoApiDataFixture Magento/Cms/_files/pages.php
-     * @magentoApiDataFixture Magento/User/_files/user_with_new_role.php
-     */
-    public function testSaveDesign()
-    {
-        /** @var array $page */
-        $page = $this->getPageData('page_design_blank');
-        /** @var Role $role */
-        $role = $this->roleFactory->create();
-        $role->load('new_role', 'role_name');
-        $token = $this->adminTokenService->createAdminAccessToken('admin_with_role', '12345abc');
-
-        //Admin doesn't have access to category's design.
-        /** @var Rules $rules */
-        $rules = $this->rulesFactory->create();
-        $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Cms::page', 'Magento_Cms::save']);
-        $rules->saveRel();
-
-        $page[PageInterface::CUSTOM_THEME] = 'test';
-        $page = $this->updatePage($page, $token);
-        $this->assertNotEquals('test', $page[PageInterface::CUSTOM_THEME]);
-
-        //Admin has access to category' design.
-        /** @var Rules $rules */
-        $rules = $this->rulesFactory->create();
-        $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Cms::page', 'Magento_Cms::save', 'Magento_Cms::save_design']);
-        $rules->saveRel();
-
-        $page[PageInterface::CUSTOM_THEME] = 'test';
-        $page = $this->updatePage($page, $token);
-        $this->assertEquals('test', $page[PageInterface::CUSTOM_THEME]);
     }
 }

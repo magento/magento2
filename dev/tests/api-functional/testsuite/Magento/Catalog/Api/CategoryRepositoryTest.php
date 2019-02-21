@@ -6,15 +6,10 @@
  */
 namespace Magento\Catalog\Api;
 
-use Magento\Authorization\Model\Role;
-use Magento\Integration\Model\AdminTokenService;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\Authorization\Model\Rules;
-use Magento\Authorization\Model\RulesFactory;
-use Magento\Authorization\Model\RoleFactory;
 
 class CategoryRepositoryTest extends WebapiAbstract
 {
@@ -22,33 +17,6 @@ class CategoryRepositoryTest extends WebapiAbstract
     const SERVICE_NAME = 'catalogCategoryRepositoryV1';
 
     private $modelId = 333;
-
-    /**
-     * @var RulesFactory
-     */
-    private $rulesFactory;
-
-    /**
-     * @var RoleFactory
-     */
-    private $roleFactory;
-
-    /**
-     * @var AdminTokenService
-     */
-    private $adminTokenService;
-
-    /**
-     * Sets up common objects.
-     *
-     * @inheritDoc
-     */
-    protected function setUp()
-    {
-        $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
-        $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
-        $this->adminTokenService = Bootstrap::getObjectManager()->get(AdminTokenService::class);
-    }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/category_backend.php
@@ -283,87 +251,28 @@ class CategoryRepositoryTest extends WebapiAbstract
         return $this->_webApiCall($serviceInfo, ['categoryId' => $id]);
     }
 
-    /**
-     * Make category update request.
-     *
-     * @param string $id
-     * @param array $data
-     * @param string|null $token
-     * @return array|bool|float|int|string
-     */
-    function updateCategory($id, $data, ?string $token = null)
+    protected function updateCategory($id, $data)
     {
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $id,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => 'V1',
-                'operation' => self::SERVICE_NAME . 'Save',
-            ],
-        ];
-        if ($token) {
-            $serviceInfo['rest']['token'] = $token;
-            $serviceInfo['soap']['token'] = $token;
-        }
+        $serviceInfo =
+            [
+                'rest' => [
+                    'resourcePath' => self::RESOURCE_PATH . '/' . $id,
+                    'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                ],
+                'soap' => [
+                    'service' => self::SERVICE_NAME,
+                    'serviceVersion' => 'V1',
+                    'operation' => self::SERVICE_NAME . 'Save',
+                ],
+            ];
 
-        $data['id'] = $id;
-        return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
-    }
-
-    /**
-     * Test authorization when saving category's design settings.
-     *
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
-     * @magentoApiDataFixture Magento/User/_files/user_with_new_role.php
-     */
-    public function testSaveDesign()
-    {
-        /** @var array $category */
-        $category = $this->getInfoCategory(333);
-        /** @var Role $role */
-        $role = $this->roleFactory->create();
-        $role->load('new_role', 'role_name');
-        $token = $this->adminTokenService->createAdminAccessToken('admin_with_role', '12345abc');
-
-        //Admin doesn't have access to category's design.
-        /** @var Rules $rules */
-        $rules = $this->rulesFactory->create();
-        $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Catalog::categories']);
-        $rules->saveRel();
-
-        $category['custom_attributes'] = [['attribute_code' => 'custom_design', 'value' => 2]];
-        $category = $this->updateCategory($category['id'], $category, $token);
-        foreach ($category['custom_attributes'] as $attribute) {
-            if ($attribute['attribute_code'] === 'custom_design') {
-                if ($attribute['value']) {
-                    $this->fail('Design attribute changed without proper access rights');
-                }
-            }
-        }
-
-        //Admin has access to category' design.
-        /** @var Rules $rules */
-        $rules = $this->rulesFactory->create();
-        $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']);
-        $rules->saveRel();
-
-        $changed = false;
-        $category['custom_attributes'] = [['attribute_code' => 'custom_design', 'value' => 2]];
-        $category = $this->updateCategory($category['id'], $category, $token);
-        foreach ($category['custom_attributes'] as $attribute) {
-            if ($attribute['attribute_code'] === 'custom_design') {
-                if ($attribute['value'] == 2) {
-                    $changed = true;
-                }
-            }
-        }
-        if (!$changed) {
-            $this->fail('Failed to change a design attribute with proper access rights');
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            $data['id'] = $id;
+            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
+        } else {
+            $data['id'] = $id;
+            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
+            return $this->_webApiCall($serviceInfo, ['category' => $data]);
         }
     }
 }

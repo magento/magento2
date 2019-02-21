@@ -7,14 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
+use Magento\Authorization\Model\Role;
+use Magento\Authorization\Model\RoleFactory;
+use Magento\Backend\Model\Auth;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Authorization\Model\Rules;
+use Magento\Authorization\Model\RulesFactory;
 
 /**
  * Provide tests for ProductRepository model.
  *
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,22 +34,45 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
+
+    /**
+     * @var RulesFactory
+     */
+    private $rulesFactory;
+
+    /**
+     * @var RoleFactory
+     */
+    private $roleFactory;
+
+    /**
+     * @var Auth
+     */
+    private $auth;
 
     /**
      * Sets up common objects
      */
     protected function setUp()
     {
-        $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
-        );
+        $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+        $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
+        $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
+        $this->auth = Bootstrap::getObjectManager()->get(Auth::class);
+    }
 
-        $this->searchCriteriaBuilder = \Magento\Framework\App\ObjectManager::getInstance()->create(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class
-        );
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $this->auth->logout();
     }
 
     /**
@@ -137,5 +168,44 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('image', $images[0]['media_type']);
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('image'));
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('small_image'));
+    }
+
+    /**
+     * Test authorization when saving product's design settings.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/User/_files/user_with_new_role.php
+     * @magentoAppArea adminhtml
+     */
+    public function testSaveDesign()
+    {
+        $product = $this->productRepository->get('simple');
+        /** @var Role $role */
+        $role = $this->roleFactory->create();
+        $role->load('new_role', 'role_name');
+        $this->auth->login('admin_with_role', '12345abc');
+
+        //Admin doesn't have access to product's design.
+        /** @var Rules $rules */
+        $rules = $this->rulesFactory->create();
+        $rules->setRoleId($role->getId());
+        $rules->setResources(['Magento_Catalog::products']);
+        $rules->saveRel();
+
+        $product->setCustomAttribute('custom_design', 2);
+        $product = $this->productRepository->save($product);
+        $this->assertEmpty($product->getCustomAttribute('custom_design'));
+
+        //Admin has access to products' design.
+        /** @var Rules $rules */
+        $rules = $this->rulesFactory->create();
+        $rules->setRoleId($role->getId());
+        $rules->setResources(['Magento_Catalog::products', 'Magento_Catalog::edit_product_design']);
+        $rules->saveRel();
+
+        $product->setCustomAttribute('custom_design', 2);
+        $product = $this->productRepository->save($product);
+        $this->assertNotEmpty($product->getCustomAttribute('custom_design'));
+        $this->assertEquals(2, $product->getCustomAttribute('custom_design')->getValue());
     }
 }

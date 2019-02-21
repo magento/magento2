@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Api;
 
-use Magento\Authorization\Model\Role;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Downloadable\Model\Link;
@@ -23,10 +22,6 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
-use Magento\Authorization\Model\Rules;
-use Magento\Authorization\Model\RulesFactory;
-use Magento\Authorization\Model\RoleFactory;
-use Magento\Integration\Model\AdminTokenService;
 
 /**
  * @magentoAppIsolation enabled
@@ -41,21 +36,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const KEY_TIER_PRICES = 'tier_prices';
     const KEY_SPECIAL_PRICE = 'special_price';
     const KEY_CATEGORY_LINKS = 'category_links';
-
-    /**
-     * @var RulesFactory
-     */
-    private $rulesFactory;
-
-    /**
-     * @var RoleFactory
-     */
-    private $roleFactory;
-
-    /**
-     * @var AdminTokenService
-     */
-    private $adminTokenService;
 
     /**
      * @var array
@@ -74,18 +54,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::PRICE => 10
         ],
     ];
-
-    /**
-     * Sets up common objects.
-     *
-     * @inheritDoc
-     */
-    protected function setUp()
-    {
-        $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
-        $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
-        $this->adminTokenService = Bootstrap::getObjectManager()->get(AdminTokenService::class);
-    }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_related.php
@@ -757,13 +725,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
-     * Update given product.
-     *
      * @param array $product
-     * @param string|null $token
      * @return array|bool|float|int|string
      */
-    protected function updateProduct($product, ?string $token = null)
+    protected function updateProduct($product)
     {
         if (isset($product['custom_attributes'])) {
             for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
@@ -790,10 +755,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        if ($token) {
-            $serviceInfo['rest']['token'] = $token;
-            $serviceInfo['soap']['token'] = $token;
-        }
         $requestData = ['product' => $product];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         return $response;
@@ -1620,59 +1581,5 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             }
         }
         $this->assertEquals($expectedMultiselectValue, $multiselectValue);
-    }
-
-    /**
-     * Test authorization when saving a product's design settings.
-     *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoApiDataFixture Magento/User/_files/user_with_new_role.php
-     */
-    public function testSaveDesign()
-    {
-        /** @var array $product */
-        $product = $this->getProduct('simple');
-        /** @var Role $role */
-        $role = $this->roleFactory->create();
-        $role->load('new_role', 'role_name');
-        $token = $this->adminTokenService->createAdminAccessToken('admin_with_role', '12345abc');
-
-        //Admin doesn't have access to product's design.
-        /** @var Rules $rules */
-        $rules = $this->rulesFactory->create();
-        $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Catalog::products']);
-        $rules->saveRel();
-
-        $product['custom_attributes'] = [['attribute_code' => 'custom_design', 'value' => 2]];
-        $product = $this->updateProduct($product, $token);
-        foreach ($product['custom_attributes'] as $attribute) {
-            if ($attribute['attribute_code'] === 'custom_design') {
-                if ($attribute['value']) {
-                    $this->fail('Design attribute changed without proper access rights');
-                }
-            }
-        }
-
-        //Admin has access to product's design.
-        /** @var Rules $rules */
-        $rules = $this->rulesFactory->create();
-        $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Catalog::products', 'Magento_Catalog::edit_product_design']);
-        $rules->saveRel();
-
-        $changed = false;
-        $product['custom_attributes'] = [['attribute_code' => 'custom_design', 'value' => 2]];
-        $product = $this->updateProduct($product, $token);
-        foreach ($product['custom_attributes'] as $attribute) {
-            if ($attribute['attribute_code'] === 'custom_design') {
-                if ($attribute['value'] == 2) {
-                    $changed = true;
-                }
-            }
-        }
-        if (!$changed) {
-            $this->fail('Failed to change a design attribute with proper access rights');
-        }
     }
 }
