@@ -10,7 +10,7 @@ namespace Magento\GraphQl\Quote;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Multishipping\Helper\Data;
-use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -28,34 +28,35 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
     private $quoteResource;
 
     /**
-     * @var Quote
+     * @var QuoteFactory
      */
-    private $quote;
+    private $quoteFactory;
 
     /**
      * @var QuoteIdToMaskedQuoteIdInterface
      */
     private $quoteIdToMaskedId;
 
+    /**
+     * @var CustomerTokenServiceInterface
+     */
+    private $customerTokenService;
+
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->create(QuoteResource::class);
-        $this->quote = $objectManager->create(Quote::class);
-        $this->quoteIdToMaskedId = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->quoteResource = $objectManager->get(QuoteResource::class);
+        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
+        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
-    public function testSetNewGuestBillingAddressOnCart()
+    public function testSetNewBillingAddressByGuest()
     {
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
 
         $query = <<<QUERY
 mutation {
@@ -104,14 +105,9 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
-    public function testSetNewGuestBillingAddressOnUseForShippingCart()
+    public function testSetNewBillingAddressWithUseForShippingParameterByGuest()
     {
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
 
         $query = <<<QUERY
 mutation {
@@ -172,15 +168,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The current customer isn't authorized.
      */
-    public function testSetSavedBillingAddressOnCartByGuest()
+    public function testSetBillingAddressFromAddressBookByGuest()
     {
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
 
         $query = <<<QUERY
 mutation {
@@ -194,19 +187,12 @@ mutation {
   ) {
     cart {
       billing_address {
-        firstname
-        lastname
-        company
-        street
         city
-        postcode
-        telephone
       }
     }
   }
 }
 QUERY;
-        self::expectExceptionMessage('The current customer isn\'t authorized.');
         $this->graphQlQuery($query);
     }
 
@@ -214,23 +200,9 @@ QUERY;
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
-    public function testSetNewRegisteredCustomerBillingAddressOnCart()
+    public function testSetNewBillingAddressByRegisteredCustomer()
     {
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-
-        $headerMap = $this->getHeaderMap();
+        $maskedQuoteId = $this->assignQuoteToCustomer();
 
         $query = <<<QUERY
 mutation {
@@ -267,7 +239,7 @@ mutation {
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
@@ -281,23 +253,9 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      */
-    public function testSetSavedRegisteredCustomerBillingAddressOnCart()
+    public function testSetBillingAddressFromAddressBookByRegisteredCustomer()
     {
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-
-        $headerMap = $this->getHeaderMap();
+        $maskedQuoteId = $this->assignQuoteToCustomer();
 
         $query = <<<QUERY
 mutation {
@@ -323,13 +281,122 @@ mutation {
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
         self::assertArrayHasKey('billing_address', $cartResponse);
         $billingAddressResponse = $cartResponse['billing_address'];
         $this->assertSavedBillingAddressFields($billingAddressResponse);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a address with ID "100"
+     */
+    public function testSetNotExistedBillingAddressFromAddressBook()
+    {
+        $maskedQuoteId = $this->assignQuoteToCustomer();
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+          customer_address_id: 100
+       }
+    }
+  ) {
+    cart {
+      billing_address {
+        city
+      }
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
+     */
+    public function testSetNewBillingAddressAndFromAddressBookAtSameTime()
+    {
+        $maskedQuoteId = $this->assignQuoteToCustomer();
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+        customer_address_id: 1
+        address: {
+          firstname: "test firstname"
+          lastname: "test lastname"
+          company: "test company"
+          street: ["test street 1", "test street 2"]
+          city: "test city"
+          region: "test region"
+          postcode: "887766"
+          country_code: "US"
+          telephone: "88776655"
+          save_in_address_book: false
+        }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        city
+      }
+    }
+  }
+}
+QUERY;
+
+        self::expectExceptionMessage(
+            'The billing address cannot contain "customer_address_id" and "address" at the same time.'
+        );
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The current user cannot use address with ID "1"
+     */
+    public function testSetBillingAddressIfCustomerIsNotOwnerOfAddress()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+          customer_address_id: 1
+       }
+    }
+  ) {
+    cart {
+      billing_address {
+        city
+      }
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
     }
 
     /**
@@ -374,17 +441,42 @@ QUERY;
 
     /**
      * @param string $username
+     * @param string $password
      * @return array
      */
-    private function getHeaderMap(string $username = 'customer@example.com'): array
+    private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
     {
-        $password = 'password';
-        /** @var CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = ObjectManager::getInstance()
-            ->get(CustomerTokenServiceInterface::class);
-        $customerToken = $customerTokenService->createCustomerAccessToken($username, $password);
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         return $headerMap;
+    }
+
+    /**
+     * @param string $reversedQuoteId
+     * @return string
+     */
+    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
+    {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+
+        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
+    }
+
+    /**
+     * @param string $reversedQuoteId
+     * @param int $customerId
+     * @return string
+     */
+    private function assignQuoteToCustomer(
+        string $reversedQuoteId = 'test_order_with_simple_product_without_address',
+        int $customerId = 1
+    ): string {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+        $quote->setCustomerId($customerId);
+        $this->quoteResource->save($quote);
+        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 
     public function tearDown()
