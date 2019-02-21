@@ -458,8 +458,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
             $defaultShippingAddress = $customer->getDefaultShipping();
         } else {
             /* we should load data from the quote if customer is not saved yet */
-            $defaultBillingAddress = $customer->getDefaultBilling();
-            $defaultShippingAddress = $customer->getDefaultShipping();
+            $defaultBillingAddress = $this->getQuote()->getDefaultBilling();
+            $defaultShippingAddress = $this->getQuote()->getDefaultShipping();
+        }
+
+        if(is_null($defaultShippingAddress) && is_null($defaultBillingAddress)){
+            return false; 
         }
 
         return !$defaultShippingAddress
