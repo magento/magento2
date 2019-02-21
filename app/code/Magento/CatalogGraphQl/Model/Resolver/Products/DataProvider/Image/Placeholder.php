@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Image;
 
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Image\Placeholder\Theme;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
 
@@ -27,24 +26,16 @@ class Placeholder
     private $assetRepository;
 
     /**
-     * @var Theme
-     */
-    private $theme;
-
-    /**
      * Placeholder constructor.
      * @param PlaceholderFactory $placeholderFactory
      * @param AssetRepository $assetRepository
-     * @param Theme $theme
      */
     public function __construct(
         PlaceholderFactory $placeholderFactory,
-        AssetRepository $assetRepository,
-        Theme $theme
+        AssetRepository $assetRepository
     ) {
         $this->placeholderFactory = $placeholderFactory;
         $this->assetRepository = $assetRepository;
-        $this->theme = $theme;
     }
 
     /**
@@ -52,7 +43,6 @@ class Placeholder
      *
      * @param string $imageType
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getPlaceholder(string $imageType): string
     {
@@ -63,10 +53,8 @@ class Placeholder
             return $imageAsset->getUrl();
         }
 
-        $themeData = $this->theme->getThemeData();
-        return $this->assetRepository->createAsset(
-            "Magento_Catalog::images/product/placeholder/{$imageType}.jpg",
-            $themeData
-        )->getUrl();
+        return $this->assetRepository->getUrl(
+            "Magento_Catalog::images/product/placeholder/{$imageType}.jpg"
+        );
     }
 }
