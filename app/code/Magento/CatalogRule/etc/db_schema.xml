@@ -23,7 +23,7 @@
         <column xsi:type="int" name="sort_order" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
         <column xsi:type="varchar" name="simple_action" nullable="true" length="32" comment="Simple Action"/>
-        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Discount Amount"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>
@@ -49,7 +49,7 @@
                 default="0" comment="Product Id"/>
         <column xsi:type="varchar" name="action_operator" nullable="true" length="10" default="to_fixed"
                 comment="Action Operator"/>
-        <column xsi:type="decimal" name="action_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="action_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Action Amount"/>
         <column xsi:type="smallint" name="action_stop" padding="6" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Action Stop"/>

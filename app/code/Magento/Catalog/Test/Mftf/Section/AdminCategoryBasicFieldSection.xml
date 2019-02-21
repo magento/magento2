@@ -22,7 +22,7 @@
         <element name="ContentTab" type="input" selector="input[name='name']"/>
         <element name="FieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
         <element name="panelFieldControl" type="input" selector='//aside//div[@data-index="{{arg1}}"]/descendant::*[@name="{{arg2}}"]' parameterized="true"/>
-        <element name="productsInCategory" type="input" selector="div[data-index='assign_products']"/>
+        <element name="productsInCategory" type="input" selector="div[data-index='assign_products']" timeout="30"/>
     </section>
     <section name="CategoryContentSection">
         <element name="SelectFromGalleryBtn" type="button" selector="//label[text()='Select from Gallery']"/>
