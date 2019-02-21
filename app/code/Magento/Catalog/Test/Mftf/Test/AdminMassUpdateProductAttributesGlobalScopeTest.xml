@@ -58,7 +58,7 @@
         <click selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}" stepKey="toggleToChangePrice"/>
         <fillField selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="$$createProductOne.price$$0" stepKey="fillAttributeNameField"/>
         <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 2 record(s) were updated." stepKey="seeAttributeUpateSuccessMsg"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
 
         <!-- Assert on storefront default view -->
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>

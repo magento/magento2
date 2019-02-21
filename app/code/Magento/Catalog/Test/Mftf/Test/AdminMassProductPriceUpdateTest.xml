@@ -54,7 +54,7 @@
         <fillField stepKey="fillPrice" selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="90.99"/>
         <click stepKey="clickOnSaveButton" selector="{{AdminEditProductAttributesSection.Save}}"/>
         <waitForPageLoad stepKey="waitForUpdatedProductToSave" />
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 2 record(s) were updated." stepKey="seeAttributeUpateSuccessMsg"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
 
         <!--Verify product name, sku and updated price-->
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$simpleProduct1.sku$$)}}"/>

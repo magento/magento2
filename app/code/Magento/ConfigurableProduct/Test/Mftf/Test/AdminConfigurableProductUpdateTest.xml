@@ -57,7 +57,7 @@
         <click selector="{{AdminUpdateAttributesSection.toggleDescription}}" stepKey="clickToggleDescription"/>
         <fillField selector="{{AdminUpdateAttributesSection.description}}" userInput="MFTF automation!" stepKey="fillDescription"/>
         <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="clickSave"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 3 record(s) were updated." stepKey="seeSaveSuccess"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeSaveSuccess"/>
 
         <!-- Check storefront for description -->
         <amOnPage url="$$createProduct1.sku$$.html" stepKey="gotoProduct1"/>

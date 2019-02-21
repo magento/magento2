@@ -67,7 +67,7 @@
         <waitForAjaxLoad stepKey="waitForLoadWebSiteTab"/>
         <click selector="{{AdminUpdateAttributesWebsiteSection.addProductToWebsite}}" stepKey="checkAddProductToWebsiteCheckbox"/>
         <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="clickSave"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 1 record(s) were updated." stepKey="seeSaveSuccess"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue." stepKey="seeSaveSuccess"/>
 
         <!--Got to Store front product page and check url-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.sku$$-new)}}" stepKey="navigateToSimpleProductPage"/>
