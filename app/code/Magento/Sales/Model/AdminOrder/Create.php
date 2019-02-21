@@ -24,6 +24,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\Model\Cart\CartInterface
