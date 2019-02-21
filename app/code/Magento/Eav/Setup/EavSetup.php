@@ -930,15 +930,15 @@ class EavSetup
             }
         } elseif (isset($option['values'])) {
             foreach ($option['values'] as $sortOrder => $label) {
-$checkOpionId = $this->setup->getConnection()->select($optionTable, ['attribute_id =?' =>$option['attribute_id'], 'sort_order =?' => $sortOrder, 'value =?'=> $label]);
+                $checkOpionId = $this->setup->getConnection()->select($optionTable, ['attribute_id =?' => $option['attribute_id'], 'sort_order =?' => $sortOrder, 'value =?' => $label]);
                 if (!$checkOpionId->getSize()) {
-                // add option
-                $data = ['attribute_id' => $option['attribute_id'], 'sort_order' => $sortOrder];
-                $this->setup->getConnection()->insert($optionTable, $data);
-                $intOptionId = $this->setup->getConnection()->lastInsertId($optionTable);
+                    // add option
+                    $data = ['attribute_id' => $option['attribute_id'], 'sort_order' => $sortOrder];
+                    $this->setup->getConnection()->insert($optionTable, $data);
+                    $intOptionId = $this->setup->getConnection()->lastInsertId($optionTable);
 
-                $data = ['option_id' => $intOptionId, 'store_id' => 0, 'value' => $label];
-                $this->setup->getConnection()->insert($optionValueTable, $data);
+                    $data = ['option_id' => $intOptionId, 'store_id' => 0, 'value' => $label];
+                    $this->setup->getConnection()->insert($optionValueTable, $data);
                 }
             }
         }
