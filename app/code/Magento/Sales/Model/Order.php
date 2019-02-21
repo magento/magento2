@@ -1990,16 +1990,18 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Get formatted order created date in store timezone
      *
-     * @param int $format date format type (\IntlDateFormatter::SHORT|\IntlDateFormatter::MEDIUM
+     * @param int $dateFormat date format type (\IntlDateFormatter::SHORT|\IntlDateFormatter::MEDIUM
+     * |\IntlDateFormatter::LONG|\IntlDateFormatter::FULL)
+     * @param int $timeFormat time format type (\IntlDateFormatter::SHORT|\IntlDateFormatter::MEDIUM
      * |\IntlDateFormatter::LONG|\IntlDateFormatter::FULL)
      * @return string
      */
-    public function getCreatedAtFormatted($format)
+    public function getCreatedAtFormatted($dateFormat, $timeFormat = \IntlDateFormatter::MEDIUM)
     {
         return $this->timezone->formatDateTime(
             new \DateTime($this->getCreatedAt()),
-            $format,
-            $format,
+            $dateFormat,
+            $timeFormat,
             $this->localeResolver->getDefaultLocale(),
             $this->timezone->getConfigTimezone('store', $this->getStore())
         );

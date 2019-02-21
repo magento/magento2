@@ -1190,7 +1190,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
                 $localeCode
             );
 
-        $this->order->getCreatedAtFormatted(\IntlDateFormatter::SHORT);
+        $this->order->getCreatedAtFormatted(\IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
     }
 
     public function notInvoicingStatesProvider()
