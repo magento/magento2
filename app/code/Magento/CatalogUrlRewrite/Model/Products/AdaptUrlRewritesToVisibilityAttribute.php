@@ -61,6 +61,8 @@ class AdaptUrlRewritesToVisibilityAttribute
     }
 
     /**
+     * Process Url Rewrites according to the products visibility attribute
+     *
      * @param array $productIds
      * @param int $visibility
      * @throws UrlAlreadyExistsException
@@ -104,10 +106,12 @@ class AdaptUrlRewritesToVisibilityAttribute
     }
 
     /**
+     * Get Product Models by Id's
+     *
      * @param array $productIds
      * @return array
      */
-    protected function getProductsByIds(array $productIds): array
+    private function getProductsByIds(array $productIds): array
     {
         $productCollection = $this->productCollectionFactory->create();
         $productCollection->addAttributeToSelect(ProductInterface::VISIBILITY);
