@@ -54,7 +54,8 @@ class ImagesTest extends AbstractModifierTest
                     'media_gallery' => [
                         'images' => [
                             [
-                                'label' => null
+                                'label' => null,
+                                'store_id' => 0
                             ]
                         ]
                     ]
