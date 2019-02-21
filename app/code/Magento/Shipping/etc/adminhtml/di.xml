@@ -15,4 +15,8 @@
             <argument name="url" xsi:type="object">Magento\Framework\Url</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Shipping\Model\Carrier\AbstractCarrier">
+        <plugin name="resolveStoreParamForCarrier" type="Magento\Shipping\Plugin\Carrier\AbstractCarrierPlugin" />
+    </type>
 </config>
