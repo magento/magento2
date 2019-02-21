@@ -84,7 +84,7 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "~2.13.0",
         "lusitanian/oauth": "~0.8.10",
-        "magento/magento2-functional-testing-framework": "~2.3.13",
+        "magento/magento2-functional-testing-framework": "~2.3.14",
         "pdepend/pdepend": "2.5.2",
         "phpmd/phpmd": "@stable",
         "phpunit/phpunit": "~6.5.0",

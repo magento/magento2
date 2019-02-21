@@ -11,4 +11,19 @@
             <argument name="exceptionMessageFactory" xsi:type="object">Magento\Framework\Message\ExceptionMessageLookupFactory</argument>
         </arguments>
     </type>
+    <type name="Magento\ImportExport\Model\Export\Entity\ExportInfoFactory">
+        <arguments>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Controller\Adminhtml\Export\File\Delete">
+        <arguments>
+            <argument name="file" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Ui\DataProvider\ExportFileDataProvider">
+        <arguments>
+            <argument name="file" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
 </config>
