@@ -39,15 +39,15 @@
         <click selector="{{AdminUrlRewriteProductSection.productRow}}" stepKey="clickOnFirstRow"/>
         <waitForPageLoad stepKey="waitForProductCategoryPageToLoad"/>
     </actionGroup>
-    <actionGroup name="AdminSearchDeletedCategory">
+    <actionGroup name="AdminSearchDeletedUrlRewrite">
         <arguments>
-            <argument name="category" type="string"/>
+            <argument name="requestPath" type="string"/>
         </arguments>
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
         <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
         <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{category}}" stepKey="fillRedirectPathFilter"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{requestPath}}" stepKey="fillRedirectPathFilter"/>
         <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
         <see selector="{{AdminUrlRewriteIndexSection.emptyRecords}}" userInput="We couldn't find any records." stepKey="seeEmptyRecordMessage"/>

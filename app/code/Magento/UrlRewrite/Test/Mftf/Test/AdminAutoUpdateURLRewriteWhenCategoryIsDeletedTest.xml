@@ -66,8 +66,8 @@
         </actionGroup>
 
         <!--Assert Category Url Redirect is not present -->
-        <actionGroup ref="AdminSearchDeletedCategory" stepKey="searchDeletedCategory">
-            <argument name="category" value="$$createCategory.name$$.html"/>
+        <actionGroup ref="AdminSearchDeletedUrlRewrite" stepKey="searchDeletedCategory">
+            <argument name="requestPath" value="$$createCategory.name$$.html"/>
         </actionGroup>
     </test>
 </tests>
