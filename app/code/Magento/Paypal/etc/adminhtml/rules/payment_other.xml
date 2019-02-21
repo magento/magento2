@@ -64,6 +64,7 @@
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
             </rule>
+            <rule type="removeCreditOptionConditional" event=":load"/>
         </relation>
     </payment>
 </rules>
