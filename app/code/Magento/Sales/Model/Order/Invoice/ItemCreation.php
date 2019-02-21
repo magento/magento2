@@ -42,6 +42,7 @@ class ItemCreation implements InvoiceItemCreationInterface
     public function setOrderItemId($orderItemId)
     {
         $this->orderItemId = $orderItemId;
+        return $this;
     }
 
     /**
@@ -58,6 +59,7 @@ class ItemCreation implements InvoiceItemCreationInterface
     public function setQty($qty)
     {
         $this->qty = $qty;
+        return $this;
     }
 
     /**
