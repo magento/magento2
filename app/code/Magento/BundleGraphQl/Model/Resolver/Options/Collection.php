@@ -61,6 +61,7 @@ class Collection
      * Add parent id/sku pair to use for option filter at fetch time.
      *
      * @param int $parentId
+     * @param int $parentEntityId
      * @param string $sku
      */
     public function addParentFilterData(int $parentId, int $parentEntityId, string $sku) : void

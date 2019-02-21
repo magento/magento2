@@ -94,5 +94,7 @@
             <argument name="sku" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Quantity')}}" userInput="99" stepKey="seeProductSkuInGrid"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
     </test>
 </tests>

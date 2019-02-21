@@ -1,12 +1,15 @@
 <?php
 /**
- * Name builder
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code;
 
+/**
+ * Builds namespace with classname out of the parts.
+ *
+ * @api
+ */
 class NameBuilder
 {
     /**
