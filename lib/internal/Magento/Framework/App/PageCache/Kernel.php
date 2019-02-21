@@ -137,9 +137,7 @@ class Kernel
         if (preg_match('/public.*s-maxage=(\d+)/', $response->getHeader('Cache-Control')->getFieldValue(), $matches)) {
             $maxAge = $matches[1];
             $response->setNoCacheHeaders();
-            if (($response->getHttpResponseCode() == 200 || $response->getHttpResponseCode() == 404)
-                && ($this->request->isGet() || $this->request->isHead())
-            ) {
+            if ($this->shouldCacheResponse($response)) {
                 $tagsHeader = $response->getHeader('X-Magento-Tags');
                 $tags = $tagsHeader ? explode(',', $tagsHeader->getFieldValue()) : [];
 
@@ -217,5 +215,23 @@ class Kernel
             );
         }
         return $this->fullPageCache;
+    }
+
+    /**
+     * Check if the response should be cached. For GET requests both 200 and 404 responses should be
+     * cached. For HEAD requests only 200 responses should be cached.
+     *
+     * @param \Magento\Framework\App\Response\Http $response
+     * @return bool
+     */
+    private function shouldCacheResponse(\Magento\Framework\App\Response\Http $response)
+    {
+        $responseCode = $response->getHttpResponseCode();
+        if ($this->request->isGet()) {
+            return $responseCode == 200 || $responseCode == 404;
+        } elseif ($this->request->isHead()) {
+            return $responseCode == 200;
+        }
+        return false;
     }
 }
