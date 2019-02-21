@@ -26,7 +26,6 @@ class Placeholder
     private $assetRepository;
 
     /**
-     * Placeholder constructor.
      * @param PlaceholderFactory $placeholderFactory
      * @param AssetRepository $assetRepository
      */
