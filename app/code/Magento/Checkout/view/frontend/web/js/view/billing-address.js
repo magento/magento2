@@ -201,6 +201,7 @@ function (
                 this.isAddressDetailsVisible(true);
             }
         },
+        
         /**
          * Manage cancel button visibility
          */
