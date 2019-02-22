@@ -33,17 +33,25 @@ class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
     protected $resultPageFactory;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
+    
+    /**
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+    	\Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
         $this->shipmentLoader = $shipmentLoader;
         $this->resultPageFactory = $resultPageFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
 
@@ -73,3 +81,4 @@ class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
         return $resultRedirect->setPath('sales/shipment');
     }
 }
+
