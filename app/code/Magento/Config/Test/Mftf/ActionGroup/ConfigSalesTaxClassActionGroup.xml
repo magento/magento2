@@ -36,7 +36,7 @@
         <scrollTo selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOnInherit}}" x="0" y="-80" stepKey="goToCheckbox"/>
         <uncheckOption selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOnInherit}}" stepKey="enableApplyTaxOnSetting"/>
         <selectOption selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOn}}" userInput="{{userInput}}" stepKey="setApplyTaxOn"/>
-        <scrollTo selector="{{SalesConfigSection.TaxClassesTab}}" stepKey="scrollToTop"/>
+        <scrollTo selector="{{SalesConfigSection.TaxClassesTab}}" x="0" y="-80" stepKey="scrollToTop"/>
         <click selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" stepKey="collapseCalcSettingsTab"/>
         <click selector="{{AdminConfigureTaxSection.save}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForConfigSaved"/>
