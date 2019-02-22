@@ -114,9 +114,9 @@ class Product extends AbstractResource
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param array $data
-     * @param TableMaintainer|null $tableMaintainer
      * @param UserContextInterface|null $userContext
      * @param AuthorizationInterface|null $authorization
+     * @param TableMaintainer|null $tableMaintainer
      * @param UniqueValidationInterface|null $uniqueValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
