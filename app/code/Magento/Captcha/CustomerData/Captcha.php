@@ -12,6 +12,7 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Captcha\Model\DefaultModel;
 use Magento\Captcha\Helper\Data as CaptchaHelper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 
 /**
@@ -50,7 +51,8 @@ class Captcha extends DataObject implements SectionSourceInterface
     ) {
         $this->helper = $helper;
         $this->formIds = $formIds;
-        $this->customerSession = $customerSession;
+        parent::__construct($data);
+        $this->customerSession = $customerSession ?? ObjectManager::getInstance()->get(CustomerSession::class);
     }
 
     /**
