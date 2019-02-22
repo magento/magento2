@@ -31,5 +31,5 @@ interface UniqueValidationInterface
         AbstractEntity $entity,
         string $entityLinkField,
         array $entityIds
-    );
+    ): bool;
 }

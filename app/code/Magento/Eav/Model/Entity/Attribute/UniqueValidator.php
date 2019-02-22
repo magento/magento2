@@ -24,10 +24,11 @@ class UniqueValidator implements UniqueValidationInterface
         AbstractEntity $entity,
         string $entityLinkField,
         array $entityIds
-    ) {
+    ): bool {
         if (isset($entityIds[0])) {
             return $entityIds[0] == $object->getData($entityLinkField);
         }
+
         return true;
     }
 }

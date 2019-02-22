@@ -661,7 +661,7 @@ class Product extends AbstractResource
     }
 
     /**
-     * Retrieve entity manager object
+     * Retrieve entity manager object.
      *
      * @return \Magento\Framework\EntityManager\EntityManager
      */
@@ -675,7 +675,7 @@ class Product extends AbstractResource
     }
 
     /**
-     * Retrieve ProductWebsiteLink object
+     * Retrieve ProductWebsiteLink object.
      *
      * @deprecated 101.1.0
      * @return ProductWebsiteLink
@@ -686,7 +686,7 @@ class Product extends AbstractResource
     }
 
     /**
-     * Retrieve CategoryLink object
+     * Retrieve CategoryLink object.
      *
      * @deprecated 101.1.0
      * @return \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
