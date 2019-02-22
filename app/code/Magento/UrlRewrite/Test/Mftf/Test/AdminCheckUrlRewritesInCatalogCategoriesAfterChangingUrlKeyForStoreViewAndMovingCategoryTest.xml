@@ -35,6 +35,13 @@
             <!--Create additional Store View in Main Website Store -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
         </before>
+        <after>
+            <deleteData createDataKey="createFirstCategory" stepKey="deleteFirstCategory"/>
+            <deleteData createDataKey="createSecondCategory" stepKey="deleteSecondCategory"/>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
 
         <!-- On the categories editing page change store view to created additional view -->
         <actionGroup ref="switchCategoryStoreView" stepKey="switchStoreView">
