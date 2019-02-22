@@ -8,7 +8,11 @@ namespace Magento\ImportExport\Controller\Adminhtml\Import;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\ImportExport\Model\Import;
 
+/**
+ * Controller responsible for initiating the import process
+ */
 class Start extends ImportResultController implements HttpPostActionInterface
 {
     /**
@@ -63,6 +67,11 @@ class Start extends ImportResultController implements HttpPostActionInterface
 
             $this->importModel->setData($data);
             $errorAggregator = $this->importModel->getErrorAggregator();
+            $errorAggregator->initValidationStrategy(
+                $this->importModel->getData(Import::FIELD_NAME_VALIDATION_STRATEGY),
+                $this->importModel->getData(Import::FIELD_NAME_ALLOWED_ERROR_COUNT)
+            );
+
             try {
                 $this->importModel->importSource();
             } catch (\Exception $e) {
@@ -84,6 +93,20 @@ class Start extends ImportResultController implements HttpPostActionInterface
                 $this->addErrorMessages($resultBlock, $errorAggregator);
             } else {
                 $this->importModel->invalidateIndex();
+
+                $noticeHtml = $this->historyModel->getSummary();
+
+                if ($this->historyModel->getErrorFile()) {
+                    $noticeHtml .=  '<div class="import-error-wrapper">' . __('Only the first 100 errors are shown. ')
+                                    . '<a href="'
+                                    . $this->createDownloadUrlImportHistoryFile($this->historyModel->getErrorFile())
+                                    . '">' . __('Download full report') . '</a></div>';
+                }
+
+                $resultBlock->addNotice(
+                    $noticeHtml
+                );
+
                 $this->addErrorMessages($resultBlock, $errorAggregator);
                 $resultBlock->addSuccess(__('Import successfully done'));
             }

@@ -16,7 +16,7 @@ class AssertExportNoDataErrorMessage extends AbstractConstraint
     /**
      * Text value to be checked.
      */
-    const ERROR_MESSAGE = 'There is no data for the export.';
+    const ERROR_MESSAGE = 'Error during export process occurred. Please check logs for detail';
 
     /**
      * Assert that error message is visible after exporting without entity attributes data.
@@ -26,7 +26,11 @@ class AssertExportNoDataErrorMessage extends AbstractConstraint
      */
     public function processAssert(AdminExportIndex $adminExportIndex)
     {
-        $actualMessage = $adminExportIndex->getMessagesBlock()->getErrorMessage();
+        $adminExportIndex->open();
+        /** @var \Magento\ImportExport\Test\Block\Adminhtml\Export\NotificationsArea $notificationsArea */
+        $notificationsArea = $adminExportIndex->getNotificationsArea();
+        $notificationsArea->openNotificationsDropDown();
+        $actualMessage = $notificationsArea->getLatestMessage();
 
         \PHPUnit\Framework\Assert::assertEquals(
             self::ERROR_MESSAGE,

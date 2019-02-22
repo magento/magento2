@@ -15,10 +15,10 @@
                 comment="Indexer Status"/>
         <column xsi:type="datetime" name="updated" on_update="false" nullable="true" comment="Indexer Status"/>
         <column xsi:type="varchar" name="hash_config" nullable="false" length="32" comment="Hash of indexer config"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="state_id"/>
         </constraint>
-        <index name="INDEXER_STATE_INDEXER_ID" indexType="btree">
+        <index referenceId="INDEXER_STATE_INDEXER_ID" indexType="btree">
             <column name="indexer_id"/>
         </index>
     </table>
@@ -31,13 +31,13 @@
         <column xsi:type="datetime" name="updated" on_update="false" nullable="true" comment="View updated time"/>
         <column xsi:type="int" name="version_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="View Version Id"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="state_id"/>
         </constraint>
-        <index name="MVIEW_STATE_VIEW_ID" indexType="btree">
+        <index referenceId="MVIEW_STATE_VIEW_ID" indexType="btree">
             <column name="view_id"/>
         </index>
-        <index name="MVIEW_STATE_MODE" indexType="btree">
+        <index referenceId="MVIEW_STATE_MODE" indexType="btree">
             <column name="mode"/>
         </index>
     </table>

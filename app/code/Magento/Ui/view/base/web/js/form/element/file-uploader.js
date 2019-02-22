@@ -324,7 +324,7 @@ define([
 
         /**
          * Handler which is invoked when files are choosed for upload.
-         * May be used for implementation of aditional validation rules,
+         * May be used for implementation of additional validation rules,
          * e.g. total files and a total size rules.
          *
          * @param {Event} e - Event object.
@@ -347,6 +347,12 @@ define([
             var file     = data.files[0],
                 allowed  = this.isFileAllowed(file),
                 target   = $(e.target);
+
+            if (this.disabled()) {
+                this.notifyError($t('The file upload field is disabled.'));
+
+                return;
+            }
 
             if (allowed.passed) {
                 target.on('fileuploadsend', function (event, postData) {

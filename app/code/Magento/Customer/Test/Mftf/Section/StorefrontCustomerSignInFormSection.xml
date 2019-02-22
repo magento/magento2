@@ -13,4 +13,10 @@
         <element name="passwordField" type="input" selector="#pass"/>
         <element name="signInAccountButton" type="button" selector="#send2" timeout="30"/>
     </section>
+    <section name="StorefrontCustomerSignInPopupFormSection">
+        <element name="errorMessage" type="input" selector="[data-ui-id='checkout-cart-validationmessages-message-error']"/>
+        <element name="email" type="input" selector="#customer-email"/>
+        <element name="password" type="input" selector="#pass"/>
+        <element name="signIn" type="button" selector="#send2" timeout="30"/>
+    </section>
 </sections>

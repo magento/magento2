@@ -78,9 +78,9 @@ class BaseUrlCheckerTest extends \PHPUnit\Framework\TestCase
     public function testIsEnabled()
     {
         $this->scopeConfig->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with('web/url/redirect_to_base', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->willReturn(1);
+            ->willReturn(!!1);
         $this->assertTrue($this->baseUrlChecker->isEnabled());
     }
 
@@ -89,15 +89,16 @@ class BaseUrlCheckerTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsFrontendSecure()
     {
-        $this->scopeConfig->expects($this->exactly(2))
+        $this->scopeConfig->expects($this->once())
             ->method('getValue')
-            ->withConsecutive(
-                ['web/unsecure/base_url', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
-                ['web/secure/use_in_frontend', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
-            )->will($this->onConsecutiveCalls(
-                $this->returnValue('https://localhost'),
-                1
-            ));
+            ->with('web/unsecure/base_url', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->willReturn('https://localhost');
+
+        $this->scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->with('web/secure/use_in_frontend', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->willReturn(!!1);
+
         $this->assertTrue($this->baseUrlChecker->isFrontendSecure());
     }
 }

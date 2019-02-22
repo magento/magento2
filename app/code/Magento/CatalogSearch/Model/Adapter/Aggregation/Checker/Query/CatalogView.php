@@ -17,8 +17,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Request checker for catalog view.
  *
  * Checks catalog view query whether required to collect all attributes for entity.
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
  */
 class CatalogView implements RequestCheckerInterface
 {
@@ -53,7 +51,7 @@ class CatalogView implements RequestCheckerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isApplicable(RequestInterface $request)
     {

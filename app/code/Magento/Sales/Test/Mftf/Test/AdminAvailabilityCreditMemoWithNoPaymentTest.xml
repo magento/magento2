@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAvailabilityCreditMemoWithNoPaymentTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="MAGETWO-91547: Unable to create Credit memo for order with no payment required"/>
+            <title value="Checking availability of 'Credit memo' button for order with no payment required"/>
+            <description value="*Credit Memo* button should be displayed"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94470"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Enable *Free Shipping* -->
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Disable *Free Shipping* -->
+            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
+            <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logOut"/>
+        </after>
+
+        <!-- Flush Magento Cache -->
+        <magentoCLI stepKey="flushCache" command="cache:flush"/>
+
+        <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->
+        <amOnPage url="{{AdminOrderCreatePage.url}}" stepKey="navigateToSalesOrderPage"/>
+        <waitForPageLoad stepKey="waitForSalesOrderPageLoaded"/>
+
+        <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
+        <waitForElementVisible stepKey="waitForNewOrderPageOpened" selector="{{NewOrderSection.submitOrder}}"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+
+        <!--Check if order can be submitted without the required fields including email address-->
+        <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="seeNewOrderPageTitle"/>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addFirstProductToOrder" after="scrollToTopOfOrderFormPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!--Click *Custom Price* link, enter 0 and click *Update Items and Quantities* button-->
+        <click selector="{{AdminOrderFormItemsSection.customPriceCheckbox}}" stepKey="clickCustomPriceCheckbox"/>
+        <waitForElementVisible stepKey="waitForPriceFieldAppears" selector="{{AdminOrderFormItemsSection.customPriceField}}"/>
+        <fillField selector="{{AdminOrderFormItemsSection.customPriceField}}" userInput="0" stepKey="fillCustomPriceField"/>
+        <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantitiesButton"/>
+
+        <!--Fill customer group and customer email-->
+        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectCustomerGroup" after="clickUpdateItemsAndQuantitiesButton"/>
+        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail" after="selectCustomerGroup"/>
+
+        <!--Fill customer address information-->
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress" after="fillCustomerEmail">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!-- Select Free shipping -->
+        <actionGroup ref="orderSelectFreeShipping" stepKey="selectFreeShippingOption" after="fillCustomerAddress"/>
+
+        <!--Click *Submit Order* button-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="selectFreeShippingOption"/>
+
+        <!--Click *Invoice* button-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
+        <waitForPageLoad stepKey="waitForInvoicePageOpened"/>
+
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <waitForPageLoad stepKey="waitForInvoiceSaved"/>
+        <see userInput="The invoice has been created." stepKey="seeCorrectMessage"/>
+
+        <!--Verify that *Credit Memo* button is displayed-->
+        <seeElement selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="seeCreditMemo"/>
+        <click selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="clickCreditMemoItem"/>
+        <waitForPageLoad stepKey="waitForCreditMemoPageLoaded"/>
+        <see stepKey="seeNewMemoPage" userInput="New Memo"/>
+        <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeUrlOnPage"/>
+    </test>
+</tests>

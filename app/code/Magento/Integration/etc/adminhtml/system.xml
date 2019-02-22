@@ -54,7 +54,7 @@
                     <label>Maximum Login Failures to Lock Out Account</label>
                     <comment>Maximum Number of authentication failures to lock out account.</comment>
                 </field>
-                <field id="timeout" translate="label" type="text comment" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="timeout" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Lockout Time (seconds)</label>
                     <comment>Period of time in seconds after which account will be unlocked.</comment>
                 </field>

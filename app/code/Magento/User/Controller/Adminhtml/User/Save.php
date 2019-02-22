@@ -10,8 +10,11 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
+use Magento\User\Model\Spi\NotificationExceptionInterface;
 
 /**
+ * Save admin user.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostActionInterface
@@ -37,7 +40,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
     }
 
     /**
-     * @return void
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -92,17 +95,19 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
             $currentUser->performIdentityCheck($data[$currentUserPasswordField]);
             $model->save();
 
-            $model->sendNotificationEmailsIfRequired();
-
             $this->messageManager->addSuccess(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
+
+            $model->sendNotificationEmailsIfRequired();
         } catch (UserLockedException $e) {
             $this->_auth->logout();
             $this->getSecurityCookie()->setLogoutReasonCookie(
                 \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             );
             $this->_redirect('adminhtml/*/');
+        } catch (NotificationExceptionInterface $exception) {
+            $this->messageManager->addErrorMessage($exception->getMessage());
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
             $this->messageManager->addError(
                 __('The password entered for the current user is invalid. Verify the password and try again.')
@@ -121,6 +126,8 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
     }
 
     /**
+     * Redirect to Edit form.
+     *
      * @param \Magento\User\Model\User $model
      * @param array $data
      * @return void

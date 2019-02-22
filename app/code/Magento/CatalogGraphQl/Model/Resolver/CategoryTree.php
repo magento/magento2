@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -28,15 +29,25 @@ class CategoryTree implements ResolverInterface
     private $categoryTree;
 
     /**
+     * @var ExtractDataFromCategoryTree
+     */
+    private $extractDataFromCategoryTree;
+
+    /**
      * @param \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree $categoryTree
+     * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
      */
     public function __construct(
-        \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree $categoryTree
+        \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree $categoryTree,
+        ExtractDataFromCategoryTree $extractDataFromCategoryTree
     ) {
         $this->categoryTree = $categoryTree;
+        $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
     }
 
     /**
+     * Get category id
+     *
      * @param array $args
      * @return int
      * @throws GraphQlInputException
@@ -62,7 +73,8 @@ class CategoryTree implements ResolverInterface
         $rootCategoryId = $this->getCategoryId($args);
         $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
         if (!empty($categoriesTree)) {
-            return current($categoriesTree);
+            $result = $this->extractDataFromCategoryTree->execute($categoriesTree);
+            return current($result);
         } else {
             return null;
         }
