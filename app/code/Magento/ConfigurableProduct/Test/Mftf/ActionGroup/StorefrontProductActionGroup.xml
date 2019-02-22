@@ -25,6 +25,15 @@
         <see userInput="{{product.custom_attributes[short_description]}}" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
     </actionGroup>
 
+    <!-- Check Storefront Configurable Product Option -->
+    <actionGroup name="VerifyOptionInProductStorefront">
+        <arguments>
+            <argument name="attributeCode" type="string"/>
+            <argument name="optionName" type="string"/>
+        </arguments>
+        <seeElement selector="{{StorefrontProductInfoMainSection.attributeOptionByAttributeID(attributeCode, optionName)}}" stepKey="verifyOptionExists"/>
+    </actionGroup>
+
     <!-- Verify configurable product options in storefront product view -->
     <actionGroup name="storefrontCheckConfigurableProductOptions">
         <arguments>

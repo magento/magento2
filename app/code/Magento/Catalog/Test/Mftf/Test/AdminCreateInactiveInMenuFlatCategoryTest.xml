@@ -42,6 +42,9 @@
             <magentoCLI command="cron:run" stepKey="runCron2"/>
         </before>
         <after>
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
+            <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="realtime" />
+            <magentoCLI stepKey="indexerReindex" command="indexer:reindex" />
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
@@ -49,7 +52,6 @@
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Select created category and disable Include In Menu option-->
