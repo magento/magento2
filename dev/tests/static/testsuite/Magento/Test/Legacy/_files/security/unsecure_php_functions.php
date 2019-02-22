@@ -63,6 +63,16 @@ return [
                 'type' => 'module',
                 'name' => 'Magento_AsynchronousOperations',
                 'path' => 'Model/ResourceModel/System/Message/Collection/Synchronized/Plugin.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_AuthorizenetAcceptjs',
+                'path' => 'Gateway/Validator/TransactionHashValidator.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Authorizenet',
+                'path' => 'Model/Directpost/Response.php'
             ]
         ]
     ],
