@@ -365,7 +365,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         if ($request->getDestPostcode()) {
             $r->setDestPostal($request->getDestPostcode());
-        } else {
         }
 
         if ($request->getDestCity()) {

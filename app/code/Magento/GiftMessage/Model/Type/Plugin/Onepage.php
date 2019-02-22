@@ -32,7 +32,7 @@ class Onepage
     /**
      * @param \Magento\Checkout\Model\Type\Onepage $subject
      * @param array $result
-     * @return $this
+     * @return array
      */
     public function afterSaveShippingMethod(
         \Magento\Checkout\Model\Type\Onepage $subject,
