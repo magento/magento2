@@ -23,7 +23,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="DeleteNewCustomerByEmailActionGroup" stepKey="deleteNewUser">
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
@@ -34,7 +34,7 @@
             <argument name="customer" value="CustomerEntityOne" />
         </actionGroup>
 
-        <!--Verify created new customer in grid-->
+        <!--Assert verify created new customer in grid-->
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
         <waitForPageLoad stepKey="waitForNavigateToCustomersPageLoad"/>
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="clickFilterButton"/>
@@ -44,7 +44,7 @@
         <see selector="{{AdminCustomerGridSection.customerGrid}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="seeAssertCustomerLastNameInGrid"/>
         <see selector="{{AdminCustomerGridSection.customerGrid}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeAssertCustomerEmailInGrid"/>
 
-        <!--Verify created new customer is subscribed to newsletter-->
+        <!--Assert verify created new customer is subscribed to newsletter-->
         <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickFirstRowEditLink"/>
         <waitForPageLoad stepKey="waitForEditLinkLoad"/>
         <click selector="{{AdminEditCustomerInformationSection.newsLetter}}" stepKey="clickNewsLetter"/>

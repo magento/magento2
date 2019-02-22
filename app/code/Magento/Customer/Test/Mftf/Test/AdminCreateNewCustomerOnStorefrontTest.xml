@@ -23,7 +23,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="DeleteNewCustomerByEmailActionGroup" stepKey="deleteNewUser">
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
