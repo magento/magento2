@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
 /**
  * Catalog Product Eav Select and Multiply Select Attributes Indexer resource model
@@ -25,6 +26,16 @@ class Source extends AbstractEav
     protected $_resourceHelper;
 
     /**
+     * @var \Magento\Eav\Api\AttributeRepositoryInterface
+     */
+    private $attributeRepository;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $criteriaBuilder;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -33,6 +44,8 @@ class Source extends AbstractEav
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param null|string $connectionName
+     * @param \Magento\Eav\Api\AttributeRepositoryInterface|null $attributeRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder|null $criteriaBuilder
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -40,7 +53,9 @@ class Source extends AbstractEav
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository = null,
+        \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder = null
     ) {
         parent::__construct(
             $context,
@@ -50,6 +65,12 @@ class Source extends AbstractEav
             $connectionName
         );
         $this->_resourceHelper = $resourceHelper;
+        $this->attributeRepository = $attributeRepository
+            ?: \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Eav\Api\AttributeRepositoryInterface::class);
+        $this->criteriaBuilder = $criteriaBuilder
+            ?: \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Api\SearchCriteriaBuilder::class);
     }
 
     /**
@@ -84,7 +105,7 @@ class Source extends AbstractEav
         if ($multiSelect == true) {
             $select->where('ea.backend_type = ?', 'varchar')->where('ea.frontend_input = ?', 'multiselect');
         } else {
-            $select->where('ea.backend_type = ?', 'int')->where('ea.frontend_input = ?', 'select');
+            $select->where('ea.backend_type = ?', 'int')->where('ea.frontend_input IN( ? )', ['select', 'boolean']);
         }
 
         return $this->getConnection()->fetchCol($select);
@@ -234,6 +255,10 @@ class Source extends AbstractEav
             $options[$row['attribute_id']][$row['option_id']] = true;
         }
 
+        // Retrieve any custom source model options
+        $sourceModelOptions = $this->getMultiSelectAttributeWithSourceModels($attrIds);
+        $options = array_replace_recursive($options, $sourceModelOptions);
+
         // prepare get multiselect values query
         $productValueExpression = $connection->getCheckSql('pvs.value_id > 0', 'pvs.value', 'pvd.value');
         $select = $connection->select()->from(
@@ -298,6 +323,39 @@ class Source extends AbstractEav
     }
 
     /**
+     * Get options for multiselect attributes using custom source models
+     * Based on @maderlock's fix from:
+     * https://github.com/magento/magento2/issues/417#issuecomment-265146285
+     *
+     * @param array $attrIds
+     *
+     * @return array
+     */
+    private function getMultiSelectAttributeWithSourceModels($attrIds)
+    {
+        // Add options from custom source models
+        $this->criteriaBuilder
+                ->addFilter('attribute_id', $attrIds, 'in')
+                ->addFilter('source_model', true, 'notnull');
+        $criteria = $this->criteriaBuilder->create();
+        $attributes = $this->attributeRepository->getList(
+            ProductAttributeInterface::ENTITY_TYPE_CODE,
+            $criteria
+        )->getItems();
+        
+        $options = [];
+        foreach ($attributes as $attribute) {
+            $sourceModelOptions = $attribute->getOptions();
+            // Add options to list used below
+            foreach ($sourceModelOptions as $option) {
+                $options[$attribute->getAttributeId()][$option->getValue()] = true;
+            }
+        }
+
+        return $options;
+    }
+
+    /**
      * Save a data to temporary source index table
      *
      * @param array $data
@@ -330,6 +388,8 @@ class Source extends AbstractEav
     }
 
     /**
+     * Save data from select
+     *
      * @param \Magento\Framework\DB\Select $select
      * @param array $options
      * @return void

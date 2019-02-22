@@ -77,7 +77,7 @@ class Csv implements ReportProcessorInterface
         $outputCsv = $this->createOutputCsvModel($outputFileName);
 
         $columnsName = $sourceCsv->getColNames();
-        array_push($columnsName, self::REPORT_ERROR_COLUMN_NAME);
+        $columnsName[] = self::REPORT_ERROR_COLUMN_NAME;
         $outputCsv->setHeaderCols($columnsName);
 
         foreach ($sourceCsv as $rowNum => $rowData) {

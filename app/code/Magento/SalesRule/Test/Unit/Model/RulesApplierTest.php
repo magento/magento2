@@ -140,6 +140,9 @@ class RulesApplierTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($appliedRuleIds, $result);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderChildren()
     {
         return [
@@ -179,6 +182,10 @@ class RulesApplierTest extends \PHPUnit\Framework\TestCase
         return $item;
     }
 
+    /**
+     * @param $item
+     * @param $rule
+     */
     protected function applyRule($item, $rule)
     {
         $qty = 2;

@@ -40,12 +40,12 @@ class Company extends AbstractWidget
     protected $options;
 
     /**
-     * @param Context                   $context
-     * @param AddressHelper             $addressHelper
+     * @param Context $context
+     * @param AddressHelper $addressHelper
      * @param CustomerMetadataInterface $customerMetadata
-     * @param Options                   $options
-     * @param AddressMetadataInterface  $addressMetadata
-     * @param array                     $data
+     * @param Options $options
+     * @param AddressMetadataInterface $addressMetadata
+     * @param array $data
      */
     public function __construct(
         Context $context,
@@ -69,7 +69,7 @@ class Company extends AbstractWidget
         parent::_construct();
 
         // default template location
-        $this->setTemplate('widget/company.phtml');
+        $this->setTemplate('Magento_Customer::widget/company.phtml');
     }
 
     /**
@@ -95,7 +95,7 @@ class Company extends AbstractWidget
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getAttribute($attributeCode)
     {

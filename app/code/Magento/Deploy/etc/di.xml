@@ -71,15 +71,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Deploy\App\Mode\ConfigProvider">
-        <arguments>
-            <argument name="config" xsi:type="array">
-                <item name="developer" xsi:type="array">
-                    <item name="production" xsi:type="array">
-                        <item name="dev/debug/debug_logging" xsi:type="string">0</item>
-                    </item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
 </config>

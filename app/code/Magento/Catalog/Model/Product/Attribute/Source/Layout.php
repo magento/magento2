@@ -18,6 +18,12 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     protected $pageLayoutBuilder;
 
     /**
+     * @inheritdoc
+     * @deprecated since the cache is now handled by \Magento\Theme\Model\PageLayout\Config\Builder::$configFiles
+     */
+    protected $_options = null;
+
+    /**
      * @param \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder
      */
     public function __construct(\Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder)
@@ -26,14 +32,14 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getAllOptions()
     {
-        if (!$this->_options) {
-            $this->_options = $this->pageLayoutBuilder->getPageLayoutsConfig()->toOptionArray();
-            array_unshift($this->_options, ['value' => '', 'label' => __('No layout updates')]);
-        }
-        return $this->_options;
+        $options = $this->pageLayoutBuilder->getPageLayoutsConfig()->toOptionArray();
+        array_unshift($options, ['value' => '', 'label' => __('No layout updates')]);
+        $this->_options = $options;
+
+        return $options;
     }
 }

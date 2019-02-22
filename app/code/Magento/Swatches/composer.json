@@ -13,6 +13,7 @@
         "magento/module-configurable-product": "*",
         "magento/module-customer": "*",
         "magento/module-eav": "*",
+        "magento/module-page-cache": "*",
         "magento/module-media-storage": "*",
         "magento/module-store": "*",
         "magento/module-theme": "*"
@@ -23,7 +24,8 @@
     },
     "type": "magento2-module",
     "license": [
-        "proprietary"
+        "OSL-3.0",
+        "AFL-3.0"
     ],
     "autoload": {
         "files": [

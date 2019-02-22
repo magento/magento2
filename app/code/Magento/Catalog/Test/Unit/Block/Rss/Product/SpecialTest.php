@@ -167,6 +167,9 @@ class SpecialTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getItemMock()
     {
         $item = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)

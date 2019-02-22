@@ -530,7 +530,7 @@
                 display: block;
                 .lib-css(padding, @_table-responsive-cell-padding);
 
-                &:before {
+                &[data-th]:before {
                     .lib-css(padding-right, @table-cell__padding-horizontal);
                     content: attr(data-th)': ';
                     display: inline-block;

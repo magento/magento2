@@ -4,6 +4,9 @@
 type Query {
 }
 
+type Mutation {
+}
+
 input FilterTypeInput @doc(description: "FilterTypeInput specifies which action will be performed in a query ") {
     eq: String @doc(description: "Equals")
     finset: [String] @doc(description: "Find in set. The value can contain a set of comma-separated values")
@@ -25,9 +28,14 @@ input FilterTypeInput @doc(description: "FilterTypeInput specifies which action 
 type SearchResultPageInfo @doc(description: "SearchResultPageInfo provides navigation for the query response") {
     page_size: Int @doc(description: "Specifies the maximum number of items to return")
     current_page: Int @doc(description: "Specifies which page of results to return")
+    total_pages: Int @doc(description: "Total pages")
 }
 
 enum SortEnum @doc(description: "This enumeration indicates whether to return results in ascending or descending order") {
     ASC
     DESC
+}
+
+type ComplexTextValue {
+    html: String! @doc(description: "HTML format")
 }

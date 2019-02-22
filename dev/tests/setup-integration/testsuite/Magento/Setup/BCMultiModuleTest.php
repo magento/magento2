@@ -7,14 +7,12 @@
 namespace Magento\Setup;
 
 use Magento\Framework\Module\DbVersionInfo;
-use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TableData;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\SetupTestCase;
 
 /**
@@ -77,7 +75,7 @@ class BCMultiModuleTest extends SetupTestCase
         //Check if declaration is applied
         $indexes = $this->dbSchemaReader->readIndexes('test_table', 'default');
         self::assertCount(1, $indexes);
-        self::assertArrayHasKey('speedup_index', $indexes);
+        self::assertArrayHasKey('TEST_TABLE_TINYINT_BIGINT', $indexes);
         //Check UpgradeSchema old format, that modify declaration
         $columns = $this->dbSchemaReader->readColumns('test_table', 'default');
         $floatColumn = $columns['float'];
@@ -198,5 +196,70 @@ class BCMultiModuleTest extends SetupTestCase
         $this->cliCommand->upgrade();
         $tables = $this->dbSchemaReader->readTables('default');
         self::assertNotContains('custom_table', $tables);
+    }
+
+    /**
+     * @moduleName Magento_TestSetupDeclarationModule1
+     * @dataProvider firstCleanInstallOneModuleDataProvider
+     * @param string $dbPrefix
+     * @param string $tableName
+     * @param string $indexName
+     * @param string $constraintName
+     * @param string $foreignKeyName
+     * @throws \Exception
+     */
+    public function testFirstCleanInstallOneModule(
+        string $dbPrefix,
+        string $tableName,
+        string $indexName,
+        string $constraintName,
+        string $foreignKeyName
+    ) {
+        $this->cliCommand->install(
+            [
+                'Magento_TestSetupDeclarationModule1'
+            ],
+            [
+                'db-prefix' => $dbPrefix,
+            ]
+        );
+
+        $indexes = $this->dbSchemaReader
+            ->readIndexes($tableName, 'default');
+        self::assertCount(1, $indexes);
+        self::assertArrayHasKey($indexName, $indexes);
+
+        $constraints = $this->dbSchemaReader
+            ->readConstraints($tableName, 'default');
+        self::assertCount(1, $constraints);
+        self::assertArrayHasKey($constraintName, $constraints);
+
+        $foreignKeys = $this->dbSchemaReader
+            ->readReferences($tableName, 'default');
+        self::assertCount(1, $foreignKeys);
+        self::assertArrayHasKey($foreignKeyName, $foreignKeys);
+    }
+
+    /**
+     * @return array
+     */
+    public function firstCleanInstallOneModuleDataProvider()
+    {
+        return [
+            'Installation without db prefix' => [
+                'dbPrefix' => '',
+                'tableName' => 'test_table',
+                'indexName' => 'TEST_TABLE_TINYINT_BIGINT',
+                'constraintName' => 'TEST_TABLE_SMALLINT_BIGINT',
+                'foreignKeyName' => 'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF',
+            ],
+            'Installation with db prefix' => [
+                'dbPrefix' => 'spec_',
+                'tableName' => 'spec_test_table',
+                'indexName' => 'SPEC_TEST_TABLE_TINYINT_BIGINT',
+                'constraintName' => 'SPEC_TEST_TABLE_SMALLINT_BIGINT',
+                'foreignKeyName' => 'SPEC_TEST_TABLE_TINYINT_SPEC_REFERENCE_TABLE_TINYINT_REF',
+            ]
+        ];
     }
 }

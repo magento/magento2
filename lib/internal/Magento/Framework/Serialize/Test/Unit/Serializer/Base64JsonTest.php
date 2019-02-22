@@ -30,6 +30,9 @@ class Base64JsonTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->base64json->serialize($value));
     }
 
+    /**
+     * @return array
+     */
     public function serializeDataProvider()
     {
         $dataObject = new \Magento\Framework\DataObject(['something']);
@@ -55,6 +58,9 @@ class Base64JsonTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->base64json->unserialize($value));
     }
 
+    /**
+     * @return array
+     */
     public function unserializeDataProvider()
     {
         return [

@@ -91,6 +91,8 @@ class TableMaintainer
      * @param string $newTableName
      *
      * @return void
+     *
+     * @throws \Zend_Db_Exception
      */
     private function createTable($mainTableName, $newTableName)
     {
@@ -135,11 +137,13 @@ class TableMaintainer
      * @param $storeId
      *
      * @return void
+     *
+     * @throws \Zend_Db_Exception
      */
     public function createTablesForStore(int $storeId)
     {
         $mainTableName = $this->getMainTable($storeId);
-        //Create index table for store based on on main replica table
+        //Create index table for store based on main replica table
         //Using main replica table is necessary for backward capability and TableResolver plugin work
         $this->createTable(
             $this->getTable(AbstractAction::MAIN_INDEX_TABLE . $this->additionalTableSuffix),
@@ -206,12 +210,12 @@ class TableMaintainer
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getMainTmpTable(int $storeId)
     {
         if (!isset($this->mainTmpTable[$storeId])) {
-            throw new \Exception('Temporary table does not exist');
+            throw new \Magento\Framework\Exception\NoSuchEntityException('Temporary table does not exist');
         }
         return $this->mainTmpTable[$storeId];
     }

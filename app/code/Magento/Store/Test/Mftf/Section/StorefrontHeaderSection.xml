@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontHeaderSection">
+        <element name="storeViewSwitcher" type="button" selector="#switcher-language-trigger"/>
+        <element name="storeViewDropdown" type="button" selector=".active ul.switcher-dropdown"/>
+        <element name="storeViewOption" type="button" selector="li.view-{{var1}}>a" parameterized="true"/>
+        <element name="storeView" type="button" selector="//div[@class='actions dropdown options switcher-options active']//ul//li//a[contains(text(),'{{var}}')]" parameterized="true"/>
+        <element name="storeViewList" type="button" selector="//li[contains(.,'{{storeViewName}}')]//a" parameterized="true"/>
+    </section>
+</sections>

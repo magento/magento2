@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteABundleProduct">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Admin list bundle products"/>
+            <title value="Admin should be able to delete a bundle product"/>
+            <description value="Admin should be able to delete a bundle product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-216"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+        </before>
+        <after>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+        </after>
+
+        <!--Create bundle product-->
+        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
+        <waitForPageLoad stepKey="waitForBundleProductCreationPage"/>
+        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
+        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
+        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle"/>
+        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions2">
+            <argument name="product" value="$$simpleProduct2$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow2"/>
+        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty1"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty2"/>
+
+        <!--Fill out ancillary data on bundle product-->
+        <actionGroup ref="AncillaryPrepBundleProduct" stepKey="createBundledProductForTwoSimpleProducts"/>
+
+        <!--Save the product-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
+
+        <!--Go to catalog deletion page-->
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogPage"/>
+        <waitForPageLoad stepKey="Loading"/>
+
+        <!--Apply Name Filter-->
+        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="SelectAllOnly1"/>
+        <waitForPageLoad stepKey="loading2"/>
+
+        <!--Delete-->
+        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="ClickOnActionsChangingView"/>
+        <click selector="{{AdminProductFiltersSection.delete}}" stepKey="ClickDelete"/>
+        <click selector="//button[@class='action-primary action-accept']" stepKey="ConfirmDelete"/>
+        <waitForPageLoad stepKey="loading3"/>
+
+        <!--Locating delete message-->
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="deleteMessage"/>
+
+        <!--Testing deletion of product-->
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
+        <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
+        <dontSeeElement selector="{{StorefrontBundledSection.bundleProductName}}" stepKey="LookingForNameOfProductTwo"/>
+    </test>
+</tests>

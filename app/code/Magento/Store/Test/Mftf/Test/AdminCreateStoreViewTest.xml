@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="AdminCreateStoreViewTest">
+            <annotations>
+                <features value="Store"/>
+                <stories value="Create a store view in admin"/>
+                <title value="Admin should be able to create a store view"/>
+                <description value="Admin should be able to create a store view"/>
+                <group value="storeView"/>
+                <severity value="AVERAGE"/>
+                <testCaseId value="MAGETWO-95111"/>
+            </annotations>
+            <before>
+                <actionGroup ref="LoginActionGroup" stepKey="login"/>
+                <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+                <!--<createData stepKey="b2" entity="customStoreGroup"/>-->
+            </before>
+            <!--Save store view on Store Grid-->
+            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="createStoreViewSave" />
+            <!--Confirm new store view created on Store Grid-->
+            <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilter"/>
+            <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearch" />
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <see selector="{{AdminStoresGridSection.storeNameInFirstRow}}" userInput="{{customStore.name}}" stepKey="seeNewStoreView" />
+            <!--Creating the same store view to validate the code uniqueness on store form-->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView2" />
+            <actionGroup ref="AdminCreateStoreViewCodeUniquenessActionGroup" stepKey="createStoreViewCode" />
+            <after>
+                <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                    <argument name="customStore" value="customStore"/>
+                </actionGroup>
+                <actionGroup ref="logout" stepKey="logout"/>
+            </after>
+        </test>
+</tests>

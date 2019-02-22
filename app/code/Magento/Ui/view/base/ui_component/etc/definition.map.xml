@@ -14,17 +14,14 @@
                     <item name="label" type="string" translate="true" xsi:type="xpath">settings/label</item>
                     <item name="type" type="string" xsi:type="xpath">settings/type</item>
                     <item name="url" type="url" xsi:type="converter">settings/url</item>
+                    <item name="actionDisable" type="boolean" xsi:type="xpath">settings/actionDisable</item>
                     <item name="confirm" xsi:type="array">
                         <item name="title" type="string" translate="true" xsi:type="xpath">settings/confirm/title</item>
-                        <item name="message" type="string" translate="true" xsi:type="xpath">settings/confirm/message
-                        </item>
+                        <item name="message" type="string" translate="true" xsi:type="xpath">settings/confirm/message</item>
                     </item>
                     <item name="callback" xsi:type="array">
-                        <item name="provider" type="string" translate="true" xsi:type="xpath">
-                            settings/callback/provider
-                        </item>
-                        <item name="target" type="string" translate="true" xsi:type="xpath">settings/callback/target
-                        </item>
+                        <item name="provider" type="string" translate="true" xsi:type="xpath">settings/callback/provider</item>
+                        <item name="target" type="string" translate="true" xsi:type="xpath">settings/callback/target</item>
                     </item>
                 </item>
             </argument>
@@ -59,8 +56,7 @@
                 <item name="config" xsi:type="array">
                     <item name="childDefaults" type="item" xsi:type="converter">settings/childDefaults</item>
                     <item name="viewTmpl" type="string" xsi:type="xpath">settings/viewTmpl</item>
-                    <item name="newViewLabel" translate="true" type="string" xsi:type="xpath">settings/newViewLabel
-                    </item>
+                    <item name="newViewLabel" translate="true" type="string" xsi:type="xpath">settings/newViewLabel</item>
                 </item>
             </argument>
         </schema>
@@ -265,9 +261,7 @@
                     <item name="columnsHeaderClasses" type="string" xsi:type="xpath">settings/columnsHeaderClasses</item>
                     <item name="recordTemplate" type="string" xsi:type="xpath">settings/recordTemplate</item>
                     <item name="collapsibleHeader" type="boolean" xsi:type="xpath">settings/collapsibleHeader</item>
-                    <item name="addButtonLabel" type="string" translate="true" xsi:type="xpath">
-                        settings/addButtonLabel
-                    </item>
+                    <item name="addButtonLabel" type="string" translate="true" xsi:type="xpath">settings/addButtonLabel</item>
                     <item name="addButton" type="boolean" xsi:type="xpath">settings/addButton</item>
                     <item name="deleteProperty" type="string" xsi:type="xpath">settings/deleteProperty</item>
                     <item name="identificationProperty" type="string" xsi:type="xpath">settings/identificationProperty</item>

@@ -35,6 +35,9 @@
                                                                         <item name="braintree_paypal" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">false</item>
                                                                         </item>
+                                                                        <item name="braintree_cc_vault" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
                                                                     </item>
                                                                 </item>
                                                             </item>

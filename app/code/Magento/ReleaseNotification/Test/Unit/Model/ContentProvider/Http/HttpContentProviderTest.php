@@ -173,6 +173,9 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($response, $this->httpContentProvider->getContent($version, $edition, $locale));
     }
 
+    /**
+     * @return array
+     */
     public function getGetContentOnDefaultOrEmptyProvider()
     {
         return [

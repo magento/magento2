@@ -46,6 +46,7 @@ Disallow: /*SID=
             </header>
             <footer translate="copyright">
                 <copyright>Copyright &#169; 2013-present Magento, Inc. All rights reserved.</copyright>
+                <report_bugs>1</report_bugs>
             </footer>
         </design>
         <theme>

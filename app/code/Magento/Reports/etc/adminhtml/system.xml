@@ -39,6 +39,62 @@
                     <comment>Select day of the month.</comment>
                 </field>
             </group>
+            <group id="options" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Options</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Reports</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If disabled, all report events will be disabled</comment>
+                </field>
+                <field id="product_view_enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable "Product View" Report</label>
+                    <comment>If enabled, will collect statistic of viewed product pages</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="product_send_enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable "Send Product Link To Friend" Report</label>
+                    <comment>If enabled, will collect statistic of product links sent to friend</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="product_compare_enabled" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable "Add Product To Compare List" Report</label>
+                    <comment>If enabled, will collect statistic of products added to Compare List</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="product_to_cart_enabled" translate="label comment" type="select" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable "Product Added To Cart" Report</label>
+                    <comment>If enabled, will collect statistic of products added to Cart</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="product_to_wishlist_enabled" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable "Product Added To WishList" Report</label>
+                    <comment>If enabled, will collect statistic of products added to WishList</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="wishlist_share_enabled" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable "Share WishList" Report</label>
+                    <comment>If enabled, will collect statistic of shared WishLists</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
         </section>
     </system>
 </config>

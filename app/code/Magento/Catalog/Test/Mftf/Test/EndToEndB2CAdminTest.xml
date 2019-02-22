@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EndToEndB2CAdminTest">
+        <annotations>
+            <features value="End to End scenarios"/>
+            <stories value="B2C admin - MAGETWO-75412"/>
+            <group value="e2e"/>
+            <title value="Pass End to End B2C Admin scenario"/>
+            <description value="Admin creates products, creates and manages categories, creates promotions, creates an order, processes an order, processes a return, uses admin grids"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-87014"/>
+            <skip>
+                <issueId value="MQE-891"/>
+            </skip>
+        </annotations>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!--Login to Admin Area-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+
+        <!--Admin creates product-->
+        <!--Create Simple Product-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageSimple"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageLoadSimple"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateSimpleProduct">
+                <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="checkRequiredFieldsInProductForm" stepKey="checkRequiredFieldsProductSimple"/>
+        <actionGroup ref="fillMainProductForm" stepKey="fillSimpleProductMain">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="addProductImage" stepKey="addImageForProductSimple">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackToGridSimple"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridSimple">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <grabAttributeFrom selector="{{AdminProductGridSection.productThumbnail('1')}}" userInput="src" stepKey="getSimpleProductThumbnail"/>
+        <assertNotRegExp expected="'/placeholder\/thumbnail\.jpg/'" actual="$getSimpleProductThumbnail" stepKey="simpleThumbnailIsNotDefault"/>
+        <actionGroup ref="viewProductInAdminGrid" stepKey="seeSimpleProductInGrid">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+
+        <!--Create Virtual Product-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageVirtual"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageLoadVirtual"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateVirtualProduct">
+            <argument name="product" value="VirtualProduct"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{VirtualProduct.sku}}" stepKey="fillVirtualName"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{VirtualProduct.name}}" stepKey="fillVirtualSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{VirtualProduct.price}}" stepKey="fillVirtualPrice"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{VirtualProduct.quantity}}" stepKey="fillVirtualQty"/>
+        <actionGroup ref="saveProductForm" stepKey="saveVirtualProduct"/>
+        <actionGroup ref="viewProductInAdminGrid" stepKey="viewVirtualProductInGrid">
+            <argument name="product" value="VirtualProduct"/>
+        </actionGroup>
+
+        <!--Admin uses product grid-->
+        <!--Start with default view-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageGrid"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+
+        <!--Search by keyword-->
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
+        <actionGroup ref="searchProductGridByKeyword" stepKey="useKeywordSearchSimpleProduct">
+            <argument name="keyword" value="SimpleProduct.name"/>
+        </actionGroup>
+        <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="1" stepKey="seeOnlyOneProductInGrid"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{SimpleProduct.name}}" stepKey="seeOnlySimpleProductInGrid"/>
+
+        <!--Paging works-->
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="setProductGridToDefaultPagination"/>
+        <comment userInput="Admin uses paging on product grid" stepKey="usePagingProductGridComment"/>
+        <click selector="{{AdminProductGridPaginationSection.perPageDropdown}}" stepKey="clickProductPerPageDropdown"/>
+        <click selector="{{AdminProductGridPaginationSection.perPageOption('50')}}" stepKey="selectProductsPerPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForProductGridLoad50PerPage"/>
+        <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" parameterArray="[5,50]" stepKey="see50ProductsInGrid"/>
+        <click selector="{{AdminProductGridPaginationSection.perPageDropdown}}" stepKey="clickProductPerPageDropdownCustom"/>
+        <click selector="{{AdminProductGridPaginationSection.perPageOption('Custom')}}" stepKey="selectCustomPerPage"/>
+        <fillField selector="{{AdminProductGridPaginationSection.perPageInput}}" userInput="5" stepKey="fillCustomPerPage"/>
+        <click selector="{{AdminProductGridPaginationSection.perPageApplyInput}}" stepKey="applyCustomPerPage"/>
+        <waitForPageLoad stepKey="waitForPageRefreshCustomPerPage"/>
+        <seeInField selector="{{AdminProductGridPaginationSection.currentPage}}" userInput="1" stepKey="seeOnFirstProductPage"/>
+        <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="5" stepKey="seeProductsOnFirstPage"/>
+        <click selector="{{AdminProductGridPaginationSection.nextPage}}" stepKey="clickNextProductPage"/>
+        <seeInField selector="{{AdminProductGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondProductPage"/>
+        <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" parameterArray="[1,5]" stepKey="seeProductsOnSecondPage"/>
+
+        <!--Filtering works  (by Name, By Price, by Status)-->
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="setProductGridToDefaultFiltering"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridByGroupedSku">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+        <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="1" stepKey="seeOneMatchingSkuInProductGrid"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1','SKU')}}" userInput="{{GroupedProduct.sku}}" stepKey="seeProductInFilteredGridSku"/>
+        <!--Filter by price-->
+        <actionGroup ref="filterProductGridByPriceRange" stepKey="filterProductGridByPrice">
+            <argument name="filter" value="PriceFilterRange"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="clickPriceHeaderToSortAscForFilter"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'Price')}}" stepKey="getMinimumPriceInGrid"/>
+        <click selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="clickPriceHeaderToSortDescForFilter"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'Price')}}" stepKey="getMaximumPriceInGrid"/>
+        <assertRegExp expected="'/\$[0-9]{2}\.[0-9]{2}/'" actual="$getMinimumPriceInGrid" stepKey="assertMinimumPriceIsCorrect"/>
+        <assertRegExp expected="'/\$[0-9]{2}\.[0-9]{2}/'" actual="$getMaximumPriceInGrid" stepKey="assertMaximumPriceIsCorrect"/>
+        <assertLessThan expected="$getMaximumPriceInGrid" actual="$getMinimumPriceInGrid" stepKey="checkPriceSortCorrect"/>
+        <!--Filter by status-->
+        <actionGroup ref="filterProductGridByEnabledStatus" stepKey="filterGridByEnabledProducts"/>
+        <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" parameterArray="[1,20]" stepKey="seeEnabledProductsNotEmpty"/>
+        <see selector="{{AdminProductGridSection.column('Status')}}" userInput="Enabled" stepKey="seeOnlyEnabledProducts"/>
+        <actionGroup ref="filterProductGridByDisabledStatus" stepKey="filterGridByDisabledProducts"/>
+        <dontSee selector="{{AdminProductGridSection.column('Status')}}" userInput="Enabled" stepKey="dontSeeEnabledProducts"/>
+
+        <!--Sorting works (By Price, by ID)-->
+        <!--By Price-->
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="setProductGridToDefaultSortingPrice"/>
+        <!--Filter by price so grid contains prices that we can compare correctly-->
+        <actionGroup ref="filterProductGridByPriceRange" stepKey="filterProductGridByPriceForCompare">
+            <argument name="filter" value="PriceFilterRange"/>
+        </actionGroup>
+        <!--Sort Ascending-->
+        <click selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="clickPriceHeaderToSortAsc"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'Price')}}" stepKey="getFirstPriceSortAsc"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('2', 'Price')}}" stepKey="getSecondPriceSortAsc"/>
+        <assertLessThanOrEqual expected="$getSecondPriceSortAsc" actual="$getFirstPriceSortAsc" stepKey="checkPriceAscSortCorrect"/>
+        <!--Sort Descending-->
+        <click selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="clickPriceHeaderToSortDesc"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'Price')}}" stepKey="getFirstPriceSortDesc"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('2', 'Price')}}" stepKey="getSecondPriceSortDesc"/>
+        <assertGreaterThanOrEqual expected="$getSecondPriceSortDesc" actual="$getFirstPriceSortDesc" stepKey="checkPriceDescSortCorrect"/>
+        <!--By Product ID-->
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="setProductGridToDefaultSortingId"/>
+        <!--Sort Ascending-->
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'ID')}}" stepKey="getFirstProductIdSortAsc"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('2', 'ID')}}" stepKey="getSecondProductIdSortAsc"/>
+        <assertLessThan expected="$getSecondProductIdSortAsc" actual="$getFirstProductIdSortAsc" stepKey="checkProductIdAscSortCorrect"/>
+        <!--Sort Descending-->
+        <click selector="{{AdminProductGridSection.columnHeader('ID')}}" stepKey="clickIdHeaderToSortDesc"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'ID')}}" stepKey="getFirstProductIdSortDesc"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('2', 'ID')}}" stepKey="getSecondProductIdSortDesc"/>
+        <assertGreaterThan expected="$getSecondProductIdSortDesc" actual="$getFirstProductIdSortDesc" stepKey="checkProductIdDescSortCorrect"/>
+
+        <!--Adding column works-->
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="setProductGridToDefaultColumns"/>
+        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsDropdownToReset"/>
+        <click selector="{{AdminProductGridFilterSection.resetGridColumns}}" stepKey="resetProductGridColumns"/>
+        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsDropdownAfterReset"/>
+        <!--Remove Price column-->
+        <seeElement selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="seeProductPriceColumn"/>
+        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsDropdown"/>
+        <uncheckOption selector="{{AdminProductGridFilterSection.viewColumnOption('Price')}}" stepKey="hidePriceColumn"/>
+        <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="dontSeeProductPriceColumn"/>
+        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsDropdown"/>
+        <!--Add Weight column-->
+        <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Weight')}}" stepKey="dontSeeWeightColumn"/>
+        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsDropdownWeight"/>
+        <checkOption selector="{{AdminProductGridFilterSection.viewColumnOption('Weight')}}" stepKey="showWeightColumn"/>
+        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsDropdownWeight"/>
+        <seeElement selector="{{AdminProductGridSection.columnHeader('Weight')}}" stepKey="seeWeightColumn"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridToCheckWeightColumn">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productGridCell('1','Weight')}}" userInput="{{SimpleProduct.weight}}" stepKey="seeCorrectProductWeightInGrid"/>
+        <!--END Admin uses product grid-->
+
+        <!--Admin creates category-->
+        <comment userInput="Admin creates category." stepKey="adminCreatesCategoryComment" before="navigateToCategoryPage"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoad"/>
+        <!--Create category under Default Category-->
+        <click selector="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}" stepKey="clickDefaultCategory"/>
+        <actionGroup ref="CheckCategoryNameIsRequiredField" stepKey="checkCategoryNameIsRequired"/>
+        <actionGroup ref="CreateCategory" stepKey="createCategory">
+            <argument name="categoryEntity" value="_defaultCategory"/>
+        </actionGroup>
+        <!--Create category under newly created category-->
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="clickCreatedCategoryInTree"/>
+        <actionGroup ref="CreateCategory" stepKey="createSubCategory">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
+
+        <!--Admin moves category-->
+        <comment userInput="Admin moves category." stepKey="adminMovesCategoryComment" before="onCategoryPageToMoveCategory"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="onCategoryPageToMoveCategory"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadMoveCategory"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandTree"/>
+        <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}"
+                     selector2="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}"
+                     stepKey="dragAndDropCategory"/>
+        <waitForPageLoad time="30" stepKey="waitForMoveConfirmation"/>
+        <see selector="{{AdminCategoryModalSection.title}}" userInput="Warning Message" stepKey="seeMoveConfirmationModal"/>
+        <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkConfirmMove"/>
+        <waitForPageLoad time="30" stepKey="waitForMove"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeCategoryMoveSuccessMessage"/>
+        <seeElement selector="{{AdminCategorySidebarTreeSection.categoryInTreeUnderRoot(SimpleSubCategory.name)}}" stepKey="seeSubcategoryIsUnderDefault"/>
+
+        <!--Admin deletes category-->
+        <comment userInput="Admin deletes category" stepKey="deleteCategoryComment"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="onCategoryPageToDeleteCategory"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageDelete"/>
+        <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
+            <argument name="categoryEntity" value="_defaultCategory"/>
+        </actionGroup>
+
+        <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
+        <!--Clean up categories-->
+        <comment userInput="Clean up categories" stepKey="cleanupCategoriesComment"/>
+        <actionGroup ref="DeleteCategory" stepKey="cleanSimpleSubCategory">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
+        <!--Clean up products-->
+        <comment userInput="Clean up simple product" stepKey="cleanUpSimpleProduct"/>
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <comment userInput="Clean up virtual product" stepKey="cleanUpVirtualProduct"/>
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteVirtualProduct">
+            <argument name="product" value="VirtualProduct"/>
+        </actionGroup>
+    </test>
+</tests>

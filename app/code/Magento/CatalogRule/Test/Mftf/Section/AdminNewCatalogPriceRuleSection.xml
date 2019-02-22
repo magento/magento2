@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminNewCatalogPriceRule">
+        <element name="saveAndApply" type="button" selector="#save_and_apply" timeout="30"/>
+        <element name="save" type="button" selector="#save" timeout="30"/>
+        <element name="saveAndContinue" type="button" selector="#save_and_continue" timeout="30"/>
+        <element name="delete" type="button" selector="#delete" timeout="30"/>
+
+        <element name="ruleName" type="input" selector="[name='name']"/>
+        <element name="description" type="textarea" selector="[name='description']"/>
+        <element name="status" type="select" selector="[name='is_active']"/>
+
+        <element name="websites" type="select" selector="[name='website_ids']"/>
+        <element name="websitesOptions" type="select" selector="[name='website_ids'] option"/>
+        <element name="customerGroups" type="select" selector="[name='customer_group_ids']"/>
+        <element name="customerGroupsOptions" type="select" selector="[name='customer_group_ids'] option"/>
+
+        <element name="fromDateButton" type="button" selector="[name='from_date'] + button" timeout="15"/>
+        <element name="toDateButton" type="button" selector="[name='to_date'] + button" timeout="15"/>
+        <element name="todayDate" type="button" selector="#ui-datepicker-div [data-handler='today']"/>
+        <element name="priority" type="input" selector="[name='sort_order']"/>
+        <element name="conditionsTab" type="block" selector="[data-index='block_promo_catalog_edit_tab_conditions']"/>
+        <element name="actionsTab" type="block" selector="[data-index='actions']"/>
+    </section>
+
+    <section name="AdminNewCatalogPriceRuleActions">
+        <element name="apply" type="select" selector="[name='simple_action']"/>
+        <element name="discountAmount" type="input" selector="[name='discount_amount']"/>
+        <element name="disregardRules" type="select" selector="[name='stop_rules_processing']"/>
+    </section>
+
+    <section name="AdminNewCatalogPriceRuleConditions">
+        <element name="newCondition" type="button" selector=".rule-param.rule-param-new-child"/>
+        <element name="conditionSelect" type="select" selector="select#conditions__{{var}}__new_child" parameterized="true"/>
+        <element name="targetEllipsis" type="button" selector="//li[{{var}}]//a[@class='label'][text() = '...']" parameterized="true"/>
+        <element name="targetEllipsisValue" type="button" selector="//ul[@id='conditions__{{var}}__children']//a[contains(text(), '{{var1}}')]" parameterized="true" timeout="30"/>
+        <element name="targetSelect" type="select" selector="//ul[@id='conditions__{{var}}__children']//select" parameterized="true" timeout="30"/>
+        <element name="targetInput" type="input" selector="input#conditions__{{var1}}--{{var2}}__value" parameterized="true"/>
+        <element name="applyButton" type="button" selector="#conditions__{{var1}}__children li:nth-of-type({{var2}}) a.rule-param-apply" parameterized="true"/>
+    </section>
+
+    <section name="AdminCatalogPriceRuleGrid">
+        <element name="applyRules" type="button" selector="#apply_rules" timeout="30"/>
+    </section>
+</sections>

@@ -147,6 +147,9 @@ class CategoriesTest extends AbstractModifierTest
         $this->assertEquals($locked, $modifyMeta['arguments']['data']['config']['disabled']);
     }
 
+    /**
+     * @return array
+     */
     public function modifyMetaLockedDataProvider()
     {
         return [[true], [false]];

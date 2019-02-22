@@ -101,8 +101,9 @@ class UpdateCommand implements CommandInterface
             if (!$result) {
                 $this->logger->warning(
                     sprintf(
-                        'Update of the subscription for MBI service has been failed: %s',
-                        !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
+                        'Update of the subscription for MBI service has been failed: %s. Content-Type: %s',
+                        !empty($response->getBody()) ? $response->getBody() : 'Response body is empty',
+                        $response->getHeader('Content-Type')
                     )
                 );
             }

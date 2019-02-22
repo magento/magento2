@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerSidebarSection">
+        <element name="sidebarTab" type="text" selector="//div[@id='block-collapsible-nav']//a[text()='{{var1}}']" parameterized="true"/>
+        <element name="sidebarCurrentTab" type="text" selector="//div[@id='block-collapsible-nav']//strong[contains(text(), '{{var}}')]" parameterized="true"/>
+    </section>
+</sections>

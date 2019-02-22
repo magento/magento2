@@ -20,7 +20,7 @@
         .lib-form-fieldset();
 
         &:last-child {
-            margin-bottom: 0;
+            margin-bottom: @indent__base;
         }
 
         > .field,
@@ -97,11 +97,6 @@
 
         &::-ms-expand {
             display: none;
-        }
-
-        .lt-ie10 & {
-            background-image: none;
-            padding-right: 4px;
         }
     }
 

@@ -30,4 +30,9 @@ interface ConverterInterface
      * @return string
      */
     public function getContentTypeHeader();
+
+    /**
+     * @return string
+     */
+    public function getContentMediaType(): string;
 }

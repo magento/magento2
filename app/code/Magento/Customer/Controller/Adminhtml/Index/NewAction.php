@@ -5,7 +5,9 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-class NewAction extends \Magento\Customer\Controller\Adminhtml\Index
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class NewAction extends \Magento\Customer\Controller\Adminhtml\Index implements HttpGetActionInterface
 {
     /**
      * Create new customer action

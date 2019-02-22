@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontPanelHeaderSection">
+        <element name="WelcomeMessage" type="text" selector=".greet.welcome span"/>
+        <element name="createAnAccountLink" type="select" selector=".panel.header li:nth-child(3)" timeout="30"/>
+        <element name="notYouLink" type="button" selector=".greet.welcome span a"/>
+        <element name="customerWelcome" type="text" selector=".panel.header .customer-welcome"/>
+        <element name="customerWelcomeMenu" type="text" selector=".panel.header .customer-welcome .customer-menu"/>
+        <element name="customerLogoutLink" type="text" selector=".panel.header .customer-welcome .customer-menu .authorization-link a" timeout="30"/>
+    </section>
+</sections>

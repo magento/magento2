@@ -5,10 +5,8 @@
  */
 namespace Magento\Framework\EntityManager;
 
-use Magento\Framework\EntityManager\MapperPool;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\EntityManager\TypeResolver;
 
 /**
  * Class Hydrator

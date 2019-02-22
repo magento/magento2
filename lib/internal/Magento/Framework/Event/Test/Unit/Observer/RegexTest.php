@@ -44,6 +44,9 @@ class RegexTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->regex->isValidFor($eventMock));
     }
 
+    /**
+     * @return array
+     */
     public function isValidForProvider()
     {
         return [

@@ -21,6 +21,9 @@ class CartConfigurationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $cartConfiguration->isProductConfigured($productMock, $config));
     }
 
+    /**
+     * @return array
+     */
     public function isProductConfiguredDataProvider()
     {
         return [

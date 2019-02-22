@@ -18,6 +18,6 @@ class CaptchaStringResolver
     {
         $captchaParams = $request->getPost(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE);
 
-        return isset($captchaParams[$formId]) ? $captchaParams[$formId] : '';
+        return $captchaParams[$formId] ?? '';
     }
 }

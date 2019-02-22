@@ -36,7 +36,7 @@ class Option extends Widget
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/edit/options/option.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/edit/options/option.phtml';
 
     /**
      * Core registry

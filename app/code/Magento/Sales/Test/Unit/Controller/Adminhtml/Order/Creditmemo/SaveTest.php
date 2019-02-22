@@ -203,10 +203,9 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $creditmemoMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo::class,
-            ['load', 'getGrandTotal', 'getAllowZeroGrandTotal', '__wakeup']
+            ['load', 'isValidGrandTotal', '__wakeup']
         );
-        $creditmemoMock->expects($this->once())->method('getGrandTotal')->will($this->returnValue('0'));
-        $creditmemoMock->expects($this->once())->method('getAllowZeroGrandTotal')->will($this->returnValue(false));
+        $creditmemoMock->expects($this->once())->method('isValidGrandTotal')->will($this->returnValue(false));
         $this->memoLoaderMock->expects(
             $this->once()
         )->method(
@@ -235,7 +234,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
      */
     protected function _setSaveActionExpectationForMageCoreException($data, $errorMessage)
     {
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($errorMessage));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($this->equalTo($errorMessage));
         $this->_sessionMock->expects($this->once())->method('setFormData')->with($this->equalTo($data));
     }
 }

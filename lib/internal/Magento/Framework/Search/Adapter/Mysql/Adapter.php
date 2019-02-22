@@ -7,7 +7,6 @@ namespace Magento\Framework\Search\Adapter\Mysql;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder as AggregationBuilder;
 use Magento\Framework\Search\AdapterInterface;
 use Magento\Framework\Search\RequestInterface;
@@ -15,6 +14,8 @@ use Magento\Framework\Search\RequestInterface;
 /**
  * MySQL Search Adapter
  *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Adapter implements AdapterInterface
@@ -70,7 +71,7 @@ class Adapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws \LogicException
      */
     public function query(RequestInterface $request)
@@ -105,6 +106,8 @@ class Adapter implements AdapterInterface
     }
 
     /**
+     * Get connection.
+     *
      * @return false|\Magento\Framework\DB\Adapter\AdapterInterface
      */
     private function getConnection()

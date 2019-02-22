@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Developer\Console\Command;
 
@@ -25,7 +26,7 @@ class GeneratePatchCommand extends Command
     /**
      * Command arguments and options
      */
-    const COMMAND_NAME = 'dev:generate:patch';
+    const COMMAND_NAME = 'setup:db-declaration:generate-patch';
     const MODULE_NAME = 'module';
     const INPUT_KEY_IS_REVERTABLE = 'revertable';
     const INPUT_KEY_PATCH_TYPE = 'type';
@@ -47,7 +48,9 @@ class GeneratePatchCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * Configure command
+     *
+     * @inheritdoc
      * @throws InvalidArgumentException
      */
     protected function configure()
@@ -89,16 +92,16 @@ class GeneratePatchCommand extends Command
      *
      * @return string
      */
-    private function getPatchTemplate()
+    private function getPatchTemplate() : string
     {
         return file_get_contents(__DIR__ . '/patch_template.php.dist');
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws \InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $moduleName = $input->getArgument(self::MODULE_NAME);
         $patchName = $input->getArgument(self::INPUT_KEY_PATCH_NAME);

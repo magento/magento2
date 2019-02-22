@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="searchAndMultiSelectActionGroup">
+        <arguments>
+            <argument name="dropDownSelector" />
+            <argument name="options" type="string"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{dropDownSelector}} .action-select.admin__action-multiselect" stepKey="waitForDropdown"/>
+        <click selector="{{dropDownSelector}} .action-select.admin__action-multiselect" stepKey="clickDropdown"/>
+        <selectMultipleOptions filterSelector="{{dropDownSelector}} .admin__action-multiselect-search-wrap>input" optionSelector="{{dropDownSelector}} .admin__action-multiselect-label>span" stepKey="selectSpecifiedOptions">
+            <array>[{{options}}]</array>
+        </selectMultipleOptions>
+    </actionGroup>
+</actionGroups>

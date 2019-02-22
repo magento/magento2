@@ -27,7 +27,7 @@
             <argument name="factoryMapByConfigElementType" xsi:type="array">
                 <item name="graphql_interface" xsi:type="object">Magento\Framework\GraphQl\Config\Element\InterfaceFactory</item>
                 <item name="graphql_type" xsi:type="object">Magento\Framework\GraphQl\Config\Element\TypeFactory</item>
-                <item name="graphql_input" xsi:type="object">Magento\Framework\GraphQl\Config\Element\TypeFactory</item>
+                <item name="graphql_input" xsi:type="object">Magento\Framework\GraphQl\Config\Element\InputFactory</item>
                 <item name="graphql_enum" xsi:type="object">Magento\Framework\GraphQl\Config\Element\EnumFactory</item>
             </argument>
         </arguments>
@@ -55,20 +55,12 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\GraphQl\Schema\Type\Output\OutputFactory">
+    <type name="Magento\Framework\GraphQl\Schema\Type\TypeRegistry">
         <arguments>
-            <argument name="prototypes" xsi:type="array">
+            <argument name="configToTypeMap" xsi:type="array">
                 <item name="Magento\Framework\GraphQl\Config\Element\Type" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Output\OutputTypeObject</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\Input" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Input\InputObjectType</item>
                 <item name="Magento\Framework\GraphQl\Config\Element\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Output\OutputInterfaceObject</item>
-                <item name="Magento\Framework\GraphQl\Config\Element\Enum" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Enum\Enum</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\GraphQl\Schema\Type\Input\InputFactory">
-        <arguments>
-            <argument name="prototypes" xsi:type="array">
-                <item name="Magento\Framework\GraphQl\Config\Element\Type" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Input\InputObjectType</item>
-                <item name="Magento\Framework\GraphQl\Config\Element\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Input\InputObjectType</item>
                 <item name="Magento\Framework\GraphQl\Config\Element\Enum" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Enum\Enum</item>
             </argument>
         </arguments>
@@ -95,6 +87,12 @@
                 <item name="input_object_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InputObjectType</item>
                 <item name="interface_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InterfaceType</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Query\QueryComplexityLimiter">
+        <arguments>
+            <argument name="queryDepth" xsi:type="number">20</argument>
+            <argument name="queryComplexity" xsi:type="number">300</argument>
         </arguments>
     </type>
 </config>

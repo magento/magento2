@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\UpdateProductFromMiniShoppingCartEntityTest" summary="Update Product from Mini Shopping Cart" ticketId="MAGETWO-29812">
         <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation1" summary="Update Product Qty on Mini Shopping Cart" ticketId=" MAGETWO-35536">
+            <data name="issue" xsi:type="string">https://github.com/magento-engcom/msi/issues/1624</data>
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test, severity:S0</data>
             <data name="originalProduct/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="checkoutData/dataset" xsi:type="string">simple_order_qty_2</data>
