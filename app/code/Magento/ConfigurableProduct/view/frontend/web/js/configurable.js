@@ -613,7 +613,7 @@ define([
             $(document).trigger('updateMsrpPriceBlock',
                 [
                     optionId,
-                    this.options.spConfig.optionPrices,
+                    this.options.spConfig.optionPrices
                 ]
             );
         },
