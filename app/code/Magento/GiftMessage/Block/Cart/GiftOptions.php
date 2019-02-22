@@ -76,7 +76,7 @@ class GiftOptions extends \Magento\Backend\Block\Template
     /**
      * Retrieve gift message configuration
      *
-     * @return array
+     * @return string
      */
     public function getGiftOptionsConfigJson()
     {
