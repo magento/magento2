@@ -246,6 +246,7 @@ class Name extends AbstractWidget
     public function getAttributeValidationClass($attributeCode)
     {
         $attributeMetadata = $this->_getAttribute($attributeCode);
+
         return $attributeMetadata ? $attributeMetadata->getFrontendClass() : '';
     }
 
