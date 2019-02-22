@@ -19,6 +19,8 @@ use Magento\Customer\Model\Session as CustomerSession;
 
 /**
  * Test for captcha based implementation.
+ *
+ * @magentoAppArea frontend
  */
 class CodeLimitManagerTest extends TestCase
 {
