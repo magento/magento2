@@ -64,8 +64,8 @@ class DataObject implements \ArrayAccess
      *
      * If $key is an array, it will overwrite all the data in the object.
      *
-     * @param string|array  $key
-     * @param mixed         $value
+     * @param string|array $key
+     * @param mixed $value
      * @return $this
      */
     public function setData($key, $value = null)
@@ -111,7 +111,7 @@ class DataObject implements \ArrayAccess
      * and retrieve corresponding member. If data is the string - it will be explode
      * by new line character and converted to array.
      *
-     * @param string     $key
+     * @param string $key
      * @param string|int $index
      * @return mixed
      */
@@ -222,6 +222,7 @@ class DataObject implements \ArrayAccess
 
     /**
      * If $key is empty, checks whether there's any data in the object
+     *
      * Otherwise checks if the specified attribute is set.
      *
      * @param string $key
@@ -272,8 +273,8 @@ class DataObject implements \ArrayAccess
     /**
      * Convert object data into XML string
      *
-     * @param array   $keys array of keys that must be represented
-     * @param string  $rootName root node name
+     * @param array $keys array of keys that must be represented
+     * @param string $rootName root node name
      * @param bool $addOpenTag flag that allow to add initial xml node
      * @param bool $addCdata flag that require wrap all values in CDATA
      * @return string
@@ -436,7 +437,7 @@ class DataObject implements \ArrayAccess
      *
      * Example: key1="value1" key2="value2" ...
      *
-     * @param   array  $keys array of accepted keys
+     * @param   array $keys array of accepted keys
      * @param   string $valueSeparator separator between key and value
      * @param   string $fieldSeparator separator between key/value pairs
      * @param   string $quote quoting sign
