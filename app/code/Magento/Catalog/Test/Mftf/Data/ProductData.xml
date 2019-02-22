@@ -729,4 +729,16 @@
         <data key="attributeGroupId">13</data>
         <data key="sortOrder">0</data>
     </entity>
+    <entity name="productAlphabeticalA" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">AAA Product</data>
+    </entity>
+    <entity name="productAlphabeticalB" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">BBB Product</data>
+    </entity>
+    <entity name="productWithSpecialCharacters" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">Product \&#39;!@#$%^&amp;*()+:;\\|}{][?=~` </data>
+    </entity>
+    <entity name="productWith130CharName" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">ProductWith128Chars 1234567891123456789112345678911234567891123456789112345678911234567891123456789112345678 endnums</data>
+    </entity>
 </entities>

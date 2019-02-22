@@ -38,4 +38,15 @@
         <waitForElementVisible selector="{{StorefrontMinicartSection.productCount}}" stepKey="waitProductCount"/>
         <see userInput="You added {{productName}} to your shopping cart." selector="{{StorefrontMessagesSection.success}}" stepKey="seeSuccessMessage"/>
     </actionGroup>
+
+    <!-- Add Bundle Product to Cart from product Page-->
+    <actionGroup name="StorefrontAddBundleProductFromProductToCartActionGroup">
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomizeAndAddToCart"/>
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddBundleProductToCart"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.productCount}}" stepKey="waitProductCount"/>
+        <see userInput="You added {{productName}} to your shopping cart." selector="{{StorefrontMessagesSection.success}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
 </actionGroups>

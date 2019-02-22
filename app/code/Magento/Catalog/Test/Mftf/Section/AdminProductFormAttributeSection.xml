@@ -17,8 +17,23 @@
         <element name="addValue" type="button" selector="//button[@data-action='add_new_row']" timeout="30"/>
         <element name="optionViewName" type="text" selector="//table[@data-index='attribute_options_select']//span[contains(text(), '{{arg}}')]" parameterized="true" timeout="30"/>
         <element name="optionValue" type="input" selector="(//input[contains(@name, 'option[value]')])[{{arg}}]" timeout="30" parameterized="true"/>
-        <element name="manageTitlesHeader" type="button" selector="//div[@class='fieldset-wrapper-title']//span[contains(text(), 'Manage Titles')]" timeout="30/"/>
+        <element name="manageTitlesHeader" type="button" selector="//div[@class='fieldset-wrapper-title']//span[contains(text(), 'Manage Titles')]" timeout="30"/>
         <element name="manageTitlesViewName" type="text" selector="//div[@data-index='manage-titles']//span[contains(text(), '{{arg}}')]" timeout="30" parameterized="true"/>
         <element name="saveAttribute" type="button" selector="button#save" timeout="30"/>
+        <element name="saveInNewSet" type="button" selector="button#saveInNewSet" timeout="10"/>
+    </section>
+    <section name="AdminProductFormNewAttributeAdvancedSection">
+        <element name="sectionHeader" type="button" selector="div[data-index='advanced_fieldset']"/>
+        <element name="defaultValue" type="textarea" selector="input[name='default_value_text']"/>
+    </section>
+    <section name="AdminProductFormNewAttributeStorefrontSection">
+        <element name="sectionHeader" type="button" selector="div[data-index='front_fieldset']"/>
+        <element name="useInSearch" type="checkbox" selector="div[data-index='is_searchable'] .admin__field-control label"/>
+        <element name="searchWeight" type="select" selector="select[name='search_weight']"/>
+    </section>
+    <section name="AdminProductFormNewAttributeNewSetSection">
+        <element name="setName" type="button" selector="//div[contains(@class, 'modal-inner-wrap') and .//*[contains(., 'Enter Name for New Attribute Set')]]//input[contains(@class, 'admin__control-text')]"/>
+        <element name="accept" type="button" selector="//div[contains(@class, 'modal-inner-wrap') and .//*[contains(., 'Enter Name for New Attribute Set')]]//button[contains(@class, 'action-accept')]"/>
+        <element name="cancel" type="button" selector="//div[contains(@class, 'modal-inner-wrap') and .//*[contains(., 'Enter Name for New Attribute Set')]]//button[contains(@class, 'action-dismiss')]"/>
     </section>
 </sections>

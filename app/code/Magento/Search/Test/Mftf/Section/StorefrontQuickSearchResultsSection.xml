@@ -13,7 +13,8 @@
         <element name="searchTextBoxButton" type="button" selector="button[class='action search']"/>
         <element name="productLink" type="select" selector="a[class='product-item-link']"/>
         <element name="productByIndex" type="button" selector=".product-items li:nth-child({{var}}) .product-item-info" parameterized="true"/>
-        <element name="addToCartBtn" type="button" selector="button.action.tocart.primary"/>
+        <element name="productByName" type="button" selector="//div[contains(@class, 'product-item-info') and .//*[contains(., '{{var}}')]]" parameterized="true"/>
+        <element name="addToCartBtn" type="button" selector="//button[contains(@class, 'tocart')]"/>
         <element name="messageSection" type="text" selector="div .message"/>
         <element name="asLowAsLabel" type="text" selector=".minimal-price-link > span"/>
         <element name="textArea" type="text" selector="li[class='item']"/>
