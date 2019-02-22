@@ -8,10 +8,8 @@ namespace Magento\ImportExport\Block\Adminhtml\Export;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Product as CatalogProduct;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\ImportExport\Model\Export\ConfigInterface;
-use Magento\CatalogImportExport\Model\Export\Product\Type\Factory as TypeFactory;
-use Magento\CatalogImportExport\Model\Export\Product\Type\AbstractType;
 
 /**
  * Export filter block
@@ -51,9 +49,9 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     private $exportConfig;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Export\Product\Type\Factory
+     * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $typeFactory;
+    private $objectManager;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -61,7 +59,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param array $data
      * @param ConfigInterface|null $exportConfig
-     * @param TypeFactory|null $typeFactory
+     * @param Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -69,10 +67,10 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\ImportExport\Helper\Data $importExportData,
         array $data = [],
         ConfigInterface $exportConfig = null,
-        TypeFactory $typeFactory = null
+        ObjectManagerInterface $objectManager
     ) {
-        $this->exportConfig = $exportConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
-        $this->typeFactory = $typeFactory ?: ObjectManager::getInstance()->get(TypeFactory::class);
+        $this->objectManager = $objectManager;
+        $this->exportConfig = $exportConfig ?: $this->objectManager->get(ConfigInterface::class);
         $this->_importExportData = $importExportData;
         parent::__construct($context, $backendHelper, $data);
     }
@@ -449,8 +447,8 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         $disabledAttrs = [];
         $productTypes = $this->exportConfig->getEntityTypes(CatalogProduct::ENTITY);
         foreach ($productTypes as $productTypeConfig) {
-            $model = $this->typeFactory->create($productTypeConfig['model']);
-            if ($model instanceof AbstractType && $model->isSuitable()) {
+            $model = $this->objectManager->create($productTypeConfig['model']);
+            if ($model && $model->isSuitable()) {
                 $disabledAttrs = array_merge($disabledAttrs, $model->getDisabledAttrs());
             }
         }
