@@ -9,7 +9,7 @@ namespace Magento\GraphQl\Quote;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Api\Data\CartInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\GuestCartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
@@ -23,6 +23,11 @@ use Magento\TestFramework\ObjectManager;
  */
 class RemoveItemFromCartTest extends GraphQlAbstract
 {
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
     /**
      * @var QuoteResource
      */
@@ -50,12 +55,12 @@ class RemoveItemFromCartTest extends GraphQlAbstract
 
     protected function setUp()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->create(QuoteResource::class);
-        $this->quote = $objectManager->create(Quote::class);
-        $this->quoteIdToMaskedId = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
-        $this->productRepository = $objectManager->create(ProductRepositoryInterface::class);
-        $this->guestCartRepository = $objectManager->create(GuestCartRepositoryInterface::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->quoteResource = $this->objectManager->create(QuoteResource::class);
+        $this->quote = $this->objectManager->create(Quote::class);
+        $this->quoteIdToMaskedId = $this->objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->guestCartRepository = $this->objectManager->create(GuestCartRepositoryInterface::class);
     }
 
     /**
@@ -207,6 +212,57 @@ mutation {
   }
 }
 QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * Test mutation is only able to remove quote item belonging to the requested cart
+     *
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find cart item with id
+     */
+    public function testRemoveItemFromDifferentQuote()
+    {
+        /** @var Quote $secondQuote */
+        $secondQuote = $this->objectManager->create(Quote::class);
+        $this->quoteResource->load(
+            $secondQuote,
+            'test_order_with_virtual_product_without_address',
+            'reserved_order_id'
+        );
+        $secondQuoteItem = $secondQuote->getItemByProduct($this->productRepository->get('virtual-product'));
+
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_with_simple_product_without_address',
+            'reserved_order_id'
+        );
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $itemId = $secondQuoteItem->getItemId();
+
+        $this->expectExceptionMessage(sprintf('Cart doesn\'t contain the %s item.', $itemId));
+
+        $query = <<<QUERY
+mutation {
+  removeItemFromCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      cart_item_id: "$itemId"
+    }
+  ) {
+    cart {
+      cart_id
+      items {
+        id
+        qty
+      }
+    }
+  }
+}
+QUERY;
+
         $this->graphQlQuery($query);
     }
 
