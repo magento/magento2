@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Catalog\Model\Product as ProductEntity;
+use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 
 /**
  * Product entity resource model
@@ -116,6 +117,7 @@ class Product extends AbstractResource
      * @param TableMaintainer|null $tableMaintainer
      * @param UserContextInterface|null $userContext
      * @param AuthorizationInterface|null $authorization
+     * @param UniqueValidationInterface|null $uniqueValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -130,9 +132,10 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
         $data = [],
-        TableMaintainer $tableMaintainer = null,
         ?UserContextInterface $userContext = null,
-        ?AuthorizationInterface $authorization = null
+        ?AuthorizationInterface $authorization = null,
+        TableMaintainer $tableMaintainer = null,
+        UniqueValidationInterface $uniqueValidator = null
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -146,7 +149,8 @@ class Product extends AbstractResource
             $context,
             $storeManager,
             $modelFactory,
-            $data
+            $data,
+            $uniqueValidator
         );
         $this->connectionName  = 'catalog';
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
