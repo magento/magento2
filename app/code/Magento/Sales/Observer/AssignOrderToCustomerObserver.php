@@ -57,6 +57,17 @@ class AssignOrderToCustomerObserver implements ObserverInterface
             $orderId = $delegateData['__sales_assign_order_id'];
             $order = $this->orderRepository->get($orderId);
             if (!$order->getCustomerId() && $customer->getId()) {
+                // Assign customer info to order after customer creation.
+                $order->setCustomerId($customer->getId())
+                    ->setCustomerIsGuest(0)
+                    ->setCustomerEmail($customer->getEmail())
+                    ->setCustomerFirstname($customer->getFirstname())
+                    ->setCustomerLastname($customer->getLastname())
+                    ->setCustomerMiddlename($customer->getMiddlename())
+                    ->setCustomerPrefix($customer->getPrefix())
+                    ->setCustomerSuffix($customer->getSuffix())
+                    ->setCustomerGroupId($customer->getGroupId());
+
                 $this->assignmentService->execute($order, $customer);
             }
         }
