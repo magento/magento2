@@ -109,13 +109,13 @@
         <click stepKey="clickResult" selector="{{AdminProductFormSection.attributeSetFilterResult}}"/>
     </actionGroup>
 
-    <actionGroup name="AdminProductPageFillTextAttributeValue">
+    <actionGroup name="AdminProductPageFillTextAttributeValueByName">
         <arguments>
             <argument name="attributeName" type="string"/>
             <argument name="value" type="string"/>
         </arguments>
         <click stepKey="openSection" selector="{{AdminProductAttributeSection.attributeSectionHeader}}"/>
-        <fillField stepKey="fillValue" selector="{{AdminProductAttributeSection.textAttribute(attributeName)}}" userInput="{{value}}"/>
+        <fillField stepKey="fillValue" selector="{{AdminProductAttributeSection.textAttributeByName(attributeName)}}" userInput="{{value}}"/>
     </actionGroup>
 
     <actionGroup name="changeUseForPromoRuleConditionsProductAttribute">

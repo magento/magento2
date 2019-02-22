@@ -170,11 +170,10 @@
             <createData entity="productAlphabeticalB" stepKey="product2">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-
-
-
-
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+
+            <!-- Create and Assign Attribute to product1-->
             <actionGroup ref="goToProductPageViaID" stepKey="goToProduct1">
                 <argument name="productId" value="$product1.id$"/>
             </actionGroup>
@@ -190,7 +189,7 @@
             </actionGroup>
             <!--fill in default-->
             <actionGroup ref="saveProductForm" stepKey="saveProduct1a"/>
-            <actionGroup ref="AdminProductPageFillTextAttributeValue" stepKey="fillDefault1">
+            <actionGroup ref="AdminProductPageFillTextAttributeValueByName" stepKey="fillDefault1">
                 <argument name="attributeName" value="$product1.name$"/>
                 <argument name="value" value="{{_defaultProduct.name}}"/>
             </actionGroup>
@@ -211,7 +210,7 @@
             </actionGroup>
             <actionGroup ref="saveProductForm" stepKey="saveProduct2a"/>
             <!--fill in default-->
-            <actionGroup ref="AdminProductPageFillTextAttributeValue" stepKey="fillDefault2">
+            <actionGroup ref="AdminProductPageFillTextAttributeValueByName" stepKey="fillDefault2">
                 <argument name="attributeName" value="$product2.name$"/>
                 <argument name="value" value="{{_defaultProduct.name}}"/>
             </actionGroup>
@@ -250,6 +249,7 @@
             <actionGroup ref="AdminCreateAttributeWithSearchWeight" stepKey="createProduct1Attribute">
                 <argument name="attributeType" value="Text Field"/>
                 <argument name="attributeName" value="$product1.name$"/>
+                <argument name="attributeSetName" value="$product1.name$"/>
                 <argument name="weight" value="5"/>
                 <argument name="defaultValue" value="{{_defaultProduct.name}}"/>
             </actionGroup>
