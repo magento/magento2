@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
@@ -19,6 +20,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class UpdateCartItemsTest extends GraphQlAbstract
 {
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
     /**
      * @var QuoteResource
      */
@@ -41,11 +47,11 @@ class UpdateCartItemsTest extends GraphQlAbstract
 
     protected function setUp()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->create(QuoteResource::class);
-        $this->quote = $objectManager->create(Quote::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
-        $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->quoteResource = $this->objectManager->create(QuoteResource::class);
+        $this->quote = $this->objectManager->create(Quote::class);
+        $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
     }
 
     /**
@@ -113,6 +119,36 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
 
         $query = $this->prepareUpdateItemsQuery($maskedQuoteId, '999', 4);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * Test mutation is only able to update quote items belonging to the requested cart
+     *
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find cart item with id
+     */
+    public function testUpdateItemFromDifferentQuote()
+    {
+        /** @var Quote $secondQuote */
+        $secondQuote = $this->objectManager->create(Quote::class);
+        $this->quoteResource->load(
+            $secondQuote,
+            'test_order_with_virtual_product_without_address',
+            'reserved_order_id'
+        );
+        $secondQuoteItem = $secondQuote->getItemByProduct($this->productRepository->get('virtual-product'));
+
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_with_simple_product_without_address',
+            'reserved_order_id'
+        );
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+
+        $query = $this->prepareUpdateItemsQuery($maskedQuoteId, $secondQuoteItem->getId(), 4);
         $this->graphQlQuery($query);
     }
 
