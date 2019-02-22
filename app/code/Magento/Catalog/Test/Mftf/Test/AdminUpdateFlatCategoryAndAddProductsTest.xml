@@ -32,8 +32,8 @@
                 <argument name="storeView" value="customStoreFR"/>
             </actionGroup>
             <!--Run full reindex and clear caches -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <!--Enable Flat Catalog Category -->
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1"/>
             <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
@@ -43,6 +43,9 @@
             <magentoCLI command="cron:run" stepKey="runCron2"/>
         </before>
         <after>
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
+            <magentoCLI stepKey="setIndexersMode" command="indexer:set-mode" arguments="realtime" />
+            <magentoCLI stepKey="indexerReindex" command="indexer:reindex" />
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
@@ -51,10 +54,10 @@
             </actionGroup>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Select Created Category-->
+        <magentoCLI command="indexer:reindex" stepKey="reindexBeforeFlow"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
@@ -64,7 +67,7 @@
         <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
         <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
         <scrollToTopOfPage stepKey="scrollOnTopOfPage"/>
-        <click selector="{{CatalogProductsSection.resetFilter}}" stepKey="clickOnResetFilter"/>
+        <conditionalClick selector="{{CatalogProductsSection.resetFilter}}" dependentSelector="{{CatalogProductsSection.resetFilter}}" visible="true" stepKey="clickOnResetFilter"/>
         <waitForPageLoad stepKey="waitForProductsToLoad"/>
         <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="$$createSimpleProduct.name$$"  stepKey="selectProduct"/>
         <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>

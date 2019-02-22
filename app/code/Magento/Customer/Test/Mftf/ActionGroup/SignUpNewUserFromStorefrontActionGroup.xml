@@ -24,7 +24,35 @@
         <see stepKey="seeLastName" userInput="{{Customer.lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
         <see stepKey="seeEmail" userInput="{{Customer.email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
     </actionGroup>
-    
+
+    <actionGroup name="StorefrontCreateCustomerSignedUpNewsletterActionGroup">
+        <arguments>
+            <argument name="customer" defaultValue="CustomerEntityOne"/>
+        </arguments>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForNavigateToCustomersPageLoad"/>
+        <click stepKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>
+        <fillField  stepKey="fillFirstName" userInput="{{customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
+        <fillField  stepKey="fillLastName" userInput="{{customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}"/>
+        <checkOption selector="{{StorefrontCustomerCreateFormSection.signUpForNewsletter}}" stepKey="checkSignUpForNewsletter"/>
+        <fillField  stepKey="fillEmail" userInput="{{customer.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}"/>
+        <fillField  stepKey="fillPassword" userInput="{{customer.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}"/>
+        <fillField  stepKey="fillConfirmPassword" userInput="{{customer.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}"/>
+        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
+        <waitForPageLoad stepKey="waitForCreateAccountButtonToLoad" />
+    </actionGroup>
+    <actionGroup name="AssertSignedUpNewsletterActionGroup">
+        <arguments>
+            <argument name="customer" defaultValue="CustomerEntityOne"/>
+            <argument name="storeName" defaultValue="Main Website" type="string"/>
+        </arguments>
+        <see stepKey="successMessage" userInput="Thank you for registering with {{storeName}} Store." selector="{{AdminCustomerMessagesSection.successMessage}}"/>
+        <see stepKey="seeFirstName" userInput="{{customer.firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <see stepKey="seeLastName" userInput="{{customer.lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <see stepKey="seeEmail" userInput="{{customer.email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <seeInCurrentUrl url="{{StorefrontCustomerDashboardPage.url}}" stepKey="seeAssertInCurrentUrl"/>
+    </actionGroup>
+
     <actionGroup name="EnterCustomerAddressInfo">
         <arguments>
             <argument name="Address"/>
@@ -48,6 +76,6 @@
 
     <actionGroup name="SignUpNewCustomerStorefrontActionGroup" extends="SignUpNewUserFromStorefrontActionGroup">
         <waitForPageLoad stepKey="waitForRegistered" after="clickCreateAccountButton"/>
-        <remove keyForRemoval="seeThankYouMessage" after="waitForRegistered"/>
+        <remove keyForRemoval="seeThankYouMessage"/>
     </actionGroup>
 </actionGroups>
