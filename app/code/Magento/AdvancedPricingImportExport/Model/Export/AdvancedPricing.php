@@ -14,7 +14,7 @@ use Magento\Catalog\Model\Product as CatalogProduct;
 /**
  * Export Advanced Pricing
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -81,6 +81,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     ];
 
     /**
+     * Website codes map
+     *
      * @var string[]
      */
     private $websiteCodesMap = [];
@@ -150,6 +152,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     }
 
     /**
+     *  Initiate type models
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -296,7 +300,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * Creating export-formatted row from tier price.
      *
      * @param array $tierPriceData Tier price information.
-     *
      * @return array Formatted for export tier price information.
      */
     private function createExportRow(array $tierPriceData): array
@@ -345,7 +348,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      *
      * @param array $productsData Products to export.
      * @param array $tierPricesData Their tier prices.
-     *
      * @return array Export rows to display.
      */
     private function prepareExportData(
@@ -402,8 +404,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                         $exportRow[$keyTemplate] = $this->_getCustomerGroupById(
                             $row[$keyTemplate],
                             isset($row[ImportAdvancedPricing::VALUE_ALL_GROUPS])
-                            ? $row[ImportAdvancedPricing::VALUE_ALL_GROUPS]
-                            : null
+                                ? $row[ImportAdvancedPricing::VALUE_ALL_GROUPS]
+                                : null
                         );
                         unset($exportRow[ImportAdvancedPricing::VALUE_ALL_GROUPS]);
                     } elseif ($keyTemplate === ImportAdvancedPricing::COL_TIER_PRICE) {
@@ -442,9 +444,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * Load tier prices for given products.
      *
      * @param string[] $productIds Link IDs of products to find tier prices for.
-     *
      * @return array Tier prices data.
-     *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
