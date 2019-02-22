@@ -110,7 +110,7 @@ class Full extends AbstractAction
     }
 
     /**
-     * Creates the store tables
+     * Create the store tables
      *
      * @return void
      */

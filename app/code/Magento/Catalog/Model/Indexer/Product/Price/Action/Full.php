@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
 
-use Exception;
 use Magento\Catalog\Model\Indexer\Product\Price\AbstractAction;
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
@@ -37,7 +36,6 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Indexer\Model\ProcessManager;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\StoreManagerInterface;
-use SplFixedArray;
 
 /**
  * Class Full reindex action
@@ -167,7 +165,7 @@ class Full extends AbstractAction
      *
      * @param array|int|null $ids
      * @return void
-     * @throws Exception
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($ids = null): void
@@ -192,7 +190,7 @@ class Full extends AbstractAction
 
             //Final replacement of tables from replica to main
             $this->switchTables();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new LocalizedException(__($e->getMessage()), $e);
         }
     }
@@ -201,7 +199,7 @@ class Full extends AbstractAction
      * Prepare indexer tables before full reindex
      *
      * @return void
-     * @throws Exception
+     * @throws \Exception
      */
     private function prepareTables(): void
     {
@@ -216,7 +214,7 @@ class Full extends AbstractAction
      * Truncate replica tables by dimensions
      *
      * @return void
-     * @throws Exception
+     * @throws \Exception
      */
     private function truncateReplicaTables(): void
     {
@@ -233,7 +231,7 @@ class Full extends AbstractAction
      * @param string $typeId
      *
      * @return void
-     * @throws Exception
+     * @throws \Exception
      */
     private function reindexProductTypeWithDimensions(DimensionalIndexerInterface $priceIndexer, string $typeId): void
     {
@@ -254,7 +252,7 @@ class Full extends AbstractAction
      * @param string $typeId
      *
      * @return void
-     * @throws Exception
+     * @throws \Exception
      */
     private function reindexByBatches(
         DimensionalIndexerInterface $priceIndexer,
@@ -272,7 +270,7 @@ class Full extends AbstractAction
      * @param string $typeId
      *
      * @return BatchIterator
-     * @throws Exception
+     * @throws \Exception
      */
     private function getBatchesForIndexer(string $typeId): BatchIterator
     {
@@ -300,7 +298,7 @@ class Full extends AbstractAction
      * @param array $dimensions
      *
      * @return void
-     * @throws Exception
+     * @throws \Exception
      */
     private function reindexByBatchWithDimensions(
         DimensionalIndexerInterface $priceIndexer,
@@ -314,7 +312,7 @@ class Full extends AbstractAction
             $temporaryTable = $this->dimensionTableMaintainer->getMainTmpTable($dimensions);
             $this->_emptyTable($temporaryTable);
 
-            $priceIndexer->executeByDimensions($dimensions, SplFixedArray::fromArray($entityIds, false));
+            $priceIndexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
 
             // Sync data from temp table to index table
             $this->_insertFromTable(
@@ -331,7 +329,7 @@ class Full extends AbstractAction
      * @param string $typeId
      *
      * @return void
-     * @throws Exception
+     * @throws \Exception
      */
     private function reindexProductType(PriceInterface $priceIndexer, string $typeId): void
     {
@@ -346,7 +344,7 @@ class Full extends AbstractAction
      * @param PriceInterface $priceIndexer
      * @param Select $batch
      * @return void
-     * @throws Exception
+     * @throws \Exception
      */
     private function reindexBatch(PriceInterface $priceIndexer, Select $batch): void
     {
@@ -377,7 +375,7 @@ class Full extends AbstractAction
      *
      * @param Select $batch
      * @return array
-     * @throws Exception
+     * @throws \Exception
      */
     private function getEntityIdsFromBatch(Select $batch): array
     {
@@ -390,7 +388,7 @@ class Full extends AbstractAction
      * Get product meta data
      *
      * @return EntityMetadataInterface
-     * @throws Exception
+     * @throws \Exception
      */
     private function getProductMetaData(): EntityMetadataInterface
     {
@@ -405,7 +403,7 @@ class Full extends AbstractAction
      * Get replica table
      *
      * @return string
-     * @throws Exception
+     * @throws \Exception
      */
     private function getReplicaTable(): string
     {
@@ -418,6 +416,7 @@ class Full extends AbstractAction
      * Replacement of tables from replica to main
      *
      * @return void
+     * @throws \Zend_Db_Statement_Exception
      */
     private function switchTables(): void
     {
@@ -446,6 +445,7 @@ class Full extends AbstractAction
      *
      * @param array $dimensions
      * @return void
+     * @throws \Zend_Db_Statement_Exception
      */
     private function moveDataFromReplicaTableToReplicaTables(array $dimensions): void
     {
