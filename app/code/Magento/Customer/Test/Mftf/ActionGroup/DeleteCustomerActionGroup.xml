@@ -41,6 +41,6 @@
         <click selector="{{CustomersPageSection.delete}}" stepKey="clickDelete"/>
         <waitForElementVisible selector="{{CustomersPageSection.ok}}" stepKey="waitForOkToVisible"/>
         <click selector="{{CustomersPageSection.ok}}" stepKey="clickOkConfirmationButton"/>
-        <waitForElementVisible stepKey="waitForSuccessfullyDeletedMessage" selector="{{CustomersPageSection.deletedSuccessMessage}}" time="10"/>
+        <waitForElementVisible stepKey="waitForSuccessfullyDeletedMessage" selector="{{CustomersPageSection.deletedSuccessMessage}}" time="30"/>
     </actionGroup>
 </actionGroups>

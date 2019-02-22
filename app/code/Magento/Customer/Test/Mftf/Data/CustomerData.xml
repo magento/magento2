@@ -21,6 +21,7 @@
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
         <data key="middlename">S</data>
+        <data key="fullname">John Doe</data>
         <data key="password">pwdTest123!</data>
         <data key="prefix">Mr</data>
         <data key="suffix">Sr</data>
