@@ -9,6 +9,9 @@ namespace Magento\PageCache\Model\Varnish;
 use Magento\PageCache\Model\VclGeneratorInterface;
 use Magento\PageCache\Model\VclTemplateLocatorInterface;
 
+/**
+ * Varnish vcl generator model.
+ */
 class VclGenerator implements VclGeneratorInterface
 {
     /**
@@ -143,7 +146,8 @@ class VclGenerator implements VclGeneratorInterface
 
     /**
      * Get IPs access list that can purge Varnish configuration for config file generation
-     * and transform it to appropriate view
+     *
+     * Tansform it to appropriate view
      *
      * acl purge{
      *  "127.0.0.1";
@@ -216,6 +220,8 @@ class VclGenerator implements VclGeneratorInterface
     }
 
     /**
+     * Get design exceptions array.
+     *
      * @return array
      */
     private function getDesignExceptions()
