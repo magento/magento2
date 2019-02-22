@@ -49,6 +49,13 @@
                                                         </xs:documentation>
                                                     </xs:annotation>
                                                 </xs:element>
+                                                <xs:element name="actionDisable" type="xs:boolean">
+                                                    <xs:annotation>
+                                                        <xs:documentation>
+                                                            Disable and remove this action.
+                                                        </xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:element>
                                             </xs:choice>
                                             <xs:attribute name="name" use="required"/>
                                         </xs:complexType>
@@ -79,6 +86,13 @@
                 <xs:annotation>
                     <xs:documentation>
                         Path to the controller responsible for action handling.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="actionDisable" type="xs:boolean">
+                <xs:annotation>
+                    <xs:documentation>
+                        Disable and remove this action.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>

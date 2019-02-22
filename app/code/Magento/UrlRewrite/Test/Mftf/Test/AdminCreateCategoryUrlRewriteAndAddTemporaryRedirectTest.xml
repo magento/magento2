@@ -44,7 +44,7 @@
         </actionGroup>
 
         <!--Assert Updated path directs to the category storefront -->
-        <actionGroup ref="StorefrontUrlRewriteRedirect" stepKey="openStorefrontUrlRedirectPath">
+        <actionGroup ref="AssertStorefrontUrlRewriteRedirect" stepKey="openStorefrontUrlRedirectPath">
             <argument name="category" value="$$category.name$$"/>
             <argument name="newRequestPath" value="newrequestpath.html"/>
         </actionGroup>
