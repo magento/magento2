@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
+ * Ui component Form
  * @api
  * @since 100.0.2
  */
@@ -53,7 +54,7 @@ class Form extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDataSourceData()
     {
