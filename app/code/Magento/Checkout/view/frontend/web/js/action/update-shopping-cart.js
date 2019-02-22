@@ -34,11 +34,7 @@ define([
         onSubmit: function (event) {
             var action = this.element.find(this.options.updateCartActionContainer).val();
 
-            if (!this.options.validationURL) {
-                return true;
-            }
-
-            if (action === 'empty_cart') {
+            if (!this.options.validationURL || action === 'empty_cart') {
                 return true;
             }
 
