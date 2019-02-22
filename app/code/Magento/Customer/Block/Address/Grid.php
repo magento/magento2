@@ -237,6 +237,7 @@ class Grid extends \Magento\Framework\View\Element\Template
             /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
             $collection = $this->addressCollectionFactory->create();
             $collection->setOrder('entity_id', 'desc')
+                ->addFieldToFilter('entity_id', array('nin' => array($this->getDefaultBilling(), $this->getDefaultShipping())))
                 ->setCustomerFilter([$this->getCustomer()->getId()]);
             $this->addressCollection = $collection;
         }
