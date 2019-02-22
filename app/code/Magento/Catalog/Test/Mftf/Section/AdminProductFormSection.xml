@@ -52,6 +52,8 @@
         <element name="setProductAsNewFrom" type="input" selector="input[name='product[news_from_date]']"/>
         <element name="setProductAsNewTo" type="input" selector="input[name='product[news_to_date]']"/>
         <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="attributeRequiredInput" type="input" selector="//input[contains(@name, 'product[{{attributeCode}}]')]" parameterized="true"/>
+        <element name="attributeFieldError" type="text" selector="//*[@class='admin__field _required _error']/..//label[contains(.,'This is a required field.')]"/>
         <element name="customSelectField" type="select" selector="//select[@name='product[{{var}}]']" parameterized="true"/>
         <element name="searchCategory" type="input" selector="//*[@data-index='category_ids']//input[contains(@class, 'multiselect-search')]"/>
         <element name="selectCategory" type="input" selector="//*[@data-index='category_ids']//label[contains(., '{{categoryName}}')]" parameterized="true"/>
@@ -188,5 +190,10 @@
         <element name="specialPrice" type="input" selector="input[name='product[special_price]']"/>
         <element name="doneButton" type="button" selector=".product_form_product_form_advanced_pricing_modal button.action-primary"/>
         <element name="useDefaultPrice" type="checkbox" selector="//input[@name='product[special_price]']/parent::div/following-sibling::div/input[@name='use_default[special_price]']"/>
+    </section>
+    <section name="AdminProductAttributeSection">
+        <element name="attributeSectionHeader" type="button" selector="//div[@data-index='attributes']" timeout="30"/>
+        <element name="dropDownAttribute" type="select" selector="//select[@name='product[{{arg}}]']" parameterized="true" timeout="30"/>
+        <element name="attributeSection" type="div" selector="//div[@data-index='attributes']/div[contains(@class, 'admin__collapsible-content _show')]" timeout="30"/>
     </section>
 </sections>
