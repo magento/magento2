@@ -7,6 +7,8 @@
 namespace Magento\Marketplace\Block;
 
 /**
+ * Partners section block.
+ *
  * @api
  * @since 100.0.2
  */
