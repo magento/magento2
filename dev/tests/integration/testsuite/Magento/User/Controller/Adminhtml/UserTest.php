@@ -5,6 +5,7 @@
  */
 namespace Magento\User\Controller\Adminhtml;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\TestFramework\Bootstrap;
 
 /**
@@ -12,6 +13,9 @@ use Magento\TestFramework\Bootstrap;
  */
 class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
+    /**
+     * Verify that the main user page contains the user grid
+     */
     public function testIndexAction()
     {
         $this->dispatch('backend/admin/user/index');
@@ -20,26 +24,33 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->assertSelectCount('#permissionsUserGrid_table', 1, $response);
     }
 
+    /**
+     * Verify that attempting to save a user when no data is present redirects back to the main user page
+     */
     public function testSaveActionNoData()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/admin/user/save');
         $this->assertRedirect($this->stringContains('backend/admin/user/index/'));
     }
 
     /**
+     * Verify that a user cannot be saved if it no longer exists
+     *
      * @magentoDataFixture Magento/User/_files/dummy_user.php
      */
     public function testSaveActionWrongId()
     {
         /** @var $user \Magento\User\Model\User */
         $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\User\Model\User'
+            \Magento\User\Model\User::class
         )->loadByUsername(
             'dummy_username'
         );
         $userId = $user->getId();
         $this->assertNotEmpty($userId, 'Broken fixture');
         $user->delete();
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue('user_id', $userId);
         $this->dispatch('backend/admin/user/save');
         $this->assertSessionMessages(
@@ -50,11 +61,14 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
+     * Verify that users cannot be saved if the admin password is not correct
+     *
      * @magentoDbIsolation enabled
      */
     public function testSaveActionMissingCurrentAdminPassword()
     {
         $fixture = uniqid();
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'username' => $fixture,
@@ -71,11 +85,14 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
+     * Verify that users can be successfully saved when data is correct
+     *
      * @magentoDbIsolation enabled
      */
     public function testSaveAction()
     {
         $fixture = uniqid();
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'username' => $fixture,
@@ -96,11 +113,14 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
+     * Verify that users with the same username or email as an existing user cannot be created
+     *
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/User/_files/user_with_role.php
      */
     public function testSaveActionDuplicateUser()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'username' => 'adminUser',
@@ -122,17 +142,20 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
+     * Verify password change properly updates fields when the request is valid
+     *
      * @magentoDbIsolation enabled
-     * @dataProvider resetPasswordDataProvider
+     * @dataProvider saveActionPasswordChangeDataProvider
      */
     public function testSaveActionPasswordChange($postData, $isPasswordCorrect)
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/admin/user/save');
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $user \Magento\User\Model\User */
-        $user = $objectManager->create('Magento\User\Model\User');
+        $user = $objectManager->create(\Magento\User\Model\User::class);
         $user->loadByUsername($postData['username']);
         if ($isPasswordCorrect) {
             $this->assertRedirect($this->stringContains('backend/admin/user/index'));
@@ -140,7 +163,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             $this->assertEquals($postData['email'], $user->getEmail());
             $this->assertEquals($postData['firstname'], $user->getFirstname());
             $this->assertEquals($postData['lastname'], $user->getLastname());
-            $encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
+            $encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
             $this->assertTrue($encryptor->validateHash($postData['password'], $user->getPassword()));
         } else {
             $this->assertRedirect($this->stringContains('backend/admin/user/edit'));
@@ -148,7 +171,12 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         }
     }
 
-    public function resetPasswordDataProvider()
+    /**
+     * Dataprovider for testSaveActionPasswordChange
+     *
+     * @return array
+     */
+    public function saveActionPasswordChangeDataProvider()
     {
         $password = uniqid('123q');
         $passwordPairs = [
@@ -175,6 +203,9 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         return $data;
     }
 
+    /**
+     * Verify that the role grid is present when requested
+     */
     public function testRoleGridAction()
     {
         $this->getRequest()->setParam('ajax', true)->setParam('isAjax', true);
@@ -184,6 +215,8 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
+     * Verify that the roles grid is present when requested
+     *
      * @depends testSaveAction
      */
     public function testRolesGridAction()
@@ -195,6 +228,8 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
+     * Verify that expected header and fieldsets are present for edit
+     *
      * @depends testSaveAction
      */
     public function testEditAction()
@@ -208,6 +243,9 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->assertSelectCount('#user_base_fieldset', 1, $response);
     }
 
+    /**
+     * Verify that validation passes on correct data
+     */
     public function testValidateActionSuccess()
     {
         $data = [

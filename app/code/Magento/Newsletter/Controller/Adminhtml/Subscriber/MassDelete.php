@@ -6,31 +6,40 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 
+use Magento\Framework\Exception\NotFoundException;
+
 class MassDelete extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
 {
     /**
      * Delete one or more subscribers action
      *
      * @return void
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found.'));
+        }
+
         $subscribersIds = $this->getRequest()->getParam('subscriber');
         if (!is_array($subscribersIds)) {
-            $this->messageManager->addError(__('Please select one or more subscribers.'));
+            $this->messageManager->addErrorMessage(__('Please select one or more subscribers.'));
         } else {
             try {
                 foreach ($subscribersIds as $subscriberId) {
                     $subscriber = $this->_objectManager->create(
-                        'Magento\Newsletter\Model\Subscriber'
+                        \Magento\Newsletter\Model\Subscriber::class
                     )->load(
                         $subscriberId
                     );
                     $subscriber->delete();
                 }
-                $this->messageManager->addSuccess(__('Total of %1 record(s) were deleted.', count($subscribersIds)));
+                $this->messageManager->addSuccessMessage(
+                    __('Total of %1 record(s) were deleted.', count($subscribersIds))
+                );
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         }
 

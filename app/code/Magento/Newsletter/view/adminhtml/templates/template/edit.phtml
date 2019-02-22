@@ -10,16 +10,16 @@ use Magento\Framework\App\TemplateTypesInterface;
 
 /* @var $block \Magento\Newsletter\Block\Adminhtml\Template\Edit */
 ?>
-<form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="newsletter_template_edit_form">
-    <?php echo $block->getBlockHtml('formkey')?>
+<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="newsletter_template_edit_form">
+    <?= $block->getBlockHtml('formkey') ?>
     <div class="no-display">
         <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
-        <input type="hidden" id="save_as_flag" name="_save_as_flag" value="<?php /* @escapeNotVerified */ echo $block->getSaveAsFlag() ?>" />
+        <input type="hidden" id="save_as_flag" name="_save_as_flag" value="<?= $block->escapeHtml($block->getSaveAsFlag()) ?>" />
     </div>
     <?php /* @escapeNotVerified */ echo $block->getForm() ?>
 </form>
-<form action="<?php /* @escapeNotVerified */ echo $block->getPreviewUrl() ?>" method="post" id="newsletter_template_preview_form" target="_blank">
-    <?php echo $block->getBlockHtml('formkey')?>
+<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_template_preview_form" target="_blank">
+    <?= $block->getBlockHtml('formkey') ?>
     <div class="no-display">
         <input type="hidden" id="preview_type" name="type" value="<?php /* @escapeNotVerified */ echo $block->isTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
@@ -33,9 +33,10 @@ require([
     'tinymce',
     'Magento_Ui/js/modal/prompt',
     'Magento_Ui/js/modal/confirm',
+    'mage/dataPost',
     'mage/mage',
     'prototype'
-], function(jQuery, tinyMCE, prompt, confirm){
+], function(jQuery, tinyMCE, prompt, confirm, dataPost){
 
 //<![CDATA[
     jQuery('#newsletter_template_edit_form').mage('form').mage('validation');
@@ -199,10 +200,13 @@ require([
 
         deleteTemplate: function() {
             confirm({
-                content: "<?php /* @escapeNotVerified */ echo __('Are you sure you want to delete this template?') ?>",
+                content: "<?= $block->escapeJsQuote($block->escapeHtml(__('Are you sure you want to delete this template?'))) ?>",
                 actions: {
                     confirm: function() {
-                        window.location.href = '<?php /* @escapeNotVerified */ echo $block->getDeleteUrl() ?>';
+                        dataPost().postData({
+                            action: '<?= $block->escapeUrl($block->getDeleteUrl()) ?>',
+                            data: {}
+                        });
                     }
                 }
             });

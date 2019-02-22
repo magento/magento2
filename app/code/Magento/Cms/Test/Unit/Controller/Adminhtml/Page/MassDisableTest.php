@@ -24,12 +24,15 @@ class MassDisableTest extends AbstractMassActionTest
      */
     protected $pageCollectionMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         parent::setUp();
 
         $this->collectionFactoryMock = $this->getMock(
-            'Magento\Cms\Model\ResourceModel\Page\CollectionFactory',
+            \Magento\Cms\Model\ResourceModel\Page\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -37,15 +40,21 @@ class MassDisableTest extends AbstractMassActionTest
         );
 
         $this->pageCollectionMock = $this->getMock(
-            'Magento\Cms\Model\ResourceModel\Page\Collection',
+            \Magento\Cms\Model\ResourceModel\Page\Collection::class,
             [],
             [],
             '',
             false
         );
 
+        $requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $requestMock->expects($this->any())->method('isPost')->willReturn(true);
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($requestMock);
+
         $this->massDisableController = $this->objectManager->getObject(
-            'Magento\Cms\Controller\Adminhtml\Page\MassDisable',
+            \Magento\Cms\Controller\Adminhtml\Page\MassDisable::class,
             [
                 'context' => $this->contextMock,
                 'filter' => $this->filterMock,
@@ -76,7 +85,7 @@ class MassDisableTest extends AbstractMassActionTest
             ->willReturn(new \ArrayIterator($collection));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('A total of %1 record(s) have been disabled.', $disabledPagesCount));
         $this->messageManagerMock->expects($this->never())->method('addError');
 
@@ -95,13 +104,10 @@ class MassDisableTest extends AbstractMassActionTest
      */
     protected function getPageMock()
     {
-        $pageMock = $this->getMock(
-            'Magento\Cms\Model\ResourceModel\Page\Collection',
-            ['setIsActive', 'save'],
-            [],
-            '',
-            false
-        );
+        $pageMock = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page\Collection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setIsActive', 'save'])
+            ->getMock();
         $pageMock->expects($this->once())->method('setIsActive')->with(false)->willReturn(true);
         $pageMock->expects($this->once())->method('save')->willReturn(true);
 
