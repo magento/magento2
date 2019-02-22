@@ -9,7 +9,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAssertSuccessLoginToStorefront" extends="LoginToStorefrontActionGroup">
         <arguments>
-            <argument name="Customer"/>
+            <argument name="Customer" type="entity"/>
         </arguments>
         <see stepKey="assertWelcome" userInput="{{Customer.firstname}}" selector="{{StorefrontPanelHeaderSection.customerWelcome}}" after="clickSignInAccountButton"/>
     </actionGroup>

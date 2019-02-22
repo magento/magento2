@@ -17,7 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13619"/>
             <group value="Customer"/>
-            <group value="mtf-migrated"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <createData stepKey="customer" entity="Simple_Customer_Without_Address"/>
@@ -97,7 +97,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13621"/>
             <group value="Customer"/>
-            <group value="mtf-migrated"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <after>
             <remove keyForRemoval="goToCustomersGridPage"/>
@@ -150,7 +150,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13622"/>
             <group value="Customer"/>
-            <group value="mtf-migrated"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <after>
             <remove keyForRemoval="goToCustomersGridPage"/>
@@ -212,7 +212,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13623"/>
             <group value="Customer"/>
-            <group value="mtf-migrated"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <createData stepKey="customer" entity="Simple_US_Customer_Multiple_Addresses"/>

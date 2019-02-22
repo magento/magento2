@@ -10,7 +10,7 @@
     <!-- Same as "EditCustomerAddressesFromAdminActionGroup" but taking country and state from input "customerAddress" -->
     <actionGroup name="AdminEditCustomerAddressesFrom" >
         <arguments>
-            <argument name="customerAddress"/>
+            <argument name="customerAddress" type="entity"/>
         </arguments>
         <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="proceedToAddresses"/>
         <click selector="{{AdminEditCustomerAddressesSection.addNewAddress}}" stepKey="addNewAddresses"/>
