@@ -143,7 +143,7 @@ class Synchronizer
         $productIds = [];
 
         foreach ($actions as $action) {
-            if (isset($action['product_id']) && is_int($action['product_id'])) {
+            if (isset($action['product_id'])) {
                 $productIds[] = $action['product_id'];
             }
         }
