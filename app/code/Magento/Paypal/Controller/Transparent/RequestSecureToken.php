@@ -106,6 +106,8 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Get error response.
+     *
      * @return Json
      */
     private function getErrorResponse()

@@ -12,6 +12,8 @@ use Magento\Framework\Debug;
 
 /**
  * Message manager model
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Manager implements ManagerInterface
@@ -227,7 +229,7 @@ class Manager implements ManagerInterface
         $items = $this->getMessages(false, $group)->getItems();
 
         foreach ($messages as $message) {
-            if ($message instanceof MessageInterface and !in_array($message, $items, false)) {
+            if ($message instanceof MessageInterface && !in_array($message, $items, false)) {
                 $this->addMessage($message, $group);
             }
         }

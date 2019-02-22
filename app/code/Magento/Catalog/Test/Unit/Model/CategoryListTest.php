@@ -86,14 +86,16 @@ class CategoryListTest extends \PHPUnit\Framework\TestCase
         $categoryIdSecond = 2;
 
         $categoryFirst = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
+        $categoryFirst->expects($this->atLeastOnce())->method('getId')->willReturn($categoryIdFirst);
         $categorySecond = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
+        $categorySecond->expects($this->atLeastOnce())->method('getId')->willReturn($categoryIdSecond);
 
         /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteria */
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
 
         $collection = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
         $collection->expects($this->once())->method('getSize')->willReturn($totalCount);
-        $collection->expects($this->once())->method('getAllIds')->willReturn([$categoryIdFirst, $categoryIdSecond]);
+        $collection->expects($this->once())->method('getItems')->willReturn([$categoryFirst, $categorySecond]);
 
         $this->collectionProcessorMock->expects($this->once())
             ->method('process')

@@ -295,4 +295,8 @@
         <data key="quantity">1</data>
         <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
     </entity>
+    <entity name="ApiSimpleWithQty100" extends="ApiSimpleOne">
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+    </entity>
 </entities>
