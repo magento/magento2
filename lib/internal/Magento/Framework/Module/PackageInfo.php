@@ -8,8 +8,9 @@ namespace Magento\Framework\Module;
 use Magento\Framework\Component\ComponentRegistrar;
 
 /**
- * Provide information of dependencies and conflicts in composer.json files, mapping of package name to module name,
- * and mapping of module name to package version
+ * Provide information of dependencies and conflicts in composer.json files.
+ *
+ * Mapping of package name to module name, and mapping of module name to package version.
  */
 class PackageInfo
 {
