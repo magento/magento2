@@ -45,6 +45,9 @@
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
 
         <!-- Select Created Product-->
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
 

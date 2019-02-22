@@ -15,7 +15,7 @@
             <title value="Admin should be able to switch a new product from configurable to simple"/>
             <description value="After selecting a configurable product when adding Admin should be switch to simple implicitly"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-10925"/>
+            <testCaseId value="MC-10926"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -34,7 +34,7 @@
             <title value="Admin should be able to switch a new product from configurable to virtual"/>
             <description value="After selecting a configurable product when adding Admin should be switch to virtual implicitly"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-10925"/>
+            <testCaseId value="MC-10927"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -43,16 +43,19 @@
         </actionGroup>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Virtual Product"  stepKey="seeProductTypeInGrid"/>
     </test>
-    <test name="AdminCreateSimpleProductSwitchToConfigurableTest" extends="AdminCreateSimpleProductSwitchToVirtualTest">
+    <test name="AdminCreateVirtualProductSwitchToConfigurableTest" extends="AdminCreateSimpleProductSwitchToVirtualTest">
         <annotations>
             <features value="Catalog"/>
             <stories value="Product Type Switching"/>
-            <title value="Admin should be able to switch a new product from simple to configurable"/>
-            <description value="After selecting a simple product when adding Admin should be switch to configurable implicitly"/>
+            <title value="Admin should be able to switch a new product from virtual to configurable"/>
+            <description value="After selecting a virtual product when adding Admin should be switch to configurable implicitly"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-10925"/>
+            <testCaseId value="MC-10930"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MQE-1445" />
+            </skip>
         </annotations>
         <before>
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
@@ -64,7 +67,7 @@
             <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
         </after>
         <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="openProductFillForm">
-            <argument name="productType" value="simple"/>
+            <argument name="productType" value="virtual"/>
         </actionGroup>
         <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
             <argument name="product" value="_defaultProduct"/>

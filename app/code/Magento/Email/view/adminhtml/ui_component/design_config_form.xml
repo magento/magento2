@@ -13,7 +13,7 @@
                 <collapsible>true</collapsible>
                 <label translate="true">Transactional Emails</label>
             </settings>
-            <field name="email_logo" formElement="fileUploader">
+            <field name="email_logo" formElement="imageUploader">
                 <settings>
                     <notice translate="true">To optimize logo for high-resolution displays, upload an image that is 3x normal size and then specify 1x dimensions in the width/height fields below.</notice>
                     <label translate="true">Logo Image</label>

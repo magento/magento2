@@ -21,5 +21,6 @@
         <element name="conditionIs" type="button" selector="//*[@id='conditions__1--1__attribute']/following-sibling::span[1]"/>
         <element name="conditionOperator" type="button" selector="#conditions__1--{{arg3}}__operator" parameterized="true"/>
         <element name="checkElementStorefrontByPrice" type="button" selector="//*[@class='product-items widget-product-grid']//*[contains(text(),'${{arg4}}.00')]" parameterized="true"/>
+        <element name="checkElementStorefrontByName" type="button" selector="//*[@class='product-items widget-product-grid']//*[@class='product-item'][{{productPosition}}]//a[contains(text(), '{{productName}}')]" parameterized="true"/>
     </section>
 </sections>
