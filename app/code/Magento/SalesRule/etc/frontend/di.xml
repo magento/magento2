@@ -25,4 +25,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Captcha\CustomerData\Captcha">
+        <arguments>
+            <argument name="formIds" xsi:type="array">
+                <item name="sales_rule_coupon_request" xsi:type="string">sales_rule_coupon_request</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -24,7 +24,8 @@
         "magento/module-ui": "*",
         "magento/module-widget": "*",
         "magento/module-captcha": "*",
-        "magento/module-checkout": "*"
+        "magento/module-checkout": "*",
+        "magento/module-authorization": "*"
     },
     "suggest": {
         "magento/module-sales-rule-sample-data": "*"

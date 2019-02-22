@@ -74,7 +74,7 @@ class CaptchaConfigProvider implements ConfigProviderInterface
         return [
             'captcha' => [
                 $formId => [
-                    'isCaseSensitive' => $captchaModel->isCaseSensitive(),
+                    'isCaseSensitive' => (bool)$captchaModel->isCaseSensitive(),
                     'imageHeight' => $captchaModel->getHeight(),
                     'imageSrc' => $imageSrc,
                     'refreshUrl' => $store->getUrl('captcha/refresh', ['_secure' => $store->isCurrentlySecure()]),
