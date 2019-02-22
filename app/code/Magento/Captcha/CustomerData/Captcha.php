@@ -12,13 +12,14 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Captcha\Model\DefaultModel;
 use Magento\Captcha\Helper\Data as CaptchaHelper;
+use Magento\Framework\DataObject;
 
 /**
  * Captcha section.
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Captcha implements SectionSourceInterface
+class Captcha extends DataObject implements SectionSourceInterface
 {
     /**
      * @var array
@@ -38,11 +39,13 @@ class Captcha implements SectionSourceInterface
     /**
      * @param CaptchaHelper $helper
      * @param array $formIds
+     * @param array $data
      * @param CustomerSession $customerSession
      */
     public function __construct(
         CaptchaHelper $helper,
         array $formIds,
+        array $data =[],
         CustomerSession $customerSession
     ) {
         $this->helper = $helper;
