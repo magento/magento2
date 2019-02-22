@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontUrlRewriteRedirect">
+    <actionGroup name="AssertStorefrontUrlRewriteRedirect">
         <arguments>
             <argument name="category" type="string"/>
             <argument name="newRequestPath" type="string"/>
@@ -18,7 +18,7 @@
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(category)}}" stepKey="seeCategoryOnStoreNavigationBar"/>
         <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(category)}}" stepKey="seeCategoryInTitle"/>
     </actionGroup>
-    <actionGroup name="StorefrontProductRedirect">
+    <actionGroup name="AssertStorefrontProductRedirect">
         <arguments>
             <argument name="productName" type="string"/>
             <argument name="productSku" type="string"/>

@@ -60,13 +60,13 @@
         </actionGroup>
 
         <!-- Assert updated Category redirect in Store Front -->
-        <actionGroup ref="StorefrontUrlRewriteRedirect" stepKey="verifyCategoryInStoreFront">
+        <actionGroup ref="AssertStorefrontUrlRewriteRedirect" stepKey="verifyCategoryInStoreFront">
             <argument name="category" value="$$category.name$$"/>
             <argument name="newRequestPath" value="{{FirstLevelSubCat.name}}.html"/>
         </actionGroup>
 
         <!-- Assert initial Category redirect in Store Front -->
-        <actionGroup ref="StorefrontUrlRewriteRedirect" stepKey="verifyCategoryInStoreFront1">
+        <actionGroup ref="AssertStorefrontUrlRewriteRedirect" stepKey="verifyCategoryInStoreFront1">
             <argument name="category" value="$$category.name$$"/>
             <argument name="newRequestPath" value="catalog/category/view/id/{$categoryId}"/>
         </actionGroup>

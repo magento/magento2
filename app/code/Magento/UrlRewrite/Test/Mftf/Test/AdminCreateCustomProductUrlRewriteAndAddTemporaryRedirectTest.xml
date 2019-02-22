@@ -60,14 +60,14 @@
         </actionGroup>
 
         <!-- Assert updated product redirect in Store Front-->
-        <actionGroup ref="StorefrontProductRedirect" stepKey="verifyProductInStoreFront">
+        <actionGroup ref="AssertStorefrontProductRedirect" stepKey="verifyProductInStoreFront">
             <argument name="productName" value="$$createProduct.name$$"/>
             <argument name="productSku" value="$$createProduct.sku$$"/>
             <argument name="productRequestPath" value="{{_defaultProduct.name}}.html"/>
         </actionGroup>
 
         <!-- Assert initial product redirect in Store Front-->
-        <actionGroup ref="StorefrontProductRedirect" stepKey="verifyProductInStoreFront1">
+        <actionGroup ref="AssertStorefrontProductRedirect" stepKey="verifyProductInStoreFront1">
             <argument name="productName" value="$$createProduct.name$$"/>
             <argument name="productSku" value="$$createProduct.sku$$"/>
             <argument name="productRequestPath" value="$$createProduct.name$$.html"/>
