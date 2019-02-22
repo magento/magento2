@@ -7,16 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Model;
 
-use Magento\Authorization\Model\Role;
-use Magento\Authorization\Model\RoleFactory;
 use Magento\Backend\Model\Auth;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Authorization\Model\Rules;
-use Magento\Authorization\Model\RulesFactory;
 use PHPUnit\Framework\TestCase;
+use Magento\TestFramework\Bootstrap as TestBootstrap;
+use Magento\Framework\Acl\Builder;
 
+/**
+ * Test class for page repository.
+ */
 class PageRepositoryTest extends TestCase
 {
     /**
@@ -25,16 +26,6 @@ class PageRepositoryTest extends TestCase
      * @var PageRepositoryInterface
      */
     private $repo;
-
-    /**
-     * @var RulesFactory
-     */
-    private $rulesFactory;
-
-    /**
-     * @var RoleFactory
-     */
-    private $roleFactory;
 
     /**
      * @var Auth
@@ -47,6 +38,11 @@ class PageRepositoryTest extends TestCase
     private $criteriaBuilder;
 
     /**
+     * @var Builder
+     */
+    private $aclBuilder;
+
+    /**
      * Sets up common objects.
      *
      * @inheritDoc
@@ -54,10 +50,9 @@ class PageRepositoryTest extends TestCase
     protected function setUp()
     {
         $this->repo = Bootstrap::getObjectManager()->create(PageRepositoryInterface::class);
-        $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
-        $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
         $this->auth = Bootstrap::getObjectManager()->get(Auth::class);
         $this->criteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+        $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
     }
 
     /**
@@ -74,7 +69,6 @@ class PageRepositoryTest extends TestCase
      * Test authorization when saving page's design settings.
      *
      * @magentoDataFixture Magento/Cms/_files/pages.php
-     * @magentoDataFixture Magento/User/_files/user_with_new_role.php
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
@@ -85,28 +79,17 @@ class PageRepositoryTest extends TestCase
             $this->criteriaBuilder->addFilter('identifier', 'page_design_blank')->create()
         )->getItems();
         $page = array_pop($pages);
-        /** @var Role $role */
-        $role = $this->roleFactory->create();
-        $role->load('new_role', 'role_name');
-        $this->auth->login('admin_with_role', '12345abc');
+        $this->auth->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
 
         //Admin doesn't have access to page's design.
-        /** @var Rules $rules */
-        $rules = $this->rulesFactory->create();
-        $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Cms::save']);
-        $rules->saveRel();
+        $this->aclBuilder->getAcl()->deny(null, 'Magento_Cms::save_design');
 
         $page->setCustomTheme('test');
         $page = $this->repo->save($page);
         $this->assertNotEquals('test', $page->getCustomTheme());
 
         //Admin has access to page' design.
-        /** @var Rules $rules */
-        $rules = $this->rulesFactory->create();
-        $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Cms::save', 'Magento_Cms::save_design']);
-        $rules->saveRel();
+        $this->aclBuilder->getAcl()->allow(null, ['Magento_Cms::save', 'Magento_Cms::save_design']);
 
         $page->setCustomTheme('test');
         $page = $this->repo->save($page);

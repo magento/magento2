@@ -8,6 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\Integration\Block\Adminhtml\System\Config;
 
+/**
+ * Testing Oauth section in configs.
+ *
+ * @magentoAppArea adminhtml
+ */
 class OauthSectionTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
