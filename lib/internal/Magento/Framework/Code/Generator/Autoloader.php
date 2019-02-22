@@ -10,6 +10,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Code\Generator;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class loader and generator.
+ */
 class Autoloader
 {
     /**
@@ -55,6 +58,8 @@ class Autoloader
     }
 
     /**
+     * Log exception.
+     *
      * @param \Exception $exception
      */
     private function tryToLogExceptionMessageIfNotDuplicate(\Exception $exception): void
