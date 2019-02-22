@@ -417,7 +417,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'static',
                         'label' => 'City',
                         'input' => 'text',
-                        'sort_order' => 80,
+                        'sort_order' => 110,
                         'validate_rules' => '{"max_text_length":255,"min_text_length":1}',
                         'position' => 80,
                     ],
