@@ -13,21 +13,16 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\Quote\Api\Data\PaymentInterfaceFactory;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
-use Magento\QuoteGraphQl\Model\Cart\Payment\MethodBuilder;
 
 /**
  * Mutation resolver for setting payment method for shopping cart
  */
 class SetPaymentMethodOnCart implements ResolverInterface
 {
-    /**
-     * @var MaskedQuoteIdToQuoteIdInterface
-     */
-    private $maskedQuoteIdToQuoteId;
-
     /**
      * @var GetCartForUser
      */
@@ -44,29 +39,26 @@ class SetPaymentMethodOnCart implements ResolverInterface
     private $paymentMethodManagement;
 
     /**
-     * @var MethodBuilder
+     * @var PaymentInterfaceFactory
      */
-    private $methodBuilder;
+    private $paymentFactory;
 
     /**
-     * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param GetCartForUser $getCartForUser
      * @param ArrayManager $arrayManager
      * @param PaymentMethodManagementInterface $paymentMethodManagement
-     * @param MethodBuilder $methodBuilder
+     * @param PaymentInterfaceFactory $paymentFactory
      */
     public function __construct(
-        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         GetCartForUser $getCartForUser,
         ArrayManager $arrayManager,
         PaymentMethodManagementInterface $paymentMethodManagement,
-        MethodBuilder $methodBuilder
+        PaymentInterfaceFactory $paymentFactory
     ) {
-        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->getCartForUser = $getCartForUser;
         $this->arrayManager = $arrayManager;
         $this->paymentMethodManagement = $paymentMethodManagement;
-        $this->methodBuilder = $methodBuilder;
+        $this->paymentFactory = $paymentFactory;
     }
 
     /**
@@ -74,21 +66,37 @@ class SetPaymentMethodOnCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $paymentMethod = $this->arrayManager->get('input/payment_method', $args);
-        $maskedCartId = $this->arrayManager->get('input/cart_id', $args);
-
+        $maskedCartId = (string)$this->arrayManager->get('input/cart_id', $args);
         if (!$maskedCartId) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
+
+        $paymentMethod = $this->arrayManager->get('input/payment_method', $args);
         if (!$paymentMethod) {
             throw new GraphQlInputException(__('Required parameter "payment_method" is missing'));
         }
 
-        $maskedCartId = $args['input']['cart_id'];
+        $paymentMethodCode = (string) $this->arrayManager->get('input/payment_method/code', $args);
+        if (!$paymentMethodCode) {
+            throw new GraphQlInputException(__('Required parameter payment "code" is missing'));
+        }
+
+        $poNumber = $this->arrayManager->get('input/payment_method/po_number', $args);
+        if (!$poNumber) {
+            throw new GraphQlInputException(__('Required parameter payment "po_number" is missing'));
+        }
+
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $payment = $this->paymentFactory->create([
+            'data' => [
+                PaymentInterface::KEY_METHOD => $paymentMethodCode,
+                PaymentInterface::KEY_PO_NUMBER => $poNumber,
+                PaymentInterface::KEY_ADDITIONAL_DATA => [],
+            ]
+        ]);
 
         try {
-            $this->paymentMethodManagement->set($cart->getId(), $this->methodBuilder->build($args));
+            $this->paymentMethodManagement->set($cart->getId(), $payment);
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
@@ -96,6 +104,7 @@ class SetPaymentMethodOnCart implements ResolverInterface
         return [
             'cart' => [
                 'cart_id' => $maskedCartId,
+                'model' => $cart,
             ],
         ];
     }

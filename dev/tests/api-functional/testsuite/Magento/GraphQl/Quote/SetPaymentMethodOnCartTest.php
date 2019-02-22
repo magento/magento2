@@ -142,7 +142,7 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
         $this->assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
         $this->assertEquals($maskedQuoteId, $response['setPaymentMethodOnCart']['cart']['cart_id']);
         $this->assertArrayHasKey('payment_method', $response['setPaymentMethodOnCart']['cart']);
-        $this->assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['payment_method']['method']);
+        $this->assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['payment_method']['code']);
     }
 
     public function dataProviderOfflinePaymentMethods(): array
@@ -236,7 +236,7 @@ mutation {
     {
       cart_id: "$maskedQuoteId", 
       payment_method: {
-          method: "$methodCode"
+          code: "$methodCode"
           po_number: "$poNumber"
         }
       }) {
@@ -244,7 +244,7 @@ mutation {
     cart {
       cart_id,
       payment_method {
-        method
+        code
         po_number
       }
     }
@@ -259,7 +259,7 @@ QUERY;
         $this->assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
         $this->assertEquals($maskedQuoteId, $response['setPaymentMethodOnCart']['cart']['cart_id']);
         $this->assertArrayHasKey('payment_method', $response['setPaymentMethodOnCart']['cart']);
-        $this->assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['payment_method']['method']);
+        $this->assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['payment_method']['code']);
         $this->assertEquals($poNumber, $response['setPaymentMethodOnCart']['cart']['payment_method']['po_number']);
     }
 
@@ -301,14 +301,14 @@ mutation {
     {
       cart_id: "$maskedQuoteId", 
       payment_method: {
-          method: "$methodCode"
+          code: "$methodCode"
         }
       }) {
     
     cart {
       cart_id,
       payment_method {
-        method
+        code
       }
     }
   }

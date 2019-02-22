@@ -109,8 +109,12 @@ input SetPaymentMethodOnCartInput {
 }
 
 input PaymentMethodInput {
-    method: String!
-    po_number: String
+    code: String! @doc(description:"Payment method code")
+    po_number: String! @doc(description:"Purchase order number")
+    additional_data: PaymentMethodAdditionalDataInput
+}
+
+input PaymentMethodAdditionalDataInput {
 }
 
 type SetPaymentMethodOnCartOutput {
@@ -139,8 +143,8 @@ type Cart {
     applied_coupon: AppliedCoupon
     shipping_addresses: [CartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
     billing_address: CartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
-    available_payment_methods : [PaymentMethod]  @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
-    payment_method: CartPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPaymentMethod")
+    available_payment_methods : [AvailablePaymentMethod]  @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
+    selected_payment_method: SelectedPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SelectedPaymentMethod")
 }
 
 type CartAddress {
@@ -154,16 +158,11 @@ type CartAddress {
     country: CartAddressCountry
     telephone: String
     address_type: AdressTypeEnum
-    selected_shipping_method: SelectedShippingMethod
     available_shipping_methods: [AvailableShippingMethod] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAdress\\AvailableShippingMethods")
+    selected_shipping_method: SelectedShippingMethod
     items_weight: Float
     customer_notes: String
     cart_items: [CartItemQuantity]
-}
-
-type CartPaymentMethod {
-    method: String
-    po_number: String
 }
 
 type CartItemQuantity {
@@ -197,9 +196,18 @@ type AvailableShippingMethod {
     price_incl_tax: Float!
 }
 
-type PaymentMethod {
+type AvailablePaymentMethod {
     code: String @doc(description: "The payment method code")
     title: String @doc(description: "The payment method title.")
+}
+
+type SelectedPaymentMethod {
+    code: String @doc(description: "The payment method code")
+    po_number: String @doc(description: "The purchase order number.")
+    additional_data: SelectedPaymentMethodAdditionalData
+}
+
+type SelectedPaymentMethodAdditionalData {
 }
 
 enum AdressTypeEnum {
