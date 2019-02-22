@@ -8,10 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\ProductTypeSwitchingOnCreationTest" summary="Product Type Switching on Creation" ticketId="MAGETWO-29398">
         <variation name="ProductTypeSwitchingOnCreationTestVariation1">
-            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="tag" xsi:type="string">stable:no, mftf_migrated:yes</data>
             <data name="createProduct" xsi:type="string">simple</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
-            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid" />
@@ -36,6 +35,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="ProductTypeSwitchingOnCreationTestVariation4">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="issue" xsi:type="string">MSI-1624</data>
             <data name="createProduct" xsi:type="string">configurable</data>
             <data name="product" xsi:type="string">catalogProductVirtual::required_fields</data>
@@ -50,7 +50,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="ProductTypeSwitchingOnCreationTestVariation6">
-            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="tag" xsi:type="string">stable:no, mftf_migrated:yes</data>
             <data name="createProduct" xsi:type="string">virtual</data>
             <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
