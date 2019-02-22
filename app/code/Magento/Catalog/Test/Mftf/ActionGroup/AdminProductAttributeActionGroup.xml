@@ -79,7 +79,7 @@
             <argument name="attributeCode" type="string"/>
             <argument name="attributeType" type="string" defaultValue="select"/>
         </arguments>
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
+        <amOnPage url="{{AdminProductAttributeNewPage.url}}" stepKey="goToNewProductAttributePage"/>
         <fillField selector="{{AttributePropertiesSection.defaultLabel}}" userInput="{{attributeCode}}" stepKey="fillDefaultLabel"/>
         <selectOption selector="{{AttributePropertiesSection.inputType}}" userInput="{{attributeType}}" stepKey="selectInputType"/>
         <waitForElementVisible selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="waitForElementVisible"/>
