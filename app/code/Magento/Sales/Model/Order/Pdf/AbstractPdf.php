@@ -45,6 +45,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
 
     const XML_PATH_SALES_PDF_CREDITMEMO_PUT_ORDER_ID = 'sales_pdf/creditmemo/put_order_id';
 
+    const LAYOUT_TOP_BORDER_DEFAULT = 830;
+
     /**
      * Zend PDF object
      *
@@ -117,6 +119,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @var \Magento\Sales\Model\Order\Address\Renderer
      */
     protected $addressRenderer;
+
+    /**
+     * @var int
+     */
+    protected $topBorder;
 
     /**
      * @param \Magento\Payment\Helper\Data $paymentData
@@ -248,7 +255,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             $imagePath = '/sales/store/logo/' . $image;
             if ($this->_mediaDirectory->isFile($imagePath)) {
                 $image = \Zend_Pdf_Image::imageWithPath($this->_mediaDirectory->getAbsolutePath($imagePath));
-                $top = 830;
+                $top = $this->topBorder ?? self::LAYOUT_TOP_BORDER_DEFAULT;
                 //top border of the page
                 $widthLimit = 270;
                 //half of the page width
