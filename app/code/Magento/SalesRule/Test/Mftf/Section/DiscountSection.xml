@@ -12,5 +12,6 @@
         <element name="CouponInput" type="input" selector="#coupon_code"/>
         <element name="DiscountInput" type="input" selector="#discount-code"/>
         <element name="ApplyCodeBtn" type="button" selector="//span[text()='Apply Discount']"/>
+        <element name="CancelCoupon" type="button" selector="//button[@value='Cancel Coupon']"/>
     </section>
 </sections>
