@@ -17,6 +17,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Quote\Api\Data\PaymentInterfaceFactory;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
+use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool;
 
 /**
  * Mutation resolver for setting payment method for shopping cart
@@ -44,21 +45,29 @@ class SetPaymentMethodOnCart implements ResolverInterface
     private $paymentFactory;
 
     /**
+     * @var AdditionalDataProviderPool
+     */
+    private $additionalDataProviderPool;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param ArrayManager $arrayManager
      * @param PaymentMethodManagementInterface $paymentMethodManagement
      * @param PaymentInterfaceFactory $paymentFactory
+     * @param AdditionalDataProviderPool $additionalDataProviderPool
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         ArrayManager $arrayManager,
         PaymentMethodManagementInterface $paymentMethodManagement,
-        PaymentInterfaceFactory $paymentFactory
+        PaymentInterfaceFactory $paymentFactory,
+        AdditionalDataProviderPool $additionalDataProviderPool
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->arrayManager = $arrayManager;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentFactory = $paymentFactory;
+        $this->additionalDataProviderPool = $additionalDataProviderPool;
     }
 
     /**
@@ -91,7 +100,10 @@ class SetPaymentMethodOnCart implements ResolverInterface
             'data' => [
                 PaymentInterface::KEY_METHOD => $paymentMethodCode,
                 PaymentInterface::KEY_PO_NUMBER => $poNumber,
-                PaymentInterface::KEY_ADDITIONAL_DATA => [],
+                PaymentInterface::KEY_ADDITIONAL_DATA => $this->additionalDataProviderPool->getData(
+                    $paymentMethodCode,
+                    $args
+                ),
             ]
         ]);
 
