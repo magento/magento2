@@ -20,6 +20,7 @@
                 <input type="number"
                        name="qty"
                        id="qty"
+                       min="0"
                        value="<?= /* @escapeNotVerified */ $block->getProductDefaultQty() * 1 ?>"
                        title="<?= /* @escapeNotVerified */ __('Qty') ?>"
                        class="input-text qty"
@@ -32,7 +33,7 @@
             <button type="submit"
                     title="<?= /* @escapeNotVerified */ $buttonTitle ?>"
                     class="action primary tocart"
-                    id="product-addtocart-button">
+                    id="product-addtocart-button" disabled>
                 <span><?= /* @escapeNotVerified */ $buttonTitle ?></span>
             </button>
             <?= $block->getChildHtml('', true) ?>
