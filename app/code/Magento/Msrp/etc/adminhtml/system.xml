@@ -10,7 +10,7 @@
         <section id="sales">
             <group id="msrp" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Minimum Advertised Price</label>
-                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enable MAP</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>
