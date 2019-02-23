@@ -9,6 +9,7 @@
     <testCase name="Magento\AdvancedPricingImportExport\Test\TestCase\ExportAdvancedPricingTest" summary="Export with advanced pricing entity type option">
         <variation name="ExportAdvancedPricingTestVariation1" summary="Trying export product data with advanced pricing option but without created products" ticketId="MAGETWO-46147">
             <data name="exportData" xsi:type="string">csv_with_advanced_pricing</data>
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertExportSubmittedMessage"/>
             <constraint name="Magento\ImportExport\Test\Constraint\AssertExportNoDataErrorMessage"/>
         </variation>
         <variation name="ExportAdvancedPricingTestVariation2" summary="Trying export product data with advanced pricing option" ticketId="MAGETWO-46120">
@@ -49,6 +50,7 @@
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertExportAdvancedPricing"/>
         </variation>
         <variation name="ExportAdvancedPricingTestVariation4" summary="Trying export product data for product available on main website with default currency and custom website with different currency" ticketId="MAGETWO-46153">
+            <data name="issue" xsi:type="string">MC-13864 Consumer always read config from memory</data>
             <data name="configData" xsi:type="string">price_scope_website</data>
             <data name="exportData" xsi:type="string">csv_with_advanced_pricing</data>
             <data name="products/0" xsi:type="array">
