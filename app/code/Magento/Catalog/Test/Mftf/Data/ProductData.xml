@@ -299,4 +299,13 @@
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
     </entity>
+    <entity name="ApiSimpleWithPrice50" type="product2" extends="ApiSimpleOne">
+        <data key="price">50</data>
+    </entity>
+    <entity name="ApiSimpleWithPrice60" type="product2" extends="ApiSimpleOne">
+        <data key="price">60</data>
+    </entity>
+    <entity name="ApiSimpleWithPrice70" type="product2" extends="ApiSimpleOne">
+        <data key="price">70</data>
+    </entity>
 </entities>
