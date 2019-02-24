@@ -14,13 +14,12 @@ use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 
-class AddSimpleProductToCartTest extends GraphQlAbstract
+class AddVirtualProductToCartTest extends GraphQlAbstract
 {
     /**
      * @var QuoteResource
      */
     private $quoteResource;
-
     /**
      * @var Quote
      */
@@ -49,15 +48,15 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
-     * Test adding a simple product to the shopping cart with all supported
+     * Test adding a virtual product to the shopping cart with all supported
      * customizable options assigned
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_options.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual_with_options.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
-    public function testAddSimpleProductWithOptions()
+    public function testAddVirtualProductWithOptions()
     {
-        $sku = 'simple';
+        $sku = 'virtual';
         $qty = 1;
 
         $customOptionsValues = $this->getCustomOptionsValuesForQuery($sku);
@@ -75,7 +74,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
 
         $query = <<<QUERY
 mutation {  
-  addSimpleProductsToCart(
+  addVirtualProductsToCart(
     input: {
       cart_id: "{$maskedQuoteId}", 
       cartItems: [
@@ -91,7 +90,7 @@ mutation {
   ) {
     cart {
       items {
-        ... on SimpleCartItem {
+        ... on VirtualCartItem {
           customizable_options {
             label
               values {
@@ -107,10 +106,10 @@ QUERY;
 
         $response = $this->graphQlQuery($query);
 
-        self::assertArrayHasKey('items', $response['addSimpleProductsToCart']['cart']);
-        self::assertCount(1, $response['addSimpleProductsToCart']['cart']);
+        self::assertArrayHasKey('items', $response['addVirtualProductsToCart']['cart']);
+        self::assertCount(1, $response['addVirtualProductsToCart']['cart']);
 
-        $customizableOptionsOutput = $response['addSimpleProductsToCart']['cart']['items'][0]['customizable_options'];
+        $customizableOptionsOutput = $response['addVirtualProductsToCart']['cart']['items'][0]['customizable_options'];
         $assignedOptionsCount = count($customOptionsValues);
         for ($counter = 0; $counter < $assignedOptionsCount; $counter++) {
             self::assertEquals(
@@ -121,57 +120,14 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/products.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The requested qty is not available
-     */
-    public function testAddProductIfQuantityIsNotAvailable()
-    {
-        $sku = 'simple';
-        $qty = 200;
-
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $query = <<<QUERY
-mutation {  
-  addSimpleProductsToCart(
-    input: {
-      cart_id: "{$maskedQuoteId}", 
-      cartItems: [
-        {
-          data: {
-            qty: $qty
-            sku: "$sku"
-          }
-        }
-      ]
-    }
-  ) {
-    cart {
-      cart_id
-    }
-  }
-}
-QUERY;
-
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * Test adding a simple product with empty values for required options
+     * Test adding a virtual product with empty values for required options
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_options.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual_with_options.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
-    public function testAddSimpleProductWithNoRequiredOptionsSet()
+    public function testAddVirtualProductWithNoRequiredOptionsSet()
     {
-        $sku = 'simple';
+        $sku = 'virtual';
         $qty = 1;
 
         $this->quoteResource->load(
@@ -184,7 +140,7 @@ QUERY;
 
         $query = <<<QUERY
 mutation {  
-  addSimpleProductsToCart(
+  addVirtualProductsToCart(
     input: {
       cart_id: "{$maskedQuoteId}", 
       cartItems: [
@@ -199,7 +155,7 @@ mutation {
   ) {
     cart {
       items {
-        ... on SimpleCartItem {
+        ... on VirtualCartItem {
           customizable_options {
             label
               values {
