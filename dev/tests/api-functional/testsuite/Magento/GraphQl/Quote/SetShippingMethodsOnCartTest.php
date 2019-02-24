@@ -55,6 +55,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      * Test for general routine of setting a shipping method on shopping cart
      *
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      */
     public function testSetShippingMethodOnCart()
     {
@@ -87,6 +88,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      */
     public function testSetFlatrateOnCart()
     {
@@ -100,19 +102,22 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/OfflineShipping/_files/tablerates_weight.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      */
     public function testSetTableRatesOnCart()
     {
         $this->setShippingMethodAndCheckResponse(
             'tablerate',
             'bestway',
-            '15',
+            '10',
             'Best Way - Table Rate'
         );
     }
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      */
     public function testSetFreeShippingOnCart()
     {
@@ -126,6 +131,21 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
+     */
+    public function testSetUpsOnCart()
+    {
+        $this->setShippingMethodAndCheckResponse(
+            'ups',
+            'GND',
+            '15.61',
+            'United Parcel Service - Ground'
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      */
     public function testSetShippingMethodWithWrongCartId()
     {
@@ -147,6 +167,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      */
     public function testSetNonExistingShippingMethod()
     {
@@ -174,6 +195,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      */
     public function testSetShippingMethodWithNonExistingAddress()
     {
@@ -200,6 +222,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      */
     public function testSetShippingMethodByGuestToCustomerCart()
     {
