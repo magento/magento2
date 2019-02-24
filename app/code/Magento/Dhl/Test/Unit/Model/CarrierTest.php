@@ -422,10 +422,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @return Element
      */
     private function getExpectedRequestXml(
-            string $origCountryId,
-            string $destCountryId,
-            string $regionCode,
-            bool $dutiable
+        string $origCountryId,
+        string $destCountryId,
+        string $regionCode,
+        bool $dutiable
     ) {
         $requestXmlPath = $regionCode === "EU"
             ? ($dutiable ? '/_files/euregion_dutiable_shipment_request.xml' : '/_files/euregion_shipment_request.xml')
