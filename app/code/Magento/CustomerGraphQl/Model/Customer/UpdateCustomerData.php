@@ -19,6 +19,8 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class UpdateCustomerData
 {
+    private const RESTRICTED_DATA_KEYS = ['email', 'password'];
+
     /**
      * @var CustomerRepositoryInterface
      */
@@ -62,13 +64,14 @@ class UpdateCustomerData
     public function execute(int $customerId, array $data): void
     {
         $customer = $this->customerRepository->getById($customerId);
+        $newCustomerData = array_diff_key($data, array_flip(static::RESTRICTED_DATA_KEYS));
 
-        if (isset($data['firstname'])) {
-            $customer->setFirstname($data['firstname']);
-        }
-
-        if (isset($data['lastname'])) {
-            $customer->setLastname($data['lastname']);
+        foreach ($newCustomerData as $key => $value) {
+            $setterMethod = 'set' . ucwords($key, '_');
+            if (!method_exists($customer, $setterMethod)) {
+                continue;
+            }
+            $customer->{$setterMethod}($value);
         }
 
         if (isset($data['email']) && $customer->getEmail() !== $data['email']) {
