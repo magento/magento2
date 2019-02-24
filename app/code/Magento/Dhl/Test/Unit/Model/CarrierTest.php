@@ -431,15 +431,15 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ? ($dutiable ? '/_files/euregion_dutiable_shipment_request.xml' : '/_files/euregion_shipment_request.xml')
             : '/_files/apregion_shipment_request.xml';
 
-        $expectedRequestElement = new Element(file_get_contents(__DIR__ . $requestXmlPath));
+        $requestElement = new Element(file_get_contents(__DIR__ . $requestXmlPath));
 
-        $expectedRequestElement->Consignee->CountryCode = $destCountryId;
-        $expectedRequestElement->Consignee->CountryName = $this->getCountryName($destCountryId);
+        $requestElement->Consignee->CountryCode = $destCountryId;
+        $requestElement->Consignee->CountryName = $this->getCountryName($destCountryId);
 
-        $expectedRequestElement->Shipper->CountryCode = $origCountryId;
-        $expectedRequestElement->Shipper->CountryName = $this->getCountryName($origCountryId);
+        $requestElement->Shipper->CountryCode = $origCountryId;
+        $requestElement->Shipper->CountryName = $this->getCountryName($origCountryId);
 
-        return $expectedRequestElement;
+        return $requestElement;
     }
 
     /**
