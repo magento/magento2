@@ -52,4 +52,24 @@
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
         <see selector="{{AdminUrlRewriteIndexSection.emptyRecords}}" userInput="We couldn't find any records." stepKey="seeEmptyRecordMessage"/>
     </actionGroup>
+    <actionGroup name="AdminDeleteUrlRewrite">
+        <arguments>
+            <argument name="requestPath" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
+        <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{requestPath}}" stepKey="fillRedirectPathFilter"/>
+        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <click selector="{{AdminUrlRewriteIndexSection.editButton('1')}}" stepKey="clickOnEditButton"/>
+        <waitForPageLoad stepKey="waitForEditPageToLoad"/>
+        <click selector="{{AdminUrlRewriteEditSection.deleteButton}}" stepKey="clickOnDeleteButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.okButton}}" stepKey="waitForOkButtonToVisible"/>
+        <click selector="{{AdminUrlRewriteEditSection.okButton}}" stepKey="clickOnOkButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad3"/>
+        <see selector="{{AdminUrlRewriteIndexSection.successMessage}}" userInput="You deleted the URL rewrite." stepKey="seeSuccessMessage"/>
+    </actionGroup>
 </actionGroups>

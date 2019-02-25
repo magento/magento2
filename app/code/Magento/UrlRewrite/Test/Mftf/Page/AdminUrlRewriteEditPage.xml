@@ -7,7 +7,7 @@
 -->
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminUrlRewriteEditPage" url="admin/url_rewrite/edit/id" area="admin" module="Magento_UrlRewrite">
         <section name="AdminUrlRewriteEditSection"/>
     </page>
