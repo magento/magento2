@@ -16,7 +16,8 @@
                 <block class="Magento\Wishlist\Block\Rss\Link" name="wishlist.rss.link" template="Magento_Wishlist::rss/wishlist.phtml"/>
                 <block class="Magento\Wishlist\Block\Customer\Wishlist\Items" name="customer.wishlist.items" as="items" template="Magento_Wishlist::item/list.phtml" cacheable="false">
                     <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image" name="customer.wishlist.item.image" template="Magento_Wishlist::item/column/image.phtml" cacheable="false"/>
-                    <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Info" name="customer.wishlist.item.name" template="Magento_Wishlist::item/column/name.phtml" cacheable="false"/>
+                    <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column" name="customer.wishlist.item.name" template="Magento_Wishlist::item/column/name.phtml" cacheable="false"/>
+                    <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column" name="customer.wishlist.item.review" template="Magento_Wishlist::item/column/review.phtml" cacheable="false"/>
                     <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart" name="customer.wishlist.item.price" template="Magento_Wishlist::item/column/price.phtml" cacheable="false">
                         <block class="Magento\Catalog\Pricing\Render" name="product.price.render.wishlist">
                             <arguments>
@@ -28,11 +29,11 @@
                         </block>
                         <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Options" name="customer.wishlist.item.options" cacheable="false"/>
                     </block>
-                    <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Actions" name="customer.wishlist.item.inner" template="Magento_Wishlist::item/column/actions.phtml" cacheable="false">
+                    <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column" name="customer.wishlist.item.inner" template="Magento_Wishlist::item/column/actions.phtml" cacheable="false">
                         <arguments>
                             <argument name="css_class" xsi:type="string">product-item-inner</argument>
                         </arguments>
-                        <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Comment" name="customer.wishlist.item.comment" template="Magento_Wishlist::item/column/comment.phtml" cacheable="false">
+                        <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column" name="customer.wishlist.item.comment" template="Magento_Wishlist::item/column/comment.phtml" cacheable="false">
                             <arguments>
                                 <argument name="title" translate="true" xsi:type="string">Product Details and Comment</argument>
                             </arguments>
@@ -43,12 +44,12 @@
                             </arguments>
                         </block>
 
-                        <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Actions" name="customer.wishlist.item.actions" template="Magento_Wishlist::item/column/actions.phtml" cacheable="false">
+                        <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column" name="customer.wishlist.item.actions" template="Magento_Wishlist::item/column/actions.phtml" cacheable="false">
                             <arguments>
                                 <argument name="css_class" xsi:type="string">product-item-actions</argument>
                             </arguments>
-                            <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Edit" name="customer.wishlist.item.edit" template="Magento_Wishlist::item/column/edit.phtml" before="-" cacheable="false"/>
-                            <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Remove" name="customer.wishlist.item.remove" template="Magento_Wishlist::item/column/remove.phtml" cacheable="false"/>
+                            <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column" name="customer.wishlist.item.edit" template="Magento_Wishlist::item/column/edit.phtml" before="-" cacheable="false"/>
+                            <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column" name="customer.wishlist.item.remove" template="Magento_Wishlist::item/column/remove.phtml" cacheable="false"/>
                         </block>
                     </block>
                 </block>
