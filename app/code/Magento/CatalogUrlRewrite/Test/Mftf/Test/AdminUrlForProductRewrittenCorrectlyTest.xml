@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUrlForProductRewrittenCorrectlyTest">
+        <annotations>
+            <features value="CatalogUrlRewrite"/>
+            <title value="Check that URL for product rewritten correctly"/>
+            <description value="Check that URL for product rewritten correctly"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-97224"/>
+            <useCaseId value="MAGETWO-64191"/>
+            <group value="CatalogUrlRewrite"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!--Create product-->
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Open Created product-->
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="amOnEditPage"/>
+        <waitForPageLoad stepKey="waitForEditPage"/>
+
+        <!--Switch to Default Store view-->
+        <actionGroup ref="SwitchToTheNewStoreView" stepKey="selectSecondStoreView">
+            <argument name="storeViewName" value="Default Store View"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForStoreViewLoad"/>
+
+        <!--Set use default url-->
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickOnSearchEngineOptimization"/>
+        <waitForElementVisible selector="{{AdminProductSEOSection.useDefaultUrl}}" stepKey="waitForUseDefaultUrlCheckbox"/>
+        <click selector="{{AdminProductSEOSection.useDefaultUrl}}" stepKey="clickUseDefaultUrlCheckbox"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="$$createProduct.sku$$-new" stepKey="changeUrlKey"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <!--Select product and go toUpdate Attribute page-->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="GoToCatalogPageChangingView"/>
+        <waitForPageLoad stepKey="WaitForPageToLoadFullyChangingView"/>
+        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName">
+            <argument name="product" value="ApiSimpleProduct"/>
+        </actionGroup>
+        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="ClickOnSelectAllCheckBoxChangingView"/>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickBulkUpdate"/>
+        <waitForPageLoad stepKey="waitForUpdateAttributesPageLoad"/>
+        <seeInCurrentUrl url="{{ProductAttributesEditPage.url}}" stepKey="seeInUrlAttributeUpdatePage"/>
+        <click selector="{{AdminUpdateAttributesWebsiteSection.website}}" stepKey="clickWebsiteTab"/>
+        <waitForAjaxLoad stepKey="waitForLoadWebSiteTab"/>
+        <click selector="{{AdminUpdateAttributesWebsiteSection.addProductToWebsite}}" stepKey="checkAddProductToWebsiteCheckbox"/>
+        <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="clickSave"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 1 record(s) were updated." stepKey="seeSaveSuccess"/>
+
+        <!--Got to Store front product page and check url-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.sku$$-new)}}" stepKey="navigateToSimpleProductPage"/>
+        <seeInCurrentUrl url="{{StorefrontProductPage.url($$createProduct.sku$$-new)}}" stepKey="seeProductNewUrl"/>
+    </test>
+</tests>
