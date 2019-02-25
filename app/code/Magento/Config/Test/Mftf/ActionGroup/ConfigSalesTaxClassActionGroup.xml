@@ -56,4 +56,4 @@
         <waitForPageLoad stepKey="waitForConfigSaved"/>
         <see userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
     </actionGroup>
-    </actionGroups>
+</actionGroups>
