@@ -90,7 +90,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
+        $dateFormat = $this->_localeDate->getDateFormatWithLongYear();
         $fieldset->addField(
             'date_from',
             'date',
