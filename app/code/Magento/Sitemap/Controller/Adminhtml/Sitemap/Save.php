@@ -5,11 +5,18 @@
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
-use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller;
+use Magento\Framework\Validator\StringLength;
+use Magento\MediaStorage\Model\File\Validator\AvailablePath;
+use Magento\Sitemap\Model\SitemapFactory;
 
-class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
+/**
+ * Save sitemap controller.
+ */
+class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap implements HttpPostActionInterface
 {
     /**
      * Maximum length of sitemap filename
@@ -17,12 +24,12 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     const MAX_FILENAME_LENGTH = 32;
 
     /**
-     * @var \Magento\Framework\Validator\StringLength
+     * @var StringLength
      */
     private $stringValidator;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Validator\AvailablePath
+     * @var AvailablePath
      */
     private $pathValidator;
 
@@ -37,33 +44,33 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     private $filesystem;
 
     /**
-     * @var \Magento\Sitemap\Model\SitemapFactory
+     * @var SitemapFactory
      */
     private $sitemapFactory;
 
     /**
      * Save constructor.
-     * @param Action\Context $context
-     * @param \Magento\Framework\Validator\StringLength $stringValidator
-     * @param \Magento\MediaStorage\Model\File\Validator\AvailablePath $pathValidator
+     * @param Context $context
+     * @param StringLength $stringValidator
+     * @param AvailablePath $pathValidator
      * @param \Magento\Sitemap\Helper\Data $sitemapHelper
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Sitemap\Model\SitemapFactory $sitemapFactory
+     * @param SitemapFactory $sitemapFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Validator\StringLength $stringValidator = null,
-        \Magento\MediaStorage\Model\File\Validator\AvailablePath $pathValidator = null,
+        Context $context,
+        StringLength $stringValidator = null,
+        AvailablePath $pathValidator = null,
         \Magento\Sitemap\Helper\Data $sitemapHelper = null,
         \Magento\Framework\Filesystem $filesystem = null,
-        \Magento\Sitemap\Model\SitemapFactory $sitemapFactory = null
+        SitemapFactory $sitemapFactory = null
     ) {
         parent::__construct($context);
-        $this->stringValidator = $stringValidator ?: $this->_objectManager->get(\Magento\Framework\Validator\StringLength::class);
-        $this->pathValidator = $pathValidator ?: $this->_objectManager->get(\Magento\MediaStorage\Model\File\Validator\AvailablePath::class);
+        $this->stringValidator = $stringValidator ?: $this->_objectManager->get(StringLength::class);
+        $this->pathValidator = $pathValidator ?: $this->_objectManager->get(AvailablePath::class);
         $this->sitemapHelper = $sitemapHelper ?: $this->_objectManager->get(\Magento\Sitemap\Helper\Data::class);
         $this->filesystem = $filesystem ?: $this->_objectManager->get(\Magento\Framework\Filesystem::class);
-        $this->sitemapFactory = $sitemapFactory ?: $this->_objectManager->get(\Magento\Sitemap\Model\SitemapFactory::class);
+        $this->sitemapFactory = $sitemapFactory ?: $this->_objectManager->get(SitemapFactory::class);
     }
 
     /**

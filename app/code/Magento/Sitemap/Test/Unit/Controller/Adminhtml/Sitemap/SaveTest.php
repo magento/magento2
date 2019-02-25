@@ -9,6 +9,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Sitemap\Controller\Adminhtml\Sitemap\Save;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
