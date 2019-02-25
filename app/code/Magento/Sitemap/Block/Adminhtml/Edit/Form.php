@@ -48,6 +48,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Configure form for sitemap.
+     *
      * @return $this
      */
     protected function _prepareForm()
