@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Variant;
 
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -17,9 +20,17 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class Attributes implements ResolverInterface
 {
     /**
+     * @inheritdoc
+     *
      * Format product's option data to conform to GraphQL schema
      *
-     * {@inheritdoc}
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @throws \Exception
+     * @return mixed|Value
      */
     public function resolve(
         Field $field,
@@ -35,12 +46,14 @@ class Attributes implements ResolverInterface
         $data = [];
         foreach ($value['options'] as $option) {
             $code = $option['attribute_code'];
-            if (!isset($value['product'][$code])) {
+            /** @var Product|null $model */
+            $model = $value['product']['model'] ?? null;
+            if (!$model || !$model->getData($code)) {
                 continue;
             }
 
             foreach ($option['values'] as $optionValue) {
-                if ($optionValue['value_index'] != $value['product'][$code]) {
+                if ($optionValue['value_index'] != $model->getData($code)) {
                     continue;
                 }
                 $data[] = [

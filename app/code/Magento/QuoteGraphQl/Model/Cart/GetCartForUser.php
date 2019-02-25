@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
@@ -47,7 +47,7 @@ class GetCartForUser
      * @param string $cartHash
      * @param int|null $userId
      * @return Quote
-     * @throws GraphQlAuthenticationException
+     * @throws GraphQlAuthorizationException
      * @throws GraphQlNoSuchEntityException
      */
     public function execute(string $cartHash, ?int $userId): Quote
@@ -77,7 +77,7 @@ class GetCartForUser
         }
 
         if ($customerId !== $userId) {
-            throw new GraphQlAuthenticationException(
+            throw new GraphQlAuthorizationException(
                 __(
                     'The current user cannot perform operations on cart "%masked_cart_id"',
                     ['masked_cart_id' => $cartHash]
