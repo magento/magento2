@@ -45,8 +45,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Filter\Translit $translitFilter
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $reservedSystemNames (optional)
      * @param array $data (optional)
+     * @param array $reservedSystemNames (optional)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -56,8 +56,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Framework\Filter\Translit $translitFilter,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $reservedSystemNames = [],
-        array $data = []
+        array $data = [],
+        array $reservedSystemNames = []
     ) {
         parent::__construct(
             $context,
@@ -66,7 +66,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $customAttributeFactory,
             $resource,
             $resourceCollection,
-            $reservedSystemNames,
             $data
         );
         $this->reservedSystemNames = $reservedSystemNames;
