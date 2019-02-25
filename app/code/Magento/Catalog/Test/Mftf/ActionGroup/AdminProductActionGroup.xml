@@ -85,6 +85,10 @@
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
 
+    <actionGroup name="toggleProductEnabled">
+        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="toggleEnabled"/>
+    </actionGroup>
+
     <!--Upload image for product-->
     <actionGroup name="addProductImage">
         <arguments>

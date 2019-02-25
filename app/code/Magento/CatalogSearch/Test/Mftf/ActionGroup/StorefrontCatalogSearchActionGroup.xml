@@ -57,9 +57,13 @@
         <see selector="{{StorefrontQuickSearchResultsSection.productByIndex(index)}}" userInput="{{productName}}" stepKey="seeProductName"/>
     </actionGroup>
 
-
-
-
+    <actionGroup name="StorefrontQuickSearchCheckProductNameNotInGrid">
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <dontSee selector="{{StorefrontQuickSearchResultsSection.allResults}}" userInput="{{productName}}" stepKey="dontSeeProductName"/>
+    </actionGroup>
+    
     <!-- Open advanced search page -->
     <actionGroup name="StorefrontOpenAdvancedSearchActionGroup">
         <click selector="{{StorefrontFooterSection.AdvancedSearch}}" stepKey="clickAdvancedSearchLink" />

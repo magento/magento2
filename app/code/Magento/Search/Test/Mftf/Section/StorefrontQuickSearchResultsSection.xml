@@ -11,6 +11,7 @@
     <section name="StorefrontQuickSearchResultsSection">
         <element name="searchTextBox" type="text" selector="#search"/>
         <element name="searchTextBoxButton" type="button" selector="button[class='action search']"/>
+        <element name="allResults" type="block" selector=".column.main"/>
         <element name="productLink" type="select" selector="a[class='product-item-link']"/>
         <element name="productByIndex" type="button" selector=".product-items li:nth-child({{var}}) .product-item-info" parameterized="true"/>
         <element name="productByName" type="button" selector="//div[contains(@class, 'product-item-info') and .//*[contains(., '{{var}}')]]" parameterized="true"/>
