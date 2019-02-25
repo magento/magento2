@@ -119,7 +119,7 @@
             <title value="User should be able to use Quick Search to find products by their first three letters"/>
             <description value="Use Quick Search to find a product using only first three letters"/>
             <severity value="MAJOR"/>
-            <testCaseId value="NEEDS ZEPHYR TEST"/>
+            <testCaseId value="MC-15034"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -391,7 +391,7 @@
             <title value="User should be able to use Quick Search to find a grouped product and add it to cart"/>
             <description value="Use Quick Search to find grouped Product and Add to Cart"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-14787"/>
+            <testCaseId value="MC-14788"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -472,7 +472,7 @@
             <title value="User should be able to use Quick Search to find a Bundle Fixed product and add it to cart"/>
             <description value="Use Quick Search to find Bundle Fixed Product and Add to Cart"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-14788"/>
+            <testCaseId value="MC-14790"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
         </annotations>
