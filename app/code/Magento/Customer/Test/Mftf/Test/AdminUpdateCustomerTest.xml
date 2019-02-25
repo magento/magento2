@@ -203,7 +203,7 @@
         </actionGroup>
     </test>
 
-    <test name="AdminDeleteCustomerAddress">
+    <test name="AdminDeleteCustomerAddressTest">
         <annotations>
             <features value="Customer"/>
             <stories value="Delete Customer Address in Admin"/>
@@ -285,6 +285,7 @@
         <actionGroup stepKey="see1Record" ref="AdminAssertNumberOfRecordsInCustomersAddressGrid">
             <argument name="number" value="1"/>
         </actionGroup>
+        <actionGroup stepKey="saveAndContinue" ref="AdminCustomerSaveAndContinue"/>
         <actionGroup stepKey="saveAndCheckSuccessMessage" ref="AdminSaveCustomerAndAssertSuccessMessage"/>
         <!-- Assert Customer Login Storefront -->
         <actionGroup stepKey="login" ref="StorefrontAssertSuccessLoginToStorefront">
