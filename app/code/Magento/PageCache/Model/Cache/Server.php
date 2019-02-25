@@ -12,6 +12,9 @@ use Magento\Framework\App\RequestInterface;
 use Zend\Uri\Uri;
 use Zend\Uri\UriFactory;
 
+/**
+ * Cache server model.
+ */
 class Server
 {
     /**
