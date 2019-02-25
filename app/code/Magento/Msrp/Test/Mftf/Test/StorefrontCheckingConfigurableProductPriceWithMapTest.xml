@@ -10,7 +10,7 @@
     <test name="StorefrontCheckingConfigurableProductPriceWithMapTest">
         <annotations>
             <features value="Mrsp"/>
-            <stories value=""/>
+            <stories value="Configurable child products with MAP"/>
             <title value="Simple product with MAP assigned to configurable should displays the same way as products with special price"/>
             <description value="Check that simple products with MAP assigned to configurable product displayed correctly"/>
             <severity value="CRITICAL"/>
