@@ -164,7 +164,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testLoadPrearranged(): void
+    public function testLoadPrearranged()
     {
         $fixtures = [
             'Foo_Bar' => ['name' => 'Foo_Bar', 'sequence' => ['Magento_Store']],
