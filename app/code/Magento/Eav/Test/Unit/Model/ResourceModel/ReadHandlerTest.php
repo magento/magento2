@@ -88,7 +88,8 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->attributeMock = $this->createMock(AbstractAttribute::class);
 
-        $this->readHandler = $this->objectManager->getObject(ReadHandler::class,
+        $this->readHandler = $this->objectManager->getObject(
+            ReadHandler::class,
             [
                 'metadataPool' => $this->metadataPoolMock,
                 'scopeResolver' => $this->scopeResolverMock,
@@ -143,9 +144,11 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
                 [
                     't' => 'some_table'
                 ],
-                ['value' => 't.value', 'attribute_id' => 't.attribute_id']
-                )
-            ->willReturnSelf();
+                [
+                    'value' => 't.value',
+                    'attribute_id' => 't.attribute_id',
+                ]
+            )->willReturnSelf();
         $this->metadataMock->expects($this->exactly(2))->method('getLinkField')->willReturn('linkField');
         $selectMock->expects($this->at(1))
             ->method('where')
@@ -176,7 +179,8 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         $selectMock->expects($this->at(4))->method('columns')->with($identifier, 't')->willReturnSelf();
         $this->connectionMock->expects($this->at(2))->method('select')->willReturn($orderedUnionSelectMock);
 
-        $unionSelect = $this->objectManager->getObject(UnionExpression::class,
+        $unionSelect = $this->objectManager->getObject(
+            UnionExpression::class,
             [
                 'parts' => [$selectMock],
                 'type' => 'UNION ALL',
