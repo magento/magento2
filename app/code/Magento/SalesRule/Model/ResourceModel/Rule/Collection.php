@@ -83,6 +83,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     * Map data for associated entities
+     *
      * @param string $entityType
      * @param string $objectField
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -120,6 +122,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     *  Add website ids and customer group ids to rules data
+     *
      * @return $this
      * @throws \Exception
      * @since 100.1.0
@@ -414,6 +418,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     * Getter for _associatedEntitiesMap property
+     *
      * @return array
      * @deprecated 100.1.0
      */
@@ -428,6 +434,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     * Getter for dateApplier property
+     *
      * @return DateApplier
      * @deprecated 100.1.0
      */

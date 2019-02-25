@@ -350,17 +350,42 @@
 
     <!--Cancel order that is in pending status-->
     <actionGroup name="cancelPendingOrder">
+        <arguments>
+            <argument name="orderStatus" type="string" defaultValue="Canceled"/>
+        </arguments>
         <click selector="{{AdminOrderDetailsMainActionsSection.cancel}}" stepKey="clickCancelOrder"/>
         <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForCancelConfirmation"/>
         <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to cancel this order?" stepKey="seeConfirmationMessage"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage"/>
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Canceled" stepKey="seeOrderStatusCanceled"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{orderStatus}}" stepKey="seeOrderStatusCanceled"/>
     </actionGroup>
 
     <!--Select Check Money payment method-->
     <actionGroup name="SelectCheckMoneyPaymentMethod">
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
         <conditionalClick selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" dependentSelector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" visible="true" stepKey="checkCheckMoneyOption"/>
+    </actionGroup>
+
+    <!-- Create Order -->
+    <actionGroup name="CreateOrderActionGroup">
+        <arguments>
+            <argument name="product"/>
+            <argument name="customer"/>
+        </arguments>
+        <amOnPage stepKey="navigateToNewOrderPage" url="{{AdminOrderCreatePage.url}}"/>
+        <click stepKey="chooseCustomer" selector="{{AdminOrdersGridSection.customerInOrdersSection(customer.firstname)}}"/>
+        <waitForPageLoad stepKey="waitForStoresPageOpened"/>
+        <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>
+        <waitForPageLoad stepKey="waitForProductsListForOrder"/>
+        <click selector="{{AdminOrdersGridSection.productForOrder(product.sku)}}" stepKey="chooseTheProduct"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="addSelectedProductToOrder"/>
+        <waitForPageLoad stepKey="waitForProductAddedInOrder"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="openShippingMethod"/>
+        <waitForPageLoad stepKey="waitForShippingMethods"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
+        <waitForPageLoad stepKey="waitForShippingMethodsThickened"/>
+        <click selector="{{OrdersGridSection.submitOrder}}" stepKey="submitOrder"/>
+        <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
     </actionGroup>
 </actionGroups>
