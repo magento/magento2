@@ -126,6 +126,9 @@
                        title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
                        id="zip"
                        class="input-text validate-zip-international <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('postcode')) ?>">
+                <div role="alert" class="message warning" style="display:none">
+                    <span></span>
+                </div>
             </div>
         </div>
         <div class="field country required">
@@ -184,7 +187,9 @@
 <script type="text/x-magento-init">
     {
         "#form-validate": {
-            "addressValidation": {}
+            "addressValidation": {
+                "postCodes": <?= /* @noEscape */ $block->getPostCodeConfig()->getSerializedPostCodes(); ?>
+            }
         },
         "#country": {
             "regionUpdater": {
