@@ -7,6 +7,7 @@ namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Event\Manager;
 
 /**
  * Application Maintenance Mode
@@ -39,13 +40,18 @@ class MaintenanceMode
     protected $flagDir;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @var Manager
      */
-    public function __construct(Filesystem $filesystem)
+    private $eventManager;
+
+    /**
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param Manager|null $eventManager
+     */
+    public function __construct(Filesystem $filesystem, ?Manager $eventManager = null)
     {
         $this->flagDir = $filesystem->getDirectoryWrite(self::FLAG_DIR);
+        $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(Manager::class);
     }
 
     /**
@@ -73,6 +79,8 @@ class MaintenanceMode
      */
     public function set($isOn)
     {
+        $this->eventManager->dispatch('maintenance_mode_changed', ['isOn' => $isOn]);
+
         if ($isOn) {
             return $this->flagDir->touch(self::FLAG_FILENAME);
         }
