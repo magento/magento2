@@ -8,14 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="EditShippingAddressOnePageCheckoutTestVariation1">
+    <test name="EditShippingAddressOnePageCheckoutTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="Edit Shipping Address"/>
             <title value="Edit Shipping Address on Checkout Page."/>
             <description value="Edit Shipping Address on Checkout Page."/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-67837"/>
+            <testCaseId value="MC-14680"/>
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -39,7 +39,7 @@
 
         <!-- Add product to cart -->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
-        <actionGroup ref="StorefrontAddCategorySimpleProductToCartActionGroup" stepKey="addProductToCart">
+        <actionGroup ref="StorefrontAddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
@@ -51,7 +51,7 @@
 
         <!--Fill in required fields and click *Save address* button-->
         <actionGroup ref="FillShippingAddressOneStreetActionGroup" stepKey="changeAddress">
-            <argument name="Address" value="UK_Not_Default_Address"/>
+            <argument name="address" value="UK_Not_Default_Address"/>
         </actionGroup>
         <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveNewAddress"/>
 
@@ -63,7 +63,7 @@
         <click selector="{{CheckoutShippingSection.editActiveAddress}}" stepKey="editNewAddress"/>
 
         <!--Remove values from required fields and click *Cancel* button -->
-        <actionGroup ref="clearShippingAddressActionGroup" stepKey="clearRequiredFields"/>
+        <actionGroup ref="ClearShippingAddressActionGroup" stepKey="clearRequiredFields"/>
         <click selector="{{CheckoutShippingSection.cancelChangeAddress}}" stepKey="cancelEditAddress"/>
 
         <!-- Go to *Next* -->

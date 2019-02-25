@@ -20,27 +20,4 @@
         <fillField stepKey="fillPostCode" selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{address.postcode}}"/>
         <waitForPageLoad stepKey="waitForFormUpdate"/>
     </actionGroup>
-    <actionGroup name="FillShippingAddressOneStreetActionGroup">
-        <arguments>
-            <argument name="Address"/>
-        </arguments>
-        <fillField stepKey="fillFirstName" selector="{{CheckoutShippingSection.firstName}}" userInput="{{Address.firstname}}"/>
-        <fillField stepKey="fillLastName" selector="{{CheckoutShippingSection.lastName}}" userInput="{{Address.lastname}}"/>
-        <fillField stepKey="fillCompany" selector="{{CheckoutShippingSection.company}}" userInput="{{Address.company}}"/>
-        <fillField stepKey="fillPhoneNumber" selector="{{CheckoutShippingSection.telephone}}" userInput="{{Address.telephone}}"/>
-        <fillField stepKey="fillStreetAddress" selector="{{CheckoutShippingSection.street}}" userInput="{{Address.street[0]}}"/>
-        <fillField stepKey="fillCityName" selector="{{CheckoutShippingSection.city}}" userInput="{{Address.city}}"/>
-        <selectOption stepKey="selectCounty" selector="{{CheckoutShippingSection.country}}" userInput="{{Address.country_id}}"/>
-        <fillField stepKey="fillZip" selector="{{CheckoutShippingSection.postcode}}" userInput="{{Address.postcode}}"/>
-    </actionGroup>
-    <actionGroup name="clearShippingAddressActionGroup">
-        <clearField selector="{{CheckoutShippingSection.firstName}}" stepKey="clearFieldFirstName"/>
-        <clearField selector="{{CheckoutShippingSection.company}}" stepKey="clearFieldCompany"/>
-        <clearField selector="{{CheckoutShippingSection.street}}" stepKey="clearFieldStreetAddress"/>
-        <clearField selector="{{CheckoutShippingSection.city}}" stepKey="clearFieldCityName"/>
-        <selectOption selector="{{CheckoutShippingSection.region}}" userInput="" stepKey="clearFieldRegion"/>
-        <clearField selector="{{CheckoutShippingSection.postcode}}"  stepKey="clearFieldZip"/>
-        <selectOption selector="{{CheckoutShippingSection.country}}" userInput="" stepKey="clearFieldCounty"/>
-        <clearField selector="{{CheckoutShippingSection.telephone}}" stepKey="clearFieldPhoneNumber"/>
-    </actionGroup>
 </actionGroups>
