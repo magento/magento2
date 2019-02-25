@@ -875,7 +875,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->productRepository = $productRepository ?? \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(ProductRepositoryInterface::class);
 
-        $errorMessageText = 'Value for multiselect attribute %s contains duplicated values';
+        $errorMessageText = __('Value for multiselect attribute %s contains duplicated values');
         $this->_messageTemplates[self::$errorDuplicateMultiselectValues] = $errorMessageText;
     }
 
@@ -3062,10 +3062,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Returns errorLevel for validation
      *
-     * @param string $sku
+     * @param string|bool|null $sku
      * @return string
      */
-    private function getValidationErrorLevel(string $sku): string
+    private function getValidationErrorLevel($sku): string
     {
         return (!$this->isSkuExist($sku) && Import::BEHAVIOR_REPLACE !== $this->getBehavior())
             ? ProcessingError::ERROR_LEVEL_CRITICAL
