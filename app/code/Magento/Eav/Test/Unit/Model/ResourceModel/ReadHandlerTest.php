@@ -20,6 +20,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Model\Entity\ScopeInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Test for Magento\Eav\Model\ResourceModel\ReadHandler class.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ReadHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -102,7 +107,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testExecuteNew()
+    public function testExecute()
     {
         $eavEntityType = 'env-entity-type';
         $entityData = ['linkField' => 'theLinkField'];
@@ -119,9 +124,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         $orderedUnionSelectMock = $this->createMock(Select::class);
         $fallbackScopeMock = $this->createMock(ScopeInterface::class);
 
-        $this->metadataPoolMock->expects($this->exactly(2))
-            ->method('getMetadata')
-            ->willReturn($this->metadataMock);
+        $this->metadataPoolMock->expects($this->exactly(2))->method('getMetadata')->willReturn($this->metadataMock);
         $this->metadataMock->expects($this->exactly(2))->method('getEavEntityType')->willReturn($eavEntityType);
         $this->scopeResolverMock->expects($this->once())
             ->method('getEntityContext')
