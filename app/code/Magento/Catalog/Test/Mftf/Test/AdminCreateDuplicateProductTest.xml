@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDuplicateProductTest">
+        <annotations>
+            <stories value="Create Product"/>
+            <title value="CreateDuplicateUrlProductEntityTestVariation1"/>
+            <description value="Login as admin and create duplicate Product"/>
+            <testCaseId value="MC-14714"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+
+        <!-- Create duplicate Product and Save the Product -->
+        <actionGroup ref="createDuplicateProduct" stepKey="createDuplicateProduct"/>
+    </test>
+</tests>
