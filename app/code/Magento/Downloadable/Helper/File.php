@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Downloadable\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -61,6 +62,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Upload file from temporary folder.
+     *
      * @param string $tmpPath
      * @param \Magento\MediaStorage\Model\File\Uploader $uploader
      * @return array
@@ -77,7 +79,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Checking file for moving and move it
+     * Checking file for moving and move it.
+     *
      * @param string $baseTmpPath
      * @param string $basePath
      * @param string $file
@@ -104,6 +107,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Check if file exist in filesystem and try to re-create it from database record if negative.
+     *
      * @param string $file
      * @return bool|int
      */
@@ -180,6 +184,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Get filesize in bytes.
+     *
      * @param string $file
      * @return int
      */
@@ -189,6 +194,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get file type by filepath.
+     *
      * @param string $filePath
      * @return string
      */
@@ -199,6 +206,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get file type by file extension.
+     *
      * @param string $ext
      * @return string
      */
@@ -212,6 +221,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get all available file types.
+     *
      * @return array
      */
     public function getAllFileTypes()
@@ -220,6 +231,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get all available mime types.
+     *
      * @return array
      */
     public function getAllMineTypes()
