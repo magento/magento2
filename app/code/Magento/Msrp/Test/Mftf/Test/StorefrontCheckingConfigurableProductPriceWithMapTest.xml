@@ -40,6 +40,42 @@
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
+        <!--Set MSRP for Child product 1-->
+        <actionGroup ref="AdminProductSetMsrp" stepKey="setMsrpForChildProduct1">
+            <argument name="productId" value="$createConfigChildProduct1CreateConfigProduct.id$"/>
+            <argument name="msrp" value="45"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveChildProduct1"/>
 
+        <!--Set MSRP for Child product 2-->
+        <actionGroup ref="AdminProductSetMsrp" stepKey="setMsrpForChildProduct2">
+            <argument name="productId" value="$createConfigChildProduct2CreateConfigProduct.id$"/>
+            <argument name="msrp" value="66"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveChildProduct2"/>
+
+        <amOnPage url="{{StorefrontProductPage.url($createConfigProductCreateConfigProduct.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
+        <!--Checking MSRP of configurable product on Storefront page-->
+        <actionGroup ref="AssertMsrpOfProduct" stepKey="assertMsrpOfChildProduct">
+            <argument name="msrp" value="66.00"/>
+        </actionGroup>
+
+        <!--Checking when Option has a price higher than MSRP-->
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$getConfigAttributeOption1CreateConfigProduct.value$" stepKey="selectOption1"/>
+        <actionGroup ref="AssertMsrpFallbackOfProduct" stepKey="assertMsrpOfChildProduct1">
+            <argument name="msrp" value="50.00"/>
+        </actionGroup>
+
+        <!--Checking when Option has a price less than MSRP-->
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$getConfigAttributeOption2CreateConfigProduct.value$" stepKey="selectOption2"/>
+        <actionGroup ref="AssertMsrpOfProduct" stepKey="assertMsrpOfChildProduct2">
+            <argument name="msrp" value="66.00"/>
+        </actionGroup>
+
+        <!--Checking when Option doesn't have MSRP-->
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$getConfigAttributeOption3CreateConfigProduct.value$" stepKey="selectOption3"/>
+        <actionGroup ref="AssertMsrpFallbackOfProduct" stepKey="assertMsrpOfChildProduct3">
+            <argument name="msrp" value="70.00"/>
+        </actionGroup>
     </test>
 </tests>
