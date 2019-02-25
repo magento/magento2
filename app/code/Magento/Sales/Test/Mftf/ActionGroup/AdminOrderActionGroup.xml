@@ -181,7 +181,7 @@
         <fillField selector="{{AdminOrderFormBillingAddressSection.phone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
     </actionGroup>
     <!--Check customer billing address fields-->
-    <actionGroup name="checkOrderCustomerBillingInformation">
+    <actionGroup name="CheckOrderCustomerBillingInformation">
         <arguments>
             <argument name="customer"/>
             <argument name="address"/>
@@ -196,7 +196,7 @@
         <seeInField selector="{{AdminOrderFormBillingAddressSection.phone}}" userInput="{{address.telephone}}" stepKey="checkTelephone"/>
     </actionGroup>
     <!--Fill customer shipping address-->
-    <actionGroup name="fillOrderCustomerShippingInformation">
+    <actionGroup name="FillOrderCustomerShippingInformation">
         <arguments>
             <argument name="customer"/>
             <argument name="address"/>
@@ -211,7 +211,7 @@
         <fillField selector="{{AdminOrderFormShippingAddressSection.phone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
     </actionGroup>
     <!--Check customer shipping address fields-->
-    <actionGroup name="checkOrderCustomerShippingInformation">
+    <actionGroup name="CheckOrderCustomerShippingInformation">
         <arguments>
             <argument name="customer"/>
             <argument name="address"/>
