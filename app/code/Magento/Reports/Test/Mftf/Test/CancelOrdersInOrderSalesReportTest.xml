@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CancelOrdersInOrderSalesReportTest">
+        <annotations>
+            <features value="Reports"/>
+            <stories value="Order Sales Report"/>
+            <group value="reports"/>
+            <title value="Canceled orders in order sales report"/>
+            <description value="Verify canceling of orders in order sales report"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-13838"/>
+            <useCaseId value="MAGETWO-95463"/>
+        </annotations>
+        <before>
+            <!-- create new product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- create new customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--login to Admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create new order-->
+        <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="startToCreateNewOrder">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrderWithUserDefinedQty">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!-- Select shipping -->
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+        <!--Select payment-->
+        <actionGroup ref="SelectCheckMoneyPaymentMethod" stepKey="selectCheckMoneyPayment"/>
+        <!--Submit Order-->
+        <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="clickSubmitOrder"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
+        <!--Create order invoice-->
+        <comment userInput="Admin creates invoice for order" stepKey="adminCreateInvoiceComment" />
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="createInvoice"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+        <!--Ship Order-->
+        <comment userInput="Admin creates shipment" stepKey="adminCreatesShipmentComment"/>
+        <actionGroup ref="StartCreateShipmentFromOrderPage" stepKey="createShipment"/>
+        <actionGroup ref="SubmitShipment" stepKey="submitShipment"/>
+
+        <!--Create new order-->
+        <comment userInput="Admin creates order" stepKey="adminCreateOrderComment1"/>
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="startToCreateNewOrder1">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrderWithUserDefinedQty1">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!-- Select shipping -->
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping1"/>
+        <!--Select payment-->
+        <actionGroup ref="SelectCheckMoneyPaymentMethod" stepKey="selectCheckMoneyPayment1"/>
+        <!--Submit Order-->
+        <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="clickSubmitOrder1"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." stepKey="seeSuccessMessage1"/>
+        <!-- Cancel order -->
+        <actionGroup ref="cancelPendingOrder" stepKey="cancelOrder"/>
+
+        <!-- Generate Order report -->
+        <amOnPage url="{{AdminOrdersReportPage.url}}" stepKey="goToAdminOrdersReportPage"/>
+        <!-- Get date -->
+        <generateDate date="+0 day" format="m/d/Y" stepKey="generateEndDate"/>
+        <generateDate date="-1 day" format="m/d/Y" stepKey="generateStartDate"/>
+        <actionGroup ref="GenerateOrderReportActionGroup" stepKey="generateReportAfterCancelOrder">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate"/>
+        </actionGroup>
+        <waitForElement selector="{{AdminOrderReportTableSection.ordersCount}}" stepKey="waitForOrdersCount"/>
+        <see selector="{{AdminOrderReportTableSection.canceledOrders}}" userInput="$0.00" stepKey="seeCanceledOrderPrice"/>
+    </test>
+</tests>
