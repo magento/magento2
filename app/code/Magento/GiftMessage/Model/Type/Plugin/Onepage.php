@@ -3,8 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\GiftMessage\Model\Type\Plugin;
 
+/**
+ * Add gift message to quote plugin.
+ */
 class Onepage
 {
     /**
@@ -30,6 +34,8 @@ class Onepage
     }
 
     /**
+     * Add gift message ot quote.
+     *
      * @param \Magento\Checkout\Model\Type\Onepage $subject
      * @param array $result
      * @return array
