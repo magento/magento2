@@ -30,7 +30,7 @@
         </after>
 
         <!--Filter and Select the created Product -->
-        <actionGroup ref="AdminSearchProductBySku" stepKey="searchProduct">
+        <actionGroup ref="AdminSearchUrlRewriteProductBySku" stepKey="searchProduct">
             <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
 
