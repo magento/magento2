@@ -237,4 +237,21 @@
         <data key="state">Colorado</data>
         <data key="postcode">12345</data>
     </entity>
+    <entity name="PolandAddress" type="address">
+        <data key="firstname">Mag</data>
+        <data key="lastname">Ento</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>Piwowarska 6</item>
+        </array>
+        <data key="city">Bielsko-Biała</data>
+        <data key="state"> Bielsko</data>
+        <data key="country_id">PL</data>
+        <data key="country">Poland</data>
+        <data key="postcode">43-310</data>
+        <data key="telephone">799885616</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionUT</requiredEntity>
+    </entity>
 </entities>
