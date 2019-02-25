@@ -38,3 +38,5 @@ name,name
 "Maximum Query Length","Maximum Query Length"
 "Rebuild Catalog product fulltext search index","Rebuild Catalog product fulltext search index"
 "Please enter a valid price range.","Please enter a valid price range."
+"This value must be compatible with the corresponding setting in the configured search engine. Be aware: a low query length limit may cause the performance impact.","This value must be compatible with the corresponding setting in the configured search engine. Be aware: a low query length limit may cause the performance impact."
+"This value must be compatible with the corresponding setting in the configured search engine.","This value must be compatible with the corresponding setting in the configured search engine."

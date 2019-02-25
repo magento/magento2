@@ -28,7 +28,7 @@ class Match implements QueryInterface
      */
     const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^';
 
-    const MINIMAL_CHARACTER_LENGTH = 3;
+    const MINIMAL_CHARACTER_LENGTH = 1;
 
     /**
      * @var string[]
@@ -146,7 +146,7 @@ class Match implements QueryInterface
             if (empty($queryValue)) {
                 unset($queryValues[$queryKey]);
             } else {
-                $stringSuffix = self::MINIMAL_CHARACTER_LENGTH > strlen($queryValue) ? '' : '*';
+                $stringSuffix = $this->getMinimalCharacterLength() > strlen($queryValue) ? '' : '*';
                 $queryValues[$queryKey] = $stringPrefix . $queryValue . $stringSuffix;
             }
         }
@@ -154,5 +154,15 @@ class Match implements QueryInterface
         $queryValue = implode(' ', $queryValues);
 
         return $queryValue;
+    }
+
+    /**
+     * Retrieves minimal character length
+     *
+     * @return int
+     */
+    protected function getMinimalCharacterLength()
+    {
+        return self::MINIMAL_CHARACTER_LENGTH;
     }
 }

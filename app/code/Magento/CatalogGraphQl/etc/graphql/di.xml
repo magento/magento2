@@ -78,4 +78,6 @@
             </argument>
         </arguments>
     </virtualType>
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match"
+                type="Magento\CatalogGraphQl\Model\Search\Adapter\Mysql\Query\Builder\Match" />
 </config>

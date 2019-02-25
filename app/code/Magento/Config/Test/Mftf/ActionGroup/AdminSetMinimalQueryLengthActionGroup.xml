@@ -21,7 +21,6 @@
         <see userInput="{{MinMaxQueryLength.Hint}}" selector="{{AdminCatalogSearchConfigurationSection.maxQueryLengthHint}}" stepKey="seeHint2"/>
         <uncheckOption selector="{{AdminCatalogSearchConfigurationSection.minQueryLengthInherit}}" stepKey="uncheckSystemValue"/>
         <fillField selector="{{AdminCatalogSearchConfigurationSection.minQueryLength}}" userInput="{{minLength}}" stepKey="setMinQueryLength"/>
-        <scrollTo selector="{{AdminConfigCatalogCategoryPermissionsSection.catalogPermissionsTab}}" stepKey="goToOpenedTab"/>
         <click selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" stepKey="collapseTab"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForConfigSaved"/>

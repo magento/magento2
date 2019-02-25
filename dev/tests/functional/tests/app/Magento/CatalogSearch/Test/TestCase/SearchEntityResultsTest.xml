@@ -57,11 +57,9 @@
         <variation name="SearchEntityResultsTestVariation12" summary="Search for simple product name using 2 symbols query length" ticketId="MAGETWO-36542">
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default::name</data>
             <data name="queryLength" xsi:type="string">2</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchNoResultMessage" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchNoResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
         </variation>
         <variation name="SearchEntityResultsTestVariation13" summary="Search for simple product name using 3 symbols query length" ticketId="MAGETWO-36542">
-            <data name="issue" xsi:type="string">MAGETWO-65509: [FT] Magento\CatalogSearch\Test\TestCase\SearchEntityResultsTest fails on Jenkins</data>
             <data name="tag" xsi:type="string">stable:no</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default::name</data>
             <data name="queryLength" xsi:type="string">3</data>
