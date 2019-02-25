@@ -931,7 +931,7 @@ class EavSetup
         } elseif (isset($option['values'])) {
             foreach ($option['values'] as $sortOrder => $label) {
                 $checkOpionId = $this->setup->getConnection()->select($optionTable, ['attribute_id =?' => $option['attribute_id'], 'sort_order =?' => $sortOrder, 'value =?' => $label]);
-                if (!$checkOpionId->getSize()) {
+                if (!$checkOpionId->count()) {
                     // add option
                     $data = ['attribute_id' => $option['attribute_id'], 'sort_order' => $sortOrder];
                     $this->setup->getConnection()->insert($optionTable, $data);
