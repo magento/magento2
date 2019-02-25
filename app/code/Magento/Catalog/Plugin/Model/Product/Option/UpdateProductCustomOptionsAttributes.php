@@ -45,8 +45,9 @@ class UpdateProductCustomOptionsAttributes
         ) {
             $product->setCanSaveCustomOptions(true);
             $product->setOptionsSaved(true);
-            $currentOptions = array_filter($product->getOptions(), function ($iOption) use ($option) {
-                return $option->getOptionId() != $iOption->getOptionId();
+            $optionId = $option->getOptionId();
+            $currentOptions = array_filter($product->getOptions(), function ($optionItem) use ($optionId) {
+                return $optionId != $optionItem->getOptionId();
             });
             $currentOptions[] = $option;
             $product->setOptions($currentOptions);

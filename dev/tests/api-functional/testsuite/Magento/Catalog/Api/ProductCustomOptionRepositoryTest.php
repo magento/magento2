@@ -32,6 +32,9 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      */
     private $productRepository;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -175,9 +178,9 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             }
         }
         $this->assertEquals($optionData, $result);
-        $this->assertTrue($product->getHasOptions() == 1);
+        $this->assertEquals(1, $product->getHasOptions());
         if ($optionDataPost['is_require']) {
-            $this->assertTrue($product->getRequiredOptions() == 1);
+            $this->assertEquals(1, $product->getRequiredOptions());
         }
     }
 
@@ -200,7 +203,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      * @dataProvider optionNegativeDataProvider
      * @param array $optionData
      */
-    public function testAddNegative($optionData)
+    public function testAddNegative(array $optionData)
     {
         $productSku = 'simple';
         $optionDataPost = $optionData;
@@ -301,7 +304,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      * @param string $optionType
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testUpdateOptionAddingNewValue($optionType)
+    public function testUpdateOptionAddingNewValue(string $optionType)
     {
         $fixtureOption = null;
         $valueData = [
