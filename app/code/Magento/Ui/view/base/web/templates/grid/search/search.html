@@ -10,9 +10,10 @@
     </label>
     <input class="admin__control-text data-grid-search-control" type="text"
             data-bind="
+                i18n: placeholder,
                 attr: {
                     id: index,
-                    placeholder: placeholder
+                    placeholder: $t(placeholder)
                 },
                 textInput: inputValue,
                 keyboard: {

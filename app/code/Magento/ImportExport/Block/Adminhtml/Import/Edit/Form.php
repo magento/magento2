@@ -36,7 +36,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param Import $importModel
+     * @param \Magento\ImportExport\Model\Import $importModel
      * @param \Magento\ImportExport\Model\Source\Import\EntityFactory $entityFactory
      * @param \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory
      * @param array $data
@@ -45,7 +45,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        Import $importModel,
+        \Magento\ImportExport\Model\Import $importModel,
         \Magento\ImportExport\Model\Source\Import\EntityFactory $entityFactory,
         \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory,
         array $data = []
@@ -77,8 +77,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         // base fieldset
-        $fieldsets['base'] = $form->addFieldset('base_fieldset', ['legend' => __('Import Settings')]);
-        $fieldsets['base']->addField(
+        $fieldsets['base'] = $form->addFieldset(
+            'base_fieldset',
+            ['legend' => __('Import Settings')]
+        )->addField(
             'entity',
             'select',
             [
@@ -95,12 +97,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         // add behaviour fieldsets
         $uniqueBehaviors = $this->_importModel->getUniqueEntityBehaviors();
         foreach ($uniqueBehaviors as $behaviorCode => $behaviorClass) {
-            $fieldsets[$behaviorCode] = $form->addFieldset(
+            $fieldset = $form->addFieldset(
                 $behaviorCode . '_fieldset',
                 ['legend' => __('Import Behavior'), 'class' => 'no-display']
             );
-            /** @var $behaviorSource \Magento\ImportExport\Model\Source\Import\AbstractBehavior */
-            $fieldsets[$behaviorCode]->addField(
+            $fieldset->addField(
                 $behaviorCode,
                 'select',
                 [
@@ -116,13 +117,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'after_element_html' => $this->getImportBehaviorTooltip(),
                 ]
             );
-            $fieldsets[$behaviorCode]->addField(
+            $fieldset->addField(
                 $behaviorCode . Import::FIELD_NAME_VALIDATION_STRATEGY,
                 'select',
                 [
                     'name' => Import::FIELD_NAME_VALIDATION_STRATEGY,
-                    'title' => __(' '),
-                    'label' => __(' '),
+                    'title' => __('Validation Strategy'),
+                    'label' => __('Validation Strategy'),
                     'required' => true,
                     'class' => $behaviorCode,
                     'disabled' => true,
@@ -133,7 +134,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'after_element_html' => $this->getDownloadSampleFileHtml(),
                 ]
             );
-            $fieldsets[$behaviorCode]->addField(
+            $fieldset->addField(
                 $behaviorCode . '_' . Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
                 'text',
                 [
@@ -149,7 +150,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     ),
                 ]
             );
-            $fieldsets[$behaviorCode]->addField(
+            $fieldset->addField(
                 $behaviorCode . '_' . Import::FIELD_FIELD_SEPARATOR,
                 'text',
                 [
@@ -162,7 +163,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'value' => ',',
                 ]
             );
-            $fieldsets[$behaviorCode]->addField(
+            $fieldset->addField(
                 $behaviorCode . Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR,
                 'text',
                 [
@@ -188,7 +189,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'value' => Import::DEFAULT_GLOBAL_MULTI_LINE_SEPARATOR,
                 ]
             );
-            $fieldsets[$behaviorCode]->addField(
+            $fieldset->addField(
                 $behaviorCode . Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
                 'text',
                 [
@@ -201,7 +202,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'value' => Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
                 ]
             );
-            $fieldsets[$behaviorCode]->addField(
+            $fieldset->addField(
                 $behaviorCode . Import::FIELDS_ENCLOSURE,
                 'checkbox',
                 [
@@ -211,14 +212,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'value' => 1,
                 ]
             );
+            $fieldsets[$behaviorCode] = $fieldset;
         }
 
         // fieldset for file uploading
-        $fieldsets['upload'] = $form->addFieldset(
+        $fieldset = $form->addFieldset(
             'upload_file_fieldset',
             ['legend' => __('File to Import'), 'class' => 'no-display']
         );
-        $fieldsets['upload']->addField(
+        $fieldset->addField(
             Import::FIELD_NAME_SOURCE_FILE,
             'file',
             [
@@ -232,7 +234,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ),
             ]
         );
-        $fieldsets['upload']->addField(
+        $fieldset->addField(
             Import::FIELD_NAME_IMG_FILE_DIR,
             'text',
             [
@@ -247,6 +249,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ),
             ]
         );
+        $fieldsets['upload'] = $fieldset;
 
         $form->setUseContainer(true);
         $this->setForm($form);
