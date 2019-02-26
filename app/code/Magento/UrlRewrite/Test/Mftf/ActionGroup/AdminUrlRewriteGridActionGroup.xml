@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-        <!--
-        /**
-         * Copyright © Magento, Inc. All rights reserved.
-         * See COPYING.txt for license details.
-         */
-        -->
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
@@ -25,7 +25,7 @@
         <see selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="{{targetPath}}" stepKey="seeTheTargetPath" />
         <see selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="{{redirectType}}" stepKey="seeTheRedirectTypeForOldUrl" />
     </actionGroup>
-    <actionGroup name="AdminSearchProductBySku">
+    <actionGroup name="AdminSearchUrlRewriteProductBySku">
         <arguments>
             <argument name="productSku" type="string"/>
         </arguments>
@@ -39,17 +39,37 @@
         <click selector="{{AdminUrlRewriteProductSection.productRow}}" stepKey="clickOnFirstRow"/>
         <waitForPageLoad stepKey="waitForProductCategoryPageToLoad"/>
     </actionGroup>
-    <actionGroup name="AdminSearchDeletedCategory">
+    <actionGroup name="AdminSearchDeletedUrlRewrite">
         <arguments>
-            <argument name="category" type="string"/>
+            <argument name="requestPath" type="string"/>
         </arguments>
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
         <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
         <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{category}}" stepKey="fillRedirectPathFilter"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{requestPath}}" stepKey="fillRedirectPathFilter"/>
         <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
         <see selector="{{AdminUrlRewriteIndexSection.emptyRecords}}" userInput="We couldn't find any records." stepKey="seeEmptyRecordMessage"/>
+    </actionGroup>
+    <actionGroup name="AdminDeleteUrlRewrite">
+        <arguments>
+            <argument name="requestPath" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
+        <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{requestPath}}" stepKey="fillRedirectPathFilter"/>
+        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <click selector="{{AdminUrlRewriteIndexSection.editButton('1')}}" stepKey="clickOnEditButton"/>
+        <waitForPageLoad stepKey="waitForEditPageToLoad"/>
+        <click selector="{{AdminUrlRewriteEditSection.deleteButton}}" stepKey="clickOnDeleteButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.okButton}}" stepKey="waitForOkButtonToVisible"/>
+        <click selector="{{AdminUrlRewriteEditSection.okButton}}" stepKey="clickOnOkButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad3"/>
+        <see selector="{{AdminUrlRewriteIndexSection.successMessage}}" userInput="You deleted the URL rewrite." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>
