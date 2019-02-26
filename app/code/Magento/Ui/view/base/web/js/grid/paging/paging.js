@@ -43,9 +43,9 @@ define([
 
             imports: {
                 pageSize: '${ $.sizesConfig.name }:value',
-                current: '${ $.currentConfig.name }:value',
                 totalSelected: '${ $.selectProvider }:totalSelected',
-                totalRecords: '${ $.provider }:data.totalRecords'
+                totalRecords: '${ $.provider }:data.totalRecords',
+                filters: '${ $.provider }:params.filters'
             },
 
             exports: {
@@ -191,8 +191,9 @@ define([
          * @returns {Paging} Chainable.
          */
         goFirst: function () {
-            this.current = 1;
-
+            if (typeof this.filters !== 'undefined') {
+                this.current = 1;
+            }
             return this;
         },
 
