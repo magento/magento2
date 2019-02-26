@@ -48,7 +48,7 @@
     <!-- Go to store's advanced catalog search page -->
     <actionGroup name="GoToStoreViewAdvancedCatalogSearchActionGroup">
         <amOnPage url="{{StorefrontCatalogSearchAdvancedFormPage.url}}" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForPageLoad time="90" stepKey="waitForPageLoad"/>
     </actionGroup>
 
     <!-- Storefront advanced catalog search by product name -->
