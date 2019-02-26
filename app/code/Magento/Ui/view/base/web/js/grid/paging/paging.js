@@ -32,29 +32,16 @@ define([
                 }
             },
 
-            currentConfig: {
-                component: 'Magento_Ui/js/grid/paging/paging',
-                name: '${ $.name }_current',
-                storageConfig: {
-                    provider: '${ $.storageConfig.provider }',
-                    namespace: '${ $.storageConfig.namespace }'
-                }
-            },
-
             imports: {
                 pageSize: '${ $.sizesConfig.name }:value',
-                current: '${ $.currentConfig.name }:value',
                 totalSelected: '${ $.selectProvider }:totalSelected',
-                totalRecords: '${ $.provider }:data.totalRecords'
+                totalRecords: '${ $.provider }:data.totalRecords',
+                filters: '${ $.provider }:params.filters'
             },
 
             exports: {
                 pageSize: '${ $.provider }:params.paging.pageSize',
                 current: '${ $.provider }:params.paging.current'
-            },
-
-            tracks: {
-                current: true
             },
 
             statefull: {
@@ -191,8 +178,9 @@ define([
          * @returns {Paging} Chainable.
          */
         goFirst: function () {
-            this.current = 1;
-
+            if (typeof this.filters !== 'undefined') {
+                this.current = 1;
+            }
             return this;
         },
 
