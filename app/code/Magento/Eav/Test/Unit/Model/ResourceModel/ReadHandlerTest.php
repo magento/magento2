@@ -145,7 +145,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('from')
             ->with(
                 [
-                    't' => 'some_table'
+                    't' => 'some_table',
                 ],
                 [
                     'value' => 't.value',

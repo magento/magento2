@@ -32,7 +32,7 @@ class UnionExpression extends Expression
      * @param string $type (optional)
      * @param string $pattern (optional)
      */
-    public function __construct(array $parts, string $type = Select::SQL_UNION, string $pattern = '')
+    public function __construct(array $parts, $type = Select::SQL_UNION, $pattern = '')
     {
         $this->parts = $parts;
         $this->type = $type;
