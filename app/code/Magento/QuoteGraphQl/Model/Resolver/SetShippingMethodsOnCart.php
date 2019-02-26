@@ -69,13 +69,13 @@ class SetShippingMethodsOnCart implements ResolverInterface
 
         $shippingMethod = reset($shippingMethods); // This point can be extended for multishipping
 
-        if (!array_key_exists('cart_address_id', $shippingMethod)) {
+        if (!isset($shippingMethod['cart_address_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_address_id" is missing'));
         }
-        if (!array_key_exists('shipping_carrier_code', $shippingMethod)) {
+        if (!isset($shippingMethod['shipping_carrier_code'])) {
             throw new GraphQlInputException(__('Required parameter "shipping_carrier_code" is missing'));
         }
-        if (!array_key_exists('shipping_method_code', $shippingMethod)) {
+        if (!isset($shippingMethod['shipping_method_code'])) {
             throw new GraphQlInputException(__('Required parameter "shipping_method_code" is missing'));
         }
 
