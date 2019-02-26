@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Catalog\Model\ProductFactory;
@@ -15,6 +17,11 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type as ProductTypes;
 
+/**
+ * Build a product based on a request
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Builder
 {
     /**
@@ -81,8 +88,9 @@ class Builder
      * @param RequestInterface $request
      * @return \Magento\Catalog\Model\Product
      * @throws \RuntimeException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function build(RequestInterface $request)
+    public function build(RequestInterface $request): Product
     {
         $productId = (int) $request->getParam('id');
         $storeId = $request->getParam('store', 0);
@@ -92,6 +100,7 @@ class Builder
         if ($productId) {
             try {
                 $product = $this->productRepository->getById($productId, true, $storeId);
+                $product->setAttributeSetId($attributeSetId);
             } catch (\Exception $e) {
                 $product = $this->createEmptyProduct(ProductTypes::DEFAULT_TYPE, $attributeSetId, $storeId);
                 $this->logger->critical($e);
@@ -113,6 +122,8 @@ class Builder
     }
 
     /**
+     * Create a product with the given properties
+     *
      * @param int $typeId
      * @param int $attributeSetId
      * @param int $storeId
