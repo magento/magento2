@@ -32,15 +32,6 @@ define([
                 }
             },
 
-            currentConfig: {
-                component: 'Magento_Ui/js/grid/paging/paging',
-                name: '${ $.name }_current',
-                storageConfig: {
-                    provider: '${ $.storageConfig.provider }',
-                    namespace: '${ $.storageConfig.namespace }'
-                }
-            },
-
             imports: {
                 pageSize: '${ $.sizesConfig.name }:value',
                 totalSelected: '${ $.selectProvider }:totalSelected',
@@ -51,10 +42,6 @@ define([
             exports: {
                 pageSize: '${ $.provider }:params.paging.pageSize',
                 current: '${ $.provider }:params.paging.current'
-            },
-
-            tracks: {
-                current: true
             },
 
             statefull: {
