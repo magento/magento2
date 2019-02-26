@@ -181,6 +181,7 @@ define([
             if (typeof this.filters !== 'undefined') {
                 this.current = 1;
             }
+
             return this;
         },
 
