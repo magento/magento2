@@ -345,6 +345,11 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->connection->expects($this->any())->method('getIfNullSql')->will(
             $this->returnValueMap([
                 [
+                    '`value`.`store_id`',
+                    '`default_value`.`store_id`',
+                    'IFNULL(`value`.`store_id`,`default_value`.`store_id`) AS `store_id`'
+                ],
+                [
                     '`value`.`label`',
                     '`default_value`.`label`',
                     'IFNULL(`value`.`label`, `default_value`.`label`)'
@@ -372,6 +377,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             []
         )->willReturnSelf();
         $this->select->expects($this->at(4))->method('columns')->with([
+            'store_id' => 'IFNULL(`value`.`store_id`,`default_value`.`store_id`) AS `store_id`',
             'label' => 'IFNULL(`value`.`label`, `default_value`.`label`)',
             'position' => 'IFNULL(`value`.`position`, `default_value`.`position`)',
             'disabled' => 'IFNULL(`value`.`disabled`, `default_value`.`disabled`)',
