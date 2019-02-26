@@ -7,6 +7,7 @@ type Query {
 
 type Mutation {
     createEmptyCart: String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CreateEmptyCart") @doc(description:"Creates an empty shopping cart for a guest or logged in user")
+    addDownloadableProductsToCart(input: AddDownloadableProductsToCartInput): AddDownloadableProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
     addSimpleProductsToCart(input: AddSimpleProductsToCartInput): AddSimpleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
     addVirtualProductsToCart(input: AddVirtualProductsToCartInput): AddVirtualProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
     applyCouponToCart(input: ApplyCouponToCartInput): ApplyCouponToCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ApplyCouponToCart")
@@ -32,6 +33,16 @@ input AddVirtualProductsToCartInput {
 }
 
 input VirtualProductCartItemInput {
+    data: CartItemInput!
+    customizable_options:[CustomizableOptionInput!]
+}
+
+input AddDownloadableProductsToCartInput {
+    cart_id: String!
+    cartItems: [DownloadableProductCartItemInput!]!
+}
+
+input DownloadableProductCartItemInput {
     data: CartItemInput!
     customizable_options:[CustomizableOptionInput!]
 }
@@ -198,12 +209,20 @@ type RemoveCouponFromCartOutput {
     cart: Cart
 }
 
+type AddDownloadableProductsToCartOutput {
+    cart: Cart!
+}
+
 type AddSimpleProductsToCartOutput {
     cart: Cart!
 }
 
 type AddVirtualProductsToCartOutput {
     cart: Cart!
+}
+
+type DownloadableCartItem implements CartItemInterface @doc(description: "Downloadable Cart Item") {
+    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
 }
 
 type SimpleCartItem implements CartItemInterface @doc(description: "Simple Cart Item") {
