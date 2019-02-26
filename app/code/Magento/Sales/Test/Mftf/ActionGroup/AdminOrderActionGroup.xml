@@ -296,4 +296,10 @@
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
         <conditionalClick selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" dependentSelector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" visible="true" stepKey="checkCheckMoneyOption"/>
     </actionGroup>
+    <!--Submit order-->
+    <actionGroup name="SubmitOrderActionGroup">
+        <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="clickSubmitOrder"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." stepKey="seeOrderSuccessMessage"/>
+    </actionGroup>
 </actionGroups>
