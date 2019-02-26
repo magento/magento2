@@ -10,6 +10,8 @@ namespace Magento\SalesRule\Model\Rule\Condition;
  * Product rule condition data model
  *
  * @author Magento Core Team <core@magentocommerce.com>
+ *
+ * @method string getAttribute()
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
@@ -161,7 +163,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * Validate Product Rule Condition
      *
      * @param \Magento\Framework\Model\AbstractModel $model
+     *
      * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {

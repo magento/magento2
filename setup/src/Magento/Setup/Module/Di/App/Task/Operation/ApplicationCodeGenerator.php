@@ -74,7 +74,7 @@ class ApplicationCodeGenerator implements OperationInterface
                     $this->directoryScanner->scan($path, $this->data['filePatterns'], $this->data['excludePatterns'])
                 );
             }
-            $entities = $this->phpScanner->collectEntities($files['php']);
+            $entities = isset($files['php']) ? $this->phpScanner->collectEntities($files['php']) : [];
             foreach ($entities as $entityName) {
                 class_exists($entityName);
             }

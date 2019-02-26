@@ -16,7 +16,6 @@ use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\Catalog\Model\Product;
 
 /**
- * Class CustomAttributeFilter
  * Applies filters by custom attributes to base select
  */
 class CustomAttributeFilter
@@ -71,13 +70,13 @@ class CustomAttributeFilter
      * Applies filters by custom attributes to base select
      *
      * @param Select $select
-     * @param FilterInterface[] ...$filters
+     * @param FilterInterface[] $filters
      * @return Select
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \InvalidArgumentException
      * @throws \DomainException
      */
-    public function apply(Select $select, FilterInterface ... $filters)
+    public function apply(Select $select, FilterInterface ...$filters)
     {
         $select = clone $select;
         $mainTableAlias = $this->extractTableAliasFromSelect($select);
@@ -141,7 +140,6 @@ class CustomAttributeFilter
     {
         return [
             sprintf('`%s`.`entity_id` = `%s`.`entity_id`', $mainTable, $joinTable),
-            sprintf('`%s`.`source_id` = `%s`.`source_id`', $mainTable, $joinTable),
             $this->conditionManager->generateCondition(
                 sprintf('%s.attribute_id', $joinTable),
                 '=',

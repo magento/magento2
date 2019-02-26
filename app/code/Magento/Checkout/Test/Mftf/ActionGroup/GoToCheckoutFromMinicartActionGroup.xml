@@ -7,12 +7,13 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Go to checkout from minicart -->
     <actionGroup name="GoToCheckoutFromMinicartActionGroup">
         <waitForElement selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitMiniCartSectionShow" />
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
-        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.goToCheckout}}" time="30" stepKey="waitForGoToCheckoutButtonVisible"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="clickGoToCheckoutButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

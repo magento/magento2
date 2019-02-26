@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="DefaultCurrencySetting" type="currency_config_default">
+        <requiredEntity type="base_currency">BaseCurrency</requiredEntity>
+        <requiredEntity type="default_currency">DefaultCurrency</requiredEntity>
+        <requiredEntity type="allowed_currencies">AllowedCurrencies</requiredEntity>
+    </entity>
+    <entity name="BaseCurrency" type="base_currency">
+        <data key="value">USD</data>
+    </entity>
+    <entity name="DefaultCurrency" type="default_currency">
+        <data key="value">USD</data>
+    </entity>
+    <entity name="AllowedCurrencies" type="allowed_currencies">
+        <array key="value">
+            <item>USD</item>
+        </array>
+    </entity>
+    <entity name="CurrencySettingWithEuroAndUSD" type="currency_config_default">
+        <requiredEntity type="base_currency">BaseCurrency</requiredEntity>
+        <requiredEntity type="default_currency">DefaultCurrency</requiredEntity>
+        <requiredEntity type="allowed_currencies">AllowedCurrenciesEuroAndUSD</requiredEntity>
+    </entity>
+    <entity name="AllowedCurrenciesEuroAndUSD" type="allowed_currencies">
+        <array key="value">
+            <item>EUR</item>
+            <item>USD</item>
+        </array>
+    </entity>
+</entities>

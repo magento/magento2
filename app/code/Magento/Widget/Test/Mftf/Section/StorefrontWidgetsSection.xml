@@ -11,5 +11,6 @@
     <section name="StorefrontWidgetsSection">
         <element name="widgetProductsGrid" type="block" selector=".block.widget.block-products-list.grid"/>
         <element name="widgetProductName" type="text" selector=".product-item-name"/>
+        <element name="checkElementStorefrontByPrice" type="text" selector="//*[@class='product-items widget-product-grid']//*[contains(text(),'${{arg2}}.00')]" parameterized="true"/>
     </section>
 </sections>

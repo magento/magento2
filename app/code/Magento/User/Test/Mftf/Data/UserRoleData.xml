@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/dataProfileSchema.xsd">
     <entity name="adminProductInWebsiteRole" type="user_role">
         <data key="rolename" unique="suffix">restrictedWebsiteRole</data>
         <data key="current_password">123123q</data>
@@ -33,5 +33,17 @@
     <entity name="RoleTest" type="user_role">
         <data key="rolename" unique="suffix">RoleTest</data>
         <data key="current_password">123123q</data>
+    </entity>
+    <entity name="adminMarketingInWebsiteRole" type="user_role">
+        <data key="rolename" unique="suffix">restrictedWebsiteRole</data>
+        <data key="current_password">123123q</data>
+        <data key="gws_is_all">0</data>
+        <array key="gws_websites">
+            <item>1</item>
+        </array>
+        <array key="resource">
+            <item>Magento_Backend::marketing</item>
+            <item>Magento_SalesRule::quote</item>
+        </array>
     </entity>
 </entities>

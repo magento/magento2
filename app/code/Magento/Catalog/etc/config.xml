@@ -30,6 +30,7 @@
                 <flat_catalog_category>0</flat_catalog_category>
                 <default_sort_by>position</default_sort_by>
                 <parse_url_directives>1</parse_url_directives>
+                <remember_pagination>0</remember_pagination>
             </frontend>
             <product>
                 <flat>

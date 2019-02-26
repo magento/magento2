@@ -14,5 +14,6 @@
         <element name="saveAndClose" type="button" selector="span[id='save_and_close']" timeout="30"/>
         <element name="changeStoreButton" type="button" selector="#store-change-button"/>
         <element name="selectStoreView" type="button" selector="//ul[@data-role='stores-list']/li/a[normalize-space(.)='{{var1}}']" timeout="10" parameterized="true"/>
+        <element name="saveAndNew" type="button" selector="#save_and_new" timeout="30"/>
     </section>
 </sections>

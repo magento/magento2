@@ -513,10 +513,6 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->method('getSelectionId')
             ->willReturn(314);
 
-        $this->priceCurrency->expects($this->once())
-            ->method('convert')
-            ->willReturn(3.14);
-
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
         $this->assertEquals([$product, $productType], $result);
     }
@@ -737,10 +733,6 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->method('prepareForCart')
             ->willReturn([]);
 
-        $this->priceCurrency->expects($this->once())
-            ->method('convert')
-            ->willReturn(3.14);
-
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
         $this->assertEquals('We can\'t add this item to your shopping cart right now.', $result);
     }
@@ -960,10 +952,6 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $productType->expects($this->once())
             ->method('prepareForCart')
             ->willReturn('string');
-
-        $this->priceCurrency->expects($this->once())
-            ->method('convert')
-            ->willReturn(3.14);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
         $this->assertEquals('string', $result);
@@ -1595,7 +1583,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $selectionItemMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->setMethods(['getSku', '__wakeup'])
+            ->setMethods(['getSku', 'getEntityId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1623,9 +1611,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($serializeIds));
         $selectionMock = $this->getSelectionsByIdsMock($selectionIds, $productMock, 5, 6);
         $selectionMock->expects(($this->any()))
-            ->method('getItems')
-            ->will($this->returnValue([$selectionItemMock]));
-        $selectionItemMock->expects($this->any())
+            ->method('getItemByColumnValue')
+            ->will($this->returnValue($selectionItemMock));
+        $selectionItemMock->expects($this->at(0))
+            ->method('getEntityId')
+            ->will($this->returnValue(1));
+        $selectionItemMock->expects($this->once())
             ->method('getSku')
             ->will($this->returnValue($itemSku));
 

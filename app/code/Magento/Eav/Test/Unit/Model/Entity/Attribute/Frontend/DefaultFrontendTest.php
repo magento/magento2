@@ -13,41 +13,42 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DefaultFrontend
      */
-    protected $model;
+    private $model;
 
     /**
-     * @var BooleanFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var BooleanFactory|MockObject
      */
-    protected $booleanFactory;
+    private $booleanFactory;
 
     /**
-     * @var Serializer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Serializer|MockObject
      */
     private $serializerMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|MockObject
      */
     private $storeMock;
 
     /**
-     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|MockObject
      */
     private $cacheMock;
 
     /**
-     * @var AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAttribute|MockObject
      */
     private $attributeMock;
 
@@ -57,7 +58,7 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
     private $cacheTags;
 
     /**
-     * @var AbstractSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractSource|MockObject
      */
     private $sourceMock;
 
@@ -76,44 +77,31 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();
-        $this->attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode', 'getSource'])
-            ->getMockForAbstractClass();
+        $this->attributeMock = $this->createAttributeMock();
         $this->sourceMock = $this->getMockBuilder(AbstractSource::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAllOptions'])
             ->getMockForAbstractClass();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(
-            DefaultFrontend::class,
-            [
-                '_attrBooleanFactory' => $this->booleanFactory,
-                'cache' => $this->cacheMock,
-                'storeManager' => $this->storeManagerMock,
-                'serializer' => $this->serializerMock,
-                '_attribute' => $this->attributeMock,
-                'cacheTags' => $this->cacheTags
-            ]
+        $this->model = new DefaultFrontend(
+            $this->booleanFactory,
+            $this->cacheMock,
+            null,
+            $this->cacheTags,
+            $this->storeManagerMock,
+            $this->serializerMock
         );
+
+        $this->model->setAttribute($this->attributeMock);
     }
 
     public function testGetClassEmpty()
     {
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getIsRequired',
-                'getFrontendClass',
-                'getValidateRules',
-            ])
-            ->getMock();
-        $attributeMock->expects($this->once())
-            ->method('getIsRequired')
+        /** @var AbstractAttribute|MockObject $attributeMock */
+        $attributeMock = $this->createAttributeMock();
+        $attributeMock->method('getIsRequired')
             ->willReturn(false);
-        $attributeMock->expects($this->once())
-            ->method('getFrontendClass')
+        $attributeMock->method('getFrontendClass')
             ->willReturn('');
         $attributeMock->expects($this->exactly(2))
             ->method('getValidateRules')
@@ -123,26 +111,26 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->model->getClass());
     }
 
-    public function testGetClass()
+    /**
+     * Validates generated html classes.
+     *
+     * @param string $validationRule
+     * @param string $expectedClass
+     * @return void
+     * @dataProvider validationRulesDataProvider
+     */
+    public function testGetClass(string $validationRule, string $expectedClass)
     {
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getIsRequired',
-                'getFrontendClass',
-                'getValidateRules',
-            ])
-            ->getMock();
-        $attributeMock->expects($this->once())
-            ->method('getIsRequired')
+        /** @var AbstractAttribute|MockObject $attributeMock */
+        $attributeMock = $this->createAttributeMock();
+        $attributeMock->method('getIsRequired')
             ->willReturn(true);
-        $attributeMock->expects($this->once())
-            ->method('getFrontendClass')
+        $attributeMock->method('getFrontendClass')
             ->willReturn('');
         $attributeMock->expects($this->exactly(3))
             ->method('getValidateRules')
             ->willReturn([
-                'input_validation' => 'alphanumeric',
+                'input_validation' => $validationRule,
                 'min_text_length' => 1,
                 'max_text_length' => 2,
             ]);
@@ -150,7 +138,7 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
         $this->model->setAttribute($attributeMock);
         $result = $this->model->getClass();
 
-        $this->assertContains('validate-alphanum', $result);
+        $this->assertContains($expectedClass, $result);
         $this->assertContains('minimum-length-1', $result);
         $this->assertContains('maximum-length-2', $result);
         $this->assertContains('validate-length', $result);
@@ -158,19 +146,11 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
 
     public function testGetClassLength()
     {
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getIsRequired',
-                'getFrontendClass',
-                'getValidateRules',
-            ])
-            ->getMock();
-        $attributeMock->expects($this->once())
-            ->method('getIsRequired')
+        /** @var AbstractAttribute|MockObject $attributeMock */
+        $attributeMock = $this->createAttributeMock();
+        $attributeMock->method('getIsRequired')
             ->willReturn(true);
-        $attributeMock->expects($this->once())
-            ->method('getFrontendClass')
+        $attributeMock->method('getFrontendClass')
             ->willReturn('');
         $attributeMock->expects($this->exactly(3))
             ->method('getValidateRules')
@@ -196,33 +176,62 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
         $options = ['option1', 'option2'];
         $serializedOptions = "{['option1', 'option2']}";
 
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
+        $this->storeManagerMock->method('getStore')
             ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())
-            ->method('getId')
+        $this->storeMock->method('getId')
             ->willReturn($storeId);
-        $this->attributeMock->expects($this->once())
-            ->method('getAttributeCode')
+        $this->attributeMock->method('getAttributeCode')
             ->willReturn($attributeCode);
-        $this->cacheMock->expects($this->once())
-            ->method('load')
+        $this->cacheMock->method('load')
             ->with($cacheKey)
             ->willReturn(false);
-        $this->attributeMock->expects($this->once())
-            ->method('getSource')
+        $this->attributeMock->method('getSource')
             ->willReturn($this->sourceMock);
-        $this->sourceMock->expects($this->once())
-            ->method('getAllOptions')
+        $this->sourceMock->method('getAllOptions')
             ->willReturn($options);
-        $this->serializerMock->expects($this->once())
-            ->method('serialize')
+        $this->serializerMock->method('serialize')
             ->with($options)
             ->willReturn($serializedOptions);
-        $this->cacheMock->expects($this->once())
-            ->method('save')
+        $this->cacheMock->method('save')
             ->with($serializedOptions, $cacheKey, $this->cacheTags);
 
         $this->assertSame($options, $this->model->getSelectOptions());
+    }
+
+    /**
+     * Provides possible validation types.
+     *
+     * @return array
+     */
+    public function validationRulesDataProvider(): array
+    {
+        return [
+            ['alphanumeric', 'validate-alphanum'],
+            ['alphanum-with-spaces', 'validate-alphanum-with-spaces'],
+            ['alpha', 'validate-alpha'],
+            ['numeric', 'validate-digits'],
+            ['url', 'validate-url'],
+            ['email', 'validate-email'],
+            ['length', 'validate-length'],
+        ];
+    }
+
+    /**
+     * Entity attribute factory.
+     *
+     * @return AbstractAttribute|MockObject
+     */
+    private function createAttributeMock()
+    {
+        return $this->getMockBuilder(AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getIsRequired',
+                'getFrontendClass',
+                'getValidateRules',
+                'getAttributeCode',
+                'getSource'
+            ])
+            ->getMockForAbstractClass();
     }
 }
