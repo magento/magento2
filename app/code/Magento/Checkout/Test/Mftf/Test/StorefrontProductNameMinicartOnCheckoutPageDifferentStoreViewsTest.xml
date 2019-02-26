@@ -57,7 +57,7 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
 
         <!--Add product to cart-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.sku$$)}}" stepKey="amOnProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnProductPage"/>
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$createProduct.name$$"/>
         </actionGroup>
