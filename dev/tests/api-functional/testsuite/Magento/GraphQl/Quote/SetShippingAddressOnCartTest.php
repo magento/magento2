@@ -422,7 +422,7 @@ QUERY;
      */
     public function testSetShippingAddressIfCustomerIsNotOwnerOfAddress()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 2);
 
         $query = <<<QUERY
 mutation {

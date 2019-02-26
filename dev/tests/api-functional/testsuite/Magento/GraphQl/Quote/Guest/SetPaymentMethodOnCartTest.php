@@ -5,9 +5,8 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Quote;
+namespace Magento\GraphQl\Quote\Guest;
 
-use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\OfflinePayments\Model\Checkmo;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
@@ -16,15 +15,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for setting payment methods on cart
+ * Test for setting payment methods on cart by guest
  */
 class SetPaymentMethodOnCartTest extends GraphQlAbstract
 {
-    /**
-     * @var CustomerTokenServiceInterface
-     */
-    private $customerTokenService;
-
     /**
      * @var QuoteResource
      */
@@ -49,25 +43,58 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
-        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
      */
-    public function testSetPaymentMethodOnCart()
+    public function testSetPaymentWithVirtualProduct()
     {
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_virtual_product');
+        $this->unAssignCustomerFromQuote('test_order_with_virtual_product');
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
-        $response = $this->sendRequestWithToken($query);
+        $response = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('setPaymentMethodOnCart', $response);
         self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
         self::assertEquals($maskedQuoteId, $response['setPaymentMethodOnCart']['cart']['cart_id']);
         self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
         self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testSetPaymentWithSimpleProduct()
+    {
+        $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $this->unAssignCustomerFromQuote('test_order_1');
+
+        $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
+        self::assertEquals($maskedQuoteId, $response['setPaymentMethodOnCart']['cart']['cart_id']);
+        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
+        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
+     */
+    public function testSetPaymentWithSimpleProductWithoutAddress()
+    {
+        $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+
+        $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
+        $this->graphQlQuery($query);
     }
 
     /**
@@ -79,17 +106,18 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     {
         $methodCode = 'noway';
         $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $this->unAssignCustomerFromQuote('test_order_1');
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
-        $this->sendRequestWithToken($query);
+        $this->graphQlQuery($query);
     }
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
-    public function testSetPaymentMethodByGuestToCustomerCart()
+    public function testSetPaymentMethodToCustomerCart()
     {
-        $methodCode = 'checkmo';
+        $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
         $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
@@ -97,7 +125,6 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
-
         $this->graphQlQuery($query);
     }
 
@@ -116,9 +143,9 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
 mutation {
   setPaymentMethodOnCart(input: 
     {
-      cart_id: "$maskedQuoteId", 
+      cart_id: "{$maskedQuoteId}", 
       payment_method: {
-          code: "$methodCode"
+          code: "{$methodCode}"
         }
       }) {
     
@@ -134,18 +161,18 @@ QUERY;
     }
 
     /**
-     * Sends a GraphQL request with using a bearer token
-     *
-     * @param string $query
-     * @return array
-     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @param string $reversedQuoteId
+     * @param int $customerId
+     * @return string
      */
-    private function sendRequestWithToken(string $query): array
-    {
-        $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-
-        return $this->graphQlQuery($query, [], '', $headerMap);
+    private function unAssignCustomerFromQuote(
+        string $reversedQuoteId
+    ): string {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+        $quote->setCustomerId(0);
+        $this->quoteResource->save($quote);
+        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 
     /**
