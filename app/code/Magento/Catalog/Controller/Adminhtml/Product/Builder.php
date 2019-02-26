@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Cms\Model\Wysiwyg as WysiwygModel;
 use Magento\Framework\App\RequestInterface;
@@ -86,11 +87,11 @@ class Builder
      * Build product based on user request
      *
      * @param RequestInterface $request
-     * @return \Magento\Catalog\Model\Product
+     * @return ProductInterface
      * @throws \RuntimeException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function build(RequestInterface $request): Product
+    public function build(RequestInterface $request): ProductInterface
     {
         $productId = (int) $request->getParam('id');
         $storeId = $request->getParam('store', 0);
@@ -100,7 +101,9 @@ class Builder
         if ($productId) {
             try {
                 $product = $this->productRepository->getById($productId, true, $storeId);
-                $product->setAttributeSetId($attributeSetId);
+                if ($attributeSetId) {
+                    $product->setAttributeSetId($attributeSetId);
+                }
             } catch (\Exception $e) {
                 $product = $this->createEmptyProduct(ProductTypes::DEFAULT_TYPE, $attributeSetId, $storeId);
                 $this->logger->critical($e);
