@@ -86,6 +86,10 @@ mutation {
         city
         postcode
         telephone
+        country {
+          code
+          label
+        }
       }
     }
   }
@@ -139,6 +143,10 @@ mutation {
         city
         postcode
         telephone
+        country {
+          code
+          label
+        }
       }
       shipping_addresses {
         firstname
@@ -148,6 +156,10 @@ mutation {
         city
         postcode
         telephone
+        country {
+          code
+          label
+        }
       }
     }
   }
