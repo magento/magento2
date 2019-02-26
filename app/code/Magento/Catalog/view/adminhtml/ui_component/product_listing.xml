@@ -173,6 +173,14 @@
                 <label translate="true">Visibility</label>
             </settings>
         </column>
+        <column name="quantity_and_stock_status" class="Magento\Catalog\Ui\Component\Listing\Columns\StockStatus" sortOrder="110">
+            <settings>
+                <addField>false</addField>
+                <options class="Magento\Catalog\Model\Product\Attribute\Source\StockStatus"/>
+                <label translate="true">Stock Status</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
         <column name="status" component="Magento_Ui/js/grid/columns/select" sortOrder="90">
             <settings>
                 <addField>true</addField>
