@@ -81,7 +81,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
     public function testGetChildHtml()
     {
         $customerId = 1;
-
+        $outputString = 'OutputString';
         /** @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject $block */
         $block = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
             ->setMethods(['setCollection'])
@@ -113,7 +113,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $block->expects($this->atLeastOnce())->method('setCollection')->with($addressCollection)->willReturnSelf();
         $this->gridBlock->setNameInLayout('NameInLayout');
         $this->gridBlock->setLayout($layout);
-        $this->assertEquals('OutputString', $this->gridBlock->getChildHtml('pager'));
+        $this->assertEquals($outputString, $this->gridBlock->getChildHtml('pager'));
     }
 
     /**
