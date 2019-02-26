@@ -43,6 +43,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
     public function testAddConfigurableProductToCart()
     {
@@ -62,6 +63,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @expectedException \Exception
      * @expectedExceptionMessage The requested qty is not available
      */
@@ -78,6 +80,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Framework/Search/_files/product_configurable.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @expectedException \Exception
      * @expectedExceptionMessage Product that you are trying to add is not available.
      */
