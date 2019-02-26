@@ -20,6 +20,15 @@
         <xs:attribute name="type" type="xs:string"/>
         <xs:attribute name="order" type="xs:integer"/>
         <xs:attribute name="src_type" type="xs:string"/>
+        <xs:attribute name="as">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="font" />
+                    <xs:enumeration value="script" />
+                    <xs:enumeration value="style" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="metaType">
