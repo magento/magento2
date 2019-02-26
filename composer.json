@@ -149,6 +149,7 @@
         "magento/module-downloadable-import-export": "*",
         "magento/module-eav": "*",
         "magento/module-elasticsearch": "*",
+        "magento/module-elasticsearch-6": "*",
         "magento/module-email": "*",
         "magento/module-encryption-key": "*",
         "magento/module-fedex": "*",
