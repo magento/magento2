@@ -81,10 +81,7 @@ class SetPaymentMethodOnCart implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter payment "code" is missing'));
         }
 
-        $poNumber = $this->arrayManager->get('input/payment_method/po_number', $args);
-        if (!$poNumber) {
-            throw new GraphQlInputException(__('Required parameter payment "po_number" is missing'));
-        }
+        $poNumber = $this->arrayManager->get('input/payment_method/purchase_order_number', $args);
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
         $payment = $this->paymentFactory->create([

@@ -110,7 +110,7 @@ input SetPaymentMethodOnCartInput {
 
 input PaymentMethodInput {
     code: String! @doc(description:"Payment method code")
-    po_number: String! @doc(description:"Purchase order number")
+    purchase_order_number: String @doc(description:"Purchase order number")
     additional_data: PaymentMethodAdditionalDataInput
 }
 
@@ -203,7 +203,7 @@ type AvailablePaymentMethod {
 
 type SelectedPaymentMethod {
     code: String @doc(description: "The payment method code")
-    po_number: String @doc(description: "The purchase order number.")
+    purchase_order_number: String @doc(description: "The purchase order number.")
     additional_data: SelectedPaymentMethodAdditionalData
 }
 
