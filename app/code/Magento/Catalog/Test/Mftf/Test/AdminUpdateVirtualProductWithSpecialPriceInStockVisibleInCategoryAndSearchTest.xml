@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateVirtualProductWithSpecialPriceInStockVisibleInCategoryAndSearchTest">
+        <annotations>
+            <stories value="Update Virtual Product"/>
+            <title value="Update Virtual Product with Special Price (In Stock) Visible in Category and Search"/>
+            <description value="Test log in to Update Virtual Product and Update Virtual Product with Special Price (In Stock) Visible in Category and Search"/>
+            <testCaseId value="MC-6496"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
+            <createData entity="defaultVirtualProduct" stepKey="initialVirtualProduct">
+                <requiredEntity createDataKey="initialCategoryEntity"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
+            <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Search default virtual product in the grid page -->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAllFilter" />
+        <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="$$initialVirtualProduct.name$$" stepKey="fillVirtualProductNameInKeywordSearch"/>
+        <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearchButton"/>
+        <waitForPageLoad stepKey="waitForProductSearch"/>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyCreatedVirtualProduct"/>
+        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+
+        <!-- Update virtual product with special price  -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{updateVirtualProductSpecialPrice.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductSpecialPrice.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductSpecialPrice.price}}" stepKey="fillProductPrice"/>
+        <!-- Press enter to validate advanced pricing link -->
+        <pressKey selector="{{AdminProductFormSection.productPrice}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressEnterKey"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" userInput="{{updateVirtualProductSpecialPrice.special_price}}" stepKey="fillSpecialPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
+        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductSpecialPrice.productTaxClass}}" stepKey="selectProductStockClass"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{updateVirtualProductSpecialPrice.quantity}}" stepKey="fillProductQuantity"/>
+        <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{updateVirtualProductSpecialPrice.status}}" stepKey="selectStockStatusInStock"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
+        <click selector="{{AdminProductFormSection.selectCategory($$initialCategoryEntity.name$$)}}" stepKey="unselectInitialCategory"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductSpecialPrice.visibility}}" stepKey="selectVisibility"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductSpecialPrice.urlKey}}" stepKey="fillUrlKey"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+        <!-- Verify we see success message -->
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSaveSuccessMessage"/>
+
+        <!-- Search updated virtual product(from above step) in the grid page -->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchUpdatedVirtualProduct"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{updateVirtualProductSpecialPrice.name}}" stepKey="fillVirtualProductNameInNameFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{updateVirtualProductSpecialPrice.sku}}" stepKey="fillVirtualProductSku"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyUpdatedVirtualProductVisibleInGrid"/>
+        <waitForPageLoad stepKey="waitUntilVirtualProductPageIsOpened"/>
+        <!-- Verify customer see updated virtual product with special price(from the above step) in the product form page -->
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{updateVirtualProductSpecialPrice.name}}" stepKey="seeProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductSpecialPrice.sku}}" stepKey="seeProductSku"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductSpecialPrice.price}}" stepKey="seeProductPrice"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink1"/>
+        <seeInField selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" userInput="{{updateVirtualProductSpecialPrice.special_price}}" stepKey="seeSpecialPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.advancedPricingCloseButton}}" stepKey="clickAdvancedPricingCloseButton"/>
+        <seeInField selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductSpecialPrice.productTaxClass}}" stepKey="seeProductTaxClass"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{updateVirtualProductSpecialPrice.quantity}}" stepKey="seeProductQuantity"/>
+        <see selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{updateVirtualProductSpecialPrice.status}}" stepKey="seeProductStockStatus"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
+        <grabMultiple selector="{{AdminProductFormSection.selectMultipleCategories}}" stepKey="selectedCategories" />
+        <assertEquals stepKey="assertSelectedCategories">
+            <actualResult type="variable">selectedCategories</actualResult>
+            <expectedResult type="array">[$$categoryEntity.name$$]</expectedResult>
+        </assertEquals>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneOnCategorySelect"/>
+        <see selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductSpecialPrice.visibility}}" stepKey="seeVisibility"/>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
+        <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductSpecialPrice.urlKey}}" stepKey="seeUrlKey"/>
+
+        <!--Verify customer see updated virtual product link on category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{updateVirtualProductSpecialPrice.name}}" stepKey="seeVirtualProductNameOnCategoryPage"/>
+
+        <!-- Verify customer see updated virtual product on the magento storefront page and is searchable by sku -->
+        <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductSpecialPrice.urlKey)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
+        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{updateVirtualProductSpecialPrice.sku}}" stepKey="fillVirtualProductName"/>
+        <waitForPageLoad stepKey="waitForSearchTextBox"/>
+        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
+        <waitForPageLoad stepKey="waitForSearch"/>
+        <see selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{updateVirtualProductSpecialPrice.name}}" stepKey="seeVirtualProductName"/>
+
+        <!--Verify customer see updated virtual product with special price(from above step) on product storefront page by url key -->
+        <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductSpecialPrice.urlKey)}}" stepKey="goToProductStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{updateVirtualProductSpecialPrice.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{updateVirtualProductSpecialPrice.sku}}" stepKey="seeVirtualProductSku"/>
+        <!-- Verify customer see virtual product special price on the storefront page -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceAmount}}" stepKey="specialPriceAmount"/>
+        <assertEquals stepKey="assertSpecialPriceTextOnProductPage">
+            <expectedResult type="string">${{updateVirtualProductSpecialPrice.special_price}}</expectedResult>
+            <actualResult type="variable">specialPriceAmount</actualResult>
+        </assertEquals>
+        <!-- Verify customer see virtual product old price on the storefront page -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.oldPriceAmount}}" stepKey="oldPriceAmount"/>
+        <assertEquals stepKey="assertOldPriceTextOnProductPage">
+            <expectedResult type="string">${{updateVirtualProductSpecialPrice.price}}</expectedResult>
+            <actualResult type="variable">oldPriceAmount</actualResult>
+        </assertEquals>
+        <!-- Verify customer see virtual product in stock status on the storefront page -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
+        <assertEquals stepKey="assertStockAvailableOnProductPage">
+            <expectedResult type="string">{{updateVirtualProductSpecialPrice.storefrontStatus}}</expectedResult>
+            <actualResult type="variable">productStockAvailableStatus</actualResult>
+        </assertEquals>
+    </test>
+</tests>

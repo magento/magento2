@@ -53,7 +53,7 @@
             <word>overriden</word>
         </item>
         <item>
-            <path>composer.lock</path>
+            <path>dev/composer.lock</path>
         </item>
         <item>
             <path>app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js</path>
