@@ -10,22 +10,23 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontProductNameMinicartOnCheckoutPageDifferentStoreViewsTest">
         <annotations>
+            <features value="Checkout"/>
             <title value="Checking Product name with custom store views"/>
             <description value="Checking Product name in Minicart and on Checkout page with custom store views"/>
-            <stories value="Verify product name with custom store view"/>
+            <stories value="Checkout via Guest Checkout"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-14944"/>
-            <features value="Checkout"/>
+            <useCaseId value="MAGETWO-95904"/>
             <group value="checkout"/>
         </annotations>
         <before>
-            <!--Login as Admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Create a product-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <!--Login as Admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!-- Create store view -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
                 <argument name="customStore" value="customStore"/>
@@ -39,6 +40,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
             <!--Logout from admin-->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
@@ -55,7 +57,7 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
 
         <!--Add product to cart-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="amOnProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.sku$$)}}" stepKey="amOnProductPage"/>
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$createProduct.name$$"/>
         </actionGroup>
@@ -76,12 +78,13 @@
         </actionGroup>
 
         <!--Go to Shopping Cart-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
         <seeElement selector="{{CheckoutCartProductSection.productLinkByName($$createProduct.name$$-new)}}" stepKey="assertProductName"/>
 
         <!--Proceed to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutPage"/>
-        <conditionalClick selector="{{CheckoutShippingGuestInfoSection.itemInCart}}" dependentSelector="{{CheckoutShippingGuestInfoSection.itemInCart}}" visible="true" stepKey="clickItemsInCart"/>
-        <see selector="{{CheckoutShippingGuestInfoSection.productName}}" userInput="$$createProduct.name$$-new" stepKey="seeProductNameAtCheckout"/>
+        <conditionalClick selector="{{CheckoutOrderSummarySection.miniCartTab}}" dependentSelector="{{CheckoutOrderSummarySection.miniCartTab}}" visible="true" stepKey="clickItemsInCart"/>
+        <waitForElementVisible selector="{{CheckoutOrderSummarySection.productItemName}}" stepKey="waitForProduct"/>
+        <see selector="{{CheckoutOrderSummarySection.productItemName}}" userInput="$$createProduct.name$$-new" stepKey="seeProductNameAtCheckout"/>
     </test>
 </tests>

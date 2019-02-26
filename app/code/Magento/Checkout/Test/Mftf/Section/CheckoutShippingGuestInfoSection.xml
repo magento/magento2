@@ -17,7 +17,5 @@
         <element name="region" type="select" selector="select[name=region_id]"/>
         <element name="postcode" type="input" selector="input[name=postcode]"/>
         <element name="telephone" type="input" selector="input[name=telephone]"/>
-        <element name="itemInCart" type="button" selector="div.items-in-cart div.title"/>
-        <element name="productName" type="text" selector="div.items-in-cart strong.product-item-name"/>
     </section>
 </sections>

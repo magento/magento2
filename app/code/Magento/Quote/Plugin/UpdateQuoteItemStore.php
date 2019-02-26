@@ -61,9 +61,7 @@ class UpdateQuoteItemStore
     ): string {
         $quote = $this->checkoutSession->getQuote();
         if ($quote->getIsActive()) {
-            $quote->setStoreId(
-                $targetStore->getId()
-            );
+            $quote->setStoreId($targetStore->getId());
             $quote->getItemsCollection(false);
             $this->quoteRepository->save($quote);
         }
