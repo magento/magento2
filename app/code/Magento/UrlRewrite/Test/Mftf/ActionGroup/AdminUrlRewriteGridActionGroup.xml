@@ -25,7 +25,7 @@
         <see selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="{{targetPath}}" stepKey="seeTheTargetPath" />
         <see selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="{{redirectType}}" stepKey="seeTheRedirectTypeForOldUrl" />
     </actionGroup>
-    <actionGroup name="AdminSearchProductBySku">
+    <actionGroup name="AdminSearchUrlRewriteProductBySku">
         <arguments>
             <argument name="productSku" type="string"/>
         </arguments>
