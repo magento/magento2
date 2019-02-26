@@ -13,6 +13,7 @@
             <argument name="productAttributeCode" type="string"/>
         </arguments>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <waitForPageLoad stepKey="waitForAdminProductAttributeGridPageLod"/>
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
         <waitForPageLoad stepKey="waitForAdminProductAttributeGridSectionLoad"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{productAttributeCode}}" stepKey="setAttributeCode"/>
