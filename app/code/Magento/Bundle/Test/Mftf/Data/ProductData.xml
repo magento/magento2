@@ -31,6 +31,22 @@
         <data key="fixedPriceFormatted">$10.00</data>
         <data key="defaultAttribute">Default</data>
     </entity>
+    <entity name="FixedBundleProduct" type="product2">
+        <data key="name" unique="suffix">FixedBundleProduct</data>
+        <data key="sku" unique="suffix">fixed-bundle-product</data>
+        <data key="type_id">bundle</data>
+        <data key="attribute_set_id">4</data>
+        <data key="price">1.23</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">fixed-bundle-product</data>
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryIds</requiredEntity>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributePriceView</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeFixPrice</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeFixWeight</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeFixSku</requiredEntity>
+    </entity>
     <entity name="ApiBundleProduct" type="product2">
         <data key="name" unique="suffix">Api Bundle Product</data>
         <data key="sku" unique="suffix">api-bundle-product</data>

@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Test\Unit\Controller\Adminhtml\Promo\Quote;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\SalesRule\Model\CouponGenerator;
+use Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -49,6 +50,9 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
 
     /** @var  CouponGenerator | \PHPUnit_Framework_MockObject_MockObject */
     private $couponGenerator;
+
+    /** @var  CouponGenerationSpecInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject */
+    private $couponGenerationSpec;
 
     /**
      * Test setup
@@ -98,6 +102,9 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
         $this->couponGenerator = $this->getMockBuilder(CouponGenerator::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->couponGenerationSpec = $this->getMockBuilder(CouponGenerationSpecInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -107,7 +114,8 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
                 'coreRegistry' => $this->registryMock,
                 'fileFactory' => $this->fileFactoryMock,
                 'dateFilter' => $this->dateMock,
-                'couponGenerator' => $this->couponGenerator
+                'couponGenerator' => $this->couponGenerator,
+                'generationSpecFactory' => $this->couponGenerationSpec
             ]
         );
     }
@@ -144,9 +152,10 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn($requestData);
-        $this->couponGenerator->expects($this->once())
-            ->method('generateCodes')
-            ->with($requestData)
+        $requestData['quantity'] = isset($requestData['qty']) ? $requestData['qty'] : null;
+        $this->couponGenerationSpec->expects($this->once())
+            ->method('create')
+            ->with(['data' => $requestData])
             ->willReturn(['some_data', 'some_data_2']);
         $this->messageManager->expects($this->once())
             ->method('addSuccessMessage');
