@@ -9,14 +9,13 @@ namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 use Magento\Catalog\Model\Product;
 
+/**
+ * Class Price for configurable product
+ */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
     /**
-     * Get product final price
-     *
-     * @param   float $qty
-     * @param   Product $product
-     * @return  float
+     * @inheritdoc
      */
     public function getFinalPrice($qty, $product)
     {
@@ -40,7 +39,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPrice($product)
     {
@@ -53,6 +52,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                 }
             }
         }
+
         return 0;
     }
 }
