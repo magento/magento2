@@ -42,6 +42,13 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * @var string
      */
     protected $name = 'product[media_gallery]';
+    
+    /**
+     * Gallery "use_default" checkbox name
+     *
+     * @var string
+     */
+    private $useDefaultName = 'product[use_default_media_gallery]';
 
     /**
      * Html id for data scope
@@ -164,6 +171,22 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     {
         return $this->name;
     }
+    
+    /**
+     * @return string
+     */
+    public function getUseDefaultHtmlId()
+    {
+        return sprintf('%s_%s_use_default', $this->getFieldNameSuffix(), $this->getHtmlId());
+    }
+    
+    /**
+     * @return string
+     */
+    public function getUserDefaultName()
+    {
+        return $this->useDefaultName;
+    }
 
     /**
      * @return string
@@ -218,6 +241,26 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
             return false;
         }
         return $defaultValue === false;
+    }
+    
+    /**
+     * Check default gallery usage fact
+     *
+     * @return bool
+     */
+    public function usedDefaultGallery()
+    {
+        $gallery = $this->getImages();
+        
+        if (!empty($gallery['images'])) {
+            foreach ($gallery['images'] as $image) {
+                if ($image['store_id'] != $this->_getDefaultStoreId()) {
+                    return false;
+                }
+            }
+        }
+    
+        return true;
     }
 
     /**

@@ -10,6 +10,7 @@ var config = {
             newCategoryDialog:    'Magento_Catalog/js/new-category-dialog',
             categoryTree:         'Magento_Catalog/js/category-tree',
             productGallery:       'Magento_Catalog/js/product-gallery',
+            galleryUseDefault:    'Magento_Catalog/js/product-gallery-use-default',
             baseImage:            'Magento_Catalog/catalog/base-image-uploader',
             productAttributes:    'Magento_Catalog/catalog/product-attributes',
             categoryCheckboxTree: 'Magento_Catalog/js/category-checkbox-tree'

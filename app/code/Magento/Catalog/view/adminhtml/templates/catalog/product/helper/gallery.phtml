@@ -7,11 +7,30 @@
 // @codingStandardsIgnoreFile
 
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
-$elementName = $block->getElement()->getName() . '[images]';
+/** @var $element \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery*/
+$element = $block->getElement();
+$elementName = $element->getName() . '[images]';
+$useDefaultChecked = $element->usedDefaultGallery() ? 'checked' : '';
+$useDefaultHtmlId = $element->getUseDefaultHtmlId();
+$overlayClass = 'gallery-overlay';
 $formName = $block->getFormName();
 ?>
+
+<?php if ($block->hasUseDefault()) :?>
+    <div class="admin__field-service">
+        <input type="checkbox"
+               id="<?= $block->escapeHtml($useDefaultHtmlId) ?>"
+               class="admin__control-checkbox"
+               name="<?= $block->escapeHtml($element->getUserDefaultName()) ?>"
+               data-form-part="<?= $block->escapeHtml($formName) ?>" <?= $block->escapeHtml($useDefaultChecked) ?> >
+        <label class="admin__field-label" for="<?= $block->escapeHtml($useDefaultHtmlId) ?>">
+            <?= $block->escapeHtml(__('Use Default Values')) ?>
+        </label>
+    </div>
+<?php endif ?>
+
 <div id="<?= $block->getHtmlId() ?>"
-     class="gallery"
+     class="gallery gallery-overlay-parent"
      data-mage-init='{"productGallery":{"template":"#<?= $block->getHtmlId() ?>-template"}}'
      data-parent-component="<?= $block->escapeHtml($block->getData('config/parentComponent')) ?>"
      data-images="<?= $block->escapeHtml($block->getImagesJson()) ?>"
@@ -215,6 +234,21 @@ $formName = $block->getFormName();
             </div>
     </script>
     <?= $block->getChildHtml('new-video') ?>
+
+    <?php if ($block->hasUseDefault()) :?>
+        <div class="<?= $block->escapeHtml($overlayClass) ?>"></div>
+
+        <script type="text/x-magento-init">
+            {
+                "#<?= $block->escapeHtml($useDefaultHtmlId) ?>" : {
+                    "galleryUseDefault" : {
+                        "overlaySelector": ".<?= $block->escapeHtml($overlayClass) ?>"
+                    }
+                }
+            }
+        </script>
+    <?php endif;?>
+    
 </div>
 <script>
     jQuery('body').trigger('contentUpdated');
