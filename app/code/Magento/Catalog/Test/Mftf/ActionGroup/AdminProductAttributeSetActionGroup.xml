@@ -64,4 +64,14 @@
         <waitForPageLoad stepKey="waitForUserInput"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
     </actionGroup>
+    <actionGroup name="FilterProductAttributeSetGridByAttributeSetName">
+        <arguments>
+            <argument name="name" type="string"/>
+        </arguments>
+        <click selector="{{AdminProductAttributeSetGridSection.resetFilter}}" stepKey="clickResetButton"/>
+        <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="{{name}}" stepKey="filterByName"/>
+        <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+    </actionGroup>
 </actionGroups>
