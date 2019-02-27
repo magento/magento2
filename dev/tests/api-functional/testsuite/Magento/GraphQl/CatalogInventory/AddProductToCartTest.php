@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Quote;
+namespace Magento\GraphQl\CatalogInventory;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -13,7 +13,7 @@ use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 
-class AddSimpleProductToCartTest extends GraphQlAbstract
+class AddProductToCartTest extends GraphQlAbstract
 {
     /**
      * @var QuoteResource
@@ -44,19 +44,36 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The requested qty is not available
      */
-    public function testAddSimpleProductsToCart()
+    public function testAddProductIfQuantityIsNotAvailable()
     {
         $sku = 'simple';
-        $qty = 2;
+        $qty = 200;
+
         $maskedQuoteId = $this->getMaskedQuoteId();
+        $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
+        $this->graphQlQuery($query);
+    }
 
-        $query = $this->geAddSimpleProducttQuery($maskedQuoteId, $sku, $qty);
-        $response = $this->graphQlQuery($query);
-        self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @magentoConfigFixture default cataloginventory/item_options/max_sale_qty 5
+     * @expectedException \Exception
+     * @expectedExceptionMessage The most you may purchase is 5.
+     */
+    public function testAddMoreProductsThatAllowed()
+    {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/167');
 
-        $cartQty = $response['addSimpleProductsToCart']['cart']['items'][0]['qty'];
-        self::assertEquals($qty, $cartQty);
+        $sku = 'custom-design-simple-product';
+        $qty = 7;
+
+        $maskedQuoteId = $this->getMaskedQuoteId();
+        $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
+        $this->graphQlQuery($query);
     }
 
     /**
@@ -76,7 +93,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
      * @param int $qty
      * @return string
      */
-    public function geAddSimpleProducttQuery(string $maskedQuoteId, string $sku, int $qty) : string
+    public function getAddSimpleProductQuery(string $maskedQuoteId, string $sku, int $qty) : string
     {
         return <<<QUERY
 mutation {  
