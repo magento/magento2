@@ -13,6 +13,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Lock\Backend\Database as DatabaseLock;
 use Magento\Framework\Lock\Backend\Zookeeper as ZookeeperLock;
+use Magento\Framework\Lock\Backend\Cache as CacheLock;
 
 /**
  * The factory to create object that implements LockManagerInterface
@@ -48,13 +49,21 @@ class LockBackendFactory
     const LOCK_ZOOKEEPER = 'zookeeper';
 
     /**
+     * Cache lock provider name
+     *
+     * @const string
+     */
+    const LOCK_CACHE = 'cache';
+
+    /**
      * The list of lock providers with mapping on classes
      *
      * @var array
      */
     private $lockers = [
         self::LOCK_DB => DatabaseLock::class,
-        self::LOCK_ZOOKEEPER => ZookeeperLock::class
+        self::LOCK_ZOOKEEPER => ZookeeperLock::class,
+        self::LOCK_CACHE => CacheLock::class,
     ];
 
     /**
@@ -77,8 +86,8 @@ class LockBackendFactory
      */
     public function create(): LockManagerInterface
     {
-        $provider = $this->deploymentConfig->get('locks/provider', self::LOCK_DB);
-        $config = $this->deploymentConfig->get('locks/config', []);
+        $provider = $this->deploymentConfig->get('lock/provider', self::LOCK_DB);
+        $config = $this->deploymentConfig->get('lock/config', []);
 
         if (!isset($this->lockers[$provider])) {
             throw new RuntimeException(new Phrase('Unknown locks provider.'));

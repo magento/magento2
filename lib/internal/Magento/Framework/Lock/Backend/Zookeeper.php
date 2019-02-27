@@ -31,6 +31,8 @@ class Zookeeper implements LockManagerInterface
     private $path;
 
     /**
+     * The name of sequence nodes
+     *
      * @var string
      */
     private $lockName = 'lock-';
@@ -71,11 +73,16 @@ class Zookeeper implements LockManagerInterface
     private $locks = [];
 
     /**
+     * The default path to storage locks
+     */
+    const DEFAULT_PATH = '/magento/locks';
+
+    /**
      * @param string $host The host to connect to Zookeeper
      * @param string $path The base path to locks in Zookeeper
      * @throws RuntimeException
      */
-    public function __construct(string $host, string $path = '/magento/locks')
+    public function __construct(string $host, string $path = self::DEFAULT_PATH)
     {
         if (empty($path)) {
             throw new RuntimeException(
@@ -164,7 +171,7 @@ class Zookeeper implements LockManagerInterface
      * @return \Zookeeper
      * @throws RuntimeException
      */
-    private function getProvider(): \Zookeeper
+    public function getProvider(): \Zookeeper
     {
         if (!$this->zookeeper) {
             $this->zookeeper = new \Zookeeper($this->host);

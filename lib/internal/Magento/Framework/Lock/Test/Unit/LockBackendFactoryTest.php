@@ -9,6 +9,7 @@ namespace Magento\Framework\Lock\Test\Unit;
 
 use Magento\Framework\Lock\Backend\Database as DatabaseLock;
 use Magento\Framework\Lock\Backend\Zookeeper as ZookeeperLock;
+use Magento\Framework\Lock\Backend\Cache as CacheLock;
 use Magento\Framework\Lock\LockBackendFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Lock\LockManagerInterface;
@@ -51,7 +52,7 @@ class LockBackendFactoryTest extends TestCase
     {
         $this->deploymentConfigMock->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['locks/provider', LockBackendFactory::LOCK_DB], ['locks/config', []])
+            ->withConsecutive(['lock/provider', LockBackendFactory::LOCK_DB], ['lock/config', []])
             ->willReturnOnConsecutiveCalls('someProvider', []);
 
         $this->factory->create();
@@ -68,7 +69,7 @@ class LockBackendFactoryTest extends TestCase
         $lockManagerMock = $this->getMockForAbstractClass(LockManagerInterface::class);
         $this->deploymentConfigMock->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['locks/provider', LockBackendFactory::LOCK_DB], ['locks/config', []])
+            ->withConsecutive(['lock/provider', LockBackendFactory::LOCK_DB], ['lock/config', []])
             ->willReturnOnConsecutiveCalls($lockProvider, $config);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
@@ -88,6 +89,11 @@ class LockBackendFactoryTest extends TestCase
                 'lockProvider' => LockBackendFactory::LOCK_DB,
                 'lockProviderClass' => DatabaseLock::class,
                 'config' => ['prefix' => 'somePrefix'],
+            ],
+            'cache' => [
+                'lockProvider' => LockBackendFactory::LOCK_CACHE,
+                'lockProviderClass' => CacheLock::class,
+                'config' => [],
             ],
         ];
 
