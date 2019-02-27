@@ -102,6 +102,11 @@ class Builder
 
         $store = $this->storeFactory->create();
         $store->load($storeId);
+        
+        $setId = (int)$request->getParam('set');
+        if ($setId) {
+            $product->setAttributeSetId($setId);
+        }
 
         $this->registry->register('product', $product);
         $this->registry->register('current_product', $product);
