@@ -930,10 +930,9 @@ class EavSetup
             }
         } elseif (isset($option['values'])) {
             foreach ($option['values'] as $sortOrder => $label) {
-                $bind = ['attribute_id' => $option['attribute_id'], 'sort_order ' => $sortOrder, 'value' => $label];
                 $select = $this->setup->getConnection()->select($optionTable, ['attribute_id =?' => $option['attribute_id'], 'sort_order =?' => $sortOrder, 'value =?' => $label]);
 
-                $row = $this->setup->getConnection()->fetchRow($select, $bind);
+                $row = $this->setup->getConnection()->fetchRow($select);
                 if (!$row) {
                     // add option
                     $data = ['attribute_id' => $option['attribute_id'], 'sort_order' => $sortOrder];
