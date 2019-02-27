@@ -36,12 +36,12 @@ class Config extends \Magento\Elasticsearch\Model\Config
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\AdvancedSearch\Model\Client\ClientResolver $clientResolver = null,
-        \Magento\Framework\Search\EngineResolverInterface $engineResolver = null,
+        \Magento\AdvancedSearch\Model\Client\ClientResolver $clientResolver,
+        \Magento\Framework\Search\EngineResolverInterface $engineResolver,
         $prefix = null
     ) {
         parent::__construct($scopeConfig, $clientResolver, $engineResolver, $prefix);
-        $this->engineResolver = $engineResolver ?: ObjectManager::getInstance()->get(EngineResolverInterface::class);
+        $this->engineResolver = $engineResolver;
     }
 
     /**
