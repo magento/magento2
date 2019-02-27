@@ -377,9 +377,11 @@ define([
             lowest = false;
         
         //sorting based on "price_qty"
-        tiers.sort(function(a, b) {
-            return a.price_qty - b.price_qty;
-        });
+        if(tiers){
+            tiers.sort(function (a, b) {
+                return a.price_qty - b.price_qty;
+            });
+        }
 
         _.each(tiers, function (tier, index) {
             if (tier['price_qty'] > qty) {
