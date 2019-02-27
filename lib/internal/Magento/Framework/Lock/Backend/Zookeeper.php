@@ -171,7 +171,7 @@ class Zookeeper implements LockManagerInterface
      * @return \Zookeeper
      * @throws RuntimeException
      */
-    public function getProvider(): \Zookeeper
+    private function getProvider(): \Zookeeper
     {
         if (!$this->zookeeper) {
             $this->zookeeper = new \Zookeeper($this->host);
