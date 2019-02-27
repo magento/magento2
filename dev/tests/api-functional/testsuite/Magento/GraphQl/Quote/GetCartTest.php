@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -20,19 +20,14 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class GetCartTest extends GraphQlAbstract
 {
     /**
-     * @var CustomerTokenServiceInterface
-     */
-    private $customerTokenService;
-
-    /**
      * @var QuoteResource
      */
     private $quoteResource;
 
     /**
-     * @var Quote
+     * @var QuoteFactory
      */
-    private $quote;
+    private $quoteFactory;
 
     /**
      * @var QuoteIdToMaskedQuoteIdInterface
@@ -40,57 +35,17 @@ class GetCartTest extends GraphQlAbstract
     private $quoteIdToMaskedId;
 
     /**
-     * @inheritdoc
+     * @var CustomerTokenServiceInterface
      */
+    private $customerTokenService;
+
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->create(QuoteResource::class);
-        $this->quote = $objectManager->create(Quote::class);
-        $this->quoteIdToMaskedId = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->quoteResource = $objectManager->get(QuoteResource::class);
+        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
+        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
-     */
-    public function testGetOwnCartForRegisteredCustomer()
-    {
-        $reservedOrderId = 'test_order_item_with_items';
-        $this->quoteResource->load(
-            $this->quote,
-            $reservedOrderId,
-            'reserved_order_id'
-        );
-
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $query = $this->prepareGetCartQuery($maskedQuoteId);
-
-        $response = $this->sendRequestWithToken($query);
-
-        self::assertArrayHasKey('cart', $response);
-        self::assertNotEmpty($response['cart']['items']);
-        self::assertNotEmpty($response['cart']['shipping_addresses']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
-     */
-    public function testGetCartFromAnotherCustomer()
-    {
-        $reservedOrderId = 'test_order_item_with_items';
-        $this->quoteResource->load(
-            $this->quote,
-            $reservedOrderId,
-            'reserved_order_id'
-        );
-
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $query = $this->prepareGetCartQuery($maskedQuoteId);
-
-        self::expectExceptionMessage("The current user cannot perform operations on cart \"$maskedQuoteId\"");
-
-        $this->graphQlQuery($query);
     }
 
     /**
@@ -98,45 +53,69 @@ class GetCartTest extends GraphQlAbstract
      */
     public function testGetCartForGuest()
     {
-        $reservedOrderId = 'test_order_1';
-        $this->quoteResource->load(
-            $this->quote,
-            $reservedOrderId,
-            'reserved_order_id'
-        );
-
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $query = $this->prepareGetCartQuery($maskedQuoteId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $query = $this->getCartQuery($maskedQuoteId);
 
         $response = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('cart', $response);
+        self::assertEquals($maskedQuoteId, $response['cart']['cart_id']);
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     */
+    public function testGetCartByRegisteredCustomer()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_item_with_items');
+        $query = $this->getCartQuery($maskedQuoteId);
+
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+
+        self::assertArrayHasKey('cart', $response);
+        self::assertEquals($maskedQuoteId, $response['cart']['cart_id']);
+        self::assertNotEmpty($response['cart']['items']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     */
+    public function testGetCartOfAnotherCustomerByGuest()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_item_with_items');
+        $query = $this->getCartQuery($maskedQuoteId);
+
+        self:$this->expectExceptionMessage(
+            "The current user cannot perform operations on cart \"{$maskedQuoteId}\""
+        );
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
     public function testGetNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
-        $query = $this->prepareGetCartQuery($maskedQuoteId);
-
-        self::expectExceptionMessage("Could not find a cart with ID \"$maskedQuoteId\"");
+        $query = $this->getCartQuery($maskedQuoteId);
 
         $this->graphQlQuery($query);
     }
 
     /**
-     * Generates query for setting the specified shipping method on cart
-     *
      * @param string $maskedQuoteId
      * @return string
      */
-    private function prepareGetCartQuery(
+    private function getCartQuery(
         string $maskedQuoteId
     ) : string {
         return <<<QUERY
 {
   cart(cart_id: "$maskedQuoteId") {
+    cart_id
     applied_coupon {
-    	  code
+        code
     }
     items {
       id
@@ -147,23 +126,30 @@ class GetCartTest extends GraphQlAbstract
     }
   }
 }
-
 QUERY;
     }
 
     /**
-     * Sends a GraphQL request with using a bearer token
-     *
-     * @param string $query
-     * @return array
-     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @param string $reversedQuoteId
+     * @return string
      */
-    private function sendRequestWithToken(string $query): array
+    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
     {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
 
-        $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
+    }
+
+    /**
+     * @param string $username
+     * @param string $password
+     * @return array
+     */
+    private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
+    {
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-
-        return $this->graphQlQuery($query, [], '', $headerMap);
+        return $headerMap;
     }
 }

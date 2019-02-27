@@ -231,6 +231,23 @@
         <waitForPageLoad stepKey="waitForStoreViewChangeLoad"/>
     </actionGroup>
 
+    <actionGroup name="switchCategoryToAllStoreView">
+        <arguments>
+            <argument name="CatName"/>
+        </arguments>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(CatName)}}" stepKey="navigateToCreatedCategory" />
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSpinner1"/>
+        <scrollToTopOfPage stepKey="scrollToToggle"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewDropdownToggle}}" stepKey="openStoreViewDropDown"/>
+        <click selector="{{AdminCategoryMainActionsSection.allStoreViews}}" stepKey="clickStoreViewByName"/>
+        <see selector="{{AdminCategoryMainActionsSection.storeSwitcher}}" userInput="All Store Views" stepKey="seeAllStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSpinner2"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}" stepKey="selectStoreViewAccept"/>
+        <waitForPageLoad stepKey="waitForStoreViewChangeLoad"/>
+    </actionGroup>
+
     <actionGroup name="navigateToCreatedCategory">
         <arguments>
             <argument name="Category"/>
@@ -262,5 +279,17 @@
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{value}}" stepKey="enterURLKey"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/>
+    </actionGroup>
+    <actionGroup name="OpenCategoryFromCategoryTree">
+        <arguments>
+            <argument name="category" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(category)}}" stepKey="selectCategory"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.categoryPageTitle}}" stepKey="waitForCategoryTitle"/>
     </actionGroup>
 </actionGroups>
