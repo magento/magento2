@@ -76,7 +76,7 @@
         <arguments>
             <argument name="requestPath" type="string"/>
         </arguments>
-        <amOnPage url="$$urlRewrite.request_path$$" stepKey="amOnPage"/>
+        <amOnPage url="{{requestPath}}" stepKey="amOnPage"/>
         <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
         <see userInput="Whoops, our bad..." stepKey="seeWhoops"/>
     </actionGroup>
