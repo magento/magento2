@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Controller;
 
+use Magento\Customer\Model\Session;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
-use Magento\Customer\Model\Session;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\TestCase\AbstractController;
 
