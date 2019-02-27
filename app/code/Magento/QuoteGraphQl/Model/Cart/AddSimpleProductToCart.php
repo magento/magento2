@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
@@ -23,6 +25,11 @@ use Magento\Quote\Model\Quote;
  */
 class AddSimpleProductToCart
 {
+    /**
+     * @var ProductCustomOptionRepositoryInterface
+     */
+    private $customOptionRepository;
+
     /**
      * @var ArrayManager
      */
@@ -42,15 +49,18 @@ class AddSimpleProductToCart
      * @param ArrayManager $arrayManager
      * @param DataObjectFactory $dataObjectFactory
      * @param ProductRepositoryInterface $productRepository
+     * @param ProductCustomOptionRepositoryInterface $customOptionRepository
      */
     public function __construct(
         ArrayManager $arrayManager,
         DataObjectFactory $dataObjectFactory,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        ProductCustomOptionRepositoryInterface $customOptionRepository
     ) {
         $this->arrayManager = $arrayManager;
         $this->dataObjectFactory = $dataObjectFactory;
         $this->productRepository = $productRepository;
+        $this->customOptionRepository = $customOptionRepository;
     }
 
     /**
@@ -67,7 +77,7 @@ class AddSimpleProductToCart
     {
         $sku = $this->extractSku($cartItemData);
         $qty = $this->extractQty($cartItemData);
-        $customizableOptions = $this->extractCustomizableOptions($cartItemData);
+        $customizableOptions = $this->extractCustomizableOptions($cartItemData, $sku);
 
         try {
             $product = $this->productRepository->get($sku);
@@ -127,15 +137,23 @@ class AddSimpleProductToCart
      * Extract Customizable Options from cart item data
      *
      * @param array $cartItemData
+     * @param string $sku
      * @return array
      */
-    private function extractCustomizableOptions(array $cartItemData): array
+    private function extractCustomizableOptions(array $cartItemData, string $sku): array
     {
         $customizableOptions = $this->arrayManager->get('customizable_options', $cartItemData, []);
-
+        $productCustomOptions = $this->customOptionRepository->getList($sku);
+        $productCustomOptionsMap = $this->getProductCustomOptionsMap($productCustomOptions);
         $customizableOptionsData = [];
+
         foreach ($customizableOptions as $customizableOption) {
-            $customizableOptionsData[$customizableOption['id']] = $customizableOption['value'];
+            $multipleOptionTypesList = ['multiple', 'checkbox']; // TODO: use constants
+            if (in_array($productCustomOptionsMap[$customizableOption['id']]->getType(), $multipleOptionTypesList)) {
+                $customizableOptionsData[$customizableOption['id']] = explode(',', $customizableOption['value']);
+            } else {
+                $customizableOptionsData[$customizableOption['id']] = $customizableOption['value'];
+            }
         }
         return $customizableOptionsData;
     }
@@ -155,5 +173,22 @@ class AddSimpleProductToCart
                 'options' => $customOptions,
             ],
         ]);
+    }
+
+    /**
+     * Creates an array with a key equals option ID
+     *
+     * @param array $productCustomOptions
+     * @return array
+     */
+    private function getProductCustomOptionsMap(array $productCustomOptions): array
+    {
+        $customOptionsData = [];
+        /** @var ProductCustomOptionInterface $productCustomOption */
+        foreach ($productCustomOptions as $productCustomOption) {
+            $customOptionsData[$productCustomOption->getOptionId()] = $productCustomOption;
+        }
+
+        return $customOptionsData;
     }
 }
