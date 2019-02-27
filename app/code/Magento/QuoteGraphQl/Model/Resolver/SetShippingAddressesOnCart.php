@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -67,7 +68,7 @@ class SetShippingAddressesOnCart implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $shippingAddresses = $this->arrayManager->get('input/shipping_addresses', $args);
-        $maskedCartId = (string) $this->arrayManager->get('input/cart_id', $args);
+        $maskedCartId = (string)$this->arrayManager->get('input/cart_id', $args);
 
         if (!$maskedCartId) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
@@ -79,7 +80,11 @@ class SetShippingAddressesOnCart implements ResolverInterface
 
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
 
-        $this->setShippingAddressesOnCart->execute($context, $cart, $shippingAddresses);
+        try {
+            $this->setShippingAddressesOnCart->execute($context, $cart, $shippingAddresses);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
+        }
 
         return [
             'cart' => [
