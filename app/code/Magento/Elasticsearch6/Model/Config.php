@@ -48,7 +48,6 @@ class Config extends \Magento\Elasticsearch\Model\Config
      * Return true if third party search engine is used
      *
      * @return bool
-     * @since 100.1.0
      */
     public function isElasticsearchEnabled()
     {
