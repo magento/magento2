@@ -45,6 +45,19 @@ class FormTest extends AbstractController
     }
 
     /**
+     * Test attempting to open the Returns form as logged in customer
+     *
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testAttemptToOpenTheFormAsLoggedIn()
+    {
+        $this->login(1);
+        $this->dispatch('sales/guest/form/');
+        $this->assertRedirect($this->stringContains('customer/account'));
+    }
+
+    /**
      * Test Return Order for guest with incorrect data
      */
     public function testViewOrderAsGuestWithIncorrectData()
