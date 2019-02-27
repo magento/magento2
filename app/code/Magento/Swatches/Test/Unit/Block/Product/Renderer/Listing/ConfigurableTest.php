@@ -306,11 +306,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $expected = [
                 0 => 'BLOCK_TPL',
                 1 => 'default',
-                2 => NULL,
-                'base_url' => NULL,
-                'template' => NULL,
+                2 => null,
+                'base_url' => null,
+                'template' => null,
                 3 => 'USD',
-                4 => NULL,
+                4 => null,
                 5 => 'STORE_1_CAT_25_CUSTGROUP_0_color_53',
             ];
         $stateKey = 'STORE_1_CAT_25_CUSTGROUP_0_color_53';
