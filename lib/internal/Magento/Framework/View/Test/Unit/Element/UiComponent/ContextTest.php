@@ -11,13 +11,27 @@ namespace Magento\Framework\View\Test\Unit\Element\UiComponent;
 
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Context
      */
     protected $context;
+
+    /**
+     * @var ActionPoolInterface
+     */
+    private $actionPool;
+
+    /**
+     * @var \Magento\Framework\AuthorizationInterface
+     */
+    private $authorization;
 
     protected function setUp()
     {
@@ -33,6 +47,10 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
+        $this->actionPool = $this->getMockBuilder(ActionPoolInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $actionPoolFactory->method('create')->willReturn($this->actionPool);
         $contentTypeFactory =
             $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory::class)
                 ->disableOriginalConstructor()
@@ -43,6 +61,9 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
+        $this->authorization = $this->getMockBuilder(\Magento\Framework\AuthorizationInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $objectManagerHelper->getObject(
@@ -55,9 +76,60 @@ class ContextTest extends \PHPUnit\Framework\TestCase
                 'contentTypeFactory'    => $contentTypeFactory,
                 'urlBuilder'            => $urlBuilder,
                 'processor'             => $processor,
-                'uiComponentFactory'    => $uiComponentFactory
+                'uiComponentFactory'    => $uiComponentFactory,
+                'authorization'         => $this->authorization,
             ]
         );
+    }
+
+    public function testAddButtonWithoutAclResource()
+    {
+        $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->actionPool->expects($this->once())->method('add');
+        $this->authorization->expects($this->never())->method('isAllowed');
+
+        $this->context->addButtons([
+            'button_1' => [
+                'name' => 'button_1',
+            ],
+        ], $component);
+    }
+
+    public function testAddButtonWithAclResourceAllowed()
+    {
+        $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->actionPool->expects($this->once())->method('add');
+        $this->authorization->expects($this->once())->method('isAllowed')->willReturn(true);
+
+        $this->context->addButtons([
+            'button_1' => [
+                'name' => 'button_1',
+                'aclResource' => 'Magento_Framwork::acl',
+            ],
+        ], $component);
+    }
+
+    public function testAddButtonWithAclResourceDenied()
+    {
+        $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->actionPool->expects($this->never())->method('add');
+        $this->authorization->expects($this->once())->method('isAllowed')->willReturn(false);
+
+        $this->context->addButtons([
+            'button_1' => [
+                'name' => 'button_1',
+                'aclResource' => 'Magento_Framwork::acl',
+            ],
+        ], $component);
     }
 
     /**

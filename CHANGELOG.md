@@ -4,7 +4,7 @@ To get detailed information about changes in Magento 2.3.0, see the [Release Not
 
 2.1.0
 =============
-To get detailed information about changes in Magento 2.1.0, please visit [Magento Community Edition (CE) Release Notes](http://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.0CE.html "Magento Community Edition (CE) Release Notes")
+To get detailed information about changes in Magento 2.1.0, please visit [Magento Community Edition (CE) Release Notes](https://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.0CE.html "Magento Community Edition (CE) Release Notes")
 
 2.0.0
 =============
@@ -1025,7 +1025,7 @@ Tests:
     * Improved backend menu keyboard accessibility
     * Accessibility improvements: WAI-ARIA in a product item on a category page and related products
     * Checkout flow code can work with a separate DB storage
-    * <a href="http://devdocs.magento.com/guides/v1.0/release-notes/changes.html#change-devrc-unit">Unit tests moved to module directories</a>
+    * <a href="https://devdocs.magento.com/guides/v1.0/release-notes/changes.html#change-devrc-unit">Unit tests moved to module directories</a>
     * Addressed naming inconsistencies in REST routes
     * Added Advanced Developer workflow for frontend developers
 * Setup

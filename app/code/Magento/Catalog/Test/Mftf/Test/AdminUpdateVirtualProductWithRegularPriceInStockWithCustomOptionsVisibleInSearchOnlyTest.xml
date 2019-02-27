@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateVirtualProductWithRegularPriceInStockWithCustomOptionsVisibleInSearchOnlyTest">
+        <annotations>
+            <stories value="Update Virtual Product"/>
+            <title value="Update Virtual Product with Regular Price (In Stock) with Custom Options Visible in Search Only"/>
+            <description value="Test log in to Update Virtual Product and Update Virtual Product with Regular Price (In Stock) with Custom Options Visible in Search Only"/>
+            <testCaseId value="MC-6641"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
+            <createData entity="defaultVirtualProduct" stepKey="initialVirtualProduct">
+                <requiredEntity createDataKey="initialCategoryEntity"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
+            <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Search default virtual product in the grid page -->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage1"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPage1"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAllFilter" />
+        <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="$$initialVirtualProduct.name$$" stepKey="fillVirtualProductNameInKeywordSearch"/>
+        <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearchButton"/>
+        <waitForPageLoad stepKey="waitForProductSearch"/>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyCreatedVirtualProduct"/>
+        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+
+        <!-- Update virtual product with regular price(in stock) -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{updateVirtualProductRegularPriceInStock.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductRegularPriceInStock.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductRegularPriceInStock.price}}" stepKey="fillProductPrice"/>
+        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductRegularPriceInStock.productTaxClass}}" stepKey="selectProductTaxClass"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{updateVirtualProductRegularPriceInStock.quantity}}" stepKey="fillProductQuantity"/>
+        <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{updateVirtualProductRegularPriceInStock.status}}" stepKey="selectStockStatusInStock"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
+        <click selector="{{AdminProductFormSection.selectCategory($$initialCategoryEntity.name$$)}}" stepKey="unselectInitialCategory"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductRegularPriceInStock.visibility}}" stepKey="selectVisibility"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductRegularPriceInStock.urlKey}}" stepKey="fillUrlKey"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" stepKey="clickAdminProductCustomizableOption"/>
+        <!-- Create virtual product with customizable options dataSet1 -->
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButton"/>
+        <waitForPageLoad stepKey="waitForFirstOption"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="{{virtualProductCustomizableOption1.title}}" stepKey="fillOptionTitleForFirstDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('1')}}" stepKey="selectOptionTypeDropDownFirstDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('1', virtualProductCustomizableOption1.type)}}" stepKey="selectOptionFieldFromDropDownForFirstDataSet"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('0')}}" stepKey="checkRequiredCheckBoxForFirstDataSet"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionPrice('0')}}" userInput="{{virtualProductCustomizableOption1.option_0_price}}" stepKey="fillOptionPriceForFirstDataSet"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceType('0')}}" userInput="{{virtualProductCustomizableOption1.option_0_price_type}}" stepKey="selectOptionPriceTypeForFirstDataSet"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionSku('0')}}" userInput="{{virtualProductCustomizableOption1.option_0_sku}}" stepKey="fillOptionSkuForFirstDataSet"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.maxCharactersInput('0')}}" userInput="{{virtualProductCustomizableOption1.option_0_max_characters}}" stepKey="fillOptionMaxCharactersForFirstDataSet"/>
+         <!--Create virtual product with customizable options dataSet2 -->
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButtonForSecondDataSet"/>
+        <waitForPageLoad stepKey="waitForSecondDataSetToLoad"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('1')}}" userInput="{{virtualProductCustomizableOption2.title}}" stepKey="fillOptionTitleForSecondDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('2')}}" stepKey="selectOptionTypeDropDownSecondDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('2', virtualProductCustomizableOption2.type)}}" stepKey="selectOptionFieldFromDropDownForSecondDataSet"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('1')}}" stepKey="checkRequiredCheckBoxForSecondDataSet"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionPrice('1')}}" userInput="{{virtualProductCustomizableOption2.option_0_price}}" stepKey="fillOptionPriceForSecondDataSet"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceType('1')}}" userInput="{{virtualProductCustomizableOption2.option_0_price_type}}" stepKey="selectOptionPriceTypeForSecondDataSet"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionSku('1')}}" userInput="{{virtualProductCustomizableOption2.option_0_sku}}" stepKey="fillOptionSkuForSecondDataSet"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.maxCharactersInput('1')}}" userInput="{{virtualProductCustomizableOption2.option_0_max_characters}}" stepKey="fillOptionMaxCharactersForSecondDataSet"/>
+        <!-- Create virtual product with customizable options dataSet3 -->
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButtonForThirdSetOfData"/>
+        <waitForPageLoad stepKey="waitForThirdSetOfDataToLoad"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('2')}}" userInput="{{virtualProductCustomizableOption3.title}}" stepKey="fillOptionTitleForThirdDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('3')}}" stepKey="selectOptionTypeDropDownForThirdDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('3', virtualProductCustomizableOption3.type)}}" stepKey="selectOptionFieldFromDropDownForThirdDataSet"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('2')}}" stepKey="checkRequiredCheckBoxForThirdDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addValue}}" stepKey="clickAddOptionButtonForThirdDataSetToAddFirstRow"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(virtualProductCustomizableOption3.title,'0')}}" userInput="{{virtualProductCustomizableOption3.option_0_title}}" stepKey="fillOptionTitleForThirdDataSetFirstRow"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(virtualProductCustomizableOption3.title,'0')}}" userInput="{{virtualProductCustomizableOption3.option_0_price}}" stepKey="fillOptionPriceForThirdDataSetFirstRow"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(virtualProductCustomizableOption3.title,'0')}}" userInput="{{virtualProductCustomizableOption3.option_0_price_type}}" stepKey="selectOptionPriceTypeForThirdDataSetFirstRow"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption3.title,'0')}}" userInput="{{virtualProductCustomizableOption3.option_0_sku}}" stepKey="fillOptionSkuForThirdDataSetFirstRow"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addValue}}" stepKey="clickAddOptionButtonForThirdDataSetToAddSecondRow"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(virtualProductCustomizableOption3.title,'1')}}" userInput="{{virtualProductCustomizableOption3.option_1_title}}" stepKey="fillOptionTitleForThirdDataSetSecondRow"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(virtualProductCustomizableOption3.title,'1')}}" userInput="{{virtualProductCustomizableOption3.option_1_price}}" stepKey="fillOptionPriceForThirdDataSetSecondRow"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(virtualProductCustomizableOption3.title,'1')}}" userInput="{{virtualProductCustomizableOption3.option_1_price_type}}" stepKey="selectOptionPriceTypeForThirdDataSetSecondRow"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption3.title,'1')}}" userInput="{{virtualProductCustomizableOption3.option_1_sku}}" stepKey="fillOptionSkuForThirdDataSetSecondRow"/>
+        <!-- Create virtual product with customizable options dataSet4 -->
+        <scrollToTopOfPage stepKey="scrollToAddOptionButton"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButtonForFourthDataSet"/>
+        <waitForPageLoad stepKey="waitForFourthDataSetToLoad"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('3')}}" userInput="{{virtualProductCustomizableOption4.title}}" stepKey="fillOptionTitleForFourthDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('4')}}" stepKey="selectOptionTypeDropDownForFourthSetOfData"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('4', virtualProductCustomizableOption4.type)}}" stepKey="selectOptionFieldFromDropDownForFourthDataSet"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('3')}}" stepKey="checkRequiredCheckBoxForFourthDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addValue}}" stepKey="clickAddOptionButtonForFourthDataSetToAddFirstRow"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(virtualProductCustomizableOption4.title,'0')}}" userInput="{{virtualProductCustomizableOption4.option_0_title}}" stepKey="fillOptionTitleForFourthDataSetFirstRow"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(virtualProductCustomizableOption4.title,'0')}}" userInput="{{virtualProductCustomizableOption4.option_0_price}}" stepKey="fillOptionPriceForFourthDataSetFirstRow"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(virtualProductCustomizableOption4.title,'0')}}" userInput="{{virtualProductCustomizableOption4.option_0_price_type}}" stepKey="selectOptionPriceTypeForFourthDataSetFirstRow"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption4.title,'0')}}" userInput="{{virtualProductCustomizableOption4.option_0_sku}}" stepKey="fillOptionSkuForFourthDataSetFirstRow"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addValue}}" stepKey="clickAddOptionButtonForFourthDataSetToAddSecondRow"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_title}}" stepKey="fillOptionTitleForFourthDataSetSecondRow"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_price}}" stepKey="fillOptionPriceForFourthDataSetSecondRow"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_price_type}}" stepKey="selectOptionPriceTypeForFourthDataSetSecondRow"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_sku}}" stepKey="fillOptionSkuForFourthDataSetSecondRow"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+        <!-- Verify we see success message -->
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSaveSuccessMessage"/>
+
+        <!-- Search updated virtual product(from above step) in the grid page -->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchUpdatedVirtualProduct"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{updateVirtualProductRegularPriceInStock.name}}" stepKey="fillVirtualProductNameInNameFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{updateVirtualProductRegularPriceInStock.sku}}" stepKey="fillVirtualProductSku"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyUpdatedVirtualProductVisibleInGrid"/>
+        <waitForPageLoad stepKey="waitUntilVirtualProductPageIsOpened"/>
+
+        <!-- Verify we customer see updated virtual product in the product form page -->
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{updateVirtualProductRegularPriceInStock.name}}" stepKey="seeProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductRegularPriceInStock.sku}}" stepKey="seeProductSku"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductRegularPriceInStock.price}}" stepKey="seeProductPrice"/>
+        <seeInField selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductRegularPriceInStock.productTaxClass}}" stepKey="seeProductTaxClass"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{updateVirtualProductRegularPriceInStock.quantity}}" stepKey="seeProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{updateVirtualProductRegularPriceInStock.status}}" stepKey="seeProductStockStatus"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
+        <grabMultiple selector="{{AdminProductFormSection.selectMultipleCategories}}" stepKey="selectedCategories" />
+        <assertEquals stepKey="assertSelectedCategories">
+            <actualResult type="variable">selectedCategories</actualResult>
+            <expectedResult type="array">[$$categoryEntity.name$$]</expectedResult>
+        </assertEquals>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneOnCategorySelect"/>
+        <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductRegularPriceInStock.visibility}}" stepKey="seeVisibility"/>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
+        <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductRegularPriceInStock.urlKey}}" stepKey="seeUrlKey"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" stepKey="clickAdminProductCustomizableOptionToSeeValues"/>
+        <!-- Create virtual product with customizable options dataSet1 -->
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButton1"/>
+        <waitForPageLoad stepKey="waitForFirstOptionToLoad"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="{{virtualProductCustomizableOption1.title}}" stepKey="seeOptionTitleForFirstDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('1')}}" stepKey="selectOptionTypeDropDownFirstDataSet1"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('1', virtualProductCustomizableOption1.type)}}" stepKey="selectOptionFieldFromDropDownForFirstDataSet1"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('0')}}" stepKey="checkRequiredCheckBoxForFirstDataSet1"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.optionPrice('0')}}" userInput="{{virtualProductCustomizableOption1.option_0_price}}" stepKey="seeOptionPriceForFirstDataSet"/>
+        <seeOptionIsSelected selector="{{AdminProductCustomizableOptionsSection.optionPriceType('0')}}" userInput="{{virtualProductCustomizableOption1.option_0_price_type}}" stepKey="selectOptionPriceTypeForFirstDataSet1"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.optionSku('0')}}" userInput="{{virtualProductCustomizableOption1.option_0_sku}}" stepKey="seeOptionSkuForFirstDataSet"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.maxCharactersInput('0')}}" userInput="{{virtualProductCustomizableOption1.option_0_max_characters}}" stepKey="seeOptionMaxCharactersForFirstDataSet"/>
+        <!--Create virtual product with customizable options dataSet2 -->
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButtonForSecondDataSetToSeeFields"/>
+        <waitForPageLoad stepKey="waitForTheSecondDataSetToLoad"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('1')}}" userInput="{{virtualProductCustomizableOption2.title}}" stepKey="seeOptionTitleForSecondDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('2')}}" stepKey="selectOptionTypeDropDownSecondDataSet2"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('2', virtualProductCustomizableOption2.type)}}" stepKey="selectOptionFieldFromDropDownForSecondDataSet2"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('1')}}" stepKey="checkRequiredCheckBoxForTheSecondDataSet"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.optionPrice('1')}}" userInput="{{virtualProductCustomizableOption2.option_0_price}}" stepKey="seeOptionPriceForSecondDataSet"/>
+        <seeOptionIsSelected selector="{{AdminProductCustomizableOptionsSection.optionPriceType('1')}}" userInput="{{virtualProductCustomizableOption2.option_0_price_type}}" stepKey="selectOptionPriceTypeForTheSecondDataSet"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.optionSku('1')}}" userInput="{{virtualProductCustomizableOption2.option_0_sku}}" stepKey="seeOptionSkuForSecondDataSet"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.maxCharactersInput('1')}}" userInput="{{virtualProductCustomizableOption2.option_0_max_characters}}" stepKey="seeOptionMaxCharactersForSecondDataSet"/>
+        <!-- Create virtual product with customizable options dataSet3 -->
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButtonForTheThirdSetOfData"/>
+        <waitForPageLoad stepKey="waitForTheThirdSetOfDataToLoad"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('2')}}" userInput="{{virtualProductCustomizableOption3.title}}" stepKey="seeOptionTitleForThirdDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('3')}}" stepKey="selectOptionTypeDropDownForTheThirdDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('3', virtualProductCustomizableOption3.type)}}" stepKey="selectOptionFieldFromDropDownForTheThirdDataSet"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('2')}}" stepKey="checkRequiredCheckBoxForTheThirdDataSet"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(virtualProductCustomizableOption3.title,'0')}}" userInput="{{virtualProductCustomizableOption3.option_0_title}}" stepKey="seeOptionTitleForThirdDataSetFirstRow"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(virtualProductCustomizableOption3.title,'0')}}" userInput="{{virtualProductCustomizableOption3.option_0_price}}" stepKey="seeOptionPriceForThirdDataSetFirstRow"/>
+        <seeOptionIsSelected selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(virtualProductCustomizableOption3.title,'0')}}" userInput="{{virtualProductCustomizableOption3.option_0_price_type}}" stepKey="selectOptionPriceTypeForTheThirdDataSetFirstRow"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption3.title,'0')}}" userInput="{{virtualProductCustomizableOption3.option_0_sku}}" stepKey="seeOptionSkuForThirdDataSetFirstRow"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(virtualProductCustomizableOption3.title,'1')}}" userInput="{{virtualProductCustomizableOption3.option_1_title}}" stepKey="seeOptionTitleForThirdDataSetSecondRow"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(virtualProductCustomizableOption3.title,'1')}}" userInput="{{virtualProductCustomizableOption3.option_1_price}}" stepKey="seeOptionPriceForThirdDataSetSecondRow"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(virtualProductCustomizableOption3.title,'1')}}" userInput="{{virtualProductCustomizableOption3.option_1_price_type}}" stepKey="selectOptionPriceTypeForTheThirdDataSetSecondRow"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption3.title,'1')}}" userInput="{{virtualProductCustomizableOption3.option_1_sku}}" stepKey="seeOptionSkuForThirdDataSetSecondRow"/>
+        <!-- Create virtual product with customizable options dataSet4 -->
+        <scrollToTopOfPage stepKey="scrollToTheAddOptionButton"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButtonForTheFourthDataSet"/>
+        <waitForPageLoad stepKey="waitForTheFourthDataSetToLoad"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('3')}}" userInput="{{virtualProductCustomizableOption4.title}}" stepKey="fillOptionTitleForTheFourthDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('4')}}" stepKey="selectOptionTypeDropDownForTheFourthSetOfData"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('4', virtualProductCustomizableOption4.type)}}" stepKey="selectOptionFieldFromDropDownForTheFourthDataSet"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('3')}}" stepKey="checkRequiredCheckBoxForTheFourthDataSet"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(virtualProductCustomizableOption4.title,'0')}}" userInput="{{virtualProductCustomizableOption4.option_0_title}}" stepKey="seeOptionTitleForFourthDataSetFirstRow"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(virtualProductCustomizableOption4.title,'0')}}" userInput="{{virtualProductCustomizableOption4.option_0_price}}" stepKey="seeOptionPriceForFourthDataSetFirstRow"/>
+        <seeOptionIsSelected selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(virtualProductCustomizableOption4.title,'0')}}" userInput="{{virtualProductCustomizableOption4.option_0_price_type}}" stepKey="selectOptionPriceTypeForTheFourthDataSetFirstRow"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption4.title,'0')}}" userInput="{{virtualProductCustomizableOption4.option_0_sku}}" stepKey="seeOptionSkuForFourthDataSetFirstRow"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_title}}" stepKey="seeOptionTitleForFourthDataSetSecondRow"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_price}}" stepKey="seeOptionPriceForFourthDataSetSecondRow"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_price_type}}" stepKey="selectOptionPriceTypeForTheFourthDataSetSecondRow"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_sku}}" stepKey="seeOptionSkuForFourthDataSetSecondRow"/>
+
+        <!--Verify customer don't see updated virtual product link on category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <dontSee selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{updateVirtualProductRegularPriceInStock.name}}" stepKey="dontSeeVirtualProductNameOnCategoryPage"/>
+
+        <!-- Verify customer see updated virtual product (from the above step) on the storefront page -->
+        <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductRegularPriceInStock.urlKey)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{updateVirtualProductRegularPriceInStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{updateVirtualProductRegularPriceInStock.price}}" stepKey="seeVirtualProductPriceOnStoreFrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{updateVirtualProductRegularPriceInStock.sku}}" stepKey="seeVirtualProductSku"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
+        <assertEquals stepKey="assertStockAvailableOnProductPage">
+            <expectedResult type="string">{{updateVirtualProductRegularPriceInStock.storefrontStatus}}</expectedResult>
+            <actualResult type="variable">productStockAvailableStatus</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="productPriceAmount"/>
+        <assertEquals stepKey="assertOldPriceTextOnProductPage">
+            <expectedResult type="string">${{updateVirtualProductRegularPriceInStock.price}}</expectedResult>
+            <actualResult type="variable">productPriceAmount</actualResult>
+        </assertEquals>
+        <!--Verify we customer see customizable options are Required -->
+        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomInput(virtualProductCustomizableOption1.title)}}" stepKey="verifyFistCustomOptionIsRequired" />
+        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomInput(virtualProductCustomizableOption2.title)}}" stepKey="verifySecondCustomOptionIsRequired" />
+        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(virtualProductCustomizableOption3.title)}}" stepKey="verifyThirdCustomOptionIsRequired" />
+        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(virtualProductCustomizableOption4.title)}}" stepKey="verifyFourthCustomOptionIsRequired" />
+        <!--Verify customer see customizable option titles and prices -->
+        <grabMultiple selector="{{StorefrontProductInfoMainSection.allCustomOptionLabels}}" stepKey="allCustomOptionLabels" />
+        <assertEquals stepKey="verifyLabels">
+            <actualResult type="variable">allCustomOptionLabels</actualResult>
+            <expectedResult type="array">[{{virtualProductCustomizableOption1.title}} + ${{virtualProductCustomizableOption1.option_0_price}}, {{virtualProductCustomizableOption2.title}} + ${{virtualProductCustomizableOption2.option_0_price}}, {{virtualProductCustomizableOption3.title}}, {{virtualProductCustomizableOption4.title}}]</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom userInput="for" selector="{{StorefrontProductInfoMainSection.customOptionLabel(virtualProductCustomizableOption4.title)}}" stepKey="fourthOptionId" />
+        <grabMultiple selector="{{StorefrontProductInfoMainSection.customSelectOptions({$fourthOptionId})}}" stepKey="grabFourthOptions" />
+        <assertEquals stepKey="assertFourthSelectOptions">
+            <actualResult type="variable">grabFourthOptions</actualResult>
+            <expectedResult type="array">['-- Please Select --', {{virtualProductCustomizableOption4.option_0_title}} +$12.01, {{virtualProductCustomizableOption4.option_1_title}} +$20.02]</expectedResult>
+        </assertEquals>
+    </test>
+</tests>
