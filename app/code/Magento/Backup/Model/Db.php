@@ -6,6 +6,8 @@
 namespace Magento\Backup\Model;
 
 use Magento\Backup\Helper\Data as Helper;
+use Magento\Backup\Model\ResourceModel\Table\GetListTables;
+use Magento\Backup\Model\ResourceModel\View\GetViewsBackup;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\RuntimeException;
 
@@ -44,18 +46,34 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
     private $helper;
 
     /**
+     * @var GetListTables
+     */
+    private $getListTables;
+
+    /**
+     * @var GetViewsBackup
+     */
+    private $getViewsBackup;
+
+    /**
      * @param \Magento\Backup\Model\ResourceModel\Db $resourceDb
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param GetListTables|null $getListTables
+     * @param GetViewsBackup|null $getViewsBackup
      * @param Helper|null $helper
      */
     public function __construct(
         \Magento\Backup\Model\ResourceModel\Db $resourceDb,
         \Magento\Framework\App\ResourceConnection $resource,
-        ?Helper $helper = null
+        ?Helper $helper = null,
+        GetListTables $getListTables = null,
+        GetViewsBackup $getViewsBackup = null
     ) {
         $this->_resourceDb = $resourceDb;
         $this->_resource = $resource;
         $this->helper = $helper ?? ObjectManager::getInstance()->get(Helper::class);
+        $this->getListTables = $getListTables ?: ObjectManager::getInstance()->get(GetListTables::class);
+        $this->getViewsBackup = $getViewsBackup ?: ObjectManager::getInstance()->get(GetViewsBackup::class);
     }
 
     /**
@@ -161,7 +179,7 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 
         $this->getResource()->beginTransaction();
 
-        $tables = $this->getResource()->getTables();
+        $tables = $this->getListTables->execute();
 
         $backup->write($this->getResource()->getHeader());
 
@@ -198,6 +216,8 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
                 $backup->write($this->getResource()->getTableDataAfterSql($table));
             }
         }
+        $this->getViewsBackup->execute($backup);
+
         $backup->write($this->getResource()->getTableForeignKeysSql());
         $backup->write($this->getResource()->getTableTriggersSql());
         $backup->write($this->getResource()->getFooter());
