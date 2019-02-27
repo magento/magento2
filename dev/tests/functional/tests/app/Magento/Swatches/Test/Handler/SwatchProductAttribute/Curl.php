@@ -30,22 +30,31 @@ class Curl extends CatalogProductAttributeCurl implements SwatchProductAttribute
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function changeStructureOfTheData(array $data): array
+    {
+        return parent::changeStructureOfTheData($data);
+    }
+
+    /**
      * Re-map options from default options structure to swatches structure,
      * as swatches was initially created with name convention differ from other attributes.
      *
-     * @param array $data
-     * @return array
+     * @inheritdoc
      */
-    protected function changeStructureOfTheData(array $data)
+    protected function getSerializeOptions(array $data): string
     {
-        $data['optiontext'] = $data['option'];
-        $data['swatchtext'] = [
-            'value' => $data['option']['value']
-        ];
-        $data['serialized_options'] = $this->getSerializeOptions($data, ['optiontext', 'swatchtext']);
-        unset($data['option']);
-        $data = parent::changeStructureOfTheData($data);
+        $options = [];
+        foreach ($data as $optionRowData) {
+            $optionRowData['optiontext'] = $optionRowData['option'];
+            $optionRowData['swatchtext'] = [
+                'value' => $optionRowData['option']['value']
+            ];
+            unset($optionRowData['option']);
+            $options[] = http_build_query($optionRowData);
+        }
 
-        return $data;
+        return json_encode($options);
     }
 }

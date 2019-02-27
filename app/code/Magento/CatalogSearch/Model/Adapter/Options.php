@@ -10,10 +10,10 @@ use Magento\Framework\Search\Adapter\OptionsInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
+ * Catalog search config.
+ *
  * @api
  * @since 100.0.2
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
  */
 class Options implements OptionsInterface
 {
@@ -35,7 +35,7 @@ class Options implements OptionsInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get()
     {

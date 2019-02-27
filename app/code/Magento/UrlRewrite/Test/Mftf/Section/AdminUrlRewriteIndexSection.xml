@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminUrlRewriteIndexSection">
+        <element name="requestPathFilter" type="input" selector="#urlrewriteGrid_filter_request_path"/>
+        <element name="requestPathColumnValue" type="text" selector="//*[@id='urlrewriteGrid']//tbody//td[@data-column='request_path' and normalize-space(.)='{{columnValue}}']" parameterized="true"/>
+        <element name="targetPathColumnValue" type="text" selector="//*[@id='urlrewriteGrid']//tbody//td[@data-column='target_path' and normalize-space(.)='{{columnValue}}']" parameterized="true"/>
+        <element name="searchButton" type="button" selector="//button[@data-ui-id='widget-button-1']" timeout="30"/>
+        <element name="resetButton" type="button" selector="button[data-ui-id='widget-button-0']" timeout="30"/>
+        <element name="emptyRecordMessage" type="text" selector="//*[@class='empty-text']"/>
+        <element name="targetPathColumn" type="text" selector="//tr[@data-role='row'][{{var1}}]/td[@data-column='target_path']" parameterized="true"/>
+        <element name="redirectTypeColumn" type="text" selector="//tr[@data-role='row'][{{var1}}]/td[@data-column='redirect_type']" parameterized="true"/>
+        <element name="requestPathColumn" type="text" selector="//tr[@data-role='row'][{{var1}}]/td[@data-column='request_path']" parameterized="true"/>
+        <element name="emptyRecords" type="text" selector="//td[@class='empty-text']"/>
+    </section>
+</sections>

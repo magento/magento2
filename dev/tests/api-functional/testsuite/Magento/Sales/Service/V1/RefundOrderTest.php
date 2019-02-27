@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Service\V1;
 
+use Magento\Sales\Model\Order;
+
 /**
  * API test for creation of Creditmemo for certain Order.
  */
@@ -86,9 +88,8 @@ class RefundOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 'Failed asserting that proper shipping amount of the Order was refunded'
             );
 
-            //Totally refunded orders can be processed.
             $this->assertEquals(
-                $existingOrder->getStatus(),
+                Order::STATE_COMPLETE,
                 $updatedOrder->getStatus(),
                 'Failed asserting that order status has not changed'
             );

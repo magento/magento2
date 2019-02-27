@@ -55,6 +55,6 @@ class RevokeCustomerToken implements ResolverInterface
 
         $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
 
-        return $this->customerTokenService->revokeCustomerAccessToken((int)$currentUserId);
+        return ['result' => $this->customerTokenService->revokeCustomerAccessToken((int)$currentUserId)];
     }
 }

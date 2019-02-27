@@ -21,7 +21,6 @@ interface ProductRenderCollectorInterface
      *
      * @param ProductInterface $product
      * @param ProductRenderInterface $productRender
-     * @param array $data
      * @return void
      * @since 101.1.0
      */

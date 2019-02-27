@@ -155,7 +155,6 @@ class CustomAttributeFilterTest extends \PHPUnit\Framework\TestCase
 
         $joinConditions = [
             '`some_index`.`entity_id` = `field1_filter`.`entity_id`',
-            '`some_index`.`source_id` = `field1_filter`.`source_id`',
             sprintf('`field1_filter`.`attribute_id` = %s', $firstAttribute->getId()),
             sprintf('`field1_filter`.`store_id` = %s', (int) $this->storeManager->getStore()->getId())
         ];
@@ -182,14 +181,12 @@ class CustomAttributeFilterTest extends \PHPUnit\Framework\TestCase
 
         $joinConditions1 = [
             '`some_index`.`entity_id` = `field1_filter`.`entity_id`',
-            '`some_index`.`source_id` = `field1_filter`.`source_id`',
             sprintf('`field1_filter`.`attribute_id` = %s', $firstAttribute->getId()),
             sprintf('`field1_filter`.`store_id` = %s', (int) $this->storeManager->getStore()->getId())
         ];
 
         $joinConditions2 = [
             '`some_index`.`entity_id` = `field2_filter`.`entity_id`',
-            '`some_index`.`source_id` = `field2_filter`.`source_id`',
             sprintf('`field2_filter`.`attribute_id` = %s', $secondAttribute->getId()),
             sprintf('`field2_filter`.`store_id` = %s', (int) $this->storeManager->getStore()->getId())
         ];

@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\TierPrice;
@@ -15,16 +16,24 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * Format a product's tier price information to conform to GraphQL schema representation
+ * @inheritdoc
  *
- * {@inheritdoc}
+ * Format a product's tier price information to conform to GraphQL schema representation
  */
 class TierPrices implements ResolverInterface
 {
     /**
+     * @inheritdoc
+     *
      * Format product's tier price data to conform to GraphQL schema
      *
-     * {@inheritdoc}
+     * @param \Magento\Framework\GraphQl\Config\Element\Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @throws \Exception
+     * @return null|array
      */
     public function resolve(
         Field $field,
@@ -34,7 +43,7 @@ class TierPrices implements ResolverInterface
         array $args = null
     ) {
         if (!isset($value['model'])) {
-            throw new GraphQlInputException(__('"model" value should be specified'));
+            throw new LocalizedException(__('"model" value should be specified'));
         }
 
         /** @var Product $product */

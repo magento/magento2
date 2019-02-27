@@ -23,12 +23,12 @@
         <column xsi:type="int" name="sort_order" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
         <column xsi:type="varchar" name="simple_action" nullable="true" length="32" comment="Simple Action"/>
-        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Discount Amount"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>
         </constraint>
-        <index name="CATALOGRULE_IS_ACTIVE_SORT_ORDER_TO_DATE_FROM_DATE" indexType="btree">
+        <index referenceId="CATALOGRULE_IS_ACTIVE_SORT_ORDER_TO_DATE_FROM_DATE" indexType="btree">
             <column name="is_active"/>
             <column name="sort_order"/>
             <column name="to_date"/>
@@ -49,7 +49,7 @@
                 default="0" comment="Product Id"/>
         <column xsi:type="varchar" name="action_operator" nullable="true" length="10" default="to_fixed"
                 comment="Action Operator"/>
-        <column xsi:type="decimal" name="action_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="action_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Action Amount"/>
         <column xsi:type="smallint" name="action_stop" padding="6" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Action Stop"/>
@@ -57,10 +57,10 @@
                 default="0" comment="Sort Order"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Website Id"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_product_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="UNQ_EAA51B56FF092A0DCB795D1CEF812B7B">
+        <constraint xsi:type="unique" referenceId="UNQ_EAA51B56FF092A0DCB795D1CEF812B7B">
             <column name="rule_id"/>
             <column name="from_time"/>
             <column name="to_time"/>
@@ -69,19 +69,19 @@
             <column name="product_id"/>
             <column name="sort_order"/>
         </constraint>
-        <index name="CATALOGRULE_PRODUCT_CUSTOMER_GROUP_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_CUSTOMER_GROUP_ID" indexType="btree">
             <column name="customer_group_id"/>
         </index>
-        <index name="CATALOGRULE_PRODUCT_WEBSITE_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
-        <index name="CATALOGRULE_PRODUCT_FROM_TIME" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_FROM_TIME" indexType="btree">
             <column name="from_time"/>
         </index>
-        <index name="CATALOGRULE_PRODUCT_TO_TIME" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_TO_TIME" indexType="btree">
             <column name="to_time"/>
         </index>
-        <index name="CATALOGRULE_PRODUCT_PRODUCT_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
     </table>
@@ -98,22 +98,22 @@
                 comment="Website Id"/>
         <column xsi:type="date" name="latest_start_date" comment="Latest StartDate"/>
         <column xsi:type="date" name="earliest_end_date" comment="Earliest EndDate"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_product_price_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="CATRULE_PRD_PRICE_RULE_DATE_WS_ID_CSTR_GROUP_ID_PRD_ID">
+        <constraint xsi:type="unique" referenceId="CATRULE_PRD_PRICE_RULE_DATE_WS_ID_CSTR_GROUP_ID_PRD_ID">
             <column name="rule_date"/>
             <column name="website_id"/>
             <column name="customer_group_id"/>
             <column name="product_id"/>
         </constraint>
-        <index name="CATALOGRULE_PRODUCT_PRICE_CUSTOMER_GROUP_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_PRICE_CUSTOMER_GROUP_ID" indexType="btree">
             <column name="customer_group_id"/>
         </index>
-        <index name="CATALOGRULE_PRODUCT_PRICE_WEBSITE_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_PRICE_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
-        <index name="CATALOGRULE_PRODUCT_PRICE_PRODUCT_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_PRICE_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
     </table>
@@ -124,15 +124,15 @@
                 default="0" comment="Customer Group Id"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website Id"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>
             <column name="customer_group_id"/>
             <column name="website_id"/>
         </constraint>
-        <index name="CATALOGRULE_GROUP_WEBSITE_CUSTOMER_GROUP_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_GROUP_WEBSITE_CUSTOMER_GROUP_ID" indexType="btree">
             <column name="customer_group_id"/>
         </index>
-        <index name="CATALOGRULE_GROUP_WEBSITE_WEBSITE_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_GROUP_WEBSITE_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
     </table>
@@ -141,17 +141,17 @@
                 comment="Rule ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Website Id"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>
             <column name="website_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="CATALOGRULE_WEBSITE_RULE_ID_CATALOGRULE_RULE_ID"
+        <constraint xsi:type="foreign" referenceId="CATALOGRULE_WEBSITE_RULE_ID_CATALOGRULE_RULE_ID"
                     table="catalogrule_website" column="rule_id" referenceTable="catalogrule" referenceColumn="rule_id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CATALOGRULE_WEBSITE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
+        <constraint xsi:type="foreign" referenceId="CATALOGRULE_WEBSITE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
                     table="catalogrule_website" column="website_id" referenceTable="store_website"
                     referenceColumn="website_id" onDelete="CASCADE"/>
-        <index name="CATALOGRULE_WEBSITE_WEBSITE_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_WEBSITE_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
     </table>
@@ -161,17 +161,17 @@
                 comment="Rule ID"/>
         <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Customer Group Id"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>
             <column name="customer_group_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="CATALOGRULE_CUSTOMER_GROUP_RULE_ID_CATALOGRULE_RULE_ID"
+        <constraint xsi:type="foreign" referenceId="CATALOGRULE_CUSTOMER_GROUP_RULE_ID_CATALOGRULE_RULE_ID"
                     table="catalogrule_customer_group" column="rule_id" referenceTable="catalogrule"
                     referenceColumn="rule_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CATRULE_CSTR_GROUP_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID"
+        <constraint xsi:type="foreign" referenceId="CATRULE_CSTR_GROUP_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID"
                     table="catalogrule_customer_group" column="customer_group_id" referenceTable="customer_group"
                     referenceColumn="customer_group_id" onDelete="CASCADE"/>
-        <index name="CATALOGRULE_CUSTOMER_GROUP_CUSTOMER_GROUP_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_CUSTOMER_GROUP_CUSTOMER_GROUP_ID" indexType="btree">
             <column name="customer_group_id"/>
         </index>
     </table>
@@ -197,10 +197,10 @@
                 default="0" comment="Sort Order"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Website Id"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_product_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="UNQ_EAA51B56FF092A0DCB795D1CEF812B7B">
+        <constraint xsi:type="unique" referenceId="UNQ_EAA51B56FF092A0DCB795D1CEF812B7B">
             <column name="rule_id"/>
             <column name="from_time"/>
             <column name="to_time"/>
@@ -209,19 +209,19 @@
             <column name="product_id"/>
             <column name="sort_order"/>
         </constraint>
-        <index name="CATALOGRULE_PRODUCT_CUSTOMER_GROUP_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_CUSTOMER_GROUP_ID" indexType="btree">
             <column name="customer_group_id"/>
         </index>
-        <index name="CATALOGRULE_PRODUCT_WEBSITE_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
-        <index name="CATALOGRULE_PRODUCT_FROM_TIME" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_FROM_TIME" indexType="btree">
             <column name="from_time"/>
         </index>
-        <index name="CATALOGRULE_PRODUCT_TO_TIME" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_TO_TIME" indexType="btree">
             <column name="to_time"/>
         </index>
-        <index name="CATALOGRULE_PRODUCT_PRODUCT_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
     </table>
@@ -239,22 +239,22 @@
                 comment="Website Id"/>
         <column xsi:type="date" name="latest_start_date" comment="Latest StartDate"/>
         <column xsi:type="date" name="earliest_end_date" comment="Earliest EndDate"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_product_price_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="CATRULE_PRD_PRICE_RULE_DATE_WS_ID_CSTR_GROUP_ID_PRD_ID">
+        <constraint xsi:type="unique" referenceId="CATRULE_PRD_PRICE_RULE_DATE_WS_ID_CSTR_GROUP_ID_PRD_ID">
             <column name="rule_date"/>
             <column name="website_id"/>
             <column name="customer_group_id"/>
             <column name="product_id"/>
         </constraint>
-        <index name="CATALOGRULE_PRODUCT_PRICE_CUSTOMER_GROUP_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_PRICE_CUSTOMER_GROUP_ID" indexType="btree">
             <column name="customer_group_id"/>
         </index>
-        <index name="CATALOGRULE_PRODUCT_PRICE_WEBSITE_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_PRICE_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
-        <index name="CATALOGRULE_PRODUCT_PRICE_PRODUCT_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_PRODUCT_PRICE_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
     </table>
@@ -266,15 +266,15 @@
                 default="0" comment="Customer Group Id"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website Id"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>
             <column name="customer_group_id"/>
             <column name="website_id"/>
         </constraint>
-        <index name="CATALOGRULE_GROUP_WEBSITE_CUSTOMER_GROUP_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_GROUP_WEBSITE_CUSTOMER_GROUP_ID" indexType="btree">
             <column name="customer_group_id"/>
         </index>
-        <index name="CATALOGRULE_GROUP_WEBSITE_WEBSITE_ID" indexType="btree">
+        <index referenceId="CATALOGRULE_GROUP_WEBSITE_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
     </table>
