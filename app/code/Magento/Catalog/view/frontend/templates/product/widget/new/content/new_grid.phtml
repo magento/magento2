@@ -60,9 +60,11 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                 <?php if ($templateType): ?>
                                     <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
                                 <?php endif; ?>
+                                <?php echo $block->getProductDetailsHtml($_item); ?>
 
                                 <?php if ($showWishlist || $showCompare || $showCart): ?>
-                                    <div class="product-item-actions">
+                                    <div class="product-item-inner">
+                                        <div class="product-item-actions">
                                         <?php if ($showCart): ?>
                                             <div class="actions-primary">
                                                 <?php if ($_item->isSaleable()): ?>
@@ -73,15 +75,14 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                                             <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
                                                         </button>
                                                     <?php else: ?>
-                                                        <?php
-                                                            $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
-                                                            $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
-                                                        ?>
-                                                        <button class="action tocart primary"
-                                                                data-post='<?= /* @escapeNotVerified */ $postData ?>'
-                                                                type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">
-                                                            <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
-                                                        </button>
+                                                        <form data-role="tocart-form" data-product-sku="<?= $block->escapeHtml($_item->getSku()) ?>" action="<?= /* @NoEscape */ $block->getAddToCartUrl($_item) ?>" method="post">
+                                                            <?php echo $block->getBlockHtml('formkey') ?>
+                                                            <button type="submit"
+                                                                    title="<?php echo $block->escapeHtml(__('Add to Cart')) ?>"
+                                                                    class="action tocart primary">
+                                                                <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
+                                                            </button>
+                                                        </form>
                                                     <?php endif; ?>
                                                 <?php else: ?>
                                                     <?php if ($_item->getIsSalable()): ?>
@@ -114,6 +115,7 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                         <?php endif; ?>
                                     </div>
                                 <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                      </li>

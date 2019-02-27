@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Block\Product\Widget;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Swatches\Block\Product\Renderer\Listing\Configurable;
+
 /**
  * New products widget
  */
@@ -45,9 +49,14 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     protected $_pager;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
+
+    /**
+     * @var Configurable|null
+     */
+    private $configurableList;
 
     /**
      * NewWidget constructor.
@@ -57,7 +66,8 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param Json|null $serializer
+     * @param Configurable|null $configurableList
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -65,7 +75,8 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Json $serializer = null,
+        Configurable $configurableList = null
     ) {
         parent::__construct(
             $context,
@@ -74,8 +85,9 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             $httpContext,
             $data
         );
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->configurableList = $configurableList ?: ObjectManager::getInstance()->get(Configurable::class);
     }
 
     /**
@@ -268,7 +280,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             ? $arguments['display_minimal_price']
             : true;
 
-            /** @var \Magento\Framework\Pricing\Render $priceRender */
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
 
         $price = '';
@@ -280,5 +292,23 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             );
         }
         return $price;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return string
+     */
+    public function getProductDetailsHtml(\Magento\Catalog\Model\Product $product)
+    {
+        $renderer =  $this->configurableList;
+
+        if ($renderer) {
+            $renderer->setProduct($product);
+            $renderer->setTemplate('product/listing/renderer.phtml');
+
+            return $renderer->toHtml();
+        }
+
+        return '';
     }
 }
