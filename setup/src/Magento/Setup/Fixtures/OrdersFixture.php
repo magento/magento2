@@ -352,7 +352,7 @@ class OrdersFixture extends Fixture
                 $this->query('sales_order', $order);
                 $this->query('sales_order_address', $order, $address, $shippingAddress);
                 $this->query('sales_order_address', $order, $address, $billingAddress);
-                $this->query('sales_order_grid', $order);
+                $this->query('sales_order_grid', $order, $address);
                 $this->query('sales_order_payment', $order);
                 $this->query('sales_order_status_history', $order);
                 $this->query('sales_invoice', $order);
