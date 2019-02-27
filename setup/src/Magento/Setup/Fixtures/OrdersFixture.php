@@ -355,6 +355,8 @@ class OrdersFixture extends Fixture
                 $this->query('sales_order_grid', $order);
                 $this->query('sales_order_payment', $order);
                 $this->query('sales_order_status_history', $order);
+                $this->query('sales_invoice', $order);
+                $this->query('sales_invoice_grid', $order, $address);
 
                 for ($i = 0; $i < $productCount[Type::TYPE_SIMPLE]; $i++) {
                     $itemData = [
@@ -367,6 +369,7 @@ class OrdersFixture extends Fixture
                         '%parentItemId%' => 'null',
                     ];
                     $this->query('sales_order_item', $order, $itemData);
+                    $this->query('sales_invoice_item', $order, $itemData);
                     $this->query('quote_item', $order, $itemData);
                     $this->query('quote_item_option', $order, $itemData, [
                         '%code%' => 'info_buyRequest',
@@ -393,6 +396,7 @@ class OrdersFixture extends Fixture
                             '%productType%' => Configurable::TYPE_CODE
                         ];
                         $this->query('sales_order_item', $order, $itemData);
+                        $this->query('sales_invoice_item', $order, $itemData);
                         $this->query('quote_item', $order, $itemData);
                         $this->query('quote_item_option', $order, $itemData, [
                             '%code%' => 'info_buyRequest',
@@ -425,6 +429,7 @@ class OrdersFixture extends Fixture
                         ];
 
                         $this->query('sales_order_item', $order, $itemData);
+                        $this->query('sales_invoice_item', $order, $itemData);
                         $this->query('quote_item', $order, $itemData);
                         $this->query('quote_item_option', $itemData, [
                             '%code%' => "info_buyRequest",
