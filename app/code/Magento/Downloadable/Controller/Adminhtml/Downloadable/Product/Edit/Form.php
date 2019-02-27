@@ -6,6 +6,13 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 
+/**
+ * Class Form
+ *
+ * @deprecated since downloadable information rendering moved to UI components.
+ * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Composite
+ * @package Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit
+ */
 class Form extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
 {
     /**

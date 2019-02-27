@@ -25,8 +25,9 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
      *
      * @param \Magento\Payment\Helper\Data $paymentHelper
      */
-    public function __construct(\Magento\Payment\Helper\Data $paymentHelper)
-    {
+    public function __construct(
+        \Magento\Payment\Helper\Data $paymentHelper
+    ) {
         $this->paymentHelper = $paymentHelper;
     }
 

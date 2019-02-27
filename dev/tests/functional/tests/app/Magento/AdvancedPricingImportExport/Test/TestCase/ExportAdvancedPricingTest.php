@@ -11,6 +11,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Store\Test\Fixture\Website;
+use Magento\Mtf\Util\Command\Cli\Cron;
 
 /**
  * Preconditions:
@@ -65,16 +66,16 @@ class ExportAdvancedPricingTest extends Injectable
     private $catalogProductIndex;
 
     /**
-     * Prepare test data.
+     * Run cron before tests running
      *
-     * @param CatalogProductIndex $catalogProductIndex
+     * @param Cron $cron
      * @return void
      */
     public function __prepare(
-        CatalogProductIndex $catalogProductIndex
+        Cron $cron
     ) {
-        $catalogProductIndex->open();
-        $catalogProductIndex->getProductGrid()->massaction([], 'Delete', true, 'Select All');
+        $cron->run();
+        $cron->run();
     }
 
     /**
@@ -132,7 +133,7 @@ class ExportAdvancedPricingTest extends Injectable
         }
         $products = $this->prepareProducts($products, $website);
         $this->adminExportIndex->open();
-
+        $this->adminExportIndex->getExportedGrid()->deleteAllExportedFiles();
         $exportData = $this->fixtureFactory->createByCode(
             'exportData',
             [
@@ -191,6 +192,9 @@ class ExportAdvancedPricingTest extends Injectable
      */
     public function prepareProducts(array $products, Website $website = null)
     {
+        $this->catalogProductIndex->open();
+        $this->catalogProductIndex->getProductGrid()->massaction([], 'Delete', true, 'Select All');
+
         if (empty($products)) {
             return null;
         }
