@@ -359,7 +359,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             if ($quote->getCustomerFirstname() === null && $quote->getCustomerLastname() === null) {
                 $quote->setCustomerFirstname($quote->getBillingAddress()->getFirstname());
                 $quote->setCustomerLastname($quote->getBillingAddress()->getLastname());
-                if ($quote->getBillingAddress()->getMiddlename() === null) {
+                if ($quote->getCustomerMiddlename() === null) {
                     $quote->setCustomerMiddlename($quote->getBillingAddress()->getMiddlename());
                 }
             }
