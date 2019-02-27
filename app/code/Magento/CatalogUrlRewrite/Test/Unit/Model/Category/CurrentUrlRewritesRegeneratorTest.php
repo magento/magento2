@@ -252,7 +252,7 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit\Framework\TestCase
                 ->disableOriginalConstructor()->getMock();
             foreach ($urlRewrite as $key => $value) {
                 $url->expects($this->any())
-                    ->method('get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key))))
+                    ->method('get' . str_replace('_', '', ucwords($key, '_')))
                     ->will($this->returnValue($value));
             }
             $rewrites[] = $url;
