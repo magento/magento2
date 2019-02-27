@@ -350,7 +350,8 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
         $fullExpression = $expression;
         foreach ($fields as $fieldKey => $fieldItem) {
-            $fullExpression = str_replace('{{' . $fieldKey . '}}', $fieldItem, $fullExpression);
+            $quotedFieldItem =  $this->getConnection()->quote($fieldItem);
+            $fullExpression = str_replace('{{' . $fieldKey . '}}', $quotedFieldItem, $fullExpression);
         }
 
         $this->getSelect()->columns([$alias => $fullExpression]);
