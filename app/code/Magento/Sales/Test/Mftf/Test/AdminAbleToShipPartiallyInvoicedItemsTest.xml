@@ -14,9 +14,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-95524"/>
             <group value="sales"/>
-            <skip>
-                <issueId value="MAGETWO-97664"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>

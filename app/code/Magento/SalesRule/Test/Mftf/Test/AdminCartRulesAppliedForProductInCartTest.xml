@@ -56,7 +56,8 @@
         </actionGroup>
 
         <!--Off dynamic price and set value-->
-        <click  selector="{{AdminProductFormBundleSection.priceTypeSwitcher}}" stepKey="offDynamicPrice"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfThePageToSeePriceTypeElement"/>
+        <click selector="{{AdminProductFormBundleSection.priceTypeSwitcher}}" stepKey="offDynamicPrice"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="0" stepKey="setProductPrice"/>
 
         <!-- Add option, a "Radio Buttons" type option, with one product and set fixed price 200-->

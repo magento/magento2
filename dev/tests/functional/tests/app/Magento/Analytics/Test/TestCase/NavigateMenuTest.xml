@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest" summary="Navigate to menu chapter">
         <variation name="NavigateMenuTestBIEssentials" summary="Navigate through BI Essentials admin menu to Sign Up page" ticketId="MAGETWO-63700">
+            <data name="issue" xsi:type="string">MAGETWO-97298: [2.2-develop] Magento\Backend\Test\TestCase\NavigateMenuTest fails on Jenkins</data>
             <data name="menuItem" xsi:type="string">Reports > BI Essentials</data>
             <data name="waitMenuItemNotVisible" xsi:type="boolean">false</data>
             <data name="businessIntelligenceLink" xsi:type="string">https://account.magento.com/onboarding/steps/view/step/gmv/</data>
