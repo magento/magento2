@@ -13,7 +13,9 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Model\UiComponentTypeResolver;
 
 /**
- * Is responsible for providing ui components information on store front
+ * Is responsible for providing ui components information on store front.
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 class Render extends \Magento\Framework\App\Action\Action
 {
