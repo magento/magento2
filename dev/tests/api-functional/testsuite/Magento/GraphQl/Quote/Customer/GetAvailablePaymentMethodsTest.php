@@ -71,7 +71,6 @@ QUERY;
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('cart', $response);
-        self::assertCount(1, $response['cart']['available_payment_methods']);
         self::assertEquals('checkmo', $response['cart']['available_payment_methods'][0]['code']);
         self::assertEquals('Check / Money order', $response['cart']['available_payment_methods'][0]['title']);
     }
