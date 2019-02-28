@@ -73,6 +73,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
     private $customerSessionMock;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->arrayUtils = $this->createMock(\Magento\Framework\Stdlib\ArrayUtils::class);
