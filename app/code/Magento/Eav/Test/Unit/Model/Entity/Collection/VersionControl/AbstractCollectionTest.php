@@ -39,7 +39,7 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
             \Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl\AbstractCollectionStub::class,
             [
                 'entityFactory' => $this->coreEntityFactoryMock,
-                'universalFactory' => $this->validatorFactoryMock,
+                'resourceModelPool' => $this->resourceModelPoolMock,
                 'entitySnapshot' => $this->entitySnapshot
             ]
         );
