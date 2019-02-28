@@ -420,8 +420,8 @@ TEMPLATE;
      */
     public function testDisallowedMethods($method)
     {
-        $this->templateFilter->setVariables(['store' => $this->store]);
-        $this->templateFilter->filter('{{var store.'.$method.'()}}');
+        $this->templateFilter->setVariables(['store' => $this->store, 'filter' => $this->templateFilter]);
+        $this->templateFilter->filter('{{var store.'.$method.'()}} {{var filter.' .$method .'()}}');
     }
 
     /**
