@@ -9,7 +9,7 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\CustomerGraphQl\Model\Customer\ChangeSubscriptionStatus;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
-use Magento\CustomerGraphQl\Model\Customer\UpdateAccountInformation;
+use Magento\CustomerGraphQl\Model\Customer\UpdateCustomerData;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CustomerGraphQl\Model\Customer\CustomerDataProvider;
@@ -27,9 +27,9 @@ class UpdateCustomer implements ResolverInterface
     private $checkCustomerAccount;
 
     /**
-     * @var UpdateAccountInformation
+     * @var UpdateCustomerData
      */
-    private $updateAccountInformation;
+    private $updateCustomerData;
 
     /**
      * @var ChangeSubscriptionStatus
@@ -43,18 +43,18 @@ class UpdateCustomer implements ResolverInterface
 
     /**
      * @param CheckCustomerAccount $checkCustomerAccount
-     * @param UpdateAccountInformation $updateAccountInformation
+     * @param UpdateCustomerData $updateCustomerData
      * @param ChangeSubscriptionStatus $changeSubscriptionStatus
      * @param CustomerDataProvider $customerDataProvider
      */
     public function __construct(
         CheckCustomerAccount $checkCustomerAccount,
-        UpdateAccountInformation $updateAccountInformation,
+        UpdateCustomerData $updateCustomerData,
         ChangeSubscriptionStatus $changeSubscriptionStatus,
         CustomerDataProvider $customerDataProvider
     ) {
         $this->checkCustomerAccount = $checkCustomerAccount;
-        $this->updateAccountInformation = $updateAccountInformation;
+        $this->updateCustomerData = $updateCustomerData;
         $this->changeSubscriptionStatus = $changeSubscriptionStatus;
         $this->customerDataProvider = $customerDataProvider;
     }
@@ -79,7 +79,7 @@ class UpdateCustomer implements ResolverInterface
         $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
 
         $currentUserId = (int)$currentUserId;
-        $this->updateAccountInformation->execute($currentUserId, $args['input']);
+        $this->updateCustomerData->execute($currentUserId, $args['input']);
 
         if (isset($args['input']['is_subscribed'])) {
             $this->changeSubscriptionStatus->execute($currentUserId, (bool)$args['input']['is_subscribed']);
