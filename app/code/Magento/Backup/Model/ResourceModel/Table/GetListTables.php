@@ -30,12 +30,14 @@ class GetListTables
     }
 
     /**
+     * Get base tables
+     *
      * @return array
      */
     public function execute()
     {
         return $this->resource->getConnection('backup')->fetchCol(
-"SHOW FULL TABLES WHERE `Table_type` = ?",
+            "SHOW FULL TABLES WHERE `Table_type` = ?",
             self::TABLE_TYPE
         );
     }

@@ -29,6 +29,8 @@ class GetListViews
     }
 
     /**
+     * Get view tables
+     *
      * @return array
      */
     public function execute()
