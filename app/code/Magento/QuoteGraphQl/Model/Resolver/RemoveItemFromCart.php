@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -14,13 +15,12 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\GuestCartItemRepositoryInterface;
-use Magento\Quote\Api\GuestCartRepositoryInterface;
-use Magento\QuoteGraphQl\Model\Cart\ExtractDataFromCart;
+use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 
 /**
  * @inheritdoc
  */
-class RemoveItemFromCartOutput implements ResolverInterface
+class RemoveItemFromCart implements ResolverInterface
 {
     /**
      * @var GuestCartItemRepositoryInterface
@@ -28,46 +28,51 @@ class RemoveItemFromCartOutput implements ResolverInterface
     private $guestCartItemRepository;
 
     /**
-     * @var GuestCartRepositoryInterface
+     * @var GetCartForUser
      */
-    private $guestCartRepository;
+    private $getCartForUser;
 
     /**
-     * @var ExtractDataFromCart
+     * @param GuestCartItemRepositoryInterface $guestCartItemRepository
+     * @param GetCartForUser $getCartForUser
      */
-    private $extractDataFromCart;
-
     public function __construct(
         GuestCartItemRepositoryInterface $guestCartItemRepository,
-        GuestCartRepositoryInterface $guestCartRepository,
-        ExtractDataFromCart $extractDataFromCart
+        GetCartForUser $getCartForUser
     ) {
         $this->guestCartItemRepository = $guestCartItemRepository;
-        $this->guestCartRepository = $guestCartRepository;
-        $this->extractDataFromCart = $extractDataFromCart;
+        $this->getCartForUser = $getCartForUser;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         if (!isset($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
+        $maskedCartId = $args['input']['cart_id'];
+
         if (!isset($args['input']['cart_item_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_item_id" is missing'));
         }
-        $maskedCartId = $args['input']['cart_id'];
         $itemId = $args['input']['cart_item_id'];
+
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
 
         try {
             $this->guestCartItemRepository->deleteById($maskedCartId, $itemId);
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__($e->getMessage()));
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
         }
 
-        $cart = $this->guestCartRepository->get($maskedCartId);
-
-        $cartData = $this->extractDataFromCart->execute($cart);
-
-        return ['cart' => array_merge(['cart_id' => $maskedCartId], $cartData)];
+        return [
+            'cart' => [
+                'model' => $cart,
+            ],
+        ];
     }
 }
