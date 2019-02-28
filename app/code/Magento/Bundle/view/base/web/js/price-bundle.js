@@ -374,16 +374,14 @@ define([
     function applyTierPrice(oneItemPrice, qty, optionConfig) {
         var tiers = optionConfig.tierPrice,
             magicKey = _.keys(oneItemPrice)[0],
+            tiersFirstKey = _.keys(optionConfig)[0],
             lowest = false;
-        
-        //tiers is undefined when options has only one option 
-		if (undefined == tiers) {
-		    var firstKey = Object.keys(optionConfig)[0];
-		    tiers = optionConfig[firstKey].tierPrice;
-		}
 
-		//sorting based on "price_qty"
-        tiers.sort( function (a, b) {
+        if (undefined === tiers) {//tiers is undefined when options has only one option
+            tiers = optionConfig[tiersFirstKey].tierPrice;
+        }
+
+        tiers.sort( function (a, b) {//sorting based on "price_qty"
             return a['price_qty'] - b['price_qty'];
         });
 
