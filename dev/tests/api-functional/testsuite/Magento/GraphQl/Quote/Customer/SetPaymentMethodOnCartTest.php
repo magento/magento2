@@ -137,7 +137,7 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
-    public function testSetPaymentMethodIfCustomerIsNotOwnerOfCart()
+    public function testSetPaymentMethodToAnotherCustomerCart()
     {
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
         $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');

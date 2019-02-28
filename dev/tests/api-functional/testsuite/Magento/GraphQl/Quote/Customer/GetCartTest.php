@@ -90,7 +90,7 @@ class GetCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      */
-    public function testGetCartIfCustomerIsNotOwnerOfCart()
+    public function testGetAnotherCustomerCart()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_item_with_items');
         $query = $this->getCartQuery($maskedQuoteId);
