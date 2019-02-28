@@ -58,9 +58,9 @@ class SaveHandler implements ExtensionInterface
             }
         }
         if ($options) {
-            $hasChangedSku = $entity->dataHasChangedFor('sku');
+            $hasChangedSku = ($entity->getOrigData('sku') !== null && $entity->dataHasChangedFor('sku'));
             foreach ($options as $option) {
-                if ($hasChangedSku) {
+                if ($hasChangedSku && $option->hasData('product_sku')) {
                     $option->setProductSku($entity->getSku());
                 }
                 $this->optionRepository->save($option);
