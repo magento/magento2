@@ -323,7 +323,7 @@ type CustomizableDropDownValue @doc(description: "CustomizableDropDownValue defi
     sort_order: Int @doc(description: "The order in which the option is displayed")
 }
 
-type CustomizableMultipleOption implements CustomizableOptionInterface @doc(description: "CustomizableMultipoleOption contains information about a multiselect that is defined as part of a customizable option") {
+type CustomizableMultipleOption implements CustomizableOptionInterface @doc(description: "CustomizableMultipleOption contains information about a multiselect that is defined as part of a customizable option") {
     value: [CustomizableMultipleValue] @doc(description: "An array that defines the set of options for a multiselect")
 }
 
