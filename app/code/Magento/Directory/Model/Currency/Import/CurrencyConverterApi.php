@@ -7,30 +7,35 @@ declare(strict_types=1);
 
 namespace Magento\Directory\Model\Currency\Import;
 
+use Magento\Store\Model\ScopeInterface;
+
 class CurrencyConverterApi extends AbstractImport
 {
     /**
      * @var string
      */
-    const CURRENCY_CONVERTER_URL = 'http://free.currencyconverterapi.com/api/v3/convert?q={{CURRENCY_FROM}}_{{CURRENCY_TO}}&compact=ultra'; //@codingStandardsIgnoreLine
+    const CURRENCY_CONVERTER_URL = 'http://free.currencyconverterapi.com/api/v3/convert?q={{CURRENCY_FROM}}_{{CURRENCY_TO}}'
+    .'&compact=ultra&apiKey={{ACCESS_KEY}}'; //@codingStandardsIgnoreLine
 
     /**
      * Http Client Factory
-     *
      * @var \Magento\Framework\HTTP\ZendClientFactory
      */
     private $httpClientFactory;
 
     /**
      * Core scope config
-     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $scopeConfig;
 
     /**
+     * @var string
+     */
+    private $accessKey;
+
+    /**
      * Initialize dependencies
-     *
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
@@ -50,6 +55,11 @@ class CurrencyConverterApi extends AbstractImport
      */
     public function fetchRates()
     {
+        $this->accessKey = $this->scopeConfig->getValue(
+            'currency/currencyconverterapi/api_key',
+            ScopeInterface::SCOPE_STORE
+        );
+
         $data = [];
         $currencies = $this->_getCurrencyCodes();
         $defaultCurrencies = $this->_getDefaultCurrencyCodes();
@@ -77,9 +87,20 @@ class CurrencyConverterApi extends AbstractImport
         foreach ($currenciesTo as $to) {
             set_time_limit(0);
             try {
-                $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
-                $url = str_replace('{{CURRENCY_TO}}', $to, $url);
+                $url = str_replace(
+                    ['{{ACCESS_KEY}}', '{{CURRENCY_FROM}}', '{{CURRENCY_TO}}'],
+                    [$this->accessKey, $currencyFrom, $to],
+                    self::CURRENCY_CONVERTER_URL
+                );
+
                 $response = $this->getServiceResponse($url);
+
+                if (!$this->validateResponse($response, $currencyFrom, $to)) {
+                    $data[$currencyFrom][$to] = null;
+
+                    return $data;
+                }
+
                 if ($currencyFrom == $to) {
                     $data[$currencyFrom][$to] = $this->_numberFormat(1);
                 } else {
@@ -142,5 +163,28 @@ class CurrencyConverterApi extends AbstractImport
     protected function _convert($currencyFrom, $currencyTo)
     {
         return 1;
+    }
+
+    /**
+     * Validates rates response.
+     * @param array $response
+     * @param string $baseCurrency
+     * @param string $currenciesTo
+     * @return bool
+     */
+    private function validateResponse(array $response, string $baseCurrency, string $currenciesTo): bool
+    {
+        if (isset($response['error'])) {
+            $this->_messages[] = $response['error'];
+
+            return false;
+        }
+        if (!isset($response[$baseCurrency.'_'.$currenciesTo])) {
+            $this->_messages[] = __('We can\'t retrieve a rate for %1.', $currenciesTo);
+
+            return false;
+        }
+
+        return true;
     }
 }
