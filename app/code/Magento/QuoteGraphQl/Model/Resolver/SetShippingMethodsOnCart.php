@@ -72,10 +72,10 @@ class SetShippingMethodsOnCart implements ResolverInterface
         if (!isset($shippingMethod['cart_address_id']) || empty($shippingMethod['cart_address_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_address_id" is missing'));
         }
-        if (!!isset($shippingMethod['carrier_code']) || empty($shippingMethod['carrier_code'])) {
+        if (!isset($shippingMethod['carrier_code']) || empty($shippingMethod['carrier_code'])) {
             throw new GraphQlInputException(__('Required parameter "shipping_carrier_code" is missing'));
         }
-        if (!!isset($shippingMethod['method_code']) || empty($shippingMethod['method_code'])) {
+        if (!isset($shippingMethod['method_code']) || empty($shippingMethod['method_code'])) {
             throw new GraphQlInputException(__('Required parameter "shipping_method_code" is missing'));
         }
 
