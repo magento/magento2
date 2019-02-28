@@ -148,4 +148,66 @@
         <waitForPageLoad stepKey="waitForAttributeToSave"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
     </actionGroup>
+
+    <!--Clicks Add Attribute and adds the given attribute-->
+    <actionGroup name="addProductAttributeInProductModal">
+        <arguments>
+            <argument name="attributeCode" type="string"/>
+        </arguments>
+        <click stepKey="addAttribute" selector="{{AdminProductFormActionSection.addAttributeButton}}"/>
+        <conditionalClick selector="{{AdminProductAddAttributeModalSection.clearFilters}}" dependentSelector="{{AdminProductAddAttributeModalSection.clearFilters}}" visible="true" stepKey="clearFilters"/>
+        <click stepKey="clickFilters" selector="{{AdminProductAddAttributeModalSection.filters}}"/>
+        <fillField stepKey="fillCode" selector="{{AdminProductAddAttributeModalSection.attributeCodeFilter}}" userInput="{{attributeCode}}"/>
+        <click stepKey="clickApply" selector="{{AdminProductAddAttributeModalSection.applyFilters}}"/>
+        <waitForPageLoad stepKey="waitForFilters"/>
+        <checkOption selector="{{AdminProductAddAttributeModalSection.firstRowCheckBox}}" stepKey="checkAttribute"/>
+        <click stepKey="addSelected" selector="{{AdminProductAddAttributeModalSection.addSelected}}"/>
+    </actionGroup>
+
+    <!--Clicks createNewAttribute and fills out form-->
+    <actionGroup name="createProductAttribute">
+        <arguments>
+            <argument name="attribute" type="entity" defaultValue="productAttributeWysiwyg"/>
+        </arguments>
+        <click stepKey="createNewAttribute" selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}"/>
+        <fillField stepKey="fillDefaultLabel" selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{attribute.attribute_code}}"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" stepKey="checkInputType" userInput="{{attribute.frontend_input}}"/>
+        <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" stepKey="checkRequired" userInput="{{attribute.is_required_admin}}"/>
+        <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
+    </actionGroup>
+
+    <!-- Inputs text default value and attribute code-->
+    <actionGroup name="createProductAttributeWithTextField" extends="createProductAttribute" insertAfter="checkRequired">
+        <click stepKey="openAdvancedProperties" selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}"/>
+        <fillField stepKey="fillCode" selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{attribute.attribute_code}}"/>
+        <fillField stepKey="fillDefaultValue" selector="{{AdvancedAttributePropertiesSection.DefaultValueText}}" userInput="{{attribute.default_value}}"/>
+    </actionGroup>
+
+    <!-- Inputs date default value and attribute code-->
+    <actionGroup name="createProductAttributeWithDateField" extends="createProductAttribute" insertAfter="checkRequired">
+        <arguments>
+            <argument name="date" type="string"/>
+        </arguments>
+        <click stepKey="openAdvancedProperties" selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}"/>
+        <fillField stepKey="fillCode" selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{attribute.attribute_code}}"/>
+        <fillField stepKey="fillDefaultValue" selector="{{AdvancedAttributePropertiesSection.DefaultValueDate}}" userInput="{{date}}"/>
+    </actionGroup>
+
+    <!-- Creates dropdown option at row without saving-->
+    <actionGroup name="createAttributeDropdownNthOption">
+        <arguments>
+            <argument name="row" type="string"/>
+            <argument name="adminName" type="string"/>
+            <argument name="frontName" type="string"/>
+        </arguments>
+        <click stepKey="clickAddOptions" selector="{{AttributePropertiesSection.dropdownAddOptions}}"/>
+        <waitForPageLoad stepKey="waitForNewOption"/>
+        <fillField stepKey="fillAdmin" selector="{{AttributePropertiesSection.dropdownNthOptionAdmin(row)}}" userInput="{{adminName}}"/>
+        <fillField stepKey="fillStoreView" selector="{{AttributePropertiesSection.dropdownNthOptionDefaultStoreView(row)}}" userInput="{{frontName}}"/>
+    </actionGroup>
+
+    <!-- Creates dropdown option at row as default-->
+    <actionGroup name="createAttributeDropdownNthOptionAsDefault" extends="createAttributeDropdownNthOption">
+        <checkOption selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault(row)}}" stepKey="setAsDefault" after="fillStoreView"/>
+    </actionGroup>
 </actionGroups>
