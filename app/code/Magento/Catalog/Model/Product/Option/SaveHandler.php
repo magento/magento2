@@ -59,14 +59,25 @@ class SaveHandler implements ExtensionInterface
         }
         if ($options) {
             $hasChangedSku = ($entity->getOrigData('sku') !== null && $entity->dataHasChangedFor('sku'));
-            foreach ($options as $option) {
-                if ($hasChangedSku && $option->hasData('product_sku')) {
-                    $option->setProductSku($entity->getSku());
-                }
-                $this->optionRepository->save($option);
-            }
+            $this->processOptionsSaving($options, $hasChangedSku, $entity->getSku());
         }
 
         return $entity;
+    }
+
+    /**
+     * Save custom options
+     *
+     * @param array $options
+     * @param bool $hasChangedSku
+     * @param string $newSku
+     */
+    private function processOptionsSaving($options, $hasChangedSku, $newSku) {
+        foreach ($options as $option) {
+            if ($hasChangedSku && $option->hasData('product_sku')) {
+                $option->setProductSku($newSku);
+            }
+            $this->optionRepository->save($option);
+        }
     }
 }
