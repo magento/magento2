@@ -13,22 +13,16 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Quote\Model\ShippingAddressManagementInterface;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
-use Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCartInterface;
+use Magento\Quote\Api\Data\PaymentInterfaceFactory;
+use Magento\Quote\Api\PaymentMethodManagementInterface;
 
 /**
- * Class SetShippingAddressesOnCart
- *
- * Mutation resolver for setting shipping addresses for shopping cart
+ * Mutation resolver for setting payment method for shopping cart
  */
-class SetShippingAddressesOnCart implements ResolverInterface
+class SetPaymentMethodOnCart implements ResolverInterface
 {
-    /**
-     * @var ShippingAddressManagementInterface
-     */
-    private $shippingAddressManagement;
-
     /**
      * @var GetCartForUser
      */
@@ -40,26 +34,31 @@ class SetShippingAddressesOnCart implements ResolverInterface
     private $arrayManager;
 
     /**
-     * @var SetShippingAddressesOnCartInterface
+     * @var PaymentMethodManagementInterface
      */
-    private $setShippingAddressesOnCart;
+    private $paymentMethodManagement;
 
     /**
-     * @param ShippingAddressManagementInterface $shippingAddressManagement
+     * @var PaymentInterfaceFactory
+     */
+    private $paymentFactory;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param ArrayManager $arrayManager
-     * @param SetShippingAddressesOnCartInterface $setShippingAddressesOnCart
+     * @param PaymentMethodManagementInterface $paymentMethodManagement
+     * @param PaymentInterfaceFactory $paymentFactory
      */
     public function __construct(
-        ShippingAddressManagementInterface $shippingAddressManagement,
         GetCartForUser $getCartForUser,
         ArrayManager $arrayManager,
-        SetShippingAddressesOnCartInterface $setShippingAddressesOnCart
+        PaymentMethodManagementInterface $paymentMethodManagement,
+        PaymentInterfaceFactory $paymentFactory
     ) {
-        $this->shippingAddressManagement = $shippingAddressManagement;
         $this->getCartForUser = $getCartForUser;
         $this->arrayManager = $arrayManager;
-        $this->setShippingAddressesOnCart = $setShippingAddressesOnCart;
+        $this->paymentMethodManagement = $paymentMethodManagement;
+        $this->paymentFactory = $paymentFactory;
     }
 
     /**
@@ -67,21 +66,34 @@ class SetShippingAddressesOnCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $shippingAddresses = $this->arrayManager->get('input/shipping_addresses', $args);
         $maskedCartId = (string)$this->arrayManager->get('input/cart_id', $args);
-
         if (!$maskedCartId) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
 
-        if (!$shippingAddresses) {
-            throw new GraphQlInputException(__('Required parameter "shipping_addresses" is missing'));
+        $paymentMethod = $this->arrayManager->get('input/payment_method', $args);
+        if (!$paymentMethod) {
+            throw new GraphQlInputException(__('Required parameter "payment_method" is missing'));
         }
 
+        $paymentMethodCode = (string) $this->arrayManager->get('input/payment_method/code', $args);
+        if (!$paymentMethodCode) {
+            throw new GraphQlInputException(__('Required parameter payment "code" is missing'));
+        }
+
+        $poNumber = $this->arrayManager->get('input/payment_method/purchase_order_number', $args);
+
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $payment = $this->paymentFactory->create([
+            'data' => [
+                PaymentInterface::KEY_METHOD => $paymentMethodCode,
+                PaymentInterface::KEY_PO_NUMBER => $poNumber,
+                PaymentInterface::KEY_ADDITIONAL_DATA => [],
+            ]
+        ]);
 
         try {
-            $this->setShippingAddressesOnCart->execute($context, $cart, $shippingAddresses);
+            $this->paymentMethodManagement->set($cart->getId(), $payment);
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
@@ -90,7 +102,7 @@ class SetShippingAddressesOnCart implements ResolverInterface
             'cart' => [
                 'cart_id' => $maskedCartId,
                 'model' => $cart,
-            ]
+            ],
         ];
     }
 }
