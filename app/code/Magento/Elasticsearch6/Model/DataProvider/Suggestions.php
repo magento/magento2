@@ -150,7 +150,11 @@ class Suggestions implements SuggestedQueriesInterface
             }
             ksort($suggestions);
             $texts = array_unique(array_column($suggestions, 'text'));
-            $suggestions = array_slice(array_intersect_key(array_values($suggestions), $texts), 0, $searchSuggestionsCount);
+            $suggestions = array_slice(
+                array_intersect_key(array_values($suggestions), $texts),
+                0,
+                $searchSuggestionsCount
+            );
         }
 
         return $suggestions;
@@ -186,7 +190,7 @@ class Suggestions implements SuggestedQueriesInterface
      * Build Suggest on searchable fields.
      *
      * @param array $searchQuery
-     * @param int   $searchSuggestionsCount
+     * @param int $searchSuggestionsCount
      *
      * @return array
      */
