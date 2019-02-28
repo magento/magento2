@@ -7,6 +7,6 @@
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminAdvancedReportingSection">
-        <element name="goToAdvancedReporting" type="text" selector="//div[@class='dashboard-advanced-reports-actions']/a[@title='Go to Advanced Reporting']"/>
+        <element name="goToAdvancedReporting" type="text" selector="//div[@class='dashboard-advanced-reports-actions']/a[@title='Go to Advanced Reporting']" timeout="30"/>
     </section>
 </sections>
