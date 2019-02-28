@@ -90,6 +90,7 @@ define([
          * @param {Object} option
          */
         saveOption: function (option) {
+            option.label = $.trim(option.label);
             if (!_.isEmpty(option.label)) {
                 this.options.remove(option);
                 this.options.push(option);
