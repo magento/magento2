@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Notification\NotifierInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Consumer for export message.
@@ -25,7 +26,7 @@ class Consumer
     private $notifier;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -94,6 +95,7 @@ class Consumer
      * @param \Magento\CatalogInventory\Api\StockRegistryInterfaceFactory $stockRegistryFactory
      * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterfaceFactory $stockItemRepositoryFactory
      * @param NotifierInterface $notifier
+     * @param LoggerInterface $logger
      */
     public function __construct(
         \Magento\Catalog\Helper\Product $catalogProduct,
@@ -105,7 +107,8 @@ class Consumer
         \Magento\Catalog\Model\Product\Action $action,
         \Magento\CatalogInventory\Api\StockRegistryInterfaceFactory $stockRegistryFactory,
         \Magento\CatalogInventory\Api\StockItemRepositoryInterfaceFactory $stockItemRepositoryFactory,
-        NotifierInterface $notifier
+        NotifierInterface $notifier,
+        LoggerInterface $logger
     ) {
         $this->catalogProduct = $catalogProduct;
         $this->productFlatIndexerProcessor = $productFlatIndexerProcessor;
@@ -118,6 +121,7 @@ class Consumer
         $this->productAction = $action;
         $this->stockRegistry = $stockRegistryFactory->create();
         $this->stockItemRepository = $stockItemRepositoryFactory->create();
+        $this->logger = $logger;
     }
 
     public function process(MassActionInterface $data): void
