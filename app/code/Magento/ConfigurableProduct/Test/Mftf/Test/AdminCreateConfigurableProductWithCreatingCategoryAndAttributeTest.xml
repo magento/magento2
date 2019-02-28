@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateConfigurableProductWithRequiredFieldsOnlyTest">
+    <test name="AdminCreateConfigurableProductWithCreatingCategoryAndAttributeTest">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Create configurable product"/>
@@ -22,7 +22,33 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Delete configurable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Delete children products -->
+            <actionGroup ref="deleteProductBySku" stepKey="deleteFirstChildProduct">
+                <argument name="sku" value="{{colorConfigurableProductAttribute1.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteSecondChildProduct">
+                <argument name="sku" value="{{colorConfigurableProductAttribute2.sku}}"/>
+            </actionGroup>
+
+            <!-- Delete product attribute -->
+            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteProductAttribute">
+                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            </actionGroup>
+
+            <!-- Delete attribute set -->
+            <actionGroup ref="deleteAttributeSetByLabel" stepKey="deleteAttributeSet">
+                <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+
+            <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 

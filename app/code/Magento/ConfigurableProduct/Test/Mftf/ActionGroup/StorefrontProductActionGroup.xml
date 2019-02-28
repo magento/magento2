@@ -37,9 +37,9 @@
     <!-- Verify configurable product options in storefront product view -->
     <actionGroup name="storefrontCheckConfigurableProductOptions">
         <arguments>
-            <argument name="product"/>
-            <argument name="firstOption"/>
-            <argument name="secondOption"/>
+            <argument name="product" type="entity"/>
+            <argument name="firstOption" type="entity"/>
+            <argument name="secondOption" type="entity"/>
         </arguments>
         <selectOption userInput="{{firstOption.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
         <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeConfigurableProductName"/>
@@ -56,9 +56,9 @@
     <!-- Assert option image in storefront product page -->
     <actionGroup name="assertOptionImageInStorefrontProductPage">
         <arguments>
-            <argument name="product"/>
-            <argument name="label"/>
-            <argument name="image"/>
+            <argument name="product" type="entity"/>
+            <argument name="label" type="string"/>
+            <argument name="image" defaultValue="MagentoLogo"/>
         </arguments>
         <seeInCurrentUrl url="/{{product.urlKey}}.html" stepKey="checkUrl"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
@@ -69,8 +69,8 @@
     <!-- Assert configurable product with special price in storefront product page -->
     <actionGroup name="assertConfigurableProductWithSpecialPriceOnStorefrontProductPage">
         <arguments>
-            <argument name="option"/>
-            <argument name="price"/>
+            <argument name="option" type="string"/>
+            <argument name="price" type="string"/>
             <argument name="specialPrice" defaultValue="specialProductPrice"/>
         </arguments>
         <selectOption userInput="{{option}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOptionWithSpecialPrice"/>

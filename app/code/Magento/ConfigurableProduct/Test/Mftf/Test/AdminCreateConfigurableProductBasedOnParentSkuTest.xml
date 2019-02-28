@@ -21,6 +21,17 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Delete configurable product with children products -->
+            <actionGroup ref="deleteProductBySku" stepKey="deleteProducts">
+                <argument name="sku" value="{{ApiConfigurableProduct.sku}}"/>
+            </actionGroup>
+
+            <!-- Delete product attribute -->
+            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteProductAttribute">
+                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            </actionGroup>
+
+            <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 

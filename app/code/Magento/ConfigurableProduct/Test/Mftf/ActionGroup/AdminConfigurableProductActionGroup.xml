@@ -159,9 +159,9 @@
 
     <actionGroup name="addNewProductConfigurationAttribute">
         <arguments>
-            <argument name="attribute"/>
-            <argument name="firstOption"/>
-            <argument name="secondOption"/>
+            <argument name="attribute" type="entity"/>
+            <argument name="firstOption" type="entity"/>
+            <argument name="secondOption" type="entity"/>
         </arguments>
         <!-- Create new attribute -->
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnNewAttribute"/>
@@ -190,46 +190,10 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnFourthNextButton"/>
     </actionGroup>
 
-    <actionGroup name="addNewProductConfigurationAttributeWithOneOption">
-        <arguments>
-            <argument name="attribute"/>
-            <argument name="option"/>
-        </arguments>
-        <!-- Create new attribute; change some fields -->
-        <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnNewAttribute"/>
-        <waitForPageLoad stepKey="waitForIFrame"/>
-        <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
-        <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{attribute.default_label}}" stepKey="fillDefaultLabel"/>
-        <click selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="showAdvancedAttributePropertiesSection"/>
-        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.UseInFilterOptions}}" stepKey="waitForSlideOut"/>
-        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInFilterOptions}}" userInput="No" stepKey="isNotFilterableInGrid"/>
-        <selectOption selector="{{AdvancedAttributePropertiesSection.AddToColumnOptions}}" userInput="No" stepKey="isNotUsedInGrid"/>
-        <click selector="{{StorefrontPropertiesSection.StorefrontPropertiesSectionToggle}}" stepKey="showStorefrontAttributePropertiesSection"/>
-        <waitForElementVisible selector="#is_html_allowed_on_front" stepKey="waitForSlideOut2"/>
-        <selectOption selector="#is_html_allowed_on_front" userInput="No" stepKey="isHtmlNotAllowedOnFront"/>
-        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickOnNewAttributePanel"/>
-        <waitForPageLoad stepKey="waitForSaveAttribute"/>
-        <switchToIFrame stepKey="switchOutOfIFrame"/>
-        <waitForPageLoad stepKey="waitForFilters"/>
-        <!-- Find created below attribute and add option; save attribute -->
-        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickOnFilters"/>
-        <fillField userInput="{{attribute.default_label}}" selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" stepKey="fillFilterAttributeCodeField"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue"/>
-        <fillField userInput="{{option.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewOption"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnSecondNextButton"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnThirdNextButton"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnFourthNextButton"/>
-    </actionGroup>
-
     <actionGroup name="changeProductConfigurationsInGrid">
         <arguments>
-            <argument name="firstOption"/>
-            <argument name="secondOption"/>
+            <argument name="firstOption" type="entity"/>
+            <argument name="secondOption" type="entity"/>
         </arguments>
         <fillField userInput="{{firstOption.name}}" selector="{{AdminProductFormConfigurationsSection.confProductNameCell(firstOption.name)}}" stepKey="fillFieldNameForFirstAttributeOption"/>
         <fillField userInput="{{secondOption.name}}" selector="{{AdminProductFormConfigurationsSection.confProductNameCell(secondOption.name)}}" stepKey="fillFieldNameForSecondAttributeOption"/>
@@ -266,8 +230,8 @@
     <actionGroup name="addUniqueImageToConfigurableProductOption">
         <arguments>
             <argument name="image" defaultValue="ProductImage"/>
-            <argument name="frontend_label"/>
-            <argument name="label"/>
+            <argument name="frontend_label" type="string"/>
+            <argument name="label" type="string"/>
         </arguments>
         <click selector="{{AdminCreateProductConfigurationsPanel.applyUniqueImagesToEachSkus}}" stepKey="clickOnApplyUniqueImagesToEachSku"/>
         <selectOption userInput="{{frontend_label}}" selector="{{AdminCreateProductConfigurationsPanel.selectImagesButton}}" stepKey="selectOption"/>
@@ -278,9 +242,9 @@
 
     <actionGroup name="addUniquePriceToConfigurableProductOption">
         <arguments>
-            <argument name="frontend_label"/>
-            <argument name="label"/>
-            <argument name="price"/>
+            <argument name="frontend_label" type="string"/>
+            <argument name="label" type="string"/>
+            <argument name="price" type="string"/>
         </arguments>
         <click selector="{{AdminCreateProductConfigurationsPanel.applyUniquePricesToEachSkus}}" stepKey="clickOnApplyUniquePricesToEachSku"/>
         <selectOption userInput="{{frontend_label}}" selector="{{AdminCreateProductConfigurationsPanel.selectPriceButton}}" stepKey="selectOption"/>
@@ -306,7 +270,7 @@
 
     <actionGroup name="assertConfigurableProductOnAdminProductPage">
         <arguments>
-            <argument name="product"/>
+            <argument name="product" type="entity"/>
         </arguments>
         <seeInField userInput="{{ApiConfigurableProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="seeNameRequired"/>
         <seeInField userInput="{{ApiConfigurableProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="seeSkuRequired"/>

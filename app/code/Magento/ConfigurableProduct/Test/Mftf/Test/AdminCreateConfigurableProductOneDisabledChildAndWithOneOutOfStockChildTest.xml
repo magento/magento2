@@ -52,6 +52,19 @@
         <after>
             <!-- Don't display out of stock product -->
             <actionGroup ref="noDisplayOutOfStockProduct" stepKey="revertDisplayOutOfStockProduct"/>
+
+            <!-- Delete configurable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Delete configurable product creation -->
+            <deleteData createDataKey="createSimpleProductOffline" stepKey="deleteSimpleProductOffline"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -67,7 +80,7 @@
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
-        <!-- Create product configurations and add attribute and select all options -->
+        <!-- Create product configurations, add attribute and select all options -->
         <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="generateConfigurationsByAttributeCode" after="fillConfigurableProductValues">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>

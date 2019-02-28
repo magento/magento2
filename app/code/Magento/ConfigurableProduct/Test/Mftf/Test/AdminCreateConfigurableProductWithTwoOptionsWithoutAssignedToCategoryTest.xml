@@ -21,6 +21,30 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Delete configurable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Delete children products -->
+            <actionGroup ref="deleteProductBySku" stepKey="deleteFirstChildProduct">
+                <argument name="sku" value="{{colorConfigurableProductAttribute1.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteSecondChildProduct">
+                <argument name="sku" value="{{colorConfigurableProductAttribute2.sku}}"/>
+            </actionGroup>
+
+            <!-- Delete product attribute -->
+            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteProductAttribute">
+                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            </actionGroup>
+
+            <!-- Delete attribute set -->
+            <actionGroup ref="deleteAttributeSetByLabel" stepKey="deleteAttributeSet">
+                <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+
+            <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -102,13 +126,11 @@
         <waitForPageLoad stepKey="waitForStoreFrontPageLoad"/>
 
         <!-- Quick search the storefront for the first attribute option -->
-        <submitForm selector="#search_mini_form" parameterArray="['q' => {{colorConfigurableProductAttribute1.sku}}]" stepKey="searchStorefrontFistChildProduct"/>
-        <dontSee userInput="{{colorConfigurableProductAttribute1.sku}}" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontFirstSeeProduct"/>
-        <see selector="{{StorefrontCatalogSearchMainSection.message}}" userInput="Your search returned no results." stepKey="seeCantFindFirstProductMessage"/>
+        <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{colorConfigurableProductAttribute1.sku}}]" stepKey="searchStorefrontFistChildProduct"/>
+        <dontSee selector="{{StorefrontCategoryProductSection.ProductTitleByName(colorConfigurableProductAttribute1.name)}}" stepKey="dontSeeConfigurableProductFirstChild"/>
 
         <!-- Quick search the storefront for the second attribute option -->
-        <submitForm selector="#search_mini_form" parameterArray="['q' => {{colorConfigurableProductAttribute2.sku}}]" stepKey="searchStorefrontSecondChildProduct"/>
-        <dontSee userInput="{{colorConfigurableProductAttribute2.sku}}" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontSeeSecondProduct"/>
-        <see selector="{{StorefrontCatalogSearchMainSection.message}}" userInput="Your search returned no results." stepKey="seeCantFindSecondProductMessage"/>
+        <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{colorConfigurableProductAttribute2.sku}}]" stepKey="searchStorefrontSecondChildProduct"/>
+        <dontSee selector="{{StorefrontCategoryProductSection.ProductTitleByName(colorConfigurableProductAttribute2.name)}}" stepKey="dontSeeConfigurableProductSecondChild"/>
     </test>
 </tests>

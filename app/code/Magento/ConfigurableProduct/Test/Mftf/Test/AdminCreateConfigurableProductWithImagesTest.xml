@@ -45,6 +45,17 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Delete configurable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Delete created data -->
+            <deleteData createDataKey="createFirstConfigProductAttribute" stepKey="deleteFirstConfigProductAttribute"/>
+            <deleteData createDataKey="createSecondConfigProductAttribute" stepKey="deleteSecondConfigProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -96,12 +107,12 @@
         <actionGroup ref="addUniquePriceToConfigurableProductOption" stepKey="addPriceToConfigurableProductOptionThree">
             <argument name="frontend_label" value="$$createSecondConfigProductAttribute.default_frontend_label$$"/>
             <argument name="label" value="$$createConfigProductAttributeOptionThree.option[store_labels][1][label]$$"/>
-            <argument name="price" value="virtualProductWithRequiredFields.price"/>
+            <argument name="price" value="{{virtualProductWithRequiredFields.price}}"/>
         </actionGroup>
         <actionGroup ref="addUniquePriceToConfigurableProductOption" stepKey="addPriceToConfigurableProductOptionFour">
             <argument name="frontend_label" value="$$createSecondConfigProductAttribute.default_frontend_label$$"/>
             <argument name="label" value="$$createConfigProductAttributeOptionFour.option[store_labels][1][label]$$"/>
-            <argument name="price" value="virtualProductWithRequiredFields.price"/>
+            <argument name="price" value="{{virtualProductWithRequiredFields.price}}"/>
         </actionGroup>
 
         <!-- Add quantity to product attribute options -->
