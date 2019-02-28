@@ -54,11 +54,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     private $serializer;
 
     /**
-     * @var Configurable|null
-     */
-    private $configurableList;
-
-    /**
      * NewWidget constructor.
      *
      * @param \Magento\Catalog\Block\Product\Context $context
@@ -67,7 +62,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      * @param Json|null $serializer
-     * @param Configurable|null $configurableList
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -75,8 +69,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = [],
-        Json $serializer = null,
-        Configurable $configurableList = null
+        Json $serializer = null
     ) {
         parent::__construct(
             $context,
@@ -87,7 +80,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         );
 
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
-        $this->configurableList = $configurableList ?: ObjectManager::getInstance()->get(Configurable::class);
     }
 
     /**
@@ -300,11 +292,10 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      */
     public function getProductDetailsHtml(\Magento\Catalog\Model\Product $product)
     {
-        $renderer =  $this->configurableList;
+        $renderer = $this->getLayout()->getBlock('widget.product.type.details.renderers.configurable');
 
         if ($renderer) {
             $renderer->setProduct($product);
-            $renderer->setTemplate('product/listing/renderer.phtml');
 
             return $renderer->toHtml();
         }
