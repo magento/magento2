@@ -9,11 +9,12 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg;
 use Magento\Backend\App\Action;
 use Magento\Cms\Model\Template\Filter;
 use Magento\Cms\Model\Wysiwyg\Config;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Process template text for wysiwyg editor.
  */
-class Directive extends Action
+class Directive extends Action implements HttpGetActionInterface
 {
 
     /**
