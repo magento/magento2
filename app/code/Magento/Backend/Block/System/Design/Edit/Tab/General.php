@@ -6,6 +6,9 @@
 
 namespace Magento\Backend\Block\System\Design\Edit\Tab;
 
+/**
+ * General system tab block.
+ */
 class General extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
