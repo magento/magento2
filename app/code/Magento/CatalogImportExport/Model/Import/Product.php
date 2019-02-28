@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Catalog\Model\Config as CatalogConfig;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
@@ -639,6 +641,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $_logger;
 
     /**
+     * "Duplicate multiselect values" error array key
+     *
+     * @var string
+     */
+    private static $errorDuplicateMultiselectValues = 'duplicatedMultiselectValues';
+
+    /**
      * {@inheritdoc}
      */
     protected $masterAttributeCode = 'sku';
@@ -767,7 +776,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param CatalogConfig $catalogConfig
      * @param MediaGalleryProcessor $mediaProcessor
      * @param ProductRepositoryInterface|null $productRepository
-     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -857,11 +865,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $string,
             $errorAggregator
         );
-        $this->_optionEntity = isset(
-            $data['option_entity']
-        ) ? $data['option_entity'] : $optionFactory->create(
-            ['data' => ['product_entity' => $this]]
-        );
+        $this->_optionEntity = $data['option_entity']
+            ?? $optionFactory->create(['data' => ['product_entity' => $this]]);
 
         $this->_initAttributeSets()
             ->_initTypeModels()
@@ -869,6 +874,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->validator->init($this);
         $this->productRepository = $productRepository ?? \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(ProductRepositoryInterface::class);
+
+        $errorMessageText = __('Value for multiselect attribute %s contains duplicated values');
+        $this->_messageTemplates[self::$errorDuplicateMultiselectValues] = $errorMessageText;
     }
 
     /**
@@ -884,7 +892,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         if (!$this->validator->isAttributeValid($attrCode, $attrParams, $rowData)) {
             foreach ($this->validator->getMessages() as $message) {
-                $this->addRowError($message, $rowNum, $attrCode);
+                $this->skipRow($rowNum, $message, ProcessingError::ERROR_LEVEL_NOT_CRITICAL, $attrCode);
             }
             return false;
         }
@@ -1592,7 +1600,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 if (!empty($rowData[self::URL_KEY])) {
                     // If url_key column and its value were in the CSV file
                     $rowData[self::URL_KEY] = $urlKey;
-                } else if ($this->isNeedToChangeUrlKey($rowData)) {
+                } elseif ($this->isNeedToChangeUrlKey($rowData)) {
                     // If url_key column was empty or even not declared in the CSV file but by the rules it is need to
                     // be setteed. In case when url_key is generating from name column we have to ensure that the bunch
                     // of products will pass for the event with url_key column.
@@ -1604,7 +1612,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 if (null === $rowSku) {
                     $this->getErrorAggregator()->addRowToSkip($rowNum);
                     continue;
-                } elseif (self::SCOPE_STORE == $rowScope) {
+                }
+
+                if (self::SCOPE_STORE == $rowScope) {
                     // set necessary data from SCOPE_DEFAULT row
                     $rowData[self::COL_TYPE] = $this->skuProcessor->getNewSku($rowSku)['type_id'];
                     $rowData['attribute_set_id'] = $this->skuProcessor->getNewSku($rowSku)['attr_set_id'];
@@ -1740,13 +1750,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 $uploadedImages[$columnImage] = $uploadedFile;
                             } else {
                                 unset($rowData[$column]);
-                                $this->addRowError(
-                                    ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
-                                    $rowNum,
-                                    null,
-                                    null,
-                                    ProcessingError::ERROR_LEVEL_NOT_CRITICAL
-                                );
+                                $this->skipRow($rowNum, ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE);
                             }
                         } else {
                             $uploadedFile = $uploadedImages[$columnImage];
@@ -2380,32 +2384,35 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         // BEHAVIOR_DELETE and BEHAVIOR_REPLACE use specific validation logic
         if (Import::BEHAVIOR_REPLACE == $this->getBehavior()) {
             if (self::SCOPE_DEFAULT == $rowScope && !$this->isSkuExist($sku)) {
-                $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
+                $this->skipRow($rowNum, ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE);
                 return false;
             }
         }
         if (Import::BEHAVIOR_DELETE == $this->getBehavior()) {
             if (self::SCOPE_DEFAULT == $rowScope && !$this->isSkuExist($sku)) {
-                $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
+                $this->skipRow($rowNum, ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE);
                 return false;
             }
             return true;
         }
 
+        // if product doesn't exist, need to throw critical error else all errors should be not critical.
+        $errorLevel = $this->getValidationErrorLevel($sku);
+
         if (!$this->validator->isValid($rowData)) {
             foreach ($this->validator->getMessages() as $message) {
-                $this->addRowError($message, $rowNum, $this->validator->getInvalidAttribute());
+                $this->skipRow($rowNum, $message, $errorLevel, $this->validator->getInvalidAttribute());
             }
         }
 
         if (null === $sku) {
-            $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
+            $this->skipRow($rowNum, ValidatorInterface::ERROR_SKU_IS_EMPTY, $errorLevel);
         } elseif (false === $sku) {
-            $this->addRowError(ValidatorInterface::ERROR_ROW_IS_ORPHAN, $rowNum);
+            $this->skipRow($rowNum, ValidatorInterface::ERROR_ROW_IS_ORPHAN, $errorLevel);
         } elseif (self::SCOPE_STORE == $rowScope
             && !$this->storeResolver->getStoreCodeToId($rowData[self::COL_STORE])
         ) {
-            $this->addRowError(ValidatorInterface::ERROR_INVALID_STORE, $rowNum);
+            $this->skipRow($rowNum, ValidatorInterface::ERROR_INVALID_STORE, $errorLevel);
         }
 
         // SKU is specified, row is SCOPE_DEFAULT, new product block begins
@@ -2420,19 +2427,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->prepareNewSkuData($sku)
                 );
             } else {
-                $this->addRowError(ValidatorInterface::ERROR_TYPE_UNSUPPORTED, $rowNum);
+                $this->skipRow($rowNum, ValidatorInterface::ERROR_TYPE_UNSUPPORTED, $errorLevel);
             }
         } else {
             // validate new product type and attribute set
-            if (!isset($rowData[self::COL_TYPE]) || !isset($this->_productTypeModels[$rowData[self::COL_TYPE]])) {
-                $this->addRowError(ValidatorInterface::ERROR_INVALID_TYPE, $rowNum);
-            } elseif (!isset(
-                    $rowData[self::COL_ATTR_SET]
-                ) || !isset(
-                    $this->_attrSetNameToId[$rowData[self::COL_ATTR_SET]]
-                )
+            if (!isset($rowData[self::COL_TYPE], $this->_productTypeModels[$rowData[self::COL_TYPE]])) {
+                $this->skipRow($rowNum, ValidatorInterface::ERROR_INVALID_TYPE, $errorLevel);
+            } elseif (!isset($rowData[self::COL_ATTR_SET], $this->_attrSetNameToId[$rowData[self::COL_ATTR_SET]])
             ) {
-                $this->addRowError(ValidatorInterface::ERROR_INVALID_ATTR_SET, $rowNum);
+                $this->skipRow($rowNum, ValidatorInterface::ERROR_INVALID_ATTR_SET, $errorLevel);
             } elseif (is_null($this->skuProcessor->getNewSku($sku))) {
                 $this->skuProcessor->addNewSku(
                     $sku,
@@ -2488,8 +2491,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         ValidatorInterface::ERROR_DUPLICATE_URL_KEY,
                         $rowNum,
                         $rowData[self::COL_NAME],
-                        $message
-                    );
+                        $message,
+                        $errorLevel
+                    )
+                        ->getErrorAggregator()
+                        ->addRowToSkip($rowNum);
                 }
             }
         }
@@ -2499,9 +2505,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $newFromTimestamp = strtotime($this->dateTime->formatDate($rowData[self::COL_NEW_FROM_DATE], false));
             $newToTimestamp = strtotime($this->dateTime->formatDate($rowData[self::COL_NEW_TO_DATE], false));
             if ($newFromTimestamp > $newToTimestamp) {
-                $this->addRowError(
-                    ValidatorInterface::ERROR_NEW_TO_DATE,
+                $this->skipRow(
                     $rowNum,
+                    ValidatorInterface::ERROR_NEW_TO_DATE,
+                    $errorLevel,
                     $rowData[self::COL_NEW_TO_DATE]
                 );
             }
@@ -3028,5 +3035,40 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
 
         return $product;
+    }
+
+    /**
+     * Add row as skipped
+     *
+     * @param int $rowNum
+     * @param string $errorCode Error code or simply column name
+     * @param string $errorLevel error level
+     * @param string|null $colName optional column name
+     * @return $this
+     */
+    private function skipRow(
+        int $rowNum,
+        string $errorCode,
+        string $errorLevel = ProcessingError::ERROR_LEVEL_NOT_CRITICAL,
+        $colName = null
+    ): self {
+        $this->addRowError($errorCode, $rowNum, $colName, null, $errorLevel);
+        $this->getErrorAggregator()
+            ->addRowToSkip($rowNum);
+
+        return $this;
+    }
+
+    /**
+     * Returns errorLevel for validation
+     *
+     * @param string|bool|null $sku
+     * @return string
+     */
+    private function getValidationErrorLevel($sku): string
+    {
+        return (!$this->isSkuExist($sku) && Import::BEHAVIOR_REPLACE !== $this->getBehavior())
+            ? ProcessingError::ERROR_LEVEL_CRITICAL
+            : ProcessingError::ERROR_LEVEL_NOT_CRITICAL;
     }
 }

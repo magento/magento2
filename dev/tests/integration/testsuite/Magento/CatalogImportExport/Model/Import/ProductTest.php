@@ -1388,10 +1388,15 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->setSource(
             $source
         )->validateData();
+        $urlKeyErrors = $errors->getErrorsByCode([RowValidatorInterface::ERROR_DUPLICATE_URL_KEY]);
         $this->assertEquals(
             $expectedErrors[RowValidatorInterface::ERROR_DUPLICATE_URL_KEY],
-            count($errors->getErrorsByCode([RowValidatorInterface::ERROR_DUPLICATE_URL_KEY]))
+            count($urlKeyErrors)
         );
+
+        foreach ($urlKeyErrors as $error) {
+            $this->assertEquals('critical', $error->getErrorLevel());
+        }
     }
 
     /**
