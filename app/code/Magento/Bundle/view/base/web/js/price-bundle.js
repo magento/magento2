@@ -376,12 +376,16 @@ define([
             magicKey = _.keys(oneItemPrice)[0],
             lowest = false;
         
-        //sorting based on "price_qty"
-        if(tiers){
-            tiers.sort(function (a, b) {
-                return a.price_qty - b.price_qty;
-            });
-        }
+        //tiers is undefined when options has only one option 
+		if (undefined == tiers) {
+		    var firstKey = Object.keys(optionConfig)[0];
+		    tiers = optionConfig[firstKey].tierPrice;
+		}
+
+		//sorting based on "price_qty"
+        tiers.sort( function (a, b) {
+            return a['price_qty'] - b['price_qty'];
+        });
 
         _.each(tiers, function (tier, index) {
             if (tier['price_qty'] > qty) {
