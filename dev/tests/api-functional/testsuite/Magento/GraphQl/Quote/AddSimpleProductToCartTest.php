@@ -51,7 +51,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         $qty = 2;
         $maskedQuoteId = $this->getMaskedQuoteId();
 
-        $query = $this->geAddSimpleProducttQuery($maskedQuoteId, $sku, $qty);
+        $query = $this->geAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
         $response = $this->graphQlQuery($query);
         self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
 
@@ -76,7 +76,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
      * @param int $qty
      * @return string
      */
-    public function geAddSimpleProducttQuery(string $maskedQuoteId, string $sku, int $qty) : string
+    public function geAddSimpleProductQuery(string $maskedQuoteId, string $sku, int $qty) : string
     {
         return <<<QUERY
 mutation {  

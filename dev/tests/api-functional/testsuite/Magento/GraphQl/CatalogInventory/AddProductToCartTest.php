@@ -61,13 +61,10 @@ class AddProductToCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @magentoConfigFixture default cataloginventory/item_options/max_sale_qty 5
-     * @expectedException \Exception
      * @expectedExceptionMessage The most you may purchase is 5.
      */
     public function testAddMoreProductsThatAllowed()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/167');
-
         $sku = 'custom-design-simple-product';
         $qty = 7;
 
