@@ -381,7 +381,7 @@ define([
             tiers = optionConfig[tiersFirstKey].tierPrice;
         }
 
-        tiers.sort( function (a, b) {//sorting based on "price_qty"
+        tiers.sort(function (a, b) {//sorting based on "price_qty"
             return a['price_qty'] - b['price_qty'];
         });
 
