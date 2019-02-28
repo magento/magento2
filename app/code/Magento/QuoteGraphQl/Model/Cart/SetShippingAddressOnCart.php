@@ -87,6 +87,7 @@ class SetShippingAddressOnCart implements SetShippingAddressesOnCartInterface
             );
         }
         if (null === $customerAddressId) {
+            $addressInput['country_id'] = $addressInput['country_code'] ?? '';
             $shippingAddress = $this->addressModel->addData($addressInput);
         } else {
             $this->checkCustomerAccount->execute($context->getUserId(), $context->getUserType());

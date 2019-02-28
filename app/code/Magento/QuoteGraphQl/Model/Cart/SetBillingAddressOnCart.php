@@ -93,6 +93,7 @@ class SetBillingAddressOnCart
             );
         }
         if (null === $customerAddressId) {
+            $addressInput['country_id'] = $addressInput['country_code'] ?? '';
             $billingAddress = $this->addressModel->addData($addressInput);
         } else {
             $this->checkCustomerAccount->execute($context->getUserId(), $context->getUserType());
