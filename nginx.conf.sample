@@ -9,6 +9,7 @@
 #    listen 80;
 #    server_name mage.dev;
 #    set $MAGE_ROOT /var/www/magento2;
+#    set $MAGE_DEBUG_SHOW_ARGS 1;
 #    include /vagrant/magento2/nginx.conf.sample;
 # }
 #
@@ -105,7 +106,7 @@ location /static/ {
 
     # Remove signature of the static files that is used to overcome the browser cache
     location ~ ^/static/version {
-        rewrite ^/static/(version[^/]+/)?(.*)$ /static/$2 last;
+        rewrite ^/static/(version\d*/)?(.*)$ /static/$2 last;
     }
 
     location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|json)$ {
@@ -114,7 +115,7 @@ location /static/ {
         expires +1y;
 
         if (!-f $request_filename) {
-            rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
+            rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
         }
     }
     location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
@@ -123,11 +124,11 @@ location /static/ {
         expires    off;
 
         if (!-f $request_filename) {
-           rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
+           rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
         }
     }
     if (!-f $request_filename) {
-        rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
+        rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
     }
     add_header X-Frame-Options "SAMEORIGIN";
 }

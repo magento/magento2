@@ -493,7 +493,7 @@ define([
                 return '';
             }
 
-            $.each(config.options, function () {
+            $.each(config.options, function (index) {
                 var id,
                     type,
                     value,
@@ -511,7 +511,7 @@ define([
 
                 // Add more button
                 if (moreLimit === countAttributes++) {
-                    html += '<a href="#" class="' + moreClass + '">' + moreText + '</a>';
+                    html += '<a href="#" class="' + moreClass + '"><span>' + moreText + '</span></a>';
                 }
 
                 id = this.id;
@@ -524,6 +524,7 @@ define([
                 label = this.label ? $('<i></i>').text(this.label).html() : '';
                 attr =
                     ' id="' + controlId + '-item-' + id + '"' +
+                    ' index="' + index + '"' +
                     ' aria-checked="false"' +
                     ' aria-describedby="' + controlId + '"' +
                     ' tabindex="0"' +
@@ -745,6 +746,12 @@ define([
             ) {
                 $widget._UpdatePrice();
             }
+
+            $(document).trigger('updateMsrpPriceBlock',
+                [
+                    parseInt($this.attr('index'), 10) + 1,
+                    $widget.options.jsonConfig.optionPrices
+                ]);
 
             $widget._loadMedia();
             $input.trigger('change');
@@ -1230,7 +1237,10 @@ define([
                 }
 
                 imagesToUpdate = this._setImageIndex(imagesToUpdate);
-                gallery.updateData(imagesToUpdate);
+
+                if (!_.isUndefined(gallery)) {
+                    gallery.updateData(imagesToUpdate);
+                }
 
                 if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
