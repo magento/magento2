@@ -626,13 +626,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
         $errorsCount = $errorAggregator->getErrorsCount();
         $result = !$errorsCount;
-        $validationStrategy = $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY);
-        if ($errorsCount
-            && $validationStrategy === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
-        ) {
-            $this->messageManager->addWarningMessage(__('Skipped errors: %1', $errorsCount));
-            $result = true;
-        }
 
         if ($result) {
             $this->addLogComment(__('Import data validation is complete.'));
