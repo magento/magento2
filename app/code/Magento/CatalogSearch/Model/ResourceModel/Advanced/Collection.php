@@ -266,6 +266,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
     {
+        /** This changes need in BIC reasons for support dynamic improved algorithm for price aggregation process. */
         if ($this->isCurrentEngineMysql()) {
             parent::addCategoryFilter($category);
         } else {
@@ -281,6 +282,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function setVisibility($visibility)
     {
+        /** This changes need in BIC reasons for support dynamic improved algorithm for price aggregation process. */
         if ($this->isCurrentEngineMysql()) {
             parent::setVisibility($visibility);
         } else {

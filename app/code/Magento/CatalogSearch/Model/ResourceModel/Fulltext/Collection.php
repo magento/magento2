@@ -584,7 +584,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
     {
         $this->addFieldToFilter('category_ids', $category->getId());
-        $this->_productLimitationPrice();
+        /** This changes need in BIC reasons for support dynamic improved algorithm for price aggregation process. */
+        if ($this->isCurrentEngineMysql()) {
+            parent::addCategoryFilter($category);
+        } else {
+            $this->_productLimitationPrice();
+        }
 
         return $this;
     }
@@ -598,6 +603,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setVisibility($visibility)
     {
         $this->addFieldToFilter('visibility', $visibility);
+        /** This changes need in BIC reasons for support dynamic improved algorithm for price aggregation process. */
+        if ($this->isCurrentEngineMysql()) {
+            parent::setVisibility($visibility);
+        }
 
         return $this;
     }

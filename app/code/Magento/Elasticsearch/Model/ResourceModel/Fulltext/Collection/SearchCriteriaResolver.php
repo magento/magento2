@@ -61,7 +61,7 @@ class SearchCriteriaResolver implements SearchCriteriaResolverInterface
         string $searchRequestName,
         int $currentPage,
         int $size,
-        array $orders
+        ?array $orders
     ) {
         $this->builder = $builder;
         $this->collection = $collection;
