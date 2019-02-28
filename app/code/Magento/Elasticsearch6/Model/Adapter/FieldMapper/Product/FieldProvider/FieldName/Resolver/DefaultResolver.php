@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch6\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver as Base;
 
 /**
  * Default name resolver.
  */
-class DefaultResolver extends \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver
+class DefaultResolver extends Base
 {
     /**
      * Get field name.
