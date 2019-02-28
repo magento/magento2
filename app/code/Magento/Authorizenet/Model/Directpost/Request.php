@@ -267,7 +267,7 @@ class Request extends AuthorizenetRequest
      * @param string $signatureKey
      * @return void
      */
-    private function setSignatureKey(string $signatureKey)
+    private function setSignatureKey($signatureKey)
     {
         $this->signatureKey = $signatureKey;
     }

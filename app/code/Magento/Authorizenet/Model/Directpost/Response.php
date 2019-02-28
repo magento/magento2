@@ -68,7 +68,7 @@ class Response extends AuthorizenetResponse
      * @return string
      * @see https://support.authorize.net/s/article/MD5-Hash-End-of-Life-Signature-Key-Replacement
      */
-    private function generateSha2Hash(string $signatureKey)
+    private function generateSha2Hash($signatureKey)
     {
         $hashFields = [
             'x_trans_id',

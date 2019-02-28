@@ -48,13 +48,13 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      * @dataProvider isValidHashDataProvider
      */
     public function testIsValidHash(
-        string $storedHash,
-        string $hashKey,
-        string $merchantApiLogin,
+        $storedHash,
+        $hashKey,
+        $merchantApiLogin,
         $amount,
-        string $transactionId,
-        string $hash,
-        bool $expectedValue
+        $transactionId,
+        $hash,
+        $expectedValue
     ) {
         $this->responseModelMock->setXAmount($amount);
         $this->responseModelMock->setXTransId($transactionId);

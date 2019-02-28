@@ -38,7 +38,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      * @return void
      * @dataProvider signRequestDataProvider
      */
-    public function testSignRequestData(string $signatureKey, string $expectedHash)
+    public function testSignRequestData($signatureKey, $expectedHash)
     {
         /** @var \Magento\Authorizenet\Model\Directpost|\PHPUnit_Framework_MockObject_MockObject $paymentMethod */
         $paymentMethod = $this->getMock(\Magento\Authorizenet\Model\Directpost::class, [], [], '', false);
