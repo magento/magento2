@@ -44,6 +44,8 @@ class GetViewsBackup
     }
 
     /**
+     * Backup
+     *
      * @param BackupInterface $backup
      */
     public function execute(BackupInterface $backup)
@@ -58,6 +60,8 @@ class GetViewsBackup
     }
 
     /**
+     * Get connection
+     *
      * @return AdapterInterface
      */
     private function getConnection()
@@ -70,6 +74,8 @@ class GetViewsBackup
     }
 
     /**
+     * Get show create view
+     *
      * @param string $viewName
      * @return string
      */
@@ -85,6 +91,8 @@ class GetViewsBackup
     }
 
     /**
+     * Get view header
+     *
      * @param string $viewName
      * @return string
      */
@@ -95,6 +103,8 @@ class GetViewsBackup
     }
 
     /**
+     * Get drop view SQL
+     *
      * @param string $viewName
      * @return string
      */

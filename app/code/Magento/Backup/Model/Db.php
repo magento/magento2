@@ -56,11 +56,12 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
     private $getViewsBackup;
 
     /**
-     * @param \Magento\Backup\Model\ResourceModel\Db $resourceDb
+     * Db constructor.
+     * @param ResourceModel\Db $resourceDb
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param Helper|null $helper
      * @param GetListTables|null $getListTables
      * @param GetViewsBackup|null $getViewsBackup
-     * @param Helper|null $helper
      */
     public function __construct(
         \Magento\Backup\Model\ResourceModel\Db $resourceDb,
