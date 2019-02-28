@@ -9,8 +9,8 @@
   },
   "sales_order": {
     "entity_id": "'%entityId%'",
-    "state": "'new'",
-    "status": "'pending'",
+    "state": "'%status%'",
+    "status": "'%status%'",
     "coupon_code": "NULL",
     "protect_code": "'272ecb'",
     "shipping_description": "'Flat Rate - Fixed'",
@@ -176,9 +176,9 @@
   },
   "sales_order_grid": {
     "entity_id": "'%entityId%'",
-    "status": "'pending'",
+    "status": "'%status%'",
     "store_id": "'%productStoreId%'",
-    "store_name": "'%entityId%'",
+    "store_name": "'%productStoreName%'",
     "customer_id": "NULL",
     "base_grand_total": 25.3000,
     "base_total_paid": "NULL",
@@ -331,12 +331,11 @@
     "additional_information": "'{\"method_title\":\"Check \/ Money order\"}'"
   },
   "sales_order_status_history": {
-    "entity_id": "'%entityId%'",
     "parent_id": "'%entityId%'",
     "is_customer_notified": "1",
     "is_visible_on_front": "0",
     "comment": "NULL",
-    "status": "'pending'",
+    "status": "'%status%'",
     "created_at": "'%time%'",
     "entity_name": "'order'"
   },
@@ -624,7 +623,7 @@
     "increment_id": "'%orderNumber%'",
     "state": 2,
     "store_id": "'%productStoreId%'",
-    "store_name": "'%entityId%'",
+    "store_name": "'%productStoreName%'",
     "order_id": "'%entityId%'",
     "order_increment_id": "'%orderNumber%'",
     "order_created_at": "'%time%'",
