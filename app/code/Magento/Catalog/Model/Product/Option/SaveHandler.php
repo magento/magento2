@@ -72,7 +72,8 @@ class SaveHandler implements ExtensionInterface
      * @param bool $hasChangedSku
      * @param string $newSku
      */
-    private function processOptionsSaving($options, $hasChangedSku, $newSku) {
+    private function processOptionsSaving($options, $hasChangedSku, $newSku)
+    {
         foreach ($options as $option) {
             if ($hasChangedSku && $option->hasData('product_sku')) {
                 $option->setProductSku($newSku);
