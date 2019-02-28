@@ -12,7 +12,7 @@ namespace Magento\Elasticsearch6\Block\Adminhtml\System\Config;
 class TestConnection extends \Magento\AdvancedSearch\Block\Adminhtml\System\Config\TestConnection
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getFieldMapping()
     {
