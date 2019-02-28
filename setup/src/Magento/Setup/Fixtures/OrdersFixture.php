@@ -337,7 +337,10 @@ class OrdersFixture extends Fixture
                 '%productStoreName%' => $productStoreName($entityId),
                 '%entityId%' => $entityId,
                 '%ruleId%' => $ruleId,
+                '%status%' => 'processing',
             ];
+            $order['%status%'] = 'pending';
+            $order['%status%'] = 'processing';
             $shippingAddress = ['%orderAddressId%' => $entityId * 2 - 1, '%addressType%' => 'shipping'];
             $billingAddress = ['%orderAddressId%' => $entityId * 2, '%addressType%' => 'billing'];
 
@@ -354,7 +357,12 @@ class OrdersFixture extends Fixture
                 $this->query('sales_order_address', $order, $address, $billingAddress);
                 $this->query('sales_order_grid', $order, $address);
                 $this->query('sales_order_payment', $order);
+
+                $order['%status%'] = 'pending';
                 $this->query('sales_order_status_history', $order);
+                $order['%status%'] = 'processing';
+                $this->query('sales_order_status_history', $order);
+
                 $this->query('sales_invoice', $order);
                 $this->query('sales_invoice_grid', $order, $address);
 
