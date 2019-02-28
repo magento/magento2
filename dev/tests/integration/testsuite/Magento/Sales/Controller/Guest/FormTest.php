@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Sales\Controller;
+namespace Magento\Sales\Controller\Guest;
 
 use Magento\Customer\Model\Session;
 use Magento\Framework\Data\Form\FormKey;
