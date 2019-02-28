@@ -56,7 +56,7 @@ define([
                 checkbox = null;
 
             if (trElement) {
-                checkbox = Element.getElementsBySelector(trElement, 'input');
+                checkbox = Element.getElementsBySelector(trElement, 'input[type="checkbox"]');
 
                 if (checkbox[0]) {
                     checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
