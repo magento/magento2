@@ -14,6 +14,6 @@
         <element name="productLink" type="select" selector="a[class='product-item-link']"/>
         <element name="asLowAsLabel" type="text" selector=".minimal-price-link > span"/>
         <element name="textArea" type="text" selector="li[class='item']"/>
-        <element name="regularPrice" type="text" selector="li[class='item']"/>
+        <element name="regularPrice" type="text" selector="//span[@class='price-wrapper ']/span[@class='price']"/>
     </section>
 </sections>
