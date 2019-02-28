@@ -8,6 +8,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormAdvancedPricingSection">
-        <element name="msrp" type="input" selector="//input[@name='product[msrp]']" timeout="5"/>
+        <element name="msrp" type="input" selector="input[name='product[msrp]']" timeout="5"/>
     </section>
 </sections>

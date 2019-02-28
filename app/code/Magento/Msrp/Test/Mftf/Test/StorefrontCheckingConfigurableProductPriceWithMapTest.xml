@@ -32,9 +32,9 @@
             <createData entity="DisableMAPConfig" stepKey="disableMAPConfig"/>
             <!--Delete entities-->
             <deleteData createDataKey="createConfigProductCreateConfigProduct" stepKey="deleteConfigProduct"/>
-            <deleteData createDataKey="createConfigChildProduct1CreateConfigProduct" stepKey="deleteConfigChildProduct1"/>
-            <deleteData createDataKey="createConfigChildProduct2CreateConfigProduct" stepKey="deleteConfigChildProduct2"/>
-            <deleteData createDataKey="createConfigChildProduct3CreateConfigProduct" stepKey="deleteConfigChildProduct3"/>
+            <deleteData createDataKey="createChildProduct1CreateConfigProduct" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createChildProduct2CreateConfigProduct" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createChildProduct3CreateConfigProduct" stepKey="deleteConfigChildProduct3"/>
             <deleteData createDataKey="createConfigProductAttributeCreateConfigProduct" stepKey="deleteConfigProductAttribute"/>
             <!--Logout-->
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
@@ -42,14 +42,14 @@
 
         <!--Set MSRP for Child product 1-->
         <actionGroup ref="AdminProductSetMsrp" stepKey="setMsrpForChildProduct1">
-            <argument name="productId" value="$createConfigChildProduct1CreateConfigProduct.id$"/>
+            <argument name="product" value="$createChildProduct1CreateConfigProduct$"/>
             <argument name="msrp" value="45"/>
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveChildProduct1"/>
 
         <!--Set MSRP for Child product 2-->
         <actionGroup ref="AdminProductSetMsrp" stepKey="setMsrpForChildProduct2">
-            <argument name="productId" value="$createConfigChildProduct2CreateConfigProduct.id$"/>
+            <argument name="product" value="$createChildProduct2CreateConfigProduct$"/>
             <argument name="msrp" value="66"/>
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveChildProduct2"/>

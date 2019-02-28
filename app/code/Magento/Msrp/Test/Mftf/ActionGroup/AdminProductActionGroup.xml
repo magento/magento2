@@ -9,10 +9,10 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminProductSetMsrp">
         <arguments>
-            <argument name="productId" type="string"/>
+            <argument name="product"/>
             <argument name="msrp" type="string" defaultValue="100"/>
         </arguments>
-        <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="goToProductEditPage"/>
+        <amOnPage url="{{AdminProductEditPage.url(product.id)}}" stepKey="goToProductEditPage"/>
         <waitForPageLoad stepKey="waitForProductEditPageLoad"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.msrp}}" stepKey="waitForMsrpElement"/>
