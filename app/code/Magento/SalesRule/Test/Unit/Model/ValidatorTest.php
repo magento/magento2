@@ -478,7 +478,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      * @param int $shippingDiscount
      * @dataProvider dataProviderActions
      */
-    public function testProcessShippingAmountActions($action, $ruleDiscount, $shippingDiscount): void
+    public function testProcessShippingAmountActions($action, $ruleDiscount, $shippingDiscount)
     {
         $shippingAmount = 5;
 
