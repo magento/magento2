@@ -102,38 +102,11 @@ define([
         },
 
         /**
-<<<<<<< HEAD
          * @param {*} percent
          * @return {*|String}
          */
         formatTxt: function (percent) {
             return this.getFormattedPriceWithoutSign(percent);
-=======
-         * @param {*} parent
-         * @param {*} percentage
-         * @return {*|String}
-         */
-        getTaxAmount: function (parent, percentage) {
-            var totalPercentage = 0;
-
-            taxAmount = parent.amount;
-            rates = parent.rates;
-            _.each(rates, function (rate) {
-                totalPercentage += parseFloat(rate.percent);
-            });
-
-            return this.getFormattedPrice(this.getPercentAmount(taxAmount, totalPercentage, percentage));
-        },
-
-        /**
-         * @param {*} amount
-         * @param {*} totalPercentage
-         * @param {*} percentage
-         * @return {*|String}
-         */
-        getPercentAmount: function (amount, totalPercentage, percentage) {
-            return parseFloat(amount * percentage / totalPercentage);
->>>>>>> a5330a77625445ebc4552eaf3e7c34d44b26d2b2
         },
 
         /**
