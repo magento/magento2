@@ -58,7 +58,7 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->shellMock->expects($this->once())
             ->method('execute')
-            ->with('crontab -l', [])
+            ->with('crontab -l 2>/dev/null', [])
             ->willThrowException($localizedException);
 
         $this->assertEquals([], $this->crontabManager->getTasks());
@@ -74,7 +74,7 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
     {
         $this->shellMock->expects($this->once())
             ->method('execute')
-            ->with('crontab -l', [])
+            ->with('crontab -l 2>/dev/null', [])
             ->willReturn($content);
 
         $this->assertEquals($tasks, $this->crontabManager->getTasks());
@@ -127,7 +127,7 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->shellMock->expects($this->at(0))
             ->method('execute')
-            ->with('crontab -l', [])
+            ->with('crontab -l 2>/dev/null', [])
             ->willReturn('');
 
         $this->shellMock->expects($this->at(1))
@@ -148,7 +148,7 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
     {
         $this->shellMock->expects($this->at(0))
             ->method('execute')
-            ->with('crontab -l', [])
+            ->with('crontab -l 2>/dev/null', [])
             ->willReturn($contentBefore);
 
         $this->shellMock->expects($this->at(1))
@@ -276,7 +276,7 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->shellMock->expects($this->at(0))
             ->method('execute')
-            ->with('crontab -l', [])
+            ->with('crontab -l 2>/dev/null', [])
             ->willReturn($content);
 
         $this->shellMock->expects($this->at(1))
