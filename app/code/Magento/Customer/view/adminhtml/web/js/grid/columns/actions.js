@@ -25,7 +25,7 @@ define([
                 fieldAction: true,
                 options: true,
                 action: true
-            },
+            }
         },
 
         /**
