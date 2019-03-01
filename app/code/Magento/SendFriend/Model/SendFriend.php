@@ -16,6 +16,7 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
  * @method \Magento\SendFriend\Model\SendFriend setTime(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
@@ -162,6 +163,8 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Send email.
+     *
      * @return $this
      * @throws CoreException
      */
@@ -236,7 +239,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         }
 
         $email = $this->getSender()->getEmail();
-        if (empty($email) or !\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
+        if (empty($email) || !\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
             $errors[] = __('Invalid Sender Email');
         }
 
@@ -281,13 +284,13 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         // validate array
         if (!is_array(
             $recipients
-        ) or !isset(
+        ) || !isset(
             $recipients['email']
-        ) or !isset(
+        ) || !isset(
             $recipients['name']
-        ) or !is_array(
+        ) || !is_array(
             $recipients['email']
-        ) or !is_array(
+        ) || !is_array(
             $recipients['name']
         )
         ) {
@@ -487,7 +490,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
             $oldTimes = explode(',', $oldTimes);
             foreach ($oldTimes as $oldTime) {
                 $periodTime = $time - $this->_sendfriendData->getPeriod();
-                if (is_numeric($oldTime) and $oldTime >= $periodTime) {
+                if (is_numeric($oldTime) && $oldTime >= $periodTime) {
                     $newTimes[] = $oldTime;
                 }
             }
