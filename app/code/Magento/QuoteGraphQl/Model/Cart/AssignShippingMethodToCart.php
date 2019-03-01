@@ -14,8 +14,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
 /**
  * Assign shipping method to cart
@@ -48,7 +48,7 @@ class AssignShippingMethodToCart
      * Assign shipping method to cart
      *
      * @param CartInterface $cart
-     * @param QuoteAddress $quoteAddress
+     * @param AddressInterface $quoteAddress
      * @param string $carrierCode
      * @param string $methodCode
      * @throws GraphQlInputException
@@ -56,7 +56,7 @@ class AssignShippingMethodToCart
      */
     public function execute(
         CartInterface $cart,
-        QuoteAddress $quoteAddress,
+        AddressInterface $quoteAddress,
         string $carrierCode,
         string $methodCode
     ): void {

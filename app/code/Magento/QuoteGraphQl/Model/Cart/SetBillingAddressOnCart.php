@@ -97,13 +97,13 @@ class SetBillingAddressOnCart
         }
 
         if (null === $customerAddressId) {
-            $billingAddressInput = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
+            $billingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
         } else {
             $this->checkCustomerAccount->execute($context->getUserId(), $context->getUserType());
             $customerAddress = $this->getCustomerAddress->execute((int)$customerAddressId, (int)$context->getUserId());
-            $billingAddressInput = $this->quoteAddressFactory->createBasedOnCustomerAddress($customerAddress);
+            $billingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress($customerAddress);
         }
 
-        $this->assignBillingAddressToCart->execute($cart, $billingAddressInput, $useForShipping);
+        $this->assignBillingAddressToCart->execute($cart, $billingAddress, $useForShipping);
     }
 }

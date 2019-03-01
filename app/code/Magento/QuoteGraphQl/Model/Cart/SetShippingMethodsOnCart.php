@@ -69,7 +69,7 @@ class SetShippingMethodsOnCart implements SetShippingMethodsOnCartInterface
         }
         $methodCode = $shippingMethodInput['method_code'];
 
-        $quoteAddress = $this->getQuoteAddress->execute($cartAddressId);
+        $quoteAddress = $this->getQuoteAddress->execute($cartAddressId, $context->getUserId());
 
         $this->assignShippingMethodToCart->execute($cart, $quoteAddress, $carrierCode, $methodCode);
     }

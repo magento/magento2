@@ -7,17 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Quote\Model\Quote\Address as QuoteAddress;
-use Magento\Quote\Model\Quote\AddressFactory as QuoteAddressFactory;
-use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
-
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\AddressInterfaceFactory;
+use Magento\Quote\Model\ResourceModel\Quote\Address as AddressResource;
 
 /**
  * Get quote address
@@ -25,26 +20,25 @@ use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
 class GetQuoteAddress
 {
     /**
-     * @var QuoteAddressFactory
+     * @var AddressInterfaceFactory
      */
     private $quoteAddressFactory;
 
     /**
-     * @var QuoteAddressResource
+     * @var AddressResource
      */
     private $quoteAddressResource;
 
     /**
-     * @var AddressRepositoryInterface
+     * @param AddressInterfaceFactory $quoteAddressFactory
+     * @param AddressResource $quoteAddressResource
      */
-    private $addressRepository;
-
-    /**
-     * @param AddressRepositoryInterface $addressRepository
-     */
-    public function __construct(AddressRepositoryInterface $addressRepository)
-    {
-        $this->addressRepository = $addressRepository;
+    public function __construct(
+        AddressInterfaceFactory $quoteAddressFactory,
+        AddressResource $quoteAddressResource
+    ) {
+        $this->quoteAddressFactory = $quoteAddressFactory;
+        $this->quoteAddressResource = $quoteAddressResource;
     }
 
     /**
@@ -57,7 +51,7 @@ class GetQuoteAddress
      * @throws GraphQlNoSuchEntityException
      * @throws GraphQlAuthorizationException
      */
-    public function execute(int $quoteAddressId, ?int $customerId): QuoteAddress
+    public function execute(int $quoteAddressId, ?int $customerId): AddressInterface
     {
         $quoteAddress = $this->quoteAddressFactory->create();
 
