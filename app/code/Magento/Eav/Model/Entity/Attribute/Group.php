@@ -35,7 +35,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * @var array
      */
-    private $reservedSystemNames;
+    private $reservedSystemNames = [];
 
     /**
      * @param \Magento\Framework\Model\Context $context
