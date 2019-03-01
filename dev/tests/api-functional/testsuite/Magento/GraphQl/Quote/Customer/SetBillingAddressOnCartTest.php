@@ -339,7 +339,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
-    public function testSetBillingAddressIfCustomerIsNotOwnerOfCart()
+    public function testSetBillingAddressToAnotherCustomerCart()
     {
         $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 2);
 

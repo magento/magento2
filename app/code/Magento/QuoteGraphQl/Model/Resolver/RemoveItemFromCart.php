@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
-use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -15,34 +14,34 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Api\CouponManagementInterface;
+use Magento\Quote\Api\GuestCartItemRepositoryInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 
 /**
  * @inheritdoc
  */
-class RemoveCouponFromCart implements ResolverInterface
+class RemoveItemFromCart implements ResolverInterface
 {
+    /**
+     * @var GuestCartItemRepositoryInterface
+     */
+    private $guestCartItemRepository;
+
     /**
      * @var GetCartForUser
      */
     private $getCartForUser;
 
     /**
-     * @var CouponManagementInterface
-     */
-    private $couponManagement;
-
-    /**
+     * @param GuestCartItemRepositoryInterface $guestCartItemRepository
      * @param GetCartForUser $getCartForUser
-     * @param CouponManagementInterface $couponManagement
      */
     public function __construct(
-        GetCartForUser $getCartForUser,
-        CouponManagementInterface $couponManagement
+        GuestCartItemRepositoryInterface $guestCartItemRepository,
+        GetCartForUser $getCartForUser
     ) {
+        $this->guestCartItemRepository = $guestCartItemRepository;
         $this->getCartForUser = $getCartForUser;
-        $this->couponManagement = $couponManagement;
     }
 
     /**
@@ -55,16 +54,19 @@ class RemoveCouponFromCart implements ResolverInterface
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        $currentUserId = $context->getUserId();
-        $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId);
-        $cartId = $cart->getId();
+        if (!isset($args['input']['cart_item_id'])) {
+            throw new GraphQlInputException(__('Required parameter "cart_item_id" is missing'));
+        }
+        $itemId = $args['input']['cart_item_id'];
+
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
 
         try {
-            $this->couponManagement->remove($cartId);
-        } catch (NoSuchEntityException $exception) {
-            throw new GraphQlNoSuchEntityException(__($exception->getMessage()));
-        } catch (CouldNotDeleteException $exception) {
-            throw new LocalizedException(__($exception->getMessage()));
+            $this->guestCartItemRepository->deleteById($maskedCartId, $itemId);
+        } catch (NoSuchEntityException $e) {
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()));
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
         }
 
         return [
