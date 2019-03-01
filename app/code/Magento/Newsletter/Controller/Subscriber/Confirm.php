@@ -10,7 +10,7 @@ class Confirm extends \Magento\Newsletter\Controller\Subscriber
 {
     /**
      * Subscription confirm action
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -23,17 +23,17 @@ class Confirm extends \Magento\Newsletter\Controller\Subscriber
 
             if ($subscriber->getId() && $subscriber->getCode()) {
                 if ($subscriber->confirm($code)) {
-                    $this->messageManager->addSuccess(__('Your subscription has been confirmed.'));
+                    $this->messageManager->addSuccessMessage(__('Your subscription has been confirmed.'));
                 } else {
-                    $this->messageManager->addError(__('This is an invalid subscription confirmation code.'));
+                    $this->messageManager->addErrorMessage(__('This is an invalid subscription confirmation code.'));
                 }
             } else {
-                $this->messageManager->addError(__('This is an invalid subscription ID.'));
+                $this->messageManager->addErrorMessage(__('This is an invalid subscription ID.'));
             }
         }
-
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setUrl($this->_storeManager->getStore()->getBaseUrl());
-        return $resultRedirect;
+        /** @var \Magento\Framework\Controller\Result\Redirect $redirect */
+        $redirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
+        $redirectUrl = $this->_storeManager->getStore()->getBaseUrl();
+        return $redirect->setUrl($redirectUrl);
     }
 }
