@@ -276,6 +276,10 @@ define([
          * @private
          */
         _onPropertyChange: function () {
+            if (typeof window.searchConfig !== 'undefined' && window.searchConfig.searchSuggestionEnabled == false) {
+                return false;
+            }
+            
             var searchField = this.element,
                 clonePosition = {
                     position: 'absolute',
