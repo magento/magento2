@@ -137,7 +137,7 @@ define([
 
                         if (eventData.redirectParameters.length > 0) {
                             parameters = res.backUrl.split('#');
-                            parameters.push(eventData.redirectParameters.join('&'));
+                            //parameters.push(eventData.redirectParameters.join('&'));
                             res.backUrl = parameters.join('#');
                         }
 
