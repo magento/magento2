@@ -7,7 +7,7 @@
 /**
  * Search form.mini block
  */
-namespace Demac\CoreRewrite\Search\Block;
+namespace Magento\Search\Block;
 
 use \Magento\Framework\View\Element\Template;
 use \Magento\Framework\View\Element\Template\Context;
