@@ -248,6 +248,7 @@
         "magento/language-nl_nl": "*",
         "magento/language-pt_br": "*",
         "magento/language-zh_hans_cn": "*",
+        "magento/language-it_it": "*",
         "magento/framework": "*",
         "magento/framework-amqp": "*",
         "magento/framework-bulk": "*",
