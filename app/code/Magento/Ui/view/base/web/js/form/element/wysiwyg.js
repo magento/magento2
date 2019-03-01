@@ -18,6 +18,7 @@ define([
     'use strict';
 
     return Abstract.extend({
+        currentWysiwyg: undefined,
         defaults: {
             elementSelector: 'textarea',
             suffixRegExpPattern: '${ $.wysiwygUniqueSuffix }',
@@ -53,6 +54,10 @@ define([
 
             // disable editor completely after initialization is field is disabled
             varienGlobalEvents.attachEventHandler('wysiwygEditorInitialized', function () {
+                if (!_.isUndefined(window.tinyMceEditors)) {
+                    this.currentWysiwyg = window.tinyMceEditors[this.wysiwygId];
+                }
+
                 if (this.disabled()) {
                     this.setDisabled(true);
                 }
@@ -136,14 +141,9 @@ define([
             }
 
             /* eslint-disable no-undef */
-            if (typeof wysiwyg !== 'undefined' && wysiwyg.activeEditor()) {
-                if (wysiwyg && disabled) {
-                    wysiwyg.setEnabledStatus(false);
-                    wysiwyg.getPluginButtons().prop('disabled', 'disabled');
-                } else if (wysiwyg) {
-                    wysiwyg.setEnabledStatus(true);
-                    wysiwyg.getPluginButtons().removeProp('disabled');
-                }
+            if (!_.isUndefined(this.currentWysiwyg) && this.currentWysiwyg.activeEditor()) {
+                this.currentWysiwyg.setEnabledStatus(!disabled);
+                this.currentWysiwyg.getPluginButtons().prop('disabled', disabled);
             }
         }
     });
