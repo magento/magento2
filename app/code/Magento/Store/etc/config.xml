@@ -22,7 +22,7 @@
                 <minify_files>0</minify_files>
                 <minify_exclude>
                     <tiny_mce>/tiny_mce/</tiny_mce>
-                    <authorizenet_acceptjs>/Accept\.js/</authorizenet_acceptjs>
+                    <authorizenet_acceptjs>\.authorize\.net/v1/Accept</authorizenet_acceptjs>
                 </minify_exclude>
             </js>
             <css>
