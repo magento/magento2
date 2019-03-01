@@ -11,9 +11,8 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Stdlib\ArrayManager;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
-use Magento\QuoteGraphQl\Model\Cart\SetShippingMethodOnCart;
+use Magento\QuoteGraphQl\Model\Cart\SetShippingMethodsOnCartInterface;
 
 /**
  * Mutation resolver for setting shipping methods for shopping cart
@@ -21,33 +20,25 @@ use Magento\QuoteGraphQl\Model\Cart\SetShippingMethodOnCart;
 class SetShippingMethodsOnCart implements ResolverInterface
 {
     /**
-     * @var SetShippingMethodOnCart
-     */
-    private $setShippingMethodOnCart;
-
-    /**
-     * @var ArrayManager
-     */
-    private $arrayManager;
-
-    /**
      * @var GetCartForUser
      */
     private $getCartForUser;
 
     /**
-     * @param ArrayManager $arrayManager
+     * @var SetShippingMethodsOnCartInterface
+     */
+    private $setShippingMethodsOnCart;
+
+    /**
      * @param GetCartForUser $getCartForUser
-     * @param SetShippingMethodOnCart $setShippingMethodOnCart
+     * @param SetShippingMethodsOnCartInterface $setShippingMethodsOnCart
      */
     public function __construct(
-        ArrayManager $arrayManager,
         GetCartForUser $getCartForUser,
-        SetShippingMethodOnCart $setShippingMethodOnCart
+        SetShippingMethodsOnCartInterface $setShippingMethodsOnCart
     ) {
-        $this->arrayManager = $arrayManager;
         $this->getCartForUser = $getCartForUser;
-        $this->setShippingMethodOnCart = $setShippingMethodOnCart;
+        $this->setShippingMethodsOnCart = $setShippingMethodsOnCart;
     }
 
     /**
@@ -55,40 +46,18 @@ class SetShippingMethodsOnCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $shippingAddresses = $this->arrayManager->get('input/shipping_addresses', $args);
-        $maskedCartId = $this->arrayManager->get('input/cart_id', $args);
-
-        if (!$maskedCartId) {
+        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
-        if (!$shippingAddresses) {
+        $maskedCartId = $args['input']['cart_id'];
+
+        if (!isset($args['input']['shipping_methods']) || empty($args['input']['shipping_methods'])) {
             throw new GraphQlInputException(__('Required parameter "shipping_methods" is missing'));
         }
+        $shippingMethods = $args['input']['shipping_methods'];
 
-        $shippingAddress = reset($shippingAddresses); // This point can be extended for multishipping
-
-        if (!$shippingAddress['cart_address_id']) {
-            throw new GraphQlInputException(__('Required parameter "cart_address_id" is missing'));
-        }
-        if (!isset($shippingAddress['shipping_method'])) {
-            throw new GraphQlInputException(__('Required parameter "shipping_method" is missing'));
-        }
-        if (!$shippingAddress['shipping_method']['carrier_code']) {
-            throw new GraphQlInputException(__('Required parameter "carrier_code" is missing'));
-        }
-        if (!$shippingAddress['shipping_method']['method_code']) {
-            throw new GraphQlInputException(__('Required parameter "method_code" is missing'));
-        }
-
-        $userId = $context->getUserId();
-        $cart = $this->getCartForUser->execute((string) $maskedCartId, $userId);
-
-        $this->setShippingMethodOnCart->execute(
-            $cart,
-            $shippingAddress['cart_address_id'],
-            $shippingAddress['shipping_method']['carrier_code'],
-            $shippingAddress['shipping_method']['method_code']
-        );
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $this->setShippingMethodsOnCart->execute($context, $cart, $shippingMethods);
 
         return [
             'cart' => [

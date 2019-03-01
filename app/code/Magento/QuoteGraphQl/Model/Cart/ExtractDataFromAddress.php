@@ -40,11 +40,6 @@ class ExtractDataFromAddress
         $addressData = $this->dataObjectConverter->toFlatArray($address, [], AddressInterface::class);
         $addressData['model'] = $address;
 
-        if ($address->getShippingMethod()) {
-            list($carrierCode, $methodCode) = explode('_', $address->getShippingMethod(), 2);
-            $shippingAmount = $address->getShippingAmount();
-        }
-
         $addressData = array_merge($addressData, [
             'address_id' => $address->getId(),
             'country' => [
@@ -56,12 +51,6 @@ class ExtractDataFromAddress
                 'label' => $address->getRegion()
             ],
             'street' => $address->getStreet(),
-            'selected_shipping_method' => [
-                'carrier_code' => $carrierCode ?? null,
-                'method_code' => $methodCode ?? null,
-                'label' => $address->getShippingDescription(),
-                'amount' => $shippingAmount ?? null
-            ],
             'items_weight' => $address->getWeight(),
             'customer_notes' => $address->getCustomerNotes()
         ]);

@@ -51,9 +51,9 @@ class AssignBillingAddressToCart
         try {
             $this->billingAddressManagement->assign($cart->getId(), $billingAddress, $useForShipping);
         } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()));
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
+            throw new GraphQlInputException(__($e->getMessage()), $e);
         }
     }
 }

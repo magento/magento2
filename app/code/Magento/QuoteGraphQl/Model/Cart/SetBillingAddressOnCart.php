@@ -63,19 +63,19 @@ class SetBillingAddressOnCart
      *
      * @param ContextInterface $context
      * @param CartInterface $cart
-     * @param array $billingAddress
+     * @param array $billingAddressInput
      * @return void
      * @throws GraphQlInputException
      * @throws GraphQlAuthenticationException
      * @throws GraphQlAuthorizationException
      * @throws GraphQlNoSuchEntityException
      */
-    public function execute(ContextInterface $context, CartInterface $cart, array $billingAddress): void
+    public function execute(ContextInterface $context, CartInterface $cart, array $billingAddressInput): void
     {
-        $customerAddressId = $billingAddress['customer_address_id'] ?? null;
-        $addressInput = $billingAddress['address'] ?? null;
-        $useForShipping = isset($billingAddress['use_for_shipping'])
-            ? (bool)$billingAddress['use_for_shipping'] : false;
+        $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
+        $addressInput = $billingAddressInput['address'] ?? null;
+        $useForShipping = isset($billingAddressInput['use_for_shipping'])
+            ? (bool)$billingAddressInput['use_for_shipping'] : false;
 
         if (null === $customerAddressId && null === $addressInput) {
             throw new GraphQlInputException(
@@ -97,13 +97,13 @@ class SetBillingAddressOnCart
         }
 
         if (null === $customerAddressId) {
-            $billingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
+            $billingAddressInput = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
         } else {
             $this->checkCustomerAccount->execute($context->getUserId(), $context->getUserType());
             $customerAddress = $this->getCustomerAddress->execute((int)$customerAddressId, (int)$context->getUserId());
-            $billingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress($customerAddress);
+            $billingAddressInput = $this->quoteAddressFactory->createBasedOnCustomerAddress($customerAddress);
         }
 
-        $this->assignBillingAddressToCart->execute($cart, $billingAddress, $useForShipping);
+        $this->assignBillingAddressToCart->execute($cart, $billingAddressInput, $useForShipping);
     }
 }

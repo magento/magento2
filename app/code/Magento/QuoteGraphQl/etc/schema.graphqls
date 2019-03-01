@@ -66,12 +66,6 @@ input SetShippingAddressesOnCartInput {
 input ShippingAddressInput {
     customer_address_id: Int # If provided then will be used address from address book
     address: CartAddressInput
-    cart_items: [CartItemQuantityInput!]
-}
-
-input CartItemQuantityInput {
-    cart_item_id: Int!
-    quantity: Float!
 }
 
 input SetBillingAddressOnCartInput {
@@ -100,17 +94,17 @@ input CartAddressInput {
 
 input SetShippingMethodsOnCartInput {
     cart_id: String!
-    shipping_addresses: [ShippingMethodForAddressInput!]!
-}
-
-input ShippingMethodForAddressInput {
-    cart_address_id: Int!
-    shipping_method: ShippingMethodInput!
+    shipping_methods: [ShippingMethodInput!]!
 }
 
 input ShippingMethodInput {
+    cart_address_id: Int!
     carrier_code: String!
     method_code: String!
+    additional_data: ShippingMethodAdditionalDataInput
+}
+
+input ShippingMethodAdditionalDataInput {
 }
 
 input SetPaymentMethodOnCartInput {
@@ -169,7 +163,7 @@ type CartAddress {
     telephone: String
     address_type: AdressTypeEnum
     available_shipping_methods: [AvailableShippingMethod] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAdress\\AvailableShippingMethods")
-    selected_shipping_method: SelectedShippingMethod
+    selected_shipping_method: SelectedShippingMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAdress\\SelectedShippingMethod")
     items_weight: Float
     customer_notes: String
     cart_items: [CartItemQuantity]
@@ -195,6 +189,10 @@ type SelectedShippingMethod {
     method_code: String
     label: String
     amount: Float
+    additional_data: SelectedShippingMethodAdditionalData
+}
+
+type SelectedShippingMethodAdditionalData {
 }
 
 type AvailableShippingMethod {
