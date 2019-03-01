@@ -7,7 +7,7 @@ namespace Magento\Backup\Model;
 
 use Magento\Backup\Helper\Data as Helper;
 use Magento\Backup\Model\ResourceModel\Table\GetListTables;
-use Magento\Backup\Model\ResourceModel\View\GetViewsBackup;
+use Magento\Backup\Model\ResourceModel\View\CreateViewsBackup;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\RuntimeException;
 
@@ -51,7 +51,7 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
     private $getListTables;
 
     /**
-     * @var GetViewsBackup
+     * @var CreateViewsBackup
      */
     private $getViewsBackup;
 
@@ -61,20 +61,20 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param Helper|null $helper
      * @param GetListTables|null $getListTables
-     * @param GetViewsBackup|null $getViewsBackup
+     * @param CreateViewsBackup|null $getViewsBackup
      */
     public function __construct(
-        \Magento\Backup\Model\ResourceModel\Db $resourceDb,
+        ResourceModel\Db $resourceDb,
         \Magento\Framework\App\ResourceConnection $resource,
         ?Helper $helper = null,
-        GetListTables $getListTables = null,
-        GetViewsBackup $getViewsBackup = null
+        ?GetListTables $getListTables = null,
+        ?CreateViewsBackup $getViewsBackup = null
     ) {
         $this->_resourceDb = $resourceDb;
         $this->_resource = $resource;
         $this->helper = $helper ?? ObjectManager::getInstance()->get(Helper::class);
-        $this->getListTables = $getListTables ?: ObjectManager::getInstance()->get(GetListTables::class);
-        $this->getViewsBackup = $getViewsBackup ?: ObjectManager::getInstance()->get(GetViewsBackup::class);
+        $this->getListTables = $getListTables ?? ObjectManager::getInstance()->get(GetListTables::class);
+        $this->getViewsBackup = $getViewsBackup ?? ObjectManager::getInstance()->get(CreateViewsBackup::class);
     }
 
     /**

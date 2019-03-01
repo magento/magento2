@@ -10,11 +10,12 @@ namespace Magento\Backup\Model\ResourceModel\View;
 use Magento\Framework\App\ResourceConnection;
 
 /**
- * Class GetListViews
+ * Get list of database views.
  */
 class GetListViews
 {
     private const TABLE_TYPE = 'VIEW';
+
     /**
      * @var ResourceConnection
      */
@@ -29,11 +30,11 @@ class GetListViews
     }
 
     /**
-     * Get view tables
+     * Get list of database views.
      *
      * @return array
      */
-    public function execute()
+    public function execute(): array
     {
         return $this->resource->getConnection('backup')->fetchCol(
             "SHOW FULL TABLES WHERE `Table_type` = ?",
