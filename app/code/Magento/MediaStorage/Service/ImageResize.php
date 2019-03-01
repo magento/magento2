@@ -24,6 +24,8 @@ use Magento\Theme\Model\ResourceModel\Theme\Collection;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * Image resize service.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImageResize
@@ -123,7 +125,8 @@ class ImageResize
     }
 
     /**
-     * Create resized images of different sizes from an original image
+     * Create resized images of different sizes from an original image.
+     *
      * @param string $originalImageName
      * @throws NotFoundException
      */
@@ -141,7 +144,8 @@ class ImageResize
     }
 
     /**
-     * Create resized images of different sizes from themes
+     * Create resized images of different sizes from themes.
+     *
      * @param array|null $themes
      * @return \Generator
      * @throws NotFoundException
@@ -169,7 +173,8 @@ class ImageResize
     }
 
     /**
-     * Search the current theme
+     * Search the current theme.
+     *
      * @return array
      */
     private function getThemesInUse(): array
@@ -187,7 +192,8 @@ class ImageResize
     }
 
     /**
-     * Get view images data from themes
+     * Get view images data from themes.
+     *
      * @param array $themes
      * @return array
      */
@@ -211,7 +217,8 @@ class ImageResize
     }
 
     /**
-     * Get unique image index
+     * Get unique image index.
+     *
      * @param array $imageData
      * @return string
      */
@@ -223,7 +230,8 @@ class ImageResize
     }
 
     /**
-     * Make image
+     * Make image.
+     *
      * @param string $originalImagePath
      * @param array $imageParams
      * @return Image
@@ -241,7 +249,8 @@ class ImageResize
     }
 
     /**
-     * Resize image
+     * Resize image.
+     *
      * @param array $viewImage
      * @param string $originalImagePath
      * @param string $originalImageName
