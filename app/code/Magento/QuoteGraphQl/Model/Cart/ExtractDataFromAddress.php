@@ -55,6 +55,7 @@ class ExtractDataFromAddress
                 'code' => $address->getShippingMethod(),
                 'label' => $address->getShippingDescription(),
                 'free_shipping' => $address->getFreeShipping(),
+                'amount' => $address->getShippingAmount()
             ],
             'items_weight' => $address->getWeight(),
             'customer_notes' => $address->getCustomerNotes()
