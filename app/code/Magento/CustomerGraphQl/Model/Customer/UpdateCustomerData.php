@@ -13,14 +13,16 @@ use Magento\Framework\GraphQl\Exception\GraphQlAlreadyExistsException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
  * Update customer data
  */
 class UpdateCustomerData
 {
-    private const RESTRICTED_DATA_KEYS = ['email', 'password'];
-
     /**
      * @var CustomerRepositoryInterface
      */
@@ -37,18 +39,50 @@ class UpdateCustomerData
     private $checkCustomerPassword;
 
     /**
+     * @var CustomerInterfaceFactory
+     */
+    private $customerFactory;
+
+    /**
+     * @var DataObjectHelper
+     */
+    private $dataObjectHelper;
+
+    /**
+     * @var DataObjectProcessor
+     */
+    private $dataObjectProcessor;
+
+    /**
+     * @var array
+     */
+    private $restrictedKeys;
+
+    /**
      * @param CustomerRepositoryInterface $customerRepository
      * @param StoreManagerInterface $storeManager
      * @param CheckCustomerPassword $checkCustomerPassword
+     * @param CustomerInterfaceFactory $customerFactory
+     * @param DataObjectHelper $dataObjectHelper
+     * @param DataObjectProcessor $dataObjectProcessor
+     * @param array $restrictedKeys
      */
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
         StoreManagerInterface $storeManager,
-        CheckCustomerPassword $checkCustomerPassword
+        CheckCustomerPassword $checkCustomerPassword,
+        CustomerInterfaceFactory $customerFactory,
+        DataObjectHelper $dataObjectHelper,
+        DataObjectProcessor $dataObjectProcessor,
+        array $restrictedKeys = []
     ) {
         $this->customerRepository = $customerRepository;
         $this->storeManager = $storeManager;
         $this->checkCustomerPassword = $checkCustomerPassword;
+        $this->customerFactory = $customerFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
+        $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->restrictedKeys = $restrictedKeys;
     }
 
     /**
@@ -64,15 +98,17 @@ class UpdateCustomerData
     public function execute(int $customerId, array $data): void
     {
         $customer = $this->customerRepository->getById($customerId);
-        $newCustomerData = array_diff_key($data, array_flip(static::RESTRICTED_DATA_KEYS));
+        $newData = array_diff_key($data, array_flip($this->restrictedKeys));
 
-        foreach ($newCustomerData as $key => $value) {
-            $setterMethod = 'set' . ucwords($key, '_');
-            if (!method_exists($customer, $setterMethod)) {
-                continue;
-            }
-            $customer->{$setterMethod}($value);
-        }
+        $oldData = $this->dataObjectProcessor->buildOutputDataArray($customer, CustomerInterface::class);
+        $newData = array_merge($oldData, $newData);
+
+        $customer = $this->customerFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $customer,
+            $newData,
+            CustomerInterface::class
+        );
 
         if (isset($data['email']) && $customer->getEmail() !== $data['email']) {
             if (!isset($data['password']) || empty($data['password'])) {
