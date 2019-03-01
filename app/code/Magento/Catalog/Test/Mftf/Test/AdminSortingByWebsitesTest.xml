@@ -18,13 +18,13 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Create new website -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
-                <argument name="newWebsiteName" value="Second Website"/>
-                <argument name="websiteCode" value="second_website"/>
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
             </actionGroup>
         </before>
         <after>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
-                <argument name="websiteName" value="Second Website"/>
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
@@ -47,7 +47,7 @@
 
         <!-- Add this product to second website -->
         <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsitesSection1"/>
-        <click selector="{{ProductInWebsitesSection.website('Second Website')}}" stepKey="selectSecondWebsite"/>
+        <click selector="{{ProductInWebsitesSection.website('{{customWebsite.name}}')}}" stepKey="selectSecondWebsite"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
         <waitForLoadingMaskToDisappear stepKey="waitForProductPagetoSaveAgain"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
@@ -75,11 +75,11 @@
         <actionGroup ref="resetProductGridToDefaultView" stepKey="setProductGridToDefaultSortingWebsites"/>
         <click selector="{{AdminProductGridSection.columnHeader('Websites')}}" stepKey="clickWebsitesHeaderToSortAsc"/>
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Main Website" stepKey="checkIfProduct1WebsitesAsc"/>
-        <see selector="{{AdminProductGridSection.productGridContentsOnRow('2')}}" userInput="Second Website" stepKey="checkIfProduct2WebsitesAsc"/>
+        <see selector="{{AdminProductGridSection.productGridContentsOnRow('2')}}" userInput="{{customWebsite.name}}" stepKey="checkIfProduct2WebsitesAsc"/>
 
         <!--Sorting works (By Websites) DESC-->
         <click selector="{{AdminProductGridSection.columnHeader('Websites')}}" stepKey="clickWebsitesHeaderToSortDesc"/>
-        <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Second Website" stepKey="checkIfProduct1WebsitesDesc"/>
+        <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="{{customWebsite.name}}" stepKey="checkIfProduct1WebsitesDesc"/>
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('2')}}" userInput="Main Website" stepKey="checkIfProduct2WebsitesDesc"/>
     </test>
 </tests>
