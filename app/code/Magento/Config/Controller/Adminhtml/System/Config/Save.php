@@ -152,14 +152,12 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             $section = $this->getRequest()->getParam('section');
             $website = $this->getRequest()->getParam('website');
             $store = $this->getRequest()->getParam('store');
-
             $configData = [
                 'section' => $section,
                 'website' => $website,
                 'store' => $store,
                 'groups' => $this->_getGroupsForSave(),
             ];
-
             $configData = $this->filterNodes($configData);
 
             /** @var \Magento\Config\Model\Config $configModel */
@@ -195,7 +193,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     }
 
     /**
-     * Filters nodes by checking exist in system.xml
+     * Filters nodes by checking whether they exist in system.xml.
      *
      * @param array $configData
      * @return array
@@ -203,27 +201,54 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     private function filterNodes(array $configData): array
     {
         $systemXmlPathsFromKeys = array_keys($this->_configStructure->getFieldPaths());
-
         $systemXmlPathsFromValues = array_reduce(
             array_values($this->_configStructure->getFieldPaths()),
             'array_merge',
             []
         );
-
-        $systemXmlConfig = array_merge($systemXmlPathsFromKeys, $systemXmlPathsFromValues);
-
-        foreach ($configData['groups'] as $configKey => $configFields) {
-            foreach (array_keys($configFields['fields']) as $configFieldName) {
-                $systemConfigArrayKey = $configData['section'] . '/' .
-                    $configKey . '/' .
-                    $configFieldName;
-                if (in_array($systemConfigArrayKey, $systemXmlConfig)) {
-                    continue;
+        //Full list of paths defined in system.xml
+        $systemXmlConfig = array_flip(array_merge($systemXmlPathsFromKeys, $systemXmlPathsFromValues));
+        //Recursive filtering function.
+        $filterPaths = function (string $prefix, array $groups) use (&$filterPaths, $systemXmlConfig): array {
+            $filtered = [];
+            foreach ($groups as $groupName => $childPaths) {
+                //Processing fields
+                if (array_key_exists('fields', $childPaths)) {
+                    foreach ($childPaths['fields'] as $field => $fieldData) {
+                        //Constructing config path for the $field
+                        $path = $prefix .'/' .$groupName .'/' .$field;
+                        $element = $this->_configStructure->getElement($path);
+                        if ($element
+                            && ($elementData = $element->getData())
+                            && array_key_exists('config_path', $elementData)
+                        ) {
+                            $path = $elementData['config_path'];
+                        }
+                        //Checking whether it exists in system.xml
+                        if (array_key_exists($path, $systemXmlConfig)) {
+                            if (!array_key_exists($groupName, $filtered)) {
+                                $filtered[$groupName] = ['fields' => []];
+                            }
+                            $filtered[$groupName]['fields'][$field] = $fieldData;
+                        }
+                    }
                 }
-
-                unset($configData['groups'][$configKey]['fields'][$configFieldName]);
+                //Recursively filtering this group's groups.
+                if (array_key_exists('groups', $childPaths)) {
+                    $filteredGroups = $filterPaths($prefix .'/' .$groupName, $childPaths['groups']);
+                    if ($filteredGroups) {
+                        if (!array_key_exists($groupName, $filtered)) {
+                            $filtered[$groupName] = [];
+                        }
+                        $filtered[$groupName]['groups'] = $filteredGroups;
+                    }
+                }
             }
-        }
+
+            return $filtered;
+        };
+
+        $configData['groups'] = $filterPaths($configData['section'], $configData['groups']);
 
         return $configData;
     }
