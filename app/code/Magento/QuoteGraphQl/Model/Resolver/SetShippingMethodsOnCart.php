@@ -16,8 +16,6 @@ use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\Cart\SetShippingMethodOnCart;
 
 /**
- * Class SetShippingMethodsOnCart
- *
  * Mutation resolver for setting shipping methods for shopping cart
  */
 class SetShippingMethodsOnCart implements ResolverInterface
@@ -94,9 +92,8 @@ class SetShippingMethodsOnCart implements ResolverInterface
 
         return [
             'cart' => [
-                'cart_id' => $maskedCartId,
-                'model' => $cart
-            ]
+                'model' => $cart,
+            ],
         ];
     }
 }
