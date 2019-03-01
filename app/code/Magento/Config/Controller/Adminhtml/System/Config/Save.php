@@ -193,6 +193,59 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     }
 
     /**
+     * Filter paths that are not defined.
+     *
+     * @param string $prefix Path prefix
+     * @param array $groups Groups data.
+     * @param string[] $systemXmlConfig Defined paths.
+     * @return array Filtered groups.
+     */
+    private function filterPaths(string $prefix, array $groups, array $systemXmlConfig): array
+    {
+        $flippedXmlConfig = array_flip($systemXmlConfig);
+        $filtered = [];
+        foreach ($groups as $groupName => $childPaths) {
+            //Processing fields
+            if (array_key_exists('fields', $childPaths)) {
+                foreach ($childPaths['fields'] as $field => $fieldData) {
+                    //Constructing config path for the $field
+                    $path = $prefix .'/' .$groupName .'/' .$field;
+                    $element = $this->_configStructure->getElement($path);
+                    if ($element
+                        && ($elementData = $element->getData())
+                        && array_key_exists('config_path', $elementData)
+                    ) {
+                        $path = $elementData['config_path'];
+                    }
+                    //Checking whether it exists in system.xml
+                    if (array_key_exists($path, $flippedXmlConfig)) {
+                        if (!array_key_exists($groupName, $filtered)) {
+                            $filtered[$groupName] = ['fields' => []];
+                        }
+                        $filtered[$groupName]['fields'][$field] = $fieldData;
+                    }
+                }
+            }
+            //Recursively filtering this group's groups.
+            if (array_key_exists('groups', $childPaths)) {
+                $filteredGroups = $this->filterPaths(
+                    $prefix .'/' .$groupName,
+                    $childPaths['groups'],
+                    $systemXmlConfig
+                );
+                if ($filteredGroups) {
+                    if (!array_key_exists($groupName, $filtered)) {
+                        $filtered[$groupName] = [];
+                    }
+                    $filtered[$groupName]['groups'] = $filteredGroups;
+                }
+            }
+        }
+
+        return $filtered;
+    }
+
+    /**
      * Filters nodes by checking whether they exist in system.xml.
      *
      * @param array $configData
@@ -207,48 +260,9 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             []
         );
         //Full list of paths defined in system.xml
-        $systemXmlConfig = array_flip(array_merge($systemXmlPathsFromKeys, $systemXmlPathsFromValues));
-        //Recursive filtering function.
-        $filterPaths = function (string $prefix, array $groups) use (&$filterPaths, $systemXmlConfig): array {
-            $filtered = [];
-            foreach ($groups as $groupName => $childPaths) {
-                //Processing fields
-                if (array_key_exists('fields', $childPaths)) {
-                    foreach ($childPaths['fields'] as $field => $fieldData) {
-                        //Constructing config path for the $field
-                        $path = $prefix .'/' .$groupName .'/' .$field;
-                        $element = $this->_configStructure->getElement($path);
-                        if ($element
-                            && ($elementData = $element->getData())
-                            && array_key_exists('config_path', $elementData)
-                        ) {
-                            $path = $elementData['config_path'];
-                        }
-                        //Checking whether it exists in system.xml
-                        if (array_key_exists($path, $systemXmlConfig)) {
-                            if (!array_key_exists($groupName, $filtered)) {
-                                $filtered[$groupName] = ['fields' => []];
-                            }
-                            $filtered[$groupName]['fields'][$field] = $fieldData;
-                        }
-                    }
-                }
-                //Recursively filtering this group's groups.
-                if (array_key_exists('groups', $childPaths)) {
-                    $filteredGroups = $filterPaths($prefix .'/' .$groupName, $childPaths['groups']);
-                    if ($filteredGroups) {
-                        if (!array_key_exists($groupName, $filtered)) {
-                            $filtered[$groupName] = [];
-                        }
-                        $filtered[$groupName]['groups'] = $filteredGroups;
-                    }
-                }
-            }
+        $systemXmlConfig = array_merge($systemXmlPathsFromKeys, $systemXmlPathsFromValues);
 
-            return $filtered;
-        };
-
-        $configData['groups'] = $filterPaths($configData['section'], $configData['groups']);
+        $configData['groups'] = $this->filterPaths($configData['section'], $configData['groups'], $systemXmlConfig);
 
         return $configData;
     }
