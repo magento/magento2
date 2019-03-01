@@ -10,6 +10,7 @@ namespace Magento\Sales\Controller\Guest;
 
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\View\Result\Page;
@@ -19,7 +20,7 @@ use Magento\Sales\Helper\Guest as GuestHelper;
 /**
  * Class Form
  */
-class Form extends \Magento\Framework\App\Action\Action
+class Form extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
      * @var PageFactory
