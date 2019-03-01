@@ -10,7 +10,7 @@ namespace Magento\Backup\Model\ResourceModel\Table;
 use Magento\Framework\App\ResourceConnection;
 
 /**
- * Class GetListTables
+ * Provides full list of tables in the database. This list excludes views, to allow different backup process.
  */
 class GetListTables
 {
@@ -30,12 +30,14 @@ class GetListTables
     }
 
     /**
+     * Get list of database tables excluding views.
+     *
      * @return array
      */
-    public function execute()
+    public function execute(): array
     {
         return $this->resource->getConnection('backup')->fetchCol(
-"SHOW FULL TABLES WHERE `Table_type` = ?",
+            "SHOW FULL TABLES WHERE `Table_type` = ?",
             self::TABLE_TYPE
         );
     }
