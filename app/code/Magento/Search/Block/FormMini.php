@@ -7,13 +7,10 @@
 /**
  * Search form.mini block
  */
-namespace Magento\Search\Block;
+namespace Demac\CoreRewrite\Search\Block;
 
-use Magento\Framework\UrlFactory;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Search\Model\ResourceModel\Query\CollectionFactory;
+use \Magento\Framework\View\Element\Template;
+use \Magento\Framework\View\Element\Template\Context;
 
 /**
  * @api
@@ -40,16 +37,16 @@ class FormMini extends Template
     /**
      * Constructor
      *
-     * @param Template\Context $context
-     * @param array $data
-     * @param Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param array $data
      */
     public function __construct(
-        Template\Context $context,
-        array $data = [],
+        Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        array $data = []
     )
     {
         $this->scopeConfig = $scopeConfig;
@@ -72,6 +69,5 @@ class FormMini extends Template
             'searchSuggestionEnabled' => $this->scopeConfig->getValue(self::XML_PATH_SEARCH_SUGGESTION, $storeScope),
         ]);
     }
-    
     
 }
