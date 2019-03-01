@@ -79,16 +79,25 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
         <waitForPageLoad time="30" stepKey="waitForProductGrid"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
-            <argument name="product" value="BaseConfigurableProduct"/>
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+        <!-- Add image to configurable product -->
+        <actionGroup ref="addProductImage" stepKey="addFirstImageForProductConfigurable">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <!-- Add image to configurable product -->
+        <actionGroup ref="addProductImage" stepKey="addSecondImageForProductConfigurable">
+            <argument name="image" value="TestImageNew"/>
         </actionGroup>
         <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
-            <argument name="product" value="BaseConfigurableProduct"/>
+            <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
 
         <!-- Create configurations based off the visual swatch we created earlier -->
-        <actionGroup ref="createConfigurationsForAttribute" stepKey="createConfigurations">
+        <actionGroup ref="createConfigurationsForAttributeWithImages" stepKey="createConfigurations">
             <argument name="attributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
+            <argument name="image" value="TestImageAdobe"/>
         </actionGroup>
 
         <!-- Go to the category page -->
@@ -111,7 +120,33 @@
 
         <!-- Click a swatch and expect to see the configurable product, not see the simple product -->
         <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" stepKey="filterBySwatch1"/>
-        <see selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="{{BaseConfigurableProduct.name}}" stepKey="seeConfigurableProduct"/>
+        <see selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="{{ApiConfigurableProduct.name}}" stepKey="seeConfigurableProduct"/>
         <dontSee selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="$$createSimpleProduct.name$$" stepKey="dontSeeSimpleProduct"/>
+
+        <!-- Assert configurable product in storefront product page -->
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Assert configurable product image in storefront product page -->
+        <actionGroup ref="assertProductImageStorefrontProductPage" stepKey="assertProductImageStorefrontProductPage">
+            <argument name="product" value="ApiConfigurableProduct"/>
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+
+        <!-- Assert configurable product image in storefront product page -->
+        <actionGroup ref="assertProductImageStorefrontProductPage" stepKey="assertProductSecondImageStorefrontProductPage">
+            <argument name="product" value="ApiConfigurableProduct"/>
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+
+        <!-- Click a swatch and expect to see the image from the swatch from the configurable product -->
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('adobe-thumb')}}" stepKey="clickSwatchOption"/>
+
+        <!-- Assert swatch option image for configurable product image in storefront product page -->
+        <actionGroup ref="assertProductImageStorefrontProductPage" stepKey="assertSwatchImageStorefrontProductPage">
+            <argument name="product" value="ApiConfigurableProduct"/>
+            <argument name="image" value="TestImageAdobe"/>
+        </actionGroup>
     </test>
 </tests>

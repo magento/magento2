@@ -43,7 +43,9 @@
         <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
 
         <!-- Assert product image in admin product form -->
-        <actionGroup ref="assertProductImageAdminProductPage" stepKey="assertProductImageAdminProductPage"/>
+        <actionGroup ref="assertProductImageAdminProductPage" stepKey="assertProductImageAdminProductPage">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
 
         <!-- Assert product in storefront product page -->
         <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
