@@ -525,7 +525,7 @@ class Config extends \Magento\Framework\DataObject
         $keyDepth = count($pathParts);
         if ($keyDepth < 3) {
             throw new \UnexpectedValueException(
-                'Minimum depth of configuration is 3. Your configuration depth is ' . $keyDepth . '.'
+                'Minimal depth of configuration is 3. Your configuration depth is ' . $keyDepth
             );
         }
 

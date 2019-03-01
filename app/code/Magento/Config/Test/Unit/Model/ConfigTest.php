@@ -401,7 +401,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testSetDataByPathWrongDepth(string $path)
     {
         $currentDepth = count(explode('/', $path));
-        $expectedException = 'Minimum depth of configuration is 3. Your configuration depth is ' . $currentDepth . '.';
+        $expectedException = 'Minimal depth of configuration is 3. Your configuration depth is ' . $currentDepth;
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage($expectedException);
         $value = 'value';
