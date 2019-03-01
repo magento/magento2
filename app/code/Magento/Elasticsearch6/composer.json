@@ -8,8 +8,8 @@
         "magento/module-catalog-search": "*",
         "magento/module-search": "*",
         "magento/module-store": "*",
-        "magento/module-elasticsearch": ">=100.3.0",
-        "elasticsearch/elasticsearch": "~2.0|~5.1|~6.1"
+        "magento/module-elasticsearch": "*",
+        "elasticsearch/elasticsearch": "~6.1"
     },
     "suggest": {
         "magento/module-config": "*"
