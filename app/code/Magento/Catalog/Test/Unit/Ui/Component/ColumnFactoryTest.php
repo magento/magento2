@@ -100,7 +100,7 @@ class ColumnFactoryTest extends TestCase
      * @return void
      * @dataProvider filterModifiersProvider
      */
-    public function testCreateWithNotFilterableInGridAttribute(array $filterModifiers,?string $filter): void
+    public function testCreateWithNotFilterableInGridAttribute(array $filterModifiers, ?string $filter): void
     {
         $componentFactoryArgument = [
             'data' => [
