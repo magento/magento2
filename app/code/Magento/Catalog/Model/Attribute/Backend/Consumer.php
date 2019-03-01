@@ -7,13 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Attribute\Backend;
 
-use Magento\Catalog\Api\Data\MassActionInterface;
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Notification\NotifierInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\TemporaryStateExceptionInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Psr\Log\LoggerInterface;
+use Magento\Framework\Bulk\OperationInterface;
 
 /**
  * Consumer for export message.
@@ -21,12 +20,12 @@ use Psr\Log\LoggerInterface;
 class Consumer
 {
     /**
-     * @var NotifierInterface
+     * @var \Magento\Framework\Notification\NotifierInterface
      */
     private $notifier;
 
     /**
-     * @var LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
@@ -41,23 +40,9 @@ class Consumer
     private $productPriceIndexerProcessor;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     private $catalogProduct;
-
-    /**
-     * Stock Indexer
-     *
-     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
-     */
-    private $stockIndexerProcessor;
-
-    /**
-     * @var \Magento\Framework\Api\DataObjectHelper
-     */
-    private $dataObjectHelper;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
@@ -75,101 +60,102 @@ class Consumer
     private $productAction;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockRegistryInterfaceFactory
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    private $stockRegistry;
+    private $serializer;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterfaceFactory
+     * @var \Magento\Framework\Bulk\OperationManagementInterface
      */
-    private $stockItemRepository;
+    private $operationManagement;
 
     /**
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
-     * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Framework\Bulk\OperationManagementInterface $operationManagement
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Product\Action $action
-     * @param \Magento\CatalogInventory\Api\StockRegistryInterfaceFactory $stockRegistryFactory
-     * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterfaceFactory $stockItemRepositoryFactory
-     * @param NotifierInterface $notifier
-     * @param LoggerInterface $logger
+     * @param \Magento\Framework\Notification\NotifierInterface $notifier
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      */
     public function __construct(
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
-        \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Framework\Bulk\OperationManagementInterface $operationManagement,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Product\Action $action,
-        \Magento\CatalogInventory\Api\StockRegistryInterfaceFactory $stockRegistryFactory,
-        \Magento\CatalogInventory\Api\StockItemRepositoryInterfaceFactory $stockItemRepositoryFactory,
-        NotifierInterface $notifier,
-        LoggerInterface $logger
+        \Magento\Framework\Notification\NotifierInterface $notifier,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Serialize\SerializerInterface $serializer
     ) {
         $this->catalogProduct = $catalogProduct;
         $this->productFlatIndexerProcessor = $productFlatIndexerProcessor;
         $this->productPriceIndexerProcessor = $productPriceIndexerProcessor;
-        $this->stockIndexerProcessor = $stockIndexerProcessor;
-        $this->dataObjectHelper = $dataObjectHelper;
         $this->notifier = $notifier;
         $this->eventManager = $eventManager;
         $this->objectManager = ObjectManager::getInstance();
         $this->productAction = $action;
-        $this->stockRegistry = $stockRegistryFactory->create();
-        $this->stockItemRepository = $stockItemRepositoryFactory->create();
         $this->logger = $logger;
+        $this->serializer = $serializer;
+        $this->operationManagement = $operationManagement;
     }
 
-    public function process(MassActionInterface $data): void
+    /**
+     * Processing batch of operations for update tier prices.
+     *
+     * @param \Magento\AsynchronousOperations\Api\Data\OperationListInterface $operationList
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    public function process(\Magento\AsynchronousOperations\Api\Data\OperationListInterface $operationList)
     {
         try {
-            if ($data->getInventory()) {
-                $this->updateInventoryInProducts($data->getProductIds(), $data->getWebsiteId(), $data->getInventory());
+            foreach ($operationList->getItems() as  $operation) {
+                $serializedData = $operation->getSerializedData();
+                $data = $this->serializer->unserialize($serializedData);
+
+                $this->execute($data);
             }
-
-            if ($data->getWebsiteAdd() || $data->getWebsiteRemove()) {
-                $this->updateWebsiteInProducts($data->getProductIds(), $data->getWebsiteRemove(), $data->getWebsiteAdd());
-            }
-
-            if ($data->getAttributeValues()) {
-                $attributesData = $this->getAttributesData(
-                    $data->getProductIds(),
-                    $data->getStoreId(),
-                    $data->getAttributeValues(),
-                    $data->getAttributeKeys()
-                );
-                $this->reindex($data->getProductIds(), $attributesData, $data->getWebsiteRemove(), $data->getWebsiteAdd());
-            }
-
-            $this->productFlatIndexerProcessor->reindexList($data->getProductIds());
-
-            $this->notifier->addNotice(
-                __('Product attributes updated'),
-                __('A total of %1 record(s) were updated.', count($data->getProductIds()))
-            );
-        } catch (LocalizedException $exception) {
-            $this->notifier->addCritical(
-                __('Error during process occurred'),
-                __('Error during process occurred. Please check logs for detail')
-            );
-            $this->logger->critical('Something went wrong while process. ' . $exception->getMessage());
+        } catch (NoSuchEntityException $e) {
+            $this->logger->critical($e->getMessage());
+            $status = ($e instanceof TemporaryStateExceptionInterface)
+                ? OperationInterface::STATUS_TYPE_RETRIABLY_FAILED
+                : OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
+            $errorCode = $e->getCode();
+            $message = $e->getMessage();
+        } catch (LocalizedException $e) {
+            $this->logger->critical($e->getMessage());
+            $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
+            $errorCode = $e->getCode();
+            $message = $e->getMessage();
+        } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage());
+            $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
+            $errorCode = $e->getCode();
+            $message = __('Sorry, something went wrong during product prices update. Please see log for details.');
         }
+
+        //update operation status based on result performing operation(it was successfully executed or exception occurs
+        $this->operationManagement->changeOperationStatus(
+            $operation->getId(),
+            $status,
+            $errorCode,
+            $message,
+            $serializedData
+        );
     }
 
     /**
      * @param $productIds
      * @param $storeId
-     * @param $attributeValuesData
-     * @param $attributeKeysData
+     * @param $attributesData
      * @return mixed
      */
-    private function getAttributesData($productIds, $storeId, $attributeValuesData, $attributeKeysData)
+    private function getAttributesData($productIds, $storeId, $attributesData)
     {
-        $attributesData = array_combine($attributeKeysData, $attributeValuesData);
         $dateFormat = $this->objectManager->get(TimezoneInterface::class)->getDateFormat(\IntlDateFormatter::SHORT);
         $config = $this->objectManager->get(\Magento\Eav\Model\Config::class);
 
@@ -210,27 +196,6 @@ class Consumer
 
     /**
      * @param $productIds
-     * @param $websiteId
-     * @param $inventoryData
-     */
-    private function updateInventoryInProducts($productIds, $websiteId, $inventoryData): void
-    {
-        foreach ($productIds as $productId) {
-            $stockItemDo = $this->stockRegistry->getStockItem($productId, $websiteId);
-            if (!$stockItemDo->getProductId()) {
-                $inventoryData['product_id'] = $productId;
-            }
-
-            $stockItemId = $stockItemDo->getId();
-            $this->dataObjectHelper->populateWithArray($stockItemDo, $inventoryData, StockItemInterface::class);
-            $stockItemDo->setItemId($stockItemId);
-            $this->stockItemRepository->save($stockItemDo);
-        }
-        $this->stockIndexerProcessor->reindexList($productIds);
-    }
-
-    /**
-     * @param $productIds
      * @param $websiteRemoveData
      * @param $websiteAddData
      */
@@ -260,5 +225,31 @@ class Consumer
         ) {
             $this->productPriceIndexerProcessor->reindexList($productIds);
         }
+    }
+
+    /**
+     * @param $data
+     */
+    private function execute($data): void
+    {
+        if ($data['website_assign'] || $data['website_detach']) {
+            $this->updateWebsiteInProducts([$data['product_id']], $data['website_detach'], $data['website_assign']);
+        }
+
+        if ($data['attributes']) {
+            $attributesData = $this->getAttributesData(
+                [$data['product_id']],
+                $data['store_id'],
+                $data['attributes']
+            );
+            $this->reindex([$data['product_id']], $attributesData, $data['website_detach'], $data['website_assign']);
+        }
+
+        $this->productFlatIndexerProcessor->reindexList([$data['product_id']]);
+
+        $this->notifier->addNotice(
+            __('Product attributes updated'),
+            __('A total of %1 record(s) were updated.', count([$data['product_id']]))
+        );
     }
 }

@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
-    <topic name="product_action_attribute.update" request="Magento\Catalog\Api\Data\MassActionInterface">
+    <topic name="product_action_attribute.update" request="Magento\AsynchronousOperations\Api\Data\OperationInterface">
         <handler name="product_action_attribute.update" type="Magento\Catalog\Model\Attribute\Backend\Consumer" method="process" />
     </topic>
 </config>

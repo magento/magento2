@@ -6,12 +6,8 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
-use Magento\Catalog\Api\Data\MassActionInterfaceFactory;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
-use Magento\Framework\MessageQueue\PublisherInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Save
@@ -19,39 +15,54 @@ use Magento\Framework\App\ObjectManager;
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute implements HttpPostActionInterface
 {
     /**
-     * @var PublisherInterface
+     * @var \Magento\Framework\Bulk\BulkManagementInterface
      */
-    private $messagePublisher;
+    private $bulkManagement;
 
     /**
-     * @var MassActionInterfaceFactory|null
+     * @var \Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory
      */
-    private $massActionFactory;
+    private $operationFactory;
 
     /**
-     * @var StockConfigurationInterface
+     * @var \Magento\Framework\DataObject\IdentityGeneratorInterface
      */
-    private $stockConfiguration;
+    private $identityService;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @var \Magento\Authorization\Model\UserContextInterface
+     */
+    private $userContext;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
-     * @param StockConfigurationInterface|null $stockConfiguration
-     * @param PublisherInterface|null $publisher
-     * @param MassActionInterfaceFactory|null $massAction
+     * @param \Magento\Framework\Bulk\BulkManagementInterface $bulkManagement
+     * @param \Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory $operartionFactory
+     * @param \Magento\Framework\DataObject\IdentityGeneratorInterface $identityService
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Authorization\Model\UserContextInterface $userContext
      */
     public function __construct(
         Action\Context $context,
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper,
-        StockConfigurationInterface $stockConfiguration = null,
-        PublisherInterface $publisher = null,
-        MassActionInterfaceFactory $massAction = null
+        \Magento\Framework\Bulk\BulkManagementInterface $bulkManagement,
+        \Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory $operartionFactory,
+        \Magento\Framework\DataObject\IdentityGeneratorInterface $identityService,
+        \Magento\Framework\Serialize\SerializerInterface $serializer,
+        \Magento\Authorization\Model\UserContextInterface $userContext
     ) {
         parent::__construct($context, $attributeHelper);
-        $this->messagePublisher = $publisher ?: ObjectManager::getInstance()->get(PublisherInterface::class);
-        $this->massActionFactory = $massAction ?: ObjectManager::getInstance()->get(MassActionInterfaceFactory::class);
-        $this->stockConfiguration = $stockConfiguration
-            ?: ObjectManager::getInstance()->get(StockConfigurationInterface::class);
+        $this->bulkManagement = $bulkManagement;
+        $this->operationFactory = $operartionFactory;
+        $this->identityService = $identityService;
+        $this->serializer = $serializer;
+        $this->userContext = $userContext;
     }
 
     /**
@@ -66,28 +77,18 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         }
 
         /* Collect Data */
-        $inventoryData = $this->getRequest()->getParam('inventory', []);
-        $inventoryData = $this->addConfigSettings($inventoryData);
         $attributesData = $this->getRequest()->getParam('attributes', []);
+
         $websiteRemoveData = $this->getRequest()->getParam('remove_website_ids', []);
         $websiteAddData = $this->getRequest()->getParam('add_website_ids', []);
+
         $storeId = $this->attributeHelper->getSelectedStoreId();
-        $productIds = $this->attributeHelper->getProductIds();
         $websiteId = $this->attributeHelper->getStoreWebsiteId($storeId);
 
-        /* Create DTO for queue */
-        $massAction = $this->massActionFactory->create();
-        $massAction->setInventory($inventoryData);
-        $massAction->setAttributeValues(array_values($attributesData));
-        $massAction->setAttributeKeys(array_keys($attributesData));
-        $massAction->setWebsiteRemove($websiteRemoveData);
-        $massAction->setWebsiteAdd($websiteAddData);
-        $massAction->setStoreId($storeId);
-        $massAction->setProductIds($productIds);
-        $massAction->setWebsiteId($websiteId);
+        $productIds = $this->attributeHelper->getProductIds();
 
         try {
-            $this->messagePublisher->publish('product_action_attribute.update', $massAction);
+            $this->publish('product_action_attribute.update', $attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds);
             $this->messageManager->addSuccessMessage(__('Message is added to queue'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
@@ -98,23 +99,63 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             );
         }
 
-        return $this->resultRedirectFactory->create()->setPath('catalog/product/', ['store' => $storeId]);
+        return $this->resultRedirectFactory->create()->setPath(
+            'catalog/product/',
+            ['store' => $storeId]
+        );
     }
 
     /**
-     * Prepare inventory data item options (use config settings)
-     * @param $inventoryData
-     * @return mixed
+     * Schedule new bulk.
+     *
+     * @param $queue
+     * @param $attributesData
+     * @param $websiteRemoveData
+     * @param $websiteAddData
+     * @param $storeId
+     * @param $websiteId
+     * @param $productIds
+     * @return void
      */
-    private function addConfigSettings($inventoryData)
+    private function publish($queue, $attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds):void
     {
-        $options = $this->stockConfiguration->getConfigItemOptions();
-        foreach ($options as $option) {
-            $useConfig = 'use_config_' . $option;
-            if (isset($inventoryData[$option]) && !isset($inventoryData[$useConfig])) {
-                $inventoryData[$useConfig] = 0;
+        $operationCount = count($productIds);
+        if ($operationCount > 0) {
+            $bulkUuid = $this->identityService->generateId();
+            $bulkDescription = __('Assign custom prices to selected products');
+            $operations = [];
+            foreach ($productIds as $productId) {
+                $dataToEncode = [
+                    'meta_information' => 'ID:' . $productId,
+                    'product_id' => $productId,
+                    'store_id' => $storeId,
+                    'website_id' => $websiteId,
+                    'website_assign' => $websiteAddData,
+                    'website_detach' => $websiteRemoveData,
+                    'attributes' => $attributesData
+                ];
+                $data = [
+                    'data' => [
+                        'bulk_uuid' => $bulkUuid,
+                        'topic_name' => $queue,
+                        'serialized_data' => $this->serializer->serialize($dataToEncode),
+                        'status' => \Magento\Framework\Bulk\OperationInterface::STATUS_TYPE_OPEN,
+                    ]
+                ];
+
+                /** @var \Magento\AsynchronousOperations\Api\Data\OperationInterface $operation */
+                $operation = $this->operationFactory->create($data);
+                $operations[] = $operation;
+            }
+            $userId = $this->userContext->getUserId();
+            $result = $this->bulkManagement->scheduleBulk($bulkUuid, $operations, $bulkDescription, $userId);
+            if (!$result) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Something went wrong while processing the request.')
+                );
             }
         }
-        return $inventoryData;
     }
+
 }
+
