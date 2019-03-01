@@ -160,7 +160,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         Address $address = null
     ) {
         if (!$this->getFlag('validation_filter')) {
-
             $this->prepareSelect($websiteId, $customerGroupId, $now);
 
             $noCouponRules = $this->getNoCouponCodeSelect();
@@ -169,7 +168,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                 $couponRules = $this->getCouponCodeSelect($couponCode);
 
                 $allAllowedRules = $this->getConnection()->select();
-                $allAllowedRules->union([$noCouponRules, $couponRules], \Zend_Db_Select::SQL_UNION_ALL);
+                $allAllowedRules->union([$noCouponRules, $couponRules], Select::SQL_UNION_ALL);
 
                 $wrapper = $this->getConnection()->select();
                 $wrapper->from($allAllowedRules);
@@ -189,9 +188,9 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     /**
      * Recreate the default select object for specific needs of salesrule evaluation with coupon codes.
      *
-     * @param $websiteId
-     * @param $customerGroupId
-     * @param $now
+     * @param int $websiteId
+     * @param int $customerGroupId
+     * @param string $now
      */
     private function prepareSelect($websiteId, $customerGroupId, $now)
     {
@@ -223,7 +222,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     /**
      * Determine all active rules that are valid for the given coupon code.
      *
-     * @param $couponCode
+     * @param string $couponCode
      * @return Select
      */
     private function getCouponCodeSelect($couponCode)
@@ -260,7 +259,9 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
-     * @param $couponCode
+     * Join coupong table to select.
+     *
+     * @param string $couponCode
      * @param Select $couponSelect
      */
     private function joinCouponTable($couponCode, Select $couponSelect)
