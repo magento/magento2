@@ -115,7 +115,7 @@ class Result implements ResultInterface
             $this->compiler->compile($templateRootElement, $this->component, $this->component);
             $this->appendLayoutConfiguration();
             $result = $this->compiler->postprocessing($this->template->__toString());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage());
             $result = $e->getMessage();
         }
