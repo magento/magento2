@@ -720,6 +720,18 @@
         <data key="status">1</data>
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
     </entity>
+    <entity name="nameAndAttributeSkuMaskSimpleProductCM" type="product">
+        <data key="urlKey" unique="suffix">simple-product-cm</data>
+        <data key="name" unique="suffix">SimpleProductCM</data>
+        <data key="price">10000.00</data>
+        <data key="quantity">657</data>
+        <data key="weight">50</data>
+        <data key="country_of_manufacture">CM</data>
+        <data key="country_of_manufacture_label">Cameroon</data>
+        <data key="type_id">simple</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+    </entity>
     <entity name="ProductShortDescription" type="ProductAttribute">
         <data key="attribute_code">short_description</data>
     </entity>

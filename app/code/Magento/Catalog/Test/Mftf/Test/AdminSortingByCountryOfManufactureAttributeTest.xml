@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSortingByCountryOfManufactureAttributeTest">
+        <annotations>
+            <stories value="View sorting by country of manufacture"/>
+            <title value="Sorting by country of manufacture in Admin"/>
+            <description value="Sorting by country of manufacture in Admin"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <magentoCLI stepKey="setCountryOfManufacture" command="config:set catalog/fields_masks/sku" arguments="{{name}}-{{country_of_manufacture}}"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="setName" command="config:set catalog/fields_masks/sku" arguments="{{name}}"/>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
+                <argument name="sku" value="{{nameAndAttributeSkuMaskSimpleProduct.name}}" />
+                <argument name="sku" value="{{nameAndAttributeSkuMaskSimpleProductCM.name}}" />
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
+        <waitForPageLoad stepKey="waitForProductToggleToSelectSimpleProduct"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickSimpleProductFromDropDownList"/>
+
+        <!-- Create simple product with country of manufacture attribute -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.name}}" stepKey="fillSimpleProductName"/>
+        <selectOption selector="{{AdminProductFormSection.countryOfManufacture}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" stepKey="selectCountryOfManufacture"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.price}}" stepKey="fillSimpleProductPrice"/>
+        <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.weight}}" stepKey="fillSimpleProductWeight"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.quantity}}" stepKey="fillSimpleProductQuantity"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForSimpleProductToSave"/>
+        <!-- Verify customer see success message -->
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
+
+        <!-- Search created simple product(from above step) in the grid page to verify sku masked as name and country of manufacture -->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchCreatedSimpleProduct"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
+
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggleCM"/>
+        <waitForPageLoad stepKey="waitForProductToggleToSelectSimpleProductCM"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickSimpleProductFromDropDownListCM"/>
+
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{nameAndAttributeSkuMaskSimpleProductCM.name}}" stepKey="fillSimpleProductNameCM"/>
+        <selectOption selector="{{AdminProductFormSection.countryOfManufacture}}" userInput="{{nameAndAttributeSkuMaskSimpleProductCM.country_of_manufacture_label}}" stepKey="selectCountryOfManufactureCM"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{nameAndAttributeSkuMaskSimpleProductCM.price}}" stepKey="fillSimpleProductPriceCM"/>
+        <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{nameAndAttributeSkuMaskSimpleProductCM.weight}}" stepKey="fillSimpleProductWeightCM"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{nameAndAttributeSkuMaskSimpleProductCM.quantity}}" stepKey="fillSimpleProductQuantityCM"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButtonCM"/>
+        <waitForPageLoad stepKey="waitForSimpleProductToSaveCM"/>
+        <!-- Verify customer see success message -->
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessageCM"/>
+
+        <!-- Search created simple product(from above step) in the grid page to verify sku masked as name and country of manufacture -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
+        <waitForPageLoad stepKey="waitForCatalogProductGrid"/>
+
+        <!--&lt;!&ndash;Sort Ascending&ndash;&gt;-->
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="setProductGridToDefaultSortingWebsites"/>
+        <click selector="{{AdminProductGridSection.columnHeader('Country of Manufacture')}}" stepKey="clickCountryOfManufactureHeaderToSortAsc"/>
+        <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Ukraine" stepKey="checkIfCountryOfManufacture1Asc"/>
+        <see selector="{{AdminProductGridSection.productGridContentsOnRow('2')}}" userInput="Cameroon" stepKey="checkIfCountryOfManufactureAsc"/>
+
+        <!--Sort Descending-->
+        <click selector="{{AdminProductGridSection.columnHeader('Country of Manufacture')}}" stepKey="clickCountryOfManufactureHeaderToSortDesc"/>
+        <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Cameroon" stepKey="checkIfCountryOfManufacture1Desc"/>
+        <see selector="{{AdminProductGridSection.productGridContentsOnRow('2')}}" userInput="Ukraine" stepKey="checkIfCountryOfManufactureDesc"/>
+    </test>
+</tests>
