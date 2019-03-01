@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * AssociatedProductsTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AssociatedProductsTest extends TestCase
 {
