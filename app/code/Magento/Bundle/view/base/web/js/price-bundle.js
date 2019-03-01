@@ -377,7 +377,7 @@ define([
             tiersFirstKey = _.keys(optionConfig)[0],
             lowest = false;
 
-        if (undefined === tiers) {//tiers is undefined when options has only one option
+        if (!tiers) {//tiers is undefined when options has only one option
             tiers = optionConfig[tiersFirstKey].tierPrice;
         }
 
