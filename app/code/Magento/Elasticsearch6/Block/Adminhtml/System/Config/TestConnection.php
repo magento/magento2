@@ -6,8 +6,7 @@
 namespace Magento\Elasticsearch6\Block\Adminhtml\System\Config;
 
 /**
- * Elasticsearch 6x test connection block
- * @codeCoverageIgnore
+ * Elasticsearch 6.x test connection block
  */
 class TestConnection extends \Magento\AdvancedSearch\Block\Adminhtml\System\Config\TestConnection
 {
