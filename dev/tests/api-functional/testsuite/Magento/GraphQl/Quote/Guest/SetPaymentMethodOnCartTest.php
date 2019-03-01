@@ -59,7 +59,6 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
 
         self::assertArrayHasKey('setPaymentMethodOnCart', $response);
         self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
-        self::assertEquals($maskedQuoteId, $response['setPaymentMethodOnCart']['cart']['cart_id']);
         self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
         self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
     }
@@ -78,7 +77,6 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
 
         self::assertArrayHasKey('setPaymentMethodOnCart', $response);
         self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
-        self::assertEquals($maskedQuoteId, $response['setPaymentMethodOnCart']['cart']['cart_id']);
         self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
         self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
     }
@@ -129,8 +127,6 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * Generates query for setting the specified shipping method on cart
-     *
      * @param string $maskedQuoteId
      * @param string $methodCode
      * @return string
@@ -150,7 +146,6 @@ mutation {
       }) {
     
     cart {
-      cart_id,
       selected_payment_method {
         code
       }
