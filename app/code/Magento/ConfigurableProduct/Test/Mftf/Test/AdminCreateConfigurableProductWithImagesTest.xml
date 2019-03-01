@@ -83,6 +83,11 @@
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations" after="addImageForProduct"/>
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
 
+         <!-- Show 100 attributes per page -->
+        <actionGroup ref="adminDataGridSelectPerPage" stepKey="selectNumberOfAttributesPerPage">
+            <argument name="perPage" value="100"/>
+        </actionGroup>
+
         <!--Add attributes and select all options -->
         <click selector="{{AdminCreateProductConfigurationsPanel.attributeRowByAttributeCode($$createFirstConfigProductAttribute.attribute_code$$)}}" stepKey="clickOnFirstAttributeCheckbox"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.attributeRowByAttributeCode($$createSecondConfigProductAttribute.attribute_code$$)}}" stepKey="clickOnSecondAttributeCheckbox"/>
