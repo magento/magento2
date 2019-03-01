@@ -5,7 +5,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
@@ -23,7 +22,10 @@ use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
+ * Class for test Account
+ *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AccountTest extends \PHPUnit\Framework\TestCase
 {
@@ -43,23 +45,33 @@ class AccountTest extends \PHPUnit\Framework\TestCase
     private $session;
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @inheritdoc
      */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $quote = $this->objectManager->create(Quote::class)->load(1);
+        parent::setUp();
+    }
+
+    /**
+     * Test for get form with existing customer
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testGetFormWithCustomer()
+    {
+        $customerGroup = 2;
+        $quote = $this->objectManager->create(Quote::class);
 
         $this->session = $this->getMockBuilder(SessionQuote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getStore', 'getStoreId', 'getQuote', 'getQuoteId'])
+            ->setMethods(['getCustomerId','getQuote'])
             ->getMock();
-        $this->session->method('getCustomerId')
-            ->willReturn(1);
         $this->session->method('getQuote')
             ->willReturn($quote);
-        $this->session->method('getQuoteId')
-            ->willReturn($quote->getId());
+        $this->session->method('getCustomerId')
+            ->willReturn(1);
+
         /** @var LayoutInterface $layout */
         $layout = $this->objectManager->get(LayoutInterface::class);
         $this->accountBlock = $layout->createBlock(
@@ -67,18 +79,20 @@ class AccountTest extends \PHPUnit\Framework\TestCase
             'address_block' . rand(),
             ['sessionQuote' => $this->session]
         );
-        parent::setUp();
-    }
 
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     */
-    public function testGetForm()
-    {
+        $fixtureCustomerId = 1;
+        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
+        $customerRepository = $this->objectManager->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+        $customer = $customerRepository->getById($fixtureCustomerId);
+        $customer->setGroupId($customerGroup);
+        $customerRepository->save($customer);
+
         $expectedFields = ['group_id', 'email'];
         $form = $this->accountBlock->getForm();
         self::assertEquals(1, $form->getElements()->count(), "Form has invalid number of fieldsets");
         $fieldset = $form->getElements()[0];
+        $content = $form->toHtml();
 
         self::assertEquals(count($expectedFields), $fieldset->getElements()->count());
 
@@ -88,22 +102,45 @@ class AccountTest extends \PHPUnit\Framework\TestCase
                 sprintf('Unexpected field "%s" in form.', $element->getId())
             );
         }
+
+        self::assertContains(
+            '<option value="'.$customerGroup.'" selected="selected">Wholesale</option>',
+            $content,
+            'The Customer Group specified for the chosen customer should be selected.'
+        );
+
+        self::assertContains(
+            'value="'.$customer->getEmail().'"',
+            $content,
+            'The Customer Email specified for the chosen customer should be input '
+        );
     }
 
     /**
      * Tests a case when user defined custom attribute has default value.
      *
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoConfigFixture current_store customer/create_account/default_group 3
+     * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
+     * @magentoConfigFixture current_store customer/create_account/default_group 2
+     * @magentoConfigFixture secondstore_store customer/create_account/default_group 3
      */
     public function testGetFormWithUserDefinedAttribute()
     {
+        /** @var \Magento\Store\Model\StoreManagerInterface  $storeManager */
+        $storeManager = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $secondStore = $storeManager->getStore('secondstore');
+
+        $quoteSession = $this->objectManager->get(SessionQuote::class);
+        $quoteSession->setStoreId($secondStore->getId());
+
         $formFactory = $this->getFormFactoryMock();
         $this->objectManager->addSharedInstance($formFactory, FormFactory::class);
 
         /** @var LayoutInterface $layout */
         $layout = $this->objectManager->get(LayoutInterface::class);
-        $accountBlock = $layout->createBlock(Account::class, 'address_block' . rand());
+        $accountBlock = $layout->createBlock(
+            Account::class,
+            'address_block' . rand()
+        );
 
         $form = $accountBlock->getForm();
         $form->setUseContainer(true);
@@ -116,7 +153,7 @@ class AccountTest extends \PHPUnit\Framework\TestCase
         );
 
         self::assertContains(
-            '<option value="3" selected="selected">Customer Group 1</option>',
+            '<option value="3" selected="selected">Retailer</option>',
             $content,
             'The Customer Group specified for the chosen store should be selected.'
         );
@@ -162,13 +199,13 @@ class AccountTest extends \PHPUnit\Framework\TestCase
     {
         /** @var Option $option1 */
         $option1 = $this->objectManager->create(Option::class);
-        $option1->setValue(3);
-        $option1->setLabel('Customer Group 1');
+        $option1->setValue(2);
+        $option1->setLabel('Wholesale');
 
         /** @var Option $option2 */
         $option2 = $this->objectManager->create(Option::class);
-        $option2->setValue(4);
-        $option2->setLabel('Customer Group 2');
+        $option2->setValue(3);
+        $option2->setLabel('Retailer');
 
         /** @var AttributeMetadataInterfaceFactory $attributeMetadataFactory */
         $attributeMetadataFactory = $this->objectManager->create(AttributeMetadataInterfaceFactory::class);
