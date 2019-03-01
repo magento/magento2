@@ -509,6 +509,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         return $this->searchResultApplierFactory->create([
             'collection' => $this,
             'searchResult' => $searchResult,
+            /** This variable sets by serOrder method, but doesn't have a getter method. */
             'orders' => $this->_orders,
         ]);
     }
@@ -584,7 +585,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
     {
         $this->addFieldToFilter('category_ids', $category->getId());
-        /** This changes need in BIC reasons for support dynamic improved algorithm for price aggregation process. */
+        /**
+         * This changes need in backward compatible reasons for support dynamic improved algorithm
+         * for price aggregation process.
+         */
         if ($this->isCurrentEngineMysql()) {
             parent::addCategoryFilter($category);
         } else {
@@ -603,7 +607,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setVisibility($visibility)
     {
         $this->addFieldToFilter('visibility', $visibility);
-        /** This changes need in BIC reasons for support dynamic improved algorithm for price aggregation process. */
+        /**
+         * This changes need in backward compatible reasons for support dynamic improved algorithm
+         * for price aggregation process.
+         */
         if ($this->isCurrentEngineMysql()) {
             parent::setVisibility($visibility);
         }
