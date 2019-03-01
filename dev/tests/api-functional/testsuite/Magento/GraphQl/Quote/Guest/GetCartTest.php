@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Quote;
+namespace Magento\GraphQl\Quote\Guest;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\QuoteFactory;
@@ -49,43 +49,37 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      */
-    public function testGetCartForGuest()
+    public function testGetCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $maskedQuoteId = $this->unAssignCustomerFromQuote('test_order_item_with_items');
         $query = $this->getCartQuery($maskedQuoteId);
 
         $response = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('cart', $response);
-        self::assertEquals($maskedQuoteId, $response['cart']['cart_id']);
+        self::assertArrayHasKey('items', $response['cart']);
+        self::assertCount(2, $response['cart']['items']);
+
+        self::assertNotEmpty($response['cart']['items'][0]['id']);
+        self::assertEquals($response['cart']['items'][0]['qty'], 2);
+        self::assertEquals($response['cart']['items'][0]['product']['sku'], 'simple');
+
+        self::assertNotEmpty($response['cart']['items'][1]['id']);
+        self::assertEquals($response['cart']['items'][1]['qty'], 1);
+        self::assertEquals($response['cart']['items'][1]['product']['sku'], 'simple_one');
     }
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      */
-    public function testGetCartByRegisteredCustomer()
+    public function testGetCustomerCart()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_item_with_items');
         $query = $this->getCartQuery($maskedQuoteId);
 
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
-
-        self::assertArrayHasKey('cart', $response);
-        self::assertEquals($maskedQuoteId, $response['cart']['cart_id']);
-        self::assertNotEmpty($response['cart']['items']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
-     */
-    public function testGetCartOfAnotherCustomerByGuest()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_item_with_items');
-        $query = $this->getCartQuery($maskedQuoteId);
-
-        self:$this->expectExceptionMessage(
+        $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"{$maskedQuoteId}\""
         );
         $this->graphQlQuery($query);
@@ -113,16 +107,12 @@ class GetCartTest extends GraphQlAbstract
         return <<<QUERY
 {
   cart(cart_id: "$maskedQuoteId") {
-    cart_id
-    applied_coupon {
-        code
-    }
     items {
       id
-    }
-    shipping_addresses {
-      firstname,
-      lastname
+      qty
+      product {
+        sku
+      }
     }
   }
 }
@@ -142,14 +132,17 @@ QUERY;
     }
 
     /**
-     * @param string $username
-     * @param string $password
-     * @return array
+     * @param string $reversedQuoteId
+     * @param int $customerId
+     * @return string
      */
-    private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
-    {
-        $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-        return $headerMap;
+    private function unAssignCustomerFromQuote(
+        string $reversedQuoteId
+    ): string {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+        $quote->setCustomerId(0);
+        $this->quoteResource->save($quote);
+        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 }
