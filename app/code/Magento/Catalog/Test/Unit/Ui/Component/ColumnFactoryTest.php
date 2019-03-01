@@ -132,7 +132,7 @@ class ColumnFactoryTest extends TestCase
     }
 
     /**
-     * The omit filterable in grid parameter data provider.
+     * Filter modifiers data provider.
      *
      * @return array
      */
