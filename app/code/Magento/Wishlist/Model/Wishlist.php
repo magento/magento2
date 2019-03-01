@@ -582,7 +582,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function getItemsCount()
     {
-        return $this->getItemCollection()->count();
+        return $this->getItemCollection()->getSize();
     }
 
     /**
