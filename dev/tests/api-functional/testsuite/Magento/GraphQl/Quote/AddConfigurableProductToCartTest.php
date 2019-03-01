@@ -60,7 +60,6 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
         self::assertEquals($variantSku, $cartItems[0]['product']['sku']);
     }
 
-
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
@@ -116,7 +115,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
      *
      * @return string
      */
-    private function getAddConfigurableProductMutationQuery(string $maskedQuoteId, string $variantSku, int $qty) : string
+    private function getAddConfigurableProductMutationQuery(string $maskedQuoteId, string $variantSku, int $qty): string
     {
         return <<<QUERY
 mutation {
