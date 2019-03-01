@@ -80,9 +80,10 @@ class ApplyCouponToCart implements ResolverInterface
             throw new LocalizedException(__($exception->getMessage()));
         }
 
-        $data['cart']['applied_coupon'] = [
-            'code' => $couponCode,
+        return [
+            'cart' => [
+                'model' => $cart,
+            ],
         ];
-        return $data;
     }
 }
