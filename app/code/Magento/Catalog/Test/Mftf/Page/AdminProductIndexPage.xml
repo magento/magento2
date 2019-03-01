@@ -12,6 +12,7 @@
         <section name="AdminProductGridActionSection" />
         <section name="AdminProductGridFilterSection" />
         <section name="AdminProductGridSection" />
+        <section name="AdminProductGridTableHeaderSection" />
         <section name="AdminMessagesSection" />
         <section name="AdminProductFiltersSection" />
     </page>

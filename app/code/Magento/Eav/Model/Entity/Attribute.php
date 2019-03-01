@@ -287,6 +287,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             }
         }
 
+        if ($this->getFrontendInput() == 'media_image') {
+            if (!$this->getFrontendModel()) {
+                $this->setFrontendModel(\Magento\Catalog\Model\Product\Attribute\Frontend\Image::class);
+            }
+        }
+
         if ($this->getBackendType() == 'gallery') {
             if (!$this->getBackendModel()) {
                 $this->setBackendModel(\Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend::class);

@@ -12,4 +12,7 @@
     <event name="catalog_block_product_list_collection">
         <observer name="review" instance="Magento\Review\Observer\CatalogBlockProductCollectionBeforeToHtmlObserver" shared="false" />
     </event>
+    <event name="controller_action_predispatch_review">
+        <observer name="catalog_review_enabled" instance="Magento\Review\Observer\PredispatchReviewObserver" />
+    </event>
 </config>

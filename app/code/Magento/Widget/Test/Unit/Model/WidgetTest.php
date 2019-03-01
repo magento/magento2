@@ -175,7 +175,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $this->conditionsHelper->expects($this->once())->method('encode')->with($conditions)
             ->willReturn('encoded-conditions-string');
         $this->escaperMock->expects($this->atLeastOnce())
-            ->method('escapeQuote')
+            ->method('escapeHtmlAttr')
             ->willReturnMap([
                 ['my "widget"', false, 'my &quot;widget&quot;'],
                 ['1', false, '1'],

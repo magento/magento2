@@ -14,5 +14,7 @@
         <element name="templateNameField" type="input" selector="#template_code"/>
         <element name="templateSubjectField" type="input" selector="#template_subject"/>
         <element name="previewTemplateButton" type="button" selector="#preview"/>
+        <!--Do not add time to this element. It call alert when clicking, so adding time will brake test-->
+        <element name="delete" type="button" selector="#delete"/>
     </section>
 </sections>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminReportTaxSection">
+        <element name="refreshStatistics" type="button" selector="//*[@id='messages']//a[text()='here']" timeout="30"/>
+        <element name="dataPickerFrom" type="button" selector="#sales_report_from + button.ui-datepicker-trigger"/>
+        <element name="dataPickerTo" type="button" selector="#sales_report_to + button.ui-datepicker-trigger"/>
+        <element name="goTodayButton" type="button" selector="#ui-datepicker-div [data-handler='today']"/>
+        <element name="closeButton" type="button" selector="#ui-datepicker-div [data-handler='hide']"/>
+        <element name="row" type="button" selector="//td[contains(text(),'{{var1}}')]/..//td[last()]" parameterized="true"/>
+    </section>
+</sections>

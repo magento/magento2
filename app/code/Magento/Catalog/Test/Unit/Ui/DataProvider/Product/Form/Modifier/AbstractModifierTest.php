@@ -67,7 +67,7 @@ abstract class AbstractModifierTest extends \PHPUnit\Framework\TestCase
                 'isLockedAttribute'
             ])->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['load', 'getId', 'getConfig'])
+            ->setMethods(['load', 'getId', 'getConfig', 'getBaseCurrency', 'getBaseCurrencyCode'])
             ->getMockForAbstractClass();
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->disableOriginalConstructor()

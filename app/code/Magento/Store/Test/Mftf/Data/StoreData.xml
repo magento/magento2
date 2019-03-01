@@ -5,7 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="_defaultStore" type="store">
         <data key="name">Default Store View</data>
         <data key="code">default</data>
@@ -33,6 +33,42 @@
     <entity name="customStoreFR" type="store">
         <data key="name">FR</data>
         <data key="code">fr</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">store</data>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
+    <entity name="CustomStoreENNotUnique" type="store">
+        <data key="name">EN</data>
+        <data key="code">en</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">store</data>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
+    <entity name="CustomStoreNLNotUnique" type="store">
+        <data key="name">NL</data>
+        <data key="code">nl</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">store</data>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
+    <entity name="CustomStoreENNotUnique" type="store">
+        <data key="name">EN</data>
+        <data key="code">en</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">store</data>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
+    <entity name="CustomStoreNLNotUnique" type="store">
+        <data key="name">NL</data>
+        <data key="code">nl</data>
         <data key="is_active">1</data>
         <data key="store_id">null</data>
         <data key="store_action">add</data>

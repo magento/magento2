@@ -5,11 +5,13 @@
  */
 namespace Magento\Checkout\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Interface PaymentDetailsInterface
  * @api
  */
-interface PaymentDetailsInterface
+interface PaymentDetailsInterface extends ExtensibleDataInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely

@@ -512,6 +512,42 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /**
      * @magentoDataFixture Magento/Customer/_files/customer_sample.php
      */
+    public function testSaveActionCoreExceptionFormatFormData()
+    {
+        $post = [
+            'customer' => [
+                'website_id' => 1,
+                'email' => 'customer@example.com',
+                'dob' => '12/3/1996',
+            ],
+        ];
+        $postFormatted = [
+            'customer' => [
+                'website_id' => 1,
+                'email' => 'customer@example.com',
+                'dob' => '1996-12-03',
+            ],
+        ];
+        $this->getRequest()->setPostValue($post);
+        $this->dispatch('backend/customer/index/save');
+        /*
+         * Check that error message is set
+         */
+        $this->assertSessionMessages(
+            $this->equalTo(['A customer with the same email already exists in an associated website.']),
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+        );
+        $this->assertEquals(
+            $postFormatted,
+            Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getCustomerFormData(),
+            'Customer form data should be formatted'
+        );
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key/'));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
+     */
     public function testEditAction()
     {
         $this->getRequest()->setParam('id', 1);

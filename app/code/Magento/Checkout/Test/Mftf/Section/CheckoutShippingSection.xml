@@ -19,7 +19,7 @@
         <element name="postcode" type="input" selector="input[name=postcode]"/>
         <element name="country" type="select" selector="select[name=country_id]"/>
         <element name="telephone" type="input" selector="input[name=telephone]"/>
-        <element name="firstShippingMethod" type="radio" selector="#checkout-shipping-method-load input[type='radio']"/>
+        <element name="firstShippingMethod" type="radio" selector="#checkout-shipping-method-load input[type='radio']" timeout="30"/>
         <element name="selectedShippingAddress" type="text" selector=".shipping-address-item.selected-item"/>
         <element name="newAddressButton" type="button" selector="#checkout-step-shipping button"/>
         <element name="next" type="button" selector="[data-role='opc-continue']"/>
@@ -30,7 +30,7 @@
         <element name="addState" type="select" selector="#shipping-new-address-form select[name='region_id']"/>
         <element name="addPostcode" type="input" selector="#shipping-new-address-form input[name='postcode']"/>
         <element name="addTelephone" type="input" selector="#shipping-new-address-form input[name='telephone']"/>
-        <element name="addcCountry" type="select" selector="#shipping-new-address-form select[name='country_id']"/>
+        <element name="addCountry" type="select" selector="#shipping-new-address-form select[name='country_id']"/>
         <element name="addSaveButton" type="button" selector=".action.primary.action-save-address"/>
         <element name="editActiveAddress" type="button" selector="//div[@class='shipping-address-item selected-item']//span[text()='Edit']" timeout="30"/>
     </section>
