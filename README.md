@@ -6,7 +6,7 @@
 Allows admin to login as a customer (enter to customer account).
 
 ## Requirements
-  * Magento Community Edition 2.0.x-2.2.x or Magento Enterprise Edition 2.0.x-2.2.x
+  * Magento Community Edition 2.0.x-2.3.x or Magento Enterprise Edition 2.0.x-2.3.x
 
 ## Installation Method 1 - Installing via composer
   * Run command: `composer require magefan/module-login-as-customer`
