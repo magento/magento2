@@ -254,8 +254,13 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function isProductHasSwatchAttribute()
     {
-        $swatchAttributes = $this->swatchAttributesProvider->provide($this->getProduct());
-        return count($swatchAttributes) > 0;
+        if ($product = $this->getProduct()) {
+            $swatchAttributes = $this->swatchAttributesProvider->provide($product);
+
+            return count($swatchAttributes) > 0;
+        }
+
+        return false;
     }
 
     /**
