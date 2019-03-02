@@ -93,6 +93,11 @@ use Magento\Quote\Model\Quote;
 class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
 {
     /**
+     * Default precision
+     */
+    const PRECISION = 4;
+
+    /**
      * Quote address model object
      *
      * @var \Magento\Quote\Model\Quote\Address
@@ -206,5 +211,21 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
             return $this->getQuoteItem()->getOptionBycode($code);
         }
         return null;
+    }
+
+    /**
+     * Added extended round precision for more accurate result
+     *
+     * @return $this
+     */
+    public function calcRowTotal()
+    {
+        $qty = $this->getTotalQty();
+        $total = $this->priceCurrency->roundPrice($this->getCalculationPriceOriginal(), static::PRECISION) * $qty;
+        $baseTotal = $this->priceCurrency->roundPrice($this->getBaseCalculationPriceOriginal(), static::PRECISION) * $qty;
+
+        $this->setRowTotal($this->priceCurrency->round($total));
+        $this->setBaseRowTotal($this->priceCurrency->round($baseTotal));
+        return $this;
     }
 }
