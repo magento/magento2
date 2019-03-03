@@ -68,7 +68,6 @@ class PlaceOrder implements ResolverInterface
             $orderId = $this->cartManagement->placeOrder($cart->getId());
             $order = $this->orderRepository->get($orderId);
 
-            // TODO: populate with data
             return [
                 'order' => [
                     'order_id' => $order->getIncrementId()
@@ -77,10 +76,6 @@ class PlaceOrder implements ResolverInterface
         } catch (LocalizedException $exception) {
             throw new GraphQlInputException(
                 __('Unable to place order: %message', ['message' => $exception->getMessage()])
-            );
-        } catch (\Exception $exception) {
-            throw new GraphQlInputException(
-                __('Unable to place order. An internal error occurred')
             );
         }
     }
