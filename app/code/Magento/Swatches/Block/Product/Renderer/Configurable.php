@@ -148,7 +148,11 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     public function getCacheKey()
     {
-        return parent::getCacheKey() . '-' . $this->getProduct()->getId();
+        if ($product = $this->getProduct()) {
+            return parent::getCacheKey() . '-' . $product->getId();
+        }
+
+        return parent::getCacheKey();
     }
 
     /**
