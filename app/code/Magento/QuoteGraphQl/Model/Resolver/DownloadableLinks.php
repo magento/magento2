@@ -16,11 +16,10 @@ use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Product\Type as Downloadable;
 use Magento\CatalogImportExport\Model\Import\Product\Type\Virtual as Virtual;
 use Magento\Downloadable\Helper\Data as DownloadableHelper;
-use Magento\Downloadable\Model\ResourceModel\Link\Collection as LinkCollection;
-use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollection;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\GraphQl\Query\EnumLookup;
-
+use Magento\Downloadable\Model\LinkFactory;
+use Magento\Downloadable\Model\SampleFactory;
 
 /**
  * @inheritdoc
@@ -38,32 +37,32 @@ class DownloadableLinks implements ResolverInterface
     private $downloadableHelper;
 
     /**
-     * @var SampleCollection
+     * @var LinkFactory
      */
-    private $sampleCollection;
+    private $linkFactory;
 
     /**
-     * @var LinkCollection
+     * @var SampleFactory
      */
-    private $linkCollection;
+    private $sampleFactory;
 
     /**
      *
      * @param EnumLookup $enumLookup
      * @param DownloadableHelper $downloadableHelper
-     * @param SampleCollection $sampleCollection
-     * @param LinkCollection $linkCollection
+     * @param LinkFactory $linkFactory
+     * @param SampleFactory $sampleFactory
      */
     public function __construct(
         EnumLookup $enumLookup,
         DownloadableHelper $downloadableHelper,
-        SampleCollection $sampleCollection,
-        LinkCollection $linkCollection
+        LinkFactory $linkFactory,
+        SampleFactory $sampleFactory
     ) {
         $this->enumLookup = $enumLookup;
         $this->downloadableHelper = $downloadableHelper;
-        $this->sampleCollection = $sampleCollection;
-        $this->linkCollection = $linkCollection;
+        $this->linkFactory = $linkFactory;
+        $this->sampleFactory = $sampleFactory;
     }
 
     /**
@@ -89,7 +88,8 @@ class DownloadableLinks implements ResolverInterface
         $data = null;
         if (in_array($product->getTypeId(), [Downloadable::TYPE_DOWNLOADABLE, Virtual::TYPE_VIRTUAL_PRODUCT])) {
             if ($field->getName() === 'downloadable_product_links') {
-                $links = $this->linkCollection->addTitleToResult($product->getStoreId())
+                $links = $this->linkFactory->create()->getResourceCollection();
+                $links->addTitleToResult($product->getStoreId())
                     ->addPriceToResult($product->getStore()->getWebsiteId())
                     ->addProductToFilter($product->getId());
 
@@ -104,14 +104,15 @@ class DownloadableLinks implements ResolverInterface
                     $links
                 );
             } elseif ($field->getName() === 'downloadable_product_samples') {
-                $samples = $this->sampleCollection->addTitleToResult($product->getStoreId())
+                $samples = $this->sampleFactory->create()->getResourceCollection();
+                $samples->addTitleToResult($product->getStoreId())
                     ->addProductToFilter($product->getId());
+
                 $data = $this->formatSamples(
                     $samples
                 );
             }
         }
-
 
         return $data;
     }
@@ -119,10 +120,10 @@ class DownloadableLinks implements ResolverInterface
     /**
      * Format links from collection as array
      *
-     * @param LinkCollection $links
+     * @param Collection $links
      * @return array
      */
-    private function formatLinks(LinkCollection $links) : array
+    private function formatLinks(Collection $links) : array
     {
         $resultData = [];
         foreach ($links as $linkKey => $link) {
