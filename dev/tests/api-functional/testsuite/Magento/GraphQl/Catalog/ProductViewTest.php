@@ -137,6 +137,26 @@ class ProductViewTest extends GraphQlAbstract
                     sort_order
                   }
                 }
+                ... on CustomizableCheckboxOption {
+                  checkbox_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                    sort_order
+                  }
+                }
+                ... on CustomizableMultipleOption {
+                  multiple_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                    sort_order
+                  }
+                }
                 ...on CustomizableFileOption {
                     product_sku
                     file_option: value {
@@ -278,6 +298,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_media_gallery_entries.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @gro
      */
     public function testQueryMediaGalleryEntryFieldsSimpleProduct()
     {
@@ -736,7 +757,7 @@ QUERY;
                         $values = $option->getValues();
                         /** @var \Magento\Catalog\Model\Product\Option\Value $value */
                         $value = current($values);
-                        $findValueKeyName = $option->getType() === 'radio' ? 'radio_option' : 'drop_down_option';
+                        $findValueKeyName = $option->getType() . '_option';
                         if ($value->getTitle() === $optionsArray[$findValueKeyName][0]['title']) {
                             $match = true;
                         }
@@ -756,7 +777,7 @@ QUERY;
             ];
 
             if (!empty($option->getValues())) {
-                $valueKeyName = $option->getType() === 'radio' ? 'radio_option' : 'drop_down_option';
+                $valueKeyName = $option->getType() . '_option';
                 $value = current($optionsArray[$valueKeyName]);
                 /** @var \Magento\Catalog\Model\Product\Option\Value $productValue */
                 $productValue = current($option->getValues());
