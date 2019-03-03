@@ -67,9 +67,10 @@ class RemoveCouponFromCart implements ResolverInterface
             throw new LocalizedException(__($exception->getMessage()));
         }
 
-        $data['cart']['applied_coupon'] = [
-            'code' => '',
+        return [
+            'cart' => [
+                'model' => $cart,
+            ],
         ];
-        return $data;
     }
 }
