@@ -68,15 +68,19 @@ class AddSimpleProductToCart
         $sku = $this->extractSku($cartItemData);
         $qty = $this->extractQty($cartItemData);
         $customizableOptions = $this->extractCustomizableOptions($cartItemData);
+        $downloadableLinks = [];
 
         try {
             $product = $this->productRepository->get($sku);
+            if ($product->getLinksPurchasedSeparately()) {
+                $downloadableLinks = $this->extractDownloadableLinks($cartItemData);
+            }
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
         }
 
         try {
-            $result = $cart->addProduct($product, $this->createBuyRequest($qty, $customizableOptions));
+            $result = $cart->addProduct($product, $this->createBuyRequest($qty, $customizableOptions, $downloadableLinks));
         } catch (\Exception $e) {
             throw new GraphQlInputException(
                 __(
@@ -141,19 +145,43 @@ class AddSimpleProductToCart
     }
 
     /**
+     * Extract Downloadable Links from cart item data
+     *
+     * @param array $cartItemData
+     * @return array
+     */
+    private function extractDownloadableLinks(array $cartItemData): array
+    {
+        $downloadableLinks = $this->arrayManager->get('downloadable_product_links', $cartItemData, []);
+
+        $downloadableLinksData = [];
+        foreach ($downloadableLinks as $downloadableLink) {
+            $downloadableLinksData[] = strval($downloadableLink['link_id']);
+        }
+        return $downloadableLinksData;
+    }
+
+    /**
      * Format GraphQl input data to a shape that buy request has
      *
      * @param float $qty
      * @param array $customOptions
+     * @param array $downloadableLinks
      * @return DataObject
      */
-    private function createBuyRequest(float $qty, array $customOptions): DataObject
+    private function createBuyRequest(float $qty, array $customOptions, array $downloadableLinks): DataObject
     {
-        return $this->dataObjectFactory->create([
+        $dataArray = [
             'data' => [
                 'qty' => $qty,
                 'options' => $customOptions,
             ],
-        ]);
+        ];
+
+        if ($downloadableLinks > 0) {
+            $dataArray['data']['links'] = $downloadableLinks;
+        }
+
+        return $this->dataObjectFactory->create($dataArray);
     }
 }
