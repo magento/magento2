@@ -30,13 +30,17 @@ class MsrpPriceCalculator implements MsrpPriceCalculatorInterface
 
         /** @var Configurable $configurableProduct */
         $configurableProduct = $product->getTypeInstance();
+        $msrp = 0;
         $prices = [];
         foreach ($configurableProduct->getUsedProducts($product) as $item) {
             if ($item->getMsrp() !== null) {
                 $prices[] = $item->getMsrp();
             }
         }
+        if ($prices) {
+            $msrp = (float)max($prices);
+        }
 
-        return $prices ? max($prices) : 0;
+        return  $msrp;
     }
 }
