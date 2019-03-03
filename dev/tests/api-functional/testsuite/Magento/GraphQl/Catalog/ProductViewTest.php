@@ -298,7 +298,6 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_media_gallery_entries.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @gro
      */
     public function testQueryMediaGalleryEntryFieldsSimpleProduct()
     {
