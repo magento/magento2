@@ -932,7 +932,7 @@ class EavSetup
             foreach ($option['values'] as $sortOrder => $label) {
                 $row = $this->setup->getConnection()->select($optionTable, ['attribute_id =?' => $option['attribute_id'], 'sort_order =?' => $sortOrder, 'value =?' => $label]);
 
-                if (!$row->getData()) {
+                if (!$row) {
                     // add option
                     $data = ['attribute_id' => $option['attribute_id'], 'sort_order' => $sortOrder];
                     $this->setup->getConnection()->insert($optionTable, $data);
