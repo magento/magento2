@@ -33,19 +33,20 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <!--AssertStoreGroupSuccessDeleteAndBackupMessages-->
+        <!--Delete custom store group and verify AssertStoreGroupSuccessDeleteAndBackupMessages-->
         <actionGroup ref="DeleteCustomStoreBackupEnabledYesActionGroup" stepKey="deleteCustomStoreGroup">
             <argument name="storeGroupName" value="{{customStore.name}}"/>
         </actionGroup>
 
-        <!--AssertStoreGroupNotInGrid-->
+        <!--Verify deleted Store group is not present in grid and verify AssertStoreGroupNotInGrid message-->
         <actionGroup ref="AssertStoreNotInGrid" stepKey="verifyDeletedStoreGroupNotInGrid">
             <argument name="storeGroupName" value="{{customStore.name}}"/>
         </actionGroup>
 
-        <!--Go to backup index page, verify AssertBackupInGrid-->
+        <!--Go to backup index page and verify AssertBackupInGrid-->
         <amOnPage url="{{BackupIndexPage.url}}" stepKey="goToBackupIndexPage"/>
         <waitForPageLoad stepKey="waitForBackupIndexPageLoad"/>
+        <see selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{WebSetupWizardBackup.name}}" stepKey="seeBackupInGrid"/>
         <!--Delete database backup-->
         <actionGroup ref="deleteBackup" stepKey="deleteDatabaseBackup">
             <argument name="backup" value="WebSetupWizardBackup"/>
