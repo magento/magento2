@@ -96,7 +96,7 @@ class DownloadableLinks implements ResolverInterface
                 if ($product->getLinksPurchasedSeparately() == true) {
                     $selectedLinksIds = explode(',', $quoteItem->getOptionByCode('downloadable_link_ids')->getValue());
                     if (count($selectedLinksIds) > 0) {
-                        $links->addFieldToFilter('main_table.link_id', $product->getEntityId());
+                        $links->addFieldToFilter('main_table.link_id', ['in' => $selectedLinksIds]);
                     }
                 }
 

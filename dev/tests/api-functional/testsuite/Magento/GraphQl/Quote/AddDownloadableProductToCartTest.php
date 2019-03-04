@@ -13,6 +13,9 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 
+/**
+ * Class AddDownloadableProductToCartTest
+ */
 class AddDownloadableProductToCartTest extends GraphQlAbstract
 {
     /**
@@ -44,14 +47,11 @@ class AddDownloadableProductToCartTest extends GraphQlAbstract
     /**
      * Test adding a downloadable product to the shopping cart
      *
-     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @magentoApiDataFixture Magento/GraphQl/_files/product_downloadable_with_purchased_separately_links.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
-    public function testAddDownloadableProduct()
+    public function testAddDownloadableProductWithCustomLinks()
     {
-        $sku = 'downloadable-product';
-        $qty = 1;
-
         $this->quoteResource->load(
             $this->quote,
             'test_order_1',
@@ -59,32 +59,135 @@ class AddDownloadableProductToCartTest extends GraphQlAbstract
         );
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
 
+        $sku    = 'graphql-downloadable-product-with-purchased-separately-links';
+        $qty    = 1;
+        $links  = $this->getProductsLinks($sku);
+        $linkId = key($links);
+
         $query = <<<MUTATION
 mutation {
-  addDownloadableProductsToCart(
-    input: {
-        cart_id: "{$maskedQuoteId}", 
-        cartItems: [
-            {
-                data: {
-                    qty: {$qty}, 
-                    sku: "{$sku}"
-                }, 
-                customizable_options: []
+    addDownloadableProductsToCart(
+        input: {
+            cart_id: "{$maskedQuoteId}", 
+            cartItems: [
+                {
+                    data: {
+                        qty: {$qty}, 
+                        sku: "{$sku}"
+                    },
+                    downloadable_product_links: [
+                        {
+          	                link_id: {$linkId}
+                        }
+                    ]
+                }
+            ]
+        }
+    ) {
+        cart {
+            items {
+                qty
+                ... on DownloadableCartItem {
+                    downloadable_product_links {
+                        title
+                        link_type
+                        price
+                    }
+                }
             }
-        ]
+        }
     }
-  ) {
-    cart {
-      items {
-        id
-      }
-    }
-  }
 }
 MUTATION;
         $response = $this->graphQlQuery($query);
         self::assertArrayHasKey('items', $response['addDownloadableProductsToCart']['cart']);
-        self::assertCount(1, $response['addDownloadableProductsToCart']['cart']);
+        self::assertCount($qty, $response['addDownloadableProductsToCart']['cart']);
+        self::assertEquals(
+            $links[$linkId],
+            $response['addDownloadableProductsToCart']['cart']['items'][0]['downloadable_product_links'][0]
+        );
+    }
+
+    /**
+     * Test adding a downloadable product to the shopping cart
+     *
+     * @magentoApiDataFixture Magento/GraphQl/_files/product_downloadable_without_purchased_separately_links.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddDownloadableProductWithoutCustomLinks()
+    {
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_1',
+            'reserved_order_id'
+        );
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+
+        $sku   = 'graphql-downloadable-product-without-purchased-separately-links';
+        $qty   = 1;
+        $links = $this->getProductsLinks($sku);
+
+        $query = <<<MUTATION
+mutation {
+    addDownloadableProductsToCart(
+        input: {
+            cart_id: "{$maskedQuoteId}", 
+            cartItems: [
+                {
+                    data: {
+                        qty: {$qty}, 
+                        sku: "{$sku}"
+                    }
+                }
+            ]
+        }
+    ) {
+        cart {
+            items {
+                qty
+                ... on DownloadableCartItem {
+                    downloadable_product_links {
+                        title
+                        link_type
+                        price
+                    }
+                }
+            }
+        }
+    }
+}
+MUTATION;
+        $response = $this->graphQlQuery($query);
+        self::assertArrayHasKey('items', $response['addDownloadableProductsToCart']['cart']);
+        self::assertCount($qty, $response['addDownloadableProductsToCart']['cart']);
+        self::assertEquals(
+            $links[key($links)],
+            $response['addDownloadableProductsToCart']['cart']['items'][0]['downloadable_product_links'][0]
+        );
+    }
+
+    /**
+     * Function returns array of all product's links
+     *
+     * @param string $sku
+     * @return array
+     */
+    private function getProductsLinks($sku = '')
+    {
+        $result = [];
+        $productRepository = Bootstrap::getObjectManager()
+            ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+
+        $product = $productRepository->get($sku, false, null, true);
+
+        foreach ($product->getDownloadableLinks() as $linkObject) {
+            $result[$linkObject->getLinkId()] = [
+                'title'     => $linkObject->getTitle(),
+                'link_type' => strtoupper($linkObject->getLinkType()),
+                'price'     => $linkObject->getPrice(),
+            ];
+        }
+
+        return $result;
     }
 }
