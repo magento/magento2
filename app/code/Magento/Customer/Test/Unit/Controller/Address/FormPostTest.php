@@ -503,14 +503,20 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
         $regionCode,
         $newRegionId,
         $newRegion,
-        $newRegionCode
+        $newRegionCode,
+        $existingDefaultBilling = false,
+        $existingDefaultShipping = false,
+        $setDefaultBilling = false,
+        $setDefaultShipping = false
     ): void {
         $existingAddressData = [
             'country_id' => $countryId,
             'region_id' => $regionId,
             'region' => $region,
             'region_code' => $regionCode,
-            'customer_id' => $customerId
+            'customer_id' => $customerId,
+            'default_billing' => $existingDefaultBilling,
+            'default_shipping' => $existingDefaultShipping,
         ];
         $newAddressData = [
             'country_id' => $countryId,
@@ -535,8 +541,8 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->willReturnMap([
                 ['id', null, $addressId],
-                ['default_billing', false, $addressId],
-                ['default_shipping', false, $addressId],
+                ['default_billing', $existingDefaultBilling, $setDefaultBilling],
+                ['default_shipping', $existingDefaultShipping, $setDefaultShipping],
             ]);
 
         $this->session->expects($this->any())
@@ -618,11 +624,11 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->addressData->expects($this->once())
             ->method('setIsDefaultBilling')
-            ->with()
+            ->with($setDefaultBilling)
             ->willReturnSelf();
         $this->addressData->expects($this->once())
             ->method('setIsDefaultShipping')
-            ->with()
+            ->with($setDefaultShipping)
             ->willReturnSelf();
 
         $this->customer->expects($this->once())
@@ -845,11 +851,11 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
 
             [1, 1, 1, 2, null, null, 12, null, null],
             [1, 1, 1, 2, 'Alaska', null, 12, null, 'CA'],
-            [1, 1, 1, 2, 'Alaska', 'AK', 12, 'California', null],
+            [1, 1, 1, 2, 'Alaska', 'AK', 12, 'California', null, true, true, true, false],
 
-            [1, 1, 1, 2, null, null, 12, null, null],
-            [1, 1, 1, 2, 'Alaska', null, 12, null, 'CA'],
-            [1, 1, 1, 2, 'Alaska', 'AK', 12, 'California', null],
+            [1, 1, 1, 2, null, null, 12, null, null, false, false, true, false],
+            [1, 1, 1, 2, 'Alaska', null, 12, null, 'CA', true, false, true, false],
+            [1, 1, 1, 2, 'Alaska', 'AK', 12, 'California', null, true, true, true, true],
         ];
     }
 

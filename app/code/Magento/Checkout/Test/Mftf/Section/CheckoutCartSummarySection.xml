@@ -23,6 +23,6 @@
         <element name="country" type="select" selector="select[name='country_id']" timeout="10"/>
         <element name="countryParameterized" type="select" selector="select[name='country_id'] > option:nth-child({{var}})" timeout="10" parameterized="true"/>
         <element name="estimateShippingAndTax" type="text" selector="#block-shipping-heading" timeout="5"/>
-        <element name="flatRateShippingMethod" type="radio" selector="#s_method_flatrate_flatrate" timeout="30"/>
+        <element name="flatRateShippingMethod" type="input" selector="#s_method_flatrate_flatrate" timeout="30"/>
     </section>
 </sections>

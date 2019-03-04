@@ -29,7 +29,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
- * Customer address from POST action.
+ * Customer Address Form Post Controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -153,8 +153,18 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             AddressInterface::class
         );
         $addressDataObject->setCustomerId($this->_getSession()->getCustomerId())
-            ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
-            ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
+            ->setIsDefaultBilling(
+                $this->getRequest()->getParam(
+                    'default_billing',
+                    isset($existingAddressData['default_billing']) ? $existingAddressData['default_billing'] : false
+                )
+            )
+            ->setIsDefaultShipping(
+                $this->getRequest()->getParam(
+                    'default_shipping',
+                    isset($existingAddressData['default_shipping']) ? $existingAddressData['default_shipping'] : false
+                )
+            );
 
         return $addressDataObject;
     }

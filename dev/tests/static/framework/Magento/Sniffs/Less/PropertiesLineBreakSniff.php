@@ -13,8 +13,7 @@ use PHP_CodeSniffer\Files\File;
  *
  * Start each property declaration in a new line
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#properties-line-break
- *
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#properties-line-break
  */
 class PropertiesLineBreakSniff implements Sniff
 {
@@ -26,7 +25,7 @@ class PropertiesLineBreakSniff implements Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -34,7 +33,7 @@ class PropertiesLineBreakSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {

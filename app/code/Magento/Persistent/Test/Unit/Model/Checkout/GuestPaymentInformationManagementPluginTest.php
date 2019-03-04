@@ -102,8 +102,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
             ['setCustomerEmail', 'getAddressesCollection'],
             false
         );
-        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
-        $quoteMock->expects($this->once())->method('getId')->willReturn($cartId);
+        $this->checkoutSessionMock->method('getQuoteId')->willReturn($cartId);
         $this->cartRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('setCustomerEmail')->with($email);
         /** @var \Magento\Framework\Data\Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */

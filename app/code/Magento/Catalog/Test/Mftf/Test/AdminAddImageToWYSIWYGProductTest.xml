@@ -16,9 +16,6 @@
             <description value="Admin should be able to add image to WYSIWYG Editor on Product Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84375"/>
-            <skip>
-                <issueId value="MAGETWO-94438"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
