@@ -137,7 +137,7 @@ class Samples extends AbstractModifier
     }
 
     /**
-     * Get sample rows meta.
+     * Returns configuration for dynamic rows
      *
      * @return array
      */
@@ -159,7 +159,7 @@ class Samples extends AbstractModifier
     }
 
     /**
-     * Get single sample row meta.
+     * Returns Record column configuration
      *
      * @return array
      */
@@ -198,7 +198,7 @@ class Samples extends AbstractModifier
     }
 
     /**
-     * Get sample title meta.
+     * Returns Title column configuration
      *
      * @return array
      */
@@ -218,6 +218,7 @@ class Samples extends AbstractModifier
             'componentType' => Form\Field::NAME,
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => 'title',
+            'labelVisible' => false,
             'validation' => [
                 'required-entry' => true,
             ],
@@ -227,7 +228,7 @@ class Samples extends AbstractModifier
     }
 
     /**
-     * Get sample element meta.
+     * Returns Sample column configuration
      *
      * @return array
      */
@@ -248,6 +249,7 @@ class Samples extends AbstractModifier
             'component' => 'Magento_Downloadable/js/components/upload-type-handler',
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => 'type',
+            'labelVisible' => false,
             'options' => $this->typeUpload->toOptionArray(),
             'typeFile' => 'sample_file',
             'typeUrl' => 'sample_url',
@@ -258,6 +260,7 @@ class Samples extends AbstractModifier
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => 'sample_url',
             'placeholder' => 'URL',
+            'labelVisible' => false,
             'validation' => [
                 'required-entry' => true,
                 'validate-url' => true,

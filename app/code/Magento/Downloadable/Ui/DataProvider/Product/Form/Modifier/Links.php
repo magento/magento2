@@ -162,7 +162,7 @@ class Links extends AbstractModifier
     }
 
     /**
-     * Get dynamic rows meta.
+     * Returns configuration for dynamic rows
      *
      * @return array
      */
@@ -184,7 +184,7 @@ class Links extends AbstractModifier
     }
 
     /**
-     * Get single link record meta.
+     * Returns Record column configuration
      *
      * @return array
      */
@@ -227,7 +227,7 @@ class Links extends AbstractModifier
     }
 
     /**
-     * Get link title meta.
+     * Returns Title column configuration
      *
      * @return array
      */
@@ -247,6 +247,7 @@ class Links extends AbstractModifier
             'componentType' => Form\Field::NAME,
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => 'title',
+            'labelVisible' => false,
             'validation' => [
                 'required-entry' => true,
             ],
@@ -256,7 +257,7 @@ class Links extends AbstractModifier
     }
 
     /**
-     * Get link price meta.
+     * Returns Price column configuration
      *
      * @return array
      */
@@ -277,6 +278,7 @@ class Links extends AbstractModifier
             'dataType' => Form\Element\DataType\Number::NAME,
             'component' => 'Magento_Downloadable/js/components/price-handler',
             'dataScope' => 'price',
+            'labelVisible' => false,
             'addbefore' => $this->locator->getStore()->getBaseCurrency()
                 ->getCurrencySymbol(),
             'validation' => [
@@ -293,7 +295,7 @@ class Links extends AbstractModifier
     }
 
     /**
-     * Get link file element meta.
+     * Returns File column configuration
      *
      * @return array
      */
@@ -317,6 +319,7 @@ class Links extends AbstractModifier
             'options' => $this->typeUpload->toOptionArray(),
             'typeFile' => 'links_file',
             'typeUrl' => 'link_url',
+            'labelVisible' => false,
         ];
         $fileLinkUrl['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
@@ -359,7 +362,7 @@ class Links extends AbstractModifier
     }
 
     /**
-     * Get sample container meta.
+     * Returns Sample column configuration
      *
      * @return array
      */
@@ -381,6 +384,7 @@ class Links extends AbstractModifier
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => 'sample.type',
             'options' => $this->typeUpload->toOptionArray(),
+            'labelVisible' => false,
             'typeFile' => 'sample_file',
             'typeUrl' => 'sample_url',
         ];
@@ -400,6 +404,7 @@ class Links extends AbstractModifier
             'component' => 'Magento_Downloadable/js/components/file-uploader',
             'elementTmpl' => 'Magento_Downloadable/components/file-uploader',
             'fileInputName' => 'link_samples',
+            'labelVisible' => false,
             'uploaderConfig' => [
                 'url' => $this->urlBuilder->addSessionParam()->getUrl(
                     'adminhtml/downloadable_file/upload',
@@ -421,7 +426,7 @@ class Links extends AbstractModifier
     }
 
     /**
-     * Get link "is sharable" element meta.
+     * Returns Sharable columns configuration
      *
      * @return array
      */
@@ -441,7 +446,7 @@ class Links extends AbstractModifier
     }
 
     /**
-     * Get link "max downloads" element meta.
+     * Returns max downloads column configuration
      *
      * @return array
      */
@@ -461,6 +466,7 @@ class Links extends AbstractModifier
             'componentType' => Form\Field::NAME,
             'dataType' => Form\Element\DataType\Number::NAME,
             'dataScope' => 'number_of_downloads',
+            'labelVisible' => false,
             'value' => 0,
             'validation' => [
                 'validate-zero-or-greater' => true,

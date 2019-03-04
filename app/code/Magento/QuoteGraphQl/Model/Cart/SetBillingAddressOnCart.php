@@ -7,14 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Customer\Api\Data\AddressInterface;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Quote\Model\Quote\Address;
-use Magento\Quote\Api\BillingAddressManagementInterface;
-use Magento\Customer\Api\AddressRepositoryInterface;
 
 /**
  * Set billing address for a specified shopping cart
@@ -22,19 +21,9 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 class SetBillingAddressOnCart
 {
     /**
-     * @var BillingAddressManagementInterface
+     * @var QuoteAddressFactory
      */
-    private $billingAddressManagement;
-
-    /**
-     * @var AddressRepositoryInterface
-     */
-    private $addressRepository;
-
-    /**
-     * @var Address
-     */
-    private $addressModel;
+    private $quoteAddressFactory;
 
     /**
      * @var CheckCustomerAccount
@@ -42,58 +31,79 @@ class SetBillingAddressOnCart
     private $checkCustomerAccount;
 
     /**
-     * @param BillingAddressManagementInterface $billingAddressManagement
-     * @param AddressRepositoryInterface $addressRepository
-     * @param Address $addressModel
+     * @var GetCustomerAddress
+     */
+    private $getCustomerAddress;
+
+    /**
+     * @var AssignBillingAddressToCart
+     */
+    private $assignBillingAddressToCart;
+
+    /**
+     * @param QuoteAddressFactory $quoteAddressFactory
      * @param CheckCustomerAccount $checkCustomerAccount
+     * @param GetCustomerAddress $getCustomerAddress
+     * @param AssignBillingAddressToCart $assignBillingAddressToCart
      */
     public function __construct(
-        BillingAddressManagementInterface $billingAddressManagement,
-        AddressRepositoryInterface $addressRepository,
-        Address $addressModel,
-        CheckCustomerAccount $checkCustomerAccount
+        QuoteAddressFactory $quoteAddressFactory,
+        CheckCustomerAccount $checkCustomerAccount,
+        GetCustomerAddress $getCustomerAddress,
+        AssignBillingAddressToCart $assignBillingAddressToCart
     ) {
-        $this->billingAddressManagement = $billingAddressManagement;
-        $this->addressRepository = $addressRepository;
-        $this->addressModel = $addressModel;
+        $this->quoteAddressFactory = $quoteAddressFactory;
         $this->checkCustomerAccount = $checkCustomerAccount;
+        $this->getCustomerAddress = $getCustomerAddress;
+        $this->assignBillingAddressToCart = $assignBillingAddressToCart;
     }
 
     /**
-     * @inheritdoc
+     * Set billing address for a specified shopping cart
+     *
+     * @param ContextInterface $context
+     * @param CartInterface $cart
+     * @param array $billingAddress
+     * @return void
+     * @throws GraphQlInputException
+     * @throws GraphQlAuthenticationException
+     * @throws GraphQlAuthorizationException
+     * @throws GraphQlNoSuchEntityException
      */
     public function execute(ContextInterface $context, CartInterface $cart, array $billingAddress): void
     {
         $customerAddressId = $billingAddress['customer_address_id'] ?? null;
         $addressInput = $billingAddress['address'] ?? null;
-        $useForShipping = $billingAddress['use_for_shipping'] ?? false;
+        $useForShipping = isset($billingAddress['use_for_shipping'])
+            ? (bool)$billingAddress['use_for_shipping'] : false;
 
         if (null === $customerAddressId && null === $addressInput) {
             throw new GraphQlInputException(
                 __('The billing address must contain either "customer_address_id" or "address".')
             );
         }
+
         if ($customerAddressId && $addressInput) {
             throw new GraphQlInputException(
                 __('The billing address cannot contain "customer_address_id" and "address" at the same time.')
             );
         }
+
         $addresses = $cart->getAllShippingAddresses();
         if ($useForShipping && count($addresses) > 1) {
             throw new GraphQlInputException(
                 __('Using the "use_for_shipping" option with multishipping is not possible.')
             );
         }
+
         if (null === $customerAddressId) {
-            $billingAddress = $this->addressModel->addData($addressInput);
+            $billingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
         } else {
             $this->checkCustomerAccount->execute($context->getUserId(), $context->getUserType());
-
-            /** @var AddressInterface $customerAddress */
-            $customerAddress = $this->addressRepository->getById($customerAddressId);
-            $billingAddress = $this->addressModel->importCustomerAddressData($customerAddress);
+            $customerAddress = $this->getCustomerAddress->execute((int)$customerAddressId, (int)$context->getUserId());
+            $billingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress($customerAddress);
         }
 
-        $this->billingAddressManagement->assign($cart->getId(), $billingAddress, $useForShipping);
+        $this->assignBillingAddressToCart->execute($cart, $billingAddress, $useForShipping);
     }
 }
