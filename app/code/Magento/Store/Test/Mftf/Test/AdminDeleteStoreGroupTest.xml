@@ -10,7 +10,7 @@
     <test name="AdminDeleteStoreGroupTest">
         <annotations>
             <stories value="Delete Store Group"/>
-            <title value="DeleteStoreGroupEntityTestVariation1"/>
+            <title value="Delete store group and save backup"/>
             <description value="Test log in to Stores and Delete Store Group Test"/>
             <testCaseId value="MC-14297"/>
             <severity value="CRITICAL"/>
