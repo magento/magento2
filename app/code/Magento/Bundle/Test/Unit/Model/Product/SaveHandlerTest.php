@@ -18,12 +18,16 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * Unit tests for \Magento\Bundle\Model\Product\SaveHandler class.
+ */
 class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
      */
     private $objectManager;
+
     /**
      * @var ProductInterface|MockObject
      */
