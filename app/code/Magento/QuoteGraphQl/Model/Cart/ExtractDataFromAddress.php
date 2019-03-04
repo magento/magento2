@@ -41,6 +41,7 @@ class ExtractDataFromAddress
         $addressData['model'] = $address;
 
         $addressData = array_merge($addressData, [
+            'address_id' => $address->getId(),
             'country' => [
                 'code' => $address->getCountryId(),
                 'label' => $address->getCountry()
@@ -54,6 +55,7 @@ class ExtractDataFromAddress
                 'code' => $address->getShippingMethod(),
                 'label' => $address->getShippingDescription(),
                 'free_shipping' => $address->getFreeShipping(),
+                'amount' => $address->getShippingAmount()
             ],
             'items_weight' => $address->getWeight(),
             'customer_notes' => $address->getCustomerNotes()

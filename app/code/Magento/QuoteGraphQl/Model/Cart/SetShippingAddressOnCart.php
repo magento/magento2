@@ -11,8 +11,6 @@ use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Quote\Model\Quote\Address;
-use Magento\Quote\Model\ShippingAddressManagementInterface;
 
 /**
  * Set single shipping address for a specified shopping cart
@@ -20,14 +18,9 @@ use Magento\Quote\Model\ShippingAddressManagementInterface;
 class SetShippingAddressOnCart implements SetShippingAddressesOnCartInterface
 {
     /**
-     * @var ShippingAddressManagementInterface
+     * @var QuoteAddressFactory
      */
-    private $shippingAddressManagement;
-
-    /**
-     * @var Address
-     */
-    private $addressModel;
+    private $quoteAddressFactory;
 
     /**
      * @var CheckCustomerAccount
@@ -40,30 +33,30 @@ class SetShippingAddressOnCart implements SetShippingAddressesOnCartInterface
     private $getCustomerAddress;
 
     /**
-     * @param ShippingAddressManagementInterface $shippingAddressManagement
-     * @param Address $addressModel
+     * @var AssignShippingAddressToCart
+     */
+    private $assignShippingAddressToCart;
+
+    /**
+     * @param QuoteAddressFactory $quoteAddressFactory
      * @param CheckCustomerAccount $checkCustomerAccount
      * @param GetCustomerAddress $getCustomerAddress
+     * @param AssignShippingAddressToCart $assignShippingAddressToCart
      */
     public function __construct(
-        ShippingAddressManagementInterface $shippingAddressManagement,
-        Address $addressModel,
+        QuoteAddressFactory $quoteAddressFactory,
         CheckCustomerAccount $checkCustomerAccount,
-        GetCustomerAddress $getCustomerAddress
+        GetCustomerAddress $getCustomerAddress,
+        AssignShippingAddressToCart $assignShippingAddressToCart
     ) {
-        $this->shippingAddressManagement = $shippingAddressManagement;
-        $this->addressModel = $addressModel;
+        $this->quoteAddressFactory = $quoteAddressFactory;
         $this->checkCustomerAccount = $checkCustomerAccount;
         $this->getCustomerAddress = $getCustomerAddress;
+        $this->assignShippingAddressToCart = $assignShippingAddressToCart;
     }
 
     /**
      * @inheritdoc
-     *
-     * @param ContextInterface $context
-     * @param CartInterface $cart
-     * @param array $shippingAddresses
-     * @throws GraphQlInputException
      */
     public function execute(ContextInterface $context, CartInterface $cart, array $shippingAddresses): void
     {
@@ -81,19 +74,21 @@ class SetShippingAddressOnCart implements SetShippingAddressesOnCartInterface
                 __('The shipping address must contain either "customer_address_id" or "address".')
             );
         }
+
         if ($customerAddressId && $addressInput) {
             throw new GraphQlInputException(
                 __('The shipping address cannot contain "customer_address_id" and "address" at the same time.')
             );
         }
+
         if (null === $customerAddressId) {
-            $shippingAddress = $this->addressModel->addData($addressInput);
+            $shippingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
         } else {
             $this->checkCustomerAccount->execute($context->getUserId(), $context->getUserType());
             $customerAddress = $this->getCustomerAddress->execute((int)$customerAddressId, (int)$context->getUserId());
-            $shippingAddress = $this->addressModel->importCustomerAddressData($customerAddress);
+            $shippingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress($customerAddress);
         }
 
-        $this->shippingAddressManagement->assign($cart->getId(), $shippingAddress);
+        $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
     }
 }
