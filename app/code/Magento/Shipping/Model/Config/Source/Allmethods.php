@@ -82,7 +82,8 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
     }
 
     /**
-     * Get Current Admin store to Display only available methods for store.
+     * Get Current Admin website ID to Display only available methods for website.
+     * Shipping methods cannot have activate option on StoreView level.
      *
      * @return int
      */
@@ -91,11 +92,6 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
         $website = $this->request->getParam('website');
         if ($website) {
             return (int) $website;
-        }
-
-        $store = $this->request->getParam('store');
-        if ($store) {
-            return (int) $store;
         }
 
         return 0;
