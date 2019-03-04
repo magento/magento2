@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DeleteCatalogPriceRuleEntityTest1">
+        <annotations>
+            <stories value="Delete Catalog Price Rule"/>
+            <title value="Delete Catalog Price Rule for Simple Product"/>
+            <description value="Assert that Catalog Price Rule is not applied for simple product"/>
+            <testCaseId value="MC-14073"/>
+            <severity value="CRITICAL"/>
+            <group value="CatalogRule"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer1"/>
+            <createData entity="_defaultCategory" stepKey="createCategory1"/>
+            <createData entity="SimpleProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategory1"/>
+            </createData>
+
+            <createData entity="ActiveCatalogPriceRuleWithConditions" stepKey="createCatalogRule1"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+
+            <deleteData createDataKey="createCustomer1" stepKey="deleteCustomer1"/>
+            <deleteData createDataKey="createProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createCategory1" stepKey="deleteCategoryFirst1"/>
+        </after>
+
+        <!-- delete the simple product and catalog price rule -->
+        <amOnPage url="admin/catalog_rule/promo_catalog/" stepKey="goToPriceRulePage1"/>
+        <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule1">
+            <argument name="name" value="$$createCatalogRule1.name$$"/>
+            <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+
+        <!-- assert that the Success message is present after the delete -->
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
+
+        <!-- assert that the Grid Empty message is present after deleting -->
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage1"/>
+
+        <!-- reindex -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
+
+        <!-- assert that the rule isn't present on the Category page -->
+        <amOnPage url="$$createCategory1.name$$.html" stepKey="goToStorefrontCategoryPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <dontSee selector="{{StorefrontCategoryProductSection.ProductCatalogRulePriceTitleByName($$createProduct1.name$$)}}" userInput="Regular Price" stepKey="dontSeeRegularPriceText1"/>
+        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductCatalogRuleSpecialPriceTitleByName($$createProduct1.name$$)}}" stepKey="dontSeeSpecialPrice1"/>
+
+        <!-- assert that the rule isn't present on the Product page -->
+        <amOnPage url="$$createProduct1.name$$.html" stepKey="goToStorefrontProductPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <dontSee selector="{{StorefrontProductInfoMainSection.oldPriceTag}}" userInput="Regular Price" stepKey="dontSeeRegularPRiceText2"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createProduct1.price$$" stepKey="seeTrueProductPrice1"/>
+
+        <!-- assert that the rule isn't present in the Shopping Cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToShoppingCart1">
+            <argument name="productName" value="$$createProduct1.name$$"/>
+        </actionGroup>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniShoppingCart1"/>
+        <see selector="{{StorefrontMinicartSection.productPriceByName($$createProduct1.name$$)}}" userInput="$$createProduct1.price$$" stepKey="seeCorrectProductPrice1"/>
+
+        <!-- assert that the rule -->
+        <click selector="{{StorefrontMiniCartSection.goToCheckout}}" stepKey="goToCheckout1"/>
+        <conditionalClick selector="{{CheckoutCartSummarySection.expandShoppingCartSummary}}" dependentSelector="{{CheckoutCartSummarySection.expandShoppingCartSummary}}" visible="true" stepKey="expandShoppingCartSummary1"/>
+        <see selector="{{CheckoutCartProductSection.ProductRegularPriceByName($$createProduct1.name$$)}}" userInput="$$createProduct1.price$$" stepKey="seeCorrectProductPriceOnCheckout1"/>
+    </test>
+</tests>
