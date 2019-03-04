@@ -75,7 +75,6 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
         Transparent $transparent,
         SessionManagerInterface $sessionInterface = null,
         Validator $formKeyValidator = null
-
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->sessionTransparent = $sessionTransparent;

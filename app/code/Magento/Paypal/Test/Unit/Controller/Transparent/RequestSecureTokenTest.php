@@ -209,7 +209,7 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @dataProvider executeErrorDataProvider
      */
-    public function testExecuteError($quote, bool $isValidToken): void
+    public function testExecuteError($quote, bool $isValidToken)
     {
         $resultExpectation = [
             'success' => false,
