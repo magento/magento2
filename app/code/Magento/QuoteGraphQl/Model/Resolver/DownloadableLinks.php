@@ -13,8 +13,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Catalog\Model\Product;
-use Magento\Downloadable\Model\Product\Type as Downloadable;
-use Magento\CatalogImportExport\Model\Import\Product\Type\Virtual as Virtual;
 use Magento\Downloadable\Helper\Data as DownloadableHelper;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\GraphQl\Query\EnumLookup;
@@ -86,7 +84,7 @@ class DownloadableLinks implements ResolverInterface
         $product = $quoteItem->getProduct();
 
         $data = null;
-        if (in_array($product->getTypeId(), [Downloadable::TYPE_DOWNLOADABLE, Virtual::TYPE_VIRTUAL_PRODUCT])) {
+        if (in_array($product->getTypeId(), ['downloadable', 'virtual'])) {
             if ($field->getName() === 'downloadable_product_links') {
                 $links = $this->linkFactory->create()->getResourceCollection();
                 $links->addTitleToResult($product->getStoreId())
