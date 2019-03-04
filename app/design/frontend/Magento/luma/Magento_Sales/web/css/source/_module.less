@@ -343,16 +343,22 @@
         }
 
         .product-item-name {
-            display: inline-block;
+            float: left;
+            width: calc(100% - 20px);
         }
-
+        .product-item::after {
+            clear: both;
+            content: '';
+            display: table;
+        }
         .product-item {
             .label {
                 &:extend(.abs-visually-hidden all);
             }
 
             .field.item {
-                display: inline-block;
+                float: left;
+                width: 20px;
             }
         }
     }

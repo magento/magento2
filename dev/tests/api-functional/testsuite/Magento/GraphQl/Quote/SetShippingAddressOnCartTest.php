@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Multishipping\Helper\Data;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
@@ -79,7 +81,7 @@ mutation {
     }
   ) {
     cart {
-      addresses {
+      shipping_addresses {
         firstname
         lastname
         company
@@ -96,8 +98,8 @@ QUERY;
 
         self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
         $cartResponse = $response['setShippingAddressesOnCart']['cart'];
-        self::assertArrayHasKey('addresses', $cartResponse);
-        $shippingAddressResponse = current($cartResponse['addresses']);
+        self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertNewShippingAddressFields($shippingAddressResponse);
     }
 
@@ -126,7 +128,7 @@ mutation {
     }
   ) {
     cart {
-      addresses {
+      shipping_addresses {
         firstname
         lastname
         company
@@ -171,7 +173,7 @@ mutation {
     }
   ) {
     cart {
-      addresses {
+      shipping_addresses {
         firstname
         lastname
         company
@@ -184,6 +186,18 @@ mutation {
   }
 }
 QUERY;
+        /** @var \Magento\Config\Model\ResourceModel\Config $config */
+        $config = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
+        $config->saveConfig(
+            Data::XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE,
+            null,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
+        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
+        $config = ObjectManager::getInstance()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $config->reinit();
+
         self::expectExceptionMessage('You cannot specify multiple shipping addresses.');
         $this->graphQlQuery($query);
     }
@@ -225,7 +239,7 @@ mutation {
     }
   ) {
     cart {
-      addresses {
+      shipping_addresses {
         firstname
         lastname
         company
@@ -267,7 +281,7 @@ mutation {
     }
   ) {
     cart {
-      addresses {
+      shipping_addresses {
         firstname
         lastname
         company
@@ -332,7 +346,7 @@ mutation {
     }
   ) {
     cart {
-      addresses {
+      shipping_addresses {
         firstname
         lastname
         company
@@ -349,8 +363,8 @@ QUERY;
 
         self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
         $cartResponse = $response['setShippingAddressesOnCart']['cart'];
-        self::assertArrayHasKey('addresses', $cartResponse);
-        $shippingAddressResponse = current($cartResponse['addresses']);
+        self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertNewShippingAddressFields($shippingAddressResponse);
     }
 
@@ -390,7 +404,7 @@ mutation {
     }
   ) {
     cart {
-      addresses {
+      shipping_addresses {
         firstname
         lastname
         company
@@ -407,8 +421,8 @@ QUERY;
 
         self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
         $cartResponse = $response['setShippingAddressesOnCart']['cart'];
-        self::assertArrayHasKey('addresses', $cartResponse);
-        $shippingAddressResponse = current($cartResponse['addresses']);
+        self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertSavedShippingAddressFields($shippingAddressResponse);
     }
 
@@ -465,5 +479,23 @@ QUERY;
         $customerToken = $customerTokenService->createCustomerAccessToken($username, $password);
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         return $headerMap;
+    }
+
+    public function tearDown()
+    {
+        /** @var \Magento\Config\Model\ResourceModel\Config $config */
+        $config = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
+
+        //default state of multishipping config
+        $config->saveConfig(
+            Data::XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE,
+            1,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
+
+        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
+        $config = ObjectManager::getInstance()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $config->reinit();
     }
 }
