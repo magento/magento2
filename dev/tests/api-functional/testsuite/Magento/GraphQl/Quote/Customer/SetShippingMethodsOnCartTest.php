@@ -53,58 +53,67 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     public function testShippingMethodWithVirtualProduct()
     {
-
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
     }
 
     public function testShippingMethodWithSimpleProduct()
     {
-
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
     }
 
     public function testShippingMethodWithSimpleProductWithoutAddress()
     {
-
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
     }
 
     public function testSetShippingMethodWithMissedRequiredParameters()
     {
-
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
     }
 
     public function testSetNonExistentShippingMethod()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
     }
 
     public function testSetShippingMethodIfAddressIsNotBelongToCart()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
     }
 
     public function testSetShippingMethodToNonExistentCart()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
     }
 
     public function testSetShippingMethodToGuestCart()
     {
-
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
     }
 
     public function testSetShippingMethodToAnotherCustomerCart()
     {
-
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
     }
 
     public function testSetShippingMethodToNonExistentCartAddress()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
     }
 
     public function testSetShippingMethodToGuestCartAddress()
     {
-
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
     }
 
     public function testSetShippingMethodToAnotherCustomerCartAddress()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
+    }
 
+    public function testSetMultipleShippingMethods()
+    {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
     }
 
     /**

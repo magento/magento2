@@ -104,6 +104,11 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/422');
     }
 
+    public function testSetMultipleShippingMethods()
+    {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/422');
+    }
+
     /**
      * @param string $maskedQuoteId
      * @param string $shippingMethodCode
