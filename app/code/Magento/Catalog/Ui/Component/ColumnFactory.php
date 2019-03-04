@@ -76,6 +76,7 @@ class ColumnFactory
         }
         
         $config['component'] = $this->getJsComponent($config['dataType']);
+        $config['__disableTmpl'] = true;
         
         $arguments = [
             'data' => [
