@@ -35,6 +35,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
      */
     protected function setUp()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/434');
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quote = $objectManager->create(Quote::class);
