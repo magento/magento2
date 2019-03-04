@@ -27,6 +27,14 @@ define([
                     event.preventDefault();
                 });
             });
+            var hashAction = window.location.href.replace(/^.*?(#|$)/, '');
+            if (hashAction) {
+                setTimeout(function () {
+                    $('html, body').animate({
+                        scrollTop: $('#' + hashAction).offset().top - 50
+                    }, 300);
+                }, 100);
+            }
         }).complete(function () {
             if (fromPages == true) { //eslint-disable-line eqeqeq
                 $('html, body').animate({
