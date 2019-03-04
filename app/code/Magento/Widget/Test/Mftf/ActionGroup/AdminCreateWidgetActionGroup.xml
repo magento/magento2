@@ -78,7 +78,6 @@
         <click selector="{{AdminDataGridTableSection.row('1')}}" stepKey="clickSearchedBlock"/>
         <waitForPageLoad stepKey="wait"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveWidget"/>
-        <waitForPageLoad stepKey="waitForSaving"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been saved." stepKey="seeSuccessMessage"/>
     </actionGroup>
 
@@ -87,11 +86,11 @@
             <argument name="product"/>
         </arguments>
         <selectOption selector="{{AdminNewWidgetSection.selectTemplate}}" userInput="{{widget.template}}" after="waitForPageLoad" stepKey="setTemplate"/>
-        <waitForAjaxLoad after="setTemplate" stepKey="waitForPageLoad2"/>
+        <waitForAjaxLoad stepKey="waitForPageLoad2"/>
         <click selector="{{AdminNewWidgetSection.selectProduct}}" after="clickWidgetOptions" stepKey="clickSelectProduct"/>
-        <fillField selector="{{AdminNewWidgetSelectProductPopupSection.filterBySku}}" userInput="{{product.sku}}" after="clickSelectProduct" stepKey="fillProductNameInFilter"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" after="fillProductNameInFilter" stepKey="applyFilter"/>
-        <click selector="{{AdminNewWidgetSelectProductPopupSection.firstRow}}" after="applyFilter" stepKey="selectProduct"/>
+        <fillField selector="{{AdminNewWidgetSelectProductPopupSection.filterBySku}}" userInput="{{product.sku}}" stepKey="fillProductNameInFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="applyFilter"/>
+        <click selector="{{AdminNewWidgetSelectProductPopupSection.firstRow}}" stepKey="selectProduct"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
     </actionGroup>
