@@ -35,6 +35,7 @@ use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav\CompositeConfigProcessor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Framework\App\State;
 
 /**
  * Class Eav
@@ -214,6 +215,11 @@ class Eav extends AbstractModifier
     private $scopeConfig;
 
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
      * Eav constructor.
      * @param LocatorInterface $locator
      * @param CatalogEavValidationRules $catalogEavValidationRules
@@ -237,6 +243,7 @@ class Eav extends AbstractModifier
      * @param CompositeConfigProcessor|null $wysiwygConfigProcessor
      * @param ScopeConfigInterface|null $scopeConfig
      * @param AttributeCollectionFactory $attributeCollectionFactory
+     * @param State $state
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -261,7 +268,8 @@ class Eav extends AbstractModifier
         $attributesToEliminate = [],
         CompositeConfigProcessor $wysiwygConfigProcessor = null,
         ScopeConfigInterface $scopeConfig = null,
-        AttributeCollectionFactory $attributeCollectionFactory = null
+        AttributeCollectionFactory $attributeCollectionFactory = null,
+        State $state = null
     ) {
         $this->locator = $locator;
         $this->catalogEavValidationRules = $catalogEavValidationRules;
@@ -288,6 +296,8 @@ class Eav extends AbstractModifier
         ->get(ScopeConfigInterface::class);
         $this->attributeCollectionFactory = $attributeCollectionFactory
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
+        $this->state = $state ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(State::class);
     }
 
     /**
@@ -676,7 +686,9 @@ class Eav extends AbstractModifier
         // TODO: Refactor to $attribute->getOptions() when MAGETWO-48289 is done
         $attributeModel = $this->getAttributeModel($attribute);
         if ($attributeModel->usesSource()) {
-            $options = $attributeModel->getSource()->getAllOptions();
+            $options = ($this->state->getAreaCode() == \Magento\Framework\App\Area::AREA_ADMINHTML)
+                ? $attributeModel->getSource()->getAllOptions(true, true)
+                : $attributeModel->getSource()->getAllOptions();
             $meta = $this->arrayManager->merge($configPath, $meta, [
                 'options' => $this->convertOptionsValueToString($options),
             ]);
