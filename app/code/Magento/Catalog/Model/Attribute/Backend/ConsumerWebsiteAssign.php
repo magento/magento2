@@ -8,15 +8,15 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Attribute\Backend;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\TemporaryStateExceptionInterface;
 use Magento\Framework\Bulk\OperationInterface;
+use Magento\Framework\EntityManager\EntityManager;
 
 /**
  * Consumer for export message.
  */
-class Consumer
+class ConsumerWebsiteAssign
 {
     /**
      * @var \Psr\Log\LoggerInterface
@@ -27,16 +27,6 @@ class Consumer
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
      */
     private $productFlatIndexerProcessor;
-
-    /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
-     */
-    private $productPriceIndexerProcessor;
-
-    /**
-     * @var \Magento\Catalog\Helper\Product
-     */
-    private $catalogProduct;
 
     /**
      * @var \Magento\Catalog\Model\Product\Action
@@ -52,13 +42,18 @@ class Consumer
      * @var \Magento\Framework\Bulk\OperationManagementInterface
      */
     private $operationManagement;
+
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     */
+    private $productPriceIndexerProcessor;
+
     /**
      * @var EntityManager
      */
     private $entityManager;
 
     /**
-     * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param \Magento\Framework\Bulk\OperationManagementInterface $operationManagement
@@ -68,7 +63,6 @@ class Consumer
      * @param EntityManager $entityManager
      */
     public function __construct(
-        \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         \Magento\Framework\Bulk\OperationManagementInterface $operationManagement,
@@ -77,13 +71,12 @@ class Consumer
         \Magento\Framework\Serialize\SerializerInterface $serializer,
         EntityManager $entityManager
     ) {
-        $this->catalogProduct = $catalogProduct;
         $this->productFlatIndexerProcessor = $productFlatIndexerProcessor;
-        $this->productPriceIndexerProcessor = $productPriceIndexerProcessor;
         $this->productAction = $action;
         $this->logger = $logger;
         $this->serializer = $serializer;
         $this->operationManagement = $operationManagement;
+        $this->productPriceIndexerProcessor = $productPriceIndexerProcessor;
         $this->entityManager = $entityManager;
     }
 
@@ -97,7 +90,6 @@ class Consumer
             $serializedData = $operation->getSerializedData();
             $data = $this->serializer->unserialize($serializedData);
             $this->execute($data);
-
         } catch (\Zend_Db_Adapter_Exception  $e) {
             //here sample how to process exceptions if they occurred
             $this->logger->critical($e->getMessage());
@@ -142,15 +134,28 @@ class Consumer
     }
 
     /**
+     * @param $productIds
+     * @param $websiteRemoveData
+     * @param $websiteAddData
+     */
+    private function updateWebsiteInProducts($productIds, $websiteRemoveData, $websiteAddData): void
+    {
+        if ($websiteRemoveData) {
+            $this->productAction->updateWebsites($productIds, $websiteRemoveData, 'remove');
+        }
+        if ($websiteAddData) {
+            $this->productAction->updateWebsites($productIds, $websiteAddData, 'add');
+        }
+    }
+
+
+    /**
      * @param $data
      */
     private function execute($data): void
     {
-        $this->productAction->updateAttributes($data['product_ids'], $data['attributes'], $data['store_id']);
-        if ($this->catalogProduct->isDataForPriceIndexerWasChanged($data['attributes'])) {
-            $this->productPriceIndexerProcessor->reindexList($data['product_ids']);
-        }
-
+        $this->updateWebsiteInProducts($data['product_ids'], $data['attributes']['website_detach'], $data['attributes']['website_assign']);
+        $this->productPriceIndexerProcessor->reindexList($data['product_ids']);
         $this->productFlatIndexerProcessor->reindexList($data['product_ids']);
     }
 }

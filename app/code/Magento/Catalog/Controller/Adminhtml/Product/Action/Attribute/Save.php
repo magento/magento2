@@ -6,8 +6,11 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
+use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Save
@@ -40,6 +43,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     private $userContext;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Framework\Bulk\BulkManagementInterface $bulkManagement
@@ -63,6 +71,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $this->identityService = $identityService;
         $this->serializer = $serializer;
         $this->userContext = $userContext;
+        $this->objectManager = ObjectManager::getInstance();
     }
 
     /**
@@ -78,17 +87,16 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
 
         /* Collect Data */
         $attributesData = $this->getRequest()->getParam('attributes', []);
-
         $websiteRemoveData = $this->getRequest()->getParam('remove_website_ids', []);
         $websiteAddData = $this->getRequest()->getParam('add_website_ids', []);
-
         $storeId = $this->attributeHelper->getSelectedStoreId();
         $websiteId = $this->attributeHelper->getStoreWebsiteId($storeId);
-
         $productIds = $this->attributeHelper->getProductIds();
 
+        $attributesData = $this->sanitizeProductAttributes($attributesData);
+
         try {
-            $this->publish('product_action_attribute.update', $attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds);
+            $this->publish($attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds);
             $this->messageManager->addSuccessMessage(__('Message is added to queue'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
@@ -99,16 +107,50 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             );
         }
 
-        return $this->resultRedirectFactory->create()->setPath(
-            'catalog/product/',
-            ['store' => $storeId]
-        );
+        return $this->resultRedirectFactory->create()->setPath('catalog/product/', ['store' => $storeId]);
+    }
+
+    private function sanitizeProductAttributes($attributesData)
+    {
+        $dateFormat = $this->objectManager->get(TimezoneInterface::class)->getDateFormat(\IntlDateFormatter::SHORT);
+        $config = $this->objectManager->get(\Magento\Eav\Model\Config::class);
+
+        foreach ($attributesData as $attributeCode => $value) {
+            $attribute = $config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
+            if (!$attribute->getAttributeId()) {
+                unset($attributesData[$attributeCode]);
+                continue;
+            }
+            if ($attribute->getBackendType() === 'datetime') {
+                if (!empty($value)) {
+                    $filterInput = new \Zend_Filter_LocalizedToNormalized(['date_format' => $dateFormat]);
+                    $filterInternal = new \Zend_Filter_NormalizedToLocalized(
+                        ['date_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT]
+                    );
+                    $value = $filterInternal->filter($filterInput->filter($value));
+                } else {
+                    $value = null;
+                }
+                $attributesData[$attributeCode] = $value;
+            } elseif ($attribute->getFrontendInput() === 'multiselect') {
+                // Check if 'Change' checkbox has been checked by admin for this attribute
+                $isChanged = (bool)$this->getRequest()->getPost('toggle_' . $attributeCode);
+                if (!$isChanged) {
+                    unset($attributesData[$attributeCode]);
+                    continue;
+                }
+                if (is_array($value)) {
+                    $value = implode(',', $value);
+                }
+                $attributesData[$attributeCode] = $value;
+            }
+        }
+        return $attributesData;
     }
 
     /**
      * Schedule new bulk.
      *
-     * @param $queue
      * @param $attributesData
      * @param $websiteRemoveData
      * @param $websiteAddData
@@ -117,44 +159,61 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param $productIds
      * @return void
      */
-    private function publish($queue, $attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds):void
+    private function publish($attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds):void
     {
-        $operationCount = count($productIds);
-        if ($operationCount > 0) {
-            $bulkUuid = $this->identityService->generateId();
-            $bulkDescription = __('Assign custom prices to selected products');
-            $operations = [];
-            foreach ($productIds as $productId) {
-                $dataToEncode = [
-                    'meta_information' => 'ID:' . $productId,
-                    'product_id' => $productId,
-                    'store_id' => $storeId,
-                    'website_id' => $websiteId,
-                    'website_assign' => $websiteAddData,
-                    'website_detach' => $websiteRemoveData,
-                    'attributes' => $attributesData
-                ];
-                $data = [
-                    'data' => [
-                        'bulk_uuid' => $bulkUuid,
-                        'topic_name' => $queue,
-                        'serialized_data' => $this->serializer->serialize($dataToEncode),
-                        'status' => \Magento\Framework\Bulk\OperationInterface::STATUS_TYPE_OPEN,
-                    ]
-                ];
+        $bulkUuid = $this->identityService->generateId();
+        $bulkDescription = __('Update attributes to selected products');
+        $operations = [];
+        if ($websiteRemoveData || $websiteAddData) {
+            $dataToUpdate = [
+                'website_assign' => $websiteAddData,
+                'website_detach' => $websiteRemoveData
+            ];
 
-                /** @var \Magento\AsynchronousOperations\Api\Data\OperationInterface $operation */
-                $operation = $this->operationFactory->create($data);
-                $operations[] = $operation;
-            }
-            $userId = $this->userContext->getUserId();
-            $result = $this->bulkManagement->scheduleBulk($bulkUuid, $operations, $bulkDescription, $userId);
-            if (!$result) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Something went wrong while processing the request.')
-                );
-            }
+            $operations[] = $this->makeOperation('Update website assign', 'product_action_attribute.website.update', $dataToUpdate, $storeId, $websiteId, $productIds, $bulkUuid);
         }
+
+        if ($attributesData) {
+            $operations[] = $this->makeOperation('Update product attributes', 'product_action_attribute.update', $attributesData, $storeId, $websiteId, $productIds, $bulkUuid);
+        }
+
+        $result = $this->bulkManagement->scheduleBulk($bulkUuid, $operations, $bulkDescription, $this->userContext->getUserId());
+        if (!$result) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Something went wrong while processing the request.')
+            );
+        }
+    }
+
+    /**
+     * @param $meta
+     * @param $queue
+     * @param $dataToUpdate
+     * @param $storeId
+     * @param $websiteId
+     * @param $productIds
+     * @param $bulkUuid
+     * @return OperationInterface
+     */
+    private function makeOperation($meta, $queue, $dataToUpdate, $storeId, $websiteId, $productIds, $bulkUuid): OperationInterface
+    {
+        $dataToEncode = [
+            'meta_information' => $meta,
+            'product_ids' => $productIds,
+            'store_id' => $storeId,
+            'website_id' => $websiteId,
+            'attributes' => $dataToUpdate
+        ];
+        $data = [
+            'data' => [
+                'bulk_uuid' => $bulkUuid,
+                'topic_name' => $queue,
+                'serialized_data' => $this->serializer->serialize($dataToEncode),
+                'status' => \Magento\Framework\Bulk\OperationInterface::STATUS_TYPE_OPEN,
+            ]
+        ];
+
+        return $this->operationFactory->create($data);
     }
 
 }
