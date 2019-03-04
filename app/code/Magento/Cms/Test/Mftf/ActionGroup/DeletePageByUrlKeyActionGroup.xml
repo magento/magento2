@@ -6,18 +6,22 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="DeletePageByUrlKeyActionGroup">
         <arguments>
             <argument name="urlKey" type="string"/>
         </arguments>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnCMSPagesIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForPageLoad time="30" stepKey="waitForCmsPageListingLoaded"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFiltersBeforeDelete"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openCmsPageFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('identifier')}}" userInput="{{urlKey}}" stepKey="fillFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
         <click selector="{{CmsPagesPageActionsSection.select(urlKey)}}" stepKey="clickSelect"/>
         <click selector="{{CmsPagesPageActionsSection.delete(urlKey)}}" stepKey="clickDelete"/>
-        <waitForElementVisible selector="{{CmsPagesPageActionsSection.deleteConfirm}}" stepKey="waitForOkButtonToBeVisible"/>
-        <click selector="{{CmsPagesPageActionsSection.deleteConfirm}}" stepKey="clickOkButton"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
-        <see userInput="The page has been deleted." stepKey="seeSuccessMessage"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForOkButtonToBeVisible"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOkButton"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The page has been deleted." stepKey="seeSuccessMessage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFiltersAfterDelete"/>
     </actionGroup>
 </actionGroups>
