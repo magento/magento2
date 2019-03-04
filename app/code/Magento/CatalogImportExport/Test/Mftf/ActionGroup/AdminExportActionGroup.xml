@@ -10,10 +10,10 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
 
     <!-- Export products using filtering by attribute -->
-    <actionGroup name="fillFilterExport">
+    <actionGroup name="exportProductsFilterByAttribute">
         <arguments>
-            <argument name="attribute"/>
-            <argument name="attributeData"/>
+            <argument name="attribute" type="string"/>
+            <argument name="attributeData" type="string"/>
         </arguments>
         <selectOption selector="{{AdminExportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
         <waitForElementVisible selector="{{AdminExportMainSection.entityAttributes}}" stepKey="waitForElementVisible"/>
@@ -38,19 +38,25 @@
     </actionGroup>
 
     <!-- Download first file in the grid -->
-    <actionGroup name="downloadProduct">
+    <actionGroup name="downloadFileByRowIndex">
+        <arguments>
+            <argument name="rowIndex" type="string"/>
+        </arguments>
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitFormReload"/>
-        <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByIndex('0')}}"/>
-        <click stepKey="clickOnDownload" selector="{{AdminExportAttributeSection.download('0')}}" after="clickSelectBtn"/>
+        <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByIndex(rowIndex)}}"/>
+        <click stepKey="clickOnDownload" selector="{{AdminExportAttributeSection.download(rowIndex)}}" after="clickSelectBtn"/>
     </actionGroup>
 
     <!-- Delete exported file -->
     <actionGroup name="deleteExportedFile">
+        <arguments>
+            <argument name="rowIndex" type="string"/>
+        </arguments>
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitFormReload"/>
-        <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByIndex('0')}}"/>
-        <click stepKey="clickOnDownload" selector="{{AdminExportAttributeSection.delete('0')}}" after="clickSelectBtn"/>
+        <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByIndex(rowIndex)}}"/>
+        <click stepKey="clickOnDownload" selector="{{AdminExportAttributeSection.delete(rowIndex)}}" after="clickSelectBtn"/>
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>

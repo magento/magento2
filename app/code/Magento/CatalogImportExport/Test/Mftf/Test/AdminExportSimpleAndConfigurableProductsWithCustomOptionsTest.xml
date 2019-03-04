@@ -82,7 +82,9 @@
         </before>
         <after>
             <!-- Delete exported file -->
-            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile"/>
+            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
+                <argument name="rowIndex" value="0"/>
+            </actionGroup>
 
             <!-- Delete configurable product creation -->
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
@@ -100,12 +102,14 @@
         <waitForPageLoad stepKey="waitForExportIndexPageLoad"/>
 
         <!-- Fill entity attributes data -->
-        <actionGroup ref="fillFilterExport" stepKey="exportProductBySku">
+        <actionGroup ref="exportProductsFilterByAttribute" stepKey="exportProductBySku">
             <argument name="attribute" value="sku"/>
             <argument name="attributeData" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
 
         <!-- Download product -->
-        <actionGroup ref="downloadProduct" stepKey="downloadCreatedProducts"/>
+        <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
     </test>
 </tests>

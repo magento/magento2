@@ -89,7 +89,9 @@
         </before>
         <after>
             <!-- Delete exported file -->
-            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile"/>
+            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
+                <argument name="rowIndex" value="0"/>
+            </actionGroup>
 
             <!-- Delete products creations -->
             <deleteData createDataKey="createDynamicBundleProduct" stepKey="deleteDynamicBundleProduct"/>
@@ -109,12 +111,13 @@
 
         <!-- Go to export page -->
         <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
-        <waitForPageLoad stepKey="waitForExportIndexPageLoad" time="10"/>
 
         <!-- Export created below products -->
         <actionGroup ref="exportAllProducts" stepKey="exportCreatedProducts"/>
 
         <!-- Download product -->
-        <actionGroup ref="downloadProduct" stepKey="downloadCreatedProducts"/>
+        <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
     </test>
 </tests>

@@ -80,7 +80,9 @@
         </before>
         <after>
             <!-- Delete exported file -->
-            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile"/>
+            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
+                <argument name="rowIndex" value="0"/>
+            </actionGroup>
 
             <!-- Delete simple product -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
@@ -104,6 +106,8 @@
         <actionGroup ref="exportAllProducts" stepKey="exportCreatedProducts"/>
 
         <!-- Download product -->
-        <actionGroup ref="downloadProduct" stepKey="downloadCreatedProducts"/>
+        <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
     </test>
 </tests>
