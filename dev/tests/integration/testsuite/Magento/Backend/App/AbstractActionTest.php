@@ -56,10 +56,16 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
             'form_key' => $formKey->getFormKey(),
         ];
 
-        $this->getRequest()->setPostValue($postLogin);
-        $this->dispatch('backend/admin/system_account/index');
+        /** @var \Magento\Framework\App\RequestInterface $request */
+        $request = $this->getRequest();
 
+        $request->setDispatched(false);
+        $request->setPostValue($postLogin);
+
+        /** @var string $expected */
         $expected = 'backend/admin/system_account/index';
+
+        $this->dispatch($expected);
         $this->assertRedirect($this->stringContains($expected));
     }
 

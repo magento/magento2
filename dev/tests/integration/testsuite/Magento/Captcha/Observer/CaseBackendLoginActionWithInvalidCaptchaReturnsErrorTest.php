@@ -36,7 +36,12 @@ class CaseBackendLoginActionWithInvalidCaptchaReturnsErrorTest extends AbstractC
             'captcha' => ['backend_login' => 'some_unrealistic_captcha_value'],
             'form_key' => $formKey->getFormKey(),
         ];
-        $this->getRequest()->setPostValue($post);
+
+        /** @var \Magento\Framework\App\RequestInterface $request */
+        $request = $this->getRequest();
+
+        $request->setDispatched(false);
+        $request->setPostValue($post);
         $this->dispatch('backend/admin');
         $this->assertSessionMessages($this->equalTo([(string)__('Incorrect CAPTCHA.')]), MessageInterface::TYPE_ERROR);
         $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

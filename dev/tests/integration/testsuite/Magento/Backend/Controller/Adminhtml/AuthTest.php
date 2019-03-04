@@ -105,7 +105,12 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
-        $this->getRequest()->setPostValue(
+
+        /** @var \Magento\Framework\App\RequestInterface $request */
+        $request = $this->getRequest();
+
+        $request->setDispatched(false);
+        $request->setPostValue(
             [
                 'login' => [
                     'username' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
@@ -197,7 +202,12 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
         $params['form_key'] = $formKey->getFormKey();
-        $this->getRequest()->setPostValue($params);
+
+        /** @var \Magento\Framework\App\RequestInterface $request */
+        $request = $this->getRequest();
+
+        $request->setDispatched(false);
+        $request->setPostValue($params);
         $this->dispatch('backend/admin/auth/login');
         $this->assertSessionMessages(
             $this->equalTo(
