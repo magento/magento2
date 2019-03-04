@@ -16,8 +16,6 @@ use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\Cart\SetShippingMethodOnCart;
 
 /**
- * Class SetShippingMethodsOnCart
- *
  * Mutation resolver for setting shipping methods for shopping cart
  */
 class SetShippingMethodsOnCart implements ResolverInterface
@@ -69,13 +67,13 @@ class SetShippingMethodsOnCart implements ResolverInterface
 
         $shippingMethod = reset($shippingMethods); // This point can be extended for multishipping
 
-        if (!$shippingMethod['cart_address_id']) {
+        if (!isset($shippingMethod['cart_address_id']) || empty($shippingMethod['cart_address_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_address_id" is missing'));
         }
-        if (!$shippingMethod['shipping_carrier_code']) {
+        if (!isset($shippingMethod['carrier_code']) || empty($shippingMethod['carrier_code'])) {
             throw new GraphQlInputException(__('Required parameter "shipping_carrier_code" is missing'));
         }
-        if (!$shippingMethod['shipping_method_code']) {
+        if (!isset($shippingMethod['method_code']) || empty($shippingMethod['method_code'])) {
             throw new GraphQlInputException(__('Required parameter "shipping_method_code" is missing'));
         }
 
@@ -85,15 +83,14 @@ class SetShippingMethodsOnCart implements ResolverInterface
         $this->setShippingMethodOnCart->execute(
             $cart,
             $shippingMethod['cart_address_id'],
-            $shippingMethod['shipping_carrier_code'],
-            $shippingMethod['shipping_method_code']
+            $shippingMethod['carrier_code'],
+            $shippingMethod['method_code']
         );
 
         return [
             'cart' => [
-                'cart_id' => $maskedCartId,
-                'model' => $cart
-            ]
+                'model' => $cart,
+            ],
         ];
     }
 }
