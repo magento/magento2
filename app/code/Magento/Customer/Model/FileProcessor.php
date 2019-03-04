@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\Model;
 
+/**
+ * Processor class for work with uploaded files
+ */
 class FileProcessor
 {
     /**
@@ -232,7 +235,7 @@ class FileProcessor
             );
         }
 
-        $fileName = $dispersionPath . '/' . $fileName;
+        $fileName = $dispersionPath . '/' . $destinationFileName;
         return $fileName;
     }
 
