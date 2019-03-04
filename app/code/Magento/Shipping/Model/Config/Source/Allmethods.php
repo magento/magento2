@@ -29,16 +29,17 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
-     * @param RequestInterface $request
+     * @param RequestInterface|null $request
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Shipping\Model\Config $shippingConfig,
-        RequestInterface $request
+        RequestInterface $request = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_shippingConfig = $shippingConfig;
-        $this->request = $request;
+        $this->request = $request ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(RequestInterface::class);
     }
 
     /**
@@ -85,7 +86,7 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
      *
      * @return int
      */
-    protected function getAdminStoreId()
+    private function getAdminStoreId()
     {
         $website = $this->request->getParam('website');
         if ($website) {
