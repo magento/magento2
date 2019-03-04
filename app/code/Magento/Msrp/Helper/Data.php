@@ -16,6 +16,8 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Msrp data helper
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Data extends AbstractHelper
 {
