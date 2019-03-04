@@ -206,7 +206,6 @@ QUERY;
         /**
          * @var ProductRepositoryInterface $productRepository
          */
-
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
 
