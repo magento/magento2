@@ -26,7 +26,6 @@
         <waitForPageLoad stepKey="waitForSuccessMessage"/>
         <see userInput="You deleted the store view." stepKey="seeDeleteMessage"/>
     </actionGroup>
-    <!--AssertStoreSuccessDeleteAndBackupMessages-->
     <actionGroup name="DeleteCustomStoreViewBackupEnabledYesActionGroup">
         <arguments>
             <argument name="storeViewName" type="string"/>
@@ -46,7 +45,6 @@
         <see selector="{{AdminStoresGridSection.successMessage}}" userInput="The database was backed up." stepKey="seeAssertDatabaseBackedUpMessage"/>
         <see selector="{{AdminStoresGridSection.successMessage}}" userInput="You deleted the store view." stepKey="seeAssertSuccessDeleteStoreViewMessage"/>
     </actionGroup>
-    <!--AssertStoreViewNotInGrid-->
     <actionGroup name="AssertStoreViewNotInGrid">
         <arguments>
             <argument name="storeViewName" type="string"/>
