@@ -8,8 +8,6 @@ namespace Magento\Config\Controller\Adminhtml\System\Config;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\State;
 
 /**
  * System Configuration Save Controller
@@ -37,18 +35,12 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     protected $string;
 
     /**
-     * @var State
-     */
-    private $appState;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Config\Model\Config\Structure $configStructure
      * @param \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Config\Model\Config\Factory $configFactory
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param State|null $appState
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -56,14 +48,12 @@ class Save extends AbstractConfig implements HttpPostActionInterface
         \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker,
         \Magento\Config\Model\Config\Factory $configFactory,
         \Magento\Framework\Cache\FrontendInterface $cache,
-        \Magento\Framework\Stdlib\StringUtils $string,
-        ?State $appState = null
+        \Magento\Framework\Stdlib\StringUtils $string
     ) {
         parent::__construct($context, $configStructure, $sectionChecker);
         $this->_configFactory = $configFactory;
         $this->_cache = $cache;
         $this->string = $string;
-        $this->appState = $appState ?? ObjectManager::getInstance()->get(State::class);
     }
 
     /**
@@ -259,10 +249,6 @@ class Save extends AbstractConfig implements HttpPostActionInterface
      */
     private function filterNodes(array $configData): array
     {
-        if ($this->appState->getMode() !== State::MODE_PRODUCTION) {
-            return $configData;
-        }
-
         $systemXmlPathsFromKeys = array_keys($this->_configStructure->getFieldPaths());
         $systemXmlPathsFromValues = array_reduce(
             array_values($this->_configStructure->getFieldPaths()),

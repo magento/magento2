@@ -8,10 +8,8 @@ namespace Magento\Config\Controller\Adminhtml\System;
 
 use Magento\Config\Controller\Adminhtml\System\Config\Save;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\State;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\TestFramework\ObjectManager;
 
 /**
  * @magentoAppArea adminhtml
@@ -93,11 +91,8 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         ]);
         $request->setParam('section', 'web');
         $request->setMethod(HttpRequest::METHOD_POST);
-        /** @var ObjectManager $objectManager */
-        $objectManager = Bootstrap::getObjectManager();
-        $appState = $objectManager->create(State::class, ['mode' => State::MODE_PRODUCTION]);
         /** @var Save $controller */
-        $controller = $objectManager->create(Save::class, ['appState' => $appState]);
+        $controller = Bootstrap::getObjectManager()->create(Save::class);
         $controller->execute();
 
         $this->assertSessionMessages($this->equalTo(['You saved the configuration.']));
