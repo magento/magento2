@@ -214,6 +214,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
         $flippedXmlConfig = array_flip($systemXmlConfig);
         $filtered = [];
         foreach ($groups as $groupName => $childPaths) {
+            $filtered[$groupName] = ['fields' => [], 'groups' => []];
             //Processing fields
             if (array_key_exists('fields', $childPaths)) {
                 foreach ($childPaths['fields'] as $field => $fieldData) {
@@ -228,9 +229,6 @@ class Save extends AbstractConfig implements HttpPostActionInterface
                     }
                     //Checking whether it exists in system.xml
                     if (array_key_exists($path, $flippedXmlConfig)) {
-                        if (!array_key_exists($groupName, $filtered)) {
-                            $filtered[$groupName] = ['fields' => []];
-                        }
                         $filtered[$groupName]['fields'][$field] = $fieldData;
                     }
                 }
@@ -243,15 +241,14 @@ class Save extends AbstractConfig implements HttpPostActionInterface
                     $systemXmlConfig
                 );
                 if ($filteredGroups) {
-                    if (!array_key_exists($groupName, $filtered)) {
-                        $filtered[$groupName] = [];
-                    }
                     $filtered[$groupName]['groups'] = $filteredGroups;
                 }
             }
+
+            $filtered[$groupName] = array_filter($filtered[$groupName]);
         }
 
-        return $filtered;
+        return array_filter($filtered);
     }
 
     /**
