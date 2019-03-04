@@ -75,7 +75,9 @@ mutation {
     }
   ) {
     cart {
-      cart_id
+      items {
+        qty
+      }
     }
   }
 }

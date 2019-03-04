@@ -78,14 +78,6 @@ type SetShippingMethodsOnCartOutput {
     cart: Cart!
 }
 
-# If no address is provided, the system get address assigned to a quote
-# If there's no address at all - the system returns all shipping methods
-input AvailableShippingMethodsOnCartInput {
-    cart_id: String!
-    customer_address_id: Int
-    address: CartAddressInput
-}
-
 input ApplyCouponToCartInput {
     cart_id: String!
     coupon_code: String!
@@ -119,7 +111,7 @@ type CartAddress {
 }
 
 type CartItemQuantity {
-    cart_item_id: String!
+    cart_item_id: Int!
     quantity: Float!
 }
 
@@ -142,11 +134,7 @@ type AvailableShippingMethod {
     carrier_title: String!
     method_code: String!
     method_title: String!
-    error_message: String
     amount: Float!
-    base_amount: Float!
-    price_excl_tax: Float!
-    price_incl_tax: Float!
 }
 
 enum AdressTypeEnum {
@@ -221,9 +209,4 @@ type CartItemSelectedOptionValuePrice {
     value: Float!
     units: String!
     type: PriceTypeEnum!
-}
-
-input CartItemDetailsInput {
-    sku: String!
-    qty: Float!
 }
