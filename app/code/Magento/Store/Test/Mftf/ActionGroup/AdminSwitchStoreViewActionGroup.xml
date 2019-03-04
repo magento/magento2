@@ -9,7 +9,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSwitchBaseActionGroup">
         <arguments>
-            <argument name="scopeName" type="string" defaultValue="customStore.name"/>
+            <argument name="scopeName" defaultValue="customStore.name"/>
         </arguments>
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="clickScopeSwitchDropdown"/>
