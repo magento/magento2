@@ -19,6 +19,6 @@
         <element name="countryInput" type="input" selector="select[name=country_id]"/>
         <element name="telephoneInput" type="input" selector="input[name=telephone]"/>
         <element name="applyFilter" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
-        <element name="clearAll" type="button" selector=".admin__data-grid-header .action-tertiary.action-clear"/>
+        <element name="clearAll" type="button" selector=".admin__data-grid-header .action-tertiary.action-clear" timeout="30"/>
     </section>
 </sections>

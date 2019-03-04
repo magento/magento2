@@ -330,6 +330,19 @@
                 padding-right: 0;
             }
 
+            &:hover {
+                &:after {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 100%;
+                    width: 10px;
+                    height: calc(100% + 3px);
+                    z-index: 1;
+                }
+            }
+
             > .level-top {
                 .lib-css(background, @_nav-level0-item-background-color);
                 .lib-css(border, @_nav-level0-item-border);
@@ -407,6 +420,17 @@
                     @_size: @_submenu-arrow-size,
                     @_left: @_submenu-arrow-left
                 );
+
+                &:before {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    width: 100%;
+                    height: 4px;
+                    left: 0;
+                    top: -4px;
+                    z-index: 1;
+                }
 
                 a {
                     display: block;
