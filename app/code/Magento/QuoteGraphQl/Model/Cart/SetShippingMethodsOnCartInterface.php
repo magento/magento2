@@ -15,24 +15,24 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
 
 /**
- * Extension point for setting shipping addresses for a specified shopping cart
+ * Extension point for setting shipping methods for a specified shopping cart
  *
- * All objects that are responsible for setting shipping addresses on a cart via GraphQl
+ * All objects that are responsible for setting shipping methods on a cart via GraphQl
  * should implement this interface.
  */
-interface SetShippingAddressesOnCartInterface
+interface SetShippingMethodsOnCartInterface
 {
     /**
-     * Set shipping addresses for a specified shopping cart
+     * Set shipping methods for a specified shopping cart
      *
      * @param ContextInterface $context
      * @param CartInterface $cart
-     * @param array $shippingAddressesInput
+     * @param array $shippingMethodsInput
      * @return void
      * @throws GraphQlInputException
      * @throws GraphQlAuthorizationException
      * @throws GraphQlAuthenticationException
      * @throws GraphQlNoSuchEntityException
      */
-    public function execute(ContextInterface $context, CartInterface $cart, array $shippingAddressesInput): void;
+    public function execute(ContextInterface $context, CartInterface $cart, array $shippingMethodsInput): void;
 }

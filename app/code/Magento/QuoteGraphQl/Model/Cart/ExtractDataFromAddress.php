@@ -52,12 +52,6 @@ class ExtractDataFromAddress
                 'label' => $address->getRegion()
             ],
             'street' => $address->getStreet(),
-            'selected_shipping_method' => [
-                'code' => $address->getShippingMethod(),
-                'label' => $address->getShippingDescription(),
-                'free_shipping' => $address->getFreeShipping(),
-                'amount' => $address->getShippingAmount()
-            ],
             'items_weight' => $address->getWeight(),
             'customer_notes' => $address->getCustomerNotes()
         ]);
