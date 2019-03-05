@@ -52,6 +52,10 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
+            <!-- Reset Product filter -->
+
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
+
             <!-- Delete Store View EN -->
 
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView1">
