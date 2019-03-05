@@ -17,6 +17,7 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessDeleteMessage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotInGrid" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage" />
