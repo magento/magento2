@@ -154,11 +154,11 @@ class AddSimpleProductToCart
     {
         $downloadableLinks = $this->arrayManager->get('downloadable_product_links', $cartItemData, []);
 
-        $downloadableLinksData = [];
+        $linksData = [];
         foreach ($downloadableLinks as $downloadableLink) {
-            $downloadableLinksData[] = strval($downloadableLink['link_id']);
+            $linksData[] = (string)$downloadableLink['link_id'];
         }
-        return $downloadableLinksData;
+        return $linksData;
     }
 
     /**

@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
@@ -34,14 +33,19 @@ class AddDownloadableProductToCartTest extends GraphQlAbstract
     private $quoteIdToMaskedId;
 
     /**
+     * @var \Magento\TestFramework\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quote = $objectManager->create(Quote::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->quoteResource = $this->objectManager->get(QuoteResource::class);
+        $this->quote = $this->objectManager->create(Quote::class);
+        $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
     }
 
     /**
@@ -175,8 +179,7 @@ MUTATION;
     private function getProductsLinks($sku = '')
     {
         $result = [];
-        $productRepository = Bootstrap::getObjectManager()
-            ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
         $product = $productRepository->get($sku, false, null, true);
 
