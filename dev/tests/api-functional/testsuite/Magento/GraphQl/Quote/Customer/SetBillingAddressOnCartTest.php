@@ -177,7 +177,7 @@ QUERY;
         self::assertArrayHasKey('shipping_addresses', $cartResponse);
         $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertNewAddressFields($billingAddressResponse);
-        $this->assertNewAddressFields($shippingAddressResponse, 'shipping');
+        $this->assertNewAddressFields($shippingAddressResponse, 'SHIPPING');
     }
 
     /**
@@ -409,7 +409,7 @@ QUERY;
      * @param array $addressResponse
      * @param string $addressType
      */
-    private function assertNewAddressFields(array $addressResponse, string $addressType = 'billing'): void
+    private function assertNewAddressFields(array $addressResponse, string $addressType = 'BILLING'): void
     {
         $assertionMap = [
             ['response_field' => 'firstname', 'expected_value' => 'test firstname'],
