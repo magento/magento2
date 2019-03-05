@@ -11,6 +11,9 @@ define([
 
     return Abstract.extend({
         defaults: {
+            listens: {
+                isConfigurable: 'handlePriceValue'
+            },
             imports: {
                 isConfigurable: '!ns = ${ $.ns }, index = configurable-matrix:isEmpty'
             },
@@ -24,10 +27,6 @@ define([
             this._super();
             // resolve initial disable state
             this.handlePriceValue(this.isConfigurable);
-            // add listener to track "configurable" type
-            this.setListeners({
-                isConfigurable: 'handlePriceValue'
-            });
 
             return this;
         },
