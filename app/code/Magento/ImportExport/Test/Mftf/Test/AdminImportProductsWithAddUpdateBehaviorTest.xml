@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-47724"/>
             <group value="importExport"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <!-- Create Simple Product1 -->
