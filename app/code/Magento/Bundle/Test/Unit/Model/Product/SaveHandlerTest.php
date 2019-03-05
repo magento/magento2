@@ -150,7 +150,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     {
         $productType = 'bundle';
         $productSku = 'product-sku';
-        $optionId = '';
+        $optionId = null;
 
         $this->productMock->expects($this->once())
             ->method('getExtensionAttributes')
