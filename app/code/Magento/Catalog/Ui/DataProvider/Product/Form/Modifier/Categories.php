@@ -310,12 +310,14 @@ class Categories extends AbstractModifier
      */
     protected function getCategoriesTree($filter = null)
     {
-        $categoryTree = $this->getCacheManager()->load(self::CATEGORY_TREE_ID . '_' . $filter);
+        $storeId = $this->locator->getStore()->getId();
+        $cacheKey = self::CATEGORY_TREE_ID . '_' . $storeId . '_' . $filter;
+
+        $categoryTree = $this->getCacheManager()->load($cacheKey);
         if ($categoryTree) {
             return $this->serializer->unserialize($categoryTree);
         }
 
-        $storeId = $this->locator->getStore()->getId();
         /* @var $matchingNamesCollection \Magento\Catalog\Model\ResourceModel\Category\Collection */
         $matchingNamesCollection = $this->categoryCollectionFactory->create();
 
@@ -367,7 +369,7 @@ class Categories extends AbstractModifier
 
         $this->getCacheManager()->save(
             $this->serializer->serialize($categoryById[CategoryModel::TREE_ROOT_ID]['optgroup']),
-            self::CATEGORY_TREE_ID . '_' . $filter,
+            $cacheKey,
             [
                 \Magento\Catalog\Model\Category::CACHE_TAG,
                 \Magento\Framework\App\Cache\Type\Block::CACHE_TAG
