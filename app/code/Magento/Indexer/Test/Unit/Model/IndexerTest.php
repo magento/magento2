@@ -164,11 +164,11 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
                 }
             }
         } else {
-            $actualGetLatestUpdated = $this->model->getLatestUpdated();
-            $this->assertEquals($getStateGetUpdated, $actualGetLatestUpdated);
+            $getLatestUpdated = $this->model->getLatestUpdated();
+            $this->assertEquals($getStateGetUpdated, $getLatestUpdated);
 
             if ($getStateGetUpdated === null) {
-                $this->assertNotNull($actualGetLatestUpdated);
+                $this->assertNotNull($getLatestUpdated);
             }
         }
     }
