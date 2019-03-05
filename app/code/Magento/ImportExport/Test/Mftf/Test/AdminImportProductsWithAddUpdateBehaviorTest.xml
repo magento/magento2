@@ -48,7 +48,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
-       </before>
+        </before>
         <after>
             <!-- Delete all products that replaced products in the before block post import -->
             <deleteData stepKey="deleteSimpleProduct1" url="/V1/products/SimpleProductForTest1"/>
@@ -65,7 +65,6 @@
 
             <!--Logout-->
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
-
         </after>
 
         <!-- Import products with add/update behavior -->
