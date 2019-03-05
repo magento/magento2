@@ -101,10 +101,6 @@ input ShippingMethodInput {
     cart_address_id: Int!
     carrier_code: String!
     method_code: String!
-    additional_data: ShippingMethodAdditionalDataInput
-}
-
-input ShippingMethodAdditionalDataInput {
 }
 
 input SetPaymentMethodOnCartInput {
@@ -115,10 +111,6 @@ input SetPaymentMethodOnCartInput {
 input PaymentMethodInput {
     code: String! @doc(description:"Payment method code")
     purchase_order_number: String @doc(description:"Purchase order number")
-    additional_data: PaymentMethodAdditionalDataInput
-}
-
-input PaymentMethodAdditionalDataInput {
 }
 
 type SetPaymentMethodOnCartOutput {
@@ -189,10 +181,6 @@ type SelectedShippingMethod {
     method_code: String
     label: String
     amount: Float
-    additional_data: SelectedShippingMethodAdditionalData
-}
-
-type SelectedShippingMethodAdditionalData {
 }
 
 type AvailableShippingMethod {
@@ -215,10 +203,6 @@ type AvailablePaymentMethod {
 type SelectedPaymentMethod {
     code: String @doc(description: "The payment method code")
     purchase_order_number: String @doc(description: "The purchase order number.")
-    additional_data: SelectedPaymentMethodAdditionalData
-}
-
-type SelectedPaymentMethodAdditionalData {
 }
 
 enum AdressTypeEnum {

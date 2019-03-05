@@ -122,6 +122,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $shippingCarrierCode
      * @param string $shippingAddressId
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function prepareMutationQuery(
         string $maskedQuoteId,
@@ -163,6 +164,7 @@ QUERY;
     /**
      * @param string $reversedQuoteId
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
     {
@@ -176,6 +178,7 @@ QUERY;
      * @param string $reversedQuoteId
      * @param int $customerId
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function assignQuoteToCustomer(
         string $reversedQuoteId,
@@ -192,6 +195,7 @@ QUERY;
      * @param string $username
      * @param string $password
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
     {
