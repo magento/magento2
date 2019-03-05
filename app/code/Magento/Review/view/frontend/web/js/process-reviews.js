@@ -13,6 +13,8 @@ define([
      * @param {*} fromPages
      */
     function processReviews(url, fromPages) {
+        var hashAction = window.location.href.replace(/^.*?(#|$)/, '');
+
         $.ajax({
             url: url,
             cache: true,
@@ -27,7 +29,6 @@ define([
                     event.preventDefault();
                 });
             });
-            var hashAction = window.location.href.replace(/^.*?(#|$)/, '');
             if (hashAction) {
                 setTimeout(function () {
                     $('html, body').animate({
