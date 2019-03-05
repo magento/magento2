@@ -10,7 +10,7 @@
     <test name="AdminCreateDuplicateCategoryTest">
         <annotations>
             <stories value="Create category"/>
-            <title value="CreateDuplicateUrlCategoryEntityTestVariation1_Subcategory_RequiredFields"/>
+            <title value="Create Duplicate Category With Already Existed UrlKey"/>
             <description value="Login as admin and create duplicate category"/>
             <testCaseId value="MC-14702"/>
             <severity value="CRITICAL"/>
@@ -31,7 +31,8 @@
 
         <!-- Fill the Category form with same name and urlKey as initially created category(SimpleSubCategory) -->
         <actionGroup ref="adminFillAndSaveCategoryForm" stepKey="fillCategoryForm">
-            <argument name="category" value="category"/>
+             <argument name="categoryName" value="$$category.name$$"/>
+             <argument name="categoryUrlKey" value="$$category.custom_attributes[url_key]$$"/>
         </actionGroup>
 
         <!-- Assert error message -->
