@@ -95,17 +95,14 @@ class Cache
     public function generate(Product $product)
     {
         $isException = false;
-        $galleryImages = $product->getMediaGalleryImages();
-        if ($galleryImages) {
-            foreach ($galleryImages as $image) {
-                foreach ($this->getData() as $imageData) {
-                    try {
-                        $this->processImageData($product, $imageData, $image->getFile());
-                    } catch (\Exception $e) {
-                        $isException = true;
-                        $this->logger->error($e->getMessage());
-                        $this->logger->error(__('The image could not be resized: ') . $image->getPath());
-                    }
+        foreach ($product->getMediaGallery('images') as $image) {
+            foreach ($this->getData() as $imageData) {
+                try {
+                    $this->processImageData($product, $imageData, $image['file']);
+                } catch (\Exception $e) {
+                    $isException = true;
+                    $this->logger->error($e->getMessage());
+                    $this->logger->error(__('The image could not be resized: ') . $image->getPath());
                 }
             }
         }
