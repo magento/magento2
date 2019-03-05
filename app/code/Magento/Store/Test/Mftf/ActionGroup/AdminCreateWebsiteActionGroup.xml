@@ -47,16 +47,15 @@
         <fillField userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillWebsiteField"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
         <waitForPageLoad stepKey="waitForStoreToLoad"/>
-        <seeElement selector="{{AdminStoresGridSection.nthRow(websiteName)}}" stepKey="seeAssertWebsiteInGrid"/>
+        <seeElement selector="{{AdminStoresGridSection.websiteName(websiteName)}}" stepKey="seeAssertWebsiteInGrid"/>
     </actionGroup>
 
     <actionGroup name="AssertWebsiteForm">
         <arguments>
             <argument name="websiteName" type="string"/>
             <argument name="websiteCode" type="string"/>
-            <argument name="websiteId"/>
         </arguments>
-        <click selector="{{AdminStoresGridSection.nthRow(websiteName)}}" stepKey="clickWebsiteFirstRowInGrid"/>
+        <click selector="{{AdminStoresGridSection.websiteName(websiteName)}}" stepKey="clickWebsiteFirstRowInGrid"/>
         <waitForPageLoad stepKey="waitTillWebsiteFormPageIsOpened"/>
         <grabFromCurrentUrl regex="~(\d+)/~" stepKey="grabWebsiteIdFromCurrentUrl"/>
         <seeInCurrentUrl url="/system_store/editWebsite/website_id/{$grabWebsiteIdFromCurrentUrl}" stepKey="seeWebsiteId"/>

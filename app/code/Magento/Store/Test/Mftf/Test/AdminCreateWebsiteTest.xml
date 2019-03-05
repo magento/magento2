@@ -10,7 +10,7 @@
         <test name="AdminCreateWebsiteTest">
             <annotations>
                 <stories value="Create Website"/>
-                <title value="CreateWebsiteEntityTestVariation1"/>
+                <title value="Create Website and Verify Store Form"/>
                 <description value="Test log in to Stores and Create Website Test"/>
                 <testCaseId value="MC-14302"/>
                 <severity value="CRITICAL"/>
@@ -34,16 +34,15 @@
                 <argument name="websiteCode" value="{{customWebsite.code}}"/>
             </actionGroup>
 
-            <!--Search created website in grid and AssertWebsiteInGrid-->
+            <!--Search created website in grid and verify AssertWebsiteInGrid-->
             <actionGroup ref="AssertWebsiteInGrid" stepKey="seeWebsiteInGrid">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
 
-            <!--AssertWebsiteForm and AssertWebsiteOnStoreForm-->
+            <!--Verify website name and websitecode on website form (AssertWebsiteForm and AssertWebsiteOnStoreForm)-->
             <actionGroup ref="AssertWebsiteForm" stepKey="seeWebsiteForm">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
                 <argument name="websiteCode" value="{{customWebsite.code}}"/>
-                <argument name="websiteId" value="admin/system_store/editWebsite/website_id/{$grabWebsiteIdFromCurrentUrl}"/>
             </actionGroup>
         </test>
 </tests>
