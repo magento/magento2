@@ -32,6 +32,6 @@
 
     <actionGroup name="AdminSwitchToAllStoreViewActionGroup" extends="AdminSwitchBaseActionGroup">
         <click selector="{{AdminMainActionsSection.allStoreViews}}" after="clickScopeSwitchDropdown" stepKey="clickStoreViewByName"/>
-        <see selector="{{AdminMainActionsSection.storeSwitcher}}" userInput="All Store Views" after="clickStoreViewByName" stepKey="seeNewStoreViewName"/>
+        <see selector="{{AdminMainActionsSection.storeSwitcher}}" userInput="{{scopeName}}" after="clickStoreViewByName" stepKey="seeNewStoreViewName"/>
     </actionGroup>
 </actionGroups>
