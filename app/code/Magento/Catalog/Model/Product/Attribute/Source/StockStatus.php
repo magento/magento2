@@ -21,12 +21,12 @@ class StockStatus extends AbstractSource implements SourceInterface, OptionSourc
     /**
      * Stock status value for product in stock
      */
-    const IN_STOCK = 1;
+    private const IN_STOCK = 1;
 
     /**
      * Stock status value for out of stock product
      */
-    const OUT_OF_STOCK = 0;
+    private const OUT_OF_STOCK = 0;
 
     /**
      * Retrieve option array
