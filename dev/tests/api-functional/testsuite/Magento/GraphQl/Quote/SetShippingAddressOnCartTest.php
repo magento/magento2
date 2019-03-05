@@ -94,6 +94,7 @@ mutation {
           code
           label
         }
+        address_type
       }
     }
   }
@@ -184,6 +185,7 @@ mutation {
           label
           code
         }
+        address_type
       }
     }
   }
@@ -472,6 +474,7 @@ QUERY;
             ['response_field' => 'postcode', 'expected_value' => '887766'],
             ['response_field' => 'telephone', 'expected_value' => '88776655'],
             ['response_field' => 'country', 'expected_value' => ['code' => 'US', 'label' => 'US']],
+            ['response_field' => 'address_type', 'expected_value' => 'shipping']
         ];
 
         $this->assertResponseFields($shippingAddressResponse, $assertionMap);
