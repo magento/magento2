@@ -36,7 +36,8 @@
         </before>
 
         <!-- Import products with replace behavior -->
-        <actionGroup ref="AdminImportProductsWithReplaceBehaviorActionGroup" stepKey="adminImportProducts">
+        <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProducts">
+            <argument name="behavior" value="Replace"/>
             <argument name="importFile" value="catalog_import_products.csv"/>
             <argument name="importMessage" value="Created: 3, Updated: 0, Deleted: 3"/>
         </actionGroup>
