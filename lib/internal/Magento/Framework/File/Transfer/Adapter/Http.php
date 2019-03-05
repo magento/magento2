@@ -9,6 +9,11 @@ namespace Magento\Framework\File\Transfer\Adapter;
 class Http
 {
     /**
+     * @var \Magento\Framework\App\Request\Http
+     */
+    private $request;
+
+    /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     private $response;
@@ -19,13 +24,16 @@ class Http
     private $mime;
 
     /**
+     * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\App\Response\Http $response
      * @param \Magento\Framework\File\Mime $mime
      */
     public function __construct(
+        \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\HTTP\PhpEnvironment\Response $response,
         \Magento\Framework\File\Mime $mime
     ) {
+        $this->request = $request;
         $this->response = $response;
         $this->mime = $mime;
     }
@@ -54,6 +62,11 @@ class Http
         $this->response->setHeader('Content-Type', $mimeType);
 
         $this->response->sendHeaders();
+
+        if ($this->request->isHead()) {
+            // Do not send the body on HEAD requests.
+            return;
+        }
 
         $handle = fopen($filepath, 'r');
         if ($handle) {
