@@ -31,7 +31,7 @@ For more informations about the installation process using the CLI, you can cons
 
 ### How to run Magento
 
-Example usage: ```php -S 127.0.0.1:8082 -t ./pub/ ../phpserver/router.php```
+Example usage: ```php -S 127.0.0.1:8082 -t ./pub/ ./phpserver/router.php```
 
 ### What exactly the script does
 

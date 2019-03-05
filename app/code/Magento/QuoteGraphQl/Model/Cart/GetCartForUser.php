@@ -45,12 +45,12 @@ class GetCartForUser
      * Get cart for user
      *
      * @param string $cartHash
-     * @param int|null $userId
+     * @param int|null $customerId
      * @return Quote
      * @throws GraphQlAuthorizationException
      * @throws GraphQlNoSuchEntityException
      */
-    public function execute(string $cartHash, ?int $userId): Quote
+    public function execute(string $cartHash, ?int $customerId): Quote
     {
         try {
             $cartId = $this->maskedQuoteIdToQuoteId->execute($cartHash);
@@ -69,14 +69,14 @@ class GetCartForUser
             );
         }
 
-        $customerId = (int)$cart->getCustomerId();
+        $cartCustomerId = (int)$cart->getCustomerId();
 
         /* Guest cart, allow operations */
-        if (!$customerId) {
+        if (!$cartCustomerId && null === $customerId) {
             return $cart;
         }
 
-        if ($customerId !== $userId) {
+        if ($cartCustomerId !== $customerId) {
             throw new GraphQlAuthorizationException(
                 __(
                     'The current user cannot perform operations on cart "%masked_cart_id"',

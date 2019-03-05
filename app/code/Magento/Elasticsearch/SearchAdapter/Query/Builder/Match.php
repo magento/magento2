@@ -10,6 +10,9 @@ use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
+/**
+ * Builder for match query.
+ */
 class Match implements QueryInterface
 {
     /**
@@ -40,7 +43,7 @@ class Match implements QueryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build(array $selectQuery, RequestQueryInterface $requestQuery, $conditionType)
     {
@@ -61,6 +64,8 @@ class Match implements QueryInterface
     }
 
     /**
+     * Prepare query.
+     *
      * @param string $queryValue
      * @param string $conditionType
      * @return array
@@ -124,10 +129,10 @@ class Match implements QueryInterface
     }
 
     /**
-     * Cut trailing plus or minus sign, and @ symbol, using of which causes InnoDB to report a syntax error.
-     * @link https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html Fulltext-boolean search docs.
-     *
      * Escape a value for special query characters such as ':', '(', ')', '*', '?', etc.
+     *
+     * Cut trailing plus or minus sign, and @ symbol, using of which causes InnoDB to report a syntax error.
+     * https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html Fulltext-boolean search docs.
      *
      * @param string $value
      * @return string
