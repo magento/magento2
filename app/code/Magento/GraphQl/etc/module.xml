@@ -11,7 +11,6 @@
             <module name="Magento_Authorization"/>
             <module name="Magento_Store"/>
             <module name="Magento_Eav"/>
-            <module name="Magento_Downloadable"/>
         </sequence>
     </module>
 </config>
