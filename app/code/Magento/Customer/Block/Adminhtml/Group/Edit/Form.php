@@ -84,7 +84,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Group Information')]);
 
         $validateClass = sprintf(
-            'required-entry validate-data validate-length maximum-length-%d',
+            'required-entry validate-length maximum-length-%d',
             \Magento\Customer\Model\GroupManagement::GROUP_CODE_MAX_LENGTH
         );
         $name = $fieldset->addField(
