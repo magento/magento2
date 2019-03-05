@@ -211,6 +211,11 @@ type SelectedPaymentMethod {
 type SelectedPaymentMethodAdditionalData {
 }
 
+enum AdressTypeEnum {
+    SHIPPING
+    BILLING
+}
+
 type AppliedCoupon {
     code: String!
 }
