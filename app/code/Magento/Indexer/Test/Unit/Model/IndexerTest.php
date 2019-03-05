@@ -164,7 +164,12 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
                 }
             }
         } else {
-            $this->assertEquals($getStateGetUpdated, $this->model->getLatestUpdated());
+            $actualGetLatestUpdated = $this->model->getLatestUpdated();
+            $this->assertEquals($getStateGetUpdated, $actualGetLatestUpdated);
+
+            if ($getStateGetUpdated === null) {
+                $this->assertNotNull($actualGetLatestUpdated);
+            }
         }
     }
 
@@ -182,7 +187,8 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
             [true, '', '06-Jan-1944'],
             [true, '06-Jan-1944', ''],
             [true, '', ''],
-            [true, '06-Jan-1944', '05-Jan-1944']
+            [true, '06-Jan-1944', '05-Jan-1944'],
+            [false, null, null],
         ];
     }
 
