@@ -48,11 +48,6 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     protected $imageHelper;
 
-    /**
-     * @var \Magento\Framework\Data\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $mediaGalleryCollection;
-
     protected function setUp()
     {
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
@@ -72,10 +67,6 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->imageHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->mediaGalleryCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
