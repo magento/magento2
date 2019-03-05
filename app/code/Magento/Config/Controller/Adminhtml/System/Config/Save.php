@@ -198,12 +198,20 @@ class Save extends AbstractConfig implements HttpPostActionInterface
      * @param array $groups Groups data.
      * @param string[] $systemXmlConfig Defined paths.
      * @return array Filtered groups.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function filterPaths(string $prefix, array $groups, array $systemXmlConfig): array
     {
         $flippedXmlConfig = array_flip($systemXmlConfig);
         $filtered = [];
         foreach ($groups as $groupName => $childPaths) {
+            //When group accepts arbitrary fields and clones them we allow it
+            $group = $this->_configStructure->getElement($prefix .'/' .$groupName);
+            if (array_key_exists('clone_fields', $group->getData()) && $group->getData()['clone_fields']) {
+                $filtered[$groupName] = $childPaths;
+                continue;
+            }
+
             $filtered[$groupName] = ['fields' => [], 'groups' => []];
             //Processing fields
             if (array_key_exists('fields', $childPaths)) {
