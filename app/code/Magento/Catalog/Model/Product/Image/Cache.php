@@ -102,7 +102,7 @@ class Cache
                 } catch (\Exception $e) {
                     $isException = true;
                     $this->logger->error($e->getMessage());
-                    $this->logger->error(__('The image could not be resized: ') . $image->getPath());
+                    $this->logger->error(__('The image could not be resized: ') . $image['file']);
                 }
             }
         }

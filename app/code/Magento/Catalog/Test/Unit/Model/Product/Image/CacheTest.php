@@ -57,6 +57,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     {
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getMediaGallery'])
             ->getMock();
 
         $this->viewConfig = $this->getMockBuilder(\Magento\Framework\View\ConfigInterface::class)
@@ -95,19 +96,104 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     public function testGenerate()
     {
         $imageFile = 'image.jpg';
-        $imageItem = $this->objectManager->getObject(
-            \Magento\Framework\DataObject::class,
-            [
-                'data' => ['file' => $imageFile]
-            ]
-        );
-        $this->mediaGalleryCollection->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$imageItem]));
 
         $this->product->expects($this->any())
-            ->method('getMediaGalleryImages')
-            ->willReturn($this->mediaGalleryCollection);
+            ->method('getMediaGallery')
+            ->willReturn([['file' => $imageFile]]);
+
+        $data = $this->getTestData();
+        $this->config->expects($this->once())
+            ->method('getMediaEntities')
+            ->with('Magento_Catalog')
+            ->willReturn($data);
+
+        $themeMock = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $themeMock->expects($this->exactly(3))
+            ->method('getCode')
+            ->willReturn('Magento\theme');
+
+        $this->themeCollection->expects($this->once())
+            ->method('loadRegisteredThemes')
+            ->willReturn([$themeMock]);
+
+        $this->viewConfig->expects($this->once())
+            ->method('getViewConfig')
+            ->with([
+                'area' => Area::AREA_FRONTEND,
+                'themeModel' => $themeMock,
+            ])
+            ->willReturn($this->config);
+
+        $this->imageHelper->expects($this->exactly(3))
+            ->method('init')
+            ->will($this->returnValueMap([
+                [
+                    $this->product,
+                    'product_image',
+                    $this->getImageData('product_image'),
+                    $this->imageHelper
+                ],
+                [
+                    $this->product,
+                    'product_small_image',
+                    $this->getImageData('product_small_image'),
+                    $this->imageHelper
+                ],
+                [
+                    $this->product,
+                    'product_thumbnail',
+                    $this->getImageData('product_thumbnail'),
+                    $this->imageHelper
+                ],
+            ]));
+        $this->imageHelper->expects($this->exactly(3))
+            ->method('setImageFile')
+            ->with($imageFile)
+            ->willReturnSelf();
+
+        $this->imageHelper->expects($this->any())
+            ->method('keepAspectRatio')
+            ->with($data['product_image']['aspect_ratio'])
+            ->willReturnSelf();
+        $this->imageHelper->expects($this->any())
+            ->method('keepFrame')
+            ->with($data['product_image']['frame'])
+            ->willReturnSelf();
+        $this->imageHelper->expects($this->any())
+            ->method('keepTransparency')
+            ->with($data['product_image']['transparency'])
+            ->willReturnSelf();
+        $this->imageHelper->expects($this->any())
+            ->method('constrainOnly')
+            ->with($data['product_image']['constrain'])
+            ->willReturnSelf();
+        $this->imageHelper->expects($this->any())
+            ->method('backgroundColor')
+            ->with($data['product_image']['background'])
+            ->willReturnSelf();
+
+        $this->imageHelper->expects($this->exactly(3))
+            ->method('save')
+            ->will($this->returnSelf());
+
+        $this->model->generate($this->product);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testGenerateHidden()
+    {
+        $imageFile = 'image.jpg';
+
+        $this->product->expects($this->any())
+            ->method('getMediaGallery')
+            ->willReturn([[
+                'file' => $imageFile,
+                'disabled' => '1'
+            ]]);
 
         $data = $this->getTestData();
         $this->config->expects($this->once())
@@ -195,19 +281,10 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     public function testGenerateWithException()
     {
         $imageFile = 'image.jpg';
-        $imageItem = $this->objectManager->getObject(
-            \Magento\Framework\DataObject::class,
-            [
-                'data' => ['file' => $imageFile]
-            ]
-        );
-        $this->mediaGalleryCollection->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$imageItem]));
 
         $this->product->expects($this->atLeastOnce())
-            ->method('getMediaGalleryImages')
-            ->willReturn($this->mediaGalleryCollection);
+            ->method('getMediaGallery')
+            ->willReturn([['file' => $imageFile]]);
 
         $data = $this->getTestData();
         $this->config->expects($this->once())
