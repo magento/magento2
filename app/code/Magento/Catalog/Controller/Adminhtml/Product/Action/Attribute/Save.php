@@ -177,11 +177,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             $operations[] = $this->makeOperation('Update product attributes', 'product_action_attribute.update', $attributesData, $storeId, $websiteId, $productIds, $bulkUuid);
         }
 
-        $result = $this->bulkManagement->scheduleBulk($bulkUuid, $operations, $bulkDescription, $this->userContext->getUserId());
-        if (!$result) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Something went wrong while processing the request.')
-            );
+        if (!empty($operations)) {
+            $result = $this->bulkManagement->scheduleBulk($bulkUuid, $operations, $bulkDescription, $this->userContext->getUserId());
+            if (!$result) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Something went wrong while processing the request.')
+                );
+            }
         }
     }
 
