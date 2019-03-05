@@ -8,7 +8,6 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--Add new search term and AssertSearchTermSaveSuccessMessage-->
     <actionGroup name="AssertSearchTermSaveSuccessMessage">
         <arguments>
             <argument name="searchQuery" type="string"/>
@@ -21,13 +20,12 @@
         <click selector="{{AdminCatalogSearchTermIndexSection.addNewSearchTermButton}}" stepKey="clickAddNewSearchTermButton"/>
         <waitForPageLoad stepKey="waitForAdminCatalogSearchTermNewPageLoad"/>
         <fillField selector="{{AdminCatalogSearchTermNewSection.searchQuery}}" userInput="{{searchQuery}}" stepKey="fillSearchQueryTextBox"/>
-        <click selector="{{AdminCatalogSearchTermNewSection.store('storeValue')}}" stepKey="selectMainWebsiteStore"/>
+        <selectOption selector="{{AdminCatalogSearchTermNewSection.store}}" userInput="{{storeValue}}" stepKey="selectStoreValue"/>
         <fillField selector="{{AdminCatalogSearchTermNewSection.redirectUrl}}" userInput="{{redirectUrl}}" stepKey="fillRedirectUrl"/>
-        <click selector="{{AdminCatalogSearchTermNewSection.displayInSuggestedTerm('displayInSuggestedTerm')}}" stepKey="selectDisplayInSuggestedTerm"/>
+        <selectOption selector="{{AdminCatalogSearchTermNewSection.displayInSuggestedTerm}}" userInput="{{displayInSuggestedTerm}}" stepKey="selectDisplayInSuggestedTerm"/>
         <click selector="{{AdminCatalogSearchTermNewSection.saveSearchButton}}" stepKey="clickSaveSearchButton"/>
         <see selector="{{AdminCatalogSearchTermMessagesSection.successMessage}}" userInput="You saved the search term." stepKey="seeSaveSuccessMessage"/>
     </actionGroup>
-    <!--Search and delete search term and AssertSearchTermSuccessDeleteMessage-->
     <actionGroup name="AssertSearchTermSuccessDeleteMessage">
         <arguments>
             <argument name="searchQuery" type="string"/>
@@ -39,13 +37,12 @@
         <fillField selector="{{AdminCatalogSearchTermIndexSection.searchQuery}}" userInput="{{searchQuery}}" stepKey="fillSearchQuery"/>
         <click selector="{{AdminCatalogSearchTermIndexSection.searchButton}}" stepKey="clickSearchButton"/>
         <waitForPageLoad stepKey="waitForSearchResultLoad"/>
-        <checkOption selector="{{AdminCatalogSearchTermIndexSection.checkBox}}" stepKey="checkCheckBox"/>
-        <selectOption selector="{{AdminCatalogSearchTermIndexSection.delete}}" userInput="delete" stepKey="selectDeleteOption"/>
+        <click selector="{{AdminCatalogSearchTermIndexSection.nthRow('1')}}" stepKey="checkFirstRow"/>
+        <selectOption selector="{{AdminCatalogSearchTermIndexSection.massActions}}" userInput="delete" stepKey="selectDeleteOption"/>
         <click selector="{{AdminCatalogSearchTermIndexSection.submit}}" stepKey="clickSubmitButton"/>
         <click selector="{{AdminCatalogSearchTermIndexSection.okButton}}" stepKey="clickOkButton"/>
         <see selector="{{AdminCatalogSearchTermMessagesSection.successMessage}}" userInput="Total of 1 record(s) were deleted." stepKey="seeSuccessMessage"/>
     </actionGroup>
-    <!--Verify deleted search term in grid and AssertSearchTermNotInGridMessage-->
     <actionGroup name="AssertSearchTermNotInGrid">
         <arguments>
             <argument name="searchQuery" type="string"/>
