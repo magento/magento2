@@ -158,7 +158,7 @@ type CartAddress {
     postcode: String
     country: CartAddressCountry
     telephone: String
-    address_type: String
+    address_type: AdressTypeEnum
     available_shipping_methods: [AvailableShippingMethod] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAdress\\AvailableShippingMethods")
     selected_shipping_method: SelectedShippingMethod
     items_weight: Float
