@@ -40,6 +40,6 @@ class Success extends \Magento\AdminNotification\Model\System\Message\Media\Abst
      */
     public function getText()
     {
-        return __('Synchronization of media storages has been completed.');
+        return __('Synchronization of media storage has been completed.');
     }
 }
