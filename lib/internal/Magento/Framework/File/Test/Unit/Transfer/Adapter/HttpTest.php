@@ -10,6 +10,11 @@ use \Magento\Framework\File\Transfer\Adapter\Http;
 class HttpTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $request;
+
+    /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\Response|\PHPUnit_Framework_MockObject_MockObject
      */
     private $response;
@@ -29,12 +34,16 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
+        $this->request = $this->createPartialMock(
+            \Magento\Framework\App\Request\Http::class,
+            ['isHead']
+        );
         $this->response = $this->createPartialMock(
             \Magento\Framework\HTTP\PhpEnvironment\Response::class,
             ['setHeader', 'sendHeaders', 'setHeaders']
         );
         $this->mime = $this->createMock(\Magento\Framework\File\Mime::class);
-        $this->object = new Http($this->response, $this->mime);
+        $this->object = new Http($this->request, $this->response, $this->mime);
     }
 
     /**
@@ -57,6 +66,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->method('getMimeType')
             ->with($file)
             ->will($this->returnValue($contentType));
+        $this->request->expects($this->once())
+            ->method('isHead')
+            ->will($this->returnValue(false));
         $this->expectOutputString(file_get_contents($file));
 
         $this->object->send($file);
@@ -83,6 +95,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->method('getMimeType')
             ->with($file)
             ->will($this->returnValue($contentType));
+        $this->request->expects($this->once())
+            ->method('isHead')
+            ->will($this->returnValue(false));
         $this->expectOutputString(file_get_contents($file));
 
         $this->object->send(['filepath' => $file, 'headers' => $headers]);
@@ -105,5 +120,33 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     public function testSendNoFileExistException(): void
     {
         $this->object->send('nonexistent.file');
+    }
+
+    /**
+     * @return void
+     */
+    public function testSendHeadRequest(): void
+    {
+        $file = __DIR__ . '/../../_files/javascript.js';
+        $contentType = 'content/type';
+
+        $this->response->expects($this->at(0))
+            ->method('setHeader')
+            ->with('Content-length', filesize($file));
+        $this->response->expects($this->at(1))
+            ->method('setHeader')
+            ->with('Content-Type', $contentType);
+        $this->response->expects($this->once())
+            ->method('sendHeaders');
+        $this->mime->expects($this->once())
+            ->method('getMimeType')
+            ->with($file)
+            ->will($this->returnValue($contentType));
+        $this->request->expects($this->once())
+            ->method('isHead')
+            ->will($this->returnValue(true));
+
+        $this->object->send($file);
+        $this->assertEquals(false, $this->hasOutput());
     }
 }

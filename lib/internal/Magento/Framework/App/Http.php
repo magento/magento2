@@ -142,10 +142,24 @@ class Http implements \Magento\Framework\AppInterface
         } else {
             throw new \InvalidArgumentException('Invalid return type');
         }
+        if ($this->_request->isHead() && $this->_response->getHttpResponseCode() == 200) {
+            $this->handleHeadRequest();
+        }
         // This event gives possibility to launch something before sending output (allow cookie setting)
         $eventParams = ['request' => $this->_request, 'response' => $this->_response];
         $this->_eventManager->dispatch('controller_front_send_response_before', $eventParams);
         return $this->_response;
+    }
+
+    /**
+     * Handle HEAD requests by adding the Content-Length header and removing the body from the response.
+     * @return void
+     */
+    private function handleHeadRequest()
+    {
+        $contentLength = strlen($this->_response->getContent());
+        $this->_response->clearBody();
+        $this->_response->setHeader('Content-Length', $contentLength);
     }
 
     /**

@@ -92,7 +92,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
                 'pathInfoProcessor' => $pathInfoProcessorMock,
                 'objectManager' => $objectManagerMock
             ])
-            ->setMethods(['getFrontName'])
+            ->setMethods(['getFrontName', 'isHead'])
             ->getMock();
         $this->areaListMock = $this->getMockBuilder(\Magento\Framework\App\AreaList::class)
             ->disableOriginalConstructor()
@@ -155,6 +155,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     public function testLaunchSuccess()
     {
         $this->setUpLaunch();
+        $this->requestMock->expects($this->once())->method('isHead')->will($this->returnValue(false));
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with(
@@ -179,6 +180,34 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             )
         );
         $this->http->launch();
+    }
+
+    public function testLaunchHeadRequest()
+    {
+        $body = "<html><head></head><body>Test</body></html>";
+        $contentLength = strlen($body);
+        $this->setUpLaunch();
+        $this->requestMock->expects($this->once())->method('isHead')->will($this->returnValue(true));
+        $this->responseMock->expects($this->once())
+            ->method('getHttpResponseCode')
+            ->will($this->returnValue(200));
+        $this->responseMock->expects($this->once())
+            ->method('getContent')
+            ->will($this->returnValue($body));
+        $this->responseMock->expects($this->once())
+            ->method('clearBody')
+            ->will($this->returnValue($this->responseMock));
+        $this->responseMock->expects($this->once())
+            ->method('setHeader')
+            ->with('Content-Length', $contentLength)
+            ->will($this->returnValue($this->responseMock));
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                'controller_front_send_response_before',
+                ['request' => $this->requestMock, 'response' => $this->responseMock]
+            );
+        $this->assertSame($this->responseMock, $this->http->launch());
     }
 
     public function testHandleDeveloperModeNotInstalled()
