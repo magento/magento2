@@ -23,25 +23,25 @@ use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 class RemoveItemFromCart implements ResolverInterface
 {
     /**
-     * @var GuestCartItemRepositoryInterface
-     */
-    private $guestCartItemRepository;
-
-    /**
      * @var GetCartForUser
      */
     private $getCartForUser;
 
     /**
-     * @param GuestCartItemRepositoryInterface $guestCartItemRepository
+     * @var GuestCartItemRepositoryInterface
+     */
+    private $guestCartItemRepository;
+
+    /**
      * @param GetCartForUser $getCartForUser
+     * @param GuestCartItemRepositoryInterface $guestCartItemRepository
      */
     public function __construct(
-        GuestCartItemRepositoryInterface $guestCartItemRepository,
-        GetCartForUser $getCartForUser
+        GetCartForUser $getCartForUser,
+        GuestCartItemRepositoryInterface $guestCartItemRepository
     ) {
-        $this->guestCartItemRepository = $guestCartItemRepository;
         $this->getCartForUser = $getCartForUser;
+        $this->guestCartItemRepository = $guestCartItemRepository;
     }
 
     /**
@@ -49,12 +49,12 @@ class RemoveItemFromCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($args['input']['cart_id'])) {
+        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        if (!isset($args['input']['cart_item_id'])) {
+        if (!isset($args['input']['cart_item_id']) || empty($args['input']['cart_item_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_item_id" is missing'));
         }
         $itemId = $args['input']['cart_item_id'];
