@@ -77,7 +77,7 @@ class Samples extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -90,7 +90,7 @@ class Samples extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function modifyMeta(array $meta)
@@ -135,6 +135,8 @@ class Samples extends AbstractModifier
     }
 
     /**
+     * Returns configuration for dynamic rows
+     *
      * @return array
      */
     protected function getDynamicRows()
@@ -155,6 +157,8 @@ class Samples extends AbstractModifier
     }
 
     /**
+     * Returns Record column configuration
+     *
      * @return array
      */
     protected function getRecord()
@@ -192,6 +196,8 @@ class Samples extends AbstractModifier
     }
 
     /**
+     * Returns Title column configuration
+     *
      * @return array
      */
     protected function getTitleColumn()
@@ -209,6 +215,7 @@ class Samples extends AbstractModifier
             'componentType' => Form\Field::NAME,
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => 'title',
+            'labelVisible' => false,
             'validation' => [
                 'required-entry' => true,
             ],
@@ -218,6 +225,8 @@ class Samples extends AbstractModifier
     }
 
     /**
+     * Returns Sample column configuration
+     *
      * @return array
      */
     protected function getSampleColumn()
@@ -236,6 +245,7 @@ class Samples extends AbstractModifier
             'component' => 'Magento_Downloadable/js/components/upload-type-handler',
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => 'type',
+            'labelVisible' => false,
             'options' => $this->typeUpload->toOptionArray(),
             'typeFile' => 'sample_file',
             'typeUrl' => 'sample_url',
@@ -246,6 +256,7 @@ class Samples extends AbstractModifier
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => 'sample_url',
             'placeholder' => 'URL',
+            'labelVisible' => false,
             'validation' => [
                 'required-entry' => true,
                 'validate-url' => true,

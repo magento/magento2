@@ -67,6 +67,7 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
         </variation>
         <variation name="UpdateProductAttributeEntityTestVariation4" summary="Create product attribute of type Dropdown and check its visibility on frontend in Advanced Search form" ticketId="MAGETWO-12941">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_dropdown</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Dropdown</data>
@@ -76,6 +77,7 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchAttributeIsAbsent" />
         </variation>
         <variation name="UpdateProductAttributeEntityTestVariation5" summary="Create product attribute of type Multiple Select and check its visibility on frontend in Advanced Search form" ticketId="MAGETWO-12941">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_multiple_select</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_%isolation%</data>
