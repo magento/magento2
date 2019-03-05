@@ -74,4 +74,38 @@
         <click selector="{{AdminDataGridTableSection.row('1')}}" stepKey="clickOnAttributeRow"/>
         <waitForPageLoad stepKey="waitForAttributePageLoad" />
     </actionGroup>
+    <actionGroup name="StartCreateProductAttribute">
+        <arguments>
+            <argument name="attributeCode" type="string"/>
+            <argument name="attributeType" type="string" defaultValue="select"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeNewPage.url}}" stepKey="goToNewProductAttributePage"/>
+        <fillField selector="{{AttributePropertiesSection.defaultLabel}}" userInput="{{attributeCode}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.inputType}}" userInput="{{attributeType}}" stepKey="selectInputType"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="waitForElementVisible"/>
+    </actionGroup>
+    <actionGroup name="AddOptionToProductAttribute">
+        <arguments>
+            <argument name="optionName" type="string"/>
+            <argument name="optionNumber" type="string"/>
+        </arguments>
+        <click selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="clickAddOption"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.optionAdminValue('optionNumber')}}" time="30" stepKey="waitForOptionRow"/>
+        <fillField selector="{{AdminNewAttributePanelSection.optionAdminValue('optionNumber')}}" userInput="{{optionName}}" stepKey="fillAdminLabel"/>
+    </actionGroup>
+    <actionGroup name="SetScopeToProductAttribute">
+        <arguments>
+            <argument name="scope" type="string" defaultValue="1"/>
+        </arguments>
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.scope}}" userInput="{{scope}}" stepKey="selectGlobalScope"/>
+    </actionGroup>
+    <actionGroup name="SetUseInLayeredNavigationToProductAttribute">
+        <arguments>
+            <argument name="useInLayeredNavigation" type="string" defaultValue="1"/>
+        </arguments>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{StorefrontPropertiesSection.storefrontPropertiesTab}}" stepKey="goToStorefrontProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="{{useInLayeredNavigation}}" stepKey="selectUseInLayeredNavigation"/>
+    </actionGroup>
 </actionGroups>
