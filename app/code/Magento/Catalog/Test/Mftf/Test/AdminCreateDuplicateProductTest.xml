@@ -10,22 +10,36 @@
     <test name="AdminCreateDuplicateProductTest">
         <annotations>
             <stories value="Create Product"/>
-            <title value="CreateDuplicateUrlProductEntityTestVariation1"/>
+            <title value="Create Duplicate Product With Existed Subcategory Name And UrlKey"/>
             <description value="Login as admin and create duplicate Product"/>
             <testCaseId value="MC-14714"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
         </annotations>
+
         <before>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
-            <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct"/>
+            <createData entity="SubCategory" stepKey="category"/>
+            <createData entity="Two_nested_categories" stepKey="subCategory">
+                <requiredEntity createDataKey="category"/>
+            </createData>
         </before>
         <after>
-            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="subCategory" stepKey="deleteSubCategory"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <!-- Create duplicate Product and Save the Product -->
-        <actionGroup ref="createDuplicateProduct" stepKey="createDuplicateProduct"/>
+        <!-- Create Product using above created Subcategory Name and SubCategory UrlKey and Save the Product -->
+        <actionGroup ref="adminFillAndSaveProductForm" stepKey="createDuplicateProduct">
+            <argument name="product" value="defaultSimpleProduct"/>
+            <argument name="productName" value="$$subCategory.name$$"/>
+            <argument name="productUrlKey" value="$$subCategory.custom_attributes[url_key]$$"/>
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+
+        <!--Assert Error Message -->
+        <see selector="{{AdminProductFormSection.successMessage}}"  userInput="The value specified in the URL Key field would generate a URL that already exists." stepKey="seeErrorMessage"/>
     </test>
 </tests>
