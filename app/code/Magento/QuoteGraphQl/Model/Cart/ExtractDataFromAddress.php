@@ -42,6 +42,7 @@ class ExtractDataFromAddress
 
         $addressData = array_merge($addressData, [
             'address_id' => $address->getId(),
+            'address_type' => $address->getAddressType(),
             'country' => [
                 'code' => $address->getCountryId(),
                 'label' => $address->getCountry()
