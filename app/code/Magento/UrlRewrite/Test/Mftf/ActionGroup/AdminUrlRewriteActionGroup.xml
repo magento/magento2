@@ -77,14 +77,12 @@
     </actionGroup>
     <actionGroup name="AdminUpdateUrlRewrite">
         <arguments>
-            <argument name="requestPath" type="string"/>
-            <argument name="redirectTypeValue" type="string"/>
-            <argument name="description" type="string"/>
+            <argument name="urlRewrite" defaultValue="updateUrlRewrite"/>
         </arguments>
-        <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{requestPath}}" stepKey="fillRequestPath"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{urlRewrite.request_path}}" stepKey="fillRequestPath"/>
         <click selector="{{AdminUrlRewriteEditSection.redirectType}}" stepKey="selectRedirectType"/>
-        <click selector="{{AdminUrlRewriteEditSection.redirectTypeValue('redirectTypeValue')}}" stepKey="selectRedirectTypeValue"/>
-        <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <click selector="{{AdminUrlRewriteEditSection.redirectTypeValue(urlRewrite.redirect_type_label)}}" stepKey="selectRedirectTypeValue"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{urlRewrite.description}}" stepKey="fillDescription"/>
         <click selector="{{AdminUrlRewriteEditSection.saveButton}}" stepKey="clickOnSaveButton"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.successMessage}}" stepKey="seeSuccessSaveMessage"/>
     </actionGroup>

@@ -30,3 +30,4 @@
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{productSku}}" stepKey="seeProductSkuInStoreFrontPage"/>
     </actionGroup>
 </actionGroups>
+

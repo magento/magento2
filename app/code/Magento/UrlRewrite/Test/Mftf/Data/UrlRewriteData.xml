@@ -23,5 +23,6 @@
         <data key="redirect_type_label">Temporary (302)</data>
         <data key="store_id">1</data>
         <data key="store">Default Store View</data>
+        <data key="description">Update Url Rewrite</data>
     </entity>
 </entities>

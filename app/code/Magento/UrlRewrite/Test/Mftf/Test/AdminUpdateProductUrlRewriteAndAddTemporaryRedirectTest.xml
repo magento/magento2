@@ -9,7 +9,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminUpdateProductUrlRewriteAndAddTemporaryRedirectTest">
         <annotations>
-            <stories value="Update URL rewrite"/>
+            <stories value="URL Rewrite"/>
             <title value="Update Product URL Rewrites"/>
             <description value="Login as Admin and update product UrlRewrite and add Temporary redirect type "/>
             <testCaseId value="MC-5351"/>
@@ -33,16 +33,14 @@
 
         <!-- Open UrlRewrite Edit page and update the fields  -->
         <actionGroup ref="AdminUpdateUrlRewrite" stepKey="updateCategoryUrlRewrite">
-            <argument name="requestPath" value="{{defaultUrlRewrite.request_path}}"/>
-            <argument name="redirectTypeValue" value="Temporary (302)"/>
-            <argument name="description" value="Update Product Url Rewrite"/>
+            <argument name="urlRewrite" value="updateUrlRewrite"/>
         </actionGroup>
 
         <!-- Assert product Url Rewrite in StoreFront -->
         <actionGroup ref="AssertStorefrontProductRedirect" stepKey="assertProductUrlRewriteInStoreFront">
             <argument name="productName" value="$$createProduct.name$$"/>
             <argument name="productSku" value="$$createProduct.sku$$"/>
-            <argument name="productRequestPath" value="{{defaultUrlRewrite.request_path}}"/>
+            <argument name="productRequestPath" value="{{updateUrlRewrite.request_path}}"/>
         </actionGroup>
     </test>
 </tests>
