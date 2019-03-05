@@ -19,14 +19,14 @@
             <group value="importExport"/>
         </annotations>
         <before>
-            <!--Create Simple Product2-->
+            <!-- Create Simple Product2 -->
             <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
                 <field key="name">SimpleProductForTest2</field>
                 <field key="sku">SimpleProductForTest2</field>
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
-            <!--Create Simple Product3-->
+            <!-- Create Simple Product3 -->
             <createData entity="SimpleProduct" stepKey="createSimpleProduct3">
                 <field key="name">SimpleProductForTest3</field>
                 <field key="sku">SimpleProductForTest3</field>
