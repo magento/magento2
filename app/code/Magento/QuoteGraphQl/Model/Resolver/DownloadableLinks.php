@@ -7,17 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Catalog\Model\Product;
+use Magento\Downloadable\Helper\Data as DownloadableHelper;
+use Magento\Downloadable\Model\LinkFactory;
+use Magento\Downloadable\Model\SampleFactory;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
-use Magento\Catalog\Model\Product;
-use Magento\Downloadable\Helper\Data as DownloadableHelper;
-use Magento\Framework\Data\Collection;
-use Magento\Framework\GraphQl\Query\EnumLookup;
-use Magento\Downloadable\Model\LinkFactory;
-use Magento\Downloadable\Model\SampleFactory;
 
 /**
  * @inheritdoc
