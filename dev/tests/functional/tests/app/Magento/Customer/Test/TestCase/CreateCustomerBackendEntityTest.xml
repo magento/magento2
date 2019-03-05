@@ -115,8 +115,7 @@
             </data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendRequiredFields" />
         </variation>
-        <variation name="CreateCustomerBackendEntityTestVariation9" summary="Verify required fields on Addresses tab.">
-            <data name="customerAction" xsi:type="string">save</data>
+        <variation name="CreateCustomerBackendEntityTestVariation9" summary="Verify required fields on the Add address modal.">
             <data name="customer/data/website_id" xsi:type="string">Main Website</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
@@ -131,7 +130,7 @@
                 <item name="5" xsi:type="string">Zip/Postal Code</item>
                 <item name="6" xsi:type="string">Phone Number</item>
             </data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendRequiredFields" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressBackendRequiredFields" />
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation10" summary="Create customer with 2 websites and with different allowed countries.">
             <data name="tag" xsi:type="string">to_maintain:yes</data>

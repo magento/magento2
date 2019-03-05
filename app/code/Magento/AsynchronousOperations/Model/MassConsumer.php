@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AsynchronousOperations\Model;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Registry;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\MessageQueue\MessageLockException;
 use Magento\Framework\MessageQueue\ConnectionLostException;
@@ -59,6 +60,11 @@ class MassConsumer implements ConsumerInterface
     private $operationProcessor;
 
     /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvoker $invoker
@@ -67,6 +73,7 @@ class MassConsumer implements ConsumerInterface
      * @param ConsumerConfigurationInterface $configuration
      * @param OperationProcessorFactory $operationProcessorFactory
      * @param LoggerInterface $logger
+     * @param Registry $registry
      */
     public function __construct(
         CallbackInvoker $invoker,
@@ -74,7 +81,8 @@ class MassConsumer implements ConsumerInterface
         MessageController $messageController,
         ConsumerConfigurationInterface $configuration,
         OperationProcessorFactory $operationProcessorFactory,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Registry $registry = null
     ) {
         $this->invoker = $invoker;
         $this->resource = $resource;
@@ -84,13 +92,17 @@ class MassConsumer implements ConsumerInterface
             'configuration' => $configuration
         ]);
         $this->logger = $logger;
+        $this->registry = $registry ?? \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Registry::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process($maxNumberOfMessages = null)
     {
+        $this->registry->register('isSecureArea', true, true);
+
         $queue = $this->configuration->getQueue();
 
         if (!isset($maxNumberOfMessages)) {
@@ -98,6 +110,8 @@ class MassConsumer implements ConsumerInterface
         } else {
             $this->invoker->invoke($queue, $maxNumberOfMessages, $this->getTransactionCallback($queue));
         }
+
+        $this->registry->unregister('isSecureArea');
     }
 
     /**

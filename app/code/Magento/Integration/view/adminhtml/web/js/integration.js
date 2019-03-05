@@ -187,7 +187,7 @@ define([
             },
 
             /**
-             * Function to check the location of the child popoup window.
+             * Function to check the location of the child popup window.
              * Once detected if the callback is successful, parent window will be reloaded
              */
             fnCheckLocation: function () {
