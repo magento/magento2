@@ -148,7 +148,6 @@ class ConsumerWebsiteAssign
         }
     }
 
-
     /**
      * @param $data
      */
