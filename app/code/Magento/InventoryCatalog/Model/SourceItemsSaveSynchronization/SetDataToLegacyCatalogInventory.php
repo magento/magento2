@@ -13,45 +13,23 @@ use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\AlignLegacyCatalogInventoryByProducts;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
-use Magento\InventoryCatalogApi\Model\SourceItemsSaveSynchronizationInterface;
 
 /**
  * Set Qty and status for legacy CatalogInventory Stock Item table
+ * @deprecated
+ * @see \Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization\SetDataToLegacyCatalogInventory
  */
 class SetDataToLegacyCatalogInventory
 {
     /**
-     * @var SetDataToLegacyStockItem
+     * @var AlignLegacyCatalogInventoryByProducts
      */
-    private $setDataToLegacyStockItem;
-
-    /**
-     * @var StockItemCriteriaInterfaceFactory
-     */
-    private $legacyStockItemCriteriaFactory;
-
-    /**
-     * @var StockItemRepositoryInterface
-     */
-    private $legacyStockItemRepository;
-
-    /**
-     * @var GetProductIdsBySkusInterface
-     */
-    private $getProductIdsBySkus;
-
-    /**
-     * @var StockStateProviderInterface
-     */
-    private $stockStateProvider;
-
-    /**
-     * @var Processor
-     */
-    private $indexerProcessor;
+    private $alignLegacyCatalogInventoryByProducts;
 
     /**
      * @param SetDataToLegacyStockItem $setDataToLegacyStockItem
@@ -60,6 +38,9 @@ class SetDataToLegacyCatalogInventory
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      * @param StockStateProviderInterface $stockStateProvider
      * @param Processor $indexerProcessor
+     * @param AlignLegacyCatalogInventoryByProducts $alignLegacyCatalogInventoryByProducts
+     * @SupressWarnings(PHPMD.UnusedFormalParameter)
+     * @SupressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         SetDataToLegacyStockItem $setDataToLegacyStockItem,
@@ -67,14 +48,11 @@ class SetDataToLegacyCatalogInventory
         StockItemRepositoryInterface $legacyStockItemRepository,
         GetProductIdsBySkusInterface $getProductIdsBySkus,
         StockStateProviderInterface $stockStateProvider,
-        Processor $indexerProcessor
+        Processor $indexerProcessor,
+        AlignLegacyCatalogInventoryByProducts $alignLegacyCatalogInventoryByProducts = null
     ) {
-        $this->setDataToLegacyStockItem = $setDataToLegacyStockItem;
-        $this->legacyStockItemCriteriaFactory = $legacyStockItemCriteriaFactory;
-        $this->legacyStockItemRepository = $legacyStockItemRepository;
-        $this->getProductIdsBySkus = $getProductIdsBySkus;
-        $this->stockStateProvider = $stockStateProvider;
-        $this->indexerProcessor = $indexerProcessor;
+        $this->alignLegacyCatalogInventoryByProducts = $alignLegacyCatalogInventoryByProducts ?:
+            ObjectManager::getInstance()->get(AlignLegacyCatalogInventoryByProducts::class);
     }
 
     /**
@@ -83,64 +61,11 @@ class SetDataToLegacyCatalogInventory
      */
     public function execute(array $sourceItems): void
     {
-        $productIds = [];
+        $skus = [];
         foreach ($sourceItems as $sourceItem) {
-            $sku = $sourceItem->getSku();
-
-            try {
-                $productId = (int)$this->getProductIdsBySkus->execute([$sku])[$sku];
-            } catch (NoSuchEntityException $e) {
-                // Skip synchronization of for not existed product
-                continue;
-            }
-
-            $legacyStockItem = $this->getLegacyStockItem($productId);
-            if (null === $legacyStockItem) {
-                continue;
-            }
-
-            $isInStock = (int)$sourceItem->getStatus();
-
-            if ($legacyStockItem->getManageStock()) {
-                $legacyStockItem->setIsInStock($isInStock);
-                $legacyStockItem->setQty((float)$sourceItem->getQuantity());
-
-                if (false === $this->stockStateProvider->verifyStock($legacyStockItem)) {
-                    $isInStock = 0;
-                }
-            }
-
-            $this->setDataToLegacyStockItem->execute(
-                (string)$sourceItem->getSku(),
-                (float)$sourceItem->getQuantity(),
-                $isInStock
-            );
-            $productIds[] = $productId;
+            $skus[] = $sourceItem->getSku();
         }
 
-        if ($productIds) {
-            $this->indexerProcessor->reindexList($productIds);
-        }
-    }
-
-    /**
-     * @param int $productId
-     * @return null|StockItemInterface
-     */
-    private function getLegacyStockItem(int $productId): ?StockItemInterface
-    {
-        $searchCriteria = $this->legacyStockItemCriteriaFactory->create();
-
-        $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
-        $searchCriteria->addFilter(StockItemInterface::STOCK_ID, StockItemInterface::STOCK_ID, Stock::DEFAULT_STOCK_ID);
-
-        $stockItemCollection = $this->legacyStockItemRepository->getList($searchCriteria);
-        if ($stockItemCollection->getTotalCount() === 0) {
-            return null;
-        }
-
-        $stockItems = $stockItemCollection->getItems();
-        $stockItem = reset($stockItems);
-        return $stockItem;
+        $this->alignLegacyCatalogInventoryByProducts->execute($skus);
     }
 }

@@ -140,4 +140,10 @@
         <plugin name="adapt_verify_stock_to_negative_min_qty"
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\Spi\StockStateProvider\AdaptVerifyStockToNegativeMinQtyPlugin"/>
     </type>
+
+    <type name="Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\AsynchronousSetDataToLegacyCatalogInventory">
+        <arguments>
+            <argument name="batchSize" xsi:type="number">100</argument>
+        </arguments>
+    </type>
 </config>

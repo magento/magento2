@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\App\ObjectManager;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization\AsyncSetDataToLegacyCatalogInventory;
+use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\AlignLegacyCatalogInventoryByProducts;
 use Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization\SetDataToLegacyCatalogInventory;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
@@ -37,35 +37,31 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
     private $getProductTypeBySku;
 
     /**
-     * @var SetDataToLegacyCatalogInventory
+     * @var AlignLegacyCatalogInventoryByProducts|null
      */
-    private $setDataToLegacyCatalogInventory;
-
-    /**
-     * @var AsyncSetDataToLegacyCatalogInventory
-     */
-    private $asyncSetDataToLegacyCatalogInventory;
+    private $alignLegacyCatalogInventoryByProducts;
 
     /**
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypeBySku
      * @param SetDataToLegacyCatalogInventory $setDataToLegacyCatalogInventory
-     * @param AsyncSetDataToLegacyCatalogInventory $asyncSetDataToLegacyCatalogInventory
+     * @param AlignLegacyCatalogInventoryByProducts|null $alignLegacyCatalogInventoryByProducts
      * @SuppressWarnings(PHPMD.LongVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         DefaultSourceProviderInterface $defaultSourceProvider,
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypeBySku,
         SetDataToLegacyCatalogInventory $setDataToLegacyCatalogInventory,
-        AsyncSetDataToLegacyCatalogInventory $asyncSetDataToLegacyCatalogInventory
+        AlignLegacyCatalogInventoryByProducts $alignLegacyCatalogInventoryByProducts = null
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->getProductTypeBySku = $getProductTypeBySku;
-        $this->setDataToLegacyCatalogInventory = $setDataToLegacyCatalogInventory;
-        $this->asyncSetDataToLegacyCatalogInventory = $asyncSetDataToLegacyCatalogInventory;
+        $this->alignLegacyCatalogInventoryByProducts = $alignLegacyCatalogInventoryByProducts ?:
+            ObjectManager::getInstance()->get(AlignLegacyCatalogInventoryByProducts::class);
     }
 
     /**
@@ -77,7 +73,6 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
      */
     public function afterExecute(SourceItemsSaveInterface $subject, $result, array $sourceItems): void
     {
-        $sourceItemsForSynchronization = [];
         $skuToSynchronize = [];
         foreach ($sourceItems as $sourceItem) {
             if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
@@ -97,11 +92,9 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
                 continue;
             }
 
-            $sourceItemsForSynchronization[] = $sourceItem;
             $skuToSynchronize[] = $sourceItem->getSku();
         }
 
-        $this->asyncSetDataToLegacyCatalogInventory->execute($skuToSynchronize);
-//        $this->setDataToLegacyCatalogInventory->execute($sourceItemsForSynchronization);
+        $this->alignLegacyCatalogInventoryByProducts->execute($skuToSynchronize);
     }
 }

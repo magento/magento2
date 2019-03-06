@@ -5,11 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization;
+namespace Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
-use Magento\AsynchronousOperations\Model\MassSchedule;
 use Magento\Framework\Bulk\BulkManagementInterface;
 use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -17,9 +16,8 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Set Qty and status for legacy CatalogInventory Stock Item table
  */
-class AsyncSetDataToLegacyCatalogInventory
+class AsynchronousSetDataToLegacyCatalogInventory
 {
-    private const BATCH_SIZE = 100; // TODO: use di.xml to define the batch size
     private const TOPIC_NAME = 'inventory.catalog.product.legacy_inventory.set_data';
 
     /**
@@ -43,22 +41,30 @@ class AsyncSetDataToLegacyCatalogInventory
     private $operationInterfaceFactory;
 
     /**
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * AsyncSetDataToLegacyCatalogInventory constructor.
      * @param BulkManagementInterface $bulkManagement
      * @param SerializerInterface $serializer
      * @param IdentityGeneratorInterface $identityService
      * @param OperationInterfaceFactory $operationInterfaceFactory
+     * @param int $batchSize
      */
     public function __construct(
         BulkManagementInterface $bulkManagement,
         SerializerInterface $serializer,
         IdentityGeneratorInterface $identityService,
-        OperationInterfaceFactory $operationInterfaceFactory
+        OperationInterfaceFactory $operationInterfaceFactory,
+        int $batchSize
     ) {
         $this->bulkManagement = $bulkManagement;
         $this->identityService = $identityService;
         $this->serializer = $serializer;
         $this->operationInterfaceFactory = $operationInterfaceFactory;
+        $this->batchSize = $batchSize;
     }
 
     /**
@@ -71,7 +77,7 @@ class AsyncSetDataToLegacyCatalogInventory
 
         $bulkUuid = $this->identityService->generateId();
 
-        $chunks = array_chunk($skus, self::BATCH_SIZE);
+        $chunks = array_chunk($skus, $this->batchSize);
         foreach ($chunks as $chunk) {
             $data = [
                 'data' => [
