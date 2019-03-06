@@ -118,9 +118,10 @@ class Eraser
     private function getSelectForProducts(array $ids)
     {
         $productTable = $this->productIndexerHelper->getTable('catalog_product_entity');
-        $select = $this->connection->select()->from($productTable)
+        $select = $this->connection->select()
+            ->from(['product_table' => $productTable])
             ->columns('entity_id')
-            ->where('entity_id IN(?)', $ids);
+            ->where('product_table.entity_id IN(?)', $ids);
         return $select;
     }
 

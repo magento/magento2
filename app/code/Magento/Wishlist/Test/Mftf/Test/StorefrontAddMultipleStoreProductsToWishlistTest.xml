@@ -16,6 +16,9 @@
             <group value="wishlist"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MAGETWO-95678"/>
+            <skip>
+                <issueId value="MC-13867"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="customStoreGroup" stepKey="storeGroup"/>

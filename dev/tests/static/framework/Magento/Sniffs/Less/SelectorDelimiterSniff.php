@@ -14,8 +14,7 @@ use PHP_CodeSniffer\Files\File;
  * Ensure that a line break exists after each selector delimiter.
  * No spaces should be before or after delimiters.
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#selector-delimiters
- *
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#selector-delimiters
  */
 class SelectorDelimiterSniff implements Sniff
 {
@@ -27,7 +26,7 @@ class SelectorDelimiterSniff implements Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -35,7 +34,7 @@ class SelectorDelimiterSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
@@ -50,6 +49,8 @@ class SelectorDelimiterSniff implements Sniff
     }
 
     /**
+     * Parenthesis validation.
+     *
      * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $tokens

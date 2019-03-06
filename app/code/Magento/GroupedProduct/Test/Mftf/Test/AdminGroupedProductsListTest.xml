@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminGroupedProductsAreListedWhenOutOfStock">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="MAGETWO-93181: Grouped product doesn't take care about his Linked Products when SalableQuantity &lt; ProductLink.ExtensionAttributes.Qty after Source Deduction"/>
+            <title value="Products in group should show in admin list even when they are out of stock"/>
+            <description value="Products in group should show in admin list even when they are out of stock"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-93181"/>
+            <group value="GroupedProduct"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category1"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!--Out of Stock-->
+            <createData entity="SimpleProduct4" stepKey="simpleProduct2">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="category1" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create product -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillGroupedProductForm" stepKey="fillMainProductForm">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+        <!-- Add two simple products to grouped product -->
+        <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToSection"/>
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductSection"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
+        <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForFilter"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku1">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkOption1"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku2">
+            <argument name="product" value="$$simpleProduct2$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkOption2"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addSelectedProducts"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+
+        <!-- Save product -->
+        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+
+        <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToProducts"/>
+
+        <waitForText userInput="$$simpleProduct1.name$$" stepKey="assertProductIsInTheList"/>
+        <waitForText userInput="$$simpleProduct2.name$$" stepKey="assertProduct2IsInTheList"/>
+    </test>
+</tests>

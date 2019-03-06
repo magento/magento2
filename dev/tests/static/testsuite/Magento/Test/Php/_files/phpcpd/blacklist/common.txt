@@ -205,3 +205,12 @@ Test/_files
 Magento/InventoryCatalogAdminUi/Controller/Adminhtml
 Magento/InventoryConfigurableProductIndexer/Indexer
 Magento/InventoryGroupedProductIndexer/Indexer
+Magento/Customer/Model/FileUploaderDataResolver.php
+Magento/Customer/Model/Customer/DataProvider.php
+Magento/InventoryShippingAdminUi/Ui/DataProvider
+Magento/Elasticsearch6/Model/Client
+Magento/CatalogSearch/Model/ResourceModel/Advanced/Collection
+Magento/CatalogSearch/Model/ResourceModel/Fulltext/Collection
+Magento/Elasticsearch/Model/Layer/Category/ItemCollectionProvider
+Magento/Elasticsearch/Model/Layer/Search/ItemCollectionProvider
+Magento/Elasticsearch/Model/Adapter/FieldMapper/Product/FieldProvider/FieldName/Resolver/CompositeResolver

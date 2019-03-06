@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateVirtualProductWithoutManageStockTest">
+        <annotations>
+            <stories value="Create virtual product"/>
+            <title value="Create virtual product without manage stock"/>
+            <description value="Test log in to Create virtual product and Create virtual product without manage stock"/>
+            <testCaseId value="MC-6035"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
+        <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
+        <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickVirtualProduct"/>
+
+        <!-- Create virtual product without manage stock  -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{virtualProductWithoutManageStock.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{virtualProductWithoutManageStock.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{virtualProductWithoutManageStock.price}}" stepKey="fillProductPrice"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" userInput="{{virtualProductWithoutManageStock.special_price}}" stepKey="fillSpecialPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductWithoutManageStock.quantity}}" stepKey="fillProductQuantity"/>
+        <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickAdvancedInventoryLink"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.manageStock}}" stepKey="clickManageStock"/>
+        <checkOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="CheckUseConfigSettingsCheckBox"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.doneButton}}" stepKey="clickDoneButtonOnAdvancedInventorySection"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{virtualProductWithoutManageStock.urlKey}}" stepKey="fillUrlKey"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+
+        <!-- Verify we see success message -->
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
+
+        <!-- Verify customer see created virtual product without manage stock on the storefront page -->
+        <amOnPage url="{{StorefrontProductPage.url(virtualProductWithoutManageStock.urlKey)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForStoreFrontPageToLoad"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{virtualProductWithoutManageStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{virtualProductWithoutManageStock.sku}}" stepKey="seeVirtualProductSku"/>
+
+        <!-- Verify customer see product special price on the storefront page -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceAmount}}" stepKey="specialPriceAmount"/>
+        <assertEquals stepKey="assertSpecialPriceTextOnProductPage">
+            <expectedResult type="string">${{virtualProductWithoutManageStock.special_price}}</expectedResult>
+            <actualResult type="variable">specialPriceAmount</actualResult>
+        </assertEquals>
+
+        <!-- Verify customer see product old price on the storefront page -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.oldPriceAmount}}" stepKey="oldPriceAmount"/>
+        <assertEquals stepKey="assertOldPriceTextOnProductPage">
+            <expectedResult type="string">${{virtualProductWithoutManageStock.price}}</expectedResult>
+            <actualResult type="variable">oldPriceAmount</actualResult>
+        </assertEquals>
+
+        <!-- Verify customer see product in stock status on the storefront page -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
+        <assertEquals stepKey="assertStockAvailableOnProductPage">
+            <expectedResult type="string">{{virtualProductWithoutManageStock.storefrontStatus}}</expectedResult>
+            <actualResult type="variable">productStockAvailableStatus</actualResult>
+        </assertEquals>
+    </test>
+</tests>

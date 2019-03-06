@@ -133,13 +133,7 @@ class Account extends AbstractForm
 
         $this->_form->addFieldNameSuffix('order[account]');
 
-        $formValues = $this->getFormValues();
-        foreach ($attributes as $code => $attribute) {
-            $defaultValue = $attribute->getDefaultValue();
-            if (isset($defaultValue) && !isset($formValues[$code])) {
-                $formValues[$code] = $defaultValue;
-            }
-        }
+        $formValues = $this->extractValuesFromAttributes($attributes);
         $this->_form->setValues($formValues);
 
         return $this;
@@ -192,5 +186,24 @@ class Account extends AbstractForm
         }
 
         return $data;
+    }
+
+    /**
+     * Extract the form values from attributes.
+     *
+     * @param array $attributes
+     * @return array
+     */
+    private function extractValuesFromAttributes(array $attributes): array
+    {
+        $formValues = $this->getFormValues();
+        foreach ($attributes as $code => $attribute) {
+            $defaultValue = $attribute->getDefaultValue();
+            if (isset($defaultValue) && !isset($formValues[$code])) {
+                $formValues[$code] = $defaultValue;
+            }
+        }
+
+        return $formValues;
     }
 }

@@ -12,6 +12,9 @@ use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\OsInfo;
 use Magento\TestFramework\Helper\Amqp;
 
+/**
+ * Publisher Consumer Controller
+ */
 class PublisherConsumerController
 {
     /**
@@ -49,6 +52,16 @@ class PublisherConsumerController
      */
     private $amqpHelper;
 
+    /**
+     * PublisherConsumerController constructor.
+     * @param PublisherInterface $publisher
+     * @param OsInfo $osInfo
+     * @param Amqp $amqpHelper
+     * @param string $logFilePath
+     * @param array $consumers
+     * @param array $appInitParams
+     * @param null|int $maxMessages
+     */
     public function __construct(
         PublisherInterface $publisher,
         OsInfo $osInfo,
@@ -75,11 +88,8 @@ class PublisherConsumerController
      */
     public function initialize()
     {
-        if ($this->osInfo->isWindows()) {
-            throw new EnvironmentPreconditionException(
-                "This test relies on *nix shell and should be skipped in Windows environment."
-            );
-        }
+        $this->validateEnvironmentPreconditions();
+
         $connections = $this->amqpHelper->getConnections();
         foreach (array_keys($connections) as $connectionName) {
             $this->amqpHelper->deleteConnection($connectionName);
@@ -109,6 +119,27 @@ class PublisherConsumerController
     }
 
     /**
+     * Validate environment preconditions
+     *
+     * @throws EnvironmentPreconditionException
+     * @throws PreconditionFailedException
+     */
+    private function validateEnvironmentPreconditions()
+    {
+        if ($this->osInfo->isWindows()) {
+            throw new EnvironmentPreconditionException(
+                "This test relies on *nix shell and should be skipped in Windows environment."
+            );
+        }
+
+        if (!$this->amqpHelper->isAvailable()) {
+            throw new PreconditionFailedException(
+                'This test relies on RabbitMQ Management Plugin.'
+            );
+        }
+    }
+
+    /**
      * Stop Consumers
      */
     public function stopConsumers()
@@ -121,6 +152,8 @@ class PublisherConsumerController
     }
 
     /**
+     * Get Consumers ProcessIds
+     *
      * @return array
      */
     public function getConsumersProcessIds()
@@ -133,6 +166,8 @@ class PublisherConsumerController
     }
 
     /**
+     * Get Consumer ProcessIds
+     *
      * @param string $consumer
      * @return string[]
      */
@@ -167,8 +202,10 @@ class PublisherConsumerController
     }
 
     /**
+     * Wait for asynchronous result
+     *
      * @param callable $condition
-     * @param $params
+     * @param array $params
      * @throws PreconditionFailedException
      */
     public function waitForAsynchronousResult(callable $condition, $params)
@@ -185,6 +222,8 @@ class PublisherConsumerController
     }
 
     /**
+     * Get publisher
+     *
      * @return PublisherInterface
      */
     public function getPublisher()
