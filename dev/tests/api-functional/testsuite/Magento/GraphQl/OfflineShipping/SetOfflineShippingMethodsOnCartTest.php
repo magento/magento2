@@ -52,40 +52,6 @@ class SetOfflineShippingOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * Test for general routine of setting a shipping method on shopping cart
-     *
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
-     */
-    public function testSetShippingMethodOnCart()
-    {
-        $shippingCarrierCode = 'flatrate';
-        $shippingMethodCode = 'flatrate';
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-        $shippingAddress = $this->quote->getShippingAddress();
-        $shippingAddressId = $shippingAddress->getId();
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $query = $this->prepareMutationQuery(
-            $maskedQuoteId,
-            $shippingMethodCode,
-            $shippingCarrierCode,
-            $shippingAddressId
-        );
-
-        $response = $this->sendRequestWithToken($query);
-
-        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
-        $addressesInformation = $response['setShippingMethodsOnCart']['cart']['shipping_addresses'];
-        self::assertCount(1, $addressesInformation);
-    }
-
-    /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      */
@@ -143,114 +109,6 @@ class SetOfflineShippingOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
-     */
-    public function testSetShippingMethodWithWrongCartId()
-    {
-        $shippingCarrierCode = 'flatrate';
-        $shippingMethodCode = 'flatrate';
-        $shippingAddressId = '1';
-        $maskedQuoteId = 'invalid';
-
-        $query = $this->prepareMutationQuery(
-            $maskedQuoteId,
-            $shippingMethodCode,
-            $shippingCarrierCode,
-            $shippingAddressId
-        );
-
-        self::expectExceptionMessage("Could not find a cart with ID \"$maskedQuoteId\"");
-        $this->sendRequestWithToken($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
-     */
-    public function testSetNonExistingShippingMethod()
-    {
-        $shippingCarrierCode = 'non';
-        $shippingMethodCode = 'existing';
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-        $shippingAddress = $this->quote->getShippingAddress();
-        $shippingAddressId = $shippingAddress->getId();
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $query = $this->prepareMutationQuery(
-            $maskedQuoteId,
-            $shippingMethodCode,
-            $shippingCarrierCode,
-            $shippingAddressId
-        );
-
-        self::expectExceptionMessage("Carrier with such method not found: $shippingCarrierCode, $shippingMethodCode");
-        $this->sendRequestWithToken($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
-     */
-    public function testSetShippingMethodWithNonExistingAddress()
-    {
-        $shippingCarrierCode = 'flatrate';
-        $shippingMethodCode = 'flatrate';
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $shippingAddressId = '-20';
-
-        $query = $this->prepareMutationQuery(
-            $maskedQuoteId,
-            $shippingMethodCode,
-            $shippingCarrierCode,
-            $shippingAddressId
-        );
-
-        self::expectExceptionMessage("Could not find a cart address with ID \"$shippingAddressId\"");
-        $this->sendRequestWithToken($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
-     */
-    public function testSetShippingMethodByGuestToCustomerCart()
-    {
-        $shippingCarrierCode = 'flatrate';
-        $shippingMethodCode = 'flatrate';
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-        $shippingAddress = $this->quote->getShippingAddress();
-        $shippingAddressId = $shippingAddress->getId();
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $query = $this->prepareMutationQuery(
-            $maskedQuoteId,
-            $shippingMethodCode,
-            $shippingCarrierCode,
-            $shippingAddressId
-        );
-
-        self::expectExceptionMessage(
-            "The current user cannot perform operations on cart \"$maskedQuoteId\""
-        );
-
-        $this->graphQlQuery($query);
-    }
-
-    /**
      * Send request for setting the requested shipping method and check the output
      *
      * @param string $shippingCarrierCode
@@ -275,7 +133,7 @@ class SetOfflineShippingOnCartTest extends GraphQlAbstract
         $shippingAddressId = $shippingAddress->getId();
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
 
-        $query = $this->prepareMutationQuery(
+        $query = $this->getQuery(
             $maskedQuoteId,
             $shippingMethodCode,
             $shippingCarrierCode,
@@ -300,7 +158,7 @@ class SetOfflineShippingOnCartTest extends GraphQlAbstract
      * @param string $shippingAddressId
      * @return string
      */
-    private function prepareMutationQuery(
+    private function getQuery(
         string $maskedQuoteId,
         string $shippingMethodCode,
         string $shippingCarrierCode,
@@ -343,7 +201,6 @@ QUERY;
      */
     private function sendRequestWithToken(string $query): array
     {
-
         $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
 
