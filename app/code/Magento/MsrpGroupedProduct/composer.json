@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-msrp",
+    "name": "magento/module-msrp-grouped-product",
     "description": "N/A",
     "config": {
         "sort-packages": true
@@ -8,14 +8,8 @@
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
         "magento/module-catalog": "*",
-        "magento/module-downloadable": "*",
-        "magento/module-eav": "*",
-        "magento/module-store": "*",
-        "magento/module-tax": "*"
-    },
-    "suggest": {
-        "magento/module-bundle": "*",
-        "magento/module-msrp-sample-data": "*"
+        "magento/module-msrp": "*",
+        "magento/module-grouped-product": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -27,7 +21,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\Msrp\\": ""
+            "Magento\\MsrpGroupedProduct\\": ""
         }
     }
 }
