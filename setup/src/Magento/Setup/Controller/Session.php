@@ -5,6 +5,9 @@
  */
 namespace Magento\Setup\Controller;
 
+/**
+ * Sets up session for setup/index.php/session/prolong or redirects to error page
+ */
 class Session extends \Zend\Mvc\Controller\AbstractActionController
 {
     /**
@@ -83,6 +86,8 @@ class Session extends \Zend\Mvc\Controller\AbstractActionController
     }
 
     /**
+     * Unlogin action, return 401 error page
+     *
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function unloginAction()
