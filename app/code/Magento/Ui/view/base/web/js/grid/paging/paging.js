@@ -19,7 +19,9 @@ define([
         defaults: {
             template: 'ui/grid/paging/paging',
             totalTmpl: 'ui/grid/paging-total',
+            totalRecords: 0,
             pageSize: 20,
+            pages: 1,
             current: 1,
             selectProvider: 'ns = ${ $.ns }, index = ids',
 
@@ -45,11 +47,12 @@ define([
             },
 
             statefull: {
+                pageSize: true,
                 current: true
             },
 
             listens: {
-                'pages': 'updateCounter',
+                'pages': 'onPagesChange',
                 'pageSize': 'onPageSizeChange',
                 'totalRecords': 'updateCounter',
                 '${ $.provider }:params.filters': 'goFirst'
@@ -226,13 +229,11 @@ define([
         /**
          * Calculates new page cursor based on the
          * previous and current page size values.
-         *
-         * @returns {Number} Updated cursor value.
          */
         updateCursor: function () {
             var cursor  = this.current - 1,
                 size    = this.pageSize,
-                oldSize = this.previousSize,
+                oldSize = typeof this.previousSize === 'undefined' ? this.pageSize : this.previousSize,
                 delta   = cursor * (oldSize  - size) / size;
 
             delta = size > oldSize ?
@@ -243,9 +244,7 @@ define([
 
             this.previousSize = size;
 
-            if (delta) {
-                this.setPage(cursor);
-            }
+            this.setPage(cursor);
 
             return this;
         },
