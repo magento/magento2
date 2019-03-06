@@ -1292,8 +1292,13 @@ define([
          */
         _EmulateSelected: function (selectedAttributes) {
             $.each(selectedAttributes, $.proxy(function (attributeCode, optionId) {
-                var elem = this.element.find('.' + this.options.classes.attributeClass +
-                    '[attribute-code="' + attributeCode + '"] [option-id="' + optionId + '"]'),
+                var elemFindStr = '.' + this.options.classes.attributeClass +
+                    '[attribute-code="' + attributeCode + '"] [option-id="' + optionId + '"]';
+                if (isNaN(optionId)) {
+                    elemFindStr ='.' + this.options.classes.attributeClass +
+                        '[attribute-code="' + attributeCode + '"] [option-label="' + optionId + '"]';
+                }
+                var elem = this.element.find(elemFindStr),
                     parentInput = elem.parent();
 
                 if (elem.hasClass('selected')) {
