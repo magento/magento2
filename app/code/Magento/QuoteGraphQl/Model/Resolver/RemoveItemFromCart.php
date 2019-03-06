@@ -64,9 +64,9 @@ class RemoveItemFromCart implements ResolverInterface
         try {
             $this->guestCartItemRepository->deleteById($maskedCartId, $itemId);
         } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()));
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
+            throw new GraphQlInputException(__($e->getMessage()), $e);
         }
 
         return [
