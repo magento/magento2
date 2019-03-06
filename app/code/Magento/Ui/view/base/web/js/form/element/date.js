@@ -122,10 +122,12 @@ define([
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
                     dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
-
                     shiftedValue = moment(value, dateFormat);
                 }
 
+                if (!shiftedValue.isValid()) {
+                    shiftedValue = moment(value, this.inputDateFormat);
+                }
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
             } else {
                 shiftedValue = '';
