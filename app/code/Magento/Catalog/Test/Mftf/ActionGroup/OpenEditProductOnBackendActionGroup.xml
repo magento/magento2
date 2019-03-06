@@ -11,7 +11,7 @@
         <arguments>
             <argument name="product" defaultValue="product"/>
         </arguments>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductRow"/>
+        <click selector="{{AdminProductGridSection.productRowBySku(product.sku)}}" stepKey="clickOnProductRow"/>
         <waitForPageLoad time="30" stepKey="waitForProductPageLoad"/>
         <seeInField userInput="{{product.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="seeProductSkuOnEditProductPage"/>
     </actionGroup>
