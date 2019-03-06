@@ -74,10 +74,10 @@ class ApplyCouponToCart implements ResolverInterface
 
         try {
             $this->couponManagement->set($cartId, $couponCode);
-        } catch (NoSuchEntityException $exception) {
-            throw new GraphQlNoSuchEntityException(__($exception->getMessage()));
-        } catch (CouldNotSaveException $exception) {
-            throw new LocalizedException(__($exception->getMessage()));
+        } catch (NoSuchEntityException $e) {
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+        } catch (CouldNotSaveException $e) {
+            throw new LocalizedException(__($e->getMessage()), $e);
         }
 
         return [
