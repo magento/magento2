@@ -16,7 +16,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 
 /**
- * Get customer address. Throws exception if customer is not owner of address
+ * Get customer address
  */
 class GetCustomerAddress
 {
@@ -52,7 +52,7 @@ class GetCustomerAddress
                 __('Could not find a address with ID "%address_id"', ['address_id' => $addressId])
             );
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
+            throw new GraphQlInputException(__($e->getMessage()), $e);
         }
 
         if ((int)$customerAddress->getCustomerId() !== $customerId) {
