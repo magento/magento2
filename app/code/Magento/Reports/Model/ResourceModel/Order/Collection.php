@@ -445,7 +445,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                 break;
 
             case 'custom':
-                $dateStart = $customStart ? $customStart : $dateEnd;
+                $dateStart = $customStart ? $customStart : $dateStart;
                 $dateEnd = $customEnd ? $customEnd : $dateEnd;
                 break;
 

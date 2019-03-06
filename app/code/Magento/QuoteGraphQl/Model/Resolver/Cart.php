@@ -12,7 +12,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
-use Magento\QuoteGraphQl\Model\Cart\ExtractDataFromCart;
 
 /**
  * @inheritdoc
@@ -20,25 +19,17 @@ use Magento\QuoteGraphQl\Model\Cart\ExtractDataFromCart;
 class Cart implements ResolverInterface
 {
     /**
-     * @var ExtractDataFromCart
-     */
-    private $extractDataFromCart;
-
-    /**
      * @var GetCartForUser
      */
     private $getCartForUser;
 
     /**
      * @param GetCartForUser $getCartForUser
-     * @param ExtractDataFromCart $extractDataFromCart
      */
     public function __construct(
-        GetCartForUser $getCartForUser,
-        ExtractDataFromCart $extractDataFromCart
+        GetCartForUser $getCartForUser
     ) {
         $this->getCartForUser = $getCartForUser;
-        $this->extractDataFromCart = $extractDataFromCart;
     }
 
     /**
@@ -54,8 +45,8 @@ class Cart implements ResolverInterface
         $currentUserId = $context->getUserId();
         $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId);
 
-        $data = $this->extractDataFromCart->execute($cart);
-        $data['model'] = $cart;
-        return $data;
+        return [
+            'model' => $cart,
+        ];
     }
 }

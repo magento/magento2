@@ -146,8 +146,9 @@ class BackendValidator implements ValidatorInterface
                 $exception = new InvalidRequestException($response);
             } else {
                 //For regular requests.
+                $startPageUrl = $this->backendUrl->getStartupPageUrl();
                 $response = $this->redirectFactory->create()
-                    ->setUrl($this->backendUrl->getStartupPageUrl());
+                    ->setUrl($this->backendUrl->getUrl($startPageUrl));
                 $exception = new InvalidRequestException(
                     $response,
                     [
