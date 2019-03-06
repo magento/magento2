@@ -399,6 +399,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $sourceMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getAllOptions'])
             ->getMockForAbstractClass();
 
         $attributeCode = self::ATTRIBUTE_CODE;

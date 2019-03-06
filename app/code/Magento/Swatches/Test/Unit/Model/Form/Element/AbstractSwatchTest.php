@@ -20,6 +20,7 @@ class AbstractSwatchTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->source = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class)
+            ->setMethods(['getAllOptions'])
             ->getMockForAbstractClass();
 
         $this->attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
