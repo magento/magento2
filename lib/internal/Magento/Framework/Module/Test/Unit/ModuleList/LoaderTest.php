@@ -160,4 +160,55 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
         ]));
         $this->loader->load();
     }
+
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testLoadPrearranged(): void
+    {
+        $fixtures = [
+            'Foo_Bar' => ['name' => 'Foo_Bar', 'sequence' => ['Magento_Store']],
+            'Magento_Directory' => ['name' => 'Magento_Directory', 'sequence' => ['Magento_Store']],
+            'Magento_Store' => ['name' => 'Magento_Store', 'sequence' => []],
+            'Magento_Theme' => ['name' => 'Magento_Theme', 'sequence' => ['Magento_Store', 'Magento_Directory']],
+            'Test_HelloWorld' => ['name' => 'Test_HelloWorld', 'sequence' => ['Magento_Theme']]
+        ];
+
+        $index = 0;
+        foreach ($fixtures as $name => $fixture) {
+            $this->converter->expects($this->at($index++))->method('convert')->willReturn([$name => $fixture]);
+        }
+
+        $this->registry->expects($this->once())
+            ->method('getPaths')
+            ->willReturn([
+                '/path/to/Foo_Bar',
+                '/path/to/Magento_Directory',
+                '/path/to/Magento_Store',
+                '/path/to/Magento_Theme',
+                '/path/to/Test_HelloWorld'
+            ]);
+
+        $this->driver->expects($this->exactly(5))
+            ->method('fileGetContents')
+            ->will($this->returnValueMap([
+                ['/path/to/Foo_Bar/etc/module.xml', null, null, self::$sampleXml],
+                ['/path/to/Magento_Directory/etc/module.xml', null, null, self::$sampleXml],
+                ['/path/to/Magento_Store/etc/module.xml', null, null, self::$sampleXml],
+                ['/path/to/Magento_Theme/etc/module.xml', null, null, self::$sampleXml],
+                ['/path/to/Test_HelloWorld/etc/module.xml', null, null, self::$sampleXml],
+            ]));
+
+        // Load the full module list information
+        $result = $this->loader->load();
+
+        $this->assertSame(
+            ['Magento_Store', 'Magento_Directory', 'Magento_Theme', 'Foo_Bar', 'Test_HelloWorld'],
+            array_keys($result)
+        );
+
+        foreach ($fixtures as $name => $fixture) {
+            $this->assertSame($fixture, $result[$name]);
+        }
+    }
 }
