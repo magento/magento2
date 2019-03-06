@@ -2024,9 +2024,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $name = '';
         foreach ($optionValues as $optionValue) {
             $pattern = '/option_title\=[+-]?([0-9]*.)?[0-9]+/';
-            $optionValueParamsString = preg_replace($pattern, '', $optionValue);
+            $optionParamsStr = preg_replace($pattern, '', $optionValue);
             preg_match($pattern, $optionValue, $match);
-            $optionValueParams = explode($this->_productEntity->getMultipleValueSeparator(), $optionValueParamsString);
+            $optionValueParams = explode($this->_productEntity->getMultipleValueSeparator(), $optionParamsStr);
             array_push($optionValueParams, isset($match[0]) ? $match[0] : '');
             foreach ($optionValueParams as $nameAndValue) {
                 $nameAndValue = explode('=', $nameAndValue, 2);
