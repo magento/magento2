@@ -5,17 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Quote;
+namespace Magento\GraphQl\Quote\Customer;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Multishipping\Helper\Data;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\TestFramework\ObjectManager;
 
 /**
  * Test for set shipping addresses on cart mutation
@@ -53,99 +50,9 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     */
-    public function testSetNewShippingAddressByGuest()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
-
-        $query = <<<QUERY
-mutation {
-  setShippingAddressesOnCart(
-    input: {
-      cart_id: "$maskedQuoteId"
-      shipping_addresses: [
-        {
-          address: {
-            firstname: "test firstname"
-            lastname: "test lastname"
-            company: "test company"
-            street: ["test street 1", "test street 2"]
-            city: "test city"
-            region: "test region"
-            postcode: "887766"
-            country_code: "US"
-            telephone: "88776655"
-            save_in_address_book: false
-          }
-        }
-      ]
-    }
-  ) {
-    cart {
-      shipping_addresses {
-        firstname
-        lastname
-        company
-        street
-        city
-        postcode
-        telephone
-        country {
-          code
-          label
-        }
-        address_type
-      }
-    }
-  }
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
-
-        self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
-        $cartResponse = $response['setShippingAddressesOnCart']['cart'];
-        self::assertArrayHasKey('shipping_addresses', $cartResponse);
-        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
-        $this->assertNewShippingAddressFields($shippingAddressResponse);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
-     */
-    public function testSetShippingAddressFromAddressBookByGuest()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
-
-        $query = <<<QUERY
-mutation {
-  setShippingAddressesOnCart(
-    input: {
-      cart_id: "$maskedQuoteId"
-      shipping_addresses: [
-        {
-          customer_address_id: 1
-        }
-      ]
-    }
-  ) {
-    cart {
-      shipping_addresses {
-        city
-      }
-    }
-  }
-}
-QUERY;
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
-    public function testSetNewShippingAddressByRegisteredCustomer()
+    public function testSetNewShippingAddress()
     {
         $maskedQuoteId = $this->assignQuoteToCustomer();
 
@@ -203,9 +110,93 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @dataProvider requestWithoutRequiredParamsDataProvider
+     * @param string $params
+     * @param string $expectedException
+     * @throws \Exception
+     */
+    public function testSetNewShippingAddressWithEmptyRequiredParams(string $params, string $expectedException)
+    {
+        $maskedQuoteId = $this->assignQuoteToCustomer();
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          address: {
+            $params
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        city
+      }
+    }
+  }
+}
+QUERY;
+        $this->expectExceptionMessage(
+            $expectedException
+        );
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
+     */
+    public function testSetNewShippingAddressOnQuoteWithVirtualProducts()
+    {
+        $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_virtual_product_without_address');
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "test firstname"
+            lastname: "test lastname"
+            company: "test company"
+            street: ["test street 1", "test street 2"]
+            city: "test city"
+            region: "test region"
+            postcode: "887766"
+            country_code: "US"
+            telephone: "88776655"
+            save_in_address_book: false
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        city
+      }
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      */
-    public function testSetShippingAddressFromAddressBookByRegisteredCustomer()
+    public function testSetShippingAddressFromAddressBook()
     {
         $maskedQuoteId = $this->assignQuoteToCustomer();
 
@@ -279,36 +270,6 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The shipping address must contain either "customer_address_id" or "address".
-     */
-    public function testSetShippingAddressWithoutAddresses()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
-
-        $query = <<<QUERY
-mutation {
-  setShippingAddressesOnCart(
-    input: {
-      cart_id: "$maskedQuoteId"
-      shipping_addresses: [
-        {}
-      ]
-    }
-  ) {
-    cart {
-      shipping_addresses {
-        city
-      }
-    }
-  }
-}
-QUERY;
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      */
@@ -355,75 +316,6 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage You cannot specify multiple shipping addresses.
-     */
-    public function testSetMultipleNewShippingAddresses()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
-
-        $query = <<<QUERY
-mutation {
-  setShippingAddressesOnCart(
-    input: {
-      cart_id: "$maskedQuoteId"
-      shipping_addresses: [
-        {
-          address: {
-            firstname: "test firstname"
-            lastname: "test lastname"
-            company: "test company"
-            street: ["test street 1", "test street 2"]
-            city: "test city"
-            region: "test region"
-            postcode: "887766"
-            country_code: "US"
-            telephone: "88776655"
-            save_in_address_book: false
-          }
-        },
-        {
-          address: {
-            firstname: "test firstname 2"
-            lastname: "test lastname 2"
-            company: "test company 2"
-            street: ["test street 1", "test street 2"]
-            city: "test city"
-            region: "test region"
-            postcode: "887766"
-            country_code: "US"
-            telephone: "88776655"
-            save_in_address_book: false
-          }
-        }
-      ]
-    }
-  ) {
-    cart {
-      shipping_addresses {
-        city
-      }
-    }
-  }
-}
-QUERY;
-        /** @var \Magento\Config\Model\ResourceModel\Config $config */
-        $config = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
-        $config->saveConfig(
-            Data::XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE,
-            null,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            0
-        );
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = ObjectManager::getInstance()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $config->reinit();
-
-        $this->graphQlQuery($query);
-    }
-
-    /**
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
@@ -456,6 +348,57 @@ mutation {
 QUERY;
 
         $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @expectedException \Exception
+     */
+    public function testSetShippingAddressIfCustomerIsNotOwnerOfCart()
+    {
+        $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 1);
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          customer_address_id: 1
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        postcode
+      }
+    }
+  }
+}
+QUERY;
+        $this->expectExceptionMessage(
+            "The current user cannot perform operations on cart \"$maskedQuoteId\""
+        );
+
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
+    }
+
+    /**
+     * TODO: currently only the city param is required, do we need to add at least ZIP code?
+     * @return array
+     */
+    public function requestWithoutRequiredParamsDataProvider()
+    {
+        return [
+            [
+                'save_in_address_book: false',
+                'Field CartAddressInput.city of required type String! was not provided'
+            ]
+        ];
     }
 
     /**
@@ -514,18 +457,6 @@ QUERY;
 
     /**
      * @param string $reversedQuoteId
-     * @return string
-     */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
-    }
-
-    /**
-     * @param string $reversedQuoteId
      * @param int $customerId
      * @return string
      */
@@ -538,23 +469,5 @@ QUERY;
         $quote->setCustomerId($customerId);
         $this->quoteResource->save($quote);
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
-    }
-
-    public function tearDown()
-    {
-        /** @var \Magento\Config\Model\ResourceModel\Config $config */
-        $config = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
-
-        //default state of multishipping config
-        $config->saveConfig(
-            Data::XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE,
-            1,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            0
-        );
-
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = ObjectManager::getInstance()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $config->reinit();
     }
 }
