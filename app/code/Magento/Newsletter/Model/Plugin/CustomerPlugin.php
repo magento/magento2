@@ -164,11 +164,12 @@ class CustomerPlugin
     public function afterGetById(CustomerRepository $subject, CustomerInterface $customer)
     {
         $extensionAttributes = $customer->getExtensionAttributes();
-        $storeId = $this->storeManager->getStore()->getId();
-        $customer->setStoreId($storeId);
+
         if ($extensionAttributes === null) {
             /** @var CustomerExtensionInterface $extensionAttributes */
             $extensionAttributes = $this->extensionFactory->create(CustomerInterface::class);
+            $storeId = $this->storeManager->getStore()->getId();
+            $customer->setStoreId($storeId);
             $customer->setExtensionAttributes($extensionAttributes);
         }
         if ($extensionAttributes->getIsSubscribed() === null) {
