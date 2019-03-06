@@ -11,7 +11,7 @@
 $url = $block->getReviewsUrl() . '#reviews';
 $urlForm = $block->getReviewsUrl() . '#review-form';
 ?>
-<?php if ($block->getReviewsCount()): ?>
+<?php if ($block->isReviewEnabled() && $block->getReviewsCount()): ?>
 <?php $rating = $block->getRatingSummary(); ?>
 <div class="product-reviews-summary<?= !$rating ? ' no-rating' : '' ?>" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
     <?php if ($rating):?>
@@ -35,7 +35,7 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
         <a class="action add" href="<?= $block->escapeUrl($urlForm) ?>"><?= $block->escapeHtml(__('Add Your Review')) ?></a>
     </div>
 </div>
-<?php elseif ($block->getDisplayIfEmpty()): ?>
+<?php elseif ($block->isReviewEnabled() && $block->getDisplayIfEmpty()): ?>
 <div class="product-reviews-summary empty">
     <div class="reviews-actions">
         <a class="action add" href="<?= $block->escapeUrl($urlForm) ?>">

@@ -1168,7 +1168,7 @@ class Multishipping extends \Magento\Framework\DataObject
     {
         foreach ($shippingAddresses as $address) {
             foreach ($address->getAllItems() as $addressItem) {
-                if (in_array($addressItem->getId(), $placedAddressItems)) {
+                if (in_array($addressItem->getQuoteItemId(), $placedAddressItems)) {
                     if ($addressItem->getProduct()->getIsVirtual()) {
                         $addressItem->isDeleted(true);
                     } else {
@@ -1218,7 +1218,7 @@ class Multishipping extends \Magento\Framework\DataObject
         $item = array_pop($items);
         foreach ($addresses as $address) {
             foreach ($address->getAllItems() as $addressItem) {
-                if ($addressItem->getId() == $item->getQuoteItemId()) {
+                if ($addressItem->getQuoteItemId() == $item->getQuoteItemId()) {
                     return (int)$address->getId();
                 }
             }

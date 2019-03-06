@@ -14,7 +14,8 @@ define([
     'Magento_Ui/js/lib/validation/validator',
     'Magento_Ui/js/form/element/abstract',
     'mage/translate',
-    'jquery/file-uploader'
+    'jquery/file-uploader',
+    'mage/adminhtml/tools'
 ], function ($, _, utils, uiAlert, validator, Element, $t) {
     'use strict';
 
