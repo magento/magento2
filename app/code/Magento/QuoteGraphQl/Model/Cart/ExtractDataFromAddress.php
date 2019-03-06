@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
@@ -40,7 +41,17 @@ class ExtractDataFromAddress
         $addressData = $this->dataObjectConverter->toFlatArray($address, [], AddressInterface::class);
         $addressData['model'] = $address;
 
+        if ($address->getAddressType() == AbstractAddress::TYPE_SHIPPING) {
+            $addressType = 'SHIPPING';
+        } elseif ($address->getAddressType() == AbstractAddress::TYPE_BILLING) {
+            $addressType = 'BILLING';
+        } else {
+            $addressType = null;
+        }
+
         $addressData = array_merge($addressData, [
+            'address_id' => $address->getId(),
+            'address_type' => $addressType,
             'country' => [
                 'code' => $address->getCountryId(),
                 'label' => $address->getCountry()
@@ -50,11 +61,6 @@ class ExtractDataFromAddress
                 'label' => $address->getRegion()
             ],
             'street' => $address->getStreet(),
-            'selected_shipping_method' => [
-                'code' => $address->getShippingMethod(),
-                'label' => $address->getShippingDescription(),
-                'free_shipping' => $address->getFreeShipping(),
-            ],
             'items_weight' => $address->getWeight(),
             'customer_notes' => $address->getCustomerNotes()
         ]);
