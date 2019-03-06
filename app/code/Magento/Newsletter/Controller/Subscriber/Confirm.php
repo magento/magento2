@@ -4,12 +4,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Newsletter\Controller\Subscriber;
 
-class Confirm extends \Magento\Newsletter\Controller\Subscriber
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
+/**
+ * Confirm subscritpion controller.
+ */
+class Confirm extends \Magento\Newsletter\Controller\Subscriber implements HttpGetActionInterface
 {
     /**
-     * Subscription confirm action
+     * Subscription confirm action.
+     *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
