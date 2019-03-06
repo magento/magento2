@@ -73,7 +73,7 @@
         <click selector="{{OrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
         <waitForPageLoad stepKey="waitForOrderPageLoad"/>
         <see selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeAdminOrderStatus"/>
-        <see selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="Guest" stepKey="seeAdminOrderGuest"/>
+        <see selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="{{CustomerEntityOne.fullname}}" stepKey="seeAdminOrderGuest"/>
         <see selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeAdminOrderEmail"/>
         <see selector="{{OrderDetailsInformationSection.billingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAdminOrderBillingAddress"/>
         <see selector="{{OrderDetailsInformationSection.shippingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAdminOrderShippingAddress"/>
