@@ -15,7 +15,7 @@ define([
             var items, i, reload;
 
             $(this.options.emptyCartButton).on('click', $.proxy(function (event) {
-                if (event.detail == 0) {
+                if (event.detail === 0) {
                     return;
                 }
 
