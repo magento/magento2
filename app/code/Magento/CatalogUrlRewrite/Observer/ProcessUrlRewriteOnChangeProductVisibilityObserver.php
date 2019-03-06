@@ -49,6 +49,6 @@ class ProcessUrlRewriteOnChangeProductVisibilityObserver implements ObserverInte
             return;
         }
 
-        $this->adaptUrlRewritesToVisibility->execute($productIds, $visibility);
+        $this->adaptUrlRewritesToVisibility->execute($productIds, (int)$visibility);
     }
 }
