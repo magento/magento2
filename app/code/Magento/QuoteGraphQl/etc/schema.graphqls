@@ -59,6 +59,11 @@ input UpdateCartItemsInput {
     cart_items: [CartItemQuantityInput!]!
 }
 
+input CartItemQuantityInput {
+    cart_item_id: Int!
+    quantity: Float!
+}
+
 input RemoveItemFromCartInput {
     cart_id: String!
     cart_item_id: Int!
