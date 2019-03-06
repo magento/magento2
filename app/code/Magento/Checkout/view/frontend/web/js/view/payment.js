@@ -66,9 +66,47 @@ define([
         navigate: function () {
             var self = this;
 
-            getPaymentInformation().done(function () {
-                self.isVisible(true);
-            });
+            if(!self.hasShippingAddress()) {
+                this.isVisible(false);
+                stepNavigator.setHash('shipping');
+            } else {
+                getPaymentInformation().done(function () {
+                    self.isVisible(true);
+                });
+            }
+        },
+
+        /**
+         * @return {*}
+         */
+        hasShippingAddress: function () {
+            var shippingAddress = quote.shippingAddress();
+
+            if ((typeof quote.guestEmail == 'undefined' && typeof shippingAddress.email == 'undefined') ||
+                typeof shippingAddress.firstname == 'undefined' ||
+                typeof shippingAddress.lastname == 'undefined' ||
+                typeof shippingAddress.countryId == 'undefined' ||
+                typeof shippingAddress.city == 'undefined' ||
+                typeof shippingAddress.telephone == 'undefined' ||
+                typeof shippingAddress.postcode == 'undefined'
+            ) {
+                return false;
+            } else {
+                if(
+                    (quote.guestEmail.length == 0 && shippingAddress.email.length == 0) ||
+                    shippingAddress.firstname.length == 0 ||
+                    shippingAddress.lastname.length == 0 ||
+                    shippingAddress.countryId.length == 0 ||
+                    shippingAddress.city.length == 0 ||
+                    shippingAddress.telephone.length == 0 ||
+                    shippingAddress.postcode.length == 0 ||
+                    shippingAddress.street.length == 0
+                ) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
         },
 
         /**
