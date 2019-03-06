@@ -245,4 +245,7 @@
     <type name="Magento\SalesRule\Model\Rule\Condition\Product">
         <plugin name="apply_rule_on_configurable_children" type="Magento\ConfigurableProduct\Plugin\SalesRule\Model\Rule\Condition\Product" />
     </type>
+    <type name="Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector">
+        <plugin name="apply_tax_class_id" type="Magento\ConfigurableProduct\Plugin\Tax\Model\Sales\Total\Quote\CommonTaxCollector" />
+    </type>
 </config>
