@@ -349,8 +349,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private function runCustomAttributePreprocessors($key, &$customAttribute)
     {
         foreach ($this->customAttributePreprocessors as $attributePreprocessor) {
-            if ($attributePreprocessor->shouldBePrepared($key, $customAttribute)) {
-                $attributePreprocessor->prepare($key, $customAttribute);
+            if ($attributePreprocessor->shouldBeProcessed($key, $customAttribute)) {
+                $attributePreprocessor->process($key, $customAttribute);
             }
         }
     }
