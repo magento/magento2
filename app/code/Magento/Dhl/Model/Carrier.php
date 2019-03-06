@@ -1964,9 +1964,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     {
         $this->_checkDomesticStatus($origCountryId, $destCountryId);
 
-        return
-            self::DHL_CONTENT_TYPE_NON_DOC == $this->getConfigData('content_type')
-            || !$this->_isDomestic;
+        return !$this->_isDomestic;
     }
 
     /**

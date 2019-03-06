@@ -24,6 +24,8 @@ use Magento\Theme\Model\ResourceModel\Theme\Collection;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * Image resize service.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImageResize
@@ -123,7 +125,8 @@ class ImageResize
     }
 
     /**
-     * Create resized images of different sizes from an original image
+     * Create resized images of different sizes from an original image.
+     *
      * @param string $originalImageName
      * @throws NotFoundException
      */
@@ -141,7 +144,8 @@ class ImageResize
     }
 
     /**
-     * Create resized images of different sizes from themes
+     * Create resized images of different sizes from themes.
+     *
      * @param array|null $themes
      * @return \Generator
      * @throws NotFoundException
@@ -169,7 +173,8 @@ class ImageResize
     }
 
     /**
-     * Search the current theme
+     * Search the current theme.
+     *
      * @return array
      */
     private function getThemesInUse(): array
@@ -187,7 +192,8 @@ class ImageResize
     }
 
     /**
-     * Get view images data from themes
+     * Get view images data from themes.
+     *
      * @param array $themes
      * @return array
      */
@@ -211,7 +217,8 @@ class ImageResize
     }
 
     /**
-     * Get unique image index
+     * Get unique image index.
+     *
      * @param array $imageData
      * @return string
      */
@@ -223,7 +230,8 @@ class ImageResize
     }
 
     /**
-     * Make image
+     * Make image.
+     *
      * @param string $originalImagePath
      * @param array $imageParams
      * @return Image
@@ -241,7 +249,8 @@ class ImageResize
     }
 
     /**
-     * Resize image
+     * Resize image.
+     *
      * @param array $viewImage
      * @param string $originalImagePath
      * @param string $originalImageName
@@ -257,9 +266,41 @@ class ImageResize
             ]
         );
 
+        if (isset($imageParams['watermark_file'])) {
+            if ($imageParams['watermark_height'] !== null) {
+                $image->setWatermarkHeight($imageParams['watermark_height']);
+            }
+
+            if ($imageParams['watermark_width'] !== null) {
+                $image->setWatermarkWidth($imageParams['watermark_width']);
+            }
+
+            if ($imageParams['watermark_position'] !== null) {
+                $image->setWatermarkPosition($imageParams['watermark_position']);
+            }
+
+            if ($imageParams['watermark_image_opacity'] !== null) {
+                $image->setWatermarkImageOpacity($imageParams['watermark_image_opacity']);
+            }
+
+            $image->watermark($this->getWatermarkFilePath($imageParams['watermark_file']));
+        }
+
         if ($imageParams['image_width'] !== null && $imageParams['image_height'] !== null) {
             $image->resize($imageParams['image_width'], $imageParams['image_height']);
         }
         $image->save($imageAsset->getPath());
+    }
+
+    /**
+     * Returns watermark file absolute path
+     *
+     * @param string $file
+     * @return string
+     */
+    private function getWatermarkFilePath($file)
+    {
+        $path = $this->imageConfig->getMediaPath('/watermark/' . $file);
+        return $this->mediaDirectory->getAbsolutePath($path);
     }
 }
