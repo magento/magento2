@@ -63,19 +63,19 @@ class SetBillingAddressOnCart
      *
      * @param ContextInterface $context
      * @param CartInterface $cart
-     * @param array $billingAddress
+     * @param array $billingAddressInput
      * @return void
      * @throws GraphQlInputException
      * @throws GraphQlAuthenticationException
      * @throws GraphQlAuthorizationException
      * @throws GraphQlNoSuchEntityException
      */
-    public function execute(ContextInterface $context, CartInterface $cart, array $billingAddress): void
+    public function execute(ContextInterface $context, CartInterface $cart, array $billingAddressInput): void
     {
-        $customerAddressId = $billingAddress['customer_address_id'] ?? null;
-        $addressInput = $billingAddress['address'] ?? null;
-        $useForShipping = isset($billingAddress['use_for_shipping'])
-            ? (bool)$billingAddress['use_for_shipping'] : false;
+        $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
+        $addressInput = $billingAddressInput['address'] ?? null;
+        $useForShipping = isset($billingAddressInput['use_for_shipping'])
+            ? (bool)$billingAddressInput['use_for_shipping'] : false;
 
         if (null === $customerAddressId && null === $addressInput) {
             throw new GraphQlInputException(

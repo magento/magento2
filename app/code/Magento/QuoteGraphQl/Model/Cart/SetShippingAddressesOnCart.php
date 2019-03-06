@@ -15,7 +15,7 @@ use Magento\Quote\Api\Data\CartInterface;
 /**
  * Set single shipping address for a specified shopping cart
  */
-class SetShippingAddressOnCart implements SetShippingAddressesOnCartInterface
+class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
 {
     /**
      * @var QuoteAddressFactory
@@ -58,16 +58,16 @@ class SetShippingAddressOnCart implements SetShippingAddressesOnCartInterface
     /**
      * @inheritdoc
      */
-    public function execute(ContextInterface $context, CartInterface $cart, array $shippingAddresses): void
+    public function execute(ContextInterface $context, CartInterface $cart, array $shippingAddressesInput): void
     {
-        if (count($shippingAddresses) > 1) {
+        if (count($shippingAddressesInput) > 1) {
             throw new GraphQlInputException(
                 __('You cannot specify multiple shipping addresses.')
             );
         }
-        $shippingAddress = current($shippingAddresses);
-        $customerAddressId = $shippingAddress['customer_address_id'] ?? null;
-        $addressInput = $shippingAddress['address'] ?? null;
+        $shippingAddressInput = current($shippingAddressesInput);
+        $customerAddressId = $shippingAddressInput['customer_address_id'] ?? null;
+        $addressInput = $shippingAddressInput['address'] ?? null;
 
         if (null === $customerAddressId && null === $addressInput) {
             throw new GraphQlInputException(

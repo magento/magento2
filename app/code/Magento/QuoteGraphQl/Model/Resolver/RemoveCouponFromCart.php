@@ -61,10 +61,10 @@ class RemoveCouponFromCart implements ResolverInterface
 
         try {
             $this->couponManagement->remove($cartId);
-        } catch (NoSuchEntityException $exception) {
-            throw new GraphQlNoSuchEntityException(__($exception->getMessage()));
-        } catch (CouldNotDeleteException $exception) {
-            throw new LocalizedException(__($exception->getMessage()));
+        } catch (NoSuchEntityException $e) {
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+        } catch (CouldNotDeleteException $e) {
+            throw new LocalizedException(__($e->getMessage()), $e);
         }
 
         return [
