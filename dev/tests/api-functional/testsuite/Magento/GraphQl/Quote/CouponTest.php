@@ -58,7 +58,7 @@ class CouponTest extends GraphQlAbstract
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
         $response = $this->graphQlQuery($query);
 
-        self::assertArrayHasKey("applyCouponToCart", $response);
+        self::assertArrayHasKey('applyCouponToCart', $response);
         self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
     }
 
@@ -154,7 +154,7 @@ class CouponTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('removeCouponFromCart', $response);
-        self::assertSame('', $response['removeCouponFromCart']['cart']['applied_coupon']['code']);
+        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
     }
 
     /**

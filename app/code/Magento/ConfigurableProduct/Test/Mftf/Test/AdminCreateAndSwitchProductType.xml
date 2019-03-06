@@ -54,7 +54,7 @@
             <group value="catalog"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MQE-1445" />
+                <issueId value="MAGETWO-62808"/>
             </skip>
         </annotations>
         <before>
