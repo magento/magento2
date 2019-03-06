@@ -10,5 +10,8 @@
         <element name="createNewAccOpt" type="button" selector="#customer_create_account-head"/>
         <element name="enableAutoAssignCustomerGroup" type="button" selector="#customer_create_account_auto_group_assign"/>
         <element name="groupForValidVATIdIntraUnion" type="select" selector="#customer_create_account_viv_intra_union_group"/>
+        <element name="accountSharingOptionsTab" type="button" selector="#customer_account_share-head"/>
+        <element name="shareCustomerAccountInherit" type="checkbox" selector="#customer_account_share_scope_inherit"/>
+        <element name="shareCustomerAccount" type="select" selector="#customer_account_share_scope"/>
     </section>
 </sections>
