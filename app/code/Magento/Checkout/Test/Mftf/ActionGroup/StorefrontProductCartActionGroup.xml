@@ -54,6 +54,34 @@
         <waitForText userInput="{{productCount}}" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
     </actionGroup>
 
+    <!-- Add product with selected option to Cart from the product page  -->
+    <actionGroup name="StorefrontAddProductWithSelectedOptionToCartActionGroup">
+        <arguments>
+            <argument name="product" type="entity"/>
+            <argument name="productCount" type="string"/>
+            <argument name="option" type="string"/>
+        </arguments>
+        <selectOption userInput="{{option}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption"/>
+        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="You added {{product.name}} to your shopping cart." stepKey="assertSuccessMessage"/>
+    </actionGroup>
+
+    <!-- Add product with selected configurable option and customizable option to cart from the product page -->
+    <actionGroup name="StorefrontAddProductWithSelectedOptionsToCartActionGroup">
+        <arguments>
+            <argument name="product" type="entity"/>
+            <argument name="productCount" type="string"/>
+            <argument name="option" type="string"/>
+            <argument name="customizableOption" type="string"/>
+        </arguments>
+        <selectOption userInput="{{option}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption"/>
+        <click selector="{{StorefrontProductInfoMainSection.selectCustomOptionByName(customizableOption)}}" stepKey="selectCustomOption"/>
+        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="You added {{product.name}} to your shopping cart." stepKey="assertSuccessMessage"/>
+    </actionGroup>
+
     <!-- Open the Minicart and check Simple Product -->
     <actionGroup name="StorefrontOpenMinicartAndCheckSimpleProductActionGroup">
         <arguments>

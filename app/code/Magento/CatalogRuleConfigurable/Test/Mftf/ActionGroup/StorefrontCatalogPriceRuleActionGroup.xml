@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="assertUpdatedProductPriceInStorefrontProductPage">
+        <arguments>
+            <argument name="product" type="entity"/>
+            <argument name="expectedPrice" type="string"/>
+        </arguments>
+        <seeInTitle userInput="{{product.name}}" stepKey="assertProductNameTitle"/>
+        <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <see userInput="{{expectedPrice}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
+        <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
+    </actionGroup>
+
+    <actionGroup name="assertCatalogPriceRuleAppliedToProductOption">
+        <arguments>
+            <argument name="option" type="string"/>
+            <argument name="expectedPrice" type="string"/>
+        </arguments>
+        <selectOption userInput="{{option}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption"/>
+        <see userInput="{{expectedPrice}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice"/>
+    </actionGroup>
+</actionGroups>
