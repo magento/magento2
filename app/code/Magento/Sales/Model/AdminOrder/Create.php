@@ -23,6 +23,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\Model\Cart\CartInterface
@@ -582,6 +583,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         }
 
         $quote->getShippingAddress()->unsCachedItemsAll();
+        $quote->getBillingAddress()->unsCachedItemsAll();
         $quote->setTotalsCollectedFlag(false);
 
         $this->quoteRepository->save($quote);

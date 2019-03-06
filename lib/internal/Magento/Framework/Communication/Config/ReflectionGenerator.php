@@ -42,7 +42,10 @@ class ReflectionGenerator
         $result = [
             Config::SCHEMA_METHOD_PARAMS => [],
             Config::SCHEMA_METHOD_RETURN_TYPE => $this->methodsMap->getMethodReturnType($className, $methodName),
-            Config::SCHEMA_METHOD_HANDLER => [Config::HANDLER_TYPE => $className, Config::HANDLER_METHOD => $methodName]
+            Config::SCHEMA_METHOD_HANDLER => [
+                Config::HANDLER_TYPE => $className,
+                Config::HANDLER_METHOD => $methodName
+            ]
         ];
         $paramsMeta = $this->methodsMap->getMethodParams($className, $methodName);
         foreach ($paramsMeta as $paramPosition => $paramMeta) {
@@ -63,16 +66,27 @@ class ReflectionGenerator
      * @param string $serviceType
      * @param string $serviceMethod
      * @param array|null $handlers
+     * @param bool|null $isSynchronous
      * @return array
      */
-    public function generateTopicConfigForServiceMethod($topicName, $serviceType, $serviceMethod, $handlers = [])
-    {
+    public function generateTopicConfigForServiceMethod(
+        $topicName,
+        $serviceType,
+        $serviceMethod,
+        $handlers = [],
+        $isSynchronous = null
+    ) {
         $methodMetadata = $this->extractMethodMetadata($serviceType, $serviceMethod);
         $returnType = $methodMetadata[Config::SCHEMA_METHOD_RETURN_TYPE];
         $returnType = ($returnType != 'void' && $returnType != 'null') ? $returnType : null;
+        if (!isset($isSynchronous)) {
+            $isSynchronous = $returnType ? true : false;
+        } else {
+            $returnType = ($isSynchronous) ? $returnType : null;
+        }
         return [
             Config::TOPIC_NAME => $topicName,
-            Config::TOPIC_IS_SYNCHRONOUS => $returnType ? true : false,
+            Config::TOPIC_IS_SYNCHRONOUS => $isSynchronous,
             Config::TOPIC_REQUEST => $methodMetadata[Config::SCHEMA_METHOD_PARAMS],
             Config::TOPIC_REQUEST_TYPE => Config::TOPIC_REQUEST_TYPE_METHOD,
             Config::TOPIC_RESPONSE => $returnType,
@@ -85,7 +99,8 @@ class ReflectionGenerator
      * Generate topic name based on service type and method name.
      *
      * Perform the following conversion:
-     * \Magento\Customer\Api\RepositoryInterface + getById => magento.customer.api.repositoryInterface.getById
+     * \Magento\Customer\Api\RepositoryInterface + getById =>
+     * magento.customer.api.repositoryInterface.getById
      *
      * @param string $typeName
      * @param string $methodName
