@@ -47,23 +47,39 @@ class UpdateCustomerTest extends GraphQlAbstract
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
 
+        $newPrefix = 'Dr';
         $newFirstname = 'Richard';
+        $newMiddlename = 'Riley';
         $newLastname = 'Rowe';
+        $newSuffix = 'III';
+        $newDob = '3/11/1972';
+        $newTaxVat = 'GQL1234567';
+        $newGender = 2;
         $newEmail = 'customer_updated@example.com';
 
         $query = <<<QUERY
 mutation {
     updateCustomer(
         input: {
+            prefix: "{$newPrefix}"
             firstname: "{$newFirstname}"
+            middlename: "{$newMiddlename}"
             lastname: "{$newLastname}"
+            suffix: "{$newSuffix}"
+            dob: "{$newDob}"
+            taxvat: "{$newTaxVat}"
             email: "{$newEmail}"
             password: "{$currentPassword}"
         }
     ) {
         customer {
+            prefix
             firstname
+            middlename
             lastname
+            suffix
+            dob
+            taxvat
             email
         }
     }
@@ -71,8 +87,14 @@ mutation {
 QUERY;
         $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
 
+        $this->assertEquals($newPrefix, $response['updateCustomer']['customer']['prefix']);
         $this->assertEquals($newFirstname, $response['updateCustomer']['customer']['firstname']);
+        $this->assertEquals($newMiddlename, $response['updateCustomer']['customer']['middlename']);
         $this->assertEquals($newLastname, $response['updateCustomer']['customer']['lastname']);
+        $this->assertEquals($newSuffix, $response['updateCustomer']['customer']['suffix']);
+        $newDobDate = new \DateTime($newDob);
+        $this->assertEquals($newDobDate->format('Y-m-d'), $response['updateCustomer']['customer']['dob']);
+        $this->assertEquals($newTaxVat, $response['updateCustomer']['customer']['taxvat']);
         $this->assertEquals($newEmail, $response['updateCustomer']['customer']['email']);
     }
 
