@@ -114,10 +114,10 @@ class Product extends AbstractResource
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param array $data
-     * @param UserContextInterface|null $userContext
-     * @param AuthorizationInterface|null $authorization
      * @param TableMaintainer|null $tableMaintainer
      * @param UniqueValidationInterface|null $uniqueValidator
+     * @param UserContextInterface|null $userContext
+     * @param AuthorizationInterface|null $authorization
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -132,10 +132,10 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
         $data = [],
-        ?UserContextInterface $userContext = null,
-        ?AuthorizationInterface $authorization = null,
         TableMaintainer $tableMaintainer = null,
-        UniqueValidationInterface $uniqueValidator = null
+        UniqueValidationInterface $uniqueValidator = null,
+        ?UserContextInterface $userContext = null,
+        ?AuthorizationInterface $authorization = null
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
