@@ -56,12 +56,7 @@ input ApplyCouponToCartInput {
 
 input UpdateCartItemsInput {
     cart_id: String!
-    cart_items: [UpdateCartItemInput!]!
-}
-
-input UpdateCartItemInput {
-    item_id: String!
-    qty: Float!
+    cart_items: [CartItemQuantityInput!]!
 }
 
 input RemoveItemFromCartInput {

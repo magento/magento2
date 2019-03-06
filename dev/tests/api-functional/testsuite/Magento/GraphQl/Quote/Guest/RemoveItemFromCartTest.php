@@ -80,7 +80,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
-    public function testRemoveNotExistentItem()
+    public function testRemoveNonExistentItem()
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');

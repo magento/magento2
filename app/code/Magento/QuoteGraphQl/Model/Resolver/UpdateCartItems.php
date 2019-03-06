@@ -1,74 +1,118 @@
 <?php
-declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Api\GuestCartRepositoryInterface;
-use Magento\QuoteGraphQl\Model\Cart\ExtractDataFromCart;
-use Magento\Framework\Stdlib\ArrayManager;
-use Magento\QuoteGraphQl\Model\Cart\UpdateCartItems as UpdateCartItemsService;
+use Magento\Quote\Api\CartItemRepositoryInterface;
+use Magento\Quote\Model\Quote;
+use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 
+/**
+ * @inheritdoc
+ */
 class UpdateCartItems implements ResolverInterface
 {
     /**
-     * @var ExtractDataFromCart
+     * @var GetCartForUser
      */
-    private $extractDataFromCart;
+    private $getCartForUser;
 
     /**
-     * @var ArrayManager
+     * @var CartItemRepositoryInterface
      */
-    private $arrayManager;
+    private $cartItemRepository;
 
     /**
-     * @var UpdateCartItemsService
-     */
-    private $updateCartItems;
-
-    /**
-     * @param ExtractDataFromCart $extractDataFromCart
-     * @param ArrayManager $arrayManager
-     * @param UpdateCartItemsService $updateCartItems
+     * @param GetCartForUser $getCartForUser
+     * @param CartItemRepositoryInterface $cartItemRepository
      */
     public function __construct(
-        ExtractDataFromCart $extractDataFromCart,
-        ArrayManager $arrayManager,
-        UpdateCartItemsService $updateCartItems
+        GetCartForUser $getCartForUser,
+        CartItemRepositoryInterface $cartItemRepository
     ) {
-        $this->extractDataFromCart = $extractDataFromCart;
-        $this->arrayManager = $arrayManager;
-        $this->updateCartItems = $updateCartItems;
+        $this->getCartForUser = $getCartForUser;
+        $this->cartItemRepository = $cartItemRepository;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $cartItems = $this->arrayManager->get('input/cart_items', $args);
-        $maskedCartId = $this->arrayManager->get('input/cart_id', $args);
-
-        if (!$maskedCartId) {
+        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
-        if (!$cartItems) {
-            throw new GraphQlInputException(__('Required parameter "cart_items  " is missing'));
+        $maskedCartId = $args['input']['cart_id'];
+
+        if (!isset($args['input']['cart_items']) || empty($args['input']['cart_items'])
+            || !is_array($args['input']['cart_items'])
+        ) {
+            throw new GraphQlInputException(__('Required parameter "cart_items" is missing'));
         }
+        $cartItems = $args['input']['cart_items'];
+
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
 
         try {
-            $cart = $this->updateCartItems->update($maskedCartId, $cartItems);
+            $this->processCartItems($cart, $cartItems);
         } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()));
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()), $e);
         }
 
-        $cartData = $this->extractDataFromCart->execute($cart);
+        return [
+            'cart' => [
+                'model' => $cart,
+            ],
+        ];
+    }
 
-        return ['cart' => array_merge(['cart_id' => $maskedCartId], $cartData)];
+    /**
+     * Process cart items
+     *
+     * @param Quote $cart
+     * @param array $items
+     * @throws GraphQlInputException
+     * @throws LocalizedException
+     */
+    private function processCartItems(Quote $cart, array $items): void
+    {
+        foreach ($items as $item) {
+            if (!isset($item['cart_item_id']) || empty($item['cart_item_id'])) {
+                throw new GraphQlInputException(__('Required parameter "cart_item_id" for "cart_items" is missing.'));
+            }
+            $itemId = $item['cart_item_id'];
+
+            if (!isset($item['quantity'])) {
+                throw new GraphQlInputException(__('Required parameter "quantity" for "cart_items" is missing.'));
+            }
+            $qty = (float)$item['quantity'];
+
+            $cartItem = $cart->getItemById($itemId);
+            if ($cartItem === false) {
+                throw new GraphQlNoSuchEntityException(
+                    __('Could not find cart item with id: %1.', $item['cart_item_id'])
+                );
+            }
+
+            if ($qty <= 0.0) {
+                $this->cartItemRepository->deleteById((int)$cart->getId(), $itemId);
+            } else {
+                $cartItem->setQty($qty);
+                $this->cartItemRepository->save($cartItem);
+            }
+        }
     }
 }
