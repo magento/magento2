@@ -367,7 +367,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             }
         }
 
-        if ($isParent || $node->getLevel() < 2) {
+        if ($isParent || $node->getLevel() < 1) {
             $item['expanded'] = true;
         }
 
