@@ -47,21 +47,11 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
-    public function testGetCartWithPaymentMethods()
+    public function testGetPaymentMethodsFromGuestCart()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
-
-        $query = <<<QUERY
-{
-  cart(cart_id: "$maskedQuoteId") {
-    available_payment_methods {
-      code
-      title
-    }
-  }
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
+        $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
+        $response      = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('cart', $response);
 
@@ -73,6 +63,68 @@ QUERY;
             'No Payment Information Required',
             $response['cart']['available_payment_methods'][1]['title']
         );
+        self::assertGreaterThan(
+            0,
+            count($response['cart']['available_payment_methods']),
+            'There are no available payment methods for guest cart!'
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testGetPaymentMethodsFromAnotherCustomerCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
+
+        $this->expectExceptionMessage(
+            "The current user cannot perform operations on cart \"$maskedQuoteId\""
+        );
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Payment/_files/disable_all_payment_methods.php
+     */
+    public function testGetPaymentMethodsIfPaymentsAreNotSet()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
+        $response      = $this->graphQlQuery($query);
+
+        self::assertEquals(0, count($response['cart']['available_payment_methods']));
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testGetPaymentMethodsOfNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getCartAvailablePaymentMethodsQuery(
+        string $maskedQuoteId
+    ) : string {
+        return <<<QUERY
+{
+  cart(cart_id: "$maskedQuoteId") {
+    available_payment_methods {
+      code
+      title
+    }
+  }
+}
+QUERY;
     }
 
     /**
