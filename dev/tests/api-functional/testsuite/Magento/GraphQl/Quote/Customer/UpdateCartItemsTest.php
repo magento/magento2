@@ -215,6 +215,87 @@ class UpdateCartItemsTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing.
+     */
+    public function testUpdateWithMissedCartItemId()
+    {
+        $query = <<<QUERY
+mutation {
+  updateCartItems(input: {
+    cart_items: [
+      {
+        cart_item_id: 1
+        quantity: 2
+      }
+    ]  
+  }) {
+    cart {
+      items {
+        id
+        qty
+      }
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @param string $input
+     * @param string $message
+     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testUpdateWithMissedItemRequiredParameters(string $input, string $message)
+    {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
+
+        $query = <<<QUERY
+mutation {
+  updateCartItems(input: {
+    cart_id: "{$maskedQuoteId}"
+    {$input}
+  }) {
+    cart {
+      items {
+        id
+        qty
+      }
+    }
+  }
+}
+QUERY;
+        $this->expectExceptionMessage($message);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderUpdateWithMissedRequiredParameters(): array
+    {
+        return [
+            'missed_cart_items' => [
+                '',
+                'Required parameter "cart_items" is missing.'
+            ],
+            'missed_cart_item_id' => [
+                'cart_items: [{ quantity: 2 }]',
+                'Required parameter "cart_item_id" for "cart_items" is missing.'
+            ],
+            'missed_cart_item_qty' => [
+                'cart_items: [{ cart_item_id: 1 }]',
+                'Required parameter "quantity" for "cart_items" is missing.'
+            ],
+        ];
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @param int $itemId
      * @param float $qty

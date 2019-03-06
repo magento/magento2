@@ -15,9 +15,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for removeItemFromCartTest mutation
+ * Test for updating/removing shopping cart items
  */
-class RemoveItemFromCartTest extends GraphQlAbstract
+class UpdateCartItemsTest extends GraphQlAbstract
 {
     /**
      * @var QuoteResource
@@ -51,19 +51,46 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
-    public function testRemoveItemFromCart()
+    public function testUpdateCartItemQty()
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
         $itemId = (int)$quote->getItemByProduct($this->productRepository->get('simple'))->getId();
+        $qty = 2;
 
-        $query = $this->prepareMutationQuery($maskedQuoteId, $itemId);
+        $query = $this->getQuery($maskedQuoteId, $itemId, $qty);
         $response = $this->graphQlQuery($query);
 
-        $this->assertArrayHasKey('removeItemFromCart', $response);
-        $this->assertArrayHasKey('cart', $response['removeItemFromCart']);
-        $this->assertCount(0, $response['removeItemFromCart']['cart']['items']);
+        $this->assertArrayHasKey('updateCartItems', $response);
+        $this->assertArrayHasKey('cart', $response['updateCartItems']);
+
+        $responseCart = $response['updateCartItems']['cart'];
+        $item = current($responseCart['items']);
+
+        $this->assertEquals($itemId, $item['id']);
+        $this->assertEquals($qty, $item['qty']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     */
+    public function testRemoveCartItemIfQuantityIsZero()
+    {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
+        $itemId = (int)$quote->getItemByProduct($this->productRepository->get('simple'))->getId();
+        $qty = 0;
+
+        $query = $this->getQuery($maskedQuoteId, $itemId, $qty);
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey('updateCartItems', $response);
+        $this->assertArrayHasKey('cart', $response['updateCartItems']);
+
+        $responseCart = $response['updateCartItems']['cart'];
+        $this->assertCount(0, $responseCart['items']);
     }
 
     /**
@@ -71,39 +98,37 @@ class RemoveItemFromCartTest extends GraphQlAbstract
      * @expectedException \Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
-    public function testRemoveItemFromNonExistentCart()
+    public function testUpdateItemInNonExistentCart()
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
         $itemId = (int)$quote->getItemByProduct($this->productRepository->get('simple'))->getId();
 
-        $query = $this->prepareMutationQuery('non_existent_masked_id', $itemId);
+        $query = $this->getQuery('non_existent_masked_id', $itemId, 2);
         $this->graphQlQuery($query);
     }
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
-    public function testRemoveNonExistentItem()
+    public function testUpdateNonExistentItem()
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
         $notExistentItemId = 999;
 
-        $this->expectExceptionMessage("Cart doesn't contain the {$notExistentItemId} item.");
+        $this->expectExceptionMessage("Could not find cart item with id: {$notExistentItemId}.");
 
-        $query = $this->prepareMutationQuery($maskedQuoteId, $notExistentItemId);
+        $query = $this->getQuery($maskedQuoteId, $notExistentItemId, 2);
         $this->graphQlQuery($query);
     }
 
     /**
-     * Test mutation is only able to remove quote item belonging to the requested cart
-     *
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
      */
-    public function testRemoveItemIfItemIsNotBelongToCart()
+    public function testUpdateItemIfItemIsNotBelongToCart()
     {
         $firstQuote = $this->quoteFactory->create();
         $this->quoteResource->load($firstQuote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
@@ -119,18 +144,16 @@ class RemoveItemFromCartTest extends GraphQlAbstract
             ->getItemByProduct($this->productRepository->get('virtual-product'))
             ->getId();
 
-        $this->expectExceptionMessage("Cart doesn't contain the {$secondQuoteItemId} item.");
+        $this->expectExceptionMessage("Could not find cart item with id: {$secondQuoteItemId}.");
 
-        $query = $this->prepareMutationQuery($firstQuoteMaskedId, $secondQuoteItemId);
+        $query = $this->getQuery($firstQuoteMaskedId, $secondQuoteItemId, 2);
         $this->graphQlQuery($query);
     }
 
     /**
-     * Test mutation is only able to remove quote item belonging to the requested cart
-     *
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
-    public function testRemoveItemFromCustomerCart()
+    public function testUpdateItemFromCustomerCart()
     {
         $customerQuote = $this->quoteFactory->create();
         $this->quoteResource->load($customerQuote, 'test_order_1', 'reserved_order_id');
@@ -139,7 +162,35 @@ class RemoveItemFromCartTest extends GraphQlAbstract
 
         $this->expectExceptionMessage("The current user cannot perform operations on cart \"$customerQuoteMaskedId\"");
 
-        $query = $this->prepareMutationQuery($customerQuoteMaskedId, $customerQuoteItemId);
+        $query = $this->getQuery($customerQuoteMaskedId, $customerQuoteItemId, 2);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing.
+     */
+    public function testUpdateWithMissedCartItemId()
+    {
+        $query = <<<QUERY
+mutation {
+  updateCartItems(input: {
+    cart_items: [
+      {
+        cart_item_id: 1
+        quantity: 2
+      }
+    ]  
+  }) {
+    cart {
+      items {
+        id
+        qty
+      }
+    }
+  }
+}
+QUERY;
         $this->graphQlQuery($query);
     }
 
@@ -147,18 +198,23 @@ class RemoveItemFromCartTest extends GraphQlAbstract
      * @param string $input
      * @param string $message
      * @dataProvider dataProviderUpdateWithMissedRequiredParameters
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
     public function testUpdateWithMissedItemRequiredParameters(string $input, string $message)
     {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
+
         $query = <<<QUERY
 mutation {
-  removeItemFromCart(
-    input: {
-      {$input}
-    }
-  ) {
+  updateCartItems(input: {
+    cart_id: "{$maskedQuoteId}"
+    {$input}
+  }) {
     cart {
       items {
+        id
         qty
       }
     }
@@ -175,13 +231,17 @@ QUERY;
     public function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
-            'missed_cart_id' => [
-                'cart_item_id: 1',
-                'Required parameter "cart_id" is missing.'
+            'missed_cart_items' => [
+                '',
+                'Required parameter "cart_items" is missing.'
             ],
             'missed_cart_item_id' => [
-                'cart_id: "test"',
-                'Required parameter "cart_item_id" is missing.'
+                'cart_items: [{ quantity: 2 }]',
+                'Required parameter "cart_item_id" for "cart_items" is missing.'
+            ],
+            'missed_cart_item_qty' => [
+                'cart_items: [{ cart_item_id: 1 }]',
+                'Required parameter "quantity" for "cart_items" is missing.'
             ],
         ];
     }
@@ -189,20 +249,25 @@ QUERY;
     /**
      * @param string $maskedQuoteId
      * @param int $itemId
+     * @param float $qty
      * @return string
      */
-    private function prepareMutationQuery(string $maskedQuoteId, int $itemId): string
+    private function getQuery(string $maskedQuoteId, int $itemId, float $qty): string
     {
         return <<<QUERY
 mutation {
-  removeItemFromCart(
-    input: {
-      cart_id: "{$maskedQuoteId}"
-      cart_item_id: {$itemId}
-    }
-  ) {
+  updateCartItems(input: {
+    cart_id: "{$maskedQuoteId}"
+    cart_items: [
+      {
+        cart_item_id: {$itemId}
+        quantity: {$qty}
+      }
+    ]
+  }) {
     cart {
       items {
+        id
         qty
       }
     }
