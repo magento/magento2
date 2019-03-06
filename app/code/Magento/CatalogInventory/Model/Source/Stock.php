@@ -9,6 +9,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 
 /**
  * CatalogInventory Stock source model
+ *
  * @api
  * @since 100.0.2
  *
@@ -18,6 +19,9 @@ use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
  */
 class Stock extends AbstractSource
 {
+    /**
+     * @inheritdoc
+     */
     protected function loadOptions(): array
     {
         return [

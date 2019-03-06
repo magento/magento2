@@ -6,6 +6,8 @@
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 /**
+ * Abstract boolean eav attribute source model.
+ *
  * @api
  * @since 100.0.2
  */
@@ -33,6 +35,9 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $this->_eavAttrEntity = $eavAttrEntity;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function loadOptions(): array
     {
         return [

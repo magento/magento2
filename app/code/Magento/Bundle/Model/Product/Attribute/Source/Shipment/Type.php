@@ -12,6 +12,9 @@ namespace Magento\Bundle\Model\Product\Attribute\Source\Shipment;
  */
 class Type extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
+    /**
+     * @inheritdoc
+     */
     protected function loadOptions(): array
     {
         return [
@@ -21,7 +24,7 @@ class Type extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getOptionText($value)

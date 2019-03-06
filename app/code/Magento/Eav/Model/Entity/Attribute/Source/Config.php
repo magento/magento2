@@ -8,7 +8,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
 /**
  * Entity/Attribute/Model - attribute selection source from configuration
  *
- * this class should be abstract, but kept usual for legacy purposes
+ * This class should be abstract, but kept usual for legacy purposes.
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
@@ -29,7 +29,7 @@ class Config extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
-     * @return array
+     * @inheritdoc
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function loadOptions(): array

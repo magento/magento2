@@ -39,6 +39,9 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         return $this->_catalogConfig;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function loadOptions(): array
     {
         $options = [['label' => __('Position'), 'value' => 'position']];

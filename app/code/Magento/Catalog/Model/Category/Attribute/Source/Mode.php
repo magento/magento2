@@ -12,6 +12,9 @@ namespace Magento\Catalog\Model\Category\Attribute\Source;
  */
 class Mode extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
+    /**
+     * @inheritdoc
+     */
     protected function loadOptions(): array
     {
         return [

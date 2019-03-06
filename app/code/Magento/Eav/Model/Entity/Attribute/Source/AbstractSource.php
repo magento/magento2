@@ -32,7 +32,7 @@ abstract class AbstractSource implements
     protected $_options = null;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAllOptions()
     {
@@ -43,6 +43,8 @@ abstract class AbstractSource implements
     }
 
     /**
+     * Load options.
+     *
      * @return array
      */
     protected function loadOptions(): array

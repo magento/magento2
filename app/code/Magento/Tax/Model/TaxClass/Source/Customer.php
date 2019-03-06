@@ -47,7 +47,7 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
-     * @return array
+     * @inheritdoc
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function loadOptions(): array

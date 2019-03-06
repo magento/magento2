@@ -25,6 +25,9 @@ class Type extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     const TYPE_BEFORE_ORDER_CONFIRM = 3;
 
+    /**
+     * @inheritdoc
+     */
     protected function loadOptions(): array
     {
         return [

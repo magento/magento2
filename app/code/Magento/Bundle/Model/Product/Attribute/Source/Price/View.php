@@ -29,6 +29,9 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $this->optionFactory = $optionFactory;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function loadOptions(): array
     {
         return [

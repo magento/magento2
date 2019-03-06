@@ -38,6 +38,7 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
 
     /**
      * Retrieve Saleable Status Ids
+     *
      * Default Product Enable status
      *
      * @return int[]

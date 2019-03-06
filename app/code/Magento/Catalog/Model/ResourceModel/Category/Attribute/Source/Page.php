@@ -29,6 +29,9 @@ class Page extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $this->_blockCollectionFactory = $blockCollectionFactory;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function loadOptions(): array
     {
         $options = $this->_blockCollectionFactory->create()->load()->toOptionArray();
