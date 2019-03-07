@@ -54,11 +54,59 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      */
-    public function testGetCartWithPaymentMethods()
+    public function testGetPaymentMethodsFromCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_item_with_items');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
+        $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
+        $response      = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
-        $query = <<<QUERY
+        self::assertArrayHasKey('cart', $response);
+        self::assertEquals('checkmo', $response['cart']['available_payment_methods'][0]['code']);
+        self::assertEquals('Check / Money order', $response['cart']['available_payment_methods'][0]['title']);
+        self::assertGreaterThan(
+            0,
+            count($response['cart']['available_payment_methods']),
+            'There are no available payment methods for customer cart!'
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     */
+    public function testGetPaymentMethodsFromAnotherCustomerCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
+        $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
+
+        $this->expectExceptionMessage(
+            "The current user cannot perform operations on cart \"$maskedQuoteId\""
+        );
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer3@search.example.com'));
+    }
+
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testGetPaymentMethodsOfNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
+
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getCartAvailablePaymentMethodsQuery(
+        string $maskedQuoteId
+    ) : string {
+        return <<<QUERY
 {
   cart(cart_id: "$maskedQuoteId") {
     available_payment_methods {
@@ -68,11 +116,6 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
-
-        self::assertArrayHasKey('cart', $response);
-        self::assertEquals('checkmo', $response['cart']['available_payment_methods'][0]['code']);
-        self::assertEquals('Check / Money order', $response['cart']['available_payment_methods'][0]['title']);
     }
 
     /**
@@ -88,13 +131,13 @@ QUERY;
     }
 
     /**
-     * @param string $reversedQuoteId
+     * @param string $reservedOrderId
      * @return string
      */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
+    private function getMaskedQuoteIdByReservedOrderId(string $reservedOrderId): string
     {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
 
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
