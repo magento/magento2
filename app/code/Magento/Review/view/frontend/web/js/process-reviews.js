@@ -29,6 +29,7 @@ define([
                     event.preventDefault();
                 });
             });
+
             if (hashAction) {
                 setTimeout(function () {
                     $('html, body').animate({
