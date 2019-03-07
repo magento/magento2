@@ -64,4 +64,11 @@ interface RequestInterface
      * @return int|null
      */
     public function getSize();
+
+    /**
+     * Get Sort items
+     *
+     * @return array
+     */
+    public function getSort();
 }
