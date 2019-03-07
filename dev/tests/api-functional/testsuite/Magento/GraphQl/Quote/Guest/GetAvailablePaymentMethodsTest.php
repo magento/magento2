@@ -86,7 +86,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/Payment/_files/disable_all_payment_methods.php
+     * @magentoApiDataFixture Magento/Payment/_files/disable_all_active_payment_methods.php
      */
     public function testGetPaymentMethodsIfPaymentsAreNotSet()
     {
