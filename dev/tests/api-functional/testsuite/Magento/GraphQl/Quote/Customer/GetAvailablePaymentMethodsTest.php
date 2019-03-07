@@ -85,6 +85,18 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
         $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer3@search.example.com'));
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     * @magentoApiDataFixture Magento/Payment/_files/disable_all_active_payment_methods.php
+     */
+    public function testGetPaymentMethodsIfPaymentsAreNotSet()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
+        $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
+        $response      = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+
+        self::assertEquals(0, count($response['cart']['available_payment_methods']));
+    }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
