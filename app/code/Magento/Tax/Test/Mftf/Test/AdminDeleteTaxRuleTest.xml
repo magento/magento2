@@ -68,7 +68,9 @@
             <argument name="address" value="US_Address_Utah" />
         </actionGroup>
         <scrollTo selector="{{StorefrontProductPageSection.orderTotal}}" x="0" y="-80" stepKey="scrollToOrderTotal"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.subTotal}}" time="30" stepKey="waitSubtotalAppears"/>
         <see selector="{{StorefrontProductPageSection.subTotal}}" userInput="$100.00" stepKey="seeSubTotal"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.shipping}}" time="30" stepKey="waitShippingAppears"/>
         <see selector="{{StorefrontProductPageSection.shipping}}" userInput="$5.00" stepKey="seeShipping"/>
         <dontSee selector="{{StorefrontProductPageSection.tax}}" stepKey="dontSeeAssertTaxAmount" />
         <see selector="{{StorefrontProductPageSection.orderTotal}}" userInput="$105.00" stepKey="seeAssertOrderTotal"/>

@@ -11,9 +11,11 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AuthenticationInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 
 /**
@@ -58,6 +60,7 @@ class CheckCustomerAccount
      * @param int|null $customerType
      * @return void
      * @throws GraphQlAuthorizationException
+     * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      * @throws GraphQlAuthenticationException
      */
@@ -74,13 +77,20 @@ class CheckCustomerAccount
                 __('Customer with id "%customer_id" does not exist.', ['customer_id' => $customerId]),
                 $e
             );
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
         }
 
         if (true === $this->authentication->isLocked($customerId)) {
             throw new GraphQlAuthenticationException(__('The account is locked.'));
         }
 
-        $confirmationStatus = $this->accountManagement->getConfirmationStatus($customerId);
+        try {
+            $confirmationStatus = $this->accountManagement->getConfirmationStatus($customerId);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
+        }
+
         if ($confirmationStatus === AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED) {
             throw new GraphQlAuthenticationException(__("This account isn't confirmed. Verify and try again."));
         }
