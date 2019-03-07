@@ -10,11 +10,9 @@ namespace Magento\CustomerGraphQl\Model\Customer;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAlreadyExistsException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Api\DataObjectHelper;
@@ -78,18 +76,11 @@ class UpdateCustomerData
      * @return void
      * @throws GraphQlAlreadyExistsException
      * @throws GraphQlInputException
-     * @throws GraphQlNoSuchEntityException
      * @throws GraphQlAuthenticationException
      */
     public function execute(int $customerId, array $data): void
     {
-        try {
-            $customer = $this->customerRepository->getById($customerId);
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
-        } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()), $e);
-        }
+        $customer = $this->customerRepository->getById($customerId);
 
         $filteredData = array_diff_key($data, array_flip($this->restrictedKeys));
         $this->dataObjectHelper->populateWithArray($customer, $filteredData, CustomerInterface::class);
