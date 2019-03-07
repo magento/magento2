@@ -100,7 +100,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
     {
         $unsecureBaseURL = $this->_config->getValue(Store::XML_PATH_UNSECURE_BASE_URL, 'default');
 
-        /** @var $http \Magento\Framework\HTTP\Adapter\Curl */
+        /** @var \Magento\Framework\HTTP\Adapter\Curl $http */
         $http = $this->_curlFactory->create();
         $http->setConfig(['timeout' => $this->_verificationTimeOut]);
         $http->write(\Zend_Http_Client::POST, $unsecureBaseURL . $this->_filePath);

@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php /** @var $this \Magento\AdminNotification\Block\ToolbarEntry */ ?>
+<?php /** @var \Magento\AdminNotification\Block\ToolbarEntry $this */ ?>
 <?php
     $notificationCount = $block->getUnreadNotificationCount();
     $notificationCounterMax = $block->getNotificationCounterMax();
@@ -31,7 +31,7 @@
             class="admin__action-dropdown-menu"
             data-mark-as-read-url="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/notification/ajaxMarkAsRead') ?>">
             <?php foreach ($block->getLatestUnreadNotifications() as $notification) : ?>
-            <?php /** @var $notification \Magento\AdminNotification\Model\Inbox*/ ?>
+            <?php /** @var \Magento\AdminNotification\Model\Inbox $notification */ ?>
             <li class="notifications-entry<?php if ($notification->getSeverity() == 1): ?> notifications-critical<?php endif; ?>"
                 data-notification-id="<?= /* @escapeNotVerified */ $notification->getId() ?>"
                 data-notification-severity="<?php if ($notification->getSeverity() == 1): ?>1<?php endif; ?>">

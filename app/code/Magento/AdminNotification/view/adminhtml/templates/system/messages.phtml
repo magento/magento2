@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php /** @var $block \Magento\AdminNotification\Block\System\Messages */ ?>
+<?php /** @var \Magento\AdminNotification\Block\System\Messages $block */ ?>
 
 <?php $lastCritical = $block->getLastCritical();?>
 <div id="system_messages" class="message-system<?php if ($lastCritical): ?> message-system-unread<?php endif; ?>">

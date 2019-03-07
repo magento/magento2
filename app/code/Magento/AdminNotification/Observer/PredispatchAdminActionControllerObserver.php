@@ -47,7 +47,7 @@ class PredispatchAdminActionControllerObserver implements ObserverInterface
     {
         if ($this->_backendAuthSession->isLoggedIn()) {
             $feedModel = $this->_feedFactory->create();
-            /* @var $feedModel \Magento\AdminNotification\Model\Feed */
+            /* @var \Magento\AdminNotification\Model\Feed $feedModel */
             $feedModel->checkUpdate();
         }
     }

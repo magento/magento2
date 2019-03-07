@@ -57,7 +57,7 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
         $arguments = ['fileStorage' => $this->_fileStorage];
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         // create new instance to ensure that it hasn't been displayed yet (var $this->_isDisplayed is unset)
-        /** @var $model \Magento\AdminNotification\Model\System\Message\Media\Synchronization\Error */
+        /** @var \Magento\AdminNotification\Model\System\Message\Media\Synchronization\Error $model */
         $model = $objectManagerHelper->getObject(
             \Magento\AdminNotification\Model\System\Message\Media\Synchronization\Error::class,
             $arguments
