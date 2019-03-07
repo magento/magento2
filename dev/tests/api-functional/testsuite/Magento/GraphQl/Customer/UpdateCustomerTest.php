@@ -70,6 +70,7 @@ mutation {
             taxvat: "{$newTaxVat}"
             email: "{$newEmail}"
             password: "{$currentPassword}"
+            gender: "{$newGender}"
         }
     ) {
         customer {
@@ -96,6 +97,7 @@ QUERY;
         $this->assertEquals($newDobDate->format('Y-m-d'), $response['updateCustomer']['customer']['dob']);
         $this->assertEquals($newTaxVat, $response['updateCustomer']['customer']['taxvat']);
         $this->assertEquals($newEmail, $response['updateCustomer']['customer']['email']);
+        $this->assertEquals($newGender, $response['updateCustomer']['customer']['gender']);
     }
 
     /**
