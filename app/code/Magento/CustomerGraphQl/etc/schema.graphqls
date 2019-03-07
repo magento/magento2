@@ -3,6 +3,9 @@
 
 type Query {
     customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer") @doc(description: "The customer query returns information about a customer account")
+    isEmailAvailable (
+        email: String! @doc(description: "The new customer email")
+    ): IsEmailAvailableOutput @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\IsEmailAvailable")
 }
 
 type Mutation {
@@ -124,6 +127,10 @@ type CustomerAddressRegion @doc(description: "CustomerAddressRegion defines the 
 type CustomerAddressAttribute {
      attribute_code: String  @doc(description: "Attribute code")
      value: String  @doc(description: "Attribute value")
+}
+
+type IsEmailAvailableOutput {
+    is_email_available: Boolean @doc(description: "Is email availabel value")
 }
 
 enum CountryCodeEnum @doc(description: "The list of countries codes") {
