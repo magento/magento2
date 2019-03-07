@@ -91,9 +91,7 @@ class ConsumerWebsiteAssign
             $data = $this->serializer->unserialize($serializedData);
             $this->execute($data);
         } catch (\Zend_Db_Adapter_Exception  $e) {
-            //here sample how to process exceptions if they occurred
             $this->logger->critical($e->getMessage());
-            //you can add here your own type of exception when operation can be retried
             if (
                 $e instanceof \Magento\Framework\DB\Adapter\LockWaitException
                 || $e instanceof \Magento\Framework\DB\Adapter\DeadlockException
@@ -105,7 +103,7 @@ class ConsumerWebsiteAssign
             } else {
                 $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
                 $errorCode = $e->getCode();
-                $message = __('Sorry, something went wrong during product prices update. Please see log for details.');
+                $message = __('Sorry, something went wrong during product attributes update. Please see log for details.');
             }
         } catch (NoSuchEntityException $e) {
             $this->logger->critical($e->getMessage());
@@ -123,7 +121,7 @@ class ConsumerWebsiteAssign
             $this->logger->critical($e->getMessage());
             $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
             $errorCode = $e->getCode();
-            $message = __('Sorry, something went wrong during product prices update. Please see log for details.');
+            $message = __('Sorry, something went wrong during product attributes update. Please see log for details.');
         }
 
         $operation->setStatus($status ?? OperationInterface::STATUS_TYPE_COMPLETE)

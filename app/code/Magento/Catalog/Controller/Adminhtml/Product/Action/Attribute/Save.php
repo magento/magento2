@@ -161,20 +161,38 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      */
     private function publish($attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds):void
     {
+        $productIdsChunks = array_chunk($productIds, 100);
         $bulkUuid = $this->identityService->generateId();
-        $bulkDescription = __('Update attributes to selected products');
+        $bulkDescription = __('Update attributes to ' . count($productIds) . ' selected products');
         $operations = [];
-        if ($websiteRemoveData || $websiteAddData) {
-            $dataToUpdate = [
-                'website_assign' => $websiteAddData,
-                'website_detach' => $websiteRemoveData
-            ];
+        foreach($productIdsChunks as $productIdsChunk) {
+            if ($websiteRemoveData || $websiteAddData) {
+                $dataToUpdate = [
+                    'website_assign' => $websiteAddData,
+                    'website_detach' => $websiteRemoveData
+                ];
+                $operations[] = $this->makeOperation(
+                    'Update website assign',
+                    'product_action_attribute.website.update',
+                    $dataToUpdate,
+                    $storeId,
+                    $websiteId,
+                    $productIdsChunk,
+                    $bulkUuid
+                );
+            }
 
-            $operations[] = $this->makeOperation('Update website assign', 'product_action_attribute.website.update', $dataToUpdate, $storeId, $websiteId, $productIds, $bulkUuid);
-        }
-
-        if ($attributesData) {
-            $operations[] = $this->makeOperation('Update product attributes', 'product_action_attribute.update', $attributesData, $storeId, $websiteId, $productIds, $bulkUuid);
+            if ($attributesData) {
+                $operations[] = $this->makeOperation(
+                    'Update product attributes',
+                    'product_action_attribute.update',
+                    $attributesData,
+                    $storeId,
+                    $websiteId,
+                    $productIdsChunk,
+                    $bulkUuid
+                );
+            }
         }
 
         if (!empty($operations)) {
