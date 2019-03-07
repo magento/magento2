@@ -430,4 +430,31 @@
         <click selector="{{AdminAddUpSellProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
     </actionGroup>
+    <actionGroup name="adminFillAndSaveProductForm">
+        <arguments>
+            <argument name="product" defaultValue="defaultSimpleProduct"/>
+            <argument name="productName" type="string"/>
+            <argument name="productUrlKey" type="string"/>
+            <argument name="categoryName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductIndexPage"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickOnAddNewProduct"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{productName}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{product.price}}" stepKey="fillProductPrice"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{product.quantity}}" stepKey="fillProductQty"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{product.status}}" stepKey="selectStockStatus"/>
+        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeight"/>
+        <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{product.weight}}" stepKey="fillProductWeight"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{categoryName}}]" stepKey="searchAndSelectCategory"/>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="scrollToSectionHeader"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="{{productUrlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+        <scrollToTopOfPage stepKey="scrollTopPageProduct"/>
+        <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveProductButton" />
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <waitForPageLoad stepKey="waitForProductToSave"/>
+    </actionGroup>
 </actionGroups>
