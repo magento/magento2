@@ -454,7 +454,11 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         }
 
         if ($bundleProduct->getPriceType() == self::PRICE_TYPE_DYNAMIC) {
-            $price = $selectionProduct->getFinalPrice($takeTierPrice ? $selectionQty : 1);
+            $totalQty = $bundleQty * $selectionQty;
+            if (!$takeTierPrice || $totalQty === 0) {
+                $totalQty = 1;
+            }
+            $price = $selectionProduct->getFinalPrice($totalQty);
         } else {
             if ($selectionProduct->getSelectionPriceType()) {
                 // percent
