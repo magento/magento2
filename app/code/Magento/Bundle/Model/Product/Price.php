@@ -429,8 +429,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     }
 
     /**
-     * Calculate final price of selection
-     * with take into account tier price
+     * Calculate final price of selection with take into account tier price
      *
      * @param \Magento\Catalog\Model\Product $bundleProduct
      * @param \Magento\Catalog\Model\Product $selectionProduct
