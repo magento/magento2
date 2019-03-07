@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14125"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -37,6 +38,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14116"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -57,6 +59,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14117"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -77,6 +80,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14118"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -97,6 +101,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14119"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -117,6 +122,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14120"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -137,6 +143,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14130"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -157,6 +164,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14131"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -177,6 +185,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14132"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -197,6 +206,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14133"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -217,6 +227,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14134"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -237,6 +248,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14135"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -257,6 +269,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14136"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -277,6 +290,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14148"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -297,6 +311,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14128"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -317,6 +332,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14129"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -337,6 +353,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14150"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -357,6 +374,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14151"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -378,6 +396,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14152"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -398,6 +417,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14113"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -418,6 +438,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14114"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -438,6 +459,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14115"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -458,6 +480,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14173"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -478,6 +501,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14156"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -498,6 +522,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14157"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -518,6 +543,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14127"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -538,6 +564,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14149"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -558,6 +585,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14188"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -578,6 +606,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14189"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -598,6 +627,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14190"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -618,6 +648,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14191"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -638,6 +669,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14193"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -658,6 +690,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14194"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -678,6 +711,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14121"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -698,6 +732,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14122"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -718,6 +753,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14158"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -738,6 +774,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14159"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -758,6 +795,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14160"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -778,6 +816,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14161"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -798,6 +837,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14162"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -818,6 +858,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14163"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -838,6 +879,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14164"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -858,6 +900,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14165"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -878,6 +921,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14166"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -898,6 +942,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14167"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -918,6 +963,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14168"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -938,6 +984,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14169"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -958,6 +1005,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14170"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -978,6 +1026,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14171"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -998,6 +1047,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14172"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1018,6 +1068,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14196"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1038,6 +1089,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14197"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1058,6 +1110,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14198"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1078,6 +1131,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14199"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1098,6 +1152,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14137"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1118,6 +1173,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14138"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1138,6 +1194,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14139"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1158,6 +1215,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14140"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1179,6 +1237,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14141"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1199,6 +1258,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14142"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1220,6 +1280,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14143"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1240,6 +1301,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14204"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1260,6 +1322,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14175"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1280,6 +1343,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14176"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1300,6 +1364,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14177"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1320,6 +1385,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14112"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1340,6 +1406,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14202"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1360,6 +1427,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14123"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1380,6 +1448,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14124"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1400,6 +1469,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14126"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -1420,6 +1490,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14147"/>
             <group value="menu"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
