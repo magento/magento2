@@ -96,8 +96,9 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .block {
+  .footer .block {
         &.newsletter {
+          width: 100%;
             input {
                 font-size: 12px;
                 padding-left: 30px;
@@ -111,6 +112,8 @@
         }
     }
 }
+
+
 
 
 
