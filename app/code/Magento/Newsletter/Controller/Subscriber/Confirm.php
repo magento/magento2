@@ -10,7 +10,7 @@ namespace Magento\Newsletter\Controller\Subscriber;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
- * Confirm subscritpion controller.
+ * Confirm subscription controller.
  */
 class Confirm extends \Magento\Newsletter\Controller\Subscriber implements HttpGetActionInterface
 {
