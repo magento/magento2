@@ -252,10 +252,25 @@ class ConditionsToSearchCriteriaMapper
         return $this->filterFactory->create([
             'data' => [
                 Filter::KEY_FIELD => $field,
-                Filter::KEY_VALUE => $value,
+                Filter::KEY_VALUE => $this->getValueParsed($value, $conditionType),
                 Filter::KEY_CONDITION_TYPE => $this->mapRuleOperatorToSQLCondition($conditionType)
             ]
         ]);
+    }
+
+    /**
+     * Retrieve parsed value
+     * @param $value
+     * @param $conditionType
+     * @return null|string|string[]
+     */
+    private function getValueParsed($value, $conditionType)
+    {
+        if (!is_array($value) && ($conditionType == '!()' || $conditionType == '()')) {
+            $value = preg_replace('/\s*,\s*/', ',', $value);
+        }
+
+        return $value;
     }
 
     /**

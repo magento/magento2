@@ -434,7 +434,7 @@ define([
             grid.reloadParams = {
                 'selected[]': this.chooserSelectedItems.keys()
             };
-            this.updateElement.value = this.chooserSelectedItems.keys().join(', ');
+            this.updateElement.value = this.chooserSelectedItems.keys().join(',');
         }
     };
 
