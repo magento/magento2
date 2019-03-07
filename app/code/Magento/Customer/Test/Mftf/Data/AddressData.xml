@@ -191,4 +191,50 @@
         <data key="default_billing">true</data>
         <data key="default_shipping">false</data>
     </entity>
+    <entity name="updateCustomerUKAddress" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <data key="telephone">0123456789-02134567</data>
+        <array key="street">
+            <item>172, Westminster Bridge Rd</item>
+            <item>7700 xyz street</item>
+        </array>
+        <data key="country_id">GB</data>
+        <data key="country">United Kingdom</data>
+        <data key="city">London</data>
+        <!-- State not required for UK address on frontend-->
+        <data key="state"> </data>
+        <data key="postcode">12345</data>
+    </entity>
+    <entity name="updateCustomerFranceAddress" type="address">
+        <data key="firstname">Jaen</data>
+        <data key="lastname">Reno</data>
+        <data key="company">Magento</data>
+        <data key="telephone">555-888-111-999</data>
+        <array key="street">
+            <item>18-20 Rue Maréchal Lecler</item>
+            <item>18-20 Rue Maréchal Lecler</item>
+        </array>
+        <data key="country_id">FR</data>
+        <data key="country">France</data>
+        <data key="city">Quintin</data>
+        <data key="state">Côtes-d'Armor</data>
+        <data key="postcode">12345</data>
+    </entity>
+    <entity name="updateCustomerNoXSSInjection" type="address">
+        <data key="firstname">Jany</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <data key="telephone">555-888-111-999</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="city">Denver</data>
+        <data key="state">Colorado</data>
+        <data key="postcode">12345</data>
+    </entity>
 </entities>
