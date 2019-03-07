@@ -48,12 +48,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Get a data object with data pertaining to a GraphQL type's structural makeup.
-     *
-     * @param string $configElementName
-     * @return ConfigElementInterface
-     * @throws \LogicException
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @inheritdoc
      */
     public function getConfigElement(string $configElementName) : ConfigElementInterface
     {
@@ -67,7 +62,7 @@ class Config implements ConfigInterface
         $fieldsInQuery = $this->queryFields->getFieldsUsedInQuery();
         if (isset($data['fields'])) {
             if (!empty($fieldsInQuery)) {
-                foreach ($data['fields'] as $fieldName => $fieldConfig) {
+                foreach (array_keys($data['fields']) as $fieldName) {
                     if (!isset($fieldsInQuery[$fieldName])) {
                         unset($data['fields'][$fieldName]);
                     }
@@ -81,18 +76,20 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Return all type names declared in a GraphQL schema's configuration.
-     *
-     * @return string[]
+     * @inheritdoc
      */
-    public function getDeclaredTypeNames() : array
+    public function getDeclaredTypes() : array
     {
         $types = [];
         foreach ($this->configData->get(null) as $item) {
-            if (isset($item['type']) && $item['type'] == 'graphql_type') {
-                $types[] = $item['name'];
+            if (isset($item['type'])) {
+                $types[] = [
+                    'name' => $item['name'],
+                    'type' => $item['type'],
+                ];
             }
         }
+
         return $types;
     }
 }

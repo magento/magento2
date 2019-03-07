@@ -79,6 +79,11 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     protected $session;
 
     /**
+     * @var string
+     */
+    private $words;
+
+    /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Captcha\Helper\Data $captchaData
      * @param ResourceModel\LogFactory $resLogFactory
@@ -311,18 +316,18 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     public function isCorrect($word)
     {
-        $storedWord = $this->getWord();
+        $storedWords = $this->getWords();
         $this->clearWord();
 
-        if (!$word || !$storedWord) {
+        if (!$word || !$storedWords) {
             return false;
         }
 
         if (!$this->isCaseSensitive()) {
-            $storedWord = strtolower($storedWord);
+            $storedWords = strtolower($storedWords);
             $word = strtolower($word);
         }
-        return $word === $storedWord;
+        return in_array($word, explode(',', $storedWords));
     }
 
     /**
@@ -481,12 +486,23 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     /**
      * Get captcha word
      *
-     * @return string
+     * @return string|null
      */
     public function getWord()
     {
         $sessionData = $this->session->getData($this->getFormIdKey(self::SESSION_WORD));
         return time() < $sessionData['expires'] ? $sessionData['data'] : null;
+    }
+
+    /**
+     * Get captcha words
+     *
+     * @return string|null
+     */
+    private function getWords()
+    {
+        $sessionData = $this->session->getData($this->getFormIdKey(self::SESSION_WORD));
+        return time() < $sessionData['expires'] ? $sessionData['words'] : null;
     }
 
     /**
@@ -498,9 +514,10 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     protected function setWord($word)
     {
+        $this->words = $this->words ? $this->words . ',' . $word : $word;
         $this->session->setData(
             $this->getFormIdKey(self::SESSION_WORD),
-            ['data' => $word, 'expires' => time() + $this->getTimeout()]
+            ['data' => $word, 'words' => $this->words, 'expires' => time() + $this->getTimeout()]
         );
         $this->word = $word;
         return $this;
