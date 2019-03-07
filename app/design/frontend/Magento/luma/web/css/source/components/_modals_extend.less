@@ -148,11 +148,11 @@
             }
         }
     }
-}
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .modal-popup {
+   .modal-popup {
+      pointer-events: auto;
         &.modal-slide {
+          .modal-popup
             .modal-inner-wrap[class] {
                 .lib-css(background-color, @modal-slide-mobile__background-color);
             }
