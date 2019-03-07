@@ -176,7 +176,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'value' => Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
                 ]
             );
-            $fieldsets[$behaviorCode]->addField(
+            $fieldset->addField(
                 $behaviorCode . Import::FIELD_FIELD_MULTIPLE_LINE_SEPARATOR,
                 'text',
                 [
