@@ -70,7 +70,7 @@ mutation {
             taxvat: "{$newTaxVat}"
             email: "{$newEmail}"
             password: "{$currentPassword}"
-            gender: "{$newGender}"
+            gender: {$newGender}
         }
     ) {
         customer {
@@ -82,6 +82,7 @@ mutation {
             dob
             taxvat
             email
+            gender
         }
     }
 }
@@ -209,7 +210,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The password doesn't match this account. Verify the password and try again.
+     * @expectedExceptionMessage Invalid login or password.
      */
     public function testUpdateEmailIfPasswordIsInvalid()
     {
