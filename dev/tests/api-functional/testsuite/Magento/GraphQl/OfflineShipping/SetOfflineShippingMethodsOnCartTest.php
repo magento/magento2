@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\OfflineShipping;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -20,6 +20,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class SetOfflineShippingOnCartTest extends GraphQlAbstract
 {
     /**
+     * @var QuoteFactory
+     */
+    private $quoteFactory;
+
+    /**
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
@@ -28,11 +33,6 @@ class SetOfflineShippingOnCartTest extends GraphQlAbstract
      * @var QuoteResource
      */
     private $quoteResource;
-
-    /**
-     * @var Quote
-     */
-    private $quote;
 
     /**
      * @var QuoteIdToMaskedQuoteIdInterface
@@ -45,67 +45,44 @@ class SetOfflineShippingOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->create(QuoteResource::class);
-        $this->quote = $objectManager->create(Quote::class);
-        $this->quoteIdToMaskedId = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->quoteResource = $objectManager->get(QuoteResource::class);
+        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
+        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
-     */
-    public function testSetFlatrateOnCart()
-    {
-        $this->setShippingMethodAndCheckResponse(
-            'flatrate',
-            'flatrate',
-            '10',
-            'Flat Rate - Fixed'
-        );
     }
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @magentoApiDataFixture Magento/OfflineShipping/_files/tablerates_weight.php
      * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
+     * @dataProvider offlineShippingMethodDataProvider()
+     * @param string $carrier
+     * @param string $method
+     * @param float $amount
+     * @param string $label
      */
-    public function testSetTableRatesOnCart()
+    public function testSetOfflineShippingMethod(string $carrier, string $method, float $amount, string $label)
     {
         $this->setShippingMethodAndCheckResponse(
-            'tablerate',
-            'bestway',
-            '10',
-            'Best Way - Table Rate'
+            $carrier,
+            $method,
+            $amount,
+            $label
         );
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
+     * Data provider for base offline shipping methods
+     *
+     * @return array
      */
-    public function testSetFreeShippingOnCart()
+    public function offlineShippingMethodDataProvider()
     {
-        $this->setShippingMethodAndCheckResponse(
-            'freeshipping',
-            'freeshipping',
-            '0',
-            'Free Shipping - Free'
-        );
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
-     */
-    public function testSetUpsOnCart()
-    {
-        $this->setShippingMethodAndCheckResponse(
-            'ups',
-            'GND',
-            '15.61',
-            'United Parcel Service - Ground'
-        );
+        return [
+            ['flatrate', 'flatrate', 10, 'Flat Rate - Fixed'],
+            ['tablerate', 'bestway', 10, 'Best Way - Table Rate'],
+            ['freeshipping', 'freeshipping', 0, 'Free Shipping - Free']
+        ];
     }
 
     /**
@@ -121,17 +98,18 @@ class SetOfflineShippingOnCartTest extends GraphQlAbstract
     private function setShippingMethodAndCheckResponse(
         string $shippingCarrierCode,
         string $shippingMethodCode,
-        string $shippingAmount,
+        float $shippingAmount,
         string $shippingLabel
     ) {
+        $quote = $this->quoteFactory->create();
         $this->quoteResource->load(
-            $this->quote,
+            $quote,
             'test_order_1',
             'reserved_order_id'
         );
-        $shippingAddress = $this->quote->getShippingAddress();
+        $shippingAddress = $quote->getShippingAddress();
         $shippingAddressId = $shippingAddress->getId();
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
 
         $query = $this->getQuery(
             $maskedQuoteId,
