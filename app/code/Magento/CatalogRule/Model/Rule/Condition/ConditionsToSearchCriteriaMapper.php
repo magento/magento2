@@ -260,11 +260,11 @@ class ConditionsToSearchCriteriaMapper
 
     /**
      * Retrieve parsed value
-     * @param $value
-     * @param $conditionType
+     * @param string $value
+     * @param string $conditionType
      * @return null|string|string[]
      */
-    private function getValueParsed($value, $conditionType)
+    private function getValueParsed(string $value, string $conditionType)
     {
         if (!is_array($value) && ($conditionType == '!()' || $conditionType == '()')) {
             $value = preg_replace('/\s*,\s*/', ',', $value);
