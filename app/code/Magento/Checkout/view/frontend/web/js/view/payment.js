@@ -80,7 +80,8 @@ define([
          * @return {*}
          */
         hasShippingAddress: function () {
-            var shippingAddress = quote.shippingAddress();
+            var shippingAddress = quote.shippingAddress(),
+                isShippingAddress = false;
 
             if ((typeof quote.guestEmail == 'undefined' && typeof shippingAddress.email == 'undefined') ||
                 typeof shippingAddress.firstname == 'undefined' ||
@@ -90,23 +91,22 @@ define([
                 typeof shippingAddress.telephone == 'undefined' ||
                 typeof shippingAddress.postcode == 'undefined'
             ) {
-                return false;
-            } else {
-                if(
-                    (quote.guestEmail.length == 0 && shippingAddress.email.length == 0) ||
-                    shippingAddress.firstname.length == 0 ||
-                    shippingAddress.lastname.length == 0 ||
-                    shippingAddress.countryId.length == 0 ||
-                    shippingAddress.city.length == 0 ||
-                    shippingAddress.telephone.length == 0 ||
-                    shippingAddress.postcode.length == 0 ||
-                    shippingAddress.street.length == 0
+                isShippingAddress = false;
+            } else if(
+                    (quote.guestEmail.length === 0 && shippingAddress.email.length === 0) ||
+                    shippingAddress.firstname.length === 0 ||
+                    shippingAddress.lastname.length === 0 ||
+                    shippingAddress.countryId.length === 0 ||
+                    shippingAddress.city.length === 0 ||
+                    shippingAddress.telephone.length === 0 ||
+                    shippingAddress.postcode.length === 0 ||
+                    shippingAddress.street.length === 0
                 ) {
-                    return false;
-                } else {
-                    return true;
-                }
+                    isShippingAddress = false;
+            } else {
+                isShippingAddress = true;
             }
+            return isShippingAddress;
         },
 
         /**
