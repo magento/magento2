@@ -35,8 +35,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'value' => 1,
-                        'label' => 'Default (General)',
-                        '__disableTmpl' => true
+                        'label' => 'Default (General)'
                     ],
                     [
                         'value' => 1,
