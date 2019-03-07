@@ -75,7 +75,6 @@ class Blocks implements ResolverInterface
      *
      * @param array $blockIdentifiers
      * @return array
-     * @throws GraphQlNoSuchEntityException
      */
     private function getBlocksData(array $blockIdentifiers): array
     {

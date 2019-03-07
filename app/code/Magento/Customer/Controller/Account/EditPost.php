@@ -308,7 +308,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      *
      * @param string $email
      * @return boolean
-     * @throws InvalidEmailOrPasswordException|InputException
+     * @throws InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function changeCustomerPassword($email)
     {

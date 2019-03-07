@@ -17,7 +17,8 @@ class CategoryInterfaceTypeResolver implements \Magento\Framework\GraphQl\Query\
 {
     /**
      * {@inheritdoc}
-     * @throws GraphQlInputException
+     * @param array $data
+     * @return string
      */
     public function resolveType(array $data) : string
     {

@@ -933,7 +933,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param InfoInterface $payment
      * @param string $transactionId
      * @return DataObject
-     * @throws LocalizedException
+     * @throws \Exception
      */
     protected function transactionInquiryRequest(InfoInterface $payment, $transactionId)
     {

@@ -123,11 +123,8 @@ class InvoiceOrder implements InvoiceOrderInterface
      * @param \Magento\Sales\Api\Data\InvoiceCommentCreationInterface|null $comment
      * @param \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface|null $arguments
      * @return int
-     * @throws \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
-     * @throws \Magento\Sales\Api\Exception\CouldNotInvoiceExceptionInterface
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \DomainException
+     * @throws \Magento\Sales\Exception\CouldNotInvoiceException
+     * @throws \Magento\Sales\Exception\DocumentValidationException
      */
     public function execute(
         $orderId,

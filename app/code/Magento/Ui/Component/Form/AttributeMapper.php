@@ -52,7 +52,6 @@ class AttributeMapper
      *
      * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function map($attribute)
     {

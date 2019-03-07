@@ -221,8 +221,6 @@ class Filesystem
      * Get used store and admin user locales.
      *
      * @return array
-     * @throws \InvalidArgumentException if unknown locale is provided by the store configuration
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     private function getUsedLocales()
     {

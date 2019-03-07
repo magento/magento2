@@ -51,7 +51,7 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve all customer tax classes as an options array.
      *
      * @return array
-     * @throws StateException
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function getAllOptions()
     {

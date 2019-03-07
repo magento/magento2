@@ -323,7 +323,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @param array $variables
      * @return string
-     * @throws \Magento\Framework\Exception\MailException
      */
     public function getProcessedTemplate(array $variables = [])
     {

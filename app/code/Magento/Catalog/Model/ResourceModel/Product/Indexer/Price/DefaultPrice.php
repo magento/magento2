@@ -326,7 +326,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param int|array $entityIds Ids for filtering output result
      * @param string|null $type Type for filtering output result by specified product type (all if null)
      * @return \Magento\Framework\DB\Select
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @since 101.0.8
      */

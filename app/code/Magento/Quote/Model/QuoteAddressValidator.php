@@ -54,8 +54,8 @@ class QuoteAddressValidator
      *
      * @param \Magento\Quote\Api\Data\AddressInterface $addressData The address data object.
      * @return bool
-     * @throws \Magento\Framework\Exception\InputException The specified address belongs to another customer.
-     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified customer ID or address ID is not valid.
+     * @throws NoSuchEntityException The specified customer ID or address ID is not valid.
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validate(\Magento\Quote\Api\Data\AddressInterface $addressData)
     {

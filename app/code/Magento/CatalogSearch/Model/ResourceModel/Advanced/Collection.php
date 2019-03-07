@@ -238,7 +238,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param array $fields
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addFieldsToFilter($fields)
     {

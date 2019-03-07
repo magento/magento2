@@ -185,7 +185,6 @@ class Update implements ProcessorInterface
      *
      * @param array $items The items to update
      * @param array $data The data to be updated
-     * @throws CouldNotSaveException If group could not be saved
      * @return void
      */
     private function updateGroups(array $items, array $data)

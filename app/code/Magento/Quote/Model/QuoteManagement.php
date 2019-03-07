@@ -315,7 +315,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param int $customerId
      * @param int $storeId
      * @return \Magento\Quote\Model\Quote Cart object.
-     * @throws CouldNotSaveException The cart could not be created.
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function createCustomerCart($customerId, $storeId)
     {

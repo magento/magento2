@@ -38,7 +38,6 @@ class AddTrack extends \Magento\Backend\App\Action
      * Add new tracking number action
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {

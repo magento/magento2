@@ -302,7 +302,6 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @param \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult
      * @return void
      * @deprecated 100.2.0
-     * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(
         \Magento\Framework\Api\Search\FilterGroup $filterGroup,

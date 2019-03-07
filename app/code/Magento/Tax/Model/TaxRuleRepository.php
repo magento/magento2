@@ -162,7 +162,6 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
      * @param Collection $collection
      * @return void
      * @deprecated 100.2.0
-     * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {

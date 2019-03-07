@@ -94,7 +94,6 @@ class CssUrls implements ProcessorInterface
      * @param string $cssContent
      * @param Package $package
      * @return array
-     * @throws NotFoundException
      */
     private function parseCss(array $urlMap, $cssFilePath, $packagePath, $cssContent, Package $package)
     {

@@ -203,7 +203,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
      * @param int $userId
      * @param int $roleId
      * @return bool
-     * @throws LocalizedException
      */
     protected function _addUserToRole($userId, $roleId)
     {

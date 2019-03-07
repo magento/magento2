@@ -37,7 +37,6 @@ class TransportInterfacePlugin
      * @param TransportInterface $subject
      * @param \Closure $proceed
      * @return void
-     * @throws MailException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSendMessage(

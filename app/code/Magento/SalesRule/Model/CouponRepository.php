@@ -85,9 +85,8 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      *
      * @param \Magento\SalesRule\Api\Data\CouponInterface $coupon
      * @return \Magento\SalesRule\Api\Data\CouponInterface
-     * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
-     * @throws \Magento\Framework\Exception\NoSuchEntityException If a coupon ID is sent but the coupon does not exist
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If a coupon ID is sent but the coupon does not exist
      */
     public function save(\Magento\SalesRule\Api\Data\CouponInterface $coupon)
     {
@@ -154,7 +153,6 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\SalesRule\Api\Data\CouponSearchResultInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {

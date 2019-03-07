@@ -80,7 +80,6 @@ class FileProcessor
      *
      * @param  string $fileId
      * @return array
-     * @throws LocalizedException
      */
     public function saveToTmp($fileId)
     {

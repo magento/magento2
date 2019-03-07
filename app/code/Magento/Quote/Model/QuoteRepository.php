@@ -247,7 +247,6 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      * @param QuoteCollection $collection The quote collection.
      * @return void
      * @deprecated 100.2.0
-     * @throws InputException The specified filter group or quote collection does not exist.
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, QuoteCollection $collection)
     {

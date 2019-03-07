@@ -37,8 +37,6 @@ class QuantityValidator implements ValidatorInterface
     /**
      * @param ShipmentInterface $entity
      * @return array
-     * @throws DocumentValidationException
-     * @throws NoSuchEntityException
      */
     public function validate($entity)
     {

@@ -36,9 +36,7 @@ class CountryValidator extends AbstractValidator
 
     /**
      * @param array $validationSubject
-     * @return bool
-     * @throws NotFoundException
-     * @throws \Exception
+     * @return ResultInterface
      */
     public function validate(array $validationSubject)
     {

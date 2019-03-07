@@ -84,7 +84,6 @@ class SensitiveConfigSetFacade
      * @param OutputInterface $output The output manager
      * @return void
      * @throws LocalizedException If scope or scope code is not valid
-     * @throws RuntimeException If sensitive config can not be filled
      */
     public function process(InputInterface $input, OutputInterface $output)
     {

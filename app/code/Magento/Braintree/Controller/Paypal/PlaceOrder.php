@@ -56,7 +56,7 @@ class PlaceOrder extends AbstractAction implements HttpPostActionInterface
     /**
      * @inheritdoc
      *
-     * @throws LocalizedException
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {

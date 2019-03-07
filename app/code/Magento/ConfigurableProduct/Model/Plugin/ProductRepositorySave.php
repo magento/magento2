@@ -46,9 +46,8 @@ class ProductRepositorySave
      * @param ProductInterface $product
      * @param bool $saveOptions
      * @return ProductInterface
-     * @throws CouldNotSaveException
      * @throws InputException
-     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(

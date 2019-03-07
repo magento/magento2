@@ -120,11 +120,8 @@ class ShipOrder implements ShipOrderInterface
      * @param \Magento\Sales\Api\Data\ShipmentPackageCreationInterface[] $packages
      * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface|null $arguments
      * @return int
-     * @throws \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
-     * @throws \Magento\Sales\Api\Exception\CouldNotShipExceptionInterface
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \DomainException
+     * @throws \Magento\Sales\Exception\CouldNotShipException
+     * @throws \Magento\Sales\Exception\DocumentValidationException
      */
     public function execute(
         $orderId,

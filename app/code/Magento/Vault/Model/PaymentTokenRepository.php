@@ -159,7 +159,6 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
      * @param Collection $collection
      * @return void
      * @deprecated 100.3.0
-     * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {

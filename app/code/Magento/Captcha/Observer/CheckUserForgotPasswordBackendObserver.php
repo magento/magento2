@@ -59,7 +59,6 @@ class CheckUserForgotPasswordBackendObserver implements ObserverInterface
      * Check Captcha On User Login Backend Page
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @throws \Magento\Framework\Exception\Plugin\AuthenticationException
      * @return $this
      */
     public function execute(\Magento\Framework\Event\Observer $observer)

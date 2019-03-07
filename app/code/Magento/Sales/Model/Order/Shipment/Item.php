@@ -145,7 +145,6 @@ class Item extends AbstractModel implements ShipmentItemInterface
      *
      * @param float $qty
      * @return \Magento\Sales\Model\Order\Shipment\Item
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)
     {
@@ -157,7 +156,6 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Applying qty to order item
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function register()
     {

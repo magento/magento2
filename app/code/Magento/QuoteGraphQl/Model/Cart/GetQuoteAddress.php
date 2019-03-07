@@ -47,9 +47,8 @@ class GetQuoteAddress
      * @param int $quoteAddressId
      * @param int|null $customerId
      * @return AddressInterface
-     * @throws GraphQlInputException
-     * @throws GraphQlNoSuchEntityException
      * @throws GraphQlAuthorizationException
+     * @throws GraphQlNoSuchEntityException
      */
     public function execute(int $quoteAddressId, ?int $customerId): AddressInterface
     {

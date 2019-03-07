@@ -75,7 +75,6 @@ class Attributes extends \Magento\Framework\View\Element\Template
      *
      * @param array $excludeAttr
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAdditionalData(array $excludeAttr = [])
     {

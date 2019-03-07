@@ -178,7 +178,6 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Import directories to storage
      *
      * @param  array $dirs
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function importDirectories($dirs)

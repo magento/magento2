@@ -281,8 +281,6 @@ class NullPaymentProvider implements MethodInterface
      * Retrieve payment information model object
      *
      * @return InfoInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
-     *
      * @deprecated 100.1.0
      */
     public function getInfoInstance()
@@ -307,8 +305,6 @@ class NullPaymentProvider implements MethodInterface
      * Validate payment method information object
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     *
      */
     public function validate()
     {
@@ -406,8 +402,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @param InfoInterface $payment
      * @return false
-     * @throws \Magento\Framework\Exception\LocalizedException
-     *
      */
     public function acceptPayment(InfoInterface $payment)
     {
@@ -419,8 +413,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @param InfoInterface $payment
      * @return false
-     * @throws \Magento\Framework\Exception\LocalizedException
-     *
      */
     public function denyPayment(InfoInterface $payment)
     {

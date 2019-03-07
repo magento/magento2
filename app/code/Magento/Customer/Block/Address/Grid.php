@@ -178,7 +178,6 @@ class Grid extends \Magento\Framework\View\Element\Template
      * Return address string if address found and null if not
      *
      * @return int
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getDefaultBilling(): int
     {
@@ -193,7 +192,6 @@ class Grid extends \Magento\Framework\View\Element\Template
      * Return address string if address found and null if not
      *
      * @return int
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getDefaultShipping(): int
     {

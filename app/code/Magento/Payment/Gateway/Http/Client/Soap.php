@@ -54,8 +54,6 @@ class Soap implements ClientInterface
      *
      * @param TransferInterface $transferObject
      * @return array
-     * @throws \Magento\Payment\Gateway\Http\ClientException
-     * @throws \Magento\Payment\Gateway\Http\ConverterException
      * @throws \Exception
      */
     public function placeRequest(TransferInterface $transferObject)

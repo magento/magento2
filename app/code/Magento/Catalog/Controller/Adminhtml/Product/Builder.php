@@ -88,8 +88,6 @@ class Builder
      *
      * @param RequestInterface $request
      * @return ProductInterface
-     * @throws \RuntimeException
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function build(RequestInterface $request): ProductInterface
     {

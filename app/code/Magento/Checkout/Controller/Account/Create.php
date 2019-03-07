@@ -52,10 +52,8 @@ class Create extends \Magento\Framework\App\Action\Action
     /**
      * Execute request
      *
-     * @throws AlreadyExistsException
-     * @throws NoSuchEntityException
-     * @throws \Exception
      * @return \Magento\Framework\Controller\Result\Json
+     * @throws \Exception
      */
     public function execute()
     {

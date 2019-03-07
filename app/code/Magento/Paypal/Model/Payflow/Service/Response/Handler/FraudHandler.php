@@ -90,7 +90,6 @@ class FraudHandler implements HandlerInterface
      *
      * @param string $rulesString
      * @return array
-     * @throws LocalizedException
      */
     private function getFraudRulesDictionary($rulesString)
     {

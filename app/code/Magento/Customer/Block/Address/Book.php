@@ -145,7 +145,6 @@ class Book extends \Magento\Framework\View\Element\Template
      * Determines is the address primary (billing or shipping)
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function hasPrimaryAddress()
     {

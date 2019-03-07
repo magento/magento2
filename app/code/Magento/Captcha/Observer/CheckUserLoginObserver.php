@@ -125,8 +125,8 @@ class CheckUserLoginObserver implements ObserverInterface
      * Check captcha on user login page
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @throws NoSuchEntityException
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

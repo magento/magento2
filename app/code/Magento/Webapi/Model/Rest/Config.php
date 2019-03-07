@@ -102,7 +102,7 @@ class Config
      *
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @return Route[] matched routes
-     * @throws \Magento\Framework\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function getRestRoutes(\Magento\Framework\Webapi\Rest\Request $request)
     {

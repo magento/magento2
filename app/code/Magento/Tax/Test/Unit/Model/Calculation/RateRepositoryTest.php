@@ -264,9 +264,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param LocalizedException $expectedException
      * @param string $exceptionType
      * @param string $exceptionMessage
-     * @throws LocalizedException
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function testSaveThrowsExceptionIfCannotSaveTitles($expectedException, $exceptionType, $exceptionMessage)
     {

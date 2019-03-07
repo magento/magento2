@@ -87,7 +87,6 @@ class DeleteAction extends CardsManagement
      * Dispatch request
      *
      * @return ResultInterface|ResponseInterface
-     * @throws NotFoundException
      */
     public function execute()
     {

@@ -19,7 +19,6 @@ abstract class PdfDocumentsMassAction extends \Magento\Sales\Controller\Adminhtm
      * Execute action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {

@@ -202,7 +202,6 @@ class Transparent extends Payflowpro implements TransparentInterface
     /**
      * @param Payment $payment
      * @param string $token
-     * @throws LocalizedException
      * @return void
      */
     protected function createPaymentToken(Payment $payment, $token)

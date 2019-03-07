@@ -36,7 +36,8 @@ class StoreProcessor implements HttpHeaderProcessorInterface
      * Handle the value of the store and set the scope
      *
      * {@inheritDoc}
-     * @throws NoSuchEntityException
+     * @param string $headerValue
+     * @throws GraphQlInputException
      */
     public function processHeaderValue(string $headerValue) : void
     {

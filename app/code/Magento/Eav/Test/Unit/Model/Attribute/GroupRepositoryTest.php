@@ -261,9 +261,8 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test get list
      *
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetList()
     {

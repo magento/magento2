@@ -124,8 +124,8 @@ class Mode
     /**
      * Enable production mode
      *
-     * @throws LocalizedException
      * @return void
+     * @throws \Throwable
      */
     public function enableProductionMode()
     {

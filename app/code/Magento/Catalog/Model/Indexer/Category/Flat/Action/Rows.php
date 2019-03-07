@@ -195,7 +195,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * @param array $categoryData
      * @param array $categoryAttributesData
      * @return array
-     * @throws NoSuchEntityException
      */
     private function buildCategoryIndexData(Store $store, array $categoryData, array $categoryAttributesData)
     {

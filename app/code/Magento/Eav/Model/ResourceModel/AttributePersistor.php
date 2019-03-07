@@ -136,7 +136,6 @@ class AttributePersistor
      * @param \Magento\Framework\Model\Entity\ScopeInterface[] $context
      * @return void
      * @throws \Exception
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function processInserts($entityType, $context)
     {

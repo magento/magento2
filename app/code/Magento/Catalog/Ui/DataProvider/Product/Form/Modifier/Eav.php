@@ -323,7 +323,6 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface[] $attributes
      * @param string $groupCode
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getAttributesMeta(array $attributes, $groupCode)
     {
@@ -613,7 +612,6 @@ class Eav extends AbstractModifier
      * Get attribute codes of prev set
      *
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getPreviousSetAttributes()
     {

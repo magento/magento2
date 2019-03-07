@@ -239,7 +239,6 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @return $this
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function saveIncrementalPopularity()
     {
@@ -254,7 +253,6 @@ class Query extends AbstractModel implements QueryInterface
      * @param int $numResults
      * @return $this
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function saveNumResults($numResults)
     {

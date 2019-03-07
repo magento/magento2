@@ -140,8 +140,6 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param App\RequestInterface $request
      * @return \Magento\Framework\Controller\Result\Redirect|bool
-     * @throws \RuntimeException
-     * @throws InputException
      * @throws CookieSizeLimitReachedException
      * @throws FailureToSendException
      */

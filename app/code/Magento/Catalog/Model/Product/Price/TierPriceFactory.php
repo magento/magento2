@@ -149,7 +149,7 @@ class TierPriceFactory
      *
      * @param string $code
      * @return int
-     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function retrieveGroupValue($code)
     {

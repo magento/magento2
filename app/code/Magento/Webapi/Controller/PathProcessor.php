@@ -48,7 +48,6 @@ class PathProcessor
      *
      * @param string $pathInfo
      * @return string
-     * @throws NoSuchEntityException
      */
     public function process($pathInfo)
     {

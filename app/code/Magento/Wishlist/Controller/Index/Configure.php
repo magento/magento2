@@ -54,7 +54,6 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex
      * Action to reconfigure wishlist item
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @throws NotFoundException
      */
     public function execute()
     {

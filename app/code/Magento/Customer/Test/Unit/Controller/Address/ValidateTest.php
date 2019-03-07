@@ -65,7 +65,6 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     /**
      * Test method \Magento\Customer\Controller\Adminhtml\Address\Save::execute
      *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testExecute()
     {

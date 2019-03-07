@@ -35,7 +35,6 @@ class CustomizableOption
      * @param QuoteItem $cartItem
      * @param int $optionId
      * @return array
-     * @throws LocalizedException
      */
     public function getData(QuoteItem $cartItem, int $optionId): array
     {

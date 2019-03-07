@@ -55,9 +55,13 @@ class UpdateCustomerData
      * @param int $customerId
      * @param array $data
      * @return void
-     * @throws GraphQlNoSuchEntityException
-     * @throws GraphQlInputException
      * @throws GraphQlAlreadyExistsException
+     * @throws GraphQlInputException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\State\InputMismatchException
+     * @throws \Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException
      */
     public function execute(int $customerId, array $data): void
     {

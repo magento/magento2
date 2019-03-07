@@ -46,7 +46,6 @@ class Upload extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements
      * Files upload processing.
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {

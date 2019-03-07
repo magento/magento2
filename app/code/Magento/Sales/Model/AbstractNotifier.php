@@ -51,7 +51,6 @@ abstract class AbstractNotifier extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractModel $model
      * @return bool
-     * @throws \Magento\Framework\Exception\MailException
      */
     public function notify(\Magento\Sales\Model\AbstractModel $model)
     {

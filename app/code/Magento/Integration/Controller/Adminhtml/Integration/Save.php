@@ -90,8 +90,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
      * Validate current user password
      *
      * @return $this
-     * @throws UserLockedException
-     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     protected function validateUser()
     {

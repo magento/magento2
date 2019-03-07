@@ -44,7 +44,6 @@ class SpecificationFactory
      *
      * @param array $data
      * @return Composite
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create($data)
     {

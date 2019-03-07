@@ -64,7 +64,7 @@ class Csv implements ReportProcessorInterface
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param bool $writeOnlyErrorItems
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      */
     public function createReport(
         $originalFileName,

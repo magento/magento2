@@ -14,8 +14,8 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue implements Htt
     /**
      * Save Newsletter queue
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()

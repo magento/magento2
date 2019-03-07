@@ -226,7 +226,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * Process regular IPN notifications
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */

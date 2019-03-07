@@ -213,7 +213,6 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {

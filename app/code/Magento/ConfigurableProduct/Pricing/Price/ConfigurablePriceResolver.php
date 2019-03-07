@@ -56,7 +56,6 @@ class ConfigurablePriceResolver implements PriceResolverInterface
     /**
      * @param \Magento\Framework\Pricing\SaleableInterface|\Magento\Catalog\Model\Product $product
      * @return float
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function resolvePrice(\Magento\Framework\Pricing\SaleableInterface $product)
     {

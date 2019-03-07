@@ -72,7 +72,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * Submit the order
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {

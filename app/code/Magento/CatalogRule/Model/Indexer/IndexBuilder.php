@@ -510,7 +510,6 @@ class IndexBuilder
      * @param int $websiteId
      * @param Product|null $product
      * @return \Zend_Db_Statement_Interface
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @deprecated 100.2.0
      * @see RuleProductsSelectBuilder::build
      */

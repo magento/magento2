@@ -43,8 +43,6 @@ class PageCachePlugin
      * @param \Magento\Framework\App\PageCache\Cache $subject
      * @param string $result
      * @return string|bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterLoad(

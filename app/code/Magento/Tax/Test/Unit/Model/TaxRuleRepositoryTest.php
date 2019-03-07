@@ -148,10 +148,7 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param $exceptionObject
      * @param $exceptionName
      * @param $exceptionMessage
-     * @throws \Exception
-     * @throws CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
-     * @throws NoSuchEntityException
      */
     public function testSaveWithExceptions($exceptionObject, $exceptionName, $exceptionMessage)
     {

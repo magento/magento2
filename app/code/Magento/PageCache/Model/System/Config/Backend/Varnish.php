@@ -21,7 +21,6 @@ class Varnish extends \Magento\Framework\App\Config\Value
      * Set default data if empty fields have been left
      *
      * @return $this|\Magento\Framework\Model\AbstractModel
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {

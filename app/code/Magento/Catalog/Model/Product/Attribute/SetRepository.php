@@ -116,7 +116,8 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
      *
      * @param  \Magento\Eav\Api\Data\AttributeSetInterface $attributeSet
      * @return void
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\StateException
      */
     protected function validate(\Magento\Eav\Api\Data\AttributeSetInterface $attributeSet)
     {
