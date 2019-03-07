@@ -248,7 +248,7 @@ class KernelTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [200, [3, 4, 5]],
-            [404, [3, 4, 5]]
+            [404, [4, 5, 6]]
         ];
     }
 
