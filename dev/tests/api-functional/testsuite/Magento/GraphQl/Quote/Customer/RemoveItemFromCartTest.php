@@ -75,17 +75,12 @@ class RemoveItemFromCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @expectedException \Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testRemoveItemFromNonExistentCart()
     {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
-        $itemId = (int)$quote->getItemByProduct($this->productRepository->get('simple'))->getId();
-
-        $query = $this->prepareMutationQuery('non_existent_masked_id', $itemId);
+        $query = $this->prepareMutationQuery('non_existent_masked_id', 1);
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 

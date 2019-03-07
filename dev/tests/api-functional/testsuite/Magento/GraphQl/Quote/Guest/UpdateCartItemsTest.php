@@ -94,17 +94,12 @@ class UpdateCartItemsTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @expectedException \Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testUpdateItemInNonExistentCart()
     {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
-        $itemId = (int)$quote->getItemByProduct($this->productRepository->get('simple'))->getId();
-
-        $query = $this->getQuery('non_existent_masked_id', $itemId, 2);
+        $query = $this->getQuery('non_existent_masked_id', 1, 2);
         $this->graphQlQuery($query);
     }
 
