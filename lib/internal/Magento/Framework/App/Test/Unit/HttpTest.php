@@ -182,10 +182,15 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->http->launch();
     }
 
-    public function testLaunchHeadRequest()
+
+    /**
+     * Test that HEAD requests lead to an empty body and a Content-Length header matching the original body size.
+     * @dataProvider dataProviderForTestLaunchHeadRequest
+     * @param string $body
+     * @param int $expectedLength
+     */
+    public function testLaunchHeadRequest($body, $expectedLength)
     {
-        $body = "<html><head></head><body>Test</body></html>";
-        $contentLength = strlen($body);
         $this->setUpLaunch();
         $this->requestMock->expects($this->once())->method('isHead')->will($this->returnValue(true));
         $this->responseMock->expects($this->once())
@@ -199,7 +204,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->responseMock));
         $this->responseMock->expects($this->once())
             ->method('setHeader')
-            ->with('Content-Length', $contentLength)
+            ->with('Content-Length', $expectedLength)
             ->will($this->returnValue($this->responseMock));
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
@@ -208,6 +213,32 @@ class HttpTest extends \PHPUnit\Framework\TestCase
                 ['request' => $this->requestMock, 'response' => $this->responseMock]
             );
         $this->assertSame($this->responseMock, $this->http->launch());
+    }
+
+    /**
+     * Different test content for responseMock with their expected lengths in bytes.
+     * @return array
+     */
+    public function dataProviderForTestLaunchHeadRequest()
+    {
+        return [
+            [
+                '<html><head></head><body>Test</body></html>',                // Ascii text
+                43                                                            // Expected Content-Length
+            ],
+            [
+                '<html><head></head><body>部落格</body></html>',               // Multi-byte characters
+                48                                                            // Expected Content-Length
+            ],
+            [
+                '<html><head></head><body>'.chr(0).'</body></html>',     // Null byte
+                40                                                            // Expected Content-Length
+            ],
+            [
+                '<html><head></head>خرید<body></body></html>',                // LTR text
+                47                                                            // Expected Content-Length
+            ]
+        ];
     }
 
     public function testHandleDeveloperModeNotInstalled()

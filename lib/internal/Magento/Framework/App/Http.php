@@ -157,7 +157,11 @@ class Http implements \Magento\Framework\AppInterface
      */
     private function handleHeadRequest()
     {
-        $contentLength = strlen($this->_response->getContent());
+        // It is possible that some PHP installations have overloaded strlen to use mb_strlen instead.
+        // This means strlen might return the actual number of characters in a non-ascii string instead
+        // of the number of bytes. Use mb_strlen explicitly with a single byte character encoding to ensure
+        // that the content length is calculated in bytes.
+        $contentLength = mb_strlen($this->_response->getContent(), '8bit');
         $this->_response->clearBody();
         $this->_response->setHeader('Content-Length', $contentLength);
     }
