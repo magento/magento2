@@ -109,7 +109,9 @@ class MassUpdateProductAttribute
             $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
             $productIds = $this->session->getData('product_ids');
             $inventoryData = $this->addConfigSettings($inventoryData);
-            $this->updateInventoryInProducts($productIds, $websiteId, $inventoryData);
+            if (!empty($inventoryData)) {
+                $this->updateInventoryInProducts($productIds, $websiteId, $inventoryData);
+            }
 
             return $proceed();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
