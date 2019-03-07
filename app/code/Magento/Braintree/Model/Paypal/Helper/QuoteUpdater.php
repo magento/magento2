@@ -148,7 +148,7 @@ class QuoteUpdater extends AbstractHelper
     {
         $billingAddress = $quote->getBillingAddress();
 
-        if ($this->config->isRequiredBillingAddress()) {
+        if ($this->config->isRequiredBillingAddress() && !empty($details['billingAddress'])) {
             $this->updateAddressData($billingAddress, $details['billingAddress']);
         } else {
             $this->updateAddressData($billingAddress, $details['shippingAddress']);

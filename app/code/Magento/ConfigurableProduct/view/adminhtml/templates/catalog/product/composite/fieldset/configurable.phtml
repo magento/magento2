@@ -17,9 +17,9 @@
     <legend class="legend admin__legend">
         <span><?= /* @escapeNotVerified */ __('Associated Products') ?></span>
     </legend>
-    <div class="product-options">
-        <div class="field admin__field _required required">
-            <?php foreach ($_attributes as $_attribute): ?>
+    <div class="product-options fieldset admin__fieldset">
+        <?php foreach ($_attributes as $_attribute): ?>
+            <div class="field admin__field _required required">
                 <label class="label admin__field-label"><?php
                     /* @escapeNotVerified */ echo $_attribute->getProductAttribute()
                         ->getStoreLabel($_product->getStoreId());
@@ -34,8 +34,8 @@
                         <option><?= /* @escapeNotVerified */ __('Choose an Option...') ?></option>
                     </select>
                 </div>
-            <?php endforeach; ?>
-        </div>
+            </div>
+        <?php endforeach; ?>
     </div>
 </fieldset>
 <script>

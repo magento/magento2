@@ -102,7 +102,7 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expected ExceptionMessage error345
+     * @expectedExceptionMessage error345
      */
     public function testSetAddressValidationFailed()
     {

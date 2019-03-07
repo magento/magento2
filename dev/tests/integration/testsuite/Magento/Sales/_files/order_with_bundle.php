@@ -6,7 +6,6 @@
 declare(strict_types=1);
 
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
@@ -29,6 +28,10 @@ $orderItems = [
         OrderItemInterface::PRODUCT_TYPE => 'bundle',
         'product_options' => [
             'product_calculations' => 0,
+            'info_buyRequest' => [
+                'bundle_option' => [1 => 1],
+                'bundle_option_qty' => 1,
+            ]
         ],
         'children' => [
             [

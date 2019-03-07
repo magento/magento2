@@ -13,4 +13,10 @@
         <click selector="{{AdminProductFormActionSection.saveAndClose}}" stepKey="clickOnSaveAndClose"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
     </actionGroup>
+    <actionGroup name="AdminFormSaveAndDuplicate">
+        <click selector="{{AdminProductFormActionSection.saveArrow}}" stepKey="openSaveDropDown"/>
+        <click selector="{{AdminProductFormActionSection.saveAndDuplicate}}" stepKey="clickOnSaveAndDuplicate"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveSuccess" userInput="You saved the product."/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertDuplicateSuccess" userInput="You duplicated the product."/>
+        </actionGroup>
 </actionGroups>

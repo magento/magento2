@@ -7,6 +7,7 @@ namespace Magento\Catalog\Helper;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -273,7 +274,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Return current category path or get it from current category
-     * and creating array of categories|product paths for breadcrumbs
+     *
+     * Creating array of categories|product paths for breadcrumbs
      *
      * @return array
      */
@@ -382,6 +384,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Split SKU of an item by dashes and spaces
+     *
      * Words will not be broken, unless this length is greater than $length
      *
      * @param string $sku
@@ -410,14 +413,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve Catalog Price Scope
      *
-     * @return int
+     * @return int|null
      */
-    public function getPriceScope()
+    public function getPriceScope(): ?int
     {
-        return $this->scopeConfig->getValue(
+        $priceScope = $this->scopeConfig->getValue(
             self::XML_PATH_PRICE_SCOPE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
+        return isset($priceScope) ? (int)$priceScope : null;
     }
 
     /**
@@ -439,7 +443,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::CONFIG_USE_STATIC_URLS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -454,7 +458,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::CONFIG_PARSE_URL_DIRECTIVES,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $this->_storeId
         );
     }
@@ -472,6 +476,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Whether to display items count for each filter option
+     *
      * @param int $storeId Store view ID
      * @return bool
      */
@@ -479,12 +484,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_DISPLAY_PRODUCT_COUNT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
 
     /**
+     * Convert tax address array to address data object with country id and postcode
+     *
      * @param array $taxAddress
      * @return \Magento\Customer\Api\Data\AddressInterface|null
      */
