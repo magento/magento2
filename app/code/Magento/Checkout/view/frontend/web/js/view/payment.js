@@ -83,7 +83,8 @@ define([
             var shippingAddress = quote.shippingAddress(),
                 isShippingAddress = false;
 
-            if ((typeof quote.guestEmail == 'undefined' && typeof shippingAddress.email == 'undefined') ||
+            if (typeof quote.guestEmail == 'undefined' &&
+                typeof shippingAddress.email == 'undefined' ||
                 typeof shippingAddress.firstname == 'undefined' ||
                 typeof shippingAddress.lastname == 'undefined' ||
                 typeof shippingAddress.countryId == 'undefined' ||
@@ -93,7 +94,8 @@ define([
             ) {
                 isShippingAddress = false;
             } else if(
-                    (quote.guestEmail.length === 0 && shippingAddress.email.length === 0) ||
+                    quote.guestEmail.length === 0 &&
+                    shippingAddress.email.length === 0 ||
                     shippingAddress.firstname.length === 0 ||
                     shippingAddress.lastname.length === 0 ||
                     shippingAddress.countryId.length === 0 ||
