@@ -49,7 +49,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      */
     public function testGetPaymentMethodsFromGuestCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_with_simple_product_without_address');
         $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
         $response      = $this->graphQlQuery($query);
 
@@ -75,7 +75,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      */
     public function testGetPaymentMethodsFromAnotherCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_1');
         $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
@@ -90,7 +90,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      */
     public function testGetPaymentMethodsIfPaymentsAreNotSet()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_with_simple_product_without_address');
         $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
         $response      = $this->graphQlQuery($query);
 
@@ -128,13 +128,13 @@ QUERY;
     }
 
     /**
-     * @param string $reversedQuoteId
+     * @param string $reservedOrderId
      * @return string
      */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
+    private function getMaskedQuoteIdByReservedOrderId(string $reservedOrderId): string
     {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
 
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
