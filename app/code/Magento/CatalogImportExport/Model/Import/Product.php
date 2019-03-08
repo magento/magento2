@@ -219,17 +219,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     ];
 
     /**
-     * Links attribute name-to-link type ID.
-     *
-     * @var array
-     */
-    protected $_linkNameToId = [
-        '_related_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED,
-        '_crosssell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL,
-        '_upsell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL,
-    ];
-
-    /**
      * Attributes codes which shows as date
      *
      * @var array
@@ -1256,7 +1245,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_connection,
             $this->_linkFactory,
             $this->_resourceHelper,
-            $this->_linkNameToId,
             $this->_dataSourceModel,
             $this->skuProcessor,
             $this->_logger,

@@ -21,12 +21,22 @@ class LinkProcessor
      */
     protected $_entityModel;
 
+    /**
+     * Links attribute name-to-link type ID.
+     *
+     * @var array
+     */
+    protected $_linkNameToId = [
+        '_related_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED,
+        '_crosssell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL,
+        '_upsell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL,
+    ];
+
     public function __construct(
         $entityModel,
         AdapterInterface $connection,
         LinkFactory $linkFactory,
         Helper $resourceHelper,
-        array $linkNameToId,
         Data $dateSourceModel,
         SkuProcessor $skuProcessor,
         LoggerInterface $logger,
@@ -36,7 +46,6 @@ class LinkProcessor
         $this->_connection = $connection;
         $this->_linkFactory = $linkFactory;
         $this->_resourceHelper = $resourceHelper; // TODO: inject via DI ? do we need the actual instance from parent or is a new okay?
-        $this->_linkNameToId = $linkNameToId; // TODO: belongs to THIS class
         $this->_dataSourceModel = $dateSourceModel;
         $this->skuProcessor = $skuProcessor;
         $this->_logger = $logger;
