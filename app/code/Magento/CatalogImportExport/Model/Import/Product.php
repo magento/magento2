@@ -1240,7 +1240,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveLinks()
     {
-        $linkProcessor = new LinkProcessor(
+        $linkProcessor = new LinkProcessor( // FIXME: instantiate via DI
             $this,
             $this->_connection,
             $this->_linkFactory,
