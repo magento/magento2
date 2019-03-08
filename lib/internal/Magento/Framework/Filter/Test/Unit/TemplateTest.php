@@ -437,6 +437,7 @@ TEMPLATE;
             ['save'],
             ['getCollection'],
             ['getResource'],
+            ['getConfig'],
         ];
     }
 }
