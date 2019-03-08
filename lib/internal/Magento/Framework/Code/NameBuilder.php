@@ -6,7 +6,7 @@
 namespace Magento\Framework\Code;
 
 /**
- * Name builder.
+ * Builds namespace with classname out of the parts.
  *
  * @api
  */
@@ -26,7 +26,7 @@ class NameBuilder
         $separator = '\\';
         $string = join($separator, $parts);
         $string = str_replace('_', $separator, $string);
-        $className = str_replace(' ', $separator, ucwords(str_replace($separator, ' ', $string)));
+        $className = ucwords($string, $separator);
         return $className;
     }
 }

@@ -9,10 +9,13 @@ namespace Magento\CustomerGraphQl\Model\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlAlreadyExistsException;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * Update customer data
@@ -35,18 +38,34 @@ class UpdateCustomerData
     private $checkCustomerPassword;
 
     /**
+     * @var DataObjectHelper
+     */
+    private $dataObjectHelper;
+
+    /**
+     * @var array
+     */
+    private $restrictedKeys;
+
+    /**
      * @param CustomerRepositoryInterface $customerRepository
      * @param StoreManagerInterface $storeManager
      * @param CheckCustomerPassword $checkCustomerPassword
+     * @param DataObjectHelper $dataObjectHelper
+     * @param array $restrictedKeys
      */
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
         StoreManagerInterface $storeManager,
-        CheckCustomerPassword $checkCustomerPassword
+        CheckCustomerPassword $checkCustomerPassword,
+        DataObjectHelper $dataObjectHelper,
+        array $restrictedKeys = []
     ) {
         $this->customerRepository = $customerRepository;
         $this->storeManager = $storeManager;
         $this->checkCustomerPassword = $checkCustomerPassword;
+        $this->dataObjectHelper = $dataObjectHelper;
+        $this->restrictedKeys = $restrictedKeys;
     }
 
     /**
@@ -55,21 +74,16 @@ class UpdateCustomerData
      * @param int $customerId
      * @param array $data
      * @return void
-     * @throws GraphQlNoSuchEntityException
-     * @throws GraphQlInputException
      * @throws GraphQlAlreadyExistsException
+     * @throws GraphQlInputException
+     * @throws GraphQlAuthenticationException
      */
     public function execute(int $customerId, array $data): void
     {
         $customer = $this->customerRepository->getById($customerId);
 
-        if (isset($data['firstname'])) {
-            $customer->setFirstname($data['firstname']);
-        }
-
-        if (isset($data['lastname'])) {
-            $customer->setLastname($data['lastname']);
-        }
+        $filteredData = array_diff_key($data, array_flip($this->restrictedKeys));
+        $this->dataObjectHelper->populateWithArray($customer, $filteredData, CustomerInterface::class);
 
         if (isset($data['email']) && $customer->getEmail() !== $data['email']) {
             if (!isset($data['password']) || empty($data['password'])) {
@@ -89,6 +103,8 @@ class UpdateCustomerData
                 __('A customer with the same email address already exists in an associated website.'),
                 $e
             );
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()), $e);
         }
     }
 }

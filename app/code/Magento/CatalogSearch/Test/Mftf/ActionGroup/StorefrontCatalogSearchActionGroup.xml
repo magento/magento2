@@ -92,7 +92,7 @@
     <!-- Go to store's advanced catalog search page -->
     <actionGroup name="GoToStoreViewAdvancedCatalogSearchActionGroup">
         <amOnPage url="{{StorefrontCatalogSearchAdvancedFormPage.url}}" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForPageLoad time="90" stepKey="waitForPageLoad"/>
     </actionGroup>
 
     <!-- Storefront advanced catalog search by product name -->
@@ -159,5 +159,10 @@
         <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.Description}}" userInput="{{description}}" stepKey="fillDescription"/>
         <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="clickSubmit"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!-- Asserts that search results do not contain any results-->
+    <actionGroup name="StorefrontCheckSearchIsEmpty">
+        <see stepKey="checkEmpty" selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="Your search returned no results"/>
     </actionGroup>
 </actionGroups>
