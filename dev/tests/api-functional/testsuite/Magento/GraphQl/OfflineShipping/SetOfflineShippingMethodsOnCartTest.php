@@ -72,6 +72,59 @@ class SetOfflineShippingOnCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
+     */
+    public function testSetShippingMethodTwiceInOneRequest()
+    {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load(
+            $quote,
+            'test_order_1',
+            'reserved_order_id'
+        );
+        $shippingAddress = $quote->getShippingAddress();
+        $shippingAddressId = $shippingAddress->getId();
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
+
+        $query = <<<QUERY
+mutation {
+  setShippingMethodsOnCart(input: 
+    {
+      cart_id: "$maskedQuoteId", 
+      shipping_methods: [
+      {
+        cart_address_id: $shippingAddressId
+        method_code: "flatrate"
+        carrier_code: "flatrate"
+      }
+      {
+        cart_address_id: $shippingAddressId
+        method_code: "freeshipping"
+        carrier_code: "freeshipping"
+      }
+      ]
+      }) {
+    
+    cart {
+      shipping_addresses {
+        selected_shipping_method {
+          carrier_code
+          method_code
+          label
+          amount
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        self::expectExceptionMessage('You cannot specify multiple shipping methods.');
+        $this->sendRequestWithToken($query);
+    }
+
+    /**
      * Data provider for base offline shipping methods
      *
      * @return array
@@ -90,7 +143,7 @@ class SetOfflineShippingOnCartTest extends GraphQlAbstract
      *
      * @param string $shippingCarrierCode
      * @param string $shippingMethodCode
-     * @param string $shippingAmount
+     * @param float $shippingAmount
      * @param string $shippingLabel
      * @throws \Magento\Framework\Exception\AuthenticationException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -166,7 +219,6 @@ mutation {
     }
   }
 }
-
 QUERY;
     }
 
