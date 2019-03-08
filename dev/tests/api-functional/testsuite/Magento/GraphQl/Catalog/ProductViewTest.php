@@ -583,6 +583,8 @@ QUERY;
      */
     public function testProductPrices()
     {
+        $this->markTestSkipped("https://github.com/magento/graphql-ce/issues/453");
+
         $firstProductSku = 'simple-249';
         $secondProductSku = 'simple-156';
         $query = <<<QUERY

@@ -16,7 +16,6 @@ services:
   - elasticsearch
 language: php
 php:
-  - 7.1
   - 7.2
 env:
   global:
@@ -36,20 +35,6 @@ env:
     - TEST_SUITE=functional
     - TEST_SUITE=msi-api-functional
     - TEST_SUITE=graphql-api-functional
-matrix:
-  exclude:
-    - php: 7.1
-      env: TEST_SUITE=static
-    - php: 7.1
-      env: TEST_SUITE=js GRUNT_COMMAND=spec
-    - php: 7.1
-      env: TEST_SUITE=js GRUNT_COMMAND=static
-    - php: 7.1
-      env: TEST_SUITE=functional
-    - php: 7.1
-      env: TEST_SUITE=msi-api-functional
-    - php: 7.1
-      env: TEST_SUITE=graphql-api-functional
 cache:
   apt: true
   directories:
