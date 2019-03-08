@@ -17,7 +17,7 @@ use Magento\MessageQueue\Api\Data\PoisonPillInterface;
 interface PoisonPillCompareInterface
 {
     /**
-     * Check is version of current poison pill is latest.
+     * Check if version of current poison pill is latest.
      *
      * @param PoisonPillInterface $poisonPill
      * @return bool

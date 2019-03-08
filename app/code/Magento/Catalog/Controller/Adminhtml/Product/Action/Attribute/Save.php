@@ -10,7 +10,6 @@ use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Save
@@ -43,11 +42,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     private $userContext;
 
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Framework\Bulk\BulkManagementInterface $bulkManagement
@@ -71,13 +65,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $this->identityService = $identityService;
         $this->serializer = $serializer;
         $this->userContext = $userContext;
-        $this->objectManager = ObjectManager::getInstance();
     }
 
     /**
      * Update product attributes
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -89,6 +82,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $attributesData = $this->getRequest()->getParam('attributes', []);
         $websiteRemoveData = $this->getRequest()->getParam('remove_website_ids', []);
         $websiteAddData = $this->getRequest()->getParam('add_website_ids', []);
+
         $storeId = $this->attributeHelper->getSelectedStoreId();
         $websiteId = $this->attributeHelper->getStoreWebsiteId($storeId);
         $productIds = $this->attributeHelper->getProductIds();
@@ -110,10 +104,17 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         return $this->resultRedirectFactory->create()->setPath('catalog/product/', ['store' => $storeId]);
     }
 
+    /**
+     * Sanitize product attributes
+     *
+     * @param $attributesData
+     *
+     * @return array
+     */
     private function sanitizeProductAttributes($attributesData)
     {
-        $dateFormat = $this->objectManager->get(TimezoneInterface::class)->getDateFormat(\IntlDateFormatter::SHORT);
-        $config = $this->objectManager->get(\Magento\Eav\Model\Config::class);
+        $dateFormat = $this->_objectManager->get(TimezoneInterface::class)->getDateFormat(\IntlDateFormatter::SHORT);
+        $config = $this->_objectManager->get(\Magento\Eav\Model\Config::class);
 
         foreach ($attributesData as $attributeCode => $value) {
             $attribute = $config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
@@ -149,7 +150,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     }
 
     /**
-     * Schedule new bulk.
+     * Schedule new bulk
      *
      * @param $attributesData
      * @param $websiteRemoveData
@@ -157,6 +158,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param $storeId
      * @param $websiteId
      * @param $productIds
+     * @throws \Magento\Framework\Exception\LocalizedException
+     *
      * @return void
      */
     private function publish($attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds):void
@@ -196,7 +199,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         }
 
         if (!empty($operations)) {
-            $result = $this->bulkManagement->scheduleBulk($bulkUuid, $operations, $bulkDescription, $this->userContext->getUserId());
+            $result = $this->bulkManagement->scheduleBulk(
+                $bulkUuid,
+                $operations,
+                $bulkDescription,
+                $this->userContext->getUserId()
+            );
             if (!$result) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Something went wrong while processing the request.')
@@ -206,6 +214,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     }
 
     /**
+     * Make asynchronous operation
      * @param $meta
      * @param $queue
      * @param $dataToUpdate
@@ -213,10 +222,18 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param $websiteId
      * @param $productIds
      * @param $bulkUuid
+     *
      * @return OperationInterface
      */
-    private function makeOperation($meta, $queue, $dataToUpdate, $storeId, $websiteId, $productIds, $bulkUuid): OperationInterface
-    {
+    private function makeOperation(
+        $meta,
+        $queue,
+        $dataToUpdate,
+        $storeId,
+        $websiteId,
+        $productIds,
+        $bulkUuid
+    ): OperationInterface {
         $dataToEncode = [
             'meta_information' => $meta,
             'product_ids' => $productIds,

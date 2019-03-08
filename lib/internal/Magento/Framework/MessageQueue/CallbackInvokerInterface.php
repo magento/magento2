@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue;
 
+/**
+ * Callback invoker interface
+ */
 interface CallbackInvokerInterface
 {
     /**

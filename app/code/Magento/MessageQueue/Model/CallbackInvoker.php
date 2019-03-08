@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for  license details.
+ * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,9 @@ use Magento\MessageQueue\Api\Data\PoisonPillInterface;
 use Magento\MessageQueue\Api\PoisonPillCompareInterface;
 use Magento\MessageQueue\Api\PoisonPillReadInterface;
 
+/**
+ * Callback invoker
+ */
 class CallbackInvoker implements CallbackInvokerInterface
 {
     /**
@@ -39,7 +42,6 @@ class CallbackInvoker implements CallbackInvokerInterface
         PoisonPillCompareInterface $poisonPillCompare
     ) {
         $this->poisonPillRead = $poisonPillRead;
-        $this->poisonPill = $poisonPillRead->getLatest();
         $this->poisonPillCompare = $poisonPillCompare;
     }
 
@@ -48,6 +50,7 @@ class CallbackInvoker implements CallbackInvokerInterface
      */
     public function invoke(QueueInterface $queue, $maxNumberOfMessages, $callback)
     {
+        $this->poisonPill = $this->poisonPillRead->getLatest();
         for ($i = $maxNumberOfMessages; $i > 0; $i--) {
             do {
                 $message = $queue->dequeue();

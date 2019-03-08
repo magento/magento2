@@ -22,6 +22,8 @@ interface PoisonPillInterface
     public function getVersion(): ?int;
 
     /**
+     * Set version of poison pill.
+     *
      * @param int $version
      * @return void
      */
