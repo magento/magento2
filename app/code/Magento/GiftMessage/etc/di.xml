@@ -13,13 +13,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GiftMessage\Model\CompositeConfigProvider">
-        <arguments>
-            <argument name="configProviders" xsi:type="array">
-                <item name="gift_message_config_provider" xsi:type="object">Magento\GiftMessage\Model\GiftMessageConfigProvider</item>
-            </argument>
-        </arguments>
-    </type>
     <preference for="Magento\GiftMessage\Api\CartRepositoryInterface" type="Magento\GiftMessage\Model\CartRepository"/>
     <preference for="Magento\GiftMessage\Api\ItemRepositoryInterface" type="Magento\GiftMessage\Model\ItemRepository"/>
     <preference for="Magento\GiftMessage\Api\GuestCartRepositoryInterface" type="Magento\GiftMessage\Model\GuestCartRepository"/>
