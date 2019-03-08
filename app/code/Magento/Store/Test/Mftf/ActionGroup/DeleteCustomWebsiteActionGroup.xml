@@ -21,5 +21,6 @@
         <click selector="{{AdminStoresMainActionsSection.deleteButton}}" stepKey="clickDeleteWebsiteButtonOnEditStorePage"/>
         <selectOption userInput="No" selector="{{AdminStoresDeleteWebsiteSection.createDbBackup}}" stepKey="setCreateDbBackupToNo"/>
         <click selector="{{AdminStoresDeleteWebsiteSection.deleteButton}}" stepKey="clickDeleteButtonOnDeleteWebsitePage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the website." stepKey="checkSuccessMessage"/>
     </actionGroup>
 </actionGroups>
