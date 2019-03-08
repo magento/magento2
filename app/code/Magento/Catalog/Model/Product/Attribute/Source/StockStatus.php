@@ -14,7 +14,6 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Product stock status functionality model
- *
  */
 class StockStatus extends AbstractSource implements SourceInterface, OptionSourceInterface
 {
