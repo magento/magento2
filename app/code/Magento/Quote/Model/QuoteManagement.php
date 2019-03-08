@@ -12,6 +12,7 @@ use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Phrase;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address\ToOrder as ToOrderConverter;
 use Magento\Quote\Model\Quote\Address\ToOrderAddress as ToOrderAddressConverter;
@@ -532,19 +533,31 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             );
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            if (!empty($this->addressesToSync)) {
-                foreach ($this->addressesToSync as $addressId) {
-                    $this->addressRepository->deleteById($addressId);
+            try {
+                if (!empty($this->addressesToSync)) {
+                    foreach ($this->addressesToSync as $addressId) {
+                        $this->addressRepository->deleteById($addressId);
+                    }
                 }
+                $this->eventManager->dispatch(
+                    'sales_model_service_quote_submit_failure',
+                    [
+                        'order' => $order,
+                        'quote' => $quote,
+                        'exception' => $e,
+                    ]
+                );
+            } catch (\Exception $consecutiveException) {
+                $message = new Phrase(
+                    "An exception occurred on 'sales_model_service_quote_submit_failure' event: %1\n%2",
+                    [
+                        $consecutiveException->getMessage(),
+                        $consecutiveException->getTraceAsString()
+                    ]
+                );
+
+                throw new LocalizedException($message, $e);
             }
-            $this->eventManager->dispatch(
-                'sales_model_service_quote_submit_failure',
-                [
-                    'order'     => $order,
-                    'quote'     => $quote,
-                    'exception' => $e
-                ]
-            );
             throw $e;
         }
         return $order;
