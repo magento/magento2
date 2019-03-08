@@ -5,6 +5,11 @@
  */
 namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface
+    as FieldTypeResolver;
+use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
@@ -26,20 +31,49 @@ class Match implements QueryInterface
     private $fieldMapper;
 
     /**
+     * @deprecated
+     * @see \Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer
      * @var PreprocessorInterface[]
      */
     protected $preprocessorContainer;
 
     /**
+     * @var AttributeProvider
+     */
+    private $attributeProvider;
+
+    /**
+     * @var FieldTypeResolver
+     */
+    private $fieldTypeResolver;
+
+    /**
+     * @var ValueTransformerPool
+     */
+    private $valueTransformerPool;
+
+    /**
      * @param FieldMapperInterface $fieldMapper
      * @param PreprocessorInterface[] $preprocessorContainer
+     * @param AttributeProvider|null $attributeProvider
+     * @param FieldTypeResolver|null $fieldTypeResolver
+     * @param ValueTransformerPool|null $valueTransformerPool
      */
     public function __construct(
         FieldMapperInterface $fieldMapper,
-        array $preprocessorContainer
+        array $preprocessorContainer,
+        AttributeProvider $attributeProvider = null,
+        FieldTypeResolver $fieldTypeResolver = null,
+        ValueTransformerPool $valueTransformerPool = null
     ) {
         $this->fieldMapper = $fieldMapper;
         $this->preprocessorContainer = $preprocessorContainer;
+        $this->attributeProvider = $attributeProvider ?? ObjectManager::getInstance()
+            ->get(AttributeProvider::class);
+        $this->fieldTypeResolver = $fieldTypeResolver ?? ObjectManager::getInstance()
+            ->get(FieldTypeResolver::class);
+        $this->valueTransformerPool = $valueTransformerPool ?? ObjectManager::getInstance()
+            ->get(ValueTransformerPool::class);
     }
 
     /**
@@ -72,10 +106,6 @@ class Match implements QueryInterface
      */
     protected function prepareQuery($queryValue, $conditionType)
     {
-        $queryValue = $this->escape($queryValue);
-        foreach ($this->preprocessorContainer as $preprocessor) {
-            $queryValue = $preprocessor->process($queryValue);
-        }
         $condition = $conditionType === BoolExpression::QUERY_CONDITION_NOT ?
             self::QUERY_CONDITION_MUST_NOT : $conditionType;
         return [
@@ -104,10 +134,24 @@ class Match implements QueryInterface
 
         // Checking for quoted phrase \"phrase test\", trim escaped surrounding quotes if found
         $count = 0;
-        $value = preg_replace('#^\\\\"(.*)\\\\"$#m', '$1', $queryValue['value'], -1, $count);
+        $value = preg_replace('#^"(.*)"$#m', '$1', $queryValue['value'], -1, $count);
         $condition = ($count) ? 'match_phrase' : 'match';
 
+        $transformedTypes = [];
         foreach ($matches as $match) {
+            $attributeAdapter = $this->attributeProvider->getByAttributeCode($match['field']);
+            $fieldType = $this->fieldTypeResolver->getFieldType($attributeAdapter);
+            $valueTransformer = $this->valueTransformerPool->get($fieldType ?? 'text');
+            $valueTransformerHash = \spl_object_hash($valueTransformer);
+            if (!isset($transformedTypes[$valueTransformerHash])) {
+                $transformedTypes[$valueTransformerHash] = $valueTransformer->transform($value);
+            }
+            $transformedValue = $transformedTypes[$valueTransformerHash];
+            if (null === $transformedValue) {
+                //Value is incompatible with this field type.
+                continue;
+            }
+
             $resolvedField = $this->fieldMapper->getFieldName(
                 $match['field'],
                 ['type' => FieldMapperInterface::TYPE_QUERY]
@@ -117,8 +161,8 @@ class Match implements QueryInterface
                 'body' => [
                     $condition => [
                         $resolvedField => [
-                            'query' => $value,
-                            'boost' => isset($match['boost']) ? $match['boost'] : 1,
+                            'query' => $transformedValue,
+                            'boost' => $match['boost'] ?? 1,
                         ],
                     ],
                 ],
@@ -131,16 +175,13 @@ class Match implements QueryInterface
     /**
      * Escape a value for special query characters such as ':', '(', ')', '*', '?', etc.
      *
-     * Cut trailing plus or minus sign, and @ symbol, using of which causes InnoDB to report a syntax error.
-     * https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html Fulltext-boolean search docs.
-     *
+     * @deprecated
+     * @see \Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer
      * @param string $value
      * @return string
      */
     protected function escape($value)
     {
-        $value = preg_replace('/@+|[@+-]+$/', '', $value);
-
         $pattern = '/(\+|-|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\*|\?|:|\\\)/';
         $replace = '\\\$1';
 

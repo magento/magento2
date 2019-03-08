@@ -20,6 +20,10 @@ $installer = Bootstrap::getObjectManager()->create(
     CategorySetup::class,
     ['resourceName' => 'catalog_setup']
 );
+$productEntityTypeId = $installer->getEntityTypeId(
+    \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE
+);
+
 $selectOptions = [];
 $selectAttributes = [];
 foreach (range(1, 2) as $index) {
@@ -30,7 +34,7 @@ foreach (range(1, 2) as $index) {
     $selectAttribute->setData(
         [
             'attribute_code' => 'select_attribute_' . $index,
-            'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
+            'entity_type_id' => $productEntityTypeId,
             'is_global' => 1,
             'is_user_defined' => 1,
             'frontend_input' => 'select',
@@ -56,7 +60,8 @@ foreach (range(1, 2) as $index) {
     );
     $selectAttribute->save();
     /* Assign attribute to attribute set */
-    $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $selectAttribute->getId());
+    $installer->addAttributeToGroup($productEntityTypeId, 'Default', 'General', $selectAttribute->getId());
+
     /** @var $selectOptions Collection */
     $selectOption = Bootstrap::getObjectManager()->create(
         Collection::class
@@ -65,6 +70,26 @@ foreach (range(1, 2) as $index) {
     $selectAttributes[$index] = $selectAttribute;
     $selectOptions[$index] = $selectOption;
 }
+
+$dateAttribute = Bootstrap::getObjectManager()->create(Attribute::class);
+$dateAttribute->setData(
+    [
+        'attribute_code' => 'date_attribute',
+        'entity_type_id' => $productEntityTypeId,
+        'is_global' => 1,
+        'is_filterable' => 1,
+        'backend_type' => 'datetime',
+        'frontend_input' => 'date',
+        'frontend_label' => 'Test Date',
+        'is_searchable' => 1,
+        'is_filterable_in_search' => 1,
+    ]
+);
+$dateAttribute->save();
+/* Assign attribute to attribute set */
+$installer->addAttributeToGroup($productEntityTypeId, 'Default', 'General', $dateAttribute->getId());
+
+$productAttributeSetId = $installer->getAttributeSetId($productEntityTypeId, 'Default');
 /* Create simple products per each first attribute option */
 foreach ($selectOptions[1] as $option) {
     /** @var $product Product */
@@ -74,7 +99,7 @@ foreach ($selectOptions[1] as $option) {
     $product->setTypeId(
         Type::TYPE_SIMPLE
     )->setAttributeSetId(
-        $installer->getAttributeSetId('catalog_product', 'Default')
+        $productAttributeSetId
     )->setWebsiteIds(
         [1]
     )->setName(
@@ -92,6 +117,7 @@ foreach ($selectOptions[1] as $option) {
     )->setStockData(
         ['use_config_manage_stock' => 1, 'qty' => 5, 'is_in_stock' => 1]
     )->save();
+
     Bootstrap::getObjectManager()->get(
         Action::class
     )->updateAttributes(
@@ -99,6 +125,7 @@ foreach ($selectOptions[1] as $option) {
         [
             $selectAttributes[1]->getAttributeCode() => $option->getId(),
             $selectAttributes[2]->getAttributeCode() => $selectOptions[2]->getLastItem()->getId(),
+            $dateAttribute->getAttributeCode() => '10/30/2000',
         ],
         $product->getStoreId()
     );
