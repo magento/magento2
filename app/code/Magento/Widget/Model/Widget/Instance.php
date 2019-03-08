@@ -15,7 +15,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @method string getTitle()
  * @method \Magento\Widget\Model\Widget\Instance setTitle(string $value)
  * @method \Magento\Widget\Model\Widget\Instance setStoreIds(string $value)
- * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string $value)
+ * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string|array $value)
  * @method int getSortOrder()
  * @method \Magento\Widget\Model\Widget\Instance setSortOrder(int $value)
  * @method \Magento\Widget\Model\Widget\Instance setThemeId(int $value)
@@ -340,6 +340,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Setter
+     *
      * Prepare widget type
      *
      * @param string $type
@@ -353,6 +354,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
+     *
      * Prepare widget type
      *
      * @return string
@@ -364,6 +366,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter.
+     *
      * If not set return default
      *
      * @return string
@@ -379,6 +382,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
+     *
      * Explode to array if string setted
      *
      * @return array
@@ -393,6 +397,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
+     *
      * Unserialize if serialized string setted
      *
      * @return array

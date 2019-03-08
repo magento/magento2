@@ -8,6 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <newsletter>
+            <general>
+                <active>1</active>
+            </general>
             <subscription>
                 <allow_guest_subscribe>1</allow_guest_subscribe>
                 <confirm>0</confirm>
