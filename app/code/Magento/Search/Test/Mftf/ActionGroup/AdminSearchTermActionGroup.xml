@@ -17,12 +17,12 @@
         <fillField selector="{{AdminCatalogSearchTermIndexSection.searchQuery}}" userInput="{{searchQuery}}" stepKey="fillSearchQuery"/>
         <click selector="{{AdminCatalogSearchTermIndexSection.searchButton}}" stepKey="clickSearchButton"/>
         <waitForPageLoad stepKey="waitForSearchResultLoad"/>
-        <checkOption selector="{{AdminCatalogSearchTermIndexSection.checkBox}}" stepKey="checkCheckBox"/>
+        <checkOption selector="{{AdminCatalogSearchTermIndexSection.searchTermRowCheckboxBySearchQuery(searchQuery)}}" stepKey="checkCheckBox"/>
     </actionGroup>
 
     <!-- Delete search term -->
     <actionGroup name="deleteSearchTerm">
-        <selectOption selector="{{AdminCatalogSearchTermIndexSection.delete}}" userInput="delete" stepKey="selectDeleteOption"/>
+        <selectOption selector="{{AdminCatalogSearchTermIndexSection.massActions}}" userInput="delete" stepKey="selectDeleteOption"/>
         <click selector="{{AdminCatalogSearchTermIndexSection.submit}}" stepKey="clickSubmitButton"/>
         <click selector="{{AdminCatalogSearchTermIndexSection.okButton}}" stepKey="clickOkButton"/>
         <waitForElementVisible selector="{{AdminCatalogSearchTermMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
