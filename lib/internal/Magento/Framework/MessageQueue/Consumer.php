@@ -103,7 +103,7 @@ class Consumer implements ConsumerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process($maxNumberOfMessages = null)
     {

@@ -15,6 +15,7 @@ use Magento\Framework\Bulk\OperationInterface;
 
 /**
  * Consumer for export message.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Consumer
 {
@@ -88,7 +89,11 @@ class Consumer
     }
 
     /**
+     * Process
+     *
      * @param \Magento\AsynchronousOperations\Api\Data\OperationInterface $operation
+     * @throws \Exception
+     *
      * @return void
      */
     public function process(\Magento\AsynchronousOperations\Api\Data\OperationInterface $operation)
@@ -97,7 +102,6 @@ class Consumer
             $serializedData = $operation->getSerializedData();
             $data = $this->serializer->unserialize($serializedData);
             $this->execute($data);
-
         } catch (\Zend_Db_Adapter_Exception  $e) {
             $this->logger->critical($e->getMessage());
             if (
@@ -111,7 +115,9 @@ class Consumer
             } else {
                 $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
                 $errorCode = $e->getCode();
-                $message = __('Sorry, something went wrong during product attributes update. Please see log for details.');
+                $message = __(
+                    'Sorry, something went wrong during product attributes update. Please see log for details.'
+                );
             }
         } catch (NoSuchEntityException $e) {
             $this->logger->critical($e->getMessage());
@@ -140,7 +146,11 @@ class Consumer
     }
 
     /**
-     * @param $data
+     * Execute
+     *
+     * @param array $data
+     *
+     * @return void
      */
     private function execute($data): void
     {

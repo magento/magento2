@@ -27,7 +27,10 @@ class PoisonPill extends AbstractDb implements PoisonPillPutInterface, PoisonPil
     private $poisonPillFactory;
 
     /**
+     * PoisonPill constructor.
+     *
      * @param Context $context
+     * @param PoisonPillInterfaceFactory $poisonPillFactory
      * @param string|null $connectionName
      */
     public function __construct(

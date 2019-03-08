@@ -223,6 +223,11 @@ class PublisherConsumerController
         return $this->publisher;
     }
 
+    /**
+     * Start consumers
+     *
+     * @return void
+     */
     public function startConsumers(): void
     {
         foreach ($this->consumers as $consumer) {

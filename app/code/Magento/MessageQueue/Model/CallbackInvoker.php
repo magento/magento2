@@ -47,6 +47,7 @@ class CallbackInvoker implements CallbackInvokerInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function invoke(QueueInterface $queue, $maxNumberOfMessages, $callback)
     {

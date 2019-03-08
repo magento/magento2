@@ -122,10 +122,18 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             \Magento\Catalog\Block\Product\ListProduct::class
         );
 
-        $this->publisherConsumerController->waitForAsynchronousResult(function() use($repository)  {
-            return $repository->get('simple', false, null, true)->getVisibility() !=  Visibility::VISIBILITY_NOT_VISIBLE;
-            sleep(3);
-        }, []);
+        $this->publisherConsumerController->waitForAsynchronousResult(
+            function() use ($repository) {
+                sleep(3);
+                return $repository->get(
+                    'simple',
+                    false,
+                    null,
+                    true
+                    )->getVisibility() != Visibility::VISIBILITY_NOT_VISIBLE;
+            },
+            []
+        );
 
         $category = $categoryFactory->create()->load(2);
         $layer = $listProduct->getLayer();

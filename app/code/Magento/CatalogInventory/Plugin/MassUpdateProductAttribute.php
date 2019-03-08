@@ -8,6 +8,10 @@ namespace Magento\CatalogInventory\Plugin;
 use Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 
+/**
+ * MassUpdate product attribute.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MassUpdateProductAttribute
 {
     /**
@@ -70,6 +74,7 @@ class MassUpdateProductAttribute
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $redirectFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
@@ -96,7 +101,10 @@ class MassUpdateProductAttribute
     }
 
     /**
+     * Around execute plugin
+     *
      * @param Save $subject
+     *
      * @return \Magento\Framework\Controller\ResultInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -109,6 +117,7 @@ class MassUpdateProductAttribute
             $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
             $productIds = $this->session->getData('product_ids');
             $inventoryData = $this->addConfigSettings($inventoryData);
+
             if (!empty($inventoryData)) {
                 $this->updateInventoryInProducts($productIds, $websiteId, $inventoryData);
             }
@@ -126,6 +135,13 @@ class MassUpdateProductAttribute
         return $this->redirectFactory->create()->setPath('catalog/product/', ['_current' => true]);
     }
 
+    /**
+     * Add config settings
+     *
+     * @param array $inventoryData
+     *
+     * @return array
+     */
     private function addConfigSettings($inventoryData)
     {
         $options = $this->stockConfiguration->getConfigItemOptions();
@@ -138,6 +154,15 @@ class MassUpdateProductAttribute
         return $inventoryData;
     }
 
+    /**
+     * Update inventory in products
+     *
+     * @param array $productIds
+     * @param int $websiteId
+     * @param array $inventoryData
+     *
+     * @return void
+     */
     private function updateInventoryInProducts($productIds, $websiteId, $inventoryData): void
     {
         foreach ($productIds as $productId) {

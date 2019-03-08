@@ -15,6 +15,7 @@ use Magento\Framework\EntityManager\EntityManager;
 
 /**
  * Consumer for export message.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConsumerWebsiteAssign
 {
@@ -81,7 +82,11 @@ class ConsumerWebsiteAssign
     }
 
     /**
+     * Process
+     *
      * @param \Magento\AsynchronousOperations\Api\Data\OperationInterface $operation
+     * @throws \Exception
+     *
      * @return void
      */
     public function process(\Magento\AsynchronousOperations\Api\Data\OperationInterface $operation)
@@ -103,7 +108,9 @@ class ConsumerWebsiteAssign
             } else {
                 $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
                 $errorCode = $e->getCode();
-                $message = __('Sorry, something went wrong during product attributes update. Please see log for details.');
+                $message = __(
+                    'Sorry, something went wrong during product attributes update. Please see log for details.'
+                );
             }
         } catch (NoSuchEntityException $e) {
             $this->logger->critical($e->getMessage());
@@ -132,9 +139,13 @@ class ConsumerWebsiteAssign
     }
 
     /**
-     * @param $productIds
-     * @param $websiteRemoveData
-     * @param $websiteAddData
+     * Update website in products
+     *
+     * @param array $productIds
+     * @param array $websiteRemoveData
+     * @param array $websiteAddData
+     *
+     * @return void
      */
     private function updateWebsiteInProducts($productIds, $websiteRemoveData, $websiteAddData): void
     {
@@ -147,11 +158,19 @@ class ConsumerWebsiteAssign
     }
 
     /**
-     * @param $data
+     * Execute
+     *
+     * @param array $data
+     *
+     * @return void
      */
     private function execute($data): void
     {
-        $this->updateWebsiteInProducts($data['product_ids'], $data['attributes']['website_detach'], $data['attributes']['website_assign']);
+        $this->updateWebsiteInProducts(
+            $data['product_ids'],
+            $data['attributes']['website_detach'],
+            $data['attributes']['website_assign']
+        );
         $this->productPriceIndexerProcessor->reindexList($data['product_ids']);
         $this->productFlatIndexerProcessor->reindexList($data['product_ids']);
     }

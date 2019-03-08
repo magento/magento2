@@ -13,6 +13,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class Save
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute implements HttpPostActionInterface
 {
@@ -107,7 +108,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     /**
      * Sanitize product attributes
      *
-     * @param $attributesData
+     * @param array $attributesData
      *
      * @return array
      */
@@ -152,23 +153,29 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     /**
      * Schedule new bulk
      *
-     * @param $attributesData
-     * @param $websiteRemoveData
-     * @param $websiteAddData
-     * @param $storeId
-     * @param $websiteId
-     * @param $productIds
+     * @param array $attributesData
+     * @param array $websiteRemoveData
+     * @param array $websiteAddData
+     * @param int $storeId
+     * @param int $websiteId
+     * @param array $productIds
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @return void
      */
-    private function publish($attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds):void
-    {
+    private function publish(
+        $attributesData,
+        $websiteRemoveData,
+        $websiteAddData,
+        $storeId,
+        $websiteId,
+        $productIds
+    ):void {
         $productIdsChunks = array_chunk($productIds, 100);
         $bulkUuid = $this->identityService->generateId();
         $bulkDescription = __('Update attributes to ' . count($productIds) . ' selected products');
         $operations = [];
-        foreach($productIdsChunks as $productIdsChunk) {
+        foreach ($productIdsChunks as $productIdsChunk) {
             if ($websiteRemoveData || $websiteAddData) {
                 $dataToUpdate = [
                     'website_assign' => $websiteAddData,
@@ -215,13 +222,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
 
     /**
      * Make asynchronous operation
-     * @param $meta
-     * @param $queue
-     * @param $dataToUpdate
-     * @param $storeId
-     * @param $websiteId
-     * @param $productIds
-     * @param $bulkUuid
+     *
+     * @param string $meta
+     * @param string $queue
+     * @param array $dataToUpdate
+     * @param int $storeId
+     * @param int $websiteId
+     * @param array $productIds
+     * @param int $bulkUuid
      *
      * @return OperationInterface
      */
@@ -252,6 +260,4 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
 
         return $this->operationFactory->create($data);
     }
-
 }
-
