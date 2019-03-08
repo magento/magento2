@@ -7,7 +7,6 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\LinkFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
-use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\ResourceModel\Helper;
@@ -97,64 +96,68 @@ class LinkProcessor
                 }
                 foreach ($this->_linkNameToId as $linkName => $linkId) {
                     $productIds[] = $productId;
-                    if (isset($rowData[$linkName . 'sku'])) {
-                        $linkSkus = explode($this->_entityModel->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
-                        $linkPositions = !empty($rowData[$linkName . 'position'])
-                            ? explode($this->_entityModel->getMultipleValueSeparator(), $rowData[$linkName . 'position'])
-                            : [];
-                        foreach ($linkSkus as $linkedKey => $linkedSku) {
-                            $linkedSku = trim($linkedSku);
-                            if (($this->skuProcessor->getNewSku($linkedSku) !== null || $this->isSkuExist($linkedSku))
-                                && strcasecmp($linkedSku, $sku) !== 0
-                            ) {
-                                $newSku = $this->skuProcessor->getNewSku($linkedSku);
-                                if (!empty($newSku)) {
-                                    $linkedId = $newSku['entity_id'];
-                                } else {
-                                    $linkedId = $this->getExistingSku($linkedSku)['entity_id'];
-                                }
+                    if (!isset($rowData[$linkName . 'sku'])) {
+                        continue;
+                    }
 
-                                if ($linkedId == null) {
-                                    // Import file links to a SKU which is skipped for some reason,
-                                    // which leads to a "NULL"
-                                    // link causing fatal errors.
-                                    $this->_logger->critical(
-                                        new \Exception(
-                                            sprintf(
-                                                'WARNING: Orphaned link skipped: From SKU %s (ID %d) to SKU %s, ' .
-                                                'Link type id: %d',
-                                                $sku,
-                                                $productId,
-                                                $linkedSku,
-                                                $linkId
-                                            )
-                                        )
-                                    );
-                                    continue;
-                                }
-
-                                $linkKey = "{$productId}-{$linkedId}-{$linkId}";
-                                if (empty($productLinkKeys[$linkKey])) {
-                                    $productLinkKeys[$linkKey] = $nextLinkId;
-                                }
-                                if (!isset($linkRows[$linkKey])) {
-                                    $linkRows[$linkKey] = [
-                                        'link_id' => $productLinkKeys[$linkKey],
-                                        'product_id' => $productId,
-                                        'linked_product_id' => $linkedId,
-                                        'link_type_id' => $linkId,
-                                    ];
-                                }
-                                if (!empty($linkPositions[$linkedKey])) {
-                                    $positionRows[] = [
-                                        'link_id' => $productLinkKeys[$linkKey],
-                                        'product_link_attribute_id' => $positionAttrId[$linkId],
-                                        'value' => $linkPositions[$linkedKey],
-                                    ];
-                                }
-                                $nextLinkId++;
-                            }
+                    $linkSkus = explode($this->_entityModel->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
+                    $linkPositions = !empty($rowData[$linkName . 'position'])
+                        ? explode($this->_entityModel->getMultipleValueSeparator(), $rowData[$linkName . 'position'])
+                        : [];
+                    foreach ($linkSkus as $linkedKey => $linkedSku) {
+                        $linkedSku = trim($linkedSku);
+                        if (!(($this->skuProcessor->getNewSku($linkedSku) !== null || $this->isSkuExist($linkedSku))
+                            && strcasecmp($linkedSku, $sku) !== 0)
+                        ) {
+                            continue;
                         }
+
+                        $newSku = $this->skuProcessor->getNewSku($linkedSku);
+                        if (!empty($newSku)) {
+                            $linkedId = $newSku['entity_id'];
+                        } else {
+                            $linkedId = $this->getExistingSku($linkedSku)['entity_id'];
+                        }
+
+                        if ($linkedId == null) {
+                            // Import file links to a SKU which is skipped for some reason,
+                            // which leads to a "NULL"
+                            // link causing fatal errors.
+                            $this->_logger->critical(
+                                new \Exception(
+                                    sprintf(
+                                        'WARNING: Orphaned link skipped: From SKU %s (ID %d) to SKU %s, ' .
+                                        'Link type id: %d',
+                                        $sku,
+                                        $productId,
+                                        $linkedSku,
+                                        $linkId
+                                    )
+                                )
+                            );
+                            continue;
+                        }
+
+                        $linkKey = "{$productId}-{$linkedId}-{$linkId}";
+                        if (empty($productLinkKeys[$linkKey])) {
+                            $productLinkKeys[$linkKey] = $nextLinkId;
+                        }
+                        if (!isset($linkRows[$linkKey])) {
+                            $linkRows[$linkKey] = [
+                                'link_id' => $productLinkKeys[$linkKey],
+                                'product_id' => $productId,
+                                'linked_product_id' => $linkedId,
+                                'link_type_id' => $linkId,
+                            ];
+                        }
+                        if (!empty($linkPositions[$linkedKey])) {
+                            $positionRows[] = [
+                                'link_id' => $productLinkKeys[$linkKey],
+                                'product_link_attribute_id' => $positionAttrId[$linkId],
+                                'value' => $linkPositions[$linkedKey],
+                            ];
+                        }
+                        $nextLinkId++;
                     }
                 }
             }
