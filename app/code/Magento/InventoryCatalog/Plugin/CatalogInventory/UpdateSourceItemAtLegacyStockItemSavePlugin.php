@@ -102,7 +102,12 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
             $typeId = $this->getTypeId($legacyStockItem);
             if ($this->isSourceItemManagementAllowedForProductType->execute($typeId)) {
                 if ($this->shouldAlignDefaultSourceWithLegacy($legacyStockItem)) {
-                    $this->synchronize->execute(Synchronize::DIRECTION_TO_INVENTORY, $legacyStockItem->getSku());
+                    $this->synchronize->execute(
+                        Synchronize::DIRECTION_TO_INVENTORY,
+                        [
+                            $this->getProductSkuById((int) $legacyStockItem->getProductId())
+                        ]
+                    );
                 }
             }
 
@@ -116,6 +121,17 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
     }
 
     /**
+     * @param int $productId
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getProductSkuById(int $productId): string
+    {
+        return $this->getSkusByProductIds
+            ->execute([$productId])[$productId];
+    }
+
+    /**
      * Return true if legacy stock item should update default source (if existing)
      * @param Item $legacyStockItem
      * @return bool
@@ -123,8 +139,7 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
      */
     private function shouldAlignDefaultSourceWithLegacy(Item $legacyStockItem): bool
     {
-        $productSku = $this->getSkusByProductIds
-            ->execute([$legacyStockItem->getProductId()])[$legacyStockItem->getProductId()];
+        $productSku = $this->getProductSkuById((int) $legacyStockItem->getProductId());
 
         $result = $legacyStockItem->getIsInStock() ||
             ((float) $legacyStockItem->getQty() !== (float) 0) ||

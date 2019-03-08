@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\MessageQueue\ConsumerFactory;
 use Magento\Framework\MessageQueue\ConsumerInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
@@ -78,9 +79,8 @@ class SetDataToLegacyStockItemAtSourceItemsSaveTest extends TestCase
         $this->sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
         $this->defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
 
-        $this->consumer = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\MessageQueue\ConsumerFactory::class
-        )->get('legacyCatalogInventorySynchronization', 100);
+        $this->consumer = Bootstrap::getObjectManager()->create(ConsumerFactory::class)
+            ->get('legacyCatalogInventorySynchronization', 100);
     }
 
     /**

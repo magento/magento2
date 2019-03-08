@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Framework\MessageQueue\ConsumerFactory;
+use Magento\Framework\MessageQueue\ConsumerInterface;
 use Magento\InventoryCatalog\Model\GetDefaultSourceItemBySku;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -24,12 +26,19 @@ class UpdateDefaultSourceItemAtLegacyStockItemSaveTest extends TestCase
      */
     private $getDefaultSourceItemBySku;
 
+    /**
+     * @var ConsumerInterface
+     */
+    private $consumer;
+
     protected function setUp()
     {
         parent::setUp();
 
         $this->stockRegistry = Bootstrap::getObjectManager()->create(StockRegistryInterface::class);
         $this->getDefaultSourceItemBySku = Bootstrap::getObjectManager()->get(GetDefaultSourceItemBySku::class);
+        $this->consumer = Bootstrap::getObjectManager()->create(ConsumerFactory::class)
+            ->get('legacyCatalogInventorySynchronization', 100);
     }
 
     /**
@@ -52,6 +61,38 @@ class UpdateDefaultSourceItemAtLegacyStockItemSaveTest extends TestCase
             $defaultSourceItem->getQuantity(),
             'Quantity is not updated in default source when legacy stock is updated and product was'
                 . 'previously assigned to default source'
+        );
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     * @magentoAdminConfigFixture cataloginventory/legacy_stock/async 1
+     * @magentoDbIsolation enabled
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testSaveLegacyStockItemAssignedToDefaultSourceAsynchronously()
+    {
+        $stockItem = $this->stockRegistry->getStockItemBySku('SKU-1');
+        $stockItem->setQty(10);
+        $this->stockRegistry->updateStockItemBySku('SKU-1', $stockItem);
+
+        $defaultSourceItem = $this->getDefaultSourceItemBySku->execute('SKU-1');
+        self::assertEquals(
+            5.5,
+            $defaultSourceItem->getQuantity(),
+            'Source item was update synchronously even if asynchronous operation was requested'
+        );
+
+        $this->consumer->process(1);
+
+        $defaultSourceItem = $this->getDefaultSourceItemBySku->execute('SKU-1');
+        self::assertEquals(
+            10,
+            $defaultSourceItem->getQuantity(),
+            'Asynchronous source item update failed'
         );
     }
 

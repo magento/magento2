@@ -9,7 +9,6 @@ namespace Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\ToLegacyCatalogInventory\SetDataToLegacyInventory;
 
 class AsyncConsumer
 {
@@ -19,22 +18,22 @@ class AsyncConsumer
     private $serializer;
 
     /**
-     * @var SetDataToLegacyInventory
+     * @var SetDataToDestination
      */
-    private $setDataToLegacyInventory;
+    private $setDataToDestination;
 
     /**
      * Consumer constructor.
      * @param SerializerInterface $serializer
-     * @param SetDataToLegacyInventory $setDataToLegacyInventory
+     * @param SetDataToDestination $setDataToDestination
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         SerializerInterface $serializer,
-        SetDataToLegacyInventory $setDataToLegacyInventory
+        SetDataToDestination $setDataToDestination
     ) {
         $this->serializer = $serializer;
-        $this->setDataToLegacyInventory = $setDataToLegacyInventory;
+        $this->setDataToDestination = $setDataToDestination;
     }
 
     /**
@@ -47,8 +46,6 @@ class AsyncConsumer
     public function processOperations(OperationInterface $operation): void
     {
         $data = $this->serializer->unserialize($operation->getSerializedData());
-        if ($data['direction'] === Synchronize::DIRECTION_TO_LEGACY) {
-            $this->setDataToLegacyInventory->execute($data['skus']);
-        }
+        $this->setDataToDestination->execute($data['direction'], $data['skus']);
     }
 }

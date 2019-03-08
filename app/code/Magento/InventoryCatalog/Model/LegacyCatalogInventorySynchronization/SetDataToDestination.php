@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization;
 
+use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\ToInventory\SetDataToSourceItem;
 use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\ToLegacyCatalogInventory\SetDataToLegacyInventory;
 
 /**
@@ -20,14 +21,22 @@ class SetDataToDestination
     private $setDataToLegacyInventory;
 
     /**
+     * @var SetDataToSourceItem
+     */
+    private $setDataToSourceItem;
+
+    /**
      * SetDataToDestination constructor.
      * @param SetDataToLegacyInventory $setDataToLegacyInventory
+     * @param SetDataToSourceItem $setDataToSourceItem
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
-        SetDataToLegacyInventory $setDataToLegacyInventory
+        SetDataToLegacyInventory $setDataToLegacyInventory,
+        SetDataToSourceItem $setDataToSourceItem
     ) {
         $this->setDataToLegacyInventory = $setDataToLegacyInventory;
+        $this->setDataToSourceItem = $setDataToSourceItem;
     }
 
     /**
@@ -39,6 +48,8 @@ class SetDataToDestination
     {
         if ($direction === Synchronize::DIRECTION_TO_LEGACY) {
             $this->setDataToLegacyInventory->execute($skus);
+        } else {
+            $this->setDataToSourceItem->execute($skus);
         }
     }
 }

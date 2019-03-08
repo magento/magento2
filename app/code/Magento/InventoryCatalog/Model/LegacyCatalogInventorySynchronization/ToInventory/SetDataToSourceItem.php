@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\ToLegacyCatalogInventory;
+namespace Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\ToInventory;
 
+use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\GetLegacyStockItemsByProductIds;
 use Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem;
-use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 
 class SetDataToSourceItem
 {
@@ -24,25 +24,25 @@ class SetDataToSourceItem
     private $getLegacyStockItemsByProductIds;
 
     /**
-     * @var GetProductIdsBySkusInterface
+     * @var Product
      */
-    private $getProductIdsBySkus;
+    private $productResource;
 
     /**
      * SetDataToSourceItem constructor.
      * @param UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem
      * @param GetLegacyStockItemsByProductIds $getLegacyStockItemsByProductIds
-     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
+     * @param Product $productResource
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem,
         GetLegacyStockItemsByProductIds $getLegacyStockItemsByProductIds,
-        GetProductIdsBySkusInterface $getProductIdsBySkus
+        Product $productResource
     ) {
         $this->updateSourceItemBasedOnLegacyStockItem = $updateSourceItemBasedOnLegacyStockItem;
+        $this->productResource = $productResource;
         $this->getLegacyStockItemsByProductIds = $getLegacyStockItemsByProductIds;
-        $this->getProductIdsBySkus = $getProductIdsBySkus;
     }
 
     /**
@@ -50,16 +50,17 @@ class SetDataToSourceItem
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Validation\ValidationException
      */
     public function execute(array $skus): void
     {
-        $productIds = $this->getProductIdsBySkus->execute($skus);
-        $stockItems = $this->getLegacyStockItemsByProductIds->execute($productIds);
+        $productIds = $this->productResource->getProductsIdsBySkus($skus);
+        if (!empty($productIds)) {
+            $stockItems = $this->getLegacyStockItemsByProductIds->execute($productIds);
 
-        foreach ($stockItems as $stockItem) {
-            $this->updateSourceItemBasedOnLegacyStockItem->execute($stockItem);
+            foreach ($stockItems as $stockItem) {
+                $this->updateSourceItemBasedOnLegacyStockItem->execute($stockItem);
+            }
         }
     }
 }
