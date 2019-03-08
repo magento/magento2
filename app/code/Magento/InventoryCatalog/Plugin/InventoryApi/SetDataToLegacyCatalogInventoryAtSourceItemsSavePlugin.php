@@ -10,7 +10,7 @@ namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 use Magento\Framework\App\ObjectManager;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\AlignLegacyCatalogInventoryByProducts;
+use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\Synchronize;
 use Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization\SetDataToLegacyCatalogInventory;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
@@ -37,16 +37,16 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
     private $getProductTypeBySku;
 
     /**
-     * @var AlignLegacyCatalogInventoryByProducts|null
+     * @var Synchronize|null
      */
-    private $alignLegacyCatalogInventoryByProducts;
+    private $synchronize;
 
     /**
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
-     * @param GetProductTypesBySkusInterface $getProductTypeBySku
-     * @param SetDataToLegacyCatalogInventory $setDataToLegacyCatalogInventory
-     * @param AlignLegacyCatalogInventoryByProducts|null $alignLegacyCatalogInventoryByProducts
+     * @param DefaultSourceProviderInterface $defaultSourceProvider @deprecated
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType @deprecated
+     * @param GetProductTypesBySkusInterface $getProductTypeBySku @deprecated
+     * @param SetDataToLegacyCatalogInventory $setDataToLegacyCatalogInventory @deprecated
+     * @param Synchronize|null $synchronize
      * @SuppressWarnings(PHPMD.LongVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -55,13 +55,13 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypeBySku,
         SetDataToLegacyCatalogInventory $setDataToLegacyCatalogInventory,
-        AlignLegacyCatalogInventoryByProducts $alignLegacyCatalogInventoryByProducts = null
+        Synchronize $synchronize = null
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->getProductTypeBySku = $getProductTypeBySku;
-        $this->alignLegacyCatalogInventoryByProducts = $alignLegacyCatalogInventoryByProducts ?:
-            ObjectManager::getInstance()->get(AlignLegacyCatalogInventoryByProducts::class);
+        $this->synchronize = $synchronize ?:
+            ObjectManager::getInstance()->get(Synchronize::class);
     }
 
     /**
@@ -95,6 +95,6 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
             $skuToSynchronize[] = $sourceItem->getSku();
         }
 
-        $this->alignLegacyCatalogInventoryByProducts->execute($skuToSynchronize);
+        $this->synchronize->execute(Synchronize::DIRECTION_TO_LEGACY, $skuToSynchronize);
     }
 }

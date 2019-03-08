@@ -16,9 +16,12 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Set Qty and status for legacy CatalogInventory Stock Item table
  */
-class AsynchronousSetDataToLegacyCatalogInventory
+class Synchronize
 {
     private const TOPIC_NAME = 'inventory.catalog.product.legacy_inventory.set_data';
+
+    public const DIRECTION_TO_LEGACY = 'to-legacy';
+    public const DIRECTION_TO_INVENTORY = 'to-inventory';
 
     /**
      * @var BulkManagementInterface
@@ -41,6 +44,16 @@ class AsynchronousSetDataToLegacyCatalogInventory
     private $operationInterfaceFactory;
 
     /**
+     * @var IsAsyncLegacyAlignment
+     */
+    private $isAsyncLegacyAlignment;
+
+    /**
+     * @var SetDataToDestination
+     */
+    private $setDataToDestination;
+
+    /**
      * @var int
      */
     private $batchSize;
@@ -51,6 +64,8 @@ class AsynchronousSetDataToLegacyCatalogInventory
      * @param SerializerInterface $serializer
      * @param IdentityGeneratorInterface $identityService
      * @param OperationInterfaceFactory $operationInterfaceFactory
+     * @param IsAsyncLegacyAlignment $isAsyncLegacyAlignment
+     * @param SetDataToDestination $setDataToDestination
      * @param int $batchSize
      */
     public function __construct(
@@ -58,6 +73,8 @@ class AsynchronousSetDataToLegacyCatalogInventory
         SerializerInterface $serializer,
         IdentityGeneratorInterface $identityService,
         OperationInterfaceFactory $operationInterfaceFactory,
+        IsAsyncLegacyAlignment $isAsyncLegacyAlignment,
+        SetDataToDestination $setDataToDestination,
         int $batchSize
     ) {
         $this->bulkManagement = $bulkManagement;
@@ -65,13 +82,15 @@ class AsynchronousSetDataToLegacyCatalogInventory
         $this->serializer = $serializer;
         $this->operationInterfaceFactory = $operationInterfaceFactory;
         $this->batchSize = $batchSize;
+        $this->isAsyncLegacyAlignment = $isAsyncLegacyAlignment;
+        $this->setDataToDestination = $setDataToDestination;
     }
 
     /**
+     * @param string $direction
      * @param array $skus
-     * @return void
      */
-    public function execute(array $skus): void
+    private function executeAsync(string $direction, array $skus): void
     {
         $operations = [];
 
@@ -83,7 +102,12 @@ class AsynchronousSetDataToLegacyCatalogInventory
                 'data' => [
                     'bulk_uuid' => $bulkUuid,
                     'topic_name' => self::TOPIC_NAME,
-                    'serialized_data' => $this->serializer->serialize($chunk),
+                    'serialized_data' => $this->serializer->serialize(
+                        [
+                            'direction' => $direction,
+                            'skus' => $chunk
+                        ]
+                    ),
                     'status' => OperationInterface::STATUS_TYPE_OPEN,
                 ]
             ];
@@ -94,5 +118,30 @@ class AsynchronousSetDataToLegacyCatalogInventory
         }
 
         $this->bulkManagement->scheduleBulk($bulkUuid, $operations, __('Set legacy stock data'));
+    }
+
+    /**
+     * @param string $direction
+     * @param array $skus
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function executeSync(string $direction, array $skus): void
+    {
+        $this->setDataToDestination->execute($direction, $skus);
+    }
+
+    /**
+     * @param string $direction
+     * @param array $skus
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function execute(string $direction, array $skus): void
+    {
+        if ($this->isAsyncLegacyAlignment->execute()) {
+            $this->executeAsync($direction, $skus);
+        } else {
+            $this->executeSync($direction, $skus);
+        }
     }
 }

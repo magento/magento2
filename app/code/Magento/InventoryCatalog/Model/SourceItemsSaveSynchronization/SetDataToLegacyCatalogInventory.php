@@ -7,38 +7,35 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization;
 
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
-use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\AlignLegacyCatalogInventoryByProducts;
+use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\Synchronize;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 
 /**
  * Set Qty and status for legacy CatalogInventory Stock Item table
  * @deprecated
- * @see \Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization\SetDataToLegacyCatalogInventory
+ * @see \Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\Synchronize
  */
 class SetDataToLegacyCatalogInventory
 {
     /**
-     * @var AlignLegacyCatalogInventoryByProducts
+     * @var Synchronize
      */
-    private $alignLegacyCatalogInventoryByProducts;
+    private $synchronize;
 
     /**
-     * @param SetDataToLegacyStockItem $setDataToLegacyStockItem
-     * @param StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory
-     * @param StockItemRepositoryInterface $legacyStockItemRepository
-     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
-     * @param StockStateProviderInterface $stockStateProvider
-     * @param Processor $indexerProcessor
-     * @param AlignLegacyCatalogInventoryByProducts $alignLegacyCatalogInventoryByProducts
+     * @param SetDataToLegacyStockItem $setDataToLegacyStockItem @deprecated
+     * @param StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory @deprecated
+     * @param StockItemRepositoryInterface $legacyStockItemRepository @deprecated
+     * @param GetProductIdsBySkusInterface $getProductIdsBySkus @deprecated
+     * @param StockStateProviderInterface $stockStateProvider @deprecated
+     * @param Processor $indexerProcessor @deprecated
+     * @param Synchronize $synchronize
      * @SupressWarnings(PHPMD.UnusedFormalParameter)
      * @SupressWarnings(PHPMD.LongVariable)
      */
@@ -49,15 +46,16 @@ class SetDataToLegacyCatalogInventory
         GetProductIdsBySkusInterface $getProductIdsBySkus,
         StockStateProviderInterface $stockStateProvider,
         Processor $indexerProcessor,
-        AlignLegacyCatalogInventoryByProducts $alignLegacyCatalogInventoryByProducts = null
+        Synchronize $synchronize = null
     ) {
-        $this->alignLegacyCatalogInventoryByProducts = $alignLegacyCatalogInventoryByProducts ?:
-            ObjectManager::getInstance()->get(AlignLegacyCatalogInventoryByProducts::class);
+        $this->alignLegacyCatalogInventoryByProducts = $synchronize ?:
+            ObjectManager::getInstance()->get(Synchronize::class);
     }
 
     /**
      * @param array $sourceItems
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(array $sourceItems): void
     {
@@ -66,6 +64,6 @@ class SetDataToLegacyCatalogInventory
             $skus[] = $sourceItem->getSku();
         }
 
-        $this->alignLegacyCatalogInventoryByProducts->execute($skus);
+        $this->synchronize->execute(Synchronize::DIRECTION_TO_LEGACY, $skus);
     }
 }

@@ -50,14 +50,7 @@ class GetLegacyStockItemsByProductIds
     public function execute(array $productIds): array
     {
         $searchCriteria = $this->stockItemCriteriaFactory->create();
-
-        $searchCriteria->addFilter(
-            StockItemInterface::PRODUCT_ID,
-            StockItemInterface::PRODUCT_ID,
-            [
-                'in' => $productIds
-            ]
-        );
+        $searchCriteria->setProductsFilter($productIds);
         $searchCriteria->addFilter(
             StockItemInterface::STOCK_ID,
             StockItemInterface::STOCK_ID,

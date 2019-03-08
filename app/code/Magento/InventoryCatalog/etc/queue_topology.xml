@@ -11,7 +11,7 @@
 
     <exchange name="inventory.catalog.product.legacy_inventory.set_data.exchange" type="topic" connection="amqp">
         <binding
-                id="inventoryCatalogProductLegacyInventorySetDataExchangeBinding"
+                id="legacyCatalogInventorySynchronizationExchangeBinding"
                 topic="inventory.catalog.product.legacy_inventory.set_data"
                 destinationType="queue"
                 destination="inventory_catalog_product_legacy_inventory_set_data_queue"/>

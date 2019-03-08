@@ -9,8 +9,8 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue_consumer.xsd">
     <consumer
-            name="inventoryCatalogProductLegacyInventorySetData"
+            name="legacyCatalogInventorySynchronization"
             queue="inventory_catalog_product_legacy_inventory_set_data_queue"
             connection="amqp"
-            handler="Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\AsynchronousSetDataToLegacyCatalogInventoryConsumer::processOperations"/>
+            handler="Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\AsyncConsumer::processOperations"/>
 </config>

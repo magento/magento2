@@ -56,7 +56,7 @@ class GetDefaultSourceItemsBySkus
     public function execute(array $skus): array
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceItemInterface::SKU, ['in' => $skus])
+            ->addFilter(SourceItemInterface::SKU, $skus, 'in')
             ->addFilter(SourceItemInterface::SOURCE_CODE, $this->defaultSourceProvider->getCode())
             ->create();
 

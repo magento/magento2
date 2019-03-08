@@ -9,8 +9,9 @@ namespace Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\ToLegacyCatalogInventory\SetDataToLegacyInventory;
 
-class AsynchronousSetDataToLegacyCatalogInventoryConsumer
+class AsyncConsumer
 {
     /**
      * @var SerializerInterface
@@ -18,22 +19,22 @@ class AsynchronousSetDataToLegacyCatalogInventoryConsumer
     private $serializer;
 
     /**
-     * @var SynchronousSetDataToLegacyCatalogInventory
+     * @var SetDataToLegacyInventory
      */
-    private $synchronousSetDataToLegacyCatalogInventory;
+    private $setDataToLegacyInventory;
 
     /**
      * Consumer constructor.
      * @param SerializerInterface $serializer
-     * @param SynchronousSetDataToLegacyCatalogInventory $synchronousSetDataToLegacyCatalogInventory
+     * @param SetDataToLegacyInventory $setDataToLegacyInventory
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         SerializerInterface $serializer,
-        SynchronousSetDataToLegacyCatalogInventory $synchronousSetDataToLegacyCatalogInventory
+        SetDataToLegacyInventory $setDataToLegacyInventory
     ) {
         $this->serializer = $serializer;
-        $this->synchronousSetDataToLegacyCatalogInventory = $synchronousSetDataToLegacyCatalogInventory;
+        $this->setDataToLegacyInventory = $setDataToLegacyInventory;
     }
 
     /**
@@ -45,7 +46,9 @@ class AsynchronousSetDataToLegacyCatalogInventoryConsumer
      */
     public function processOperations(OperationInterface $operation): void
     {
-        $skus = $this->serializer->unserialize($operation->getSerializedData());
-        $this->synchronousSetDataToLegacyCatalogInventory->execute($skus);
+        $data = $this->serializer->unserialize($operation->getSerializedData());
+        if ($data['direction'] === Synchronize::DIRECTION_TO_LEGACY) {
+            $this->setDataToLegacyInventory->execute($data['skus']);
+        }
     }
 }

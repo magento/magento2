@@ -9,9 +9,11 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
 
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel;
 use Magento\CatalogInventory\Model\Stock\Item;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryCatalog\Model\GetDefaultSourceItemBySku;
+use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\Synchronize;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem;
@@ -34,11 +36,6 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
     private $isSourceItemManagementAllowedForProductType;
 
     /**
-     * @var UpdateSourceItemBasedOnLegacyStockItem
-     */
-    private $updateSourceItemBasedOnLegacyStockItem;
-
-    /**
      * @var GetProductTypesBySkusInterface
      */
     private $getProductTypeBySku;
@@ -54,12 +51,18 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
     private $getDefaultSourceItemBySku;
 
     /**
-     * @param UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem
+     * @var Synchronize
+     */
+    private $synchronize;
+
+    /**
+     * @param UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem @deprecated
      * @param ResourceConnection $resourceConnection
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypeBySku
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param GetDefaultSourceItemBySku $getDefaultSourceItemBySku
+     * @param Synchronize|null $synchronize
      */
     public function __construct(
         UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem,
@@ -67,14 +70,16 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypeBySku,
         GetSkusByProductIdsInterface $getSkusByProductIds,
-        GetDefaultSourceItemBySku $getDefaultSourceItemBySku
+        GetDefaultSourceItemBySku $getDefaultSourceItemBySku,
+        Synchronize $synchronize = null
     ) {
-        $this->updateSourceItemBasedOnLegacyStockItem = $updateSourceItemBasedOnLegacyStockItem;
         $this->resourceConnection = $resourceConnection;
         $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->getProductTypeBySku = $getProductTypeBySku;
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->getDefaultSourceItemBySku = $getDefaultSourceItemBySku;
+        $this->synchronize =  $synchronize ?:
+            ObjectManager::getInstance()->get(Synchronize::class);
     }
 
     /**
@@ -97,7 +102,7 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
             $typeId = $this->getTypeId($legacyStockItem);
             if ($this->isSourceItemManagementAllowedForProductType->execute($typeId)) {
                 if ($this->shouldAlignDefaultSourceWithLegacy($legacyStockItem)) {
-                    $this->updateSourceItemBasedOnLegacyStockItem->execute($legacyStockItem);
+                    $this->synchronize->execute(Synchronize::DIRECTION_TO_INVENTORY, $legacyStockItem->getSku());
                 }
             }
 
