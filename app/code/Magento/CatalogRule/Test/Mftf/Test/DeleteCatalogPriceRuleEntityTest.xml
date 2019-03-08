@@ -39,7 +39,8 @@
         </after>
 
         <!-- delete the simple product and catalog price rule -->
-        <amOnPage url="admin/catalog_rule/promo_catalog/" stepKey="goToPriceRulePage1"/>
+        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
+        <waitForPageLoad stepKey="waitForPriceRulePage"/>
         <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule1">
             <argument name="name" value="$$createCatalogRule1.name$$"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
@@ -85,7 +86,7 @@
             <stories value="Delete Catalog Price Rule"/>
             <title value="Delete Catalog Price Rule for Configurable Product"/>
             <description value="Assert that Catalog Price Rule is not applied for configurable product"/>
-            <testCaseId value="MC-14073"/>
+            <testCaseId value="MC-14074"/>
             <severity value="CRITICAL"/>
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
@@ -151,10 +152,16 @@
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
 
             <deleteData createDataKey="createCustomer1" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
+            <deleteData createDataKey="createConfigProduct1" stepKey="deleteConfigProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute1" stepKey="deleteConfigProductAttribute1"/>
         </after>
 
         <!-- delete the simple product and catalog price rule -->
-        <amOnPage url="admin/catalog_rule/promo_catalog/" stepKey="goToPriceRulePage1"/>
+        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
+        <waitForPageLoad stepKey="waitForPriceRulePage"/>
         <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule1">
             <argument name="name" value="$$createCatalogRule1.name$$"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
