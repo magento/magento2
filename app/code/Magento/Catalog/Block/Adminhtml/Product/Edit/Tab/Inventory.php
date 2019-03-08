@@ -50,6 +50,11 @@ class Inventory extends \Magento\Backend\Block\Widget
     protected $stockConfiguration;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    protected $json;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\CatalogInventory\Model\Source\Backorders $backorders
      * @param \Magento\CatalogInventory\Model\Source\Stock $stock
@@ -57,6 +62,7 @@ class Inventory extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
+     * @param \Magento\Framework\Serialize\Serializer\Json $json
      * @param array $data
      */
     public function __construct(
@@ -67,6 +73,7 @@ class Inventory extends \Magento\Backend\Block\Widget
         \Magento\Framework\Registry $coreRegistry,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
+        \Magento\Framework\Serialize\Serializer\Json $json,
         array $data = []
     ) {
         $this->stock = $stock;
@@ -75,6 +82,7 @@ class Inventory extends \Magento\Backend\Block\Widget
         $this->coreRegistry = $coreRegistry;
         $this->stockRegistry = $stockRegistry;
         $this->stockConfiguration = $stockConfiguration;
+        $this->json = $json;
         parent::__construct($context, $data);
     }
 
@@ -168,7 +176,7 @@ class Inventory extends \Magento\Backend\Block\Widget
      */
     public function getDefaultConfigValue($field)
     {
-        return $this->stockConfiguration->getDefaultConfigValue($field);
+        return $this->json->unserialize($this->stockConfiguration->getDefaultConfigValue($field));
     }
 
     /**
