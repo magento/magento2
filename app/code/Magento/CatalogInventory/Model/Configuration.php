@@ -402,7 +402,7 @@ class Configuration implements StockConfigurationInterface
     public function getDefaultConfigValue($field, $store = null)
     {
         return $this->scopeConfig->getValue(
-            self::XML_PATH_ITEM . $field,
+            self::XML_PATH_MIN_SALE_QTY . $field,
             ScopeInterface::SCOPE_STORE,
             $store
         );
