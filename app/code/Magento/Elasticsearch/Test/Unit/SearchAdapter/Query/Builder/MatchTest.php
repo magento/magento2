@@ -7,8 +7,7 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface
-    as FieldTypeResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface as TypeResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerInterface;
@@ -25,7 +24,7 @@ class MatchTest extends \PHPUnit\Framework\TestCase
     private $attributeProvider;
 
     /**
-     * @var FieldTypeResolver|MockObject
+     * @var TypeResolver|MockObject
      */
     private $fieldTypeResolver;
 
@@ -40,7 +39,7 @@ class MatchTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->attributeProvider = $this->createMock(AttributeProvider::class);
-        $this->fieldTypeResolver = $this->createMock(FieldTypeResolver::class);
+        $this->fieldTypeResolver = $this->createMock(TypeResolver::class);
 
         $valueTransformerPoolMock = $this->createMock(ValueTransformerPool::class);
         $valueTransformerMock = $this->createMock(ValueTransformerInterface::class);

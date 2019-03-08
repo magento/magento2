@@ -6,8 +6,7 @@
 namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface
-    as FieldTypeResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface as TypeResolver;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\Query\BoolExpression;
@@ -43,7 +42,7 @@ class Match implements QueryInterface
     private $attributeProvider;
 
     /**
-     * @var FieldTypeResolver
+     * @var TypeResolver
      */
     private $fieldTypeResolver;
 
@@ -56,14 +55,14 @@ class Match implements QueryInterface
      * @param FieldMapperInterface $fieldMapper
      * @param PreprocessorInterface[] $preprocessorContainer
      * @param AttributeProvider|null $attributeProvider
-     * @param FieldTypeResolver|null $fieldTypeResolver
+     * @param TypeResolver|null $fieldTypeResolver
      * @param ValueTransformerPool|null $valueTransformerPool
      */
     public function __construct(
         FieldMapperInterface $fieldMapper,
         array $preprocessorContainer,
         AttributeProvider $attributeProvider = null,
-        FieldTypeResolver $fieldTypeResolver = null,
+        TypeResolver $fieldTypeResolver = null,
         ValueTransformerPool $valueTransformerPool = null
     ) {
         $this->fieldMapper = $fieldMapper;
@@ -71,7 +70,7 @@ class Match implements QueryInterface
         $this->attributeProvider = $attributeProvider ?? ObjectManager::getInstance()
             ->get(AttributeProvider::class);
         $this->fieldTypeResolver = $fieldTypeResolver ?? ObjectManager::getInstance()
-            ->get(FieldTypeResolver::class);
+            ->get(TypeResolver::class);
         $this->valueTransformerPool = $valueTransformerPool ?? ObjectManager::getInstance()
             ->get(ValueTransformerPool::class);
     }
