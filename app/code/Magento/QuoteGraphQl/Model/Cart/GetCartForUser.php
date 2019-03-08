@@ -84,6 +84,13 @@ class GetCartForUser
                 )
             );
         }
-        return $cart;
+
+        try {
+            return $this->cartRepository->getActiveForCustomer($customerId);
+        } catch (\Exception $e) {
+            throw new GraphQlNoSuchEntityException(
+                __('Current customer does not have an active cart.')
+            );
+        }
     }
 }
