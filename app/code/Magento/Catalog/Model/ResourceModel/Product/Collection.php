@@ -21,6 +21,7 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
  * Product collection
@@ -291,7 +292,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $dimensionFactory;
 
     /**
+     * @var \Magento\Framework\DataObject
+     */
+    private $emptyItem;
+
+    /**
      * Collection constructor
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -317,6 +324,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
+     * @param ResourceModelPoolInterface|null $resourceModelPool
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -344,7 +353,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         MetadataPool $metadataPool = null,
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
-        DimensionFactory $dimensionFactory = null
+        DimensionFactory $dimensionFactory = null,
+        ResourceModelPoolInterface $resourceModelPool = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -372,7 +382,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $resourceHelper,
             $universalFactory,
             $storeManager,
-            $connection
+            $connection,
+            $resourceModelPool
         );
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
         $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
@@ -550,7 +561,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function getNewEmptyItem()
     {
-        $object = parent::getNewEmptyItem();
+        if (null === $this->emptyItem) {
+            $this->emptyItem = parent::getNewEmptyItem();
+        }
+        $object = clone $this->emptyItem;
         if ($this->isEnabledFlat()) {
             $object->setIdFieldName($this->getEntity()->getIdFieldName());
         }
@@ -1429,7 +1443,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'u.url_rewrite_id=cu.url_rewrite_id'
             )->where('cu.url_rewrite_id IS NULL');
         }
-        
+
         // more priority is data with category id
         $urlRewrites = [];
 
@@ -1534,7 +1548,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Add attribute to filter
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|string $attribute
+     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|string|array $attribute
      * @param array $condition
      * @param string $joinType
      * @return $this
@@ -1809,7 +1823,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             }
             $conditions[] = $this->getConnection()->quoteInto(
                 'product_website.website_id IN(?)',
-                $filters['website_ids']
+                $filters['website_ids'],
+                'int'
             );
         } elseif (isset(
             $filters['store_id']
@@ -1821,7 +1836,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         ) {
             $joinWebsite = true;
             $websiteId = $this->_storeManager->getStore($filters['store_id'])->getWebsiteId();
-            $conditions[] = $this->getConnection()->quoteInto('product_website.website_id = ?', $websiteId);
+            $conditions[] = $this->getConnection()->quoteInto('product_website.website_id = ?', $websiteId, 'int');
         }
 
         $fromPart = $this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM);
@@ -2017,12 +2032,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $conditions = [
             'cat_index.product_id=e.entity_id',
-            $this->getConnection()->quoteInto('cat_index.store_id=?', $filters['store_id']),
+            $this->getConnection()->quoteInto('cat_index.store_id=?', $filters['store_id'], 'int'),
         ];
         if (isset($filters['visibility']) && !isset($filters['store_table'])) {
-            $conditions[] = $this->getConnection()->quoteInto('cat_index.visibility IN(?)', $filters['visibility']);
+            $conditions[] = $this->getConnection()->quoteInto(
+                'cat_index.visibility IN(?)',
+                $filters['visibility'],
+                'int'
+            );
         }
-        $conditions[] = $this->getConnection()->quoteInto('cat_index.category_id=?', $filters['category_id']);
+        $conditions[] = $this->getConnection()->quoteInto('cat_index.category_id=?', $filters['category_id'], 'int');
         if (isset($filters['category_is_anchor'])) {
             $conditions[] = $this->getConnection()->quoteInto('cat_index.is_parent=?', $filters['category_is_anchor']);
         }
@@ -2205,7 +2224,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getLinkField() . ' IN(?)',
             $productIds
         )->order(
-            $this->getLinkField()
+            'qty'
         );
         return $select;
     }

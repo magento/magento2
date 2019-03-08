@@ -13,8 +13,7 @@ use PHP_CodeSniffer\Files\File;
  *
  * Ensure that hexadecimal values are used for variables not for properties
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#hexadecimal-notation
- *
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#hexadecimal-notation
  */
 class ColourDefinitionSniff implements Sniff
 {
@@ -26,7 +25,7 @@ class ColourDefinitionSniff implements Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -34,7 +33,7 @@ class ColourDefinitionSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {

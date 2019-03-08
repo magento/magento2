@@ -71,9 +71,7 @@ class ConfigurableVariant implements ResolverInterface
     }
 
     /**
-     * Fetch and format configurable variants.
-     *
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
@@ -85,7 +83,7 @@ class ConfigurableVariant implements ResolverInterface
             return $this->valueFactory->create($result);
         }
 
-        $this->variantCollection->addParentId((int)$value[$linkField]);
+        $this->variantCollection->addParentProduct($value['model']);
         $fields = $this->getProductFields($info);
         $matchedFields = $this->attributeCollection->getRequestAttributes($fields);
         $this->variantCollection->addEavAttributes($matchedFields);

@@ -58,6 +58,11 @@ class Renderer
                     . "{{lastname}}{{depend}} {{suffix}}{{/depend}}\n{{/depend}}{{street}}\n"
                     . "{{city}}, {{{$region}}} {{postcode}}\n{{country_id}}\n{{depend}}{{telephone}}{{/depend}}";
                 break;
+            case "html_without_company_separated_names":
+                $outputPattern = "{{depend}}{{prefix}}\n{{/depend}}{{firstname}}\n{{depend}}{{middlename}}\n{{/depend}}"
+                    . "{{lastname}}{{depend}}\n{{suffix}}{{/depend}}\n{{/depend}}{{street}}\n"
+                    . "{{city}}\n{{{$region}}}\n{{postcode}}\n{{country_id}}\n{{depend}}{{telephone}}{{/depend}}";
+                break;
             case "html_for_select_element":
                 $outputPattern = "{{depend}}{{prefix}} {{/depend}}{{firstname}} {{depend}}{{middlename}} {{/depend}}"
                     . "{{lastname}}{{depend}} {{suffix}}{{/depend}}, {{/depend}}{{street}}, "

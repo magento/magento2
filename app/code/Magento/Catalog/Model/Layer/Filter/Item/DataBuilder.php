@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Catalog\Model\Layer\Filter\Item;
+
 /**
  * Item Data Builder
  */
-namespace Magento\Catalog\Model\Layer\Filter\Item;
-
 class DataBuilder
 {
     /**
@@ -29,7 +29,7 @@ class DataBuilder
      * Add Item Data
      *
      * @param string $label
-     * @param string $label
+     * @param string $value
      * @param int $count
      * @return void
      */

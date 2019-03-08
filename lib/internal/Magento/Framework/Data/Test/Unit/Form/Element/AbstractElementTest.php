@@ -195,6 +195,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             'onchange',
             'disabled',
             'readonly',
+            'autocomplete',
             'tabindex',
             'placeholder',
             'data-form-part',
