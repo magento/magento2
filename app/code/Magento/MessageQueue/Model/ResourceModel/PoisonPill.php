@@ -14,6 +14,9 @@ use Magento\MessageQueue\Api\PoisonPillPutInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
+/**
+ * PoisonPill.
+ */
 class PoisonPill extends AbstractDb implements PoisonPillPutInterface, PoisonPillReadInterface
 {
     /**

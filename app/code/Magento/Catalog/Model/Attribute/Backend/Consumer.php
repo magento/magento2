@@ -102,10 +102,9 @@ class Consumer
             $serializedData = $operation->getSerializedData();
             $data = $this->serializer->unserialize($serializedData);
             $this->execute($data);
-        } catch (\Zend_Db_Adapter_Exception  $e) {
+        } catch (\Zend_Db_Adapter_Exception $e) {
             $this->logger->critical($e->getMessage());
-            if (
-                $e instanceof \Magento\Framework\DB\Adapter\LockWaitException
+            if ($e instanceof \Magento\Framework\DB\Adapter\LockWaitException
                 || $e instanceof \Magento\Framework\DB\Adapter\DeadlockException
                 || $e instanceof \Magento\Framework\DB\Adapter\ConnectionException
             ) {

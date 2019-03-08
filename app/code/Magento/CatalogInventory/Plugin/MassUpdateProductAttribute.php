@@ -104,6 +104,7 @@ class MassUpdateProductAttribute
      * Around execute plugin
      *
      * @param Save $subject
+     * @param callable $proceed
      *
      * @return \Magento\Framework\Controller\ResultInterface
      *
