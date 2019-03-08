@@ -18,7 +18,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class CategoryProductsVariantsTest extends GraphQlAbstract
 {
     /**
-     *
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
