@@ -28,18 +28,39 @@ class LinkProcessor
      */
     protected $_linkNameToId = [];
 
+    /**
+     * @var LinkFactory
+     */
     protected $_linkFactory;
 
+    /**
+     * @var LoggerInterface
+     */
     protected $_logger;
 
+    /**
+     * @var Helper
+     */
     protected $_resourceHelper;
 
+    /**
+     * @var Data
+     */
     protected $_dataSourceModel;
 
+    /**
+     * @var SkuProcessor
+     */
     protected $skuProcessor;
 
+    /**
+     * @var AdapterInterface
+     */
     protected $_connection;
 
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Link
+     */
     protected $_resource;
 
     public function __construct(
@@ -49,7 +70,6 @@ class LinkProcessor
         Helper $resourceHelper,
         Data $importData,
         SkuProcessor $skuProcessor,
-        \Magento\Framework\App\Arguments\ArgumentInterpreter $argumentInterpreter,
         array $linkNameToId
     ) {
         $this->_linkFactory = $linkFactory;
