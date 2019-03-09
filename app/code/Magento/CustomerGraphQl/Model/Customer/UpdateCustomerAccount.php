@@ -18,9 +18,9 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Api\DataObjectHelper;
 
 /**
- * Update customer data
+ * Update customer account data
  */
-class UpdateCustomerData
+class UpdateCustomerAccount
 {
     /**
      * @var CustomerRepositoryInterface
@@ -43,6 +43,11 @@ class UpdateCustomerData
     private $dataObjectHelper;
 
     /**
+     * @var ChangeSubscriptionStatus
+     */
+    private $changeSubscriptionStatus;
+
+    /**
      * @var array
      */
     private $restrictedKeys;
@@ -52,6 +57,7 @@ class UpdateCustomerData
      * @param StoreManagerInterface $storeManager
      * @param CheckCustomerPassword $checkCustomerPassword
      * @param DataObjectHelper $dataObjectHelper
+     * @param ChangeSubscriptionStatus $changeSubscriptionStatus
      * @param array $restrictedKeys
      */
     public function __construct(
@@ -59,6 +65,7 @@ class UpdateCustomerData
         StoreManagerInterface $storeManager,
         CheckCustomerPassword $checkCustomerPassword,
         DataObjectHelper $dataObjectHelper,
+        ChangeSubscriptionStatus $changeSubscriptionStatus,
         array $restrictedKeys = []
     ) {
         $this->customerRepository = $customerRepository;
@@ -66,33 +73,52 @@ class UpdateCustomerData
         $this->checkCustomerPassword = $checkCustomerPassword;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->restrictedKeys = $restrictedKeys;
+        $this->changeSubscriptionStatus = $changeSubscriptionStatus;
     }
 
     /**
-     * Update account information
+     * Update customer account data
      *
-     * @param int $customerId
+     * @param CustomerInterface $customer
      * @param array $data
      * @return void
      * @throws GraphQlAlreadyExistsException
-     * @throws GraphQlInputException
      * @throws GraphQlAuthenticationException
+     * @throws GraphQlInputException
      */
-    public function execute(int $customerId, array $data): void
+    public function execute(CustomerInterface $customer, array $data): void
     {
-        $customer = $this->customerRepository->getById($customerId);
+        try {
+            $this->updateCustomer($customer, $data);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
+        }
 
-        $filteredData = array_diff_key($data, array_flip($this->restrictedKeys));
-        $this->dataObjectHelper->populateWithArray($customer, $filteredData, CustomerInterface::class);
+        if (isset($data['is_subscribed'])) {
+            $this->changeSubscriptionStatus->execute((int)$customer->getId(), (bool)$data['is_subscribed']);
+        }
+    }
 
+    /**
+     * @param CustomerInterface $customer
+     * @param array $data
+     * @throws GraphQlAlreadyExistsException
+     * @throws GraphQlAuthenticationException
+     * @throws GraphQlInputException
+     */
+    private function updateCustomer(CustomerInterface $customer, array $data): void
+    {
         if (isset($data['email']) && $customer->getEmail() !== $data['email']) {
             if (!isset($data['password']) || empty($data['password'])) {
                 throw new GraphQlInputException(__('Provide the current "password" to change "email".'));
             }
 
-            $this->checkCustomerPassword->execute($data['password'], $customerId);
+            $this->checkCustomerPassword->execute($data['password'], (int)$customer->getId());
             $customer->setEmail($data['email']);
         }
+
+        $filteredData = array_diff_key($data, array_flip($this->restrictedKeys));
+        $this->dataObjectHelper->populateWithArray($customer, $filteredData, CustomerInterface::class);
 
         $customer->setStoreId($this->storeManager->getStore()->getId());
 
