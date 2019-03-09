@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Quote\Customer;
+namespace Magento\GraphQl\Quote\Guest;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\QuoteFactory;
@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test getting cart totals for registered customer
+ * Test getting cart totals for guest
  */
 class CartTotalsTest extends GraphQlAbstract
 {
@@ -49,7 +49,7 @@ class CartTotalsTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_tax_customer.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_tax_guest.php
      */
     public function testGetCartTotalsForCustomerWithTaxApplied()
     {
@@ -86,7 +86,7 @@ class CartTotalsTest extends GraphQlAbstract
   }
 }
 QUERY;
-        $response = $this->sendRequestWithToken($query);
+        $response = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('prices', $response['cart']);
         $pricesResponse = $response['cart']['prices'];
@@ -112,21 +112,5 @@ QUERY;
         $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
 
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
-    }
-
-    /**
-     * Sends a GraphQL request with using a bearer token
-     *
-     * @param string $query
-     * @return array
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     */
-    private function sendRequestWithToken(string $query): array
-    {
-
-        $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-
-        return $this->graphQlQuery($query, [], '', $headerMap);
     }
 }
