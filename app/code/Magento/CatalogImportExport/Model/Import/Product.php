@@ -2907,7 +2907,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param string $sku
      * @return array
      */
-    private function getExistingSku($sku)
+    public function getExistingSku($sku)
     {
         return $this->_oldSku[strtolower($sku)];
     }

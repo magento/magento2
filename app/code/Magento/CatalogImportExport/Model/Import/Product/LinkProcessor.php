@@ -332,7 +332,7 @@ class LinkProcessor
         if ( ! empty($newSku)) {
             $linkedId = $newSku['entity_id'];
         } else {
-            $linkedId = $this->getExistingSku($linkedSku)['entity_id'];
+            $linkedId = $this->_entityModel->getExistingSku($linkedSku)['entity_id'];
         }
 
         return $linkedId;
