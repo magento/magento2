@@ -125,19 +125,14 @@ class LinkProcessor
                     $linkPositions = $this->getLinkPositions($rowData, $linkName);
 
                     foreach ($linkSkus as $linkedKey => $linkedSku) {
-                        $linkedSku = trim($linkedSku);
+                        $linkedSku = trim($linkedSku); //NOTE: why is trimming happening here and not for all cols in a general place?
                         if ( ! $this->isProperLink($linkedSku, $sku)) {
                             continue;
                         }
 
-                        $newSku = $this->skuProcessor->getNewSku($linkedSku);
-                        if ( ! empty($newSku)) {
-                            $linkedId = $newSku['entity_id'];
-                        } else {
-                            $linkedId = $this->getExistingSku($linkedSku)['entity_id'];
-                        }
+                        $linkedId = $this->getLinkedId($linkedSku);
 
-                        if ($this->isEmptyLinkId($linkedId, $sku, $productId, $linkedSku)) {
+                        if ($this->checkForEmptyLinkId($linkedId, $sku, $productId, $linkedSku)) {
                             continue;
                         }
 
@@ -178,7 +173,7 @@ class LinkProcessor
      * @param $productId
      * @param string $linkedSku
      */
-    protected function isEmptyLinkId($linkedId, $sku, $productId, string $linkedSku): bool
+    protected function checkForEmptyLinkId($linkedId, $sku, $productId, string $linkedSku): bool
     {
         if ($linkedId == null) {
             // Import file links to a SKU which is skipped for some reason,
@@ -325,4 +320,21 @@ class LinkProcessor
             );
         }
     }
+
+    /**
+     * @param string $linkedSku
+     *
+     * @return mixed
+     */
+    protected function getLinkedId(string $linkedSku)
+    {
+        $newSku = $this->skuProcessor->getNewSku($linkedSku);
+        if ( ! empty($newSku)) {
+            $linkedId = $newSku['entity_id'];
+        } else {
+            $linkedId = $this->getExistingSku($linkedSku)['entity_id'];
+        }
+
+        return $linkedId;
+}
 }
