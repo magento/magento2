@@ -10,10 +10,12 @@ namespace Magento\GraphQl\Catalog;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\ObjectManager;
+
 
 class CategoryTest extends GraphQlAbstract
 {
@@ -144,6 +146,21 @@ QUERY;
             13,
             $responseDataObject->getData('category/id')
         );
+    }
+
+    public function testNonExistentCategoryWithProductCount()
+    {
+        $query = <<<QUERY
+{
+  category(id: 99) {
+      product_count
+    }
+}
+QUERY;
+
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: Category doesn\'t exist');
+        $this->graphQlQuery($query);
     }
 
     /**
