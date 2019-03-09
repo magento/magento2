@@ -7,7 +7,7 @@
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote;
 
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_with_tax.php';
+require __DIR__ . '/../../../Magento/Catalog/_files/products.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var AddressInterface $quoteAddress */
@@ -22,7 +22,7 @@ $quoteAddress->setData(
         'street' => 'Green str, 67',
         'lastname' => 'Smith',
         'firstname' => 'John',
-        'region_id' => 12
+        'region_id' => 1
     ]
 );
 
@@ -41,12 +41,10 @@ $quote->setStoreId(
 )->setCheckoutMethod(
     'customer'
 )->setReservedOrderId(
-    'test_order_tax'
+    'test_order_1'
 )->addProduct(
     $product
 );
-
-$quote->getShippingAddress()->setRegionId(12);
 
 $quoteRepository = $objectManager->get(
     \Magento\Quote\Api\CartRepositoryInterface::class

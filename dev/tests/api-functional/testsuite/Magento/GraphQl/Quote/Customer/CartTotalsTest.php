@@ -42,20 +42,62 @@ class CartTotalsTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->create(QuoteResource::class);
-        $this->quoteFactory = $objectManager->create(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
-        $this->customerTokenService = $objectManager->create(CustomerTokenServiceInterface::class);
+        $this->quoteResource = $objectManager->get(QuoteResource::class);
+        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
+        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_tax_customer.php
      */
-    public function testGetCartTotalsForCustomerWithTaxApplied()
+    public function testGetCartTotalsWithTaxApplied()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_tax');
+        $query = $this->getCartTotalsGraphqlQuery($maskedQuoteId);
+        $response = $this->sendRequestWithToken($query);
 
-        $query = <<<QUERY
+        self::assertArrayHasKey('prices', $response['cart']);
+        $pricesResponse = $response['cart']['prices'];
+        self::assertEquals(10.83, $pricesResponse['grand_total']['value']);
+        self::assertEquals(10.83, $pricesResponse['subtotal_including_tax']['value']);
+        self::assertEquals(10, $pricesResponse['subtotal_excluding_tax']['value']);
+        self::assertEquals(10, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);
+
+        $appliedTaxesResponse = $pricesResponse['applied_taxes'];
+
+        self::assertEquals('US-CA-*-Rate 1', $appliedTaxesResponse[0]['label']);
+        self::assertEquals(0.83, $appliedTaxesResponse[0]['amount']['value']);
+        self::assertEquals('USD', $appliedTaxesResponse[0]['amount']['currency']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @group last
+     */
+    public function testGetTotalsWithNoTaxApplied()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $query = $this->getCartTotalsGraphqlQuery($maskedQuoteId);
+        $response = $this->sendRequestWithToken($query);
+
+        $pricesResponse = $response['cart']['prices'];
+        self::assertEquals(20, $pricesResponse['grand_total']['value']);
+        self::assertEquals(20, $pricesResponse['subtotal_including_tax']['value']);
+        self::assertEquals(20, $pricesResponse['subtotal_excluding_tax']['value']);
+        self::assertEquals(20, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);
+        self::assertEmpty($pricesResponse['applied_taxes']);
+    }
+
+    /**
+     * Generates GraphQl query for retrieving cart totals
+     *
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getCartTotalsGraphqlQuery(string $maskedQuoteId): string
+    {
+        return <<<QUERY
 {
   cart(cart_id: "$maskedQuoteId") {
     prices {
@@ -86,20 +128,6 @@ class CartTotalsTest extends GraphQlAbstract
   }
 }
 QUERY;
-        $response = $this->sendRequestWithToken($query);
-
-        self::assertArrayHasKey('prices', $response['cart']);
-        $pricesResponse = $response['cart']['prices'];
-        self::assertEquals(10.83, $pricesResponse['grand_total']['value']);
-        self::assertEquals(10.83, $pricesResponse['subtotal_including_tax']['value']);
-        self::assertEquals(10, $pricesResponse['subtotal_excluding_tax']['value']);
-        self::assertEquals(10, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);
-
-        $appliedTaxesResponse = $pricesResponse['applied_taxes'];
-
-        self::assertEquals('US-CA-*-Rate 1', $appliedTaxesResponse[0]['label']);
-        self::assertEquals(0.83, $appliedTaxesResponse[0]['amount']['value']);
-        self::assertEquals('USD', $appliedTaxesResponse[0]['amount']['currency']);
     }
 
     /**
