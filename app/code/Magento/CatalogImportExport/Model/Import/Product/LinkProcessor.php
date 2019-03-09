@@ -97,18 +97,8 @@ class LinkProcessor
         $mainTable = $this->_resource->getMainTable();
         $positionAttrId = [];
         $nextLinkId = $this->_resourceHelper->getNextAutoincrement($mainTable);
+        $positionAttrId = $this->loadPositionAttributes($positionAttrId);
 
-        // pre-load 'position' attributes ID for each link type once
-        foreach ($this->_linkNameToId as $linkName => $linkId) {
-            $select = $this->_connection->select()->from(
-                $this->_resource->getTable('catalog_product_link_attribute'),
-                ['id' => 'product_link_attribute_id']
-            )->where(
-                'link_type_id = :link_id AND product_link_attribute_code = :position'
-            );
-            $bind = [':link_id' => $linkId, ':position' => 'position'];
-            $positionAttrId[$linkId] = $this->_connection->fetchOne($select, $bind);
-        }
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $productIds = [];
             $linkRows = [];
@@ -174,23 +164,9 @@ class LinkProcessor
                     }
                 }
             }
-            if (Import::BEHAVIOR_APPEND !== $this->_entityModel->getBehavior() && $productIds) {
-                $this->_connection->delete(
-                    $mainTable,
-                    $this->_connection->quoteInto('product_id IN (?)', array_unique($productIds))
-                );
-            }
-            if ($linkRows) {
-                $this->_connection->insertOnDuplicate($mainTable, $linkRows, ['link_id']);
-            }
-            if ($positionRows) {
-                // process linked product positions
-                $this->_connection->insertOnDuplicate(
-                    $this->_resource->getAttributeTypeTable('int'),
-                    $positionRows,
-                    ['value']
-                );
-            }
+
+            $this->deleteExistingLinks($productIds);
+            $this->insertNewLinks($linkRows, $positionRows);
         }
 
         return $this;
@@ -293,5 +269,60 @@ class LinkProcessor
         }
 
         return explode($this->_entityModel->getMultipleValueSeparator(), $rowData[$linkField]);
+    }
+
+    /**
+     * pre-load 'position' attributes ID for each link type once
+     *
+     * @param array $positionAttrId
+     *
+     * @return array
+     */
+    protected function loadPositionAttributes(array $positionAttrId): array
+    {
+        foreach ($this->_linkNameToId as $linkName => $linkId) {
+            $select = $this->_connection->select()->from(
+                $this->_resource->getTable('catalog_product_link_attribute'),
+                ['id' => 'product_link_attribute_id']
+            )->where(
+                'link_type_id = :link_id AND product_link_attribute_code = :position'
+            );
+            $bind = [':link_id' => $linkId, ':position' => 'position'];
+            $positionAttrId[$linkId] = $this->_connection->fetchOne($select, $bind);
+        }
+
+        return $positionAttrId;
+}
+
+    /**
+     * @param array $productIds
+     */
+    protected function deleteExistingLinks(array $productIds): void
+    {
+        if (Import::BEHAVIOR_APPEND !== $this->_entityModel->getBehavior() && $productIds) {
+            $this->_connection->delete(
+                $this->_resource->getMainTable(),
+                $this->_connection->quoteInto('product_id IN (?)', array_unique($productIds))
+            );
+        }
+    }
+
+    /**
+     * @param array $linkRows
+     * @param array $positionRows
+     */
+    protected function insertNewLinks(array $linkRows, array $positionRows): void
+    {
+        if ($linkRows) {
+            $this->_connection->insertOnDuplicate($this->_resource->getMainTable(), $linkRows, ['link_id']);
+        }
+        if ($positionRows) {
+            // process linked product positions
+            $this->_connection->insertOnDuplicate(
+                $this->_resource->getAttributeTypeTable('int'),
+                $positionRows,
+                ['value']
+            );
+        }
     }
 }
