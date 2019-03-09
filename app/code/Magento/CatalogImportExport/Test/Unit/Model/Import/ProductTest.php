@@ -8,6 +8,7 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\LinkProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -164,6 +165,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     /** @var  ImageTypeProcessor|MockObject */
     protected $imageTypeProcessor;
+
+    /** @var  LinkProcessor|MockObject */
+    protected $linkProcessor;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -336,6 +340,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->linkProcessor = $this->getMockBuilder(LinkProcessor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->_objectConstructor()
             ->_parentObjectConstructor()
             ->_initAttributeSets()
@@ -385,7 +393,8 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'scopeConfig' => $this->scopeConfig,
                 'productUrl' => $this->productUrl,
                 'data' => $this->data,
-                'imageTypeProcessor' => $this->imageTypeProcessor
+                'imageTypeProcessor' => $this->imageTypeProcessor,
+                'linkProcessor', $this->linkProcessor
             ]
         );
         $reflection = new \ReflectionClass(Product::class);

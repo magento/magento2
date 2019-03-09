@@ -722,6 +722,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $mediaProcessor;
 
     /**
+     * @var LinkProcessor
+     */
+    private $linkProcessor;
+
+
+    /**
      * @var DateTimeFactory
      */
     private $dateTimeFactory;
@@ -825,7 +831,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         MediaGalleryProcessor $mediaProcessor = null,
         StockItemImporterInterface $stockItemImporter = null,
         DateTimeFactory $dateTimeFactory = null,
-        ProductRepositoryInterface $productRepository = null
+        ProductRepositoryInterface $productRepository = null,
+        LinkProcessor $linkProcessor = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -881,6 +888,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->dateTimeFactory = $dateTimeFactory ?? ObjectManager::getInstance()->get(DateTimeFactory::class);
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
                 ->get(ProductRepositoryInterface::class);
+        $this->linkProcessor = $linkProcessor ?? ObjectManager::getInstance()
+                ->get(LinkProcessor::class);
     }
 
     /**
@@ -1101,7 +1110,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         foreach ($this->_productTypeModels as $productTypeModel) {
             $productTypeModel->saveData();
         }
-        $this->_saveLinks();
+        $this->linkProcessor->saveLinks($this, $this->getProductEntityLinkField());
         $this->_saveStockItem();
         if ($this->_replaceFlag) {
             $this->getOptionEntity()->clearProductsSkuToId();
@@ -1234,23 +1243,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Must be called after ALL products saving done.
      *
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
+     * @deprecated use linkProcessor
      */
     protected function _saveLinks()
     {
-        $linkProcessor = new LinkProcessor( // FIXME: instantiate via DI
-            $this,
-            $this->_connection,
-            $this->_linkFactory,
-            $this->_resourceHelper,
-            $this->_dataSourceModel,
-            $this->skuProcessor,
-            $this->_logger,
-            $this->getProductEntityLinkField()
-        );
-        $linkProcessor->process();
+        $this->_linkProcessor->process($this, $this->getProductEntityLinkField());
         return $this;
     }
 

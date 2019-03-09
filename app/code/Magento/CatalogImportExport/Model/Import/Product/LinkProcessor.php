@@ -7,6 +7,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\LinkFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\ResourceModel\Helper;
@@ -32,28 +33,28 @@ class LinkProcessor
     ];
 
     public function __construct(
-        $entityModel,
-        AdapterInterface $connection,
+        ResourceConnection $resourceConnection,
         LinkFactory $linkFactory,
-        Helper $resourceHelper,
-        Data $dateSourceModel,
-        SkuProcessor $skuProcessor,
         LoggerInterface $logger,
-        string $productEntityLinkField
+        Helper $resourceHelper,
+        Data $importData,
+        SkuProcessor $skuProcessor
     ) {
-        $this->_entityModel = $entityModel;
-        $this->_connection = $connection;
         $this->_linkFactory = $linkFactory;
-        $this->_resourceHelper = $resourceHelper; // TODO: inject via DI ? do we need the actual instance from parent or is a new okay?
-        $this->_dataSourceModel = $dateSourceModel;
-        $this->skuProcessor = $skuProcessor;
         $this->_logger = $logger;
-        $this->_productEntityLinkField = $productEntityLinkField;
+        $this->_resourceHelper = $resourceHelper;
+        $this->_dataSourceModel = $importData;
+        $this->skuProcessor = $skuProcessor;
+
         $this->_resource = $this->_linkFactory->create();
+        $this->_connection = $resourceConnection->getConnection();
     }
 
-    public function process()
+    public function saveLinks($entityModel, $productEntityLinkField)
     {
+        $this->_entityModel = $entityModel;
+        $this->_productEntityLinkField = $productEntityLinkField;
+
         $mainTable = $this->_resource->getMainTable();
         $positionAttrId = [];
         $nextLinkId = $this->_resourceHelper->getNextAutoincrement($mainTable);
@@ -75,7 +76,7 @@ class LinkProcessor
             $positionRows = [];
 
             foreach ($bunch as $rowNum => $rowData) {
-                if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
+                if ( ! $this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                     continue;
                 }
 
@@ -96,12 +97,12 @@ class LinkProcessor
 
                     foreach ($linkSkus as $linkedKey => $linkedSku) {
                         $linkedSku = trim($linkedSku);
-                        if (!$this->isProperLink($linkedSku, $sku)) {
+                        if ( ! $this->isProperLink($linkedSku, $sku)) {
                             continue;
                         }
 
                         $newSku = $this->skuProcessor->getNewSku($linkedSku);
-                        if (!empty($newSku)) {
+                        if ( ! empty($newSku)) {
                             $linkedId = $newSku['entity_id'];
                         } else {
                             $linkedId = $this->getExistingSku($linkedSku)['entity_id'];
@@ -115,7 +116,7 @@ class LinkProcessor
                         if (empty($productLinkKeys[$linkKey])) {
                             $productLinkKeys[$linkKey] = $nextLinkId;
                         }
-                        if (!isset($linkRows[$linkKey])) {
+                        if ( ! isset($linkRows[$linkKey])) {
                             $linkRows[$linkKey] = [
                                 'link_id' => $productLinkKeys[$linkKey],
                                 'product_id' => $productId,
@@ -123,7 +124,7 @@ class LinkProcessor
                                 'link_type_id' => $linkId,
                             ];
                         }
-                        if (!empty($linkPositions[$linkedKey])) {
+                        if ( ! empty($linkPositions[$linkedKey])) {
                             $positionRows[] = [
                                 'link_id' => $productLinkKeys[$linkKey],
                                 'product_link_attribute_id' => $positionAttrId[$linkId],
@@ -152,6 +153,7 @@ class LinkProcessor
                 );
             }
         }
+
         return $this;
     }
 
@@ -235,7 +237,7 @@ class LinkProcessor
         return ! empty($rowData[$positionField])
             ? explode($this->_entityModel->getMultipleValueSeparator(), $rowData[$positionField])
             : [];
-}
+    }
 
     /**
      * @param $rowData
@@ -247,9 +249,10 @@ class LinkProcessor
     {
         $linkField = $linkName . 'sku';
 
-        if (!isset($rowData[$linkField])) {
+        if ( ! isset($rowData[$linkField])) {
             return false;
         }
+
         return explode($this->_entityModel->getMultipleValueSeparator(), $rowData[$linkField]);
-}
+    }
 }
