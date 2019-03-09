@@ -26,11 +26,21 @@ class LinkProcessor
      *
      * @var array
      */
-    protected $_linkNameToId = [
-        '_related_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED,
-        '_crosssell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL,
-        '_upsell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL,
-    ];
+    protected $_linkNameToId = [];
+
+    protected $_linkFactory;
+
+    protected $_logger;
+
+    protected $_resourceHelper;
+
+    protected $_dataSourceModel;
+
+    protected $skuProcessor;
+
+    protected $_connection;
+
+    protected $_resource;
 
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -38,7 +48,9 @@ class LinkProcessor
         LoggerInterface $logger,
         Helper $resourceHelper,
         Data $importData,
-        SkuProcessor $skuProcessor
+        SkuProcessor $skuProcessor,
+        \Magento\Framework\App\Arguments\ArgumentInterpreter $argumentInterpreter,
+        array $linkNameToId
     ) {
         $this->_linkFactory = $linkFactory;
         $this->_logger = $logger;
@@ -46,8 +58,15 @@ class LinkProcessor
         $this->_dataSourceModel = $importData;
         $this->skuProcessor = $skuProcessor;
 
-        $this->_resource = $this->_linkFactory->create();
+        // Temporary solution: arrays do not seem to support init_parameter,
+        // so we have to parse the constant by ourselves
+        $this->_linkNameToId = [];
+        foreach($linkNameToId as $key=>$value) {
+            $this->_linkNameToId[$key] = constant($value);
+        }
+
         $this->_connection = $resourceConnection->getConnection();
+        $this->_resource = $this->_linkFactory->create();
     }
 
     public function saveLinks($entityModel, $productEntityLinkField)
