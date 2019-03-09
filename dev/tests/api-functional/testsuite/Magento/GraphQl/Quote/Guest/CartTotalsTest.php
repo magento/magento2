@@ -90,7 +90,7 @@ QUERY;
 
         self::assertArrayHasKey('prices', $response['cart']);
         $pricesResponse = $response['cart']['prices'];
-        self::assertEquals(10, $pricesResponse['grand_total']['value']);
+        self::assertEquals(10.83, $pricesResponse['grand_total']['value']);
         self::assertEquals(10.83, $pricesResponse['subtotal_including_tax']['value']);
         self::assertEquals(10, $pricesResponse['subtotal_excluding_tax']['value']);
         self::assertEquals(10, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);

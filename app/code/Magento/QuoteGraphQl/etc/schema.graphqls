@@ -125,7 +125,7 @@ type CartPrices {
     subtotal_including_tax: Money
     subtotal_excluding_tax: Money
     subtotal_with_discount_excluding_tax: Money
-    applied_taxes: [CartTaxItem] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartTaxes")
+    applied_taxes: [CartTaxItem]
 }
 
 type CartTaxItem {

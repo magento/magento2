@@ -11,7 +11,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Api\CartTotalRepositoryInterface;
+use Magento\Quote\Model\Quote\Address\Total;
+use Magento\Quote\Model\Quote\TotalsCollector;
 
 /**
  * @inheritdoc
@@ -19,17 +20,17 @@ use Magento\Quote\Api\CartTotalRepositoryInterface;
 class Totals implements ResolverInterface
 {
     /**
-     * @var CartTotalRepositoryInterface
+     * @var TotalsCollector
      */
-    private $cartTotalRepository;
+    private $totalsCollector;
 
     /**
-     * @param CartTotalRepositoryInterface $cartTotalRepository
+     * @param TotalsCollector $totalsCollector
      */
     public function __construct(
-        CartTotalRepositoryInterface $cartTotalRepository
+        TotalsCollector $totalsCollector
     ) {
-        $this->cartTotalRepository = $cartTotalRepository;
+        $this->totalsCollector = $totalsCollector;
     }
 
     /**
@@ -41,34 +42,45 @@ class Totals implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        $cartTotals = $this->cartTotalRepository->get($value['model']->getId());
+        /** @var Quote $quote */
+        $quote = $value['model'];
+        $cartTotals = $this->totalsCollector->collectQuoteTotals($quote);
+        $currency = $quote->getQuoteCurrencyCode();
 
-        $currency = $cartTotals->getQuoteCurrencyCode();
-        $data = $this->addCurrencyCode([
-            'grand_total' => ['value' => $cartTotals->getGrandTotal(), ],
-            'subtotal_including_tax' => ['value' => $cartTotals->getSubtotalInclTax()],
-            'subtotal_excluding_tax' => ['value' => $cartTotals->getSubtotal()],
-            'subtotal_with_discount_excluding_tax' => ['value' => $cartTotals->getSubtotalWithDiscount()]
-        ], $currency);
-
-        $data['model'] = $value['model'];
-
-        return $data;
+        return [
+            'grand_total' => ['value' => $cartTotals->getGrandTotal(), 'currency' => $currency],
+            'subtotal_including_tax' => ['value' => $cartTotals->getSubtotalInclTax(), 'currency' => $currency],
+            'subtotal_excluding_tax' => ['value' => $cartTotals->getSubtotal(), 'currency' => $currency],
+            'subtotal_with_discount_excluding_tax' => [
+                'value' => $cartTotals->getSubtotalWithDiscount(), 'currency' => $currency
+            ],
+            'applied_taxes' => $this->getAppliedTaxes($cartTotals, $currency),
+            'model' => $quote
+        ];
     }
 
     /**
-     * Adds currency code to the totals
+     * Returns taxes applied to the current quote
      *
-     * @param array $totals
-     * @param string|null $currencyCode
+     * @param Total $total
+     * @param string $currency
      * @return array
      */
-    private function addCurrencyCode(array $totals, $currencyCode): array
+    private function getAppliedTaxes(Total $total, string $currency): array
     {
-        foreach ($totals as &$total) {
-            $total['currency'] = $currencyCode;
+        $appliedTaxes = $total->getAppliedTaxes();
+
+        if (count($appliedTaxes) === 0) {
+            return [];
         }
 
-        return $totals;
+        foreach ($appliedTaxes as $appliedTax) {
+            $appliedTaxesData[] = [
+                'label' => $appliedTax['id'],
+                'amount' => ['value' => $appliedTax['amount'], 'currency' => $currency]
+            ];
+        }
+
+        return $appliedTaxesData;
     }
 }
