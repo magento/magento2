@@ -97,6 +97,10 @@ mutation {
                         link_type
                         price
                     }
+                    downloadable_product_samples {
+                        id
+                        title
+                    }
                 }
             }
         }
