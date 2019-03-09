@@ -76,7 +76,7 @@ class Header extends AbstractCreate
         $customerId = $this->getCustomerId();
         $storeId = $this->getStoreId();
         $out = '';
-        if ($customerId && $storeId) {
+        if (!empty($customerId) && $storeId) {
             $out .= __(
                 'Create New Order for %1 in %2',
                 $this->_getCustomerName($customerId),
