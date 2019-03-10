@@ -73,7 +73,6 @@ class CartTotalsTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @group last
      */
     public function testGetTotalsWithNoTaxApplied()
     {
@@ -86,6 +85,26 @@ class CartTotalsTest extends GraphQlAbstract
         self::assertEquals(20, $pricesResponse['subtotal_including_tax']['value']);
         self::assertEquals(20, $pricesResponse['subtotal_excluding_tax']['value']);
         self::assertEquals(20, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);
+        self::assertEmpty($pricesResponse['applied_taxes']);
+    }
+
+    /**
+     * The totals calculation is based on quote address.
+     * But the totals should be calculated even if no address is set
+     *
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_customer_no_address.php
+     */
+    public function testGetCartTotalsWithNoAddressSet()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $query = $this->getCartTotalsGraphqlQuery($maskedQuoteId);
+        $response = $this->sendRequestWithToken($query);
+
+        $pricesResponse = $response['cart']['prices'];
+        self::assertEquals(10, $pricesResponse['grand_total']['value']);
+        self::assertEquals(10, $pricesResponse['subtotal_including_tax']['value']);
+        self::assertEquals(10, $pricesResponse['subtotal_excluding_tax']['value']);
+        self::assertEquals(10, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);
         self::assertEmpty($pricesResponse['applied_taxes']);
     }
 

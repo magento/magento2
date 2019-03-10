@@ -82,6 +82,26 @@ class CartTotalsTest extends GraphQlAbstract
     }
 
     /**
+     * The totals calculation is based on quote address.
+     * But the totals should be calculated even if no address is set
+     *
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     */
+    public function testGetCartTotalsWithNoAddressSet()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $query = $this->getCartTotalsGraphqlQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
+
+        $pricesResponse = $response['cart']['prices'];
+        self::assertEquals(10, $pricesResponse['grand_total']['value']);
+        self::assertEquals(10, $pricesResponse['subtotal_including_tax']['value']);
+        self::assertEquals(10, $pricesResponse['subtotal_excluding_tax']['value']);
+        self::assertEquals(10, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);
+        self::assertEmpty($pricesResponse['applied_taxes']);
+    }
+
+    /**
      * Generates GraphQl query for retrieving cart totals
      *
      * @param string $maskedQuoteId

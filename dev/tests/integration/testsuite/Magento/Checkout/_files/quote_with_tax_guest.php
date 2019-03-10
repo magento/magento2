@@ -39,7 +39,7 @@ $quote->setStoreId(
 )->setBillingAddress(
     $quoteAddress
 )->setCheckoutMethod(
-    'customer'
+    'guest'
 )->setReservedOrderId(
     'test_order_tax'
 )->addProduct(
@@ -55,8 +55,8 @@ $quoteRepository = $objectManager->get(
 $quoteRepository->save($quote);
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-$quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
+$quoteIdMask = $objectManager
+    ->get(\Magento\Quote\Model\QuoteIdMaskFactory::class)
     ->create();
 $quoteIdMask->setQuoteId($quote->getId());
 $quoteIdMask->setDataChanges(true);
