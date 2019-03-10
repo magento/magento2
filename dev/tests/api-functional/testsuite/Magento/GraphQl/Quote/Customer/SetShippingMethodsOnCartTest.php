@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Magento\Catalog\Model\Product;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
@@ -38,6 +40,10 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      * @var QuoteIdToMaskedQuoteIdInterface
      */
     private $quoteIdToMaskedId;
+    /**
+     * @var \Magento\Quote\Model\Quote\Address\Rate
+     */
+    private $rate;
 
     /**
      * @inheritdoc
@@ -49,11 +55,41 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->rate = $objectManager->get(\Magento\Quote\Model\Quote\Address\Rate::class);
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
+     * @throws \Exception
+     */
     public function testShippingMethodWithVirtualProduct()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_virtual_product');
+
+        /** @var Quote $quote */
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_order_with_virtual_product', 'reserved_order_id');
+
+        $shippingAddress = $quote->getShippingAddress();
+        $rate = $this->rate;
+
+        $rate->setPrice(2)
+            ->setAddressId($shippingAddress->getId())
+            ->setCode('flatrate_flatrate');
+        $shippingAddress->setShippingMethod('flatrate_flatrate')
+            ->addShippingRate($rate)
+            ->save();
+
+        $mutation = $this->prepareMutationQuery(
+            $maskedQuoteId,
+            'flatrate',
+            'flatrate_flatrate',
+            '1'
+        );
+
+        $this->graphQlQuery($mutation, [], '', $this->getHeaderMap());
     }
 
     public function testShippingMethodWithSimpleProduct()
@@ -135,18 +171,18 @@ mutation {
   setShippingMethodsOnCart(input: 
     {
       cart_id: "$maskedQuoteId", 
-      shipping_addresses: [{
+      shipping_methods: [{
         cart_address_id: $shippingAddressId
-        shipping_method: {
-          method_code: "$shippingMethodCode"
-          carrier_code: "$shippingCarrierCode"
-        }
+        method_code: "$shippingMethodCode"
+        carrier_code: "$shippingCarrierCode"
       }]
-      }) {
-    
+    } ) 
+    {
     cart {
-      cart_id,
       shipping_addresses {
+        address_id
+        firstname
+        lastname
         selected_shipping_method {
           carrier_code
           method_code
