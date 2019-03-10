@@ -11,6 +11,7 @@ use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\File\NotFoundException;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\App\Request\Http;
 
 /**
  * A locally available image placeholder file asset that can be referred with a file type
@@ -54,23 +55,31 @@ class Placeholder implements LocalInterface
     private $scopeConfig;
 
     /**
+     * @var Http
+     */
+    private $request;
+
+    /**
      * Placeholder constructor.
      *
      * @param ContextInterface $context
      * @param ScopeConfigInterface $scopeConfig
      * @param Repository $assetRepo
+     * @param Http $request
      * @param string $type
      */
     public function __construct(
         ContextInterface $context,
         ScopeConfigInterface $scopeConfig,
         Repository $assetRepo,
+        Http $request,
         $type
     ) {
         $this->context = $context;
         $this->scopeConfig = $scopeConfig;
         $this->assetRepo = $assetRepo;
         $this->type = $type;
+        $this->request = $request;
     }
 
     /**
@@ -152,10 +161,13 @@ class Placeholder implements LocalInterface
         if ($this->filePath !== null) {
             return $this->filePath;
         }
+
+        $storeId = $this->request->getParam('filters')['store_id'];
         // check if placeholder defined in config
         $isConfigPlaceholder = $this->scopeConfig->getValue(
             "catalog/placeholder/{$this->type}_placeholder",
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
         );
         $this->filePath = $isConfigPlaceholder;
 
