@@ -215,7 +215,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $this->templateFactory = $templateFactory;
         $this->filterManager = $filterManager;
         $this->urlModel = $urlModel;
-        $this->fileStorageDatabase = $fileStorageDatabase ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Database::class);
+        $this->fileStorageDatabase = $fileStorageDatabase ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(Database::class);
         parent::__construct($context, $registry, null, null, $data);
     }
 
