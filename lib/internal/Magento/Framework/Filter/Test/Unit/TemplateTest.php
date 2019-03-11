@@ -210,7 +210,7 @@ EXPECTED_RESULT;
      *
      * @return void
      */
-    public function testDisallowedMethods(string $method)
+    public function testDisallowedMethods($method)
     {
         $this->templateFilter->setVariables(['store' => $this->store]);
         $this->templateFilter->filter('{{var store.' . $method . '()}}');

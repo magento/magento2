@@ -324,7 +324,7 @@ class Template implements \Zend_Filter_Interface
      * @return void
      * @throws \InvalidArgumentException
      */
-    private function validateVariableMethodCall($object, string $method)
+    private function validateVariableMethodCall($object, $method)
     {
         if ($object === $this) {
             if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
@@ -343,7 +343,7 @@ class Template implements \Zend_Filter_Interface
      * @return bool
      * @throws \InvalidArgumentException
      */
-    private function isAllowedDataObjectMethod($object, string $method)
+    private function isAllowedDataObjectMethod($object, $method)
     {
         if ($object instanceof AbstractExtensibleModel || $object instanceof AbstractModel) {
             if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
