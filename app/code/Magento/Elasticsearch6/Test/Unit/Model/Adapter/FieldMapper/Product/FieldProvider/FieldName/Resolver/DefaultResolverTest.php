@@ -66,6 +66,7 @@ class DefaultResolverTest extends \PHPUnit\Framework\TestCase
      * @param $fieldType
      * @param $attributeCode
      * @param $frontendInput
+     * @param $isSortable
      * @param $context
      * @param $expected
      * @return void
@@ -74,6 +75,7 @@ class DefaultResolverTest extends \PHPUnit\Framework\TestCase
         $fieldType,
         $attributeCode,
         $frontendInput,
+        $isSortable,
         $context,
         $expected
     ) {
@@ -82,7 +84,7 @@ class DefaultResolverTest extends \PHPUnit\Framework\TestCase
             ->willReturn('string');
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode', 'getFrontendInput'])
+            ->setMethods(['getAttributeCode', 'getFrontendInput', 'isSortable'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('getAttributeCode')
@@ -90,6 +92,9 @@ class DefaultResolverTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->any())
             ->method('getFrontendInput')
             ->willReturn($frontendInput);
+        $attributeMock->expects($this->any())
+            ->method('isSortable')
+            ->willReturn($isSortable);
         $this->fieldTypeResolver->expects($this->any())
             ->method('getFieldType')
             ->willReturn($fieldType);
@@ -106,13 +111,13 @@ class DefaultResolverTest extends \PHPUnit\Framework\TestCase
     public function getFieldNameProvider()
     {
         return [
-            ['', 'code', '', [], 'code'],
-            ['', 'code', '', ['type' => 'default'], 'code'],
-            ['string', '*', '', ['type' => 'default'], '_search'],
-            ['', 'code', '', ['type' => 'default'], 'code'],
-            ['', 'code', 'select', ['type' => 'default'], 'code'],
-            ['', 'code', 'boolean', ['type' => 'default'], 'code'],
-            ['', 'code', '', ['type' => 'type'], 'sort_code'],
+            ['', 'code', '', false, [], 'code'],
+            ['', 'code', '', false, ['type' => 'default'], 'code'],
+            ['string', '*', '', false, ['type' => 'default'], '_search'],
+            ['', 'code', '', false, ['type' => 'default'], 'code'],
+            ['', 'code', 'select', false, ['type' => 'default'], 'code'],
+            ['', 'code', 'boolean', false, ['type' => 'default'], 'code'],
+            ['', 'code', '', true, ['type' => 'sort'], 'sort_code'],
         ];
     }
 }
