@@ -26,4 +26,11 @@ interface PreprocessorInterface
      * @param mixed $attribute
      */
     public function process($key, &$attribute);
+
+    /**
+     * Get list of affected attributes for the current preprocessor
+     *
+     * @return array
+     */
+    public function getAffectedAttributes();
 }

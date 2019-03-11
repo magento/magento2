@@ -79,6 +79,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $customAttributePreprocessors;
 
     /**
+     * @var array
+     */
+    private $attributesPreprocessorsMap = [];
+
+    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
@@ -296,9 +301,12 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     {
         $result = [];
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
+        $attributesPreprocessorMap = $this->getAttributesPreprocessorsMap();
 
         foreach ($customAttributesValueArray as $key => $customAttribute) {
-            $this->runCustomAttributePreprocessors($key, $customAttribute);
+            if($key && is_array($customAttribute) && array_key_exists($key, $attributesPreprocessorMap)) {
+                $this->runCustomAttributePreprocessors($key, $customAttribute, $attributesPreprocessorMap[$key]);
+            }
             if (!is_array($customAttribute)) {
                 $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
             }
@@ -340,16 +348,36 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     }
 
     /**
+     * Get map of preprocessors related to the custom attributes
+     *
+     * @return array
+     */
+    private function getAttributesPreprocessorsMap()
+    {
+        if (!$this->attributesPreprocessorsMap) {
+            foreach ($this->customAttributePreprocessors as $attributePreprocessor) {
+                foreach ($attributePreprocessor->getAffectedAttributes() as $attributeKey) {
+                    $this->attributesPreprocessorsMap[$attributeKey][] = get_class($attributePreprocessor);
+                }
+            }
+        }
+
+        return $this->attributesPreprocessorsMap;
+    }
+
+    /**
      * Prepare attribute value by loaded attribute preprocessors
      *
      * @param string $key
      * @param mixed $customAttribute
      * @return bool
      */
-    private function runCustomAttributePreprocessors($key, &$customAttribute)
+    private function runCustomAttributePreprocessors($key, &$customAttribute, $preprocessorlsList)
     {
         foreach ($this->customAttributePreprocessors as $attributePreprocessor) {
-            if ($attributePreprocessor->shouldBeProcessed($key, $customAttribute)) {
+            if (array_key_exists(get_class($attributePreprocessor), $preprocessorlsList)
+                && $attributePreprocessor->shouldBeProcessed($key, $customAttribute)
+            ) {
                 $attributePreprocessor->process($key, $customAttribute);
             }
         }
