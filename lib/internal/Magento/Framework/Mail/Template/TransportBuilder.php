@@ -49,13 +49,6 @@ class TransportBuilder
     protected $templateOptions;
 
     /**
-     * Mail from address
-     *
-     * @var string|array
-     */
-    private $from;
-
-    /**
      * Mail Transport
      *
      * @var TransportInterface
@@ -180,12 +173,29 @@ class TransportBuilder
     /**
      * Set mail from address
      *
+     * @deprecated This function sets the from address but does not provide
+     * a way of setting the correct from addresses based on the scope.
+     * @see setFromByScope()
+     *
      * @param string|array $from
      * @return $this
      */
     public function setFrom($from)
     {
-        $this->from = $from;
+        return $this->setFromByScope($from, null);
+    }
+
+    /**
+     * Set mail from address by Scope
+     *
+     * @param string|array $from
+     * @param string|int $scopeId
+     * @return $this
+     */
+    public function setFromByScope($from, $scopeId = null)
+    {
+        $result = $this->_senderResolver->resolve($from, $scopeId);
+        $this->message->setFromAddress($result['email'], $result['name']);
         return $this;
     }
 
@@ -262,7 +272,6 @@ class TransportBuilder
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;
-        $this->from = null;
         return $this;
     }
 
@@ -295,14 +304,6 @@ class TransportBuilder
         $this->message->setMessageType($types[$template->getType()])
             ->setBody($body)
             ->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
-
-        if ($this->from) {
-            $from = $this->_senderResolver->resolve(
-                $this->from,
-                $template->getDesignConfig()->getStore()
-            );
-            $this->message->setFrom($from['email'], $from['name']);
-        }
 
         return $this;
     }
