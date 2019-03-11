@@ -8,27 +8,21 @@ namespace Magento\Sales\Setup\Patch\Data;
 
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\State;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Sales\Model\Order\Address;
-use Magento\Sales\Model\OrderFactory;
-use Magento\Sales\Model\ResourceModel\Order\Address\CollectionFactory as AddressCollectionFactory;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Sales\Setup\SalesSetupFactory;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Sales\Model\Order\Address;
+use Magento\Sales\Setup\SalesSetupFactory;
 
+/**
+ * Fills quote_address_id in table sales_order_address if it is empty.
+ */
 class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ModuleDataSetupInterface
      */
     private $moduleDataSetup;
-
-    /**
-     * @var SalesSetupFactory
-     */
-    private $salesSetupFactory;
 
     /**
      * @var State
@@ -41,29 +35,22 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
     private $eavConfig;
 
     /**
-     * PatchInitial constructor.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
      * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param State $state
+     * @param Config $eavConfig
      */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
-        SalesSetupFactory $salesSetupFactory,
         State $state,
-        Config $eavConfig,
-        AddressCollectionFactory $addressCollectionFactory,
-        OrderFactory $orderFactory,
-        QuoteFactory $quoteFactory
+        Config $eavConfig
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
-        $this->salesSetupFactory = $salesSetupFactory;
         $this->state = $state;
         $this->eavConfig = $eavConfig;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -87,7 +74,7 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -97,7 +84,7 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -105,7 +92,7 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
@@ -113,8 +100,11 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
     }
 
     /**
+     * Fill quote_address_id in sales_order_address by type.
+     *
      * @param ModuleDataSetupInterface $setup
      * @param string $addressType
+     * @throws \Zend_Db_Statement_Exception
      */
     private function fillQuoteAddressIdInSalesOrderAddressByType(ModuleDataSetupInterface $setup, $addressType)
     {
@@ -152,6 +142,8 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
     }
 
     /**
+     * Process filling quote_address_id in sales_order_address in batch.
+     *
      * @param ModuleDataSetupInterface $setup
      * @param array $orderAddresses
      * @param string $addressType
