@@ -60,7 +60,7 @@ class QuoteAddressFactory
         try {
             $quoteAddress->importCustomerAddressData($customerAddress);
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
+            throw new GraphQlInputException(__($e->getMessage()), $e);
         }
         return $quoteAddress;
     }
