@@ -357,7 +357,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         if (!$this->attributesPreprocessorsMap) {
             foreach ($this->customAttributePreprocessors as $attributePreprocessor) {
                 foreach ($attributePreprocessor->getAffectedAttributes() as $attributeKey) {
-                    $this->attributesPreprocessorsMap[$attributeKey][] = get_class($attributePreprocessor);
+                    $this->attributesPreprocessorsMap[$attributeKey][] = $attributePreprocessor;
                 }
             }
         }
@@ -374,10 +374,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      */
     private function runCustomAttributePreprocessors($key, &$customAttribute, $preprocessorlsList)
     {
-        foreach ($this->customAttributePreprocessors as $attributePreprocessor) {
-            if (array_key_exists(get_class($attributePreprocessor), $preprocessorlsList)
-                && $attributePreprocessor->shouldBeProcessed($key, $customAttribute)
-            ) {
+        foreach ($preprocessorlsList as $attributePreprocessor) {
+            if ($attributePreprocessor->shouldBeProcessed($key, $customAttribute)) {
                 $attributePreprocessor->process($key, $customAttribute);
             }
         }
