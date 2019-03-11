@@ -60,6 +60,16 @@ class Validator
         $this->countryFactory = $countryFactory;
         $this->eavConfig = $eavConfig ?: ObjectManager::getInstance()
             ->get(EavConfig::class);
+    }
+
+    /**
+     *
+     * @param \Magento\Sales\Model\Order\Address $address
+     * @return array
+     */
+    public function validate(Address $address)
+    {
+        $warnings = [];
 
         if ($this->isTelephoneRequired()) {
             $this->required['telephone'] = 'Phone Number';
@@ -72,16 +82,7 @@ class Validator
         if ($this->isFaxRequired()) {
             $this->required['fax'] = 'Fax';
         }
-    }
 
-    /**
-     *
-     * @param \Magento\Sales\Model\Order\Address $address
-     * @return array
-     */
-    public function validate(Address $address)
-    {
-        $warnings = [];
         foreach ($this->required as $code => $label) {
             if (!$address->hasData($code)) {
                 $warnings[] = sprintf('%s is a required field', $label);
