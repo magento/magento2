@@ -72,8 +72,8 @@ class Placeholder implements LocalInterface
         ContextInterface $context,
         ScopeConfigInterface $scopeConfig,
         Repository $assetRepo,
+        $type,
         Http $request,
-        $type
     ) {
         $this->context = $context;
         $this->scopeConfig = $scopeConfig;
@@ -162,7 +162,9 @@ class Placeholder implements LocalInterface
             return $this->filePath;
         }
 
-        $storeId = $this->request->getParam('filters')['store_id'];
+        $filters = $this->request->getParam('filters');
+        $storedId = (is_array($filters) && array_key_exists('store_id', $filters)) ? $filters['store_id'] : null;
+        
         // check if placeholder defined in config
         $isConfigPlaceholder = $this->scopeConfig->getValue(
             "catalog/placeholder/{$this->type}_placeholder",
