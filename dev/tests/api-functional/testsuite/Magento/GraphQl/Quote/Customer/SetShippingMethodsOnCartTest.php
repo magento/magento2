@@ -9,6 +9,7 @@ namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\Quote;
@@ -54,6 +55,11 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     private $productRepository;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $quoteRepository;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -62,6 +68,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->quoteRepository = $objectManager->get(CartRepositoryInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->rate = $objectManager->get(Rate::class);
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
@@ -94,7 +101,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $maskedQuoteId,
             'flatrate',
             'flatrate_flatrate',
-            '1'
+            $shippingAddress->getId()
         );
 
         $this->graphQlQuery($mutation, [], '', $this->getHeaderMap());
@@ -323,29 +330,157 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $this->graphQlQuery($mutation);
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
+     * @throws \Exception
+     */
     public function testSetShippingMethodToAnotherCustomerCart()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_virtual_product');
+
+        /** @var Quote $quote test01 */
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
+
+        $mutation = $this->prepareMutationQuery(
+            $maskedQuoteId,
+            'flatrate',
+            'flatrate',
+            $quote->getShippingAddress()->getId()
+        );
+
+        self::expectExceptionMessage(
+            'Carrier with such method not found: flatrate, flatrate'
+        );
+        $this->graphQlQuery($mutation, [], '', $this->getHeaderMap());
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @throws \Exception
+     */
     public function testSetShippingMethodToNonExistentCartAddress()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+
+        $mutation = $this->prepareMutationQuery(
+            $maskedQuoteId,
+            'flatrate',
+            'flatrate',
+            '16800'
+        );
+        self::expectExceptionMessage(
+            'Could not find a cart address with ID "16800"'
+        );
+
+        $this->graphQlQuery($mutation, [], '', $this->getHeaderMap());
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
+     * @throws \Exception
+     */
     public function testSetShippingMethodToGuestCartAddress()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('guest_quote');
+
+        /** @var Quote $quote */
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'guest_quote', 'reserved_order_id');
+
+        $mutation = $this->prepareMutationQuery(
+            $maskedQuoteId,
+            'flatrate',
+            'flatrate',
+            $quote->getShippingAddress()->getId()
+        );
+
+        $this->graphQlQuery($mutation);
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
+     * @throws \Exception
+     */
     public function testSetShippingMethodToAnotherCustomerCartAddress()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_virtual_product');
+
+        /** @var Quote $quote */
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
+
+        $mutation = $this->prepareMutationQuery(
+            $maskedQuoteId,
+            'flatrate',
+            'flatrate',
+            $quote->getShippingAddress()->getId()
+        );
+
+        self::expectExceptionMessage(
+            'Carrier with such method not found: flatrate, flatrate'
+        );
+        $this->graphQlQuery($mutation, [], '', $this->getHeaderMap());
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
+     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
+     * @throws \Exception
+     */
     public function testSetMultipleShippingMethods()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/423');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+
+        /** @var Quote $quote */
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
+
+        $shippingAddressId = $quote->getShippingAddress()->getId();
+
+        $mutation = <<<MUTATION
+mutation {
+  setShippingMethodsOnCart(input: 
+    {
+      cart_id: "$maskedQuoteId", 
+      shipping_methods: [{
+          cart_address_id: $shippingAddressId
+          method_code: "flatrate"
+          carrier_code: "flatrate"
+        },
+        {
+          cart_address_id: $shippingAddressId
+          method_code: "ups"
+          carrier_code: "ups"
+      }]
+    }
+    ) {
+    cart {
+      shipping_addresses {
+        address_id
+        firstname
+        lastname
+        selected_shipping_method {
+          carrier_code
+          method_code
+          label
+          amount
+        }
+      }
+    }
+  }
+}
+
+MUTATION;
+        self::expectExceptionMessage(
+            'You cannot specify multiple shipping methods.'
+        );
+
+        $this->graphQlQuery($mutation, [], '', $this->getHeaderMap());
     }
 
     /**
