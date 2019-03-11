@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\UrlRewrite\Test\TestCase\CreateProductWithSeveralWebsitesUrlRewriteTest" summary="Test product url rewrites when it is created in several websites">
         <variation name="CreateSimpleProductEntityWithSeveralWebsites" summary="Create product with several websites and check URL Rewites" ticketId="MAGETWO-27238">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
