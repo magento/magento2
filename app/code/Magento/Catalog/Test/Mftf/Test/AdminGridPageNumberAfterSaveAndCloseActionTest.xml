@@ -32,6 +32,7 @@
         <after>
             <amOnPage url="{{ProductCatalogPage.url}}" stepKey="GoToProductCatalog"/>
             <waitForPageLoad stepKey="waitForProductIndexPage"/>
+            <click selector="{{AdminDataGridPaginationSection.previousPage}}" stepKey="clickPrevPageOrderGrid"/>
             <actionGroup ref="adminDataGridDeleteCustomPerPage" stepKey="deleteCustomAddedPerPage">
                 <argument name="perPage" value="Const.one"/>
             </actionGroup>
@@ -46,8 +47,8 @@
         <actionGroup ref="adminDataGridSelectCustomPerPage" stepKey="select1OrderPerPage">
             <argument name="perPage" value="Const.one"/>
         </actionGroup>
-        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="1" stepKey="seeOnFirstPageOrderGrid"/>
-        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPageOrderGrid" after="seeOnFirstPageOrderGrid"/>
+
+        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPageOrderGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
             <argument name="product" value="$$product2$$"/>
