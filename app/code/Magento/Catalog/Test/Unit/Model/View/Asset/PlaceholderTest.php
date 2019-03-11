@@ -9,6 +9,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Catalog\Model\View\Asset\Placeholder;
 use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\App\Request\Http;
 
 /**
  * Class PlaceholderTest
@@ -34,6 +35,11 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $imageContext;
+    
+    /**
+     * @var Http|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $request;
 
     protected function setUp()
     {
@@ -44,6 +50,7 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
             $this->imageContext,
             $this->scopeConfig,
             $this->repository,
+            $this->request,
             'thumbnail'
         );
     }
@@ -121,6 +128,7 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
             $this->imageContext,
             $this->scopeConfig,
             $this->repository,
+            $this->request,
             $imageType
         );
 
