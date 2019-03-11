@@ -87,6 +87,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
          * for using it in elements generation
          */
         $form->setDataObject($this->_productFactory->create());
+        $form->setHtmlIdPrefix('attributes_');
         $this->_setFieldset($attributes, $fieldset, $this->getFormExcludedFieldList());
         $form->setFieldNameSuffix('attributes');
         $this->setForm($form);
@@ -127,7 +128,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
     {
         // Add name attribute to checkboxes that correspond to multiselect elements
         $nameAttributeHtml = $element->getExtType() === 'multiple' ? 'name="' . $element->getId() . '_checkbox"' : '';
-        $elementId = $element->getId();
+        $elementId = $element->getHtmlId();
         $dataAttribute = "data-disable='{$elementId}'";
         $dataCheckboxName = "toggle_" . "{$elementId}";
         $checkboxLabel = __('Change');
