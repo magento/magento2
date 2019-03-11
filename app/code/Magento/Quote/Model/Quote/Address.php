@@ -426,7 +426,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected function _isSameAsBilling()
     {
         return $this->getAddressType() == \Magento\Quote\Model\Quote\Address::TYPE_SHIPPING &&
-            ($this->_isNotRegisteredCustomer() ||
+            ($this->_isNotRegisteredCustomer() &&
             $this->_isDefaultShippingNullOrSameAsBillingAddress());
     }
 
