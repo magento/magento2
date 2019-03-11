@@ -305,3 +305,111 @@
         padding-left: @collapsible-title-icon__size + .5rem + @admin__table-secondary__padding-horizontal;
     }
 }
+
+//
+//  Sales order Address Information Form layout 
+//  -------------------------------------------
+
+.sales-order-address .admin__fieldset-wrapper { 
+    border: 0;
+    margin: 0;
+    min-width: 0;
+    padding: 0;
+
+    //  Filedset section
+    .fieldset-wrapper {
+        &.admin__fieldset-section {
+            > .fieldset-wrapper-title {
+                padding-left: @indent__s;
+
+                strong {
+                    font-size: @collapsible-title__font-size;
+                    font-weight: @font-weight__semibold;
+                }
+            }
+
+            .admin__fieldset-wrapper-content {
+                > .admin__fieldset {
+                    padding-top: @indent__s;
+                }
+            }
+
+            &:last-child {
+                .admin__fieldset-wrapper-content {
+                    > .admin__fieldset {
+                        padding-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    .form-inline #edit_form > .admin__field {  
+        border: 0;
+        margin: 0;
+        padding: 0;
+        #mix-grid .row();
+
+        &.admin__field-wide {
+            &:extend(.abs-field-rows all);
+        }
+
+        > .admin__field-control {
+            #mix-grid .column(@field-control-grid__column, @field-grid__columns);
+        }
+
+        > .admin__field-label {
+            #mix-grid .column(@field-label-grid__column, @field-grid__columns);
+        }
+
+        &:extend(.abs-field-sizes all);
+
+        &.admin__field-no-label {
+            > .admin__field-label {
+                display: none;
+            }
+
+            > .admin__field-control {
+                &:extend(.abs-field-no-label all);
+            }
+        }
+
+        //  Field with empty table and no thead
+        + .admin__field {
+            &._empty {
+                &._no-header {
+                    margin-top: -@indent__l;
+                }
+            }
+        }
+    }
+
+    .form-inline #edit_form .admin__field {      
+        margin-bottom: 3rem;
+        position: relative; 
+    } 
+    &.admin__fieldset-wrapper .admin__legend{ 
+        &:extend(.abs-clearfix all);
+        border-bottom: 1px solid @color-gray80;
+        line-height: 1.2;
+        padding: 14px 0 16px;
+        margin-bottom: 3rem;
+        
+    }
+
+}
+
+.admin__form-field-control,
+.admin__field-control {
+    .admin__control-text,
+    .admin__control-textarea {
+        width: 100%;
+        &.disabled {
+            background-color: #e9e9e9;
+            border-color: #adadad;
+            color: #303030;
+            cursor: not-allowed;
+            opacity: .5;
+        }
+    }
+}
