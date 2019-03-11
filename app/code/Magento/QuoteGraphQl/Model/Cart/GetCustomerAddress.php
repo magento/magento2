@@ -12,10 +12,11 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 
 /**
- * Get customer address. Throws exception if customer is not owner of address
+ * Get customer address
  */
 class GetCustomerAddress
 {
@@ -33,14 +34,14 @@ class GetCustomerAddress
     }
 
     /**
-     * Get customer address. Throws exception if customer is not owner of address
+     * Get customer address
      *
      * @param int $addressId
      * @param int $customerId
      * @return AddressInterface
-     * @throws GraphQlAuthorizationException
+     * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
-     * @throws LocalizedException
+     * @throws GraphQlAuthorizationException
      */
     public function execute(int $addressId, int $customerId): AddressInterface
     {
@@ -50,6 +51,8 @@ class GetCustomerAddress
             throw new GraphQlNoSuchEntityException(
                 __('Could not find a address with ID "%address_id"', ['address_id' => $addressId])
             );
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()), $e);
         }
 
         if ((int)$customerAddress->getCustomerId() !== $customerId) {
