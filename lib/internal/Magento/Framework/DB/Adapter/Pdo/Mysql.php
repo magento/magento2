@@ -960,14 +960,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param   string $columnName
      * @param   array|string $definition  string specific or universal array DB Server definition
      * @param   string $schemaName
-     * @return  true|\Zend_Db_Statement_Pdo
+     * @return  $this
      * @throws  \Zend_Db_Exception
      */
     public function addColumn($tableName, $columnName, $definition, $schemaName = null)
     {
         $this->getSchemaListener()->addColumn($tableName, $columnName, $definition);
         if ($this->tableColumnExists($tableName, $columnName, $schemaName)) {
-            return true;
+            return $this;
         }
 
         $primaryKey = '';
@@ -990,11 +990,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $primaryKey
         );
 
-        $result = $this->rawQuery($sql);
+        $this->rawQuery($sql);
 
         $this->resetDdlCache($tableName, $schemaName);
 
-        return $result;
+        return $this;
     }
 
     /**
