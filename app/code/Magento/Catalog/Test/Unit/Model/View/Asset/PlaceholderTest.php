@@ -88,6 +88,7 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
             $this->imageContext,
             $this->scopeConfig,
             $this->repository,
+            $this->request,
             $imageType
         );
         $absolutePath = '/var/www/html/magento2ce/pub/media/catalog/product';
