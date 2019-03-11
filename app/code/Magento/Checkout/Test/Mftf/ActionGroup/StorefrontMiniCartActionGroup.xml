@@ -15,7 +15,7 @@
     </actionGroup>
     <actionGroup name="assertOneProductNameInMiniCart">
         <arguments>
-            <argument name="productName"/>
+            <argument name="productName" type="string"/>
         </arguments>
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
