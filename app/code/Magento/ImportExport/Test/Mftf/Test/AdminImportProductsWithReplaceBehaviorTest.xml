@@ -11,11 +11,11 @@
     <test name="AdminImportProductsWithReplaceBehaviorTest" extends="AdminImportProductsWithAddUpdateBehaviorTest">
         <annotations>
             <description value="Verify Magento native import products with replace behavior."/>
-            <stories value="Verify Magento native import products with replace behavior."/>
+            <stories value="Import Products"/>
             <features value="Import/Export"/>
             <title value="Verify Magento native import products with replace behavior."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-47719"/>
+            <testCaseId value="MC-14076"/>
             <group value="importExport"/>
             <group value="mtf_migrated"/>
         </annotations>

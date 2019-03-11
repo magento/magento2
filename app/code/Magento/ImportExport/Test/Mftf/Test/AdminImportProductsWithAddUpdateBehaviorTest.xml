@@ -11,11 +11,11 @@
     <test name="AdminImportProductsWithAddUpdateBehaviorTest">
         <annotations>
             <description value="Verify Magento native import products with add/update behavior."/>
-            <stories value="Verify Magento native import products with add/update behavior."/>
+            <stories value="Import Products"/>
             <features value="Import/Export"/>
             <title value="Verify Magento native import products with add/update behavior."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-47724"/>
+            <testCaseId value="MC-14077"/>
             <group value="importExport"/>
             <group value="mtf_migrated"/>
         </annotations>
