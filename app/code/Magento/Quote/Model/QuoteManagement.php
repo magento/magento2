@@ -12,7 +12,6 @@ use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\Phrase;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address\ToOrder as ToOrderConverter;
 use Magento\Quote\Model\Quote\Address\ToOrderAddress as ToOrderAddressConverter;
@@ -548,15 +547,12 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                     ]
                 );
             } catch (\Exception $consecutiveException) {
-                $message = new Phrase(
-                    "An exception occurred on 'sales_model_service_quote_submit_failure' event: %1\n%2",
-                    [
-                        $consecutiveException->getMessage(),
-                        $consecutiveException->getTraceAsString()
-                    ]
+                $message = sprintf(
+                    "An exception occurred on 'sales_model_service_quote_submit_failure' event: %s",
+                    $consecutiveException->getMessage()
                 );
 
-                throw new LocalizedException($message, $e);
+                throw new \Exception($message, 0, $e);
             }
             throw $e;
         }
