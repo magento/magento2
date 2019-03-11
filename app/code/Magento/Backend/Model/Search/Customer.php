@@ -89,7 +89,7 @@ class Customer extends \Magento\Framework\DataObject
 
         $this->searchCriteriaBuilder->setCurrentPage($this->getStart());
         $this->searchCriteriaBuilder->setPageSize($this->getLimit());
-        $searchFields = ['firstname', 'lastname', 'company'];
+        $searchFields = ['firstname', 'lastname', 'billing_company'];
         $filters = [];
         foreach ($searchFields as $field) {
             $filters[] = $this->filterBuilder

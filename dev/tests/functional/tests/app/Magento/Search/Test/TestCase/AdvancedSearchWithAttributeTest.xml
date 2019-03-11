@@ -8,8 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Search\Test\TestCase\AdvancedSearchWithAttributeTest" summary="Use Advanced Search by Decimal indexable attribute if Edit/Add Attribute" ticketId="MAGETWO-25931">
         <variation name="AdvancedSearchWithWeightAttributeTestVariation1">
-            <data name="issue" xsi:type="string">MAGETWO-65408: [FT] Magento\Search\Test\TestCase\AdvancedSearchWithAttributeTest fails on Jenkins</data>
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="productDropDownList/0" xsi:type="string">configurable</data>
             <data name="productDropDownList/1" xsi:type="string">simple</data>
             <data name="productDropDownList/2" xsi:type="string">bundle</data>

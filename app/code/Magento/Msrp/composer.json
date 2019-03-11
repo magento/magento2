@@ -11,6 +11,7 @@
         "magento/module-downloadable": "*",
         "magento/module-eav": "*",
         "magento/module-grouped-product": "*",
+        "magento/module-configurable-product": "*",
         "magento/module-store": "*",
         "magento/module-tax": "*"
     },

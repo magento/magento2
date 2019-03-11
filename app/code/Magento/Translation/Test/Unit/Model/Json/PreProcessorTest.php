@@ -8,39 +8,43 @@ namespace Magento\Translation\Test\Unit\Model\Json;
 use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\DataProvider;
 use Magento\Translation\Model\Json\PreProcessor;
+use Magento\Backend\App\Area\FrontNameResolver;
 
 class PreProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PreProcessor
      */
-    protected $model;
+    private $model;
 
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $configMock;
+    private $configMock;
 
     /**
      * @var DataProvider|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dataProviderMock;
+    private $dataProviderMock;
 
     /**
      * @var \Magento\Framework\App\AreaList|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $areaListMock;
+    private $areaListMock;
 
     /**
      * @var \Magento\Framework\TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $translateMock;
+    private $translateMock;
 
     /**
      * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $designMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->configMock = $this->createMock(\Magento\Translation\Model\Js\Config::class);
@@ -57,7 +61,14 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetData()
+    /**
+     * Test 'process' method.
+     *
+     * @param array $data
+     * @param array $expects
+     * @dataProvider processDataProvider
+     */
+    public function testProcess(array $data, array $expects)
     {
         $chain = $this->createMock(\Magento\Framework\View\Asset\PreProcessor\Chain::class);
         $asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
@@ -66,8 +77,10 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
         $targetPath = 'path/js-translation.json';
         $themePath = '*/*';
         $dictionary = ['hello' => 'bonjour'];
-        $areaCode = 'adminhtml';
+        $areaCode = $data['area_code'];
+
         $area = $this->createMock(\Magento\Framework\App\Area::class);
+        $area->expects($expects['area_load'])->method('load')->willReturnSelf();
 
         $chain->expects($this->once())
             ->method('getTargetAssetPath')
@@ -93,7 +106,7 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->designMock->expects($this->once())->method('setDesignTheme')->with($themePath, $areaCode);
 
-        $this->areaListMock->expects($this->once())
+        $this->areaListMock->expects($expects['areaList_getArea'])
             ->method('getArea')
             ->with($areaCode)
             ->willReturn($area);
@@ -113,5 +126,34 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
         $this->translateMock->expects($this->once())->method('loadData')->with($areaCode, true);
 
         $this->model->process($chain);
+    }
+
+    /**
+     * Data provider for 'process' method test.
+     *
+     * @return array
+     */
+    public function processDataProvider()
+    {
+        return [
+            [
+                [
+                    'area_code' => FrontNameResolver::AREA_CODE
+                ],
+                [
+                    'areaList_getArea' => $this->never(),
+                    'area_load' => $this->never(),
+                ]
+            ],
+            [
+                [
+                    'area_code' => 'frontend'
+                ],
+                [
+                    'areaList_getArea' => $this->once(),
+                    'area_load' => $this->once(),
+                ]
+            ],
+        ];
     }
 }

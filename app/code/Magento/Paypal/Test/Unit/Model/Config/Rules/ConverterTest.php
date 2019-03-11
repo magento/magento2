@@ -60,6 +60,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
                                     'value' => '0',
                                     'predicate' => [
                                     ],
+                                    'include' => '',
                                 ],
                                 'event1' => [
                                     'value' => '1',
@@ -72,6 +73,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
                                             'argument2' => 'argument2',
                                         ],
                                     ],
+                                    'include' => '',
                                 ],
                             ],
                         ],
@@ -109,6 +111,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
                                 'event0' => [
                                     'value' => '0',
                                     'predicate' => [],
+                                    'include' => '',
                                 ],
                                 'event1' => [
                                     'value' => '1',
@@ -121,6 +124,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
                                             'argument2' => 'argument2',
                                         ],
                                     ],
+                                    'include' => '',
                                 ],
                             ],
                         ],
