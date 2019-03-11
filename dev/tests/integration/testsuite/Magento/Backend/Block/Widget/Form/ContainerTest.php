@@ -30,7 +30,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $expectedHtml = '<b>html</b>';
         $this->assertNotEquals($expectedHtml, $block->getFormHtml());
         $form->setText($expectedHtml);
-        $this->assertEquals($expectedHtml, $block->getFormHtml());
+        $this->assertEquals('', $block->getFormHtml());
     }
 
     public function testPseudoConstruct()

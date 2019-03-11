@@ -129,6 +129,7 @@
     <preference for="Magento\Framework\Encryption\EncryptorInterface" type="Magento\Framework\Encryption\Encryptor" />
     <preference for="Magento\Framework\Filter\Encrypt\AdapterInterface" type="Magento\Framework\Filter\Encrypt\Basic" />
     <preference for="Magento\Framework\Cache\ConfigInterface" type="Magento\Framework\Cache\Config" />
+    <preference for="Magento\Framework\Cache\LockQueryInterface" type="Magento\Framework\Cache\Lock\Query" />
     <preference for="Magento\Framework\View\Asset\MergeStrategyInterface" type="Magento\Framework\View\Asset\MergeStrategy\Direct" />
     <preference for="Magento\Framework\App\ViewInterface" type="Magento\Framework\App\View" />
     <preference for="Magento\Framework\Data\Collection\EntityFactoryInterface" type="Magento\Framework\Data\Collection\EntityFactory" />
@@ -1755,6 +1756,13 @@
             <argument name="scopeResolvers" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Framework\App\ScopeResolver</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Cache\Lock\Query">
+        <arguments>
+            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Backend\Cache</argument>
+            <argument name="lockTimeout" xsi:type="number">10</argument>
+            <argument name="delayTimeout" xsi:type="number">50000</argument>
         </arguments>
     </type>
 </config>
