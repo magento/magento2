@@ -889,7 +889,6 @@
         <data key="attributeGroupId">13</data>
         <data key="sortOrder">0</data>
     </entity>
-<<<<<<< HEAD
     <entity name="productAlphabeticalA" type="product" extends="_defaultProduct">
         <data key="name" unique="suffix">AAA Product</data>
     </entity>

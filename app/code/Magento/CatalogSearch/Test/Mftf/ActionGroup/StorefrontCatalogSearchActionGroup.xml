@@ -33,11 +33,6 @@
         <see stepKey="checkName" selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{productName}}"/>
     </actionGroup>
 
-    <!-- Asserts that search results do not contain nay results-->
-    <actionGroup name="StorefrontCheckSearchIsEmpty">
-        <see stepKey="checkEmpty" selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="Your search returned no results"/>
-    </actionGroup>
-
     <!-- Adds product from Quicksearch page and perform assertions-->
     <actionGroup name="StorefrontAddToCartFromQuickSearch">
         <arguments>
