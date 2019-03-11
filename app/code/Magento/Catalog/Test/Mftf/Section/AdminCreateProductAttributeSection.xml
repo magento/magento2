@@ -46,6 +46,7 @@
         <element name="StoreFrontPropertiesTab" selector="#product_attribute_tabs_front" type="button"/>
         <element name="EnableWYSIWYG" type="select" selector="#enabled"/>
         <element name="useForPromoRuleConditions" type="select" selector="#is_used_for_promo_rules"/>
+        <element name="StorefrontPropertiesSectionToggle" type="button" selector="#front_fieldset-wrapper"/>
     </section>
     <section name="WYSIWYGProductAttributeSection">
         <element name="ShowHideBtn" type="button" selector="#toggledefault_value_texteditor"/>
