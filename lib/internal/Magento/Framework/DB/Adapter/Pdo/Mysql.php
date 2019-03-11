@@ -960,7 +960,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param   string $columnName
      * @param   array|string $definition  string specific or universal array DB Server definition
      * @param   string $schemaName
-     * @return  $this
+     * @return  \Magento\Framework\DB\Adapter\AdapterInterface
      * @throws  \Zend_Db_Exception
      */
     public function addColumn($tableName, $columnName, $definition, $schemaName = null)
