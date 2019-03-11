@@ -43,11 +43,15 @@ class CloseErrorAlertStep implements TestStepInterface
     public function run()
     {
         $modalMessage = $this->dashboard->getModalMessage();
-        $this->browser->waitUntil(
-            function () use ($modalMessage) {
-                return $modalMessage->isVisible() ? true : null;
-            }
-        );
-        $modalMessage->acceptAlert();
+        try {
+            $this->browser->waitUntil(
+                function () use ($modalMessage) {
+                    return $modalMessage->isVisible() ? true : null;
+                }
+            );
+            $modalMessage->acceptAlert();
+        } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+            //There is no modal to accept.
+        }
     }
 }
