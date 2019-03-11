@@ -34,16 +34,16 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->request = $this->createPartialMock(
-            \Magento\Framework\App\Request\Http::class,
-            ['isHead']
-        );
         $this->response = $this->createPartialMock(
             \Magento\Framework\HTTP\PhpEnvironment\Response::class,
             ['setHeader', 'sendHeaders', 'setHeaders']
         );
         $this->mime = $this->createMock(\Magento\Framework\File\Mime::class);
-        $this->object = new Http($this->request, $this->response, $this->mime);
+        $this->request = $this->createPartialMock(
+            \Magento\Framework\App\Request\Http::class,
+            ['isHead']
+        );
+        $this->object = new Http($this->response, $this->mime, $this->request);
     }
 
     /**

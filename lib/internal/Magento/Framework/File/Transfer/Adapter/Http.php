@@ -8,10 +8,6 @@ namespace Magento\Framework\File\Transfer\Adapter;
 
 class Http
 {
-    /**
-     * @var \Magento\Framework\App\Request\Http
-     */
-    private $request;
 
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\Response
@@ -24,18 +20,24 @@ class Http
     private $mime;
 
     /**
-     * @param \Magento\Framework\App\Request\Http $request
+     * @var \Magento\Framework\App\Request\Http
+     */
+    private $request;
+
+    /**
      * @param \Magento\Framework\App\Response\Http $response
      * @param \Magento\Framework\File\Mime $mime
+     * @param \Magento\Framework\App\Request\Http|null $request
      */
     public function __construct(
-        \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\HTTP\PhpEnvironment\Response $response,
-        \Magento\Framework\File\Mime $mime
+        \Magento\Framework\File\Mime $mime,
+        \Magento\Framework\App\Request\Http $request = null
     ) {
-        $this->request = $request;
         $this->response = $response;
         $this->mime = $mime;
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->request = $request ?: $objectManager->get(\Magento\Framework\App\Request\Http::class);
     }
 
     /**
