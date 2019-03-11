@@ -40,11 +40,6 @@ class ConsumerWebsiteAssign
     private $serializer;
 
     /**
-     * @var \Magento\Framework\Bulk\OperationManagementInterface
-     */
-    private $operationManagement;
-
-    /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
      */
     private $productPriceIndexerProcessor;
@@ -55,30 +50,35 @@ class ConsumerWebsiteAssign
     private $entityManager;
 
     /**
+     * @var \Magento\MessageQueue\Api\Data\PoisonPillInterface
+     */
+    private $poisonPill;
+
+    /**
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
-     * @param \Magento\Framework\Bulk\OperationManagementInterface $operationManagement
      * @param \Magento\Catalog\Model\Product\Action $action
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param EntityManager $entityManager
+     * @param \Magento\MessageQueue\Api\PoisonPillPutInterface $poisonPill
      */
     public function __construct(
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
-        \Magento\Framework\Bulk\OperationManagementInterface $operationManagement,
         \Magento\Catalog\Model\Product\Action $action,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Serialize\SerializerInterface $serializer,
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        \Magento\MessageQueue\Api\PoisonPillPutInterface $poisonPill
     ) {
         $this->productFlatIndexerProcessor = $productFlatIndexerProcessor;
         $this->productAction = $action;
         $this->logger = $logger;
         $this->serializer = $serializer;
-        $this->operationManagement = $operationManagement;
         $this->productPriceIndexerProcessor = $productPriceIndexerProcessor;
         $this->entityManager = $entityManager;
+        $this->poisonPill = $poisonPill;
     }
 
     /**
@@ -94,6 +94,7 @@ class ConsumerWebsiteAssign
         try {
             $serializedData = $operation->getSerializedData();
             $data = $this->serializer->unserialize($serializedData);
+            $this->poisonPill->put();
             $this->execute($data);
         } catch (\Zend_Db_Adapter_Exception $e) {
             $this->logger->critical($e->getMessage());
