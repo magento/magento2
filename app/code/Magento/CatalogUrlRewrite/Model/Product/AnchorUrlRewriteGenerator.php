@@ -14,6 +14,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
+/**
+ * Url rewrite generator for anchor categories.
+ */
 class AnchorUrlRewriteGenerator
 {
     /**
