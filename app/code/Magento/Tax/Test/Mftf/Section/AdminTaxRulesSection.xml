@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminTaxRulesSection">
+        <!-- on page /admin/tax/rule/new/ -->
+        <element name="customerAddNewTaxClass" type="button" selector="//*[@id='tax_customer_class']/following-sibling::section//*[contains(text(),'Add New Tax Class')]"/>
+        <element name="fieldCustomerNewTaxClass" type="input" selector="//*[@id='tax_customer_class']/following-sibling::section//input[@class='mselect-input']"/>
+        <element name="saveCustomerNewTaxClass" type="button" selector="//*[@id='tax_customer_class']/following-sibling::section//span[@class='mselect-save']"/>
+        <element name="defaultCustomerTaxClass" type="button" selector="//*[@id='tax_customer_class']/following-sibling::section//div[@class='mselect-items-wrapper']/div[1]"/>
+        <element name="ruleName" type="input" selector="#anchor-content #code"/>
+        <element name="addNewTaxRate" type="block" selector="//*[text()='Add New Tax Rate']" timeout="30"/>
+        <element name="taxIdentifier" type="input" selector="aside #code"/>
+        <element name="zipIsRange" type="checkbox" selector="#zip_is_range"/>
+        <element name="zipCode" type="input" selector="#tax_postcode"/>
+        <element name="state" type="select" selector="#tax_region_id"/>
+        <element name="country" type="select" selector="#tax_country_id"/>
+        <element name="rate" type="input" selector="#rate"/>
+        <element name="save" type="button" selector=".action-save" timeout="30"/>
+        <element name="saveRule" type="button" selector="#save" timeout="30"/>
+        <element name="additionalSettings" type="button" selector="#details-summarybase_fieldset"/>
+        <element name="productAddNewTaxClass" type="button" selector="//*[@id='tax_product_class']/following-sibling::section//*[contains(text(),'Add New Tax Class')]"/>
+        <element name="fieldProdNewTaxClass" type="input" selector="//*[@id='tax_product_class']/following-sibling::section//input[@class='mselect-input']"/>
+        <element name="saveProdNewTaxClass" type="button" selector="//*[@id='tax_product_class']/following-sibling::section//span[@class='mselect-save']"/>
+        <element name="defaultTaxClass" type="button" selector="//*[@id='tax_product_class']/following-sibling::section//div[@class='mselect-items-wrapper']/div[1]"/>
+        <element name="deleteTaxClassName" type="button" selector="//span[contains(text(),'{{var1}}')]" parameterized="true"/>
+        <element name="deleteTaxClass" type="button" selector="//span[contains(text(),'{{var1}}')]/../..//*[@class='mselect-delete']" parameterized="true"/>
+        <element name="popUpDialogOK" type="button" selector="//*[@class='modal-footer']//*[contains(text(),'OK')]"/>
+        <element name="taxRateMultiSelectItems" type="block" selector=".mselect-list-item"/>
+        <element name="taxRateNumber" type="button" selector="//div[@data-ui-id='tax-rate-form-fieldset-element-form-field-tax-rate']//div[@class='mselect-items-wrapper']//label[{{var}}]" parameterized="true"/>
+    </section>
+</sections>

@@ -73,11 +73,11 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $select = $connection->select()->from(
                 $this->getMainTable()
             )->where(
-                'customer_id =:customet_id'
+                'customer_id =:customer_id'
             )->where(
                 'coupon_id = :coupon_id'
             );
-            $data = $connection->fetchRow($select, [':coupon_id' => $couponId, ':customet_id' => $customerId]);
+            $data = $connection->fetchRow($select, [':coupon_id' => $couponId, ':customer_id' => $customerId]);
             if ($data) {
                 $object->setData($data);
             }

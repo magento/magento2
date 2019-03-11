@@ -11,6 +11,7 @@ Enabled,Enabled
 "New Order Status","New Order Status"
 "Sort Order","Sort Order"
 Title,Title
+"Purchase order number is a required field.","Purchase order number is a required field."
 "Payment from Applicable Countries","Payment from Applicable Countries"
 "Payment from Specific Countries","Payment from Specific Countries"
 "Make Check Payable to","Make Check Payable to"

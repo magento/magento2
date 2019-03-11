@@ -17,4 +17,5 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\User\Model\Spi\NotificatorInterface" type="Magento\User\Model\Notificator" />
 </config>

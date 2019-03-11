@@ -1,12 +1,16 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-class Index extends \Magento\Cms\Controller\Adminhtml\Block
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
+/**
+ * Index action.
+ */
+class Index extends \Magento\Cms\Controller\Adminhtml\Block implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

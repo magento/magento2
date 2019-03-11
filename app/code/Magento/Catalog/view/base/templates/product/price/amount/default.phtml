@@ -19,9 +19,8 @@
         <?= ($block->getPriceDisplayLabel()) ? 'data-label="' . $block->getPriceDisplayLabel() . $block->getPriceDisplayInclExclTaxes() . '"' : '' ?>
         data-price-amount="<?= /* @escapeNotVerified */ $block->getDisplayValue() ?>"
         data-price-type="<?= /* @escapeNotVerified */ $block->getPriceType() ?>"
-        class="price-wrapper <?= /* @escapeNotVerified */ $block->getPriceWrapperCss() ?>">
-        <?= /* @escapeNotVerified */ $block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()) ?>
-    </span>
+        class="price-wrapper <?= /* @escapeNotVerified */ $block->getPriceWrapperCss() ?>"
+    ><?= /* @escapeNotVerified */ $block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()) ?></span>
     <?php if ($block->hasAdjustmentsHtml()): ?>
         <?= $block->getAdjustmentsHtml() ?>
     <?php endif; ?>

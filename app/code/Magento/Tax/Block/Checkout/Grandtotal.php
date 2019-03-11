@@ -15,7 +15,7 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      *
      * @var string
      */
-    protected $_template = 'checkout/grandtotal.phtml';
+    protected $_template = 'Magento_Tax::checkout/grandtotal.phtml';
 
     /**
      * @var \Magento\Tax\Model\Config

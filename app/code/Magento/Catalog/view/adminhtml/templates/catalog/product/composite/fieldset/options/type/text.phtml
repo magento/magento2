@@ -12,7 +12,7 @@
 <div class="field admin__field<?php if ($_option->getIsRequire()) echo ' required _required' ?>">
     <label class="admin__field-label label">
         <?= $block->escapeHtml($_option->getTitle()) ?>
-        <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
+        <?= /* @escapeNotVerified */ $block->getFormattedPrice() ?>
     </label>
     <div class="control admin__field-control">
         <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FIELD): ?>

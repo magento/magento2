@@ -13,10 +13,10 @@
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Website Id"/>
         <column xsi:type="varchar" name="stock_name" nullable="true" length="255" comment="Stock Name"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="stock_id"/>
         </constraint>
-        <index name="CATALOGINVENTORY_STOCK_WEBSITE_ID" indexType="btree">
+        <index referenceId="CATALOGINVENTORY_STOCK_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
     </table>
@@ -71,23 +71,23 @@
                 identity="false" default="0" comment="Is Divided into Multiple Boxes for Shipping"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website ID"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="item_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="CATINV_STOCK_ITEM_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
+        <constraint xsi:type="foreign" referenceId="CATINV_STOCK_ITEM_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
                     table="cataloginventory_stock_item" column="product_id" referenceTable="catalog_product_entity"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CATINV_STOCK_ITEM_STOCK_ID_CATINV_STOCK_STOCK_ID"
+        <constraint xsi:type="foreign" referenceId="CATINV_STOCK_ITEM_STOCK_ID_CATINV_STOCK_STOCK_ID"
                     table="cataloginventory_stock_item" column="stock_id" referenceTable="cataloginventory_stock"
                     referenceColumn="stock_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="CATALOGINVENTORY_STOCK_ITEM_PRODUCT_ID_STOCK_ID">
+        <constraint xsi:type="unique" referenceId="CATALOGINVENTORY_STOCK_ITEM_PRODUCT_ID_STOCK_ID">
             <column name="product_id"/>
             <column name="stock_id"/>
         </constraint>
-        <index name="CATALOGINVENTORY_STOCK_ITEM_WEBSITE_ID" indexType="btree">
+        <index referenceId="CATALOGINVENTORY_STOCK_ITEM_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
-        <index name="CATALOGINVENTORY_STOCK_ITEM_STOCK_ID" indexType="btree">
+        <index referenceId="CATALOGINVENTORY_STOCK_ITEM_STOCK_ID" indexType="btree">
             <column name="stock_id"/>
         </index>
     </table>
@@ -103,18 +103,18 @@
                 comment="Qty"/>
         <column xsi:type="smallint" name="stock_status" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Stock Status"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="product_id"/>
             <column name="website_id"/>
             <column name="stock_id"/>
         </constraint>
-        <index name="CATALOGINVENTORY_STOCK_STATUS_STOCK_ID" indexType="btree">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_STOCK_ID" indexType="btree">
             <column name="stock_id"/>
         </index>
-        <index name="CATALOGINVENTORY_STOCK_STATUS_WEBSITE_ID" indexType="btree">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
-        <index name="CATALOGINVENTORY_STOCK_STATUS_STOCK_STATUS" indexType="btree">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_STOCK_STATUS" indexType="btree">
             <column name="stock_status"/>
         </index>
     </table>
@@ -130,15 +130,15 @@
                 comment="Qty"/>
         <column xsi:type="smallint" name="stock_status" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Stock Status"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="product_id"/>
             <column name="website_id"/>
             <column name="stock_id"/>
         </constraint>
-        <index name="CATALOGINVENTORY_STOCK_STATUS_IDX_STOCK_ID" indexType="btree">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_IDX_STOCK_ID" indexType="btree">
             <column name="stock_id"/>
         </index>
-        <index name="CATALOGINVENTORY_STOCK_STATUS_IDX_WEBSITE_ID" indexType="btree">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_IDX_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
     </table>
@@ -154,15 +154,15 @@
                 comment="Qty"/>
         <column xsi:type="smallint" name="stock_status" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Stock Status"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="product_id"/>
             <column name="website_id"/>
             <column name="stock_id"/>
         </constraint>
-        <index name="CATALOGINVENTORY_STOCK_STATUS_TMP_STOCK_ID" indexType="hash">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_TMP_STOCK_ID" indexType="hash">
             <column name="stock_id"/>
         </index>
-        <index name="CATALOGINVENTORY_STOCK_STATUS_TMP_WEBSITE_ID" indexType="hash">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_TMP_WEBSITE_ID" indexType="hash">
             <column name="website_id"/>
         </index>
     </table>
@@ -178,18 +178,18 @@
                 comment="Qty"/>
         <column xsi:type="smallint" name="stock_status" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Stock Status"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="product_id"/>
             <column name="website_id"/>
             <column name="stock_id"/>
         </constraint>
-        <index name="CATALOGINVENTORY_STOCK_STATUS_STOCK_ID" indexType="btree">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_STOCK_ID" indexType="btree">
             <column name="stock_id"/>
         </index>
-        <index name="CATALOGINVENTORY_STOCK_STATUS_WEBSITE_ID" indexType="btree">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
-        <index name="CATALOGINVENTORY_STOCK_STATUS_STOCK_STATUS" indexType="btree">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_STOCK_STATUS" indexType="btree">
             <column name="stock_status"/>
         </index>
     </table>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductsToCartFromWishlistUsingSidebarTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Add to wishlist"/>
+            <title value="Add products from the wishlist to the cart using the sidebar."/>
+            <description value="Products added to the cart from wishlist and a customer remains on the same page."/>
+            <group value="wishlist"/>
+            <severity value="AVERAGE"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="categoryFirst"/>
+            <createData entity="SimpleSubCategory" stepKey="categorySecond"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="categoryFirst"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="simpleProduct2">
+                <requiredEntity createDataKey="categorySecond"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="categoryFirst" stepKey="deleteCategoryFirst"/>
+            <deleteData createDataKey="categorySecond" stepKey="deleteCategorySecond"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Sign in as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!-- Add product from first category to the wishlist -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryFirst.name$$)}}" stepKey="navigateToCategoryFirstPage"/>
+        <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct1">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerAddCategoryProductToWishlistActionGroup" stepKey="addSimpleProduct1ToWishlist">
+            <argument name="productVar" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <!--Add product to the cart from the Wishlist using the sidebar from the second category page-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categorySecond.name$$)}}" stepKey="navigateToCategorySecondPage"/>
+        <actionGroup ref="StorefrontSwitchCategoryViewToListMode" stepKey="switchCategoryViewToListMode"/>
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProduct1InWishlistSidebar">
+            <argument name="productVar" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerAddProductToCartFromWishlistUsingSidebar" stepKey="addProduct1ToCartFromWishlistUsingSidebar">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <!--Check that a customer on the same page as before-->
+        <!--hardcoded URL because this method does not support replacement-->
+        <seeCurrentUrlMatches regex="~\/$$categorySecond.name$$\.html\?(\S+)?\w+=list(&amp;\S+)?$~i" stepKey="seeCurrentCategoryUrlMatches"/>
+    </test>
+</tests>

@@ -15,7 +15,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      *
      * @var string
      */
-    protected $_template = 'checkout/shipping.phtml';
+    protected $_template = 'Magento_Tax::checkout/shipping.phtml';
 
     /**
      * @var \Magento\Tax\Model\Config

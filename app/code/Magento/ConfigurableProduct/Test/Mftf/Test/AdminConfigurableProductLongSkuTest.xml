@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductLongSkuTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create configurable product"/>
+            <title value="Admin is able to create an product with a long sku below that is below the character limit"/>
+            <description value="Try to create a product with sku slightly less than char limit. Get client side SKU length error for child products. Correct SKUs and save product succeeds."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-5685"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <!--Create product attribute with options-->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <!--Create Category-->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+
+        <after>
+            <!--Clean up products-->
+            <actionGroup ref="deleteProductByName" stepKey="cleanUpProducts">
+                <argument name="sku" value="{{ProductWithLongNameSku.sku}}"/>
+                <argument name="name" value="{{ProductWithLongNameSku.name}}"/>
+            </actionGroup>
+            <!--Clean up attribute-->
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <!--Clean up category-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+         <!--Create a configurable product with long name and sku-->
+        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'configurable')}}" stepKey="goToProductCreatePage"/>
+        <waitForPageLoad stepKey="waitForProductCreatePage"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{ProductWithLongNameSku.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{ProductWithLongNameSku.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{ProductWithLongNameSku.price}}" stepKey="fillProductPrice"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="selectCategory"/>
+        <!--Setup configurations-->
+        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="setupConfigurations">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+
+         <!--See SKU length errors in Current Variations grid-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductFail"/>
+        <seeInCurrentUrl url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'configurable')}}" stepKey="seeRemainOnCreateProductPage"/>
+        <see selector="{{AdminProductFormConfigurationsSection.variationsSkuInputErrorByRow('1')}}" userInput="Please enter less or equal than 64 symbols." stepKey="seeSkuTooLongError1"/>
+        <see selector="{{AdminProductFormConfigurationsSection.variationsSkuInputErrorByRow('2')}}" userInput="Please enter less or equal than 64 symbols." stepKey="seeSkuTooLongError2"/>
+        <!--Fix SKU lengths-->
+        <fillField selector="{{AdminProductFormConfigurationsSection.variationsSkuInputByRow('1')}}" userInput="LongSku-$$getConfigAttributeOption1.label$$" stepKey="fixConfigurationSku1"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.variationsSkuInputByRow('2')}}" userInput="LongSku-$$getConfigAttributeOption2.label$$" stepKey="fixConfigurationSku2"/>
+        <!--Save product successfully-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductSuccess"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+
+         <!--Assert configurations on the product edit pag-->
+        <seeNumberOfElements selector="{{AdminProductFormConfigurationsSection.currentVariationsRows}}" userInput="2" stepKey="seeNumberOfRows"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{ProductWithLongNameSku.name}}-$$getConfigAttributeOption1.label$$" stepKey="seeChildProductName1"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{ProductWithLongNameSku.name}}-$$getConfigAttributeOption2.label$$" stepKey="seeChildProductName2"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="LongSku-$$getConfigAttributeOption1.label$$" stepKey="seeChildProductSku1"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="LongSku-$$getConfigAttributeOption2.label$$" stepKey="seeChildProductSku2"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="{{ProductWithLongNameSku.price}}" stepKey="seeConfigurationsPrice"/>
+
+         <!--Assert storefront category list page-->
+        <amOnPage url="/" stepKey="amOnStorefront"/>
+        <waitForPageLoad stepKey="waitForStorefrontLoad"/>
+        <click userInput="$$createCategory.name$$" stepKey="clickOnCategoryName"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <see userInput="{{ProductWithLongNameSku.name}}" stepKey="assertProductPresent"/>
+        <see userInput="{{ProductWithLongNameSku.price}}" stepKey="assertProductPricePresent"/>
+
+        <!--Assert storefront product details page-->
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(ProductWithLongNameSku.name)}}" stepKey="clickOnProductName"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <seeInTitle userInput="{{ProductWithLongNameSku.name}}" stepKey="assertProductNameTitle"/>
+        <see userInput="{{ProductWithLongNameSku.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <see userInput="{{ProductWithLongNameSku.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="$$createConfigProductAttribute.default_frontend_label$$" stepKey="seeColorAttributeName1"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="seeInDropDown1"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="$$getConfigAttributeOption2.label$$" stepKey="seeInDropDown2"/>
+    </test>
+</tests>

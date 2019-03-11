@@ -56,7 +56,7 @@ class BackupFactoryTest extends \PHPUnit\Framework\TestCase
         $this->_objectManager->expects(
             $this->at(0)
         )->method(
-            'get'
+            'create'
         )->with(
             \Magento\Backup\Model\Fs\Collection::class
         )->will(
@@ -65,7 +65,7 @@ class BackupFactoryTest extends \PHPUnit\Framework\TestCase
         $this->_objectManager->expects(
             $this->at(1)
         )->method(
-            'get'
+            'create'
         )->with(
             \Magento\Backup\Model\Backup::class
         )->will(

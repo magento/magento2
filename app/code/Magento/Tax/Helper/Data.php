@@ -733,7 +733,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $orderItemId = $orderItem->getId();
             $orderItemTax = $orderItem->getTaxAmount();
             $itemTax = $item->getTaxAmount();
-            if (!$itemTax || !floatval($orderItemTax)) {
+            if (!$itemTax || !(float)$orderItemTax) {
                 continue;
             }
             //An invoiced item or credit memo item can have a different qty than its order item qty
@@ -761,7 +761,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $shippingTaxAmount = $salesItem->getShippingTaxAmount();
         $originalShippingTaxAmount = $order->getShippingTaxAmount();
         if ($shippingTaxAmount && $originalShippingTaxAmount &&
-            $shippingTaxAmount != 0 && floatval($originalShippingTaxAmount)
+            $shippingTaxAmount != 0 && (float)$originalShippingTaxAmount
         ) {
             //An invoice or credit memo can have a different qty than its order
             $shippingRatio = $shippingTaxAmount / $originalShippingTaxAmount;

@@ -5,11 +5,6 @@
  */
 namespace Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor;
 
-use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray;
-use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray;
-use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested;
-use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray;
-
 class TestService
 {
     const DEFAULT_VALUE = 42;
@@ -26,10 +21,28 @@ class TestService
     }
 
     /**
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleConstructor $simpleConstructor
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleConstructor
+     */
+    public function simpleConstructor(SimpleConstructor $simpleConstructor)
+    {
+        return $simpleConstructor;
+    }
+
+    /**
      * @param int $entityId
      * @return string[]
      */
     public function simpleDefaultValue($entityId = self::DEFAULT_VALUE)
+    {
+        return [$entityId];
+    }
+
+    /**
+     * @param int $entityId
+     * @return string[]
+     */
+    public function constructorArguments($entityId = self::DEFAULT_VALUE)
     {
         return [$entityId];
     }

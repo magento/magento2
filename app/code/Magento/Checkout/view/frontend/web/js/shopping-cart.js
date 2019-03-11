@@ -12,9 +12,13 @@ define([
     $.widget('mage.shoppingCart', {
         /** @inheritdoc */
         _create: function () {
-            var items, i;
+            var items, i, reload;
 
-            $(this.options.emptyCartButton).on('click', $.proxy(function () {
+            $(this.options.emptyCartButton).on('click', $.proxy(function (event) {
+                if (event.detail === 0) {
+                    return;
+                }
+
                 $(this.options.emptyCartButton).attr('name', 'update_cart_action_temp');
                 $(this.options.updateCartActionContainer)
                     .attr('name', 'update_cart_action').attr('value', 'empty_cart');
@@ -35,6 +39,27 @@ define([
             }
             $(this.options.continueShoppingButton).on('click', $.proxy(function () {
                 location.href = this.options.continueShoppingUrl;
+            }, this));
+
+            $(document).on('ajax:removeFromCart', $.proxy(function () {
+                reload = true;
+                $('div.block.block-minicart').on('dropdowndialogclose', $.proxy(function () {
+                    if (reload === true) {
+                        location.reload();
+                        reload = false;
+                    }
+                    $('div.block.block-minicart').off('dropdowndialogclose');
+                }));
+            }, this));
+            $(document).on('ajax:updateItemQty', $.proxy(function () {
+                reload = true;
+                $('div.block.block-minicart').on('dropdowndialogclose', $.proxy(function () {
+                    if (reload === true) {
+                        location.reload();
+                        reload = false;
+                    }
+                    $('div.block.block-minicart').off('dropdowndialogclose');
+                }));
             }, this));
         }
     });

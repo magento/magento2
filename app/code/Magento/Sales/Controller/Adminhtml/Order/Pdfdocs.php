@@ -113,6 +113,7 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
      * @return ResponseInterface|\Magento\Backend\Model\View\Result\Redirect
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws \Exception
      */
     protected function massAction(AbstractCollection $collection)
     {
@@ -134,7 +135,7 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
         }
 
         if (empty($documents)) {
-            $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
+            $this->messageManager->addErrorMessage(__('There are no printable documents related to selected orders.'));
             return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
 
@@ -142,10 +143,11 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
         foreach ($documents as $document) {
             $pdf->pages = array_merge($pdf->pages, $document->pages);
         }
+        $fileContent = ['type' => 'string', 'value' => $pdf->render(), 'rm' => true];
 
         return $this->fileFactory->create(
             sprintf('docs%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
-            $pdf->render(),
+            $fileContent,
             DirectoryList::VAR_DIR,
             'application/pdf'
         );

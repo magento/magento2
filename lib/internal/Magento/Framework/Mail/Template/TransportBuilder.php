@@ -11,12 +11,16 @@ namespace Magento\Framework\Mail\Template;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\MessageInterface;
+use Magento\Framework\Mail\MessageInterfaceFactory;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
+ * TransportBuilder
+ *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransportBuilder
 {
@@ -89,24 +93,34 @@ class TransportBuilder
     protected $mailTransportFactory;
 
     /**
+     * @var \Magento\Framework\Mail\MessageInterfaceFactory
+     */
+    private $messageFactory;
+
+    /**
      * @param FactoryInterface $templateFactory
      * @param MessageInterface $message
      * @param SenderResolverInterface $senderResolver
      * @param ObjectManagerInterface $objectManager
      * @param TransportInterfaceFactory $mailTransportFactory
+     * @param MessageInterfaceFactory $messageFactory
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         FactoryInterface $templateFactory,
         MessageInterface $message,
         SenderResolverInterface $senderResolver,
         ObjectManagerInterface $objectManager,
-        TransportInterfaceFactory $mailTransportFactory
+        TransportInterfaceFactory $mailTransportFactory,
+        MessageInterfaceFactory $messageFactory = null
     ) {
         $this->templateFactory = $templateFactory;
-        $this->message = $message;
         $this->objectManager = $objectManager;
         $this->_senderResolver = $senderResolver;
         $this->mailTransportFactory = $mailTransportFactory;
+        $this->messageFactory = $messageFactory ?: $this->objectManager->get(MessageInterfaceFactory::class);
+        $this->message = $this->messageFactory->create();
     }
 
     /**
@@ -163,13 +177,31 @@ class TransportBuilder
     /**
      * Set mail from address
      *
+     * @deprecated This function sets the from address but does not provide
+     * a way of setting the correct from addresses based on the scope.
+     * @see setFromByScope()
+     *
      * @param string|array $from
      * @return $this
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function setFrom($from)
     {
-        $result = $this->_senderResolver->resolve($from);
-        $this->message->setFrom($result['email'], $result['name']);
+        return $this->setFromByScope($from, null);
+    }
+
+    /**
+     * Set mail from address by scopeId
+     *
+     * @param string|array $from
+     * @param string|int $scopeId
+     * @return $this
+     * @throws \Magento\Framework\Exception\MailException
+     */
+    public function setFromByScope($from, $scopeId = null)
+    {
+        $result = $this->_senderResolver->resolve($from, $scopeId);
+        $this->message->setFromAddress($result['email'], $result['name']);
         return $this;
     }
 
@@ -225,6 +257,7 @@ class TransportBuilder
      * Get mail transport
      *
      * @return \Magento\Framework\Mail\TransportInterface
+     * @throws LocalizedException
      */
     public function getTransport()
     {
@@ -242,7 +275,7 @@ class TransportBuilder
      */
     protected function reset()
     {
-        $this->message = $this->objectManager->create(\Magento\Framework\Mail\Message::class);
+        $this->message = $this->messageFactory->create();
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;

@@ -37,3 +37,4 @@ name,name
 "Minimal Query Length","Minimal Query Length"
 "Maximum Query Length","Maximum Query Length"
 "Rebuild Catalog product fulltext search index","Rebuild Catalog product fulltext search index"
+"Please enter a valid price range.","Please enter a valid price range."

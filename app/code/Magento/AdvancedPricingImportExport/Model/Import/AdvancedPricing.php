@@ -8,7 +8,6 @@ namespace Magento\AdvancedPricingImportExport\Model\Import;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class AdvancedPricing
@@ -409,6 +408,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND == $behavior) {
                 $this->processCountExistingPrices($tierPrices, self::TABLE_TIER_PRICE)
                     ->processCountNewPrices($tierPrices);
+
                 $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE);
                 if ($listSku) {
                     $this->setUpdatedAt($listSku);
@@ -563,11 +563,14 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
         $tableName = $this->_resourceFactory->create()->getTable($table);
         $productEntityLinkField = $this->getProductEntityLinkField();
-        $existingPrices = $this->_connection->fetchAssoc(
+        $existingPrices = $this->_connection->fetchAll(
             $this->_connection->select()->from(
                 $tableName,
-                ['value_id', $productEntityLinkField, 'all_groups', 'customer_group_id']
-            )->where($productEntityLinkField . ' IN (?)', $existProductIds)
+                [$productEntityLinkField, 'all_groups', 'customer_group_id', 'qty']
+            )->where(
+                $productEntityLinkField . ' IN (?)',
+                $existProductIds
+            )
         );
         foreach ($existingPrices as $existingPrice) {
             foreach ($prices as $sku => $skuPrices) {
@@ -592,8 +595,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         foreach ($prices as $price) {
             if ($existingPrice['all_groups'] == $price['all_groups']
                 && $existingPrice['customer_group_id'] == $price['customer_group_id']
+                && (int) $existingPrice['qty'] === (int) $price['qty']
             ) {
                 $this->countItemsUpdated++;
+                continue;
             }
         }
     }
@@ -618,6 +623,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Get product entity link field
      *
      * @return string
+     * @throws \Exception
      */
     private function getProductEntityLinkField()
     {

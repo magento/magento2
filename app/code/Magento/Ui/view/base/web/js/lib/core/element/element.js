@@ -46,7 +46,7 @@ define([
     }
 
     /**
-     * Creates observable propery using 'track' method.
+     * Creates observable property using 'track' method.
      *
      * @param {Object} obj - Object to whom property belongs.
      * @param {String} key - Key of the property.
@@ -66,7 +66,7 @@ define([
 
     Element = _.extend({
         defaults: {
-            _requesetd: {},
+            _requested: {},
             containers: [],
             exports: {},
             imports: {},
@@ -249,7 +249,7 @@ define([
          * @returns {Function} Async module wrapper.
          */
         requestModule: function (name) {
-            var requested = this._requesetd;
+            var requested = this._requested;
 
             if (!requested[name]) {
                 requested[name] = registry.async(name);

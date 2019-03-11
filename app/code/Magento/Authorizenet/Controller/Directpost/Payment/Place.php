@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Authorizenet\Controller\Directpost\Payment;
 use Magento\Authorizenet\Helper\DataFactory;
 use Magento\Checkout\Model\Type\Onepage;
@@ -24,8 +26,9 @@ use Psr\Log\LoggerInterface;
  * Class Place
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
-class Place extends Payment
+class Place extends Payment implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Quote\Api\CartManagementInterface

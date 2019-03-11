@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontProductPageSection">
+        <element name="qtyInput" type="button" selector="input.input-text.qty" timeout="30"/>
+        <element name="addToCartBtn" type="button" selector="button.action.tocart.primary" timeout="30"/>
+        <element name="successMsg" type="button" selector="div.message-success" timeout="30"/>
+        <element name="errorMsg" type="button" selector="div.message-error" timeout="30"/>
+        <element name="alertMessage" type="text" selector=".page.messages [role=alert]"/>
+        <element name="messagesBlock" type="text" selector=".page.messages" timeout="30"/>
+        <element name="addToWishlist" type="button" selector="//a[@class='action towishlist']" timeout="30"/>
+        <element name="customTextOptionInput" type="input" selector=".input-text.product-custom-option"/>
+        <element name="charCounter" type="text" selector=".character-counter"/>
+        <element name="tax" type="input" selector=".totals-tax .amount .price"/>
+        <element name="subTotal" type="input" selector="span[data-th='Subtotal']"/>
+        <element name="shipping" type="input" selector="span[data-th='Shipping']"/>
+        <element name="orderTotal" type="input" selector=".grand.totals .amount .price"/>
+        <element name="customOptionDropDown" type="select" selector="//*[@id='product-options-wrapper']//select[contains(@class, 'product-custom-option admin__control-select')]"/>
+    </section>
+</sections>

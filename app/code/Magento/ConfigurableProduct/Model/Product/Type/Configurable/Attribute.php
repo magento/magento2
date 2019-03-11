@@ -18,7 +18,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\ConfigurableProduct\Api\Data\OptionInterface
 {
-    /**#@+
+    /**
      * Constants for field names
      */
     const KEY_ATTRIBUTE_ID = 'attribute_id';
@@ -27,9 +27,10 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     const KEY_IS_USE_DEFAULT = 'is_use_default';
     const KEY_VALUES = 'values';
     const KEY_PRODUCT_ID = 'product_id';
-    /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var MetadataPool|\Magento\Framework\EntityManager\MetadataPool
+     */
     private $metadataPool;
 
     /**

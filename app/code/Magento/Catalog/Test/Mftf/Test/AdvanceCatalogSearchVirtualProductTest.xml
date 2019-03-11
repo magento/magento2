@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdvanceCatalogSearchVirtualProductByNameTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search virtual product with product name"/>
+            <description value="Guest customer should be able to advance search virtual product with product name"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-137"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="ApiVirtualProductWithDescription" stepKey="product"/>
+        </before>
+    </test>
+    <test name="AdvanceCatalogSearchVirtualProductBySkuTest" extends="AdvanceCatalogSearchSimpleProductBySkuTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search virtual product with product sku"/>
+            <description value="Guest customer should be able to advance search virtual product with product sku"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-162"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="ApiVirtualProductWithDescription" stepKey="product"/>
+        </before>
+    </test>
+    <test name="AdvanceCatalogSearchVirtualProductByDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByDescriptionTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search virtual product with product description"/>
+            <description value="Guest customer should be able to advance search virtual product with product description"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-163"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="ApiVirtualProductWithDescription" stepKey="product"/>
+        </before>
+    </test>
+    <test name="AdvanceCatalogSearchVirtualProductByShortDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByShortDescriptionTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search virtual product with product short description"/>
+            <description value="Guest customer should be able to advance search virtual product with product short description"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-164"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="ApiVirtualProductWithDescription" stepKey="product"/>
+        </before>
+    </test>
+    <test name="AdvanceCatalogSearchVirtualProductByPriceTest" extends="AdvanceCatalogSearchSimpleProductByPriceTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search virtual product with product price"/>
+            <description value="Guest customer should be able to advance search virtual product with product price"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-165"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="ApiVirtualProductWithDescription" stepKey="product"/>
+        </before>
+    </test>
+</tests>

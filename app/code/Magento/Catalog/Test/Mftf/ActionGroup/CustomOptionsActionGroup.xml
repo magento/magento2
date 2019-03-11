@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateCustomRadioOptions">
+        <!-- ActionGroup will add a single custom option to a product -->
+        <!-- You must already be on the product creation page -->
+        <arguments>
+            <argument name="customOptionName"/>
+            <argument name="productOption"/>
+            <argument name="productOption2"/>
+        </arguments>
+        <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
+        <waitForPageLoad stepKey="waitForAddProductPageLoad"/>
+
+        <!-- Fill in the option and select the type of radio (once) -->
+        <fillField stepKey="fillInOptionTitle" selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{customOptionName}}"/>
+        <click stepKey="clickOptionTypeParent" selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}"/>
+        <waitForPageLoad stepKey="waitForDropdownOpen"/>
+        <click stepKey="clickOptionType" selector="{{AdminProductCustomizableOptionsSection.optionType('Radio Buttons')}}"/>
+
+        <!-- Add three radio options based on the parameter -->
+        <click stepKey="clickAddValue" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
+
+        <fillField stepKey="fillInValueTitle" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{productOption.title}}"/>
+        <fillField stepKey="fillInValuePrice" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{productOption.price}}"/>
+
+        <click stepKey="clickAddValue2" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
+
+        <fillField stepKey="fillInValueTitle2" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{productOption2.title}}"/>
+        <fillField stepKey="fillInValuePrice2" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{productOption2.price}}"/>
+    </actionGroup>
+
+    <!--Add a custom option of type "file" to a product-->
+    <actionGroup name="AddProductCustomOptionFile">
+        <arguments>
+            <argument name="option" defaultValue="ProductOptionFile"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" stepKey="waitForOption"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{option.title}}" stepKey="fillTitle"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}" stepKey="openTypeSelect"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionType('File')}}" stepKey="selectTypeFile"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.optionPrice('0')}}" stepKey="waitForElements"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionPrice('0')}}" userInput="{{option.price}}" stepKey="fillPrice"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceType('0')}}" userInput="{{option.price_type}}" stepKey="selectPriceType"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionFileExtensions('0')}}" userInput="{{option.file_extension}}" stepKey="fillCompatibleExtensions"/>
+    </actionGroup>
+</actionGroups>

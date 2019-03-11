@@ -7,28 +7,65 @@
 
 define([
     'jquery',
-    'Magento_Ui/js/form/element/file-uploader'
-], function ($, FileUploader) {
+    'squire'
+], function ($, Squire) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/file-uploader', function () {
-        var component;
+        var injector = new Squire(),
+            mocks = {
+                'Magento_Ui/js/lib/core/events': {
+                    on: jasmine.createSpy()
+                },
+                'Magento_Ui/js/lib/registry/registry': {
+                    /** Method stub. */
+                    get: function () {
+                        return {
+                            get: jasmine.createSpy(),
+                            set: jasmine.createSpy()
+                        };
+                    },
+                    create: jasmine.createSpy(),
+                    set: jasmine.createSpy(),
+                    async: jasmine.createSpy()
+                },
+                '/mage/utils/wrapper': jasmine.createSpy()
+            },
+            component,
+            dataScope = 'dataScope',
+            originalJQuery = jQuery.fn;
 
-        beforeEach(function () {
-            component = new FileUploader({
-                dataScope: 'abstract'
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require([
+                'Magento_Ui/js/form/element/file-uploader',
+                'knockoutjs/knockout-es5'
+            ], function (Constr) {
+                component = new Constr({
+                    provider: 'provName',
+                    name: '',
+                    index: '',
+                    dataScope: dataScope
+                });
+
+                done();
             });
+        });
+
+        afterEach(function () {
+            jQuery.fn = originalJQuery;
         });
 
         describe('initUploader method', function () {
             it('creates instance of file uploader', function () {
                 var elem = document.createElement('input');
 
-                spyOn($.fn, 'fileupload');
+                spyOn(jQuery.fn, 'fileupload');
 
                 component.initUploader(elem);
 
-                expect($.fn.fileupload).toHaveBeenCalled();
+                expect(jQuery.fn.fileupload).toHaveBeenCalled();
+
             });
         });
 
