@@ -7,13 +7,15 @@
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Sitemap\Controller\Adminhtml\Sitemap;
 use Magento\Store\Model\App\Emulation;
 use Magento\Framework\App\ObjectManager;
 
 /**
  * Generate sitemap file
  */
-class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
+class Generate extends Sitemap implements HttpGetActionInterface
 {
     /** @var \Magento\Store\Model\App\Emulation $appEmulation */
     private $appEmulation;
