@@ -489,7 +489,7 @@ Tests:
     * Fixed an issue where found records in global search in Backend could not be selected via keyboard
     * Fixed an issue where Category menu items went out of screen when page side was reached
     * Fixed an issue where subcategories in menu were shown instantly when user moved mouse quickly
-    * Fixed an issue where popup header was our of window range while creating group product
+    * Fixed an issue where popup header was out of window range while creating group product
     * Fixed an issue where region field was absent in customer address form on backend for "United Kingdom" country
     * Fixed an ability to edit the Order from Admin panel
     * Fixed an issue where email could not be retrieved from \Magento\Quote\Api\Data\AddressInterface after adding an address on OnePageCheckout
