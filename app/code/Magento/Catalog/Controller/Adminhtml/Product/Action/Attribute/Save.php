@@ -43,6 +43,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     private $userContext;
 
     /**
+     * @var \Magento\MessageQueue\Api\PoisonPillPutInterface
+     */
+    private $pillPut;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Framework\Bulk\BulkManagementInterface $bulkManagement
@@ -50,6 +55,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param \Magento\Framework\DataObject\IdentityGeneratorInterface $identityService
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param \Magento\Authorization\Model\UserContextInterface $userContext
+     * @param \Magento\MessageQueue\Api\PoisonPillPutInterface $pillPut
      */
     public function __construct(
         Action\Context $context,
@@ -58,7 +64,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         \Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory $operartionFactory,
         \Magento\Framework\DataObject\IdentityGeneratorInterface $identityService,
         \Magento\Framework\Serialize\SerializerInterface $serializer,
-        \Magento\Authorization\Model\UserContextInterface $userContext
+        \Magento\Authorization\Model\UserContextInterface $userContext,
+        \Magento\MessageQueue\Api\PoisonPillPutInterface $pillPut
     ) {
         parent::__construct($context, $attributeHelper);
         $this->bulkManagement = $bulkManagement;
@@ -66,6 +73,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $this->identityService = $identityService;
         $this->serializer = $serializer;
         $this->userContext = $userContext;
+        $this->pillPut = $pillPut;
     }
 
     /**
@@ -190,6 +198,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                     $productIdsChunk,
                     $bulkUuid
                 );
+                $this->pillPut->put();
             }
 
             if ($attributesData) {
