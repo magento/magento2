@@ -66,7 +66,7 @@ define([
         navigate: function () {
             var self = this;
 
-            if(!self.hasShippingAddress()) {
+            if (!self.hasShippingAddress()) {
                 this.isVisible(false);
                 stepNavigator.setHash('shipping');
             } else {
@@ -93,7 +93,7 @@ define([
                 typeof shippingAddress.postcode == 'undefined'
             ) {
                 isShippingAddress = false;
-            } else if(
+            } else if (
                     quote.guestEmail.length === 0 &&
                     shippingAddress.email.length === 0 ||
                     shippingAddress.firstname.length === 0 ||
@@ -104,10 +104,11 @@ define([
                     shippingAddress.postcode.length === 0 ||
                     shippingAddress.street.length === 0
                 ) {
-                    isShippingAddress = false;
+                isShippingAddress = false;
             } else {
                 isShippingAddress = true;
             }
+
             return isShippingAddress;
         },
 
