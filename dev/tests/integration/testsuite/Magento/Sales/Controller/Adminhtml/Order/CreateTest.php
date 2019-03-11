@@ -351,7 +351,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             'firstname' => 'John',
             'lastname' => 'Doe',
             'street' => ['Soborna 23'],
-            'city' => 'Kyiv',
+            'city' => 'Los Angeles',
             'country_id' => 'UA',
             'region' => 'Kyivska',
             'region_id' => 1
