@@ -85,4 +85,43 @@ QUERY;
 
         $this->graphQlQuery($query);
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "wrong_cart_hash"
+     */
+    public function testAddProductWithWrongCartHash()
+    {
+        $sku = 'simple';
+        $qty = 1;
+
+        $maskedQuoteId = 'wrong_cart_hash';
+
+        $query = <<<QUERY
+mutation {  
+  addSimpleProductsToCart(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+      cartItems: [
+        {
+          data: {
+            qty: $qty
+            sku: "$sku"
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      items {
+        qty
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlQuery($query);
+    }
 }
