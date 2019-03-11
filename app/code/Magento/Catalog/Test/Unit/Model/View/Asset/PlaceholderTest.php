@@ -46,6 +46,7 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)->getMockForAbstractClass();
         $this->imageContext = $this->getMockBuilder(ContextInterface::class)->getMockForAbstractClass();
         $this->repository = $this->getMockBuilder(Repository::class)->disableOriginalConstructor()->getMock();
+        $this->request = $this->getMockBuilder(Http::class)->disableOriginalConstructor()->getMock();
         $this->model = new Placeholder(
             $this->imageContext,
             $this->scopeConfig,
