@@ -112,7 +112,7 @@
             <group id="debug" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Debug</label>
                 <field id="template_hints_storefront" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enabled Template Path Hints for Storefront</label>
+                    <label>Enable Template Path Hints for Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="template_hints_storefront_show_with_parameter" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -132,7 +132,7 @@
                     <comment>Add the following parameter to the URL to show template hints ?templatehints=[parameter_value]</comment>
                 </field>
                 <field id="template_hints_admin" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Enabled Template Path Hints for Admin</label>
+                    <label>Enable Template Path Hints for Admin</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="template_hints_blocks" translate="label" type="select" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1">
