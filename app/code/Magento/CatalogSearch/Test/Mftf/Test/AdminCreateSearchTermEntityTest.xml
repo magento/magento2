@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="CreateSearchTermTest">
+    <test name="AdminCreateSearchTermEntityTest">
         <annotations>
             <stories value="Search terms"/>
             <title value="Create search term test"/>
