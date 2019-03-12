@@ -301,12 +301,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     {
         $result = [];
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
-        $attributesPreprocessorMap = $this->getAttributesPreprocessorsMap();
 
         foreach ($customAttributesValueArray as $key => $customAttribute) {
-            if($key && is_array($customAttribute) && array_key_exists($key, $attributesPreprocessorMap)) {
-                $this->runCustomAttributePreprocessors($key, $customAttribute, $attributesPreprocessorMap[$key]);
-            }
+            $this->runCustomAttributePreprocessors($key, $customAttribute);
             if (!is_array($customAttribute)) {
                 $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
             }
@@ -370,13 +367,16 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      *
      * @param string $key
      * @param mixed $customAttribute
-     * @return bool
      */
-    private function runCustomAttributePreprocessors($key, &$customAttribute, $preprocessorlsList)
+    private function runCustomAttributePreprocessors($key, &$customAttribute)
     {
-        foreach ($preprocessorlsList as $attributePreprocessor) {
-            if ($attributePreprocessor->shouldBeProcessed($key, $customAttribute)) {
-                $attributePreprocessor->process($key, $customAttribute);
+        $preprocessorsMap = $this->getAttributesPreprocessorsMap();
+        if ($key && is_array($customAttribute) && array_key_exists($key, $preprocessorsMap)) {
+            $preprocessorsList = $preprocessorsMap[$key];
+            foreach ($preprocessorsList as $attributePreprocessor) {
+                if ($attributePreprocessor->shouldBeProcessed($key, $customAttribute)) {
+                    $attributePreprocessor->process($key, $customAttribute);
+                }
             }
         }
     }
