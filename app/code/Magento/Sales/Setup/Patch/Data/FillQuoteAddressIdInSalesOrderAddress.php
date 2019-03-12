@@ -181,7 +181,7 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
                 'quote_address_id' => $quoteAddresses[$orderAddress['quote_id']]['address_id'] ?? null,
             ];
             $where = [
-                'orderAddressId' => $orderAddress['entity_id']
+                'entity_id' => $orderAddress['entity_id']
             ];
 
             $salesConnection->update($salesOrderAddressTable, $bind, $where);
