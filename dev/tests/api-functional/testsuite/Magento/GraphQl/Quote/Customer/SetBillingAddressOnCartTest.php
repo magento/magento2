@@ -376,7 +376,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The current user cannot use address with ID "1"
+     * @expectedExceptionMessage Current customer does not have permission to address with ID "1"
      */
     public function testSetBillingAddressIfCustomerIsNotOwnerOfAddress()
     {
