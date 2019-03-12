@@ -11,7 +11,7 @@
             <argument name="default" xsi:type="array">
                 <item name="prices" xsi:type="array">
                     <item name="msrp_price" xsi:type="array">
-                        <item name="render_class" xsi:type="string">Magento\Catalog\Pricing\Render\PriceBox</item>
+                        <item name="render_class" xsi:type="string">Magento\Msrp\Pricing\Render\PriceBox</item>
                         <item name="render_template" xsi:type="string">Magento_Msrp::product/price/msrp.phtml</item>
                     </item>
                 </item>
