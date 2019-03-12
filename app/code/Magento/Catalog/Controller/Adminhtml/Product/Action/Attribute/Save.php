@@ -198,7 +198,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                     $productIdsChunk,
                     $bulkUuid
                 );
-                $this->pillPut->put();
             }
 
             if ($attributesData) {
@@ -215,6 +214,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         }
 
         if (!empty($operations)) {
+            $this->pillPut->put();
             $result = $this->bulkManagement->scheduleBulk(
                 $bulkUuid,
                 $operations,
