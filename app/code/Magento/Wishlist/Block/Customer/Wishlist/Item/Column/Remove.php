@@ -5,13 +5,13 @@
  */
 
 /**
- * Delete item column in customer wishlist table
- *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
 
 /**
+ * Delete item column in customer wishlist table
+ *
  * @api
  * @deprecated
  * @since 100.0.2

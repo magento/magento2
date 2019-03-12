@@ -5,13 +5,13 @@
  */
 
 /**
- * Wishlist for item column in customer wishlist
- *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
 
 /**
+ * Model for item column in customer wishlist.
+ *
  * @api
  * @deprecated
  * @since 100.0.2
