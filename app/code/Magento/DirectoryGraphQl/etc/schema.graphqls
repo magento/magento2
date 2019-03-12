@@ -10,8 +10,8 @@ type Query {
 type Currency {
     base_currency_code: String
     base_currency_symbol: String
-    default_display_currecy_code: String
-    default_display_currecy_symbol: String
+    default_display_currency_code: String
+    default_display_currency_symbol: String
     available_currency_codes: [String]
     exchange_rates: [ExchangeRate]
 }
