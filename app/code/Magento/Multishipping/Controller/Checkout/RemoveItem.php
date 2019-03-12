@@ -20,6 +20,7 @@ class RemoveItem extends \Magento\Multishipping\Controller\Checkout
         if ($addressId && $itemId) {
             $this->_getCheckout()->setCollectRatesFlag(true);
             $this->_getCheckout()->removeAddressItem($addressId, $itemId);
+            $this->messageManager->addSuccessMessage(__('Item removed successfully'));
         }
         $this->_redirect('*/*/addresses');
     }
