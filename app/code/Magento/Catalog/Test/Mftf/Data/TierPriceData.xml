@@ -42,4 +42,18 @@
         <data key="price_1">24.00</data>
         <data key="qty_1">15</data>
     </entity>
+    <entity name="tierPriceHighCostSimpleProduct" type="data">
+        <data key="website">All Websites [USD]</data>
+        <data key="customer_group">ALL GROUPS</data>
+        <data key="price">500,000.00</data>
+        <data key="qty">1</data>
+    </entity>
+    <entity name="tierProductPrice" type="catalogTierPrice">
+        <data key="price">90.00</data>
+        <data key="price_type">fixed</data>
+        <data key="website_id">0</data>
+        <data key="customer_group">ALL GROUPS</data>
+        <data key="quantity">2</data>
+        <var key="sku" entityType="product2" entityKey="sku" />
+    </entity>
 </entities>
