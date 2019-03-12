@@ -9,6 +9,9 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote\Address;
+use Magento\SalesRule\Api\Data\CouponInterface;
+use Magento\SalesRule\Model\Coupon;
+use Magento\SalesRule\Model\Rule;
 
 /**
  * Sales Rules resource collection model.
