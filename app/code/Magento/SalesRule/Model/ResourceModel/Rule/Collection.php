@@ -147,10 +147,10 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param string $couponCode
      * @param string|null $now
      * @param Address $address allow extensions to further filter out rules based on quote address
+     * @throws \Zend_Db_Select_Exception
      * @use $this->addWebsiteGroupDateFilter()
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return $this
-     * @throws \Zend_Db_Select_Exception
      */
     public function setValidationFilter(
         $websiteId,
