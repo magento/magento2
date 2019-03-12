@@ -52,7 +52,7 @@
                 <item name="elasticsearch6" xsi:type="string">\Magento\Elasticsearch6\Model\Client\ElasticsearchFactory</item>
             </argument>
             <argument name="clientOptions" xsi:type="array">
-                <item name="elasticsearch6" xsi:type="string">\Magento\Elasticsearch6\Model\Config</item>
+                <item name="elasticsearch6" xsi:type="string">\Magento\Elasticsearch\Model\Config</item>
             </argument>
         </arguments>
     </type>
