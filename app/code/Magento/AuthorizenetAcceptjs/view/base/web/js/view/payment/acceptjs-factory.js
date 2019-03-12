@@ -16,7 +16,7 @@ define([
             dependency = 'acceptjssandbox';
         }
 
-        require([dependency], function () {
+        require([dependency], function (accept) {
                 var $body = $('body');
 
                 /*
@@ -26,16 +26,7 @@ define([
                  * Dynamically-loading-Accept-js-E-WC-03-Accept-js-is-not-loaded/td-p/63283
                  */
                 $body.on('handshake.acceptjs', function () {
-                    /*
-                     * Accept.js doesn't return the library when loading
-                     * and requirejs "shim" can't be used because it only works with the "paths" config option
-                     * and we can't use "paths" because require will try to load ".min.js" in production
-                     * and that doesn't work because it doesn't exist
-                     * and we can't add a query string to force a URL because accept.js will reject it
-                     * and we can't include it locally because they check in the script before loading more scripts
-                     * So, we use the global version as "shim" would
-                     */
-                    deferred.resolve(window.Accept);
+                    deferred.resolve(accept);
                     $body.off('handshake.acceptjs');
                 });
             },
