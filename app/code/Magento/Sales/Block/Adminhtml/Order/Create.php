@@ -86,9 +86,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return $this
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {
