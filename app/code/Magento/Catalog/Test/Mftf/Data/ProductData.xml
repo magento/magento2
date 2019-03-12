@@ -60,6 +60,48 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="SimpleProductAfterImport1" type="product">
+        <data key="sku">SimpleProductForTest1</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name">SimpleProductAfterImport1</data>
+        <data key="price">250.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <data key="urlKey">simple-product-for-test-1</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="SimpleProductAfterImport2" type="product">
+        <data key="sku">SimpleProductForTest2</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name">SimpleProductAfterImport2</data>
+        <data key="price">300.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <data key="urlKey">simple-product-for-test-2</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="SimpleProductAfterImport3" type="product">
+        <data key="sku">SimpleProductForTest3</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name">SimpleProductAfterImport3</data>
+        <data key="price">350.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <data key="urlKey">simple-product-for-test-3</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
     <entity name="SimpleProduct2" type="product">
         <data key="sku" unique="suffix">SimpleProduct</data>
         <data key="type_id">simple</data>
