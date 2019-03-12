@@ -7,23 +7,17 @@ declare(strict_types=1);
 
 use Magento\Config\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 
-$processConfigData = function (Config $config, array $data) {
-    foreach ($data as $key => $value) {
-        $config->setDataByPath($key, $value);
-        $config->save();
-    }
-};
-
-$objectManager          = Bootstrap::getObjectManager();
-$paymentMethodList      = $objectManager->get(\Magento\Payment\Api\PaymentMethodListInterface::class);
-$rollbackConfigKey      = 'test/payment/disabled_payment_methods';
-$configData             = [];
+$objectManager = Bootstrap::getObjectManager();
+$paymentMethodList = $objectManager->get(\Magento\Payment\Api\PaymentMethodListInterface::class);
+$rollbackConfigKey = 'test/payment/disabled_payment_methods';
+$configData = [];
 $disabledPaymentMethods = [];
 
 // Get all active Payment Methods
-foreach ($paymentMethodList->getActiveList(\Magento\Store\Model\Store::DEFAULT_STORE_ID) as $paymentMethod) {
+foreach ($paymentMethodList->getActiveList(Store::DEFAULT_STORE_ID) as $paymentMethod) {
     $configData['payment/' . $paymentMethod->getCode() . '/active'] = 0;
     $disabledPaymentMethods[] = $paymentMethod->getCode();
 }
@@ -34,4 +28,8 @@ $configData[$rollbackConfigKey] = implode(',', $disabledPaymentMethods);
 $defConfig = $objectManager->create(Config::class);
 $defConfig->setScope(ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
 
-$processConfigData($defConfig, $configData);
+foreach ($configData as $key => $value) {
+    $defConfig->setDataByPath($key, $value);
+    $defConfig->save();
+}
+

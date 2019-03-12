@@ -54,11 +54,11 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      */
-    public function testGetPaymentMethodsFromCustomerCart()
+    public function testGetCartWithPaymentMethods()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
-        $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
-        $response      = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('cart', $response);
         self::assertEquals('checkmo', $response['cart']['available_payment_methods'][0]['code']);
@@ -71,13 +71,30 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     */
+    public function testGetPaymentMethodsFromGuestCart()
+    {
+        $guestQuoteMaskedId = $this->getMaskedQuoteIdByReservedOrderId(
+            'test_order_with_virtual_product_without_address'
+        );
+        $query = $this->getQuery($guestQuoteMaskedId);
+
+        $this->expectExceptionMessage(
+            "The current user cannot perform operations on cart \"$guestQuoteMaskedId\""
+        );
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      */
     public function testGetPaymentMethodsFromAnotherCustomerCart()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
-        $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
+        $query = $this->getQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
@@ -92,8 +109,8 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     public function testGetPaymentMethodsIfPaymentsAreNotSet()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
-        $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
-        $response      = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         self::assertEquals(0, count($response['cart']['available_payment_methods']));
     }
@@ -106,7 +123,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     public function testGetPaymentMethodsOfNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
-        $query = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
+        $query = $this->getQuery($maskedQuoteId);
 
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
@@ -115,9 +132,10 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      * @param string $maskedQuoteId
      * @return string
      */
-    private function getCartAvailablePaymentMethodsQuery(
+    private function getQuery(
         string $maskedQuoteId
-    ) : string {
+    ): string
+    {
         return <<<QUERY
 {
   cart(cart_id: "$maskedQuoteId") {

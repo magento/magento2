@@ -9,10 +9,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-$objectManager     = Bootstrap::getObjectManager();
+$objectManager = Bootstrap::getObjectManager();
 $rollbackConfigKey = 'test/payment/disabled_payment_methods';
 
-$configWriter        = $objectManager->create(WriterInterface::class);
+$configWriter = $objectManager->create(WriterInterface::class);
 $rollbackConfigValue = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
     ->getStore(\Magento\Store\Model\Store::DEFAULT_STORE_ID)
     ->getConfig($rollbackConfigKey);
