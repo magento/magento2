@@ -133,7 +133,15 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     public function testSetPaymentOnNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
-        $query = $this->getCartQuery($maskedQuoteId);
+        $query = <<<QUERY
+{
+  cart(cart_id: "$maskedQuoteId") {
+    items {
+      id
+    }
+  }
+}
+QUERY;
         $this->graphQlQuery($query);
     }
 
@@ -159,28 +167,6 @@ mutation {
     cart {
       selected_payment_method {
         code
-      }
-    }
-  }
-}
-QUERY;
-    }
-
-    /**
-     * @param string $maskedQuoteId
-     * @return string
-     */
-    private function getCartQuery(
-        string $maskedQuoteId
-    ) : string {
-        return <<<QUERY
-{
-  cart(cart_id: "$maskedQuoteId") {
-    items {
-      id
-      qty
-      product {
-        sku
       }
     }
   }
