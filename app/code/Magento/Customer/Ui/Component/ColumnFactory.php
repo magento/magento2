@@ -60,6 +60,7 @@ class ColumnFactory
      */
     public function create(array $attributeData, $columnName, $context, array $config = [])
     {
+        // @codingStandardsIgnoreStart
         $config = array_merge([
             'label' => __($attributeData[AttributeMetadata::FRONTEND_LABEL]),
             'dataType' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
@@ -68,6 +69,7 @@ class ColumnFactory
             'component' => $this->getJsComponent($this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT])),
             '__disableTmpl' => 'true',
         ], $config);
+        // @codingStandardsIgnoreEnd
         if ($attributeData[AttributeMetadata::FRONTEND_INPUT] == 'date') {
             $config['dateFormat'] = 'MMM d, y';
             $config['timezone'] = false;

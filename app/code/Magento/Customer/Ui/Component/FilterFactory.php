@@ -45,11 +45,13 @@ class FilterFactory
      */
     public function create(array $attributeData, $context)
     {
+        // @codingStandardsIgnoreStart
         $config = [
             'dataScope' => $attributeData[AttributeMetadata::ATTRIBUTE_CODE],
             'label' => __($attributeData[AttributeMetadata::FRONTEND_LABEL]),
             '__disableTmpl' => 'true',
         ];
+        // @codingStandardsIgnoreEnd
         if ($attributeData[AttributeMetadata::OPTIONS]) {
             $config['options'] = $attributeData[AttributeMetadata::OPTIONS];
             $config['caption'] = __('Select...');

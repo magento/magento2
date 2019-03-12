@@ -141,7 +141,6 @@ class AttributeRepository
         return $options;
     }
 
-
     /**
      * Return customer group's metadata by given group code.
      *
