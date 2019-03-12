@@ -47,6 +47,7 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
      * @param Escaper $escaper
+     * @param Validator|null $formKeyValidator
      */
     public function __construct(
         Context $context,

@@ -31,8 +31,9 @@ class View extends Action\Action
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Sales\Helper\Guest $guestHelper
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param GuestHelper $guestHelper
+     * @param PageFactory $resultPageFactory
+     * @param Validator|null $formKeyValidator
      */
     public function __construct(
         Action\Context $context,
