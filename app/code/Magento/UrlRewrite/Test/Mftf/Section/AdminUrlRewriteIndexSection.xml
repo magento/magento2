@@ -21,5 +21,6 @@
         <element name="emptyRecords" type="text" selector="//td[@class='empty-text']"/>
         <element name="successMessage" type="text" selector="#messages"/>
         <element name="editButton" type="text" selector="//tr[@data-role='row'][{{rowNumber}}]/td/a[contains(.,'Edit')]" parameterized="true"/>
+        <element name="storeView" type="text" selector="//tr[@data-role='row'][{{var1}}]/td[@data-column='store_id']" parameterized="true"/>
     </section>
 </sections>
