@@ -156,7 +156,10 @@ class AddSimpleProductToCart
 
         $linksData = [];
         foreach ($downloadableLinks as $downloadableLink) {
-            $linksData[] = (string)$downloadableLink['link_id'];
+            $linkId = (string)$downloadableLink['link_id'];
+            if (!in_array($linkId, $linksData)) {
+                $linksData[] = $linkId;
+            }
         }
         return $linksData;
     }
