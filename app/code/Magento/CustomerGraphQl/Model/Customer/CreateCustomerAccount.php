@@ -88,6 +88,8 @@ class CreateCustomerAccount
     }
 
     /**
+     * Create account
+     *
      * @param array $data
      * @return CustomerInterface
      * @throws LocalizedException
