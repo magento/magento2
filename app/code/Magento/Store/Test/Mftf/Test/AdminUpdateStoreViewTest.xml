@@ -36,7 +36,7 @@
             </after>
 
             <!--Search created store view in grid-->
-            <actionGroup ref="AssertStoreViewInGrid" stepKey="searchCreatedStoreViewInGrid">
+            <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchCreatedStoreViewInGrid">
                 <argument name="storeViewName" value="{{storeViewData.name}}"/>
             </actionGroup>
             <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickStoreViewFirstRowInGrid"/>
@@ -51,12 +51,12 @@
             </actionGroup>
 
             <!--Search updated store view in grid and verify AssertStoreViewInGridMessage-->
-            <actionGroup ref="AssertStoreViewInGrid" stepKey="verifyUpdatedStoreViewInGrid">
+            <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="verifyUpdatedStoreViewInGrid">
                 <argument name="storeViewName" value="{{SecondStoreUnique.name}}"/>
             </actionGroup>
 
             <!--Go to store view form page and verify AssertStoreForm-->
-            <actionGroup ref="AssertStoreViewForm" stepKey="verifyStoreViewForm">
+            <actionGroup ref="AssertStoreViewFormActionGroup" stepKey="verifyStoreViewForm">
                 <argument name="storeDropdown" value="{{_defaultStoreGroup.name}}"/>
                 <argument name="storeViewName" value="{{SecondStoreUnique.name}}"/>
                 <argument name="storeViewCode" value="{{SecondStoreUnique.code}}"/>

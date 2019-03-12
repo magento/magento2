@@ -62,30 +62,4 @@
         <waitForElementVisible selector="{{errorMessageSelector}}" stepKey="waitForErrorMessage"/>
         <see selector="{{errorMessageSelector}}" userInput="{{errorMessage}}" stepKey="seeErrorMessage"/>
     </actionGroup>
-    <actionGroup name="AssertStoreViewInGrid">
-        <arguments>
-            <argument name="storeViewName" type="string"/>
-        </arguments>
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
-        <fillField userInput="{{storeViewName}}" selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="fillSearchStoreViewField"/>
-        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad stepKey="waitForStoreToLoad"/>
-        <see selector="{{AdminStoresGridSection.firstRow('1')}}" userInput="{{storeViewName}}" stepKey="seeAssertStoreViewInGridMessage"/>
-    </actionGroup>
-    <actionGroup name="AssertStoreViewForm">
-        <arguments>
-            <argument name="storeDropdown" type="string"/>
-            <argument name="storeViewName" type="string"/>
-            <argument name="storeViewCode" type="string"/>
-            <argument name="status" type="string"/>
-        </arguments>
-        <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickStoreViewFirstRowInGrid"/>
-        <waitForPageLoad stepKey="waitForAdminSystemStoreViewPageLoad"/>
-        <seeInField selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="{{storeDropdown}}" stepKey="seeAssertStore"/>
-        <seeInField selector="{{AdminNewStoreSection.storeNameTextField}}" userInput="{{storeViewName}}" stepKey="seeAssertStoreViewName"/>
-        <seeInField selector="{{AdminNewStoreSection.storeCodeTextField}}" userInput="{{storeViewCode}}" stepKey="seeAssertStoreViewCode"/>
-        <seeInField selector="{{AdminNewStoreSection.statusDropdown}}" userInput="{{status}}" stepKey="seeAssertStatus"/>
-    </actionGroup>
 </actionGroups>
