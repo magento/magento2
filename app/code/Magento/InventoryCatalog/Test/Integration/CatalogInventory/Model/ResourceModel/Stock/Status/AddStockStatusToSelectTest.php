@@ -85,9 +85,9 @@ class AddStockStatusToSelectTest extends TestCase
     public function addStockStatusToSelectDataProvider(): array
     {
         return [
-            ['eu_website', 2, 3],
-            ['us_website', 1, 4],
-            ['global_website', 3, 2],
+            ['eu_website', 3, 3],
+            ['us_website', 1, 5],
+            ['global_website', 4, 2],
         ];
     }
 
