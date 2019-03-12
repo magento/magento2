@@ -113,7 +113,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $maskedQuoteId
      * @param string $shippingMethodCode
      * @param string $shippingCarrierCode
-     * @param string $shippingAddressId
+     * @param int $shippingAddressId
      * @return string
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
@@ -121,21 +121,20 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         string $maskedQuoteId,
         string $shippingMethodCode,
         string $shippingCarrierCode,
-        string $shippingAddressId
+        int $shippingAddressId
     ) : string {
         return <<<QUERY
 mutation {
   setShippingMethodsOnCart(input: 
     {
       cart_id: "$maskedQuoteId", 
-      shipping_addresses: [{
+      shipping_methods: [{
         cart_address_id: $shippingAddressId
-        shipping_method: {
-          method_code: "$shippingMethodCode"
-          carrier_code: "$shippingCarrierCode"
-        }
+        carrier_code: "$shippingCarrierCode"
+        method_code: "$shippingMethodCode"
       }]
-      }) {
+    }) {
+
     cart {
       shipping_addresses {
         selected_shipping_method {
