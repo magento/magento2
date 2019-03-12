@@ -9,15 +9,15 @@ namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test for setting shipping methods on cart for customer
@@ -30,6 +30,16 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var Rate
+     */
+    private $rate;
+
+    /**
      * @var QuoteResource
      */
     private $quoteResource;
@@ -40,24 +50,14 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     private $quoteFactory;
 
     /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
-
-    /**
-     * @var Rate
-     */
-    private $rate;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @var CartRepositoryInterface
      */
     private $quoteRepository;
+
+    /**
+     * @var QuoteIdToMaskedQuoteIdInterface
+     */
+    private $quoteIdToMaskedId;
 
     /**
      * @inheritdoc
@@ -65,13 +65,13 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
+        $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
+        $this->rate = $objectManager->get(Rate::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->quoteRepository = $objectManager->get(CartRepositoryInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->rate = $objectManager->get(Rate::class);
-        $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
     }
 
     /**
@@ -94,8 +94,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             ->setAddressId($shippingAddress->getId())
             ->setCode('flatrate_flatrate');
         $shippingAddress->setShippingMethod('flatrate_flatrate')
-            ->addShippingRate($rate)
-            ->save();
+            ->addShippingRate($rate);
+
+        $this->quoteRepository->save($quote);
 
         $mutation = $this->prepareMutationQuery(
             $maskedQuoteId,
@@ -132,8 +133,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             ->setAddressId($shippingAddress->getId())
             ->setCode('flatrate_flatrate');
         $shippingAddress->setShippingMethod('flatrate_flatrate')
-            ->addShippingRate($rate)
-            ->save();
+            ->addShippingRate($rate);
+
+        $this->quoteRepository->save($quote);
 
         $mutation = $this->prepareMutationQuery(
             $maskedQuoteId,
@@ -166,8 +168,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             ->setAddressId($shippingAddress->getId())
             ->setCode('flatrate_flatrate');
         $shippingAddress->setShippingMethod('flatrate_flatrate')
-            ->addShippingRate($rate)
-            ->save();
+            ->addShippingRate($rate);
+
+        $this->quoteRepository->save($quote);
 
         $mutation = $this->prepareMutationQuery(
             $maskedQuoteId,
@@ -228,8 +231,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             ->setAddressId($shippingAddress->getId())
             ->setCode('flatrate_flatrate');
         $shippingAddress->setShippingMethod('flatrate_flatrate')
-            ->addShippingRate($rate)
-            ->save();
+            ->addShippingRate($rate);
+
+        $this->quoteRepository->save($quote);
 
         $mutation = $this->prepareMutationQuery(
             $maskedQuoteId,
@@ -271,8 +275,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             ->setAddressId($shippingAddress->getId())
             ->setCode('flatrate_flatrate');
         $shippingAddress->setShippingMethod('flatrate_flatrate')
-            ->addShippingRate($rate)
-            ->save();
+            ->addShippingRate($rate);
+
+        $this->quoteRepository->save($quote);
 
         $mutation = $this->prepareMutationQuery(
             $maskedQuoteId,
@@ -295,13 +300,13 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      */
     public function testSetShippingMethodToNonExistentCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('Non_existent_cart_reversed_quote_id');
 
         $mutation = $this->prepareMutationQuery(
             $maskedQuoteId,
             'flatrate',
             'flatrate',
-            '1'
+            '80900'
         );
 
         $this->graphQlQuery($mutation, [], '', $this->getHeaderMap());
@@ -526,10 +531,6 @@ mutation {
 }
 
 QUERY;
-    }
-
-    private function addShippingMethodToQuote(Quote $quote)
-    {
     }
 
     /**
