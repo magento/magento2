@@ -11,6 +11,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerPassword;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -81,8 +82,12 @@ class ChangePassword implements ResolverInterface
         $customerId = (int)$customer->getId();
 
         $this->checkCustomerPassword->execute($args['currentPassword'], $customerId);
-        $this->accountManagement->changePasswordById($customerId, $args['currentPassword'], $args['newPassword']);
 
+        try {
+            $this->accountManagement->changePasswordById($customerId, $args['currentPassword'], $args['newPassword']);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()), $e);
+        }
         return $this->extractCustomerData->execute($customer);
     }
 }

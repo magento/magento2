@@ -102,6 +102,7 @@ class ExtractCustomerData
         }
         $customerData = array_merge($customerData, $customAttributes);
 
+        $customerData['model'] = $customer;
         return $customerData;
     }
 }
