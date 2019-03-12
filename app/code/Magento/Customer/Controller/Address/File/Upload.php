@@ -91,6 +91,7 @@ class Upload extends Action implements HttpPostActionInterface
                     $result = $this->processError(($errorMessage));
                 } else {
                     $result = $fileUploader->upload();
+                    $this->moveTmpFileToSuitableFolder($result);
                 }
             }
         } catch (LocalizedException $e) {
@@ -100,7 +101,6 @@ class Upload extends Action implements HttpPostActionInterface
             $result = $this->processError($e->getMessage(), $e->getCode());
         }
 
-        $this->moveTmpFileToSuitableFolder($result);
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setData($result);

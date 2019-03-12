@@ -11,19 +11,26 @@ namespace Magento\Framework\Webapi\CustomAttribute;
 interface PreprocessorInterface
 {
     /**
-     * Check if this attribute data should be prepared
+     * Check if this attribute data should be processed
      *
      * @param string $key
      * @param mixed $attribute
      * @return bool
      */
-    public function shouldBePrepared($key, $attribute);
+    public function shouldBeProcessed($key, $attribute);
 
     /**
-     * Prepare attribute object according to type rules
+     * Process attribute object according to type rules
      *
      * @param string $key
      * @param mixed $attribute
      */
-    public function prepare($key, &$attribute);
+    public function process($key, &$attribute);
+
+    /**
+     * Get list of affected attributes for the current preprocessor
+     *
+     * @return array
+     */
+    public function getAffectedAttributes();
 }
