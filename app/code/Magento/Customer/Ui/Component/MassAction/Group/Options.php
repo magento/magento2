@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Ui\Component\MassAction\Group;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\UrlInterface;
 use Zend\Stdlib\JsonSerializable;
 use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
@@ -87,7 +88,8 @@ class Options implements JsonSerializable
             foreach ($options as $optionCode) {
                 $this->options[$optionCode['value']] = [
                     'type' => 'customer_group_' . $optionCode['value'],
-                    'label' => $optionCode['label'],
+                    'label' => __($optionCode['label']),
+                    '__disableTmpl' => true,
                 ];
 
                 if ($this->urlPath && $this->paramName) {
@@ -123,6 +125,11 @@ class Options implements JsonSerializable
                     break;
                 case 'paramName':
                     $this->paramName = $value;
+                    break;
+                case 'confirm':
+                    foreach ($value as $messageName => $message) {
+                        $this->additionalData[$key][$messageName] = (string) new Phrase($message);
+                    }
                     break;
                 default:
                     $this->additionalData[$key] = $value;
