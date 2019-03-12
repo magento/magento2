@@ -58,9 +58,10 @@ class PoisonPill extends AbstractDb implements PoisonPillPutInterface, PoisonPil
      */
     public function put(): int
     {
-        /** @var PoisonPillInterface $poisonPill */
-        $poisonPill = $this->poisonPillFactory->create();
-        return $this->save($poisonPill)->getConnection()->lastInsertId();
+        $connection = $this->getConnection();
+        $table = $this->getMainTable();
+        $connection->insert($table, []);
+        return (int)$connection->lastInsertId($table);
     }
 
     /**

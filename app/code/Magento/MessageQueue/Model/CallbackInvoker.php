@@ -57,6 +57,7 @@ class CallbackInvoker implements CallbackInvokerInterface
                 $message = $queue->dequeue();
             } while ($message === null && (sleep(1) === 0));
             if (false === $this->poisonPillCompare->isLatest($this->poisonPill)) {
+                $queue->reject($message);
                 exit(0);
             }
             $callback($message);
