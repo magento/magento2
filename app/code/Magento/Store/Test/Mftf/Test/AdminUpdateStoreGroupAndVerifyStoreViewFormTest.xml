@@ -38,7 +38,7 @@
         </after>
 
         <!--Open created Store group in grid-->
-        <actionGroup ref="AssertStoreGroupInGrid" stepKey="openCreatedStoreGroupInGrid">
+        <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="openCreatedStoreGroupInGrid">
             <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
         </actionGroup>
         <click selector="{{AdminStoresGridSection.firstRow('1')}}" stepKey="clickFirstRow"/>
@@ -51,12 +51,12 @@
         </actionGroup>
 
         <!--Search updated store group(from above step) in grid and verify AssertStoreGroupInGrid-->
-        <actionGroup ref="AssertStoreGroupInGrid" stepKey="seeUpdatedStoreGroupInGrid">
+        <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="seeUpdatedStoreGroupInGrid">
             <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
         </actionGroup>
 
         <!--Verify updated website name and updated websitecode on website form (AssertStoreGroupForm and AssertStoreGroupOnStoreViewForm)-->
-        <actionGroup ref="AssertStoreGroupForm" stepKey="seeUpdatedStoreGroupForm">
+        <actionGroup ref="AssertStoreGroupFormActionGroup" stepKey="seeUpdatedStoreGroupForm">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
             <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
             <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
