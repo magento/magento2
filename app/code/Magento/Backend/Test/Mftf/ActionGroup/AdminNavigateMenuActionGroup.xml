@@ -8,14 +8,12 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="NavigateMenuActionGroup">
+    <actionGroup name="AdminNavigateMenuActionGroup">
         <arguments>
             <argument name="menuItem" type="string"/>
             <argument name="submenuItem" type="string"/>
-            <argument name="title" type="string"/>
         </arguments>
-        <click selector="{{AdminMenuSection.mainMenuItem(menuItem}}" stepKey="clickOnMenuItem"/>
+        <click selector="{{AdminMenuSection.mainMenuItem(menuItem)}}" stepKey="clickOnMenuItem"/>
         <click selector="{{AdminMenuSection.submenuItem(submenuItem)}}" stepKey="clickOnSubmenuItem"/>
-        <see selector="{{AdminGridHeaders.title}}" userInput="{{title}}" stepKey="assertPageTitle"/>
     </actionGroup>
 </actionGroups>
