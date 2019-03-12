@@ -15,6 +15,7 @@
         </arguments>
         <amOnPage url="{{AdminSystemStoreViewPage.url}}" stepKey="navigateToNewStoreView"/>
         <waitForPageLoad stepKey="waitForPageLoad1" />
+        <comment userInput="Creating Store View" stepKey="storeViewCreationComment" />
         <!--Create Store View-->
         <selectOption selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="{{StoreGroup.name}}" stepKey="selectStore" />
         <fillField selector="{{AdminNewStoreSection.storeNameTextField}}" userInput="{{customStore.name}}" stepKey="enterStoreViewName" />
@@ -22,8 +23,9 @@
         <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="Enabled" stepKey="setStatus" />
         <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreView" />
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal" />
-        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarning" />
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="dismissModal" />
+        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarningAboutTakingALongTimeToComplete" />
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmModal" />
+        <waitForPageLoad stepKey="waitForStorePageLoad" />
         <waitForElementNotVisible selector="{{AdminNewStoreViewActionsSection.loadingMask}}" stepKey="waitForElementVisible"/>
     </actionGroup>
     <!--Save the Store view-->
@@ -36,5 +38,28 @@
     <actionGroup name="AdminCreateStoreViewCodeUniquenessActionGroup">
         <waitForLoadingMaskToDisappear stepKey="waitForForm"/>
         <see userInput="Store with the same code already exists." stepKey="seeMessage" />
+    </actionGroup>
+    <actionGroup name="navigateToAdminContentManagementPage">
+        <amOnPage url="{{AdminContentManagementPage.url}}" stepKey="navigateToConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+    </actionGroup>
+    <actionGroup name="saveStoreConfiguration">
+        <comment userInput="saveStoreConfiguration" stepKey="comment"/>
+        <waitForElementVisible selector="{{StoreConfigSection.Save}}" stepKey="waitForSaveButton"/>
+        <click selector="{{StoreConfigSection.Save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+    <actionGroup name="saveStoreConfigurationAndValidateFieldError">
+        <arguments>
+            <argument name="inputFieldError" type="string"/>
+            <argument name="errorMessageSelector" type="string"/>
+            <argument name="errorMessage" type="string"/>
+        </arguments>
+        <comment userInput="saveStoreConfigurationAndValidateFieldError" stepKey="comment"/>
+        <waitForElementVisible selector="{{StoreConfigSection.Save}}" stepKey="waitForSaveButton"/>
+        <click selector="{{StoreConfigSection.Save}}" stepKey="clickSaveButton"/>
+        <waitForElement selector="{{inputFieldError}}" stepKey="waitForErrorField"/>
+        <waitForElementVisible selector="{{errorMessageSelector}}" stepKey="waitForErrorMessage"/>
+        <see selector="{{errorMessageSelector}}" userInput="{{errorMessage}}" stepKey="seeErrorMessage"/>
     </actionGroup>
 </actionGroups>
