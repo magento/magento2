@@ -38,7 +38,6 @@ class SaveCustomer
      * Save customer
      *
      * @param CustomerInterface $customer
-     * @param array $data
      * @throws GraphQlAlreadyExistsException
      * @throws GraphQlAuthenticationException
      * @throws GraphQlInputException
