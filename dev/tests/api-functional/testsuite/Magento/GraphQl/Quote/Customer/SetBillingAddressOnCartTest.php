@@ -404,6 +404,26 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testSetBillingAddressOnNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = <<<QUERY
+{
+  cart(cart_id: "$maskedQuoteId") {
+    items {
+      id
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
      * Verify the all the whitelisted fields for a New Address Object
      *
      * @param array $addressResponse
