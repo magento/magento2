@@ -163,6 +163,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
             if ($couponCode) {
                 $couponRules = $this->getCouponCodeSelect($couponCode);
+
                 $allAllowedRules = $this->getConnection()->select();
                 $allAllowedRules->union([$noCouponRules, $couponRules], Select::SQL_UNION_ALL);
 
