@@ -189,7 +189,7 @@ MUTATION;
     }
 
     /**
-     * Test adding a downloadable product to the shopping cart
+     * Add a downloadable product into shopping cart when "Links can be purchased separately" is disabled
      *
      * @magentoApiDataFixture Magento/GraphQl/_files/product_downloadable_without_purchased_separately_links.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
@@ -218,6 +218,71 @@ mutation {
                         qty: {$qty}, 
                         sku: "{$sku}"
                     }
+                }
+            ]
+        }
+    ) {
+        cart {
+            items {
+                qty
+                ... on DownloadableCartItem {
+                    downloadable_product_links {
+                        title
+                        link_type
+                        price
+                    }
+                }
+            }
+        }
+    }
+}
+MUTATION;
+        $response = $this->graphQlQuery($query);
+        self::assertArrayHasKey('items', $response['addDownloadableProductsToCart']['cart']);
+        self::assertCount($qty, $response['addDownloadableProductsToCart']['cart']);
+        self::assertEquals(
+            $links[key($links)],
+            $response['addDownloadableProductsToCart']['cart']['items'][0]['downloadable_product_links'][0]
+        );
+    }
+
+    /**
+     * Add a downloadable product into shopping cart when "Links can be purchased separately" is disabled
+     * Unnecessary `link_id` option is provided
+     *
+     * @magentoApiDataFixture Magento/GraphQl/_files/product_downloadable_without_purchased_separately_links.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddDownloadableProductWithoutCustomLinks2()
+    {
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_1',
+            'reserved_order_id'
+        );
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+
+        $sku    = 'graphql-downloadable-product-without-purchased-separately-links';
+        $qty    = 1;
+        $links  = $this->getProductsLinks($sku);
+        $linkId = key($links);
+
+        $query = <<<MUTATION
+mutation {
+    addDownloadableProductsToCart(
+        input: {
+            cart_id: "{$maskedQuoteId}", 
+            cartItems: [
+                {
+                    data: {
+                        qty: {$qty}, 
+                        sku: "{$sku}"
+                    },
+                    downloadable_product_links: [
+                        {
+          	                link_id: {$linkId}
+                        }
+                    ]
                 }
             ]
         }

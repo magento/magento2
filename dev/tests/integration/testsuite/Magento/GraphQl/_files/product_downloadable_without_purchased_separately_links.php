@@ -15,6 +15,7 @@ $product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product:
 $product
     ->setTypeId(ProductType::TYPE_DOWNLOADABLE)
     ->setAttributeSetId(4)
+    ->setStoreId(1)
     ->setWebsiteIds([1])
     ->setName('GraphQl Downloadable Product (Links can not be purchased separately)')
     ->setSku('graphql-downloadable-product-without-purchased-separately-links')
@@ -28,30 +29,42 @@ $product
     ]);
 
 /**
- * @var \Magento\Downloadable\Api\Data\LinkInterfaceFactory $linkFactory
+ * @var \Magento\Downloadable\Api\Data\LinkInterfaceFactory $linkFactory1
  */
-$linkFactory = Bootstrap::getObjectManager()
+$linkFactory1 = Bootstrap::getObjectManager()
     ->get(\Magento\Downloadable\Api\Data\LinkInterfaceFactory::class);
-$linkData = [
-    'title'        => 'GraphQl Downloadable Product Link',
-    'type'         => \Magento\Downloadable\Helper\Download::LINK_TYPE_URL,
-    'is_shareable' => \Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG,
-    'link_url'     => 'http://example.com/downloadable.txt',
-    'is_delete'    => null,
-];
-$link = $linkFactory->create(['data' => $linkData]);
-$link->setLinkType($linkData['type'])
+$link1 = $linkFactory1->create();
+$link1
+    ->setTitle('GraphQl Downloadable Product Link 1')
+    ->setLinkType(\Magento\Downloadable\Helper\Download::LINK_TYPE_URL)
+    ->setIsShareable(\Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG)
+    ->setLinkUrl('http://example.com/downloadable1.txt')
     ->setStoreId($product->getStoreId())
     ->setWebsiteId($product->getStore()->getWebsiteId())
     ->setProductWebsiteIds($product->getWebsiteIds())
-    ->setSortOrder(1)
-    ->setPrice(0.0000)
+    ->setSortOrder(10)
+    ->setPrice(2.0000)
     ->setNumberOfDownloads(0);
-$links   = [];
-$links[] = $link;
+/**
+ * @var \Magento\Downloadable\Api\Data\LinkInterfaceFactory $linkFactory2
+ */
+$linkFactory2 = Bootstrap::getObjectManager()
+    ->get(\Magento\Downloadable\Api\Data\LinkInterfaceFactory::class);
+$link2 = $linkFactory2->create();
+$link2
+    ->setTitle('GraphQl Downloadable Product Link 2')
+    ->setLinkType(\Magento\Downloadable\Helper\Download::LINK_TYPE_URL)
+    ->setIsShareable(\Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG)
+    ->setLinkUrl('http://example.com/downloadable2.txt')
+    ->setStoreId($product->getStoreId())
+    ->setWebsiteId($product->getStore()->getWebsiteId())
+    ->setProductWebsiteIds($product->getWebsiteIds())
+    ->setSortOrder(20)
+    ->setPrice(4.0000)
+    ->setNumberOfDownloads(0);
 
 $extension = $product->getExtensionAttributes();
-$extension->setDownloadableProductLinks($links);
+$extension->setDownloadableProductLinks([$link1, $link2]);
 
 $product->setExtensionAttributes($extension);
 $product->setLinksPurchasedSeparately(false);

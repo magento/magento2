@@ -12,10 +12,11 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\Data as DownloadableHelper;
+use Magento\Downloadable\Model\LinkFactory;
+use Magento\Downloadable\Model\SampleFactory;
 use Magento\Downloadable\Model\Product\Type as Downloadable;
 use Magento\Downloadable\Model\ResourceModel\Link\Collection as LinkCollection;
 use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollection;
-use Magento\Framework\Data\Collection;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -38,31 +39,31 @@ class DownloadableOptions implements ResolverInterface
     private $downloadableHelper;
 
     /**
-     * @var SampleCollection
+     * @var LinkFactory
      */
-    private $sampleCollection;
+    private $linkFactory;
 
     /**
-     * @var LinkCollection
+     * @var SampleFactory
      */
-    private $linkCollection;
+    private $sampleFactory;
 
     /**
      * @param EnumLookup $enumLookup
      * @param DownloadableHelper $downloadableHelper
-     * @param SampleCollection $sampleCollection
-     * @param LinkCollection $linkCollection
+     * @param LinkFactory $linkFactory
+     * @param SampleFactory $sampleFactory
      */
     public function __construct(
         EnumLookup $enumLookup,
         DownloadableHelper $downloadableHelper,
-        SampleCollection $sampleCollection,
-        LinkCollection $linkCollection
+        LinkFactory $linkFactory,
+        SampleFactory $sampleFactory
     ) {
         $this->enumLookup = $enumLookup;
         $this->downloadableHelper = $downloadableHelper;
-        $this->sampleCollection = $sampleCollection;
-        $this->linkCollection = $linkCollection;
+        $this->linkFactory = $linkFactory;
+        $this->sampleFactory = $sampleFactory;
     }
 
     /**
@@ -95,14 +96,22 @@ class DownloadableOptions implements ResolverInterface
         $data = null;
         if ($product->getTypeId() === Downloadable::TYPE_DOWNLOADABLE) {
             if ($field->getName() === 'downloadable_product_links') {
-                $links = $this->linkCollection->addTitleToResult($product->getStoreId())
+                /**
+                 * @var \Magento\Downloadable\Model\ResourceModel\Link\Collection $links
+                 */
+                $links = $this->linkFactory->create()->getResourceCollection();
+                $links->addTitleToResult($product->getStoreId())
                     ->addPriceToResult($product->getStore()->getWebsiteId())
                     ->addProductToFilter($product->getId());
                 $data = $this->formatLinks(
                     $links
                 );
             } elseif ($field->getName() === 'downloadable_product_samples') {
-                $samples = $this->sampleCollection->addTitleToResult($product->getStoreId())
+                /**
+                 * @var \Magento\Downloadable\Model\ResourceModel\Sample\Collection $samples
+                 */
+                $samples = $this->sampleFactory->create()->getResourceCollection();
+                $samples->addTitleToResult($product->getStoreId())
                     ->addProductToFilter($product->getId());
                 $data = $this->formatSamples(
                     $samples
@@ -152,10 +161,10 @@ class DownloadableOptions implements ResolverInterface
     /**
      * Format links from collection as array
      *
-     * @param Collection $samples
+     * @param SampleCollection $samples
      * @return array
      */
-    private function formatSamples(Collection $samples) : array
+    private function formatSamples(SampleCollection $samples) : array
     {
         $resultData = [];
         foreach ($samples as $sampleKey => $sample) {
