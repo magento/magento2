@@ -47,11 +47,11 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
-    public function testGetPaymentMethodsFromGuestCart()
+    public function testGetCartWithPaymentMethods()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_with_simple_product_without_address');
-        $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
-        $response      = $this->graphQlQuery($query);
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('cart', $response);
 
@@ -73,10 +73,10 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
-    public function testGetPaymentMethodsFromAnotherCustomerCart()
+    public function testGetPaymentMethodsFromCustomerCart()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_1');
-        $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
+        $query = $this->getQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
@@ -91,8 +91,8 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     public function testGetPaymentMethodsIfPaymentsAreNotSet()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_with_simple_product_without_address');
-        $query         = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
-        $response      = $this->graphQlQuery($query);
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
 
         self::assertEquals(0, count($response['cart']['available_payment_methods']));
     }
@@ -104,7 +104,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     public function testGetPaymentMethodsOfNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
-        $query = $this->getCartAvailablePaymentMethodsQuery($maskedQuoteId);
+        $query = $this->getQuery($maskedQuoteId);
         $this->graphQlQuery($query);
     }
 
@@ -112,9 +112,9 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      * @param string $maskedQuoteId
      * @return string
      */
-    private function getCartAvailablePaymentMethodsQuery(
+    private function getQuery(
         string $maskedQuoteId
-    ) : string {
+    ): string {
         return <<<QUERY
 {
   cart(cart_id: "$maskedQuoteId") {
