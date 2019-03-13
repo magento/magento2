@@ -14,6 +14,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\InventoryShippingAdminUi\Model\IsOrderStockManageable;
 use Magento\InventoryShippingAdminUi\Model\IsWebsiteInMultiSourceMode;
 use Magento\Sales\Model\OrderRepository;
 
@@ -40,25 +41,25 @@ class NewShipmentLoadBefore implements ObserverInterface
     /**
      * @var StockConfigurationInterface
      */
-    private $stockConfiguration;
+    private $isOrderStockManageable;
 
     /**
      * @param OrderRepository $orderRepository
      * @param IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode
      * @param RedirectInterface $redirect
-     * @param StockConfigurationInterface $stockConfiguration
+     * @param StockConfigurationInterface $isOrderStockManageable
      */
     public function __construct(
         OrderRepository $orderRepository,
         IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode,
         RedirectInterface $redirect,
-        StockConfigurationInterface $stockConfiguration = null
+        IsOrderStockManageable $isOrderStockManageable = null
     ) {
         $this->orderRepository = $orderRepository;
         $this->isWebsiteInMultiSourceMode = $isWebsiteInMultiSourceMode;
         $this->redirect = $redirect;
-        $this->stockConfiguration = $stockConfiguration ??
-            ObjectManager::getInstance()->get(StockConfigurationInterface::class);
+        $this->isOrderStockManageable = $isOrderStockManageable ??
+            ObjectManager::getInstance()->get(IsOrderStockManageable::class);
     }
 
     /**
@@ -67,10 +68,6 @@ class NewShipmentLoadBefore implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        if (!$this->stockConfiguration->getManageStock()) {
-            return;
-        }
-
         $request = $observer->getEvent()->getRequest();
         $controller = $observer->getEvent()->getControllerAction();
 
@@ -82,6 +79,9 @@ class NewShipmentLoadBefore implements ObserverInterface
         try {
             $orderId = $request->getParam('order_id');
             $order = $this->orderRepository->get($orderId);
+            if (!$this->isOrderStockManageable->execute($order)) {
+                return;
+            }
             $websiteId = (int)$order->getStore()->getWebsiteId();
             if ($this->isWebsiteInMultiSourceMode->execute($websiteId)) {
                 $this->redirect->redirect(

@@ -9,9 +9,9 @@ namespace Magento\InventoryShippingAdminUi\Block\Adminhtml\Order\View;
 
 use Magento\Backend\Block\Widget\Container;
 use Magento\Backend\Block\Widget\Context;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Registry;
+use Magento\InventoryShippingAdminUi\Model\IsOrderStockManageable;
 use Magento\InventoryShippingAdminUi\Model\IsWebsiteInMultiSourceMode;
 
 /**
@@ -32,29 +32,29 @@ class ShipButton extends Container
     private $isWebsiteInMultiSourceMode;
 
     /**
-     * @var StockConfigurationInterface
+     * @var IsOrderStockManageable
      */
-    private $stockConfiguration;
+    private $isOrderStockManageable;
 
     /**
      * @param Context $context
      * @param Registry $registry
      * @param IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode
      * @param array $data
-     * @param StockConfigurationInterface $stockConfiguration
+     * @param IsOrderStockManageable $isOrderStockManageable
      */
     public function __construct(
         Context $context,
         Registry $registry,
         IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode,
         array $data = [],
-        StockConfigurationInterface $stockConfiguration = null
+        IsOrderStockManageable $isOrderStockManageable = null
     ) {
         parent::__construct($context, $data);
         $this->registry = $registry;
         $this->isWebsiteInMultiSourceMode = $isWebsiteInMultiSourceMode;
-        $this->stockConfiguration = $stockConfiguration ??
-            ObjectManager::getInstance()->get(StockConfigurationInterface::class);
+        $this->isOrderStockManageable = $isOrderStockManageable ??
+            ObjectManager::getInstance()->get(IsOrderStockManageable::class);
     }
 
     /**
@@ -66,7 +66,7 @@ class ShipButton extends Container
 
         $order = $this->registry->registry('current_order');
         $websiteId = (int)$order->getStore()->getWebsiteId();
-        if ($this->isWebsiteInMultiSourceMode->execute($websiteId) && $this->stockConfiguration->getManageStock()) {
+        if ($this->isWebsiteInMultiSourceMode->execute($websiteId) && $this->isOrderStockManageable->execute($order)) {
             $this->buttonList->update(
                 'order_ship',
                 'onclick',
