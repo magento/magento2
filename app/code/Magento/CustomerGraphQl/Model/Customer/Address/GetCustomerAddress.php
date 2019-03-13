@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Cart;
+namespace Magento\CustomerGraphQl\Model\Customer\Address;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
@@ -58,7 +58,7 @@ class GetCustomerAddress
         if ((int)$customerAddress->getCustomerId() !== $customerId) {
             throw new GraphQlAuthorizationException(
                 __(
-                    'The current user cannot use address with ID "%address_id"',
+                    'Current customer does not have permission to address with ID "%address_id"',
                     ['address_id' => $addressId]
                 )
             );

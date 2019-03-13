@@ -7,28 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\CustomerGraphQl\Model\Customer\Address\CreateCustomerAddress as CreateCustomerAddressModel;
-use Magento\CustomerGraphQl\Model\Customer\Address\ExtractCustomerAddressData;
+use Magento\Customer\Model\Customer;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\CustomerGraphQl\Model\Customer\Address\ExtractCustomerAddressData;
 
 /**
- * Customers address create, used for GraphQL request processing
+ * Customers addresses field resolver
  */
-class CreateCustomerAddress implements ResolverInterface
+class CustomerAddresses implements ResolverInterface
 {
     /**
      * @var GetCustomer
      */
     private $getCustomer;
-
-    /**
-     * @var CreateCustomerAddressModel
-     */
-    private $createCustomerAddress;
 
     /**
      * @var ExtractCustomerAddressData
@@ -37,16 +32,13 @@ class CreateCustomerAddress implements ResolverInterface
 
     /**
      * @param GetCustomer $getCustomer
-     * @param CreateCustomerAddressModel $createCustomerAddress
      * @param ExtractCustomerAddressData $extractCustomerAddressData
      */
     public function __construct(
         GetCustomer $getCustomer,
-        CreateCustomerAddressModel $createCustomerAddress,
         ExtractCustomerAddressData $extractCustomerAddressData
     ) {
         $this->getCustomer = $getCustomer;
-        $this->createCustomerAddress = $createCustomerAddress;
         $this->extractCustomerAddressData = $extractCustomerAddressData;
     }
 
@@ -60,13 +52,20 @@ class CreateCustomerAddress implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($args['input']) || !is_array($args['input']) || empty($args['input'])) {
-            throw new GraphQlInputException(__('"input" value should be specified'));
+        if (!isset($value['model'])) {
+            throw new LocalizedException(__('"model" value should be specified'));
         }
+        /** @var Customer $customer */
+        $customer = $value['model'];
 
-        $customer = $this->getCustomer->execute($context);
+        $addressesData = [];
+        $addresses = $customer->getAddresses();
 
-        $address = $this->createCustomerAddress->execute((int)$customer->getId(), $args['input']);
-        return $this->extractCustomerAddressData->execute($address);
+        if (count($addresses)) {
+            foreach ($addresses as $address) {
+                $addressesData[] = $this->extractCustomerAddressData->execute($address);
+            }
+        }
+        return $addressesData;
     }
 }
