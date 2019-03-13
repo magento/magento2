@@ -7,6 +7,7 @@ namespace Magento\Framework\Search\Adapter\Mysql;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder as AggregationBuilder;
 use Magento\Framework\Search\AdapterInterface;
 use Magento\Framework\Search\RequestInterface;
@@ -129,9 +130,10 @@ class Adapter implements AdapterInterface
     /**
      * Get rows size
      *
+     * @param Select $query
      * @return int
      */
-    private function getSize($query)
+    private function getSize(Select $query): int
     {
         $sql = $this->getSelectCountSql($query);
         $parentSelect = $this->getConnection()->select();
@@ -139,22 +141,24 @@ class Adapter implements AdapterInterface
         $parentSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $parentSelect->columns('COUNT(*)');
         $totalRecords = $this->getConnection()->fetchOne($parentSelect);
+
         return intval($totalRecords);
     }
 
     /**
      * Reset limit and offset
      *
+     * @param Select $query
      * @return Select
      */
-    private function getSelectCountSql($query)
+    private function getSelectCountSql(Select $query): Select
     {
         foreach ($this->countSqlSkipParts as $part => $toSkip) {
             if ($toSkip) {
                 $query->reset($part);
             }
         }
+
         return $query;
     }
-
 }
