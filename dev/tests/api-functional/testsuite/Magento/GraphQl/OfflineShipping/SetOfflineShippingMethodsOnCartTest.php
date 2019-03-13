@@ -17,7 +17,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 /**
  * Test for setting offline shipping methods on cart
  */
-class SetOfflineShippingOnCartTest extends GraphQlAbstract
+class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
 {
     /**
      * @var QuoteFactory
