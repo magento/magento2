@@ -1,11 +1,15 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Widget;
 
+use Magento\Framework\Exception\NotFoundException;
+
+/**
+ * Chooser Product container Action.
+ */
 class Chooser extends \Magento\Backend\App\Action
 {
     /**
@@ -24,27 +28,40 @@ class Chooser extends \Magento\Backend\App\Action
     protected $layoutFactory;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Framework\Escaper $escaper
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->escaper = $escaper;
     }
 
     /**
-     * Chooser Source action
+     * Chooser Source action.
      *
      * @return \Magento\Framework\Controller\Result\Raw
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found.'));
+        }
+
         $uniqId = $this->getRequest()->getParam('uniq_id');
         $massAction = $this->getRequest()->getParam('use_massaction', false);
         $productTypeId = $this->getRequest()->getParam('product_type_id', null);
@@ -71,7 +88,7 @@ class Chooser extends \Magento\Backend\App\Action
                 '',
                 [
                     'data' => [
-                        'id' => $uniqId . 'Tree',
+                        'id' => $this->escaper->escapeHtml($uniqId) . 'Tree',
                         'node_click_listener' => $productsGrid->getCategoryClickListenerJs(),
                         'with_empty_node' => true,
                     ]
@@ -86,6 +103,7 @@ class Chooser extends \Magento\Backend\App\Action
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
+
         return $resultRaw->setContents($html);
     }
 }
