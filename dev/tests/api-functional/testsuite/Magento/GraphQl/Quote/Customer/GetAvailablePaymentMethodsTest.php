@@ -134,8 +134,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      */
     private function getQuery(
         string $maskedQuoteId
-    ): string
-    {
+    ): string {
         return <<<QUERY
 {
   cart(cart_id: "$maskedQuoteId") {

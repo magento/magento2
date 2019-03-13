@@ -32,4 +32,3 @@ foreach ($configData as $key => $value) {
     $defConfig->setDataByPath($key, $value);
     $defConfig->save();
 }
-
