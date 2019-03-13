@@ -68,9 +68,9 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['General Group', 'general-group'],
-            ['configurable', sha1('configurable')],
-            ['configurAble', sha1('configurable')],
-            ['///', sha1('///')],
+            ['configurable', md5('configurable')],
+            ['configurAble', md5('configurable')],
+            ['///', md5('///')],
         ];
     }
 }

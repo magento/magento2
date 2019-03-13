@@ -127,8 +127,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
                 );
                 $isReservedSystemName = in_array(strtolower($attributeGroupCode), $this->reservedSystemNames);
                 if (empty($attributeGroupCode) || $isReservedSystemName) {
-                    // in the following code sha1 is not used for security purposes
-                    $attributeGroupCode = sha1(strtolower($groupName));
+                    // in the following code md5 is not used for security purposes
+                    $attributeGroupCode = md5(strtolower($groupName));
                 }
                 $this->setAttributeGroupCode($attributeGroupCode);
             }
