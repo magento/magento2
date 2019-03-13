@@ -160,6 +160,11 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     protected $_currencyFactory;
 
     /**
+     * @var \Magento\MessageQueue\Api\PoisonPillPutInterface
+     */
+    private $pillPut;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -174,6 +179,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\MessageQueue\Api\PoisonPillPutInterface|null $pillPut
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -190,7 +196,8 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\MessageQueue\Api\PoisonPillPutInterface $pillPut = null
     ) {
         parent::__construct(
             $context,
@@ -208,6 +215,8 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         $this->_websiteFactory = $websiteFactory;
         $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;
+        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\MessageQueue\Api\PoisonPillPutInterface::class);
     }
 
     /**
@@ -581,7 +590,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         if ($this->isObjectNew()) {
             $this->_storeManager->reinitStores();
         }
-
+        $this->pillPut->put();
         return parent::afterSave();
     }
 

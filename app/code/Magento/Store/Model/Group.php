@@ -101,6 +101,11 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     private $eventManager;
 
     /**
+     * @var \Magento\MessageQueue\Api\PoisonPillPutInterface
+     */
+    private $pillPut;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -112,6 +117,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
+     * @param \Magento\MessageQueue\Api\PoisonPillPutInterface|null $pillPut
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -125,13 +131,16 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Event\ManagerInterface $eventManager = null
+        \Magento\Framework\Event\ManagerInterface $eventManager = null,
+        \Magento\MessageQueue\Api\PoisonPillPutInterface $pillPut = null
     ) {
         $this->_configDataResource = $configDataResource;
         $this->_storeListFactory = $storeListFactory;
         $this->_storeManager = $storeManager;
         $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Event\ManagerInterface::class);
+        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\MessageQueue\Api\PoisonPillPutInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -445,6 +454,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $this->_storeManager->reinitStores();
             $this->eventManager->dispatch($this->_eventPrefix . '_save', ['group' => $group]);
         });
+        $this->pillPut->put();
         return parent::afterSave();
     }
 
