@@ -9,22 +9,15 @@ namespace Magento\CustomerGraphQl\Model\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Customer\Api\Data\CustomerInterface;
 
 /**
- * Customer field data provider, used for GraphQL request processing.
+ * Transform single customer data from object to in array format
  */
-class CustomerDataProvider
+class ExtractCustomerData
 {
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
     /**
      * @var ServiceOutputProcessor
      */
@@ -36,38 +29,15 @@ class CustomerDataProvider
     private $serializer;
 
     /**
-     * @param CustomerRepositoryInterface $customerRepository
      * @param ServiceOutputProcessor $serviceOutputProcessor
      * @param SerializerInterface $serializer
      */
     public function __construct(
-        CustomerRepositoryInterface $customerRepository,
         ServiceOutputProcessor $serviceOutputProcessor,
         SerializerInterface $serializer
     ) {
-        $this->customerRepository = $customerRepository;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->serializer = $serializer;
-    }
-
-    /**
-     * Get customer data by Id or empty array
-     *
-     * @param int $customerId
-     * @return array
-     * @throws NoSuchEntityException|LocalizedException
-     */
-    public function getCustomerById(int $customerId): array
-    {
-        try {
-            $customer = $this->customerRepository->getById($customerId);
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(
-                __('Customer id "%customer_id" does not exist.', ['customer_id' => $customerId]),
-                $e
-            );
-        }
-        return $this->processCustomer($customer);
     }
 
     /**
@@ -76,7 +46,7 @@ class CustomerDataProvider
      * @param array $arrayAddress
      * @return array
      */
-    private function curateAddressData(array $arrayAddress) : array
+    private function curateAddressData(array $arrayAddress): array
     {
         foreach ($arrayAddress as $key => $address) {
             if (!isset($address['default_shipping'])) {
@@ -94,8 +64,9 @@ class CustomerDataProvider
      *
      * @param CustomerInterface $customer
      * @return array
+     * @throws LocalizedException
      */
-    private function processCustomer(CustomerInterface $customer): array
+    public function execute(CustomerInterface $customer): array
     {
         $customerData = $this->serviceOutputProcessor->process(
             $customer,
@@ -131,6 +102,7 @@ class CustomerDataProvider
         }
         $customerData = array_merge($customerData, $customAttributes);
 
+        $customerData['model'] = $customer;
         return $customerData;
     }
 }
