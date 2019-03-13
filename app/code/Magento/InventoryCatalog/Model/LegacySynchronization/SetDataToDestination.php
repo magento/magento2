@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization;
+namespace Magento\InventoryCatalog\Model\LegacySynchronization;
 
-use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\ToInventory\SetDataToSourceItem;
-use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\ToLegacyCatalogInventory\SetDataToLegacyInventory;
+use Magento\InventoryCatalog\Model\LegacySynchronization\ToInventory\SetDataToSourceItem;
+use Magento\InventoryCatalog\Model\LegacySynchronization\ToLegacyCatalogInventory\SetDataToLegacyInventory;
 
 /**
  * Set Qty and status for legacy CatalogInventory Stock Item table

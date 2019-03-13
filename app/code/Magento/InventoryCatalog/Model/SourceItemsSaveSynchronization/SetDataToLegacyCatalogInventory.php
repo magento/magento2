@@ -12,14 +12,14 @@ use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\Synchronize;
+use Magento\InventoryCatalog\Model\LegacySynchronization\Synchronize;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 
 /**
  * Set Qty and status for legacy CatalogInventory Stock Item table
  * @deprecated
- * @see \Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\Synchronize
+ * @see \Magento\InventoryCatalog\Model\LegacySynchronization\Synchronize
  */
 class SetDataToLegacyCatalogInventory
 {

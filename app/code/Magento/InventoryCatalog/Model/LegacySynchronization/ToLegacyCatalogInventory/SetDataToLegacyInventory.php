@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\ToLegacyCatalogInventory;
+namespace Magento\InventoryCatalog\Model\LegacySynchronization\ToLegacyCatalogInventory;
 
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\GetDefaultSourceItemsBySkus;
-use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\GetLegacyStockItemsByProductIds;
+use Magento\InventoryCatalog\Model\LegacySynchronization\GetLegacyStockItemsByProductIds;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 
 class SetDataToLegacyInventory

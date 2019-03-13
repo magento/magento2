@@ -63,7 +63,6 @@ class SetDataToLegacyStockItemAtSourceItemsSaveTest extends TestCase
      */
     private $consumer;
 
-
     protected function setUp()
     {
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);

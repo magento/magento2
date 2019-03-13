@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization;
+namespace Magento\InventoryCatalog\Model\LegacySynchronization;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 

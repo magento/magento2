@@ -13,7 +13,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryCatalog\Model\GetDefaultSourceItemBySku;
-use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\Synchronize;
+use Magento\InventoryCatalog\Model\LegacySynchronization\Synchronize;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem;

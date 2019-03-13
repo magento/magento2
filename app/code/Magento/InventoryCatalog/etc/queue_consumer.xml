@@ -12,5 +12,5 @@
             name="legacyCatalogInventorySynchronization"
             queue="inventory_catalog_product_legacy_inventory_set_data_queue"
             connection="amqp"
-            handler="Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\AsyncConsumer::processOperations"/>
+            handler="Magento\InventoryCatalog\Model\LegacySynchronization\AsyncConsumer::processOperations"/>
 </config>

@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization;
+namespace Magento\InventoryCatalog\Model\LegacySynchronization;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\CatalogInventory\Model\Stock;;
+use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\Exception\LocalizedException;
 
 /**

@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\ToInventory;
+namespace Magento\InventoryCatalog\Model\LegacySynchronization\ToInventory;
 
 use Magento\Catalog\Model\ResourceModel\Product;
-use Magento\InventoryCatalog\Model\LegacyCatalogInventorySynchronization\GetLegacyStockItemsByProductIds;
+use Magento\InventoryCatalog\Model\LegacySynchronization\GetLegacyStockItemsByProductIds;
 use Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem;
 
 class SetDataToSourceItem
