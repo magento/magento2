@@ -36,8 +36,8 @@ class SetDataToLegacyCatalogInventory
      * @param StockStateProviderInterface $stockStateProvider @deprecated
      * @param Processor $indexerProcessor @deprecated
      * @param Synchronize $synchronize
-     * @SupressWarnings(PHPMD.UnusedFormalParameter)
-     * @SupressWarnings(PHPMD.LongVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         SetDataToLegacyStockItem $setDataToLegacyStockItem,
