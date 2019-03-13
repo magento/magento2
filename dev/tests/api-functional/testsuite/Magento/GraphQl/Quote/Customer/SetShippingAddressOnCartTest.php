@@ -49,8 +49,8 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
     public function testSetNewShippingAddress()
     {
@@ -105,46 +105,6 @@ QUERY;
         self::assertArrayHasKey('shipping_addresses', $cartResponse);
         $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertNewShippingAddressFields($shippingAddressResponse);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @dataProvider requestWithoutRequiredParamsDataProvider
-     * @param string $params
-     * @param string $expectedException
-     * @throws \Exception
-     */
-    public function testSetNewShippingAddressWithEmptyRequiredParams(string $params, string $expectedException)
-    {
-        $maskedQuoteId = $this->assignQuoteToCustomer();
-
-        $query = <<<QUERY
-mutation {
-  setShippingAddressesOnCart(
-    input: {
-      cart_id: "$maskedQuoteId"
-      shipping_addresses: [
-        {
-          address: {
-            $params
-          }
-        }
-      ]
-    }
-  ) {
-    cart {
-      shipping_addresses {
-        city
-      }
-    }
-  }
-}
-QUERY;
-        $this->expectExceptionMessage(
-            $expectedException
-        );
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -241,7 +201,7 @@ QUERY;
      * @expectedException \Exception
      * @expectedExceptionMessage Could not find a address with ID "100"
      */
-    public function testSetNotExistedShippingAddressFromAddressBook()
+    public function testSetNonExistentShippingAddressFromAddressBook()
     {
         $maskedQuoteId = $this->assignQuoteToCustomer();
 
@@ -356,7 +316,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @expectedException \Exception
      */
-    public function testSetShippingAddressIfCustomerIsNotOwnerOfCart()
+    public function testSetShippingAddressToAnotherCustomerCart()
     {
         $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 1);
 
@@ -388,17 +348,114 @@ QUERY;
     }
 
     /**
-     * TODO: currently only the city param is required, do we need to add at least ZIP code?
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
+     * @param string $input
+     * @param string $message
+     * @throws \Exception
+     */
+    public function testSetNewShippingAddressWithMissedRequiredParameters(string $input, string $message)
+    {
+        $maskedQuoteId = $this->assignQuoteToCustomer();
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+      shipping_addresses: [
+        {
+          {$input}
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        city
+      }
+    }
+  }
+}
+QUERY;
+        $this->expectExceptionMessage($message);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
      * @return array
      */
-    public function requestWithoutRequiredParamsDataProvider()
+    public function dataProviderUpdateWithMissedRequiredParameters()
     {
         return [
-            [
-                'save_in_address_book: false',
+            'shipping_addresses' => [
+                '',
+                'The shipping address must contain either "customer_address_id" or "address".',
+            ],
+            'missed_city' => [
+                'address: { save_in_address_book: false }',
                 'Field CartAddressInput.city of required type String! was not provided'
             ]
         ];
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage You cannot specify multiple shipping addresses.
+     */
+    public function testSetMultipleNewShippingAddresses()
+    {
+        $maskedQuoteId = $this->assignQuoteToCustomer();
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "test firstname"
+            lastname: "test lastname"
+            company: "test company"
+            street: ["test street 1", "test street 2"]
+            city: "test city"
+            region: "test region"
+            postcode: "887766"
+            country_code: "US"
+            telephone: "88776655"
+            save_in_address_book: false
+          }
+        },
+        {
+          address: {
+            firstname: "test firstname 2"
+            lastname: "test lastname 2"
+            company: "test company 2"
+            street: ["test street 1", "test street 2"]
+            city: "test city"
+            region: "test region"
+            postcode: "887766"
+            country_code: "US"
+            telephone: "88776655"
+            save_in_address_book: false
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        city
+      }
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**

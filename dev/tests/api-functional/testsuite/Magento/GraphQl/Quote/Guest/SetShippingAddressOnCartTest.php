@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Guest;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Multishipping\Helper\Data;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
@@ -37,18 +36,12 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
      */
     private $quoteIdToMaskedId;
 
-    /**
-     * @var CustomerTokenServiceInterface
-     */
-    private $customerTokenService;
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
-        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
     /**
@@ -186,44 +179,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The shipping address must contain either "customer_address_id" or "address".
      */
-    public function testSetShippingAddressWithoutAddresses()
+    public function testSetShippingAddressToCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
-
-        $query = <<<QUERY
-mutation {
-  setShippingAddressesOnCart(
-    input: {
-      cart_id: "$maskedQuoteId"
-      shipping_addresses: [
-        {}
-      ]
-    }
-  ) {
-    cart {
-      shipping_addresses {
-        city
-      }
-    }
-  }
-}
-QUERY;
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @dataProvider requestWithoutRequiredParamsDataProvider
-     * @param string $params
-     * @param string $expectedException
-     * @throws \Exception
-     */
-    public function testSetNewShippingAddressWithEmptyRequiredParams(string $params, string $expectedException)
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 1);
 
         $query = <<<QUERY
 mutation {
@@ -232,9 +193,45 @@ mutation {
       cart_id: "$maskedQuoteId"
       shipping_addresses: [
         {
-          address: {
-            $params
-          }
+          customer_address_id: 1
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        postcode
+      }
+    }
+  }
+}
+QUERY;
+        $this->expectExceptionMessage(
+            "The current user cannot perform operations on cart \"$maskedQuoteId\""
+        );
+
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
+     * @param string $input
+     * @param string $message
+     * @throws \Exception
+     */
+    public function testSetNewShippingAddressWithMissedRequiredParameters(string $input, string $message)
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+      shipping_addresses: [
+        {
+          {$input}
         }
       ]
     }
@@ -247,10 +244,25 @@ mutation {
   }
 }
 QUERY;
-        $this->expectExceptionMessage(
-            $expectedException
-        );
+        $this->expectExceptionMessage($message);
         $this->graphQlQuery($query);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderUpdateWithMissedRequiredParameters()
+    {
+        return [
+            'shipping_addresses' => [
+                '',
+                'The shipping address must contain either "customer_address_id" or "address".',
+            ],
+            'missed_city' => [
+                'address: { save_in_address_book: false }',
+                'Field CartAddressInput.city of required type String! was not provided'
+            ]
+        ];
     }
 
     /**
@@ -307,54 +319,6 @@ mutation {
   }
 }
 QUERY;
-        /** @var \Magento\Config\Model\ResourceModel\Config $config */
-        $config = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
-        $config->saveConfig(
-            Data::XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE,
-            null,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            0
-        );
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = ObjectManager::getInstance()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $config->reinit();
-
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     */
-    public function testSetShippingAddressIfCustomerIsNotOwnerOfCart()
-    {
-        $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 1);
-
-        $query = <<<QUERY
-mutation {
-  setShippingAddressesOnCart(
-    input: {
-      cart_id: "$maskedQuoteId"
-      shipping_addresses: [
-        {
-          customer_address_id: 1
-        }
-      ]
-    }
-  ) {
-    cart {
-      shipping_addresses {
-        postcode
-      }
-    }
-  }
-}
-QUERY;
-        $this->expectExceptionMessage(
-            "The current user cannot perform operations on cart \"$maskedQuoteId\""
-        );
-
         $this->graphQlQuery($query);
     }
 
@@ -406,37 +370,5 @@ QUERY;
         $quote->setCustomerId($customerId);
         $this->quoteResource->save($quote);
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
-    }
-
-    /**
-     * TODO: currently only the city param is required, do we need to add at least ZIP code?
-     * @return array
-     */
-    public function requestWithoutRequiredParamsDataProvider()
-    {
-        return [
-            [
-                'save_in_address_book: false',
-                'Field CartAddressInput.city of required type String! was not provided'
-            ]
-        ];
-    }
-
-    public function tearDown()
-    {
-        /** @var \Magento\Config\Model\ResourceModel\Config $config */
-        $config = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
-
-        //default state of multishipping config
-        $config->saveConfig(
-            Data::XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE,
-            1,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            0
-        );
-
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = ObjectManager::getInstance()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $config->reinit();
     }
 }
