@@ -7,8 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model\LegacySynchronization\ToInventory;
 
-use Magento\Catalog\Model\ResourceModel\Product;
-use Magento\InventoryCatalog\Model\LegacySynchronization\GetLegacyStockItemsByProductIds;
+use Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory;
 use Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem;
 
 class SetDataToSourceItem
@@ -19,48 +18,36 @@ class SetDataToSourceItem
     private $updateSourceItemBasedOnLegacyStockItem;
 
     /**
-     * @var GetLegacyStockItemsByProductIds
+     * @var StockItemInterfaceFactory
      */
-    private $getLegacyStockItemsByProductIds;
-
-    /**
-     * @var Product
-     */
-    private $productResource;
+    private $stockItemInterfaceFactory;
 
     /**
      * SetDataToSourceItem constructor.
      * @param UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem
-     * @param GetLegacyStockItemsByProductIds $getLegacyStockItemsByProductIds
-     * @param Product $productResource
+     * @param StockItemInterfaceFactory $stockItemInterfaceFactory
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem,
-        GetLegacyStockItemsByProductIds $getLegacyStockItemsByProductIds,
-        Product $productResource
+        StockItemInterfaceFactory $stockItemInterfaceFactory
     ) {
         $this->updateSourceItemBasedOnLegacyStockItem = $updateSourceItemBasedOnLegacyStockItem;
-        $this->productResource = $productResource;
-        $this->getLegacyStockItemsByProductIds = $getLegacyStockItemsByProductIds;
+        $this->stockItemInterfaceFactory = $stockItemInterfaceFactory;
     }
 
     /**
-     * @param array $skus
+     * @param array $legacyItemsData
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Validation\ValidationException
      */
-    public function execute(array $skus): void
+    public function execute(array $legacyItemsData): void
     {
-        $productIds = $this->productResource->getProductsIdsBySkus($skus);
-        if (!empty($productIds)) {
-            $stockItems = $this->getLegacyStockItemsByProductIds->execute($productIds);
-
-            foreach ($stockItems as $stockItem) {
-                $this->updateSourceItemBasedOnLegacyStockItem->execute($stockItem);
-            }
+        foreach ($legacyItemsData as $legacyItemData) {
+            $stockItem = $this->stockItemInterfaceFactory->create(['data' => $legacyItemData]);
+            $this->updateSourceItemBasedOnLegacyStockItem->execute($stockItem);
         }
     }
 }

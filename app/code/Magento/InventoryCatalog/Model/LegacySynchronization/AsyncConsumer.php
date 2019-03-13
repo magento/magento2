@@ -46,6 +46,6 @@ class AsyncConsumer
     public function processOperations(OperationInterface $operation): void
     {
         $data = $this->serializer->unserialize($operation->getSerializedData());
-        $this->setDataToDestination->execute($data['direction'], $data['skus']);
+        $this->setDataToDestination->execute($data['direction'], $data['items']);
     }
 }

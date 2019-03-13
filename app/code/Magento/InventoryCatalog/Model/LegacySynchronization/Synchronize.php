@@ -88,15 +88,15 @@ class Synchronize
 
     /**
      * @param string $direction
-     * @param array $skus
+     * @param array $items
      */
-    private function executeAsync(string $direction, array $skus): void
+    private function executeAsync(string $direction, array $items): void
     {
         $operations = [];
 
         $bulkUuid = $this->identityService->generateId();
 
-        $chunks = array_chunk($skus, $this->batchSize);
+        $chunks = array_chunk($items, $this->batchSize);
         foreach ($chunks as $chunk) {
             $data = [
                 'data' => [
@@ -105,7 +105,7 @@ class Synchronize
                     'serialized_data' => $this->serializer->serialize(
                         [
                             'direction' => $direction,
-                            'skus' => $chunk
+                            'items' => $chunk
                         ]
                     ),
                     'status' => OperationInterface::STATUS_TYPE_OPEN,
@@ -117,31 +117,31 @@ class Synchronize
             $operations[] = $operation;
         }
 
-        $this->bulkManagement->scheduleBulk($bulkUuid, $operations, __('Set legacy stock data'));
+        $this->bulkManagement->scheduleBulk($bulkUuid, $operations, __('Synchronize legacy stock'));
     }
 
     /**
      * @param string $direction
-     * @param array $skus
+     * @param array $items
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function executeSync(string $direction, array $skus): void
+    private function executeSync(string $direction, array $items): void
     {
-        $this->setDataToDestination->execute($direction, $skus);
+        $this->setDataToDestination->execute($direction, $items);
     }
 
     /**
      * @param string $direction
-     * @param array $skus
+     * @param array $items
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(string $direction, array $skus): void
+    public function execute(string $direction, array $items): void
     {
         if ($this->isAsyncLegacyAlignment->execute()) {
-            $this->executeAsync($direction, $skus);
+            $this->executeAsync($direction, $items);
         } else {
-            $this->executeSync($direction, $skus);
+            $this->executeSync($direction, $items);
         }
     }
 }

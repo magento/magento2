@@ -41,15 +41,15 @@ class SetDataToDestination
 
     /**
      * @param string $direction
-     * @param array $skus
+     * @param array $items
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(string $direction, array $skus): void
+    public function execute(string $direction, array $items): void
     {
         if ($direction === Synchronize::DIRECTION_TO_LEGACY) {
-            $this->setDataToLegacyInventory->execute($skus);
+            $this->setDataToLegacyInventory->execute($items);
         } else {
-            $this->setDataToSourceItem->execute($skus);
+            $this->setDataToSourceItem->execute($items);
         }
     }
 }

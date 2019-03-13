@@ -73,7 +73,7 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
      */
     public function afterExecute(SourceItemsSaveInterface $subject, $result, array $sourceItems): void
     {
-        $skuToSynchronize = [];
+        $sourceItemsData = [];
         foreach ($sourceItems as $sourceItem) {
             if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
                 continue;
@@ -92,9 +92,9 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
                 continue;
             }
 
-            $skuToSynchronize[] = $sourceItem->getSku();
+            $sourceItemsData[] = $sourceItem->getData();
         }
 
-        $this->synchronize->execute(Synchronize::DIRECTION_TO_LEGACY, $skuToSynchronize);
+        $this->synchronize->execute(Synchronize::DIRECTION_TO_LEGACY, $sourceItemsData);
     }
 }

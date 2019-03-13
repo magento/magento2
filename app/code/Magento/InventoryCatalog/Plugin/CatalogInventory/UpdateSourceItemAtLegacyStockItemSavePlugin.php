@@ -62,7 +62,7 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
      * @param GetProductTypesBySkusInterface $getProductTypeBySku
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param GetDefaultSourceItemBySku $getDefaultSourceItemBySku
-     * @param Synchronize|null $synchronize
+     * @param Synchronize $synchronize
      */
     public function __construct(
         UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem,
@@ -105,7 +105,7 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
                     $this->synchronize->execute(
                         Synchronize::DIRECTION_TO_INVENTORY,
                         [
-                            $this->getProductSkuById((int) $legacyStockItem->getProductId())
+                            $legacyStockItem->getData()
                         ]
                     );
                 }
