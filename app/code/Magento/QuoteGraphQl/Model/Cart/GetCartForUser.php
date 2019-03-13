@@ -69,6 +69,12 @@ class GetCartForUser
             );
         }
 
+        if (!$cart->getIsActive()) {
+            throw new GraphQlNoSuchEntityException(
+                __('Current customer does not have an active cart.')
+            );
+        }
+
         $cartCustomerId = (int)$cart->getCustomerId();
 
         /* Guest cart, allow operations */
@@ -83,16 +89,6 @@ class GetCartForUser
                     ['masked_cart_id' => $cartHash]
                 )
             );
-        }
-
-        if ($customerId) {
-            try {
-                return $this->cartRepository->getActiveForCustomer($customerId);
-            } catch (\Exception $e) {
-                throw new GraphQlNoSuchEntityException(
-                    __($e->getMessage())
-                );
-            }
         }
         return $cart;
     }
