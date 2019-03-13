@@ -71,7 +71,6 @@
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad stepKey="waitForInvoicePageLoad"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5" />

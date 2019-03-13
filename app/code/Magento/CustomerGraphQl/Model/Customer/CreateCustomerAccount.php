@@ -12,13 +12,13 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class CreateAccount creates new customer account
+ * Create new customer account
  */
-class CreateAccount
+class CreateCustomerAccount
 {
     /**
      * @var DataObjectHelper
@@ -41,45 +41,72 @@ class CreateAccount
     private $storeManager;
 
     /**
+     * @var ChangeSubscriptionStatus
+     */
+    private $changeSubscriptionStatus;
+
+    /**
      * @param DataObjectHelper $dataObjectHelper
      * @param CustomerInterfaceFactory $customerFactory
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $accountManagement
+     * @param ChangeSubscriptionStatus $changeSubscriptionStatus
      */
     public function __construct(
         DataObjectHelper $dataObjectHelper,
         CustomerInterfaceFactory $customerFactory,
         StoreManagerInterface $storeManager,
-        AccountManagementInterface $accountManagement
+        AccountManagementInterface $accountManagement,
+        ChangeSubscriptionStatus $changeSubscriptionStatus
     ) {
         $this->dataObjectHelper = $dataObjectHelper;
         $this->customerFactory = $customerFactory;
         $this->accountManagement = $accountManagement;
         $this->storeManager = $storeManager;
+        $this->changeSubscriptionStatus = $changeSubscriptionStatus;
     }
 
     /**
      * Creates new customer account
      *
-     * @param array $args
+     * @param array $data
+     * @return CustomerInterface
+     * @throws GraphQlInputException
+     */
+    public function execute(array $data): CustomerInterface
+    {
+        try {
+            $customer = $this->createAccount($data);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
+        }
+
+        if (isset($data['is_subscribed'])) {
+            $this->changeSubscriptionStatus->execute((int)$customer->getId(), (bool)$data['is_subscribed']);
+        }
+        return $customer;
+    }
+
+    /**
+     * Create account
+     *
+     * @param array $data
      * @return CustomerInterface
      * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
-    public function execute(array $args): CustomerInterface
+    private function createAccount(array $data): CustomerInterface
     {
         $customerDataObject = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customerDataObject,
-            $args['input'],
+            $data,
             CustomerInterface::class
         );
         $store = $this->storeManager->getStore();
         $customerDataObject->setWebsiteId($store->getWebsiteId());
         $customerDataObject->setStoreId($store->getId());
 
-        $password = array_key_exists('password', $args['input']) ? $args['input']['password'] : null;
-
+        $password = array_key_exists('password', $data) ? $data['password'] : null;
         return $this->accountManagement->createAccount($customerDataObject, $password);
     }
 }
