@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
@@ -44,11 +44,11 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      */
     protected function setUp()
     {
-        $objectManager              = Bootstrap::getObjectManager();
-        $this->quoteFactory         = $objectManager->get(QuoteFactory::class);
-        $this->quoteResource        = $objectManager->create(QuoteResource::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
+        $this->quoteResource = $objectManager->create(QuoteResource::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->quoteIdToMaskedId    = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->quoteIdToMaskedId = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
     }
 
     /**
@@ -59,7 +59,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     public function testGetAvailableShippingMethods()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_1');
-        $response      = $this->graphQlQuery($this->getQuery($maskedQuoteId), [], '', $this->getHeaderMap());
+        $response = $this->graphQlQuery($this->getAvailableShippingMethodsQuery($maskedQuoteId), [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('cart', $response);
         self::assertArrayHasKey('shipping_addresses', $response['cart']);
@@ -68,13 +68,13 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
         self::assertCount(1, $response['cart']['shipping_addresses'][0]['available_shipping_methods']);
 
         $expectedAddressData = [
-            'amount'         => 10,
-            'base_amount'    => 10,
-            'carrier_code'   => 'flatrate',
-            'carrier_title'  => 'Flat Rate',
-            'error_message'  => '',
-            'method_code'    => 'flatrate',
-            'method_title'   => 'Fixed',
+            'amount' => 10,
+            'base_amount' => 10,
+            'carrier_code' => 'flatrate',
+            'carrier_title' => 'Flat Rate',
+            'error_message' => '',
+            'method_code' => 'flatrate',
+            'method_title' => 'Fixed',
             'price_incl_tax' => 10,
             'price_excl_tax' => 10,
         ];
@@ -98,7 +98,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
 
-        $this->graphQlQuery($this->getQuery($maskedQuoteId), [], '', $this->getHeaderMap('customer2@search.example.com'));
+        $this->graphQlQuery($this->getAvailableShippingMethodsQuery($maskedQuoteId), [], '', $this->getHeaderMap('customer2@search.example.com'));
     }
 
     /**
@@ -110,7 +110,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     public function testGetAvailableShippingMethodsIfShippingsAreNotSet()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_1');
-        $response      = $this->graphQlQuery($this->getQuery($maskedQuoteId), [], '', $this->getHeaderMap());
+        $response = $this->graphQlQuery($this->getAvailableShippingMethodsQuery($maskedQuoteId), [], '', $this->getHeaderMap());
 
         self::assertEquals(0, count($response['cart']['shipping_addresses'][0]['available_shipping_methods']));
     }
@@ -125,7 +125,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     public function testGetAvailableShippingMethodsOfNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
-        $query = $this->getQuery($maskedQuoteId);
+        $query = $this->getAvailableShippingMethodsQuery($maskedQuoteId);
 
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
@@ -134,9 +134,10 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      * @param string $maskedQuoteId
      * @return string
      */
-    private function getQuery(
+    private function getAvailableShippingMethodsQuery(
         string $maskedQuoteId
-    ): string {
+    ): string
+    {
         return <<<QUERY
 query {
   cart (cart_id: "{$maskedQuoteId}") {

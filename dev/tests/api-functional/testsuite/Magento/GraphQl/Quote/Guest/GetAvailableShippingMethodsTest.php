@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
@@ -38,10 +38,10 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      */
     protected function setUp()
     {
-        $objectManager              = Bootstrap::getObjectManager();
-        $this->quoteFactory         = $objectManager->get(QuoteFactory::class);
-        $this->quoteResource        = $objectManager->create(QuoteResource::class);
-        $this->quoteIdToMaskedId    = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
+        $this->quoteResource = $objectManager->create(QuoteResource::class);
+        $this->quoteIdToMaskedId = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
     }
 
     /**
@@ -52,7 +52,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     public function testGetAvailableShippingMethodsFromGuestCart()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('guest_quote');
-        $response      = $this->graphQlQuery($this->getQuery($maskedQuoteId));
+        $response = $this->graphQlQuery($this->getAvailableShippingMethodsQuery($maskedQuoteId));
 
         self::assertArrayHasKey('cart', $response);
         self::assertArrayHasKey('shipping_addresses', $response['cart']);
@@ -61,13 +61,13 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
         self::assertCount(1, $response['cart']['shipping_addresses'][0]['available_shipping_methods']);
 
         $expectedAddressData = [
-            'amount'         => 5,
-            'base_amount'    => 5,
-            'carrier_code'   => 'flatrate',
-            'carrier_title'  => 'Flat Rate',
-            'error_message'  => '',
-            'method_code'    => 'flatrate',
-            'method_title'   => 'Fixed',
+            'amount' => 5,
+            'base_amount' => 5,
+            'carrier_code' => 'flatrate',
+            'carrier_title' => 'Flat Rate',
+            'error_message' => '',
+            'method_code' => 'flatrate',
+            'method_title' => 'Fixed',
             'price_incl_tax' => 5,
             'price_excl_tax' => 5,
         ];
@@ -90,7 +90,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
 
-        $this->graphQlQuery($this->getQuery($maskedQuoteId));
+        $this->graphQlQuery($this->getAvailableShippingMethodsQuery($maskedQuoteId));
     }
 
     /**
@@ -102,7 +102,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     public function testGetAvailableShippingMethodsIfShippingsAreNotSet()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('guest_quote');
-        $response      = $this->graphQlQuery($this->getQuery($maskedQuoteId));
+        $response = $this->graphQlQuery($this->getAvailableShippingMethodsQuery($maskedQuoteId));
 
         self::assertEquals(0, count($response['cart']['shipping_addresses'][0]['available_shipping_methods']));
     }
@@ -117,16 +117,17 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     {
         $maskedQuoteId = 'non_existent_masked_id';
 
-        $this->graphQlQuery($this->getQuery($maskedQuoteId));
+        $this->graphQlQuery($this->getAvailableShippingMethodsQuery($maskedQuoteId));
     }
 
     /**
      * @param string $maskedQuoteId
      * @return string
      */
-    private function getQuery(
+    private function getAvailableShippingMethodsQuery(
         string $maskedQuoteId
-    ): string {
+    ): string
+    {
         return <<<QUERY
 query {
   cart (cart_id: "{$maskedQuoteId}") {
