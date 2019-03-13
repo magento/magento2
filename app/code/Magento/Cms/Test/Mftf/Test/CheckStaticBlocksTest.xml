@@ -19,6 +19,7 @@
             <group value="Cms"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateWebsite">
                 <argument name="newWebsiteName" value="secondWebsite"/>
@@ -67,6 +68,7 @@
                 <argument name="websiteName" value="secondWebsite"/>
             </actionGroup>
             <actionGroup ref="DeleteCMSBlockActionGroup" stepKey="DeleteCMSBlockActionGroup"/>
+            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
         </after>
     </test>
 </tests>
