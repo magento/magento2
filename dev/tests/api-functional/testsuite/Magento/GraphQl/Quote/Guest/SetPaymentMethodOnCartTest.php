@@ -127,6 +127,25 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     }
 
     /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testSetPaymentOnNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = <<<QUERY
+{
+  cart(cart_id: "$maskedQuoteId") {
+    items {
+      id
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @param string $methodCode
      * @return string

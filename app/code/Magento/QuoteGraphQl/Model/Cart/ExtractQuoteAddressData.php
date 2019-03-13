@@ -13,9 +13,9 @@ use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
 /**
- * Extract the necessary address fields from an Address model
+ * Extract address fields from an Quote Address model
  */
-class ExtractDataFromAddress
+class ExtractQuoteAddressData
 {
     /**
      * @var ExtensibleDataObjectConverter
