@@ -7,14 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShippingAdminUi\Observer;
 
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryShippingAdminUi\Model\IsOrderStockManageable;
+use Magento\InventoryShippingAdminUi\Model\IsOrderSourceManageable;
 use Magento\InventoryShippingAdminUi\Model\IsWebsiteInMultiSourceMode;
 use Magento\Sales\Model\OrderRepository;
 
@@ -39,27 +38,27 @@ class NewShipmentLoadBefore implements ObserverInterface
     private $redirect;
 
     /**
-     * @var StockConfigurationInterface
+     * @var IsOrderSourceManageable
      */
-    private $isOrderStockManageable;
+    private $orderSourceManageable;
 
     /**
      * @param OrderRepository $orderRepository
      * @param IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode
      * @param RedirectInterface $redirect
-     * @param StockConfigurationInterface $isOrderStockManageable
+     * @param IsOrderSourceManageable $isOrderSourceManageable
      */
     public function __construct(
         OrderRepository $orderRepository,
         IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode,
         RedirectInterface $redirect,
-        IsOrderStockManageable $isOrderStockManageable = null
+        IsOrderSourceManageable $isOrderSourceManageable = null
     ) {
         $this->orderRepository = $orderRepository;
         $this->isWebsiteInMultiSourceMode = $isWebsiteInMultiSourceMode;
         $this->redirect = $redirect;
-        $this->isOrderStockManageable = $isOrderStockManageable ??
-            ObjectManager::getInstance()->get(IsOrderStockManageable::class);
+        $this->orderSourceManageable = $isOrderSourceManageable ??
+            ObjectManager::getInstance()->get(IsOrderSourceManageable::class);
     }
 
     /**
@@ -79,7 +78,7 @@ class NewShipmentLoadBefore implements ObserverInterface
         try {
             $orderId = $request->getParam('order_id');
             $order = $this->orderRepository->get($orderId);
-            if (!$this->isOrderStockManageable->execute($order)) {
+            if (!$this->orderSourceManageable->execute($order)) {
                 return;
             }
             $websiteId = (int)$order->getStore()->getWebsiteId();

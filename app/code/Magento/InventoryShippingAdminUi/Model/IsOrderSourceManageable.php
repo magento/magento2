@@ -12,12 +12,13 @@ use Magento\Catalog\Model\Product;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryConfiguration\Model\GetStockItemConfiguration;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**
- * Is stock manageable for certain order
+ * Is source inventory of certain order is manageable
  */
-class IsOrderStockManageable
+class IsOrderSourceManageable
 {
     /**
      * @var ProductRepositoryInterface
@@ -35,34 +36,47 @@ class IsOrderStockManageable
     private $stockRepository;
 
     /**
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemManagementAllowedForProductType;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param GetStockItemConfiguration $getStockItemConfiguration
      * @param StockRepositoryInterface $stockRepository
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         GetStockItemConfiguration $getStockItemConfiguration,
-        StockRepositoryInterface $stockRepository
+        StockRepositoryInterface $stockRepository,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
     ) {
         $this->productRepository = $productRepository;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->stockRepository = $stockRepository;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
     }
 
     /**
-     * Check if stock manageable for certain order
+     * Check if source manageable for certain order
      *
      * @param OrderInterface $order
      * @return bool
      */
     public function execute(OrderInterface $order): bool
     {
-        $stocks = $this->stockRepository->getList();
+        $stocks = $this->stockRepository->getList()->getItems();
         $orderItems = $order->getItems();
         foreach ($orderItems as $orderItem) {
+            if (!$this->isSourceItemManagementAllowedForProductType->execute($orderItem->getProductType())) {
+                continue;
+            }
+
             $productId = $orderItem->getProductId();
             /** @var Product $product */
             $product = $this->productRepository->getById($productId);
+
             /** @var StockInterface $stock */
             foreach ($stocks as $stock) {
                 $inventoryConfiguration = $this->getStockItemConfiguration->execute(
