@@ -103,7 +103,7 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
+     * @magentoApiDataFixture Magento/OfflineShipping/_files/enable_offline_shipping_methods.php
      */
     public function testSetShippingMethodTwiceInOneRequest()
     {
