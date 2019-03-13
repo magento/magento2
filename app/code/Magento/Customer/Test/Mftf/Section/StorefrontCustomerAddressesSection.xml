@@ -17,5 +17,6 @@
         <element name="deleteAdditionalAddress" type="button" selector="//tbody//tr[{{var}}]//a[@class='action delete']" parameterized="true"/>
         <element name="editAdditionalAddress" type="button" selector="//tbody//tr[{{var}}]//a[@class='action edit']" parameterized="true" timeout="30"/>
         <element name="addNewAddress" type="button" selector="//span[text()='Add New Address']"/>
+        <element name="numberOfAddresses" type="text" selector=".toolbar-number"/>
     </section>
 </sections>
