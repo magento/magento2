@@ -86,9 +86,9 @@ class SetPaymentMethodOnCart implements ResolverInterface
         try {
             $this->paymentMethodManagement->set($cart->getId(), $payment);
         } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()));
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
+            throw new GraphQlInputException(__($e->getMessage()), $e);
         }
 
         return [
