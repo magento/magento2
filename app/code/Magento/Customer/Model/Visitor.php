@@ -14,6 +14,7 @@ use Magento\Framework\App\RequestSafetyInterface;
  *
  * @package Magento\Customer\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Visitor extends \Magento\Framework\Model\AbstractModel
 {
