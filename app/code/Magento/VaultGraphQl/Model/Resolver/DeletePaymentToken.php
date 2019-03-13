@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
+use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 
 /**
  * Delete Payment Token resolver, used for GraphQL mutation processing.
@@ -22,9 +22,9 @@ use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 class DeletePaymentToken implements ResolverInterface
 {
     /**
-     * @var CheckCustomerAccount
+     * @var GetCustomer
      */
-    private $checkCustomerAccount;
+    private $getCustomer;
 
     /**
      * @var PaymentTokenManagementInterface
@@ -37,16 +37,16 @@ class DeletePaymentToken implements ResolverInterface
     private $paymentTokenRepository;
 
     /**
-     * @param CheckCustomerAccount $checkCustomerAccount
+     * @param GetCustomer $getCustomer
      * @param PaymentTokenManagementInterface $paymentTokenManagement
      * @param PaymentTokenRepositoryInterface $paymentTokenRepository
      */
     public function __construct(
-        CheckCustomerAccount $checkCustomerAccount,
+        GetCustomer $getCustomer,
         PaymentTokenManagementInterface $paymentTokenManagement,
         PaymentTokenRepositoryInterface $paymentTokenRepository
     ) {
-        $this->checkCustomerAccount = $checkCustomerAccount;
+        $this->getCustomer = $getCustomer;
         $this->paymentTokenManagement = $paymentTokenManagement;
         $this->paymentTokenRepository = $paymentTokenRepository;
     }
@@ -65,12 +65,9 @@ class DeletePaymentToken implements ResolverInterface
             throw new GraphQlInputException(__('Specify the "public_hash" value.'));
         }
 
-        $currentUserId = $context->getUserId();
-        $currentUserType = $context->getUserType();
+        $customer = $this->getCustomer->execute($context);
 
-        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
-
-        $token = $this->paymentTokenManagement->getByPublicHash($args['public_hash'], $currentUserId);
+        $token = $this->paymentTokenManagement->getByPublicHash($args['public_hash'], $customer->getId());
         if (!$token) {
             throw new GraphQlNoSuchEntityException(
                 __('Could not find a token using public hash: %1', $args['public_hash'])
