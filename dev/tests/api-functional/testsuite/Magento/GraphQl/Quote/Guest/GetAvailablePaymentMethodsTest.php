@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Quote\Guest;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\QuoteGraphQl\Model\GetMaskedQuoteIdByReversedQuoteId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -18,6 +19,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class GetAvailablePaymentMethodsTest extends GraphQlAbstract
 {
+    /**
+     * @var GetMaskedQuoteIdByReversedQuoteId
+     */
+    private $getMaskedQuoteIdByReversedQuoteId;
+
     /**
      * @var QuoteResource
      */
@@ -39,6 +45,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
+        $this->getMaskedQuoteIdByReversedQuoteId = $objectManager->get(GetMaskedQuoteIdByReversedQuoteId::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
@@ -46,10 +53,12 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetCartWithPaymentMethods()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_with_simple_product_without_address');
 
         $query = <<<QUERY
 {
@@ -73,17 +82,5 @@ QUERY;
             'No Payment Information Required',
             $response['cart']['available_payment_methods'][1]['title']
         );
-    }
-
-    /**
-     * @param string $reversedQuoteId
-     * @return string
-     */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 }

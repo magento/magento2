@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Quote\Guest;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\QuoteGraphQl\Model\GetMaskedQuoteIdByReversedQuoteId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -18,6 +19,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class SetShippingMethodsOnCartTest extends GraphQlAbstract
 {
+    /**
+     * @var GetMaskedQuoteIdByReversedQuoteId
+     */
+    private $getMaskedQuoteIdByReversedQuoteId;
+
     /**
      * @var QuoteResource
      */
@@ -39,6 +45,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
+        $this->getMaskedQuoteIdByReversedQuoteId->execute(GetMaskedQuoteIdByReversedQuoteId::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
@@ -150,18 +157,5 @@ mutation {
 }
 
 QUERY;
-    }
-
-    /**
-     * @param string $reversedQuoteId
-     * @return string
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
-     */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 }

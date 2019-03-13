@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
+use Magento\QuoteGraphQl\Model\GetMaskedQuoteIdByReversedQuoteId;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
@@ -18,6 +19,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class SetBillingAddressOnCartTest extends GraphQlAbstract
 {
+    /**
+     * @var GetMaskedQuoteIdByReversedQuoteId
+     */
+    private $getMaskedQuoteIdByReversedQuoteId;
+
     /**
      * @var QuoteResource
      */
@@ -36,6 +42,7 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
+        $this->getMaskedQuoteIdByReversedQuoteId = $objectManager->get(GetMaskedQuoteIdByReversedQuoteId::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
@@ -43,10 +50,12 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSetNewBillingAddress()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_with_simple_product_without_address');
 
         $query = <<<QUERY
 mutation {
@@ -99,10 +108,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSetNewBillingAddressWithUseForShippingParameter()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_with_simple_product_without_address');
 
         $query = <<<QUERY
 mutation {
@@ -173,10 +184,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSettBillingAddressToCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_1');
 
         $query = <<<QUERY
 mutation {
@@ -221,7 +234,7 @@ QUERY;
      */
     public function testSetBillingAddressFromAddressBook()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_with_simple_product_without_address');
 
         $query = <<<QUERY
 mutation {
@@ -265,17 +278,5 @@ QUERY;
         ];
 
         $this->assertResponseFields($addressResponse, $assertionMap);
-    }
-
-    /**
-     * @param string $reversedQuoteId
-     * @return string
-     */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 }

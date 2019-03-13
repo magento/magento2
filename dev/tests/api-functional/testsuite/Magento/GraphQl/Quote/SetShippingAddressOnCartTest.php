@@ -24,6 +24,16 @@ use Magento\TestFramework\ObjectManager;
 class SetShippingAddressOnCartTest extends GraphQlAbstract
 {
     /**
+     * @var CustomerTokenServiceInterface
+     */
+    private $customerTokenService;
+
+    /**
+     * @var GetMaskedQuoteIdByReversedQuoteId
+     */
+    private $getMaskedQuoteIdByReversedQuoteId;
+
+    /**
      * @var QuoteResource
      */
     private $quoteResource;
@@ -38,24 +48,14 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
      */
     private $quoteIdToMaskedId;
 
-    /**
-     * @var GetMaskedQuoteIdByReversedQuoteId
-     */
-    private $getMaskedQuoteIdByReversedQuoteId;
-
-    /**
-     * @var CustomerTokenServiceInterface
-     */
-    private $customerTokenService;
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
+        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->getMaskedQuoteIdByReversedQuoteId = $objectManager->get(GetMaskedQuoteIdByReversedQuoteId::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->getMaskedQuoteIdByReversedQuoteId = $objectManager->get(GetMaskedQuoteIdByReversedQuoteId::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
-        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
     /**
