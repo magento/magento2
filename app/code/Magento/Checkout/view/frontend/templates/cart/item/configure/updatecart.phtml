@@ -12,7 +12,7 @@
 <?php $buttonTitle = __('Update Cart'); ?>
 <?php if ($_product->isSaleable()): ?>
     <div class="box-tocart update">
-        <fieldset class="fieldset">
+        <div class="fieldset">
             <?php if ($block->shouldRenderQuantity()): ?>
             <div class="field qty">
                 <label class="label" for="qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></label>
@@ -37,7 +37,7 @@
                 </button>
                 <?= $block->getChildHtml('', true) ?>
             </div>
-        </fieldset>
+        </div>
     </div>
     <script type="text/x-magento-init">
         {
