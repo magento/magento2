@@ -8,7 +8,7 @@
     <div class="checkout-agreements fieldset" data-bind="visible: isVisible">
         <!-- ko foreach: agreements -->
             <!-- ko if: ($parent.isAgreementRequired($data)) -->
-            <div class="checkout-agreement field required">
+            <div class="checkout-agreement field choice required">
                 <input type="checkbox" class="required-entry"
                        data-bind="attr: {
                                     'id': $parent.getCheckboxId($parentContext, agreementId),
