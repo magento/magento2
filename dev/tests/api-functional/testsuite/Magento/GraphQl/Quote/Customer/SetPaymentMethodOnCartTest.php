@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\OfflinePayments\Model\Checkmo;
-use Magento\QuoteGraphQl\Model\GetMaskedQuoteIdByReversedQuoteId;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
@@ -22,14 +22,14 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class SetPaymentMethodOnCartTest extends GraphQlAbstract
 {
     /**
+     * @var GetMaskedQuoteIdByReservedOrderId
+     */
+    private $getMaskedQuoteIdByReservedOrderId;
+
+    /**
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
-
-    /**
-     * @var GetMaskedQuoteIdByReversedQuoteId
-     */
-    private $getMaskedQuoteIdByReversedQuoteId;
 
     /**
      * @var QuoteResource
@@ -52,7 +52,7 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->getMaskedQuoteIdByReversedQuoteId = $objectManager->get(GetMaskedQuoteIdByReversedQuoteId::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
@@ -61,13 +61,11 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSetPaymentWithVirtualProduct()
     {
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_with_virtual_product');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_with_virtual_product');
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
@@ -80,13 +78,11 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSetPaymentWithSimpleProduct()
     {
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
@@ -120,7 +116,7 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     public function testSetNonExistingPaymentMethod()
     {
         $methodCode = 'noway';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
@@ -129,13 +125,13 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSetPaymentMethodToGuestCart()
     {
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute(
+            'test_order_with_simple_product_without_address'
+        );
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
 
@@ -149,13 +145,11 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSetPaymentMethodToAnotherCustomerCart()
     {
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
 
@@ -192,7 +186,7 @@ QUERY;
     public function testReSetPayment()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1_with_payment');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_with_payment');
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
@@ -231,16 +225,16 @@ QUERY;
     }
 
     /**
-     * @param string $reversedQuoteId
+     * @param string $reversedOrderId
      * @param int $customerId
      * @return string
      */
     private function assignQuoteToCustomer(
-        string $reversedQuoteId,
+        string $reversedOrderId,
         int $customerId
     ): string {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
         $quote->setCustomerId($customerId);
         $this->quoteResource->save($quote);
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());

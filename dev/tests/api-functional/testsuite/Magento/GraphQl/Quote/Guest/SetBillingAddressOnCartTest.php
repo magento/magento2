@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
-use Magento\QuoteGraphQl\Model\GetMaskedQuoteIdByReversedQuoteId;
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
@@ -20,9 +20,9 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class SetBillingAddressOnCartTest extends GraphQlAbstract
 {
     /**
-     * @var GetMaskedQuoteIdByReversedQuoteId
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $getMaskedQuoteIdByReversedQuoteId;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
      * @var QuoteResource
@@ -42,7 +42,7 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->getMaskedQuoteIdByReversedQuoteId = $objectManager->get(GetMaskedQuoteIdByReversedQuoteId::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
@@ -55,7 +55,7 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
      */
     public function testSetNewBillingAddress()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_with_simple_product_without_address');
 
         $query = <<<QUERY
 mutation {
@@ -113,7 +113,7 @@ QUERY;
      */
     public function testSetNewBillingAddressWithUseForShippingParameter()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_with_simple_product_without_address');
 
         $query = <<<QUERY
 mutation {
@@ -189,7 +189,7 @@ QUERY;
      */
     public function testSetBillingAddressToCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = <<<QUERY
 mutation {
@@ -234,7 +234,7 @@ QUERY;
      */
     public function testSetBillingAddressFromAddressBook()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_with_simple_product_without_address');
 
         $query = <<<QUERY
 mutation {

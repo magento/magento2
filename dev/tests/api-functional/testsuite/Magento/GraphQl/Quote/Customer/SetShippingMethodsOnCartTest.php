@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\QuoteGraphQl\Model\GetMaskedQuoteIdByReversedQuoteId;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
@@ -20,11 +19,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class SetShippingMethodsOnCartTest extends GraphQlAbstract
 {
-    /**
-     * @var GetMaskedQuoteIdByReversedQuoteId
-     */
-    private $getMaskedQuoteIdByReversedQuoteId;
-
     /**
      * @var CustomerTokenServiceInterface
      */
@@ -51,7 +45,6 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->getMaskedQuoteIdByReversedQuoteId = $objectManager->get(GetMaskedQuoteIdByReversedQuoteId::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
@@ -169,17 +162,30 @@ QUERY;
     }
 
     /**
-     * @param string $reversedQuoteId
+     * @param string $reversedOrderId
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    private function getMaskedQuoteIdByReservedOrderId(string $reversedOrderId): string
+    {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
+
+        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
+    }
+
+    /**
+     * @param string $reversedOrderId
      * @param int $customerId
      * @return string
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function assignQuoteToCustomer(
-        string $reversedQuoteId,
+        string $reversedOrderId,
         int $customerId
     ): string {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
         $quote->setCustomerId($customerId);
         $this->quoteResource->save($quote);
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());

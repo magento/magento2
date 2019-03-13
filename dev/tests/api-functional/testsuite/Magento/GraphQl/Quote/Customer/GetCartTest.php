@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
@@ -19,6 +20,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class GetCartTest extends GraphQlAbstract
 {
+    /**
+     * @var GetMaskedQuoteIdByReservedOrderId
+     */
+    private $getMaskedQuoteIdByReservedOrderId;
+
     /**
      * @var QuoteResource
      */
@@ -42,6 +48,7 @@ class GetCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
@@ -53,7 +60,7 @@ class GetCartTest extends GraphQlAbstract
      */
     public function testGetCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_item_with_items');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_item_with_items');
         $query = $this->getCartQuery($maskedQuoteId);
 
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
@@ -77,7 +84,9 @@ class GetCartTest extends GraphQlAbstract
      */
     public function testGetGuestCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute(
+            'test_order_with_simple_product_without_address'
+        );
         $query = $this->getCartQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
@@ -92,7 +101,7 @@ class GetCartTest extends GraphQlAbstract
      */
     public function testGetAnotherCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_item_with_items');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_item_with_items');
         $query = $this->getCartQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
@@ -154,18 +163,6 @@ class GetCartTest extends GraphQlAbstract
   }
 }
 QUERY;
-    }
-
-    /**
-     * @param string $reversedQuoteId
-     * @return string
-     */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 
     /**

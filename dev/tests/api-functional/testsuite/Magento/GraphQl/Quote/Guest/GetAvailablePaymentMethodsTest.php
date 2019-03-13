@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -19,19 +17,9 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class GetAvailablePaymentMethodsTest extends GraphQlAbstract
 {
     /**
-     * @var QuoteResource
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteResource;
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
      * @inheritdoc
@@ -39,9 +27,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
@@ -49,7 +35,9 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      */
     public function testGetCartWithPaymentMethods()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute(
+            'test_order_with_simple_product_without_address'
+        );
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
 
@@ -75,7 +63,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      */
     public function testGetPaymentMethodsFromCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $query = $this->getQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
@@ -90,7 +78,9 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      */
     public function testGetPaymentMethodsIfPaymentsAreNotSet()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute(
+            'test_order_with_simple_product_without_address'
+        );
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
 
@@ -125,17 +115,5 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
   }
 }
 QUERY;
-    }
-
-    /**
-     * @param string $reservedOrderId
-     * @return string
-     */
-    private function getMaskedQuoteIdByReservedOrderId(string $reservedOrderId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 }

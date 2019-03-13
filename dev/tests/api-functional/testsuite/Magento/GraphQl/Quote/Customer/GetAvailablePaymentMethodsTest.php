@@ -7,10 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -25,19 +23,9 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var QuoteResource
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteResource;
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
      * @inheritdoc
@@ -45,9 +33,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
@@ -56,7 +42,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      */
     public function testGetCartWithPaymentMethods()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_item_with_items');
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
@@ -76,7 +62,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      */
     public function testGetPaymentMethodsFromGuestCart()
     {
-        $guestQuoteMaskedId = $this->getMaskedQuoteIdByReservedOrderId(
+        $guestQuoteMaskedId = $this->getMaskedQuoteIdByReservedOrderId->execute(
             'test_order_with_virtual_product_without_address'
         );
         $query = $this->getQuery($guestQuoteMaskedId);
@@ -93,7 +79,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      */
     public function testGetPaymentMethodsFromAnotherCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_item_with_items');
         $query = $this->getQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
@@ -108,7 +94,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      */
     public function testGetPaymentMethodsIfPaymentsAreNotSet()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_item_with_items');
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
@@ -157,17 +143,5 @@ QUERY;
         $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         return $headerMap;
-    }
-
-    /**
-     * @param string $reservedOrderId
-     * @return string
-     */
-    private function getMaskedQuoteIdByReservedOrderId(string $reservedOrderId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 }
