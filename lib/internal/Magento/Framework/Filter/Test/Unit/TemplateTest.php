@@ -253,6 +253,7 @@ EXPECTED_RESULT;
             ['save'],
             ['getCollection'],
             ['getResource'],
+            ['getConfig'],
         ];
     }
 
