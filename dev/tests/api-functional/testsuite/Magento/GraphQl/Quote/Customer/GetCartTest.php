@@ -72,8 +72,8 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
     public function testGetGuestCart()
     {

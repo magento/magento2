@@ -10,6 +10,7 @@ namespace Magento\CustomerGraphQl\Model\Customer;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -17,11 +18,12 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 
 /**
- * Check customer account
+ * Get customer
  */
-class CheckCustomerAccount
+class GetCustomer
 {
     /**
      * @var AuthenticationInterface
@@ -54,39 +56,41 @@ class CheckCustomerAccount
     }
 
     /**
-     * Check customer account
+     * Get customer
      *
-     * @param int|null $customerId
-     * @param int|null $customerType
-     * @return void
+     * @param ContextInterface $context
+     * @return CustomerInterface
+     * @throws GraphQlAuthenticationException
      * @throws GraphQlAuthorizationException
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
-     * @throws GraphQlAuthenticationException
      */
-    public function execute(?int $customerId, ?int $customerType): void
+    public function execute(ContextInterface $context): CustomerInterface
     {
-        if (true === $this->isCustomerGuest($customerId, $customerType)) {
+        $currentUserId = $context->getUserId();
+        $currentUserType = $context->getUserType();
+
+        if (true === $this->isUserGuest($currentUserId, $currentUserType)) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
 
         try {
-            $this->customerRepository->getById($customerId);
+            $customer = $this->customerRepository->getById($currentUserId);
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(
-                __('Customer with id "%customer_id" does not exist.', ['customer_id' => $customerId]),
+                __('Customer with id "%customer_id" does not exist.', ['customer_id' => $currentUserId]),
                 $e
             );
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
 
-        if (true === $this->authentication->isLocked($customerId)) {
+        if (true === $this->authentication->isLocked($currentUserId)) {
             throw new GraphQlAuthenticationException(__('The account is locked.'));
         }
 
         try {
-            $confirmationStatus = $this->accountManagement->getConfirmationStatus($customerId);
+            $confirmationStatus = $this->accountManagement->getConfirmationStatus($currentUserId);
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
@@ -94,6 +98,7 @@ class CheckCustomerAccount
         if ($confirmationStatus === AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED) {
             throw new GraphQlAuthenticationException(__("This account isn't confirmed. Verify and try again."));
         }
+        return $customer;
     }
 
     /**
@@ -103,7 +108,7 @@ class CheckCustomerAccount
      * @param int|null $customerType
      * @return bool
      */
-    private function isCustomerGuest(?int $customerId, ?int $customerType): bool
+    private function isUserGuest(?int $customerId, ?int $customerType): bool
     {
         if (null === $customerId || null === $customerType) {
             return true;

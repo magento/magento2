@@ -129,7 +129,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
      */
     public function testRemoveItemFromGuestCart()
