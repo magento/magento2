@@ -376,7 +376,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The current user cannot use address with ID "1"
+     * @expectedExceptionMessage Current customer does not have permission to address with ID "1"
      */
     public function testSetBillingAddressIfCustomerIsNotOwnerOfAddress()
     {
@@ -401,6 +401,26 @@ mutation {
 }
 QUERY;
         $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testSetBillingAddressOnNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = <<<QUERY
+{
+  cart(cart_id: "$maskedQuoteId") {
+    items {
+      id
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
