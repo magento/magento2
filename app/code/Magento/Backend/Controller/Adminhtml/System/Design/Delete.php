@@ -6,7 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
 
-class Delete extends \Magento\Backend\Controller\Adminhtml\System\Design
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+class Delete extends \Magento\Backend\Controller\Adminhtml\System\Design implements HttpPostActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
