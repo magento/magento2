@@ -100,10 +100,10 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
         self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
 
-        $selectedShippingMethod = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('selected_shipping_method', $selectedShippingMethod);
-        self::assertEquals($carrierCode, $selectedShippingMethod['selected_shipping_method']['carrier_code']);
-        self::assertEquals($methodCode, $selectedShippingMethod['selected_shipping_method']['method_code']);
+        $shippingMethod = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+        self::assertArrayHasKey('selected_shipping_method', $shippingMethod);
+        self::assertEquals($carrierCode, $shippingMethod['selected_shipping_method']['carrier_code']);
+        self::assertEquals($methodCode, $shippingMethod['selected_shipping_method']['method_code']);
     }
 
     /**
@@ -264,10 +264,10 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
         self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
 
-        $selectedShippingMethod = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('selected_shipping_method', $selectedShippingMethod);
-        self::assertEquals($carrierCode, $selectedShippingMethod['selected_shipping_method']['carrier_code']);
-        self::assertEquals($methodCode, $selectedShippingMethod['selected_shipping_method']['method_code']);
+        $shippingMethod = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+        self::assertArrayHasKey('selected_shipping_method', $shippingMethod);
+        self::assertEquals($carrierCode, $shippingMethod['selected_shipping_method']['carrier_code']);
+        self::assertEquals($methodCode, $shippingMethod['selected_shipping_method']['method_code']);
     }
 
     /**
@@ -360,10 +360,10 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
         self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
 
-        $selectedShippingMethod = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('selected_shipping_method', $selectedShippingMethod);
-        self::assertEquals($carrierCode, $selectedShippingMethod['selected_shipping_method']['carrier_code']);
-        self::assertEquals($methodCode, $selectedShippingMethod['selected_shipping_method']['method_code']);
+        $shippingMethod = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+        self::assertArrayHasKey('selected_shipping_method', $shippingMethod);
+        self::assertEquals($carrierCode, $shippingMethod['selected_shipping_method']['carrier_code']);
+        self::assertEquals($methodCode, $shippingMethod['selected_shipping_method']['method_code']);
     }
 
     /**
