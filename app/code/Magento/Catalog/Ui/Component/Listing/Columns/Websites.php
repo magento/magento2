@@ -1,16 +1,21 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
 
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\DB\Helper;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
+ * Websites listing column component.
+ *
  * @api
  * @since 100.0.2
  */
@@ -22,9 +27,9 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
     const NAME = 'websites';
 
     /**
-     * Data for concatenated website names value
+     * Data for concatenated website names value.
      */
-    const WEBSITE_NAMES = 'website_names';
+    private $websiteNames = 'website_names';
 
     /**
      * Store manager
@@ -36,7 +41,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
     /**
      * @var \Magento\Framework\DB\Helper
      */
-    protected $_resourceHelper;
+    private $resourceHelper;
 
     /**
      * @param ContextInterface $context
@@ -57,11 +62,12 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->storeManager = $storeManager;
-        $this->_resourceHelper = $resourceHelper ?: $objectManager->get(Helper::class);
+        $this->resourceHelper = $resourceHelper ?: $objectManager->get(Helper::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @deprecated 101.0.0
      */
     public function prepareDataSource(array $dataSource)
@@ -86,9 +92,10 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 
         return $dataSource;
     }
-    
+
     /**
-     * Prepare component configuration
+     * Prepare component configuration.
+     *
      * @return void
      */
     public function prepare()
@@ -100,7 +107,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
     }
 
     /**
-     * Apply sorting
+     * Apply sorting.
      *
      * @return void
      */
@@ -131,13 +138,13 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
                      'left'
                  )
                  ->groupByAttribute('entity_id');
-            $this->_resourceHelper->addGroupConcatColumn(
+            $this->resourceHelper->addGroupConcatColumn(
                 $collection->getSelect(),
-                self::WEBSITE_NAMES,
+                $this->websiteNames,
                 'name'
             );
 
-            $collection->getSelect()->order(self::WEBSITE_NAMES . ' ' . $sorting['direction']);
+            $collection->getSelect()->order($this->websiteNames . ' ' . $sorting['direction']);
         }
     }
 }

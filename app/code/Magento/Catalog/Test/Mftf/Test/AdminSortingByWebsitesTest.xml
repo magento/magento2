@@ -15,71 +15,64 @@
             <description value="Sorting products by websites in Admin"/>
         </annotations>
         <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="productAssignedToCustomWebsite">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="productAssignedToMainWebsite">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Create new website -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
                 <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
                 <argument name="websiteCode" value="{{customWebsite.code}}"/>
             </actionGroup>
+            <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
+            <magentoCLI command="cache:flush" stepKey="flushCacheAfterEnableWebUrlOptions"/>
         </before>
         <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="productAssignedToCustomWebsite" stepKey="deleteProductAssignedToCustomWebsite"/>
+            <deleteData createDataKey="productAssignedToMainWebsite" stepKey="deleteProductAssignedToMainWebsite"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
+            <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
-        <!--Create a Simple Product -->
+        <!--Assign Custom Website to Simple Product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
         <waitForPageLoad stepKey="waitForCatalogProductGrid"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
-        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
-        <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
-        <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
-        <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
-        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
 
-        <!--Save the product -->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitProductPageSave"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeProductSavedMessage"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="assignCustomWebsiteToProduct">
+            <argument name="product" value="$$productAssignedToCustomWebsite$$"/>
+        </actionGroup>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToWebsites"/>
+        <conditionalClick selector="{{ProductInWebsitesSection.sectionHeader}}" dependentSelector="{{AdminProductContentSection.sectionHeaderShow}}" visible="false" stepKey="expandSection"/>
+        <waitForPageLoad stepKey="waitForPageOpened"/>
+        <uncheckOption selector="{{ProductInWebsitesSection.website(_defaultWebsite.name)}}" stepKey="deselectMainWebsite"/>
+        <checkOption selector="{{ProductInWebsitesSection.website(customWebsite.name)}}" stepKey="selectWebsite"/>
 
-        <!-- Add this product to second website -->
-        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsitesSection1"/>
-        <click selector="{{ProductInWebsitesSection.website('{{customWebsite.name}}')}}" stepKey="selectSecondWebsite"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForProductPagetoSaveAgain"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForProductPageToSaveAgain"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
 
-        <!--Create a Simple Product 2 -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
-        <waitForPageLoad stepKey="waitForProductToggleToSelectSimpleProduct"/>
-        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickSimpleProductFromDropDownList"/>
-
-        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.name}}" stepKey="fillSimpleProductName"/>
-        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.price}}" stepKey="fillSimpleProductPrice"/>
-        <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.weight}}" stepKey="fillSimpleProductWeight"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.quantity}}" stepKey="fillSimpleProductQuantity"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton2"/>
-        <waitForPageLoad stepKey="waitForSimpleProductToSave"/>
-        <!-- Verify customer see success message -->
-        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
-
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid2"/>
-        <waitForPageLoad stepKey="waitForCatalogProductGrid2"/>
+        <!--Navigate To Product Grid To Check Website Sorting-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGridToSortByWebsite"/>
+        <waitForPageLoad stepKey="waitForCatalogProductGridLoaded"/>
 
         <!--Sorting works (By Websites) ASC-->
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="setProductGridToDefaultSortingWebsites"/>
         <click selector="{{AdminProductGridSection.columnHeader('Websites')}}" stepKey="clickWebsitesHeaderToSortAsc"/>
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Main Website" stepKey="checkIfProduct1WebsitesAsc"/>
-        <see selector="{{AdminProductGridSection.productGridContentsOnRow('2')}}" userInput="{{customWebsite.name}}" stepKey="checkIfProduct2WebsitesAsc"/>
 
         <!--Sorting works (By Websites) DESC-->
         <click selector="{{AdminProductGridSection.columnHeader('Websites')}}" stepKey="clickWebsitesHeaderToSortDesc"/>
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="{{customWebsite.name}}" stepKey="checkIfProduct1WebsitesDesc"/>
-        <see selector="{{AdminProductGridSection.productGridContentsOnRow('2')}}" userInput="Main Website" stepKey="checkIfProduct2WebsitesDesc"/>
     </test>
 </tests>
