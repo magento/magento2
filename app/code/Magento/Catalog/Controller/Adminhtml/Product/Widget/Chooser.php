@@ -72,7 +72,7 @@ class Chooser extends \Magento\Backend\App\Action
             '',
             [
                 'data' => [
-                    'id' => $uniqId,
+                    'id' => $this->escaper->escapeHtml($uniqId),
                     'use_massaction' => $massAction,
                     'product_type_id' => $productTypeId,
                     'category_id' => $this->getRequest()->getParam('category_id'),
