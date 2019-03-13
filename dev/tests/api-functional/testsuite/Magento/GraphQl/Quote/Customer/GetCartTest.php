@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\QuoteGraphQl\Model\GetMaskedQuoteIdByReversedQuoteId;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
@@ -20,11 +19,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class GetCartTest extends GraphQlAbstract
 {
-    /**
-     * @var GetMaskedQuoteIdByReversedQuoteId
-     */
-    private $getMaskedQuoteIdByReversedQuoteId;
-
     /**
      * @var QuoteResource
      */
@@ -48,7 +42,6 @@ class GetCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->getMaskedQuoteIdByReversedQuoteId = $objectManager->get(GetMaskedQuoteIdByReversedQuoteId::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
@@ -57,12 +50,10 @@ class GetCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_item_with_items');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_item_with_items');
         $query = $this->getCartQuery($maskedQuoteId);
 
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
@@ -81,14 +72,12 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
     public function testGetGuestCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
         $query = $this->getCartQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
@@ -100,12 +89,10 @@ class GetCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetAnotherCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_item_with_items');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_item_with_items');
         $query = $this->getCartQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
@@ -122,6 +109,26 @@ class GetCartTest extends GraphQlAbstract
     public function testGetNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
+        $query = $this->getCartQuery($maskedQuoteId);
+
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Current user does not have an active cart.
+     */
+    public function testGetInactiveCart()
+    {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
+        $quote->setCustomerId(1);
+        $quote->setIsActive(false);
+        $this->quoteResource->save($quote);
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
+
         $query = $this->getCartQuery($maskedQuoteId);
 
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
@@ -147,6 +154,18 @@ class GetCartTest extends GraphQlAbstract
   }
 }
 QUERY;
+    }
+
+    /**
+     * @param string $reversedQuoteId
+     * @return string
+     */
+    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
+    {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+
+        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 
     /**

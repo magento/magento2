@@ -187,7 +187,7 @@ QUERY;
      * @throws \Exception
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testSettBillingAddressToCustomerCart()
+    public function testSetBillingAddressToCustomerCart()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId->execute('test_order_1');
 
@@ -250,6 +250,25 @@ mutation {
       billing_address {
         city
       }
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testSetBillingAddressOnNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = <<<QUERY
+{
+  cart(cart_id: "$maskedQuoteId") {
+    items {
+      id
     }
   }
 }
