@@ -326,9 +326,12 @@ class IndexBuilder
      */
     private function cleanProductIndex($productIds, int $ruleId = null)
     {
-        $where = ['product_id' => $productIds];
+        $productIds = (array) $productIds;
+        $where = count($productIds) > 1
+            ? ['product_id IN (?)' => $productIds]
+            : ['product_id = ?' => $productIds];
         if ($ruleId) {
-            $where['rule_id'] = $ruleId;
+            $where['rule_id = ?'] = $ruleId;
         }
         $this->connection->delete($this->getTable('catalogrule_product'), $where);
     }
@@ -341,9 +344,12 @@ class IndexBuilder
      */
     private function cleanProductPriceIndex($productIds, int $ruleId = null)
     {
-        $where = ['product_id' => $productIds];
+        $productIds = (array) $productIds;
+        $where = count($productIds) > 1
+            ? ['product_id IN (?)' => $productIds]
+            : ['product_id = ?' => $productIds];
         if ($ruleId) {
-            $where['rule_id'] = $ruleId;
+            $where['rule_id = ?'] = $ruleId;
         }
         $this->connection->delete($this->getTable('catalogrule_product_price'), $where);
     }
