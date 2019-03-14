@@ -20,6 +20,14 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!--Clear product page-->
+            <amOnPage url="{{ProductCatalogPage.url}}" stepKey="GoToProductCatalog"/>
+            <waitForPageLoad stepKey="waitForProductIndexPage"/>
+            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
+                              dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+            <actionGroup ref="emptyProductGridIfTheyExits" stepKey="deleteProductIfTheyExits"/>
             <createData stepKey="category1" entity="SimpleSubCategory"/>
             <createData stepKey="product1" entity="SimpleProduct">
                 <requiredEntity createDataKey="category1"/>

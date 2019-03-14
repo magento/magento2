@@ -27,8 +27,7 @@
         <fillField selector="{{AdminDataGridPaginationSection.perPageInput}}" userInput="{{perPage}}" stepKey="fillCustomPerPage"/>
         <click selector="{{AdminDataGridPaginationSection.perPageApplyInput}}" stepKey="applyCustomPerPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
-        <click selector="{{AdminDataGridPaginationSection.perPageDropdown}}" stepKey="clickPerPageDropdown1"/>
-        <seeElement selector="{{AdminDataGridPaginationSection.perPageDropDownItem(perPage)}}" stepKey="seeDropDownItem"/>
+        <seeInField selector="{{AdminDataGridPaginationSection.perPageDropDownValue}}" userInput="{{perPage}}" stepKey="seePerPageValueInDropDown"/>
     </actionGroup>
 
     <actionGroup name="adminDataGridDeleteCustomPerPage">
