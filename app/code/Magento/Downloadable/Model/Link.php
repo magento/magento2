@@ -28,6 +28,8 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
 
     const XML_PATH_CONFIG_IS_SHAREABLE = 'catalog/downloadable/shareable';
 
+    const XML_PATH_CONFIG_STATUS_TO_ENABLE_DOWNLOAD = 'catalog/downloadable/order_item_status';
+
     const LINK_SHAREABLE_YES = 1;
 
     const LINK_SHAREABLE_NO = 0;

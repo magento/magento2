@@ -13,6 +13,24 @@ use Magento\Framework\App\ResponseInterface;
 class Link extends \Magento\Downloadable\Controller\Download
 {
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+    )
+    {
+        $this->_scopeConfig = $scopeConfig;
+        parent::__construct($context);
+    }
+
+    /**
      * Return customer session object
      *
      * @return \Magento\Customer\Model\Session
@@ -92,7 +110,7 @@ class Link extends \Magento\Downloadable\Controller\Download
             $linkPurchasedItem->getNumberOfDownloadsUsed();
 
         $status = $linkPurchasedItem->getStatus();
-        if ($status == PurchasedLink::LINK_STATUS_AVAILABLE && ($downloadsLeft ||
+        if (($status == PurchasedLink::LINK_STATUS_AVAILABLE || ($status == PurchasedLink::LINK_STATUS_PENDING && 1 == $this->_scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_CONFIG_STATUS_TO_ENABLE_DOWNLOAD, \Magento\Store\Model\ScopeInterface::SCOPE_STORE))) && ($downloadsLeft ||
             $linkPurchasedItem->getNumberOfDownloadsBought() == 0)
         ) {
             $resource = '';
