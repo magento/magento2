@@ -10,6 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCreditMemoItemsSection">
         <element name="itemQtyToRefund" type="input" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-refund .qty-input" parameterized="true"/>
-        <element name="updateQty" type="button" selector=".order-creditmemo-tables tfoot button[data-ui-id='order-items-update-button']" timeout="30"/>
+        <element name="updateQty" type="button" selector=".order-creditmemo-tables tfoot button[data-ui-id='order-items-update-button']:not([class~='disabled'])" timeout="30"/>
     </section>
 </sections>
