@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EditShippingAddressOnePageCheckoutTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Edit Shipping Address"/>
+            <title value="Edit Shipping Address on Checkout Page."/>
+            <description value="Edit Shipping Address on Checkout Page."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14680"/>
+            <group value="shoppingCart"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="simpleProductDefault" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+         </after>
+
+        <!-- Go to Frontend as Customer -->
+         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+             <argument name="Customer" value="$$createCustomer$$" />
+         </actionGroup>
+
+        <!-- Add product to cart -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <actionGroup ref="StorefrontAddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!-- Go to checkout page -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="customerGoToCheckoutFromMinicart" />
+
+        <!--  *New Address* button on 1st checkout step -->
+        <click selector="{{CheckoutShippingSection.newAddressButton}}" stepKey="addNewAddress"/>
+
+        <!--Fill in required fields and click *Save address* button-->
+        <actionGroup ref="FillShippingAddressOneStreetActionGroup" stepKey="changeAddress">
+            <argument name="address" value="UK_Not_Default_Address"/>
+        </actionGroup>
+        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveNewAddress"/>
+
+        <!--Select Shipping Rate-->
+        <scrollTo selector="{{CheckoutShippingMethodsSection.next}}" stepKey="scrollToShippingRate"/>
+        <click selector="{{CheckoutShippingMethodsSection.shippingMethodFlatRate}}" stepKey="selectShippingMethod"/>
+
+        <!-- Click *Edit* button for the new address -->
+        <click selector="{{CheckoutShippingSection.editActiveAddress}}" stepKey="editNewAddress"/>
+
+        <!--Remove values from required fields and click *Cancel* button -->
+        <actionGroup ref="ClearShippingAddressActionGroup" stepKey="clearRequiredFields"/>
+        <click selector="{{CheckoutShippingSection.cancelChangeAddress}}" stepKey="cancelEditAddress"/>
+
+        <!-- Go to *Next* -->
+        <scrollTo selector="{{CheckoutShippingMethodsSection.next}}" stepKey="scrollToButtonNext"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="goNext"/>
+
+        <!-- Select payment solution -->
+        <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution" />
+
+        <!--Refresh Page and Place Order-->
+        <reloadPage stepKey="reloadPage"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+    </test>
+ </tests>
