@@ -397,9 +397,9 @@ class ConditionsElement extends SimpleElement
     protected function fillSelect($rule, ElementInterface $param, $type = null)
     {
         //Avoid confusion between regions like: "Baja California" and "California".
-        $value = $type === 'Shipping State/Province'
-            ? $param->find('select', Locator::SELECTOR_TAG_NAME, 'selectstate')
-            : $param->find('select', Locator::SELECTOR_TAG_NAME, 'select');
+        $value = strpos($type, 'State/Province') === false
+            ? $param->find('select', Locator::SELECTOR_TAG_NAME, 'select')
+            : $param->find('select', Locator::SELECTOR_TAG_NAME, 'selectstate');
         if ($value->isVisible()) {
             $value->setValue($rule);
             $this->click();
