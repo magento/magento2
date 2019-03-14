@@ -6,6 +6,8 @@
 namespace Magento\Framework\Locale;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 
 class Resolver implements ResolverInterface
 {
@@ -48,20 +50,28 @@ class Resolver implements ResolverInterface
     protected $emulatedLocales = [];
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param string $defaultLocalePath
      * @param string $scopeType
      * @param mixed $locale
+     * @param DeploymentConfig|null $deploymentConfig
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         $defaultLocalePath,
         $scopeType,
-        $locale = null
+        $locale = null,
+        DeploymentConfig $deploymentConfig = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->defaultLocalePath = $defaultLocalePath;
         $this->scopeType = $scopeType;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->create(DeploymentConfig::class);
         $this->setLocale($locale);
     }
 
@@ -88,7 +98,10 @@ class Resolver implements ResolverInterface
     public function getDefaultLocale()
     {
         if (!$this->defaultLocale) {
-            $locale = $this->scopeConfig->getValue($this->getDefaultLocalePath(), $this->scopeType);
+            $locale = false;
+            if ($this->deploymentConfig->isAvailable() && $this->deploymentConfig->isDbAvailable()) {
+                $locale = $this->scopeConfig->getValue($this->getDefaultLocalePath(), $this->scopeType);
+            }
             if (!$locale) {
                 $locale = self::DEFAULT_LOCALE;
             }

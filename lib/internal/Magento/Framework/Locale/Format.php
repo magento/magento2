@@ -100,7 +100,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
         }
 
         $formatter = new \NumberFormatter(
-            $localeCode . '@currency=' . $currency->getCode(),
+            $currency->getCode() ? $localeCode . '@currency=' . $currency->getCode() : $localeCode,
             \NumberFormatter::CURRENCY
         );
         $format = $formatter->getPattern();
