@@ -111,10 +111,10 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
-     * @param \Magento\Store\Model\Store $store
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param ResourceModel\Store\CollectionFactory $storeListFactory
+     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
      * @param \Magento\MessageQueue\Api\PoisonPillPutInterface|null $pillPut
@@ -253,6 +253,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Get stores count
+     *
      * @return int
      */
     public function getStoresCount()
@@ -358,6 +360,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Get default store id
+     *
      * @return mixed
      */
     public function getDefaultStoreId()
@@ -374,6 +378,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Get root category id
+     *
      * @return mixed
      */
     public function getRootCategoryId()
@@ -390,6 +396,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Get website id
+     *
      * @return mixed
      */
     public function getWebsiteId()
@@ -406,7 +414,10 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * @return $this
+     * Before delete action
+     *
+     * @return \Magento\Framework\Model\AbstractExtensibleModel
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeDelete()
     {
@@ -483,7 +494,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
@@ -517,7 +528,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -525,7 +536,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\GroupExtensionInterface $extensionAttributes
@@ -534,7 +545,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getScopeType()
@@ -543,7 +554,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getScopeTypeName()
