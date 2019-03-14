@@ -73,14 +73,13 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     public function testRemoveItemFromNonExistentCart()
     {
         $query = $this->prepareMutationQuery('non_existent_masked_id', 1);
-
         $this->graphQlQuery($query);
     }
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
-    public function testRemoveNotExistentItem()
+    public function testRemoveNonExistentItem()
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
@@ -137,6 +136,49 @@ class RemoveItemFromCartTest extends GraphQlAbstract
 
         $query = $this->prepareMutationQuery($customerQuoteMaskedId, $customerQuoteItemId);
         $this->graphQlQuery($query);
+    }
+
+    /**
+     * @param string $input
+     * @param string $message
+     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
+     */
+    public function testUpdateWithMissedItemRequiredParameters(string $input, string $message)
+    {
+        $query = <<<QUERY
+mutation {
+  removeItemFromCart(
+    input: {
+      {$input}
+    }
+  ) {
+    cart {
+      items {
+        qty
+      }
+    }
+  }
+}
+QUERY;
+        $this->expectExceptionMessage($message);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderUpdateWithMissedRequiredParameters(): array
+    {
+        return [
+            'missed_cart_id' => [
+                'cart_item_id: 1',
+                'Required parameter "cart_id" is missing.'
+            ],
+            'missed_cart_item_id' => [
+                'cart_id: "test"',
+                'Required parameter "cart_item_id" is missing.'
+            ],
+        ];
     }
 
     /**
