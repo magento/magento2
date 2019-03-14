@@ -16,6 +16,7 @@
         <element name="submit" type="button" selector="//button[@class='action-default scalable']/span" timeout="30"/>
         <element name="searchQuery" type="text" selector="//tr[@class='data-grid-filters']//td/input[@name='search_query']"/>
         <element name="nthRow" type="checkbox" selector="//tbody/tr['{{rowNum}}']//input[@name='search']" parameterized="true"/>
+        <element name="searchTermRowCheckboxBySearchQuery" type="checkbox" selector="//*[normalize-space()='{{var1}}']/preceding-sibling::td//input[@name='search']" parameterized="true" timeout="30"/>
         <element name="okButton" type="button" selector="//button[@class='action-primary action-accept']/span" timeout="30"/>
         <element name="emptyRecords" type="text" selector="//tr[@class='data-grid-tr-no-data even']/td[@class='empty-text']"/>
     </section>

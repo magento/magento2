@@ -94,6 +94,7 @@ mutation {
           code
           label
         }
+        address_type
       }
     }
   }
@@ -184,6 +185,7 @@ mutation {
           label
           code
         }
+        address_type
       }
     }
   }
@@ -426,7 +428,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The current user cannot use address with ID "1"
+     * @expectedExceptionMessage Current customer does not have permission to address with ID "1"
      */
     public function testSetShippingAddressIfCustomerIsNotOwnerOfAddress()
     {
@@ -472,6 +474,7 @@ QUERY;
             ['response_field' => 'postcode', 'expected_value' => '887766'],
             ['response_field' => 'telephone', 'expected_value' => '88776655'],
             ['response_field' => 'country', 'expected_value' => ['code' => 'US', 'label' => 'US']],
+            ['response_field' => 'address_type', 'expected_value' => 'SHIPPING']
         ];
 
         $this->assertResponseFields($shippingAddressResponse, $assertionMap);
