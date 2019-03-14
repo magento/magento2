@@ -1063,7 +1063,7 @@ class EavSetup
                 return $this;
             }
         }
-      
+
         $attributeId = $this->getAttributeId($entityTypeId, $id);
         if (false === $attributeId) {
             throw new LocalizedException(__('Attribute with ID: "%1" does not exist', $id));
