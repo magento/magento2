@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Controller\Guest;
 
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
@@ -50,39 +51,56 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected $resultPageMock;
 
     /**
+     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $formKeyValidatorMock;
+
+    /**
      * @return void
      */
     protected function setUp()
     {
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
-            ->getMock();
-        $this->guestHelperMock = $this->getMockBuilder('Magento\Sales\Helper\Guest')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->setMethods(['isPost'])
+            ->getMockForAbstractClass();
+        $this->guestHelperMock = $this->getMockBuilder(\Magento\Sales\Helper\Guest::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+        $this->resultPageFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+        $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->formKeyValidatorMock = $this->getMockBuilder(Validator::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['validate'])
+            ->getMock();
+
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn(true);
+        $this->formKeyValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->requestMock)
+            ->willReturn(true);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $this->objectManagerHelper->getObject(
-            'Magento\Framework\App\Action\Context',
+            \Magento\Framework\App\Action\Context::class,
             [
                 'request' => $this->requestMock
             ]
         );
         $this->viewController = $this->objectManagerHelper->getObject(
-            'Magento\Sales\Controller\Guest\View',
+            \Magento\Sales\Controller\Guest\View::class,
             [
                 'context' => $this->context,
                 'guestHelper' => $this->guestHelperMock,
-                'resultPageFactory' => $this->resultPageFactoryMock
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'formKeyValidator' => $this->formKeyValidatorMock,
             ]
         );
     }

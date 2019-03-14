@@ -13,6 +13,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http as Request;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\Result\RedirectFactory as ResultRedirectFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
@@ -67,26 +68,42 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
      */
     protected $messageManager;
 
+    /**
+     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $formKeyValidatorMock;
+
     protected function setUp()
     {
         $this->prepareContext();
 
-        $this->session = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->accountManagement = $this->getMockBuilder('Magento\Customer\Api\AccountManagementInterface')
+        $this->accountManagement = $this->getMockBuilder(\Magento\Customer\Api\AccountManagementInterface::class)
             ->getMockForAbstractClass();
 
-        $this->escaper = $this->getMockBuilder('Magento\Framework\Escaper')
+        $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->formKeyValidatorMock = $this->getMockBuilder(Validator::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['validate'])
+            ->getMock();
+
+        $this->request->expects($this->once())->method('isPost')->willReturn(true);
+        $this->formKeyValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
 
         $this->controller = new ForgotPasswordPost(
             $this->context,
             $this->session,
             $this->accountManagement,
-            $this->escaper
+            $this->escaper,
+            $this->formKeyValidatorMock
         );
     }
 
@@ -212,26 +229,24 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareContext()
     {
-        $this->resultRedirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+        $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultRedirectFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\RedirectFactory')
+        $this->resultRedirectFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\RedirectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder('Magento\Framework\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getPost',
-            ])
+            ->setMethods(['getPost', 'isPost'])
             ->getMock();
 
-        $this->messageManager = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
+        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->getMockForAbstractClass();
 
         $this->resultRedirectFactory->expects($this->any())
