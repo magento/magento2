@@ -109,6 +109,27 @@ class ListProducts extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Returns whether or not an item is available for download.
+     *
+     * @param \Magento\Downloadable\Model\Link\Purchased\Item $item
+     * @return bool
+     */
+    public function isItemAvailable($item)
+    {
+        if (
+            $item->getStatus() == \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_AVAILABLE ||
+            (
+                1 == $this->_scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_CONFIG_STATUS_TO_ENABLE_DOWNLOAD, \Magento\Store\Model\ScopeInterface::SCOPE_STORE) &&
+                $item->getStatus() == \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PENDING
+            )
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Return order view url
      *
      * @param integer $orderId
