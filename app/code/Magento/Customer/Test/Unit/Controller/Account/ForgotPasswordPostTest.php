@@ -233,7 +233,9 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultRedirectFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\RedirectFactory::class)
+        $this->resultRedirectFactory = $this->getMockBuilder(
+            \Magento\Framework\Controller\Result\RedirectFactory::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 

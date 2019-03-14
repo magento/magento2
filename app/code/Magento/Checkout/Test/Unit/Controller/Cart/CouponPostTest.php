@@ -12,6 +12,7 @@ use Magento\Framework\Data\Form\FormKey\Validator;
  * Test for \Magento\Checkout\Controller\Cart\CouponPost
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CouponPostTest extends \PHPUnit_Framework_TestCase
 {
