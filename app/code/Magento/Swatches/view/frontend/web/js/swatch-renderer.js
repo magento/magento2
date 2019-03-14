@@ -950,7 +950,8 @@ define([
                 $productPrice = $product.find(this.options.selectorProductPrice),
                 options = _.object(_.keys($widget.optionsMap), {}),
                 result,
-                tierPriceHtml;
+                tierPriceHtml,
+                isShow;
 
             $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
                 var attributeId = $(this).attr('attribute-id');
@@ -967,11 +968,9 @@ define([
                 }
             );
 
-            if (typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount) {
-                $(this.options.slyOldPriceSelector).show();
-            } else {
-                $(this.options.slyOldPriceSelector).hide();
-            }
+            isShow = typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount;
+
+            $product.find(this.options.slyOldPriceSelector)[isShow ? 'show' : 'hide']();
 
             if (typeof result != 'undefined' && result.tierPrices.length) {
                 if (this.options.tierPriceTemplate) {
