@@ -14,7 +14,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('simple')
     ->setAttributeSetId($product->getDefaultAttributeSetId())
-    ->setName('Simple Product')
+    ->setName('Simple Product For Guest Quote')
     ->setSku('simple-product-guest-quote')
     ->setPrice(10)
     ->setTaxClassId(0)

@@ -97,7 +97,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      * Test case: get available shipping methods when all shipping methods are disabled
      *
      * @magentoApiDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
-     * @magentoApiDataFixture Magento/Checkout/_files/disable_all_active_shipping_methods.php
+     * @magentoApiDataFixture Magento/OfflineShipping/_files/disable_offline_shipping_methods.php
      */
     public function testGetAvailableShippingMethodsIfShippingsAreNotSet()
     {

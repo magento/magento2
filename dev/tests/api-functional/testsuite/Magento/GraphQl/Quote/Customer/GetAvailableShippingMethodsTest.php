@@ -68,15 +68,15 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
         self::assertCount(1, $response['cart']['shipping_addresses'][0]['available_shipping_methods']);
 
         $expectedAddressData = [
-            'amount' => 10,
-            'base_amount' => 10,
+            'amount' => 0,
+            'base_amount' => 0,
             'carrier_code' => 'flatrate',
             'carrier_title' => 'Flat Rate',
             'error_message' => '',
             'method_code' => 'flatrate',
             'method_title' => 'Fixed',
-            'price_incl_tax' => 10,
-            'price_excl_tax' => 10,
+            'price_incl_tax' => 0,
+            'price_excl_tax' => 0,
         ];
         self::assertEquals(
             $expectedAddressData,
@@ -105,7 +105,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      * Test case: get available shipping methods when all shipping methods are disabled
      *
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/disable_all_active_shipping_methods.php
+     * @magentoApiDataFixture Magento/OfflineShipping/_files/disable_offline_shipping_methods.php
      */
     public function testGetAvailableShippingMethodsIfShippingsAreNotSet()
     {
