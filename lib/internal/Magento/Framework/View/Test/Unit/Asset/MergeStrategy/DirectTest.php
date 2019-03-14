@@ -13,6 +13,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class DirectTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $mathRandomMock;
+    /**
      * @var \Magento\Framework\View\Asset\MergeStrategy\Direct
      */
     protected $object;
@@ -50,30 +54,42 @@ class DirectTest extends \PHPUnit\Framework\TestCase
                 [DirectoryList::TMP, \Magento\Framework\Filesystem\DriverPool::FILE, $this->tmpDir],
             ]);
         $this->resultAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
-        $this->object = new Direct($filesystem, $this->cssUrlResolver);
+        $this->mathRandomMock = $this->getMockBuilder(\Magento\Framework\Math\Random::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->object = new Direct($filesystem, $this->cssUrlResolver, $this->mathRandomMock);
     }
 
     public function testMergeNoAssets()
     {
+        $uniqId = '_b3bf82fa6e140594420fa90982a8e877';
         $this->resultAsset->expects($this->once())->method('getPath')->will($this->returnValue('foo/result'));
         $this->staticDir->expects($this->never())->method('writeFile');
-        $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result', '');
-        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result', 'foo/result', $this->staticDir);
+        $this->mathRandomMock->expects($this->once())
+            ->method('getUniqueHash')
+            ->willReturn($uniqId);
+        $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result' . $uniqId, '');
+        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result' . $uniqId, 'foo/result', $this->staticDir);
         $this->object->merge([], $this->resultAsset);
     }
 
     public function testMergeGeneric()
     {
+        $uniqId = '_be50ccf992fd81818c1a2645d1a29e92';
         $this->resultAsset->expects($this->once())->method('getPath')->will($this->returnValue('foo/result'));
         $assets = $this->prepareAssetsToMerge([' one', 'two']); // note leading space intentionally
         $this->staticDir->expects($this->never())->method('writeFile');
-        $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result', 'onetwo');
-        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result', 'foo/result', $this->staticDir);
+        $this->mathRandomMock->expects($this->once())
+            ->method('getUniqueHash')
+            ->willReturn($uniqId);
+        $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result' . $uniqId, 'onetwo');
+        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result' . $uniqId, 'foo/result', $this->staticDir);
         $this->object->merge($assets, $this->resultAsset);
     }
 
     public function testMergeCss()
     {
+        $uniqId = '_f929c374767e00712449660ea673f2f5';
         $this->resultAsset->expects($this->exactly(3))
             ->method('getPath')
             ->will($this->returnValue('foo/result'));
@@ -86,9 +102,12 @@ class DirectTest extends \PHPUnit\Framework\TestCase
             ->method('aggregateImportDirectives')
             ->with('12')
             ->will($this->returnValue('1020'));
+        $this->mathRandomMock->expects($this->once())
+            ->method('getUniqueHash')
+            ->willReturn($uniqId);
         $this->staticDir->expects($this->never())->method('writeFile');
-        $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result', '1020');
-        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result', 'foo/result', $this->staticDir);
+        $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result' . $uniqId, '1020');
+        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result' . $uniqId, 'foo/result', $this->staticDir);
         $this->object->merge($assets, $this->resultAsset);
     }
 

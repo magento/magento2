@@ -31,15 +31,22 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
     private $cssUrlResolver;
 
     /**
+     * @var \Magento\Framework\Math\Random
+     */
+    protected $mathRandom;
+
+    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Url\CssResolver $cssUrlResolver
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\View\Url\CssResolver $cssUrlResolver
+        \Magento\Framework\View\Url\CssResolver $cssUrlResolver,
+        \Magento\Framework\Math\Random $mathRandom
     ) {
         $this->filesystem = $filesystem;
         $this->cssUrlResolver = $cssUrlResolver;
+        $this->mathRandom = $mathRandom;
     }
 
     /**
@@ -49,17 +56,18 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
     {
         $mergedContent = $this->composeMergedContent($assetsToMerge, $resultAsset);
         $filePath = $resultAsset->getPath();
+        $tmpFilePath = $filePath . $this->mathRandom->getUniqueHash('_');
         $staticDir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
         $tmpDir = $this->filesystem->getDirectoryWrite(DirectoryList::TMP);
-        $tmpDir->writeFile($filePath, $mergedContent);
-        $tmpDir->renameFile($filePath, $filePath, $staticDir);
+        $tmpDir->writeFile($tmpFilePath, $mergedContent);
+        $tmpDir->renameFile($tmpFilePath, $filePath, $staticDir);
     }
 
     /**
      * Merge files together and modify content if needed
      *
      * @param \Magento\Framework\View\Asset\MergeableInterface[] $assetsToMerge
-     * @param \Magento\Framework\View\Asset\LocalInterface $resultAsset
+     * @param \Magento\ Framework\View\Asset\LocalInterface $resultAsset
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
