@@ -11,5 +11,6 @@
     <section name="StorefrontQuickSearchSection">
         <element name="searchPhrase" type="input" selector="#search"/>
         <element name="searchButton" type="button" selector="button.action.search" timeout="30"/>
+        <element name="searchMiniForm" type="input" selector="#search_mini_form"/>
     </section>
 </sections>
