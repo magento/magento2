@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddOutOfStockProductToCompareListTest">
+        <annotations>
+            <features value="Catalog"/>
+            <title value="Adding to compare list if a product is out of stock"/>
+            <description value="Adding to compare list if a product is out of stock"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-98644"/>
+            <useCaseId value="MAGETWO-98522"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="ApiCategory" stepKey="category"/>
+            <createData entity="SimpleOutOfStockProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Check 'out of stock' is turned off by default-->
+        <actionGroup ref="noDisplayOutOfStockProduct" stepKey="noDisplayOutOfStockProduct"/>
+
+        <!--Open product page-->
+        <amOnPage url="$$product.name$$.html" stepKey="goToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPage"/>
+
+        <!--'Add to compare' link is not available-->
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="dontSeeAddToCompareLink"/>
+
+        <!--Turn on 'out of stock' config-->
+        <actionGroup ref="displayOutOfStockProduct" stepKey="displayOutOfStockProduct"/>
+
+        <!--Clear cache-->
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache" />
+
+        <!--Open product page-->
+        <amOnPage url="$$product.name$$.html" stepKey="goToSimpleProductPage2"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPage2"/>
+
+        <!--Click on 'Add to Compare' link-->
+        <click selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="clickOnAddToCompare"/>
+
+        <!--See product in the comparison list-->
+        <amOnPage url="{{StorefrontProductComparePage.url}}" stepKey="navigateToComparePage"/>
+        <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($product.name$)}}" stepKey="seeProductInCompareList"/>
+    </test>
+</tests>
