@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Controller\Adminhtml\Product\Widget;
 
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Chooser Product container Action.
@@ -38,18 +39,18 @@ class Chooser extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Framework\Escaper $escaper
+        \Magento\Framework\Escaper $escaper = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
         $this->layoutFactory = $layoutFactory;
-        $this->escaper = $escaper;
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->create(\Magento\Framework\Escaper::class);
     }
 
     /**
@@ -77,8 +78,8 @@ class Chooser extends \Magento\Backend\App\Action
                     'id' => $this->escaper->escapeHtml($uniqId),
                     'use_massaction' => $massAction,
                     'product_type_id' => $productTypeId,
-                    'category_id' => $this->getRequest()->getParam('category_id'),
-                ]
+                    'category_id' => (int)$this->getRequest()->getParam('category_id'),
+                ],
             ]
         );
 
@@ -93,7 +94,7 @@ class Chooser extends \Magento\Backend\App\Action
                         'id' => $this->escaper->escapeHtml($uniqId) . 'Tree',
                         'node_click_listener' => $productsGrid->getCategoryClickListenerJs(),
                         'with_empty_node' => true,
-                    ]
+                    ],
                 ]
             );
 
