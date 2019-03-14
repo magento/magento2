@@ -556,10 +556,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * Before delete action
-     *
-     * @return \Magento\Framework\Model\AbstractExtensibleModel
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @inheritdoc
      */
     public function beforeDelete()
     {
