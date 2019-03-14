@@ -265,7 +265,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     }
 
     /**
-     * @inheritdoc
+     * @return string
      */
     protected function _toHtml()
     {

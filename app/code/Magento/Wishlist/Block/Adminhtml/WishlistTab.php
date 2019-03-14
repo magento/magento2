@@ -42,7 +42,7 @@ class WishlistTab extends TabWrapper implements TabInterface
     }
 
     /**
-     * @inheritdoc
+     * @return bool|mixed
      */
     public function canShowTab()
     {
