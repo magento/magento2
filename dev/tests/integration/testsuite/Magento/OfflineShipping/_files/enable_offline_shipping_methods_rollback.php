@@ -16,7 +16,3 @@ $configWriter = $objectManager->create(WriterInterface::class);
 $configWriter->delete('carriers/flatrate/active');
 $configWriter->delete('carriers/tablerate/active');
 $configWriter->delete('carriers/freeshipping/active');
-$configWriter->delete('carriers/ups/active');
-$configWriter->delete('carriers/usps/active');
-$configWriter->delete('carriers/fedex/active');
-$configWriter->delete('carriers/dhl/active');
