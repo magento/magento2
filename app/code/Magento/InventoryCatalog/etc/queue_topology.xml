@@ -7,7 +7,7 @@
 -->
 <config
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue_topology.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
 
     <exchange name="inventory.catalog.product.legacy_inventory.set_data.exchange" type="topic" connection="amqp">
         <binding

@@ -7,7 +7,7 @@
 -->
 <config
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue_publisher.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
     <publisher topic="inventory.catalog.product.legacy_inventory.set_data">
         <connection name="amqp" exchange="inventory.catalog.product.legacy_inventory.set_data.exchange" />
     </publisher>
