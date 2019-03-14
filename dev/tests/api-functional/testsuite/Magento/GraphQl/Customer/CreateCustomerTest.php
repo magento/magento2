@@ -237,4 +237,19 @@ mutation {
 QUERY;
         $this->graphQlQuery($query);
     }
+
+    public function tearDown()
+    {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+        $customersCollection = Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Customer::class);
+        foreach ($customersCollection as $customer) {
+            $this->customerRepository->deleteById($customer->getId());
+        }
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
+        parent::tearDown();
+    }
 }
