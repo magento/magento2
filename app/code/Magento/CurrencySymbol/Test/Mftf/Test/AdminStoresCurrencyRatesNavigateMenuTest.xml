@@ -12,7 +12,7 @@
         <annotations>
             <features value="CurrencySymbol"/>
             <stories value="Menu Navigation"/>
-            <title value="Navigate menu test 20"/>
+            <title value="Admin stores currency rates navigate menu test"/>
             <description value="Admin should be able to navigate to Stores > Currency Rates"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14150"/>

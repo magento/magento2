@@ -12,7 +12,7 @@
         <annotations>
             <features value="Newsletter"/>
             <stories value="Menu Navigation"/>
-            <title value="Navigate menu test 48"/>
+            <title value="Admin marketing newsletter subscribers navigate menu test"/>
             <description value="Admin should be able to navigate to Marketing > Newsletter Subscribers"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14190"/>
