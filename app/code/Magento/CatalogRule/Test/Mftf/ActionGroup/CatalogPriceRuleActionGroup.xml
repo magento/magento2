@@ -70,23 +70,6 @@
         <click selector="{{AdminNewCatalogPriceRule.fromDateButton}}" stepKey="clickFromCalender"/>
         <click selector="{{AdminNewCatalogPriceRule.todayDate}}" stepKey="clickFromToday"/>
     </actionGroup>
-
-    <actionGroup name="CreateCatalogPriceRuleConditionWithAttributeAndOption">
-        <arguments>
-            <argument name="attributeName" type="string"/>
-            <argument name="targetSelectValue" type="string"/>
-            <argument name="indexA" type="string"/>
-            <argument name="indexB" type="string"/>
-        </arguments>
-        <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="openConditionsTab"/>
-        <waitForPageLoad stepKey="waitForConditionTabOpened"/>
-        <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="addNewCondition"/>
-        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect(indexA)}}" userInput="{{attributeName}}" stepKey="selectTypeCondition"/>
-        <waitForElement selector="{{AdminNewCatalogPriceRuleConditions.ellipsisValue(indexA)}}" stepKey="waitForTarget"/>
-        <click selector="{{AdminNewCatalogPriceRuleConditions.ellipsisValue(indexA)}}" stepKey="clickOnEllipsis"/>
-        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.targetEllipsisSelect(indexA, indexB)}}" userInput="{{targetSelectValue}}" stepKey="selectOption"/>
-    </actionGroup>
-
     <!-- Apply all of the saved catalog price rules -->
     <actionGroup name="applyCatalogPriceRules">
         <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
@@ -131,12 +114,5 @@
 
     <actionGroup name="selectNotLoggedInCustomerGroupActionGroup">
         <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
-    </actionGroup>
-
-    <actionGroup name="selectNewCustomerGroupActionGroup">
-        <arguments>
-            <argument name="customerGroup" type="entity"/>
-        </arguments>
-        <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="{{customerGroup}}" stepKey="selectCustomerGroup"/>
     </actionGroup>
 </actionGroups>

@@ -185,14 +185,16 @@
         </actionGroup>
 
         <!-- Create price rule -->
-        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createFirstPriceRule">
+        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createPriceRule">
             <argument name="catalogRule" value="CatalogRuleToFixed"/>
         </actionGroup>
-        <actionGroup ref="selectNewCustomerGroupActionGroup" stepKey="adFirstCustomerGroup">
+        <actionGroup ref="SelectNewCustomerGroupActionGroup" stepKey="addCustomerGroup">
             <argument name="customerGroup" value="$$customerGroup.code$$"/>
         </actionGroup>
-        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRulesForFirst"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccessForFirst"/>
+
+        <!-- Save price rule -->
+        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRule"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccessMessage"/>
 
         <!-- Run full reindex and clear caches -->
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
@@ -206,39 +208,37 @@
         <!-- Assert first product in category -->
         <amOnPage url="$$firstSimpleCategory.name$$.html" stepKey="goToFirstCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForFirstCategoryPageLoad"/>
-        <actionGroup ref="StorefrontCheckCategoryConfigurableProductWithUpdatedPrice" stepKey="checkFirstProductPriceInCategory">
-            <argument name="product" value="$$createFirstConfigProduct$$"/>
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProductWithUpdatedPriceActionGroup" stepKey="checkFirstProductPriceInCategory">
+            <argument name="productName" value="$$createFirstConfigProduct.name$$"/>
             <argument name="expectedPrice" value="{{CatalogRuleToFixed.discount_amount}}"/>
         </actionGroup>
 
         <!-- Assert second product in category -->
         <amOnPage url="$$secondSimpleCategory.name$$.html" stepKey="goToSecondCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForSecondCategoryPageLoad"/>
-        <actionGroup ref="StorefrontCheckCategoryConfigurableProductWithUpdatedPrice" stepKey="checkSecondProductPriceInCategory">
-            <argument name="product" value="$$createSecondConfigProduct$$"/>
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProductWithUpdatedPriceActionGroup" stepKey="checkSecondProductPriceInCategory">
+            <argument name="productName" value="$$createSecondConfigProduct.name$$"/>
             <argument name="expectedPrice" value="{{CatalogRuleToFixed.discount_amount}}"/>
         </actionGroup>
 
         <!-- Assert first product in storefront product page -->
         <amOnPage url="$$createFirstConfigProduct.custom_attributes[url_key]$$.html" stepKey="amOnFirstProductPage"/>
         <waitForPageLoad stepKey="waitForFirstProductPageLoad"/>
-        <actionGroup ref="assertUpdatedProductPriceInStorefrontProductPage" stepKey="checkFirstProductPriceInStorefrontProductPage">
-            <argument name="product" value="$$createFirstConfigProduct$$"/>
+        <actionGroup ref="StorefrontAssertUpdatedProductPriceInStorefrontProductPageActionGroup" stepKey="checkFirstProductPriceInStorefrontProductPage">
+            <argument name="productName" value="$$createFirstConfigProduct.name$$"/>
             <argument name="expectedPrice" value="{{CatalogRuleToFixed.discount_amount}}"/>
         </actionGroup>
 
         <!-- Add first product with selected options to the cart -->
-        <actionGroup ref="StorefrontAddProductWithSelectedOptionsToCartActionGroup" stepKey="addFirstProductWithSelectedOptionsToCart1">
+        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableAndCustomOptionsToCartActionGroup" stepKey="addFirstProductWithSelectedOptionToCart1">
             <argument name="product" value="$$createFirstConfigProduct$$"/>
-            <argument name="productCount" value="1"/>
             <argument name="option" value="$$createFirstConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
             <argument name="customizableOption" value="{{ProductOptionValueRadioButtons1.title}}"/>
         </actionGroup>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="grabForthProductUpdatedPrice1"/>
 
-        <actionGroup ref="StorefrontAddProductWithSelectedOptionsToCartActionGroup" stepKey="addFirstProductWithSelectedOptionsToCart2">
+        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableAndCustomOptionsToCartActionGroup" stepKey="addFirstProductWithSelectedOptionToCart2">
             <argument name="product" value="$$createFirstConfigProduct$$"/>
-            <argument name="productCount" value="1"/>
             <argument name="option" value="$$createFirstConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
             <argument name="customizableOption" value="{{ProductOptionValueRadioButtons3.title}}"/>
         </actionGroup>
@@ -246,22 +246,20 @@
         <!-- Assert second product in storefront product page -->
         <amOnPage url="$$createSecondConfigProduct.custom_attributes[url_key]$$.html" stepKey="amOnSecondProductPage"/>
         <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
-        <actionGroup ref="assertUpdatedProductPriceInStorefrontProductPage" stepKey="checkSecondProductPriceInStorefrontProductPage">
-            <argument name="product" value="$$createSecondConfigProduct$$"/>
+        <actionGroup ref="StorefrontAssertUpdatedProductPriceInStorefrontProductPageActionGroup" stepKey="checkSecondProductPriceInStorefrontProductPage">
+            <argument name="productName" value="$$createSecondConfigProduct.name$$"/>
             <argument name="expectedPrice" value="{{CatalogRuleToFixed.discount_amount}}"/>
         </actionGroup>
 
         <!-- Add second product with selected options to the cart -->
-        <actionGroup ref="StorefrontAddProductWithSelectedOptionsToCartActionGroup" stepKey="addSecondProductWithSelectedOptionsToCart1">
+        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableAndCustomOptionsToCartActionGroup" stepKey="addSecondProductWithSelectedOptionToCart1">
             <argument name="product" value="$$createSecondConfigProduct$$"/>
-            <argument name="productCount" value="1"/>
             <argument name="option" value="$$createSecondConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
             <argument name="customizableOption" value="{{ProductOptionValueRadioButtons1.title}}"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontAddProductWithSelectedOptionsToCartActionGroup" stepKey="addSecondProductWithSelectedOptionsToCart2">
+        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableAndCustomOptionsToCartActionGroup" stepKey="addSecondProductWithSelectedOptionToCart2">
             <argument name="product" value="$$createSecondConfigProduct$$"/>
-            <argument name="productCount" value="1"/>
             <argument name="option" value="$$createSecondConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
             <argument name="customizableOption" value="{{ProductOptionValueRadioButtons3.title}}"/>
         </actionGroup>

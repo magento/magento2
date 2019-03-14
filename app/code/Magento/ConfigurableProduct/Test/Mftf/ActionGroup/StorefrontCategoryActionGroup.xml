@@ -32,15 +32,4 @@
         <seeElement selector="{{StorefrontCategoryProductSection.ProductStockUnavailable}}" stepKey="AssertOutOfStock"/>
         <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart" />
     </actionGroup>
-
-    <actionGroup name="StorefrontCheckCategoryConfigurableProductWithUpdatedPrice">
-        <arguments>
-            <argument name="product" type="entity"/>
-            <argument name="expectedPrice" type="string"/>
-        </arguments>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(product.name)}}" stepKey="assertProductName"/>
-        <see userInput="{{expectedPrice}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="AssertProductPrice"/>
-        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart" />
-    </actionGroup>
 </actionGroups>

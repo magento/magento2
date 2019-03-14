@@ -127,7 +127,7 @@
             <argument name="catalogRule" value="CatalogRuleToFixed"/>
         </actionGroup>
         <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroupForFirstPriceRule"/>
-        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOption" stepKey="createFirstCatalogPriceRuleCondition">
+        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="createFirstCatalogPriceRuleCondition">
             <argument name="attributeName" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetSelectValue" value="$$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
             <argument name="indexA" value="1"/>
@@ -141,7 +141,7 @@
             <argument name="catalogRule" value="_defaultCatalogRule"/>
         </actionGroup>
         <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroupForSecondPriceRule"/>
-        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOption" stepKey="createSecondCatalogPriceRuleCondition">
+        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="createSecondCatalogPriceRuleCondition">
             <argument name="attributeName" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetSelectValue" value="$$createConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
             <argument name="indexA" value="1"/>
@@ -155,7 +155,7 @@
             <argument name="catalogRule" value="CatalogRuleWithoutDiscount"/>
         </actionGroup>
         <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroupForThirdPriceRule"/>
-        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOption" stepKey="createThirdCatalogPriceRuleCondition">
+        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="createThirdCatalogPriceRuleCondition">
             <argument name="attributeName" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetSelectValue" value="$$createConfigProductAttributeThirdOption.option[store_labels][1][label]$$"/>
             <argument name="indexA" value="1"/>
@@ -171,43 +171,40 @@
         <!-- Assert product in storefront product page -->
         <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <actionGroup ref="assertUpdatedProductPriceInStorefrontProductPage" stepKey="assertUpdatedProductPriceInStorefrontProductPage">
-            <argument name="product" value="$$createConfigProduct$$"/>
+        <actionGroup ref="StorefrontAssertUpdatedProductPriceInStorefrontProductPageActionGroup" stepKey="assertUpdatedProductPriceInStorefrontProductPage">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
             <argument name="expectedPrice" value="{{CatalogRuleToFixed.discount_amount}}"/>
         </actionGroup>
 
         <!-- Assert product options price in storefront product page -->
-        <actionGroup ref="assertCatalogPriceRuleAppliedToProductOption" stepKey="assertCatalogPriceRuleAppliedToFirstProductOption">
+        <actionGroup ref="StorefrontAssertCatalogPriceRuleAppliedToProductOptionActionGroup" stepKey="assertCatalogPriceRuleAppliedToFirstProductOption">
             <argument name="option" value="$$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
             <argument name="expectedPrice" value="{{CatalogRuleToFixed.discount_amount}}"/>
         </actionGroup>
 
-        <actionGroup ref="assertCatalogPriceRuleAppliedToProductOption" stepKey="assertCatalogPriceRuleAppliedToSecondProductOption">
+        <actionGroup ref="StorefrontAssertCatalogPriceRuleAppliedToProductOptionActionGroup" stepKey="assertCatalogPriceRuleAppliedToSecondProductOption">
             <argument name="option" value="$$createConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
             <argument name="expectedPrice" value="$110.70"/>
         </actionGroup>
 
-        <actionGroup ref="assertCatalogPriceRuleAppliedToProductOption" stepKey="assertCatalogPriceRuleAppliedToThirdProductOption">
+        <actionGroup ref="StorefrontAssertCatalogPriceRuleAppliedToProductOptionActionGroup" stepKey="assertCatalogPriceRuleAppliedToThirdProductOption">
             <argument name="option" value="$$createConfigProductAttributeThirdOption.option[store_labels][1][label]$$"/>
             <argument name="expectedPrice" value="{{ApiConfigurableProduct.price}}"/>
         </actionGroup>
 
         <!-- Add product with selected option to the cart -->
-        <actionGroup ref="StorefrontAddProductWithSelectedOptionToCartActionGroup" stepKey="addProductWithSelectedFirstOptionToCart">
+        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableOptionToCartActionGroup" stepKey="addProductWithSelectedFirstOptionToCart">
             <argument name="product" value="$$createConfigProduct$$"/>
-            <argument name="productCount" value="1"/>
             <argument name="option" value="$$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontAddProductWithSelectedOptionToCartActionGroup" stepKey="addProductWithSelectedSecondOptionToCart">
+        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableOptionToCartActionGroup" stepKey="addProductWithSelectedSecondOptionToCart">
             <argument name="product" value="$$createConfigProduct$$"/>
-            <argument name="productCount" value="1"/>
             <argument name="option" value="$$createConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontAddProductWithSelectedOptionToCartActionGroup" stepKey="addProductWithSelectedThirdOptionToCart">
+        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableOptionToCartActionGroup" stepKey="addProductWithSelectedThirdOptionToCart">
             <argument name="product" value="$$createConfigProduct$$"/>
-            <argument name="productCount" value="1"/>
             <argument name="option" value="$$createConfigProductAttributeThirdOption.option[store_labels][1][label]$$"/>
         </actionGroup>
 
