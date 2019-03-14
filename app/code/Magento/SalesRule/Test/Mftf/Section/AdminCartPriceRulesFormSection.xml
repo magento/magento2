@@ -48,9 +48,12 @@
         <element name="conditions" type="button" selector=".rule-param.rule-param-new-child > a"/>
         <element name="childAttribute" type="select" selector="//select[contains(@name, 'new_child')]"/>
         <element name="condition" type="text" selector="//span[@class='rule-param']/a[text()='{{arg}}']" parameterized="true"/>
+        <element name="actionsAggregator" type="select" selector="#actions__1__aggregator"/>
+        <element name="actionsValue" type="select" selector="#actions__1__value"/>
         <element name="operator" type="select" selector="//select[contains(@name, '[operator]')]"/>
         <element name="option" type="select" selector="//ul[@class='rule-param-children']//select[contains(@name, '[value]')]"/>
         <element name="actionValue" type="input" selector=".rule-param-edit input"/>
+        <element name="applyAction" type="text" selector=".rule-param-apply" timeout="30"/>
         <element name="actionOperator" type="select" selector=".rule-param-edit select"/>
         <element name="applyDiscountToShipping" type="checkbox" selector="input[name='apply_to_shipping']"/>
         <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>

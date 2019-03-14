@@ -14,7 +14,11 @@ define([
         _create: function () {
             var items, i, reload;
 
-            $(this.options.emptyCartButton).on('click', $.proxy(function () {
+            $(this.options.emptyCartButton).on('click', $.proxy(function (event) {
+                if (event.detail === 0) {
+                    return;
+                }
+
                 $(this.options.emptyCartButton).attr('name', 'update_cart_action_temp');
                 $(this.options.updateCartActionContainer)
                     .attr('name', 'update_cart_action').attr('value', 'empty_cart');

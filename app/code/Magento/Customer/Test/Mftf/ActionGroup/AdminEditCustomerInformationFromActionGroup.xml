@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Edit Customer Account Information Required Fields in Admin -->
+    <actionGroup name="AdminEditCustomerAccountInformationActionGroup" >
+        <arguments>
+            <argument name="firstName" type="string"/>
+            <argument name="lastName" type="string"/>
+            <argument name="email" type="string"/>
+        </arguments>
+        <click selector="{{AdminCustomerAccountInformationSection.accountInformationTab}}" stepKey="goToAccountInformation"/>
+        <clearField stepKey="clearFirstName" selector="{{AdminCustomerAccountInformationSection.firstName}}"/>
+        <fillField  stepKey="fillFirstName" userInput="{{firstName}}" selector="{{AdminCustomerAccountInformationSection.firstName}}"/>
+        <clearField stepKey="clearLastName" selector="{{AdminCustomerAccountInformationSection.lastName}}"/>
+        <fillField  stepKey="fillLastName" userInput="{{lastName}}" selector="{{AdminCustomerAccountInformationSection.lastName}}"/>
+        <clearField stepKey="clearEmail" selector="{{AdminCustomerAccountInformationSection.email}}"/>
+        <fillField  stepKey="fillEmail" userInput="{{email}}" selector="{{AdminCustomerAccountInformationSection.email}}"/>
+        <click selector="{{AdminCustomerMainActionsSection.saveAndContinue}}" stepKey="saveAndContinue"/>
+        <waitForPageLoad stepKey="wait"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+    </actionGroup>
+</actionGroups>
