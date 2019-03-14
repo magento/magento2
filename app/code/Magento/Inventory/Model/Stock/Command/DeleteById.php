@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model\Stock\Command;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Inventory\Model\ResourceModel\Stock as StockResourceModel;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
@@ -58,7 +59,15 @@ class DeleteById implements DeleteByIdInterface
         $this->stockResource->load($stock, $stockId, StockInterface::STOCK_ID);
 
         if (null === $stock->getStockId()) {
-            return;
+            throw new NoSuchEntityException(
+                __(
+                    'There is no stock with "%fieldValue" for "%fieldName". Verify and try again.',
+                    [
+                        'fieldName' => StockInterface::STOCK_ID,
+                        'fieldValue' => $stockId
+                    ]
+                )
+            );
         }
 
         try {

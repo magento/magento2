@@ -14,12 +14,17 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySales\Model\IsProductSalableCondition\BackOrderNotifyCustomerCondition;
 use Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\ProductSalabilityError;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Replace legacy quote item check
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CheckQuoteItemQtyPlugin
 {
     /**
@@ -53,12 +58,19 @@ class CheckQuoteItemQtyPlugin
     private $storeManager;
 
     /**
+     * @var BackOrderNotifyCustomerCondition
+     */
+    private $backOrderNotifyCustomerCondition;
+
+    /**
      * @param ObjectFactory $objectFactory
      * @param FormatInterface $format
      * @param IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param StockResolverInterface $stockResolver
      * @param StoreManagerInterface $storeManager
+     * @param BackOrderNotifyCustomerCondition $backOrderNotifyCustomerCondition
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         ObjectFactory $objectFactory,
@@ -66,7 +78,8 @@ class CheckQuoteItemQtyPlugin
         IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
         GetSkusByProductIdsInterface $getSkusByProductIds,
         StockResolverInterface $stockResolver,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        BackOrderNotifyCustomerCondition $backOrderNotifyCustomerCondition
     ) {
         $this->objectFactory = $objectFactory;
         $this->format = $format;
@@ -74,9 +87,12 @@ class CheckQuoteItemQtyPlugin
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockResolver = $stockResolver;
         $this->storeManager = $storeManager;
+        $this->backOrderNotifyCustomerCondition = $backOrderNotifyCustomerCondition;
     }
 
     /**
+     * Replace legacy quote item check
+     *
      * @param StockStateInterface $subject
      * @param \Closure $proceed
      * @param int $productId
@@ -97,7 +113,7 @@ class CheckQuoteItemQtyPlugin
         $itemQty,
         $qtyToCheck,
         $origQty,
-        $scopeId
+        $scopeId = null
     ) {
         $result = $this->objectFactory->create();
         $result->setHasError(false);
@@ -108,7 +124,7 @@ class CheckQuoteItemQtyPlugin
         $productSku = $skus[$productId];
 
         $websiteCode = $this->storeManager->getWebsite()->getCode();
-        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+        $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
         $stockId = $stock->getStockId();
 
         $isSalableResult = $this->isProductSalableForRequestedQty->execute($productSku, (int)$stockId, $qty);
@@ -121,10 +137,20 @@ class CheckQuoteItemQtyPlugin
             }
         }
 
+        $productSalableResult = $this->backOrderNotifyCustomerCondition->execute($productSku, (int)$stockId, $qty);
+        if ($productSalableResult->getErrors()) {
+            /** @var ProductSalabilityError $error */
+            foreach ($productSalableResult->getErrors() as $error) {
+                $result->setMessage($error->getMessage());
+            }
+        }
+
         return $result;
     }
 
     /**
+     * Convert quantity to a valid float
+     *
      * @param string|float|int|null $qty
      *
      * @return float|null

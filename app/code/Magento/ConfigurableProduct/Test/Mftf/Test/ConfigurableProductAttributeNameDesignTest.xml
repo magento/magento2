@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ConfigurableProductAttributeNameDesignTest">
+        <annotations>
+            <title value="Generation of configurable products with an attribute named 'design'"/>
+            <description value="Generation of configurable products with an attribute named 'design'"/>
+            <features value="Product Customizable Option"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-93307"/>
+            <stories value="MAGETWO-91524 : 'element.disabled is not a function' error is thrown when configurable products are generated with an attribute named 'design'"/>
+            <group value="product"/>
+        </annotations>
+
+        <before>
+            <!-- Log in to Dashboard page -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+
+
+        <!-- Navigate to Catalog-> Products -->
+        <actionGroup ref="GotoCatalogProductsPage" stepKey="goToCatalogProductsPage"/>
+        <!-- Fill the fields on Configurable Product-->
+        <actionGroup ref="GotoConfigurableProductPage" stepKey="goToConfigurableProductPage"/>
+        <actionGroup ref="FillAllRequiredFields" stepKey="fillInAllRequiredFields"/>
+        <!-- Create New Attribute (Default Label= design) -->
+        <actionGroup ref="CreateNewAttribute" stepKey="createNewAttribute"/>
+
+        <after>
+            <!-- Delete Created Attribute -->
+            <actionGroup ref="DeleteCreatedAttribute" stepKey="deleteCreatedAttribute"/>
+        </after>
+
+    </test>
+</tests>

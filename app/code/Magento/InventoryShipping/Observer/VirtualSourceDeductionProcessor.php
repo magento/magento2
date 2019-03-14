@@ -12,13 +12,14 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
-use Magento\InventoryShipping\Model\InventoryRequestFromInvoiceFactory;
-use Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionServiceInterface;
+use Magento\InventoryShipping\Model\GetSourceSelectionResultFromInvoice;
+use Magento\InventorySourceDeductionApi\Model\SourceDeductionRequestInterface;
+use Magento\InventorySourceDeductionApi\Model\SourceDeductionServiceInterface;
 use Magento\InventoryShipping\Model\SourceDeductionRequestsFromSourceSelectionFactory;
-use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
-use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
+use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
 
 /**
  * Class VirtualSourceDeductionProcessor
@@ -26,19 +27,9 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 class VirtualSourceDeductionProcessor implements ObserverInterface
 {
     /**
-     * @var SourceSelectionServiceInterface
+     * @var GetSourceSelectionResultFromInvoice
      */
-    private $sourceSelectionService;
-
-    /**
-     * @var GetDefaultSourceSelectionAlgorithmCodeInterface
-     */
-    private $getDefaultSourceSelectionAlgorithmCode;
-
-    /**
-     * @var InventoryRequestFromInvoiceFactory
-     */
-    private $inventoryRequestFromInvoiceFactory;
+    private $getSourceSelectionResultFromInvoice;
 
     /**
      * @var SourceDeductionServiceInterface
@@ -56,27 +47,37 @@ class VirtualSourceDeductionProcessor implements ObserverInterface
     private $salesEventFactory;
 
     /**
-     * @param SourceSelectionServiceInterface $sourceSelectionService
-     * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
-     * @param InventoryRequestFromInvoiceFactory $inventoryRequestFromInvoiceFactory
+     * @var ItemToSellInterfaceFactory
+     */
+    private $itemToSellFactory;
+
+    /**
+     * @var PlaceReservationsForSalesEventInterface
+     */
+    private $placeReservationsForSalesEvent;
+
+    /**
+     * @param GetSourceSelectionResultFromInvoice $getSourceSelectionResultFromInvoice
      * @param SourceDeductionServiceInterface $sourceDeductionService
      * @param SourceDeductionRequestsFromSourceSelectionFactory $sourceDeductionRequestsFromSourceSelectionFactory
      * @param SalesEventInterfaceFactory $salesEventFactory
+     * @param ItemToSellInterfaceFactory $itemToSellFactory
+     * @param PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
      */
     public function __construct(
-        SourceSelectionServiceInterface $sourceSelectionService,
-        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
-        InventoryRequestFromInvoiceFactory $inventoryRequestFromInvoiceFactory,
+        GetSourceSelectionResultFromInvoice $getSourceSelectionResultFromInvoice,
         SourceDeductionServiceInterface $sourceDeductionService,
         SourceDeductionRequestsFromSourceSelectionFactory $sourceDeductionRequestsFromSourceSelectionFactory,
-        SalesEventInterfaceFactory $salesEventFactory
+        SalesEventInterfaceFactory $salesEventFactory,
+        ItemToSellInterfaceFactory $itemToSellFactory,
+        PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
     ) {
-        $this->sourceSelectionService = $sourceSelectionService;
-        $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
-        $this->inventoryRequestFromInvoiceFactory = $inventoryRequestFromInvoiceFactory;
+        $this->getSourceSelectionResultFromInvoice = $getSourceSelectionResultFromInvoice;
         $this->sourceDeductionService = $sourceDeductionService;
         $this->sourceDeductionRequestsFromSourceSelectionFactory = $sourceDeductionRequestsFromSourceSelectionFactory;
         $this->salesEventFactory = $salesEventFactory;
+        $this->itemToSellFactory = $itemToSellFactory;
+        $this->placeReservationsForSalesEvent = $placeReservationsForSalesEvent;
     }
 
     /**
@@ -92,9 +93,7 @@ class VirtualSourceDeductionProcessor implements ObserverInterface
             return;
         }
 
-        $inventoryRequest = $this->inventoryRequestFromInvoiceFactory->create($invoice);
-        $selectionAlgorithmCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
-        $sourceSelectionResult = $this->sourceSelectionService->execute($inventoryRequest, $selectionAlgorithmCode);
+        $sourceSelectionResult = $this->getSourceSelectionResultFromInvoice->execute($invoice);
 
         /** @var SalesEventInterface $salesEvent */
         $salesEvent = $this->salesEventFactory->create([
@@ -111,7 +110,29 @@ class VirtualSourceDeductionProcessor implements ObserverInterface
 
         foreach ($sourceDeductionRequests as $sourceDeductionRequest) {
             $this->sourceDeductionService->execute($sourceDeductionRequest);
+            $this->placeCompensatingReservation($sourceDeductionRequest);
         }
+    }
+
+    /**
+     * Place compensating reservation after source deduction
+     *
+     * @param SourceDeductionRequestInterface $sourceDeductionRequest
+     */
+    private function placeCompensatingReservation(SourceDeductionRequestInterface $sourceDeductionRequest): void
+    {
+        $items = [];
+        foreach ($sourceDeductionRequest->getItems() as $item) {
+            $items[] = $this->itemToSellFactory->create([
+                'sku' => $item->getSku(),
+                'qty' => $item->getQty()
+            ]);
+        }
+        $this->placeReservationsForSalesEvent->execute(
+            $items,
+            $sourceDeductionRequest->getSalesChannel(),
+            $sourceDeductionRequest->getSalesEvent()
+        );
     }
 
     /**

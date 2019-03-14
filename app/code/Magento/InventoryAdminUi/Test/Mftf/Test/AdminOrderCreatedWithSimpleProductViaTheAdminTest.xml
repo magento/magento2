@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderCreatedWithSimpleProductViaTheAdminTest">
+        <annotations>
+            <stories value="Add Order"/>
+            <title value="Create an Order with a Simple Product via the Admin"/>
+            <description value="You should be able to place an Order using a Simple Product that is assigned to a Source with a Stock."/>
+            <testCaseId value="MSI-1008"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
+            <createData entity="MsiCustomer1" stepKey="createCustomer1"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="simpleCategory1"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <actionGroup ref="AdminUpdateCustomerGroupByEmailActionGroup" stepKey="updateCustomerGroup1">
+                <argument name="emailAddress" value="$createCustomer1.customer[email]$"/>
+                <argument name="customerGroup" value="General"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+        </after>
+
+        <actionGroup ref="AdminGoToStockGridFilterResultsByInputEditStock" stepKey="goToStockGridFilterResultsByInputEditStock1">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createStock1.stock[name]$$"/>
+        </actionGroup>
+
+        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="clickOnMainWebsite1"/>
+        <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSources1"/>
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword2">
+            <argument name="keyword" value="$$createSource1.source[name]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.checkboxByValue($$createSource1.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource2"/>
+        <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDone1"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
+        <seeElement selector=".success" stepKey="seeSuccessMessage"/>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$simpleProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillDefaultQuantityField1"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillDefaultQuantityField2"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose2"/>
+
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+
+        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickOnCreateNewOrder1"/>
+
+        <fillField selector="#sales_order_create_customer_grid_filter_email" userInput="$$createCustomer1.customer[email]$$" stepKey="enterTheEmailAddress1"/>
+        <click selector=".admin__filter-actions button[title='Search']" stepKey="clickOnSearch1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+
+        <click selector="#sales_order_create_customer_grid_table tbody tr" stepKey="clickOnTheFirstRow1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+
+        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad20"/>
+
+        <click selector="#add_products" stepKey="clickOnAddProductsButton1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
+
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="$$simpleProduct1.product[sku]$$" stepKey="fillProductSkuField1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
+        <click selector="#order-search button[title='Search']" stepKey="clickOnSearch2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
+
+        <click selector="#order-search tbody tr .col-sku" stepKey="clickOnSku1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad11"/>
+
+        <fillField selector="#order-search tr .qty" userInput="5" stepKey="fillProductQuantity1"/>
+        <click selector="#order-search .action-add" stepKey="clickOnAddSelectedProductsToOrder1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad12"/>
+
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+            <argument name="customer" value="$$createCustomer1$$"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+
+        <click selector=".admin__field-shipping-same-as-billing label" stepKey="clickOnSameAsBillingAddress1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad13"/>
+
+        <click selector="#order-shipping-method-summary a" stepKey="clickOnGetShippingMethodsAndRates1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad14"/>
+
+        <click selector=".admin__order-shipment-methods-options-list li label" stepKey="clickOnFixedShippingRate1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad15"/>
+
+        <click selector=".order-totals-actions .save" stepKey="clickOnSubmitOrder1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad16"/>
+
+        <seeElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="seeSuccessMessage1"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage2"/>
+
+        <grabTextFrom selector=".page-title" stepKey="grabTheOrderId1"/>
+
+        <actionGroup ref="verifyBasicOrderInformation" stepKey="verifyOrderInformation">
+            <argument name="customer" value="$$createCustomer1$$"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+
+        <see selector="{{AdminOrderItemsOrderedSection.productSkuColumn}}" userInput="$$simpleProduct1.product[sku]$$" stepKey="seeSkuInItemsOrdered1"/>
+        <see selector=".edit-order-table .qty-table" userInput="Ordered 5" stepKey="seeQuantity1"/>
+
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad17"/>
+
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show" visible="true" stepKey="clearTheFiltersIfPresent"/>
+
+        <fillField userInput="$grabTheOrderId1" selector="{{OrdersGridSection.search}}" stepKey="fillCodeField2"/>
+        <click selector=".data-grid-search-control-wrap button" stepKey="clickOnApplyFilters1"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad18"/>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createCustomer1.customer[firstname]$$" stepKey="seeFirstName1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createCustomer1.customer[lastname]$$" stepKey="seeLastName1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Pending" stepKey="seeFirstName3"/>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad19"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults3">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$simpleProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock1.stock[name]$$" stepKey="seeStockName1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="95" stepKey="seeUpdatedQuantity1"/>
+    </test>
+</tests>

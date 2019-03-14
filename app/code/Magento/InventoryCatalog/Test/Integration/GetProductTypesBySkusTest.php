@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Test\Integration;
 
-use Magento\InventoryCatalog\Model\GetProductTypesBySkus;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 class GetProductTypesBySkusTest extends TestCase
 {
     /**
-     * @var GetProductTypesBySkus
+     * @var GetProductTypesBySkusInterface
      */
     private $getProductTypesBySkus;
 
@@ -51,14 +50,11 @@ class GetProductTypesBySkusTest extends TestCase
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/products_all_types.php
-     *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Following products with requested skus were not found: not_existed_1, not_existed_2
      */
     public function testExecuteWithNotExistedSkus()
     {
         $skus = ['not_existed_1', 'not_existed_2', 'simple_sku'];
 
-        $this->getProductTypesBySkus->execute($skus);
+        self::assertEquals(['simple_sku' => 'simple'], $this->getProductTypesBySkus->execute($skus));
     }
 }

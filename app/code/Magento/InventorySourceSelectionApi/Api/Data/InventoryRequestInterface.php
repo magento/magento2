@@ -12,7 +12,7 @@ namespace Magento\InventorySourceSelectionApi\Api\Data;
  *
  * @api
  */
-interface InventoryRequestInterface
+interface InventoryRequestInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Get Stock Id
@@ -34,7 +34,7 @@ interface InventoryRequestInterface
      * @param int $stockId
      * @return void
      */
-    public function setStockId($stockId);
+    public function setStockId(int $stockId): void;
 
     /**
      * Set Items
@@ -42,5 +42,22 @@ interface InventoryRequestInterface
      * @param \Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface[] $items
      * @return void
      */
-    public function setItems($items);
+    public function setItems(array $items): void;
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * @return \Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ?InventoryRequestExtensionInterface;
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(
+        \Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestExtensionInterface $extensionAttributes
+    ): void;
 }

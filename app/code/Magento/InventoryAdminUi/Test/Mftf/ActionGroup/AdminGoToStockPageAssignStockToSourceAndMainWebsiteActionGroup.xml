@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminGoToStockPageAssignStockToSourceAndMainWebsite">
+        <arguments>
+            <argument name="keyword"/>
+            <argument name="stock_name"/>
+            <argument name="source_name"/>
+        </arguments>
+
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnStockListPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{keyword}}" stepKey="fillKeywordSearchField1"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch1"/>
+
+        <click selector="{{AdminGridRow.editByValue(stock_name)}}" stepKey="clickOnFirstRow1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+
+        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="clickOnMainWebsite1"/>
+        <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSources1"/>
+
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters2"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{source_name}}" stepKey="fillKeywordSearchField2"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch2"/>
+
+        <click selector="{{AdminGridRow.checkboxByValue(source_name)}}" stepKey="clickOnTheCheckboxForSource2"/>
+        <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDone1"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinue1"/>
+    </actionGroup>
+</actionGroups>

@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotificationApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Represents a Source Item Configuration object
  *
@@ -16,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * @api
  */
-interface SourceItemConfigurationInterface extends ExtensibleDataInterface
+interface SourceItemConfigurationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Constant for fields in data array
@@ -30,7 +28,7 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
      *
      * @return string|null
      */
-    public function getSourceCode();
+    public function getSourceCode(): ?string;
 
     /**
      * Set source code
@@ -38,14 +36,14 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
      * @param string $sourceCode
      * @return void
      */
-    public function setSourceCode(string $sourceCode);
+    public function setSourceCode(string $sourceCode): void;
 
     /**
      * Get notify stock qty
      *
      * @return float|null
      */
-    public function getNotifyStockQty();
+    public function getNotifyStockQty(): ?float;
 
     /**
      * Set notify stock qty
@@ -53,14 +51,14 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
      * @param float|null $quantity
      * @return void
      */
-    public function setNotifyStockQty($quantity);
+    public function setNotifyStockQty(?float $quantity): void;
 
     /**
      * Get SKU
      *
      * @return string|null
      */
-    public function getSku();
+    public function getSku(): ?string;
 
     /**
      * Set SKU
@@ -68,16 +66,14 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
      * @param string $sku
      * @return void
      */
-    public function setSku(string $sku);
+    public function setSku(string $sku): void;
 
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?SourceItemConfigurationExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -86,5 +82,5 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
      *      $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(SourceItemConfigurationExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(SourceItemConfigurationExtensionInterface $extensionAttributes): void;
 }

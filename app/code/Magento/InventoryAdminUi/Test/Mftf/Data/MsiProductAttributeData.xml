@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="visualSwatchAttribute" type="product_attribute">
+        <data key="name" unique="suffix">Visual Swatch </data>
+        <data key="catalogInputType">Visual Swatch</data>
+    </entity>
+    <entity name="visualSwatchColor1" type="product_attribute">
+        <data key="name" unique="suffix">Red</data>
+    </entity>
+    <entity name="visualSwatchColor2" type="product_attribute">
+        <data key="name" unique="suffix">Blue</data>
+    </entity>
+    <entity name="textSwatchAttribute" type="product_attribute">
+        <data key="name" unique="suffix">Text Swatch </data>
+        <data key="catalogInputType">Text Swatch</data>
+    </entity>
+    <entity name="textSwatch1" type="product_attribute">
+        <data key="name" unique="suffix">Text1</data>
+    </entity>
+    <entity name="textSwatch2" type="product_attribute">
+        <data key="name" unique="suffix">Text2</data>
+    </entity>
+</entities>

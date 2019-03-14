@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateVirtualProductWithDefaultSourceTest">
+        <annotations>
+            <stories value="Add Virtual Product"/>
+            <title value="Virtual Product created with Default Source assigned by Admin user"/>
+            <description value="Virtual Product created with Default Source assigned by Admin user"/>
+            <testCaseId value="MSI-1499"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
+            <createData entity="VirtualMsiProduct" stepKey="virtualProduct1">
+                <requiredEntity createDataKey="createCategory1"/>
+            </createData>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <comment userInput="Assign Source to Stock" stepKey="AssignSourceToStockComment"/>
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheManageStockPage"/>
+        <waitForPageLoad time="30" stepKey="waitForManageStockPageLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearStockFilters"/>
+        <waitForPageLoad stepKey="waitForClearFilters" time="30"/>
+        <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters"/>
+        <waitForPageLoad time="30" stepKey="waitForFiltersLoad"/>
+        <fillField userInput="{{_defaultStock.name}}" selector="{{AdminManageStockGridFilterControls.name}}" stepKey="fillFilterField"/>
+        <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters"/>
+        <waitForPageLoad time="30" stepKey="waitForFiltersAppled"/>
+        <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickOnEditStock"/>
+        <waitForPageLoad time="30" stepKey="waitForStockPage1"/>
+        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="clickOnMainWebsite1"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinue"/>
+        <waitForPageLoad time="30" stepKey="waitForStockPage2"/>
+
+        <comment userInput="Assign category to created virtual product." stepKey="assignCategoryToProductComment1"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditProduct1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySku1">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$virtualProduct1.sku$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumns1"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductEditPage1"/>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillSourceQuantityField1"/>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedVirtualProduct1"/>
+
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
+            <argument name="category" value="$$createCategory1$$"/>
+            <argument name="product" value="VirtualMsiProduct"/>
+        </actionGroup>
+
+        <amOnPage url="/$$virtualProduct1.product[sku]$$.html" stepKey="amOnProductPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <seeInTitle userInput="$$virtualProduct1.product[name]$$" stepKey="assertProductNameTitle1"/>
+        <see userInput="$$virtualProduct1.product[name]$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName1"/>
+        <see userInput="$$virtualProduct1.product[price]$$" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice1"/>
+        <see userInput="$$virtualProduct1.product[sku]$$" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku1"/>
+    </test>
+</tests>

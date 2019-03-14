@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductDisabledManageStockOnProductPageCustomStock">
+        <annotations>
+            <stories value="Check 'Manage Stock' product page configuration value affection on configurable product on custom source."/>
+            <title value="Check 'Manage Stock' product page configuration value affection on configurable product on custom source."/>
+            <description value="Verify, that configurable product with children on custom source and 'Out of Stock' status is visible on storefront in case 'Manage Stock' product page configuration value is set to 'No'."/>
+            <testCaseId value="MSI-966"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="customStock"/>
+            <createData entity="FullSource1" stepKey="customSource"/>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="customStock"/>
+                <requiredEntity createDataKey="customSource"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+        </before>
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+        </after>
+
+        <comment userInput="Create Configurable product with two options 'In Stock' on 'Custom' stock" stepKey="CreateConfigurableProductComment"/>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToAdminProductGrid"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGridLoad"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct('configurable')}}" stepKey="addConfigurableProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForConfigurableProductNewPageLoad"/>
+
+        <fillField userInput="{{ConfigurableMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName"/>
+        <fillField userInput="{{ConfigurableMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice"/>
+        <fillField userInput="{{ConfigurableMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSku"/>
+        <fillField userInput="{{ConfigurableMsiProduct.quantity}}" selector="{{AdminConfigurableProductFormSection.productQuantity}}" stepKey="fillProductQuantity"/>
+        <fillField userInput="{{ConfigurableMsiProduct.weight}}" selector="{{AdminConfigurableProductFormSection.productWeight}}" stepKey="fillProductWeight"/>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]"  stepKey="searchAndSelectCategory"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButton"/>
+        <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="30" stepKey="waitForGridPresents"/>
+
+        <click selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="selectColorAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToSecondStep"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="addNewColorWhite"/>
+        <fillField userInput="{{colorProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="setNameWhite"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="saveWhiteColor"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="addNewColorRed"/>
+        <fillField userInput="{{colorProductAttribute2.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="setNameRed"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="saveRedColor"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStep"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="openSelectSourcesModalWindow"/>
+
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilter"/>
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomSourceByNameForAssignment">
+            <argument name="keyword" value="$$customSource.source[name]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.checkboxByValue($$customSource.source[name]$$)}}" stepKey="selectCustomSource"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="daneAssignSources"/>
+
+        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForMultiMode}}" userInput="100" stepKey="fillQuantityForCustomSource"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStep"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariations"/>
+
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProduct"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProduct"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkProductSavedMessage"/>
+
+        <seeNumberOfElements selector="{{AdminProductFormConfigurationsSection.currentVariationsRows}}" userInput="2" stepKey="checkConfigurableMatrix"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute1.name}}" stepKey="checkWhiteAttributeVariationName"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute2.name}}" stepKey="checkRedAttributeVariationName"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute1.name}}" stepKey="checkWhiteAttributeVariationSku"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute2.name}}" stepKey="checkRedAttributeVariationSku"/>
+        <see selector="{{AdminConfigurableProductFormSection.currentVariationsQuantityCells}}" userInput="100" stepKey="checkQtyIsCorrectForCustomSource"/>
+
+        <comment userInput="Check, configurable product is present on category page and has 'In Stock' status" stepKey="checkConfigurableIsPresentOnCategoryPageComment"/>
+
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="checkConfigurableIsPresentOnCategoryPage">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="checkConfigurableOnProductViewPage">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+
+        <selectOption selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute1.name}}" stepKey="selectWhiteVariation"/>
+        <seeOptionIsSelected selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute1.name}}" stepKey="checkWhiteVariationIsSelected"/>
+        <selectOption selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute2.name}}" stepKey="selectRedVariation"/>
+        <seeOptionIsSelected selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute2.name}}" stepKey="checkRedVariationIsSelected"/>
+
+        <comment userInput="Edit configurable product options. Set them to 'Out of Stock' on 'Custom' stock" stepKey="editConfigurableVariationsComment"/>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateBackToAdminProductGrid"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGridPageIsLoaded"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGrid"/>
+        <actionGroup ref="filterProductGridByName" stepKey="filterWhiteConfigurableVariation">
+            <argument name="product" value="colorProductAttribute1"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="editWhiteConfigurableVariation"/>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="setWhiteConfigurableVariationToOutOfStock"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveWhiteConfigurableVariation"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkWhiteConfigurableVariationSaveMessage"/>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateBackToAdminProductGridToEditRedConfigurableVariation"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGridLoadToFindRedConfigurableVariation"/>
+        <actionGroup ref="filterProductGridByName" stepKey="filterProductGridToFindConfigurableRedVariation">
+            <argument name="product" value="colorProductAttribute2"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="editConfigurableRedVariation"/>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="setConfigurableRedVariationToOutOfStock"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableRedVariation"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkRedConfigurableVariationSaveMessage"/>
+
+        <comment userInput="Check, configurable product is absent on category page and has 'Out of Stock' status" stepKey="checkConfigurableProductIsAbsentOnCategoryPageAndHasOutOfStockStatusOnViewPageComment"/>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateBackToConfigurableCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad7"/>
+        <dontSee userInput="{{ConfigurableMsiProduct.name}}" stepKey="checkConfigurableProductIsAbsentOnCategoryPage"/>
+
+        <amOnPage url="{{ConfigurableMsiProduct.urlKey}}.html" stepKey="navigateToConfigurableProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad8"/>
+        <seeInTitle userInput="{{ConfigurableMsiProduct.name}}" stepKey="checkProductIsCorrectByName"/>
+        <see userInput="Out of Stock" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="checkConfigurableProductHasOutOfStockStatus"/>
+
+        <comment userInput="Disable 'Manage Stock' configuration on configurable children edit page" stepKey="disableMangeStockConfigurationComment"/>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateBackToAdminProductGridToDisableManageStockForWhiteConfigurableVariation"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGridIsLoaded"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridToGetConfigurableVariations"/>
+        <actionGroup ref="filterProductGridByName" stepKey="findWhiteConfigurableVariation">
+            <argument name="product" value="colorProductAttribute1"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="editConfigurableWhiteVariationToDisableManageStock"/>
+        <click selector="{{AdminProductSourcesSection.advancedInventory}}" stepKey="clickOnAdvancedInventoryForWhiteConfigurableVariation"/>
+        <uncheckOption selector="{{AdminAdvancedInventorySection.manageStockUseDefault}}" stepKey="uncheckManageStockSystemValueForWhiteConfigurableVariation"/>
+        <selectOption selector="{{AdminAdvancedInventorySection.manageStock}}" userInput="No" stepKey="disableManageStockForWhiteConfigurableVariation"/>
+        <click selector="{{AdminAdvancedInventoryControlsSection.done}}" stepKey="doneWithDisableManageStockForWhiteConfigurableVariation"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseDisableMangeStockForWhiteConfigurableVariation"/>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateBackToAdminProductGridToDisableManageStockForRedConfigurableVariation"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGridLoadToFilterRedConfigurableVariation"/>
+        <actionGroup ref="filterProductGridByName" stepKey="searchConfigurableRedVariation">
+            <argument name="product" value="colorProductAttribute2"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="editConfigurableRedVariationToDisableManageStock"/>
+        <click selector="{{AdminProductSourcesSection.advancedInventory}}" stepKey="clickOnAdvancedInventoryForRedConfigurableVariation"/>
+        <uncheckOption selector="{{AdminAdvancedInventorySection.manageStockUseDefault}}" stepKey="uncheckManageStockSystemValueForRedConfigurableVariation"/>
+        <selectOption selector="{{AdminAdvancedInventorySection.manageStock}}" userInput="No" stepKey="disableManageStockForRedConfigurableVariation"/>
+        <click selector="{{AdminAdvancedInventoryControlsSection.done}}" stepKey="doneWithDisableManageStockForRedConfigurableVariation"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseDisableMangeStockForRedConfigurableVariation"/>
+
+        <comment userInput="Check, configurable product back to category page and has 'In Stock' status on product view page." stepKey="checkConfigurableProductBackOnStorefront"/>
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="checkConfigurableIsBackToCategoryPage">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="checkConfigurableBackToStockOnProductViewPage">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+
+        <selectOption selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute1.name}}" stepKey="checkCanSelectWhiteVariation"/>
+        <seeOptionIsSelected selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute1.name}}" stepKey="checkWhiteVariationCanBeSelected"/>
+        <selectOption selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute2.name}}" stepKey="checkCanSelectRedVariation"/>
+        <seeOptionIsSelected selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute2.name}}" stepKey="checkRedVariationCanBeSelected"/>
+    </test>
+</tests>

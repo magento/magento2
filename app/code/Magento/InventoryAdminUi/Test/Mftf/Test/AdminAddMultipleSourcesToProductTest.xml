@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddMultipleSourcesToProductTest">
+        <annotations>
+            <stories value="Add Sources to Products"/>
+            <title value="Add Multiple Sources to a Product"/>
+            <description value="You should be able to add Multiple Sources to a Product."/>
+            <testCaseId value="MSI-630"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+            <skip>
+                <issueId value="MSI-1588"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="simpleCategory1"/>
+            </createData>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="FullSource2" stepKey="createSource2"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+                <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+                <argument name="filter_value" value="SimpleProduct.sku"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
+        </after>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct2">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource2.source[source_code]$$"/>
+        </actionGroup>
+
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSourceIdInGrid1"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[name]$$" stepKey="seeSourceNameInGrid1"/>
+
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource2.source[source_code]$$" stepKey="seeSourceIdInGrid2"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource2.source[name]$$" stepKey="seeSourceNameInGrid2"/>
+    </test>
+</tests>

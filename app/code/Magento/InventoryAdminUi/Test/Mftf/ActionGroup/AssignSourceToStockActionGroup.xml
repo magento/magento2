@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssignSourceToStockActionGroup">
+        <arguments>
+            <argument name="stockName"/>
+            <argument name="sourceName"/>
+        </arguments>
+        <comment userInput="Assign Source to Stock" stepKey="AssignSourceToStockComment"/>
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheManageStockPage"/>
+        <waitForPageLoad time="30" stepKey="waitForManageStockPageLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearStockFilters"/>
+        <waitForPageLoad stepKey="waitForClearFilters" time="30"/>
+        <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters"/>
+        <waitForPageLoad time="30" stepKey="waitForFiltersLoad"/>
+        <fillField userInput="{{stockName}}" selector="{{AdminManageStockGridFilterControls.name}}" stepKey="fillFilterField"/>
+        <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters"/>
+        <waitForPageLoad time="30" stepKey="waitForFiltersAppled"/>
+        <click selector="{{AdminGridRow.editByValue(stockName)}}" stepKey="clickOnEditStock"/>
+        <waitForPageLoad time="30" stepKey="waitForStockPage"/>
+
+        <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSources"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearSourceFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{sourceName}}" stepKey="fillKeywordSearchField"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch"/>
+        <waitForPageLoad time="30" stepKey="waitForKeywordSearch"/>
+        <click selector="{{AdminGridRow.checkboxByValue(sourceName)}}" stepKey="clickOnTheCheckboxForSource"/>
+        <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDone"/>
+        <waitForPageLoad time="30" stepKey="waitSourceAssigned"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinue"/>
+    </actionGroup>
+</actionGroups>

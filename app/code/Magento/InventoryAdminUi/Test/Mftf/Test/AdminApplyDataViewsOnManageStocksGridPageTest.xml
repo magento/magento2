@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyDataViewsOnManageStocksGridPageTest">
+        <annotations>
+            <stories value="Save and Load Admin Grid Views"/>
+            <title value="Save and Load Admin Stock Grid Views"/>
+            <description value="You should be able to Save and Load a Grid View for the Stocks Grid."/>
+            <testCaseId value="MSI-916"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockListPage1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        </before>
+        <after>
+            <click selector="{{AdminGridDefaultViewControls.defaultView}}" stepKey="clickOnDefaultView3"/>
+            <click selector="{{AdminGridDefaultViewControls.viewByName('Default View')}}" stepKey="clickOnDefaultViewMenuOption1"/>
+            <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnTheColumnsButton1"/>
+            <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnTheColumnsButton1"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetColumnReaders1"/>
+
+        <click selector="{{AdminGridColumnsControls.columnName('ID')}}" stepKey="disableIdColumn1"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Action')}}" stepKey="disableActionColumn1"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Sales Channels')}}" stepKey="disableSalesChannelsColumn1"/>
+
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnTheColumnsButton2"/>
+
+        <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeTheHeaderName1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="dontSeeIdColumn1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="dontSeeActionColumn1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Sales Channels')}}" userInput="Sales Channels" stepKey="dontSeeSalesChannelColumn1"/>
+
+        <click selector="{{AdminGridDefaultViewControls.defaultView}}" stepKey="clickOnDefaultView1"/>
+        <click selector="{{AdminGridDefaultViewControls.saveViewAs}}" stepKey="clickOnSaveViewAs1"/>
+        <fillField selector="{{AdminGridDefaultViewControls.viewName}}" userInput="{{StockView1.name}}" stepKey="fillTheViewNameField1"/>
+        <click selector="{{AdminGridDefaultViewControls.save}}" stepKey="clickOnSave1"/>
+        <click selector="{{AdminGridDefaultViewControls.defaultView}}" stepKey="clickOnDefaultView2"/>
+
+        <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeTheHeaderName2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="dontSeeIdColumn2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="dontSeeActionColumn2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Sales Channels')}}" userInput="Sales Channels" stepKey="dontSeeSalesChannelColumn2"/>
+
+        <click selector="{{AdminGridDefaultViewControls.defaultView}}" stepKey="clickOnDefaultView3"/>
+        <click selector="{{AdminGridDefaultViewControls.viewByName('Default View')}}" stepKey="clickOnDefaultViewMenuOption1"/>
+
+        <see selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="seeTheHeaderId3"/>
+        <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeTheHeaderName3"/>
+        <see selector="{{AdminGridHeaders.headerByName('Sales Channels')}}" userInput="Sales Channels" stepKey="seeTheHeaderSalesChannel3"/>
+        <see selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="seeTheHeaderAction3"/>
+    </test>
+</tests>

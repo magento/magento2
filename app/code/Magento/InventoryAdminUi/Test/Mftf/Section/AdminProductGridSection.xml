@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductGridSection">
+        <element name="quantity" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Quantity')]/preceding-sibling::th)]" parameterized="true"/>
+        <element name="productQtyPerSource" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Quantity per Source')]/preceding-sibling::th) +1 ]//*[text()='{{sourceName}}']/following-sibling::span" parameterized="true"/>
+        <element name="productSalableQty" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Salable Quantity')]/preceding-sibling::th) +1 ]//*[text()='{{stockName}}']/following-sibling::span" parameterized="true"/>
+    </section>
+</sections>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCanSetOnlyXLeftThresholdForVirtualProductWithTestSourceTest">
+        <annotations>
+            <stories value="Admin user apply 'Only X left Threshold' for Virtual product on Test source"/>
+            <title value="Admin user apply 'Only X left Threshold' for Virtual product on Test source"/>
+            <description value="Admin user apply 'Only X left Threshold' for Virtual product on Test source"/>
+            <testCaseId value="MSI-1485"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 0" stepKey="setMinQtyToDefaultValue1"/>
+
+            <createData entity="Msi_US_Customer" stepKey="customer"/>
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
+            <createData entity="VirtualMsiProduct" stepKey="virtualProduct1">
+                <requiredEntity createDataKey="createCategory1"/>
+            </createData>
+
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$virtualProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                    parameterArray="[$$createCategory1.name$$]" requiredAction="true"
+                                    stepKey="searchAndSelectCategory"/>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillSourceQuantityField1"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillSourceQuantityField2"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
+
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
+            <argument name="category" value="$$createCategory1$$"/>
+            <argument name="product" value="VirtualMsiProduct"/>
+        </actionGroup>
+
+        <amOnPage url="/$$virtualProduct1.product[sku]$$.html" stepKey="amOnProductPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <seeInTitle userInput="$$virtualProduct1.product[name]$$" stepKey="assertProductNameTitle1"/>
+        <see userInput="$$virtualProduct1.product[name]$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName1"/>
+        <see userInput="$$virtualProduct1.product[price]$$" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice1"/>
+        <see userInput="$$virtualProduct1.product[sku]$$" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku1"/>
+
+        <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 99" stepKey="setMinQtyToDefaultValue1"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache1"/>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad14"/>
+
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addVirtualProductToOrder">
+            <argument name="product" value="$$virtualProduct1$$"/>
+        </actionGroup>
+
+        <comment userInput="Submit order." stepKey="submitOrderComment"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage"/>
+
+        <amOnPage url="/$$virtualProduct1.product[sku]$$.html" stepKey="amOnProductPage2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+
+        <see selector=".availability.only" userInput="Only 99 left" stepKey="seeCurrentProductQuantity1"/>
+    </test>
+</tests>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateVirtualProductOnSingleStockModeTest">
+        <annotations>
+            <stories value="Add Virtual Product"/>
+            <title value="Virtual Product created on Single stock mode by Admin user"/>
+            <description value="Virtual Product created on Single stock mode by Admin user"/>
+            <testCaseId value="MSI-1500"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="single_mode"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableStockManagement1"/>
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
+            <createData entity="VirtualMsiProduct" stepKey="virtualProduct1">
+                <requiredEntity createDataKey="createCategory1"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <comment userInput="Assign category to created virtual product." stepKey="assignCategoryToProductComment1"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditProduct1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySku1">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$virtualProduct1.sku$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductEditPage1"/>
+
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{VirtualMsiProduct.quantity}}" stepKey="fillSourceQtyField1"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="setProductQuantity1"/>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedVirtualProduct1"/>
+
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
+            <argument name="category" value="$$createCategory1$$"/>
+            <argument name="product" value="VirtualMsiProduct"/>
+        </actionGroup>
+
+        <amOnPage url="/$$virtualProduct1.product[sku]$$.html" stepKey="amOnProductPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <seeInTitle userInput="$$virtualProduct1.product[name]$$" stepKey="assertProductNameTitle1"/>
+        <see userInput="$$virtualProduct1.product[name]$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName1"/>
+        <see userInput="$$virtualProduct1.product[price]$$" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice1"/>
+        <see userInput="$$virtualProduct1.product[sku]$$" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku1"/>
+    </test>
+</tests>

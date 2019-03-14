@@ -23,4 +23,18 @@
     <type name="Magento\Shipping\Block\Adminhtml\Create">
         <plugin name="back_button_url" type="Magento\InventoryShippingAdminUi\Plugin\Sales\Block\Shipment\BackButtonUrlOnNewShipmentPagePlugin"/>
     </type>
+    <type name="Magento\InventoryShippingAdminUi\Controller\Adminhtml\SourceSelection\ProcessAlgorithm">
+        <arguments>
+            <!-- @deprecated parameter stockByWebsiteIdResolver has been deprecated and not in use now -->
+            <argument name="stockByWebsiteIdResolver" xsi:type="null"/>
+            <!-- @deprecated parameter inventoryRequestFactory has been deprecated and not in use now -->
+            <argument name="inventoryRequestFactory" xsi:type="null"/>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryShippingAdminUi\Ui\DataProvider\SourceSelectionDataProvider">
+        <arguments>
+            <!-- @deprecated parameter getSourcesByStockIdSkuAndQty has been deprecated and not in use now -->
+            <argument name="getSourcesByStockIdSkuAndQty" xsi:type="null"/>
+        </arguments>
+    </type>
 </config>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDefaultStockCannotBeDeletedTest">
+        <annotations>
+            <stories value="Delete Stock"/>
+            <title value="Cannot Delete Default Stock from the Stock Grid"/>
+            <description value="You should not be able to delete the Default Stock from the Stock Grid."/>
+            <testCaseId value="MSI-797"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockListPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
+
+        <click selector="{{AdminGridRow.checkboxByValue('Default Stock')}}" stepKey="checkDefaultStock1"/>
+        <click selector="{{AdminGridActionsMenu.dropDown}}" stepKey="clickOnTheActionMenu1"/>
+        <click selector="{{AdminGridActionsMenu.delete}}" stepKey="clickOnDelete1"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="clickOnOk1"/>
+
+        <seeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="seeErrorMessage1"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="[ID: 1] Default Stock could not be deleted." stepKey="seeInErrorMessage1"/>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Default Stock" stepKey="seeCodeInRow1"/>
+    </test>
+</tests>

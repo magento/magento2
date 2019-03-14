@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStockCannotBeDeletedWhenSalesChannelIsAssignedTest">
+        <annotations>
+            <stories value="Delete Stock"/>
+            <title value="Cannot Delete Stock when a Sales Channel is assigned"/>
+            <description value="You should not be able to delete a Stock when a Sales Channel is assigned."/>
+            <testCaseId value="MSI-798"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <!-- Copy of "AdminDefaultStockCannotBeDeletedTest steps until we figure out how to post it via the Admin Form. -->
+        <!-- START OF COPY -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage1"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite1"/>
+        <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="enterWebsiteName1"/>
+        <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite1.code}}" stepKey="enterWebsiteCode1"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite1"/>
+
+        <fillField selector="{{AdminStoresGridSection.websiteFilterTextField}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="searchForWebsiteTitle1"/>
+        <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="clickOnTheSearchButton1"/>
+
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="seeTheNewWebsite1"/>
+
+        <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="clickOnCreateStoreButton1"/>
+        <selectOption selector="#group_website_id" userInput="{{BasicMsiWebsite1.name}}" stepKey="selectWebsiteFromDropDown1"/>
+        <fillField selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" userInput="{{BasicMsiStore.name}}" stepKey="fillStoreName1"/>
+        <fillField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{BasicMsiStore.code}}" stepKey="fillStoreCode1"/>
+        <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="Default Category" stepKey="selectRootCategory1"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite2"/>
+
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="seeTheNewWebsite2"/>
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiStore.name}}" stepKey="seeTheNewStore2"/>
+
+        <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="clickOnCreateStoreView1"/>
+        <selectOption selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="{{BasicMsiStore.name}}" stepKey="selectStoreName1"/>
+        <fillField selector="{{AdminNewStoreSection.storeNameTextField}}" userInput="{{BasicMsiStoreView.name}}" stepKey="fillStoreViewName1"/>
+        <fillField selector="{{AdminNewStoreSection.storeCodeTextField}}" userInput="{{BasicMsiStoreView.code}}" stepKey="fillStoreViewCode1"/>
+        <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="{{BasicMsiStoreView.status}}" stepKey="setStoreViewStatus1"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite3"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="clickOnOk1"/>
+
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="seeTheNewWebsite3"/>
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiStore.name}}" stepKey="seeTheNewStore3"/>
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiStoreView.name}}" stepKey="seeTheNewStoreView3"/>
+        <!-- END OF COPY -->
+
+        <actionGroup ref="AdminGoToStockGridFilterResultsByInputEditStock" stepKey="goToStockGridFilterResultsByInputEditStock1">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createStock1.stock[name]$$"/>
+        </actionGroup>
+
+        <unselectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="unSelectNewWebsite1"/>
+        <dontSeeOptionIsSelected selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="dontSeeBasicWebbSiteSelected1"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
+
+        <dontSee userInput="{{BasicMsiWebsite1.name}}" selector="{{AdminGridRow.rowByIndex('0')}}" stepKey="dontSeeWebsiteInTheGrid1"/>
+
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword1">
+            <argument name="keyword" value="$$createStock1.stock[name]$$"/>
+        </actionGroup>
+
+        <click selector="{{AdminGridRow.editByValue($$createStock1.stock[name]$$)}}" stepKey="clickOnEditForDefaultStock2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+
+        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="unSelectNewWebsite2"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad4"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose2"/>
+
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword2">
+            <argument name="keyword" value="$$createStock1.stock[name]$$"/>
+        </actionGroup>
+
+        <click selector="{{AdminGridRow.checkboxByValue($$createStock1.stock[name]$$)}}" stepKey="clickOnEditForDefaultStock3"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+
+        <click selector="{{AdminGridActionsMenu.dropDown}}" stepKey="clickOnTheActionMenu1"/>
+        <click selector="{{AdminGridActionsMenu.delete}}" stepKey="clickOnDelete1"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="clickOnOk2"/>
+
+        <seeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="seeErrorMessage1"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="Stock has at least one sale channel and could not be deleted." stepKey="seeInErrorMessage1"/>
+    </test>
+</tests>

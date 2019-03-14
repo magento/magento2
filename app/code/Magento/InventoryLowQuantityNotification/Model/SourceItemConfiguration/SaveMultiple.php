@@ -44,7 +44,7 @@ class SaveMultiple implements SourceItemConfigurationsSaveInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $sourceItemConfigurations)
+    public function execute(array $sourceItemConfigurations): void
     {
         if (empty($sourceItemConfigurations)) {
             throw new InputException(__('Input data is empty'));

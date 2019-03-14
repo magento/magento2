@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddConfigurableProductWithTextSwatchAttributeAndDefaultSourceTest">
+        <annotations>
+            <stories value="Add Configurable Product"/>
+            <title value="Create a Configurable Product with a text swatch attribute"/>
+            <description value="You should be able to create a Configurable Product that is assigned to the Default Source with a text swatch attribute."/>
+            <testCaseId value="MSI-965"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="NewSubCategoryUnderDefaultCategory" stepKey="createPreReqCategory1"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="createPreReqCategory1" stepKey="deletePreReqCategory1"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheCategoryPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnTheAddProductToggle1"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct('configurable')}}" stepKey="clickOnAddConfigurableProduct1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+
+        <fillField userInput="{{ConfigurableMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName1"/>
+        <fillField userInput="{{ConfigurableMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice1"/>
+        <fillField userInput="{{ConfigurableMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSku1"/>
+        <fillField userInput="{{ConfigurableMsiProduct.quantity}}" selector="{{AdminConfigurableProductFormSection.productQuantity}}" stepKey="fillProductQuantity1"/>
+        <fillField userInput="{{ConfigurableMsiProduct.weight}}" selector="{{AdminConfigurableProductFormSection.productWeight}}" stepKey="fillProductWeight1"/>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createPreReqCategory1.name$$]"  stepKey="searchAndSelectCategory1"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+
+        <!--Create configuration-->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButton1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <!--Add new attribute-->
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnCreateNewAttributeButton1"/>
+        <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="enterAttributePanelIFrame"/>
+        <wait time="2" stepKey="waitForModalIframeReady"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{textSwatchProductAttribute.default_label}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="{{textSwatchProductAttribute.input_type}}" stepKey="selectAttributeInputType"/>
+        <!--Add text swatch 1 to attribute-->
+        <click selector="{{AdminNewAttributePanel.addTextSwatch}}" stepKey="clickAddTextSwatch1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <fillField selector="{{AdminNewAttributePanel.textSwatchAdminSwatchValue('0')}}" userInput="{{textSwatchProductAttribute1.adminSwatch}}" stepKey="fillAdminSwatchLabel1"/>
+        <fillField selector="{{AdminNewAttributePanel.textSwatchDefaultStoreSwatchValue('0')}}" userInput="{{textSwatchProductAttribute1.defaultStoreSwatch}}" stepKey="fillDefaultStoreSwatchLabel1"/>
+        <fillField selector="{{AdminNewAttributePanel.textSwatchAdminDescriptionValue('0')}}" userInput="{{textSwatchProductAttribute1.adminDescription}}" stepKey="fillAdminDescriptionLabel1"/>
+        <fillField selector="{{AdminNewAttributePanel.textSwatchDefaultStoreDescriptionValue('0')}}" userInput="{{textSwatchProductAttribute1.defaultStoreDescription}}" stepKey="fillDefaultStoreDescriptionLabel1"/>
+        <!--Add text swatch 2 to attribute-->
+        <click selector="{{AdminNewAttributePanel.addTextSwatch}}" stepKey="clickAddTextSwatch2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+        <fillField selector="{{AdminNewAttributePanel.textSwatchAdminSwatchValue('1')}}" userInput="{{textSwatchProductAttribute2.adminSwatch}}" stepKey="fillAdminSwatchLabel2"/>
+        <fillField selector="{{AdminNewAttributePanel.textSwatchDefaultStoreSwatchValue('1')}}" userInput="{{textSwatchProductAttribute2.defaultStoreSwatch}}" stepKey="fillDefaultStoreSwatchLabel2"/>
+        <fillField selector="{{AdminNewAttributePanel.textSwatchAdminDescriptionValue('1')}}" userInput="{{textSwatchProductAttribute2.adminDescription}}" stepKey="fillAdminDescriptionLabel2"/>
+        <fillField selector="{{AdminNewAttributePanel.textSwatchDefaultStoreDescriptionValue('1')}}" userInput="{{textSwatchProductAttribute2.defaultStoreDescription}}" stepKey="fillDefaultStoreDescriptionLabel2"/>
+        <!--Save new attribute-->
+        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickSaveAttribute"/>
+        <switchToIFrame stepKey="switchToParentPage" after="clickSaveAttribute"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
+        <!--Find new attribute in grid and select-->
+        <conditionalClick selector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" dependentSelector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" visible="true" stepKey="clickClearFilters1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="openFilterPanel"/>
+        <waitForPageLoad stepKey="waitForPageLoad12" time="10"/>
+        <conditionalClick selector="[class*='assign_sources_configurable_modal'] div.admin__data-grid-header [data-action='grid-filter-reset']" dependentSelector="[class*='assign_sources_configurable_modal'] div.admin__data-grid-header [data-action='grid-filter-reset']" visible="true" stepKey="clickClearFilters2"/>
+        <waitForPageLoad stepKey="waitForPageLoad16" time="10"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeLabel}}" userInput="{{textSwatchProductAttribute.default_label}}" stepKey="fillAttributeLabelFilter"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersAttribute"/>
+        <checkOption selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="checkAttributeInGrid"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNext1"/>
+        <!--Select all options for attribute-->
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="selectAllAttributeOptions"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNext2"/>
+        <!--Images, price and quantity configuration-->
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku1"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="clickOnAssignSources2"/>
+
+        <conditionalClick selector="(//*[contains(@class, '_show')]//*[contains(@class, 'action-clear')])[1]" dependentSelector="(//*[contains(@class, 'admin__data-grid-filters-current _show')])[1]" visible="true" stepKey="clickClearFilters3"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
+        <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
+        <waitForPageLoad stepKey="waitForPageLoad13" time="10"/>
+        <conditionalClick selector="[class*='assign_sources_configurable_modal'] div.admin__data-grid-header [data-action='grid-filter-reset']" dependentSelector="[class*='assign_sources_configurable_modal'] div.admin__data-grid-header [data-action='grid-filter-reset']" visible="true" stepKey="clickClearFilters4"/>
+        <waitForPageLoad stepKey="waitForPageLoad15" time="10"/>
+        <fillField userInput="$$createSource1.source[source_code]$$" selector="{{AdminManageSourcesGridFilterControls.code}}" stepKey="fillCodeField2"/>
+
+        <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters1"/>
+        <waitForPageLoad stepKey="waitForPageLoad14" time="10"/>
+        <click selector="{{AdminGridRow.checkboxByValue($$createSource1.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource1"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="clickOnDone2"/>
+
+        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSource('0')}}" userInput="{{ConfigurableMsiProduct.quantity}}" stepKey="fillTheQuantityField1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNext3"/>
+        <!--Generate products-->
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickGenerateProducts"/>
+        <!--Save configurable product-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveConfigurableProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickConfirmAttributeSet"/>
+
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage1"/>
+        <seeNumberOfElements selector="{{AdminProductFormConfigurationsSection.currentVariationsRows}}" userInput="2" stepKey="seeNumberOfRows1"/>
+
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
+            <argument name="category" value="$$createPreReqCategory1$$"/>
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="assertProductInStorefront2">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <!-- Assert product text swatch -->
+        <seeElement selector="{{StorefrontProductInfoMainSection.productSwatchText(textSwatchProductAttribute1.adminSwatch)}}" stepKey="assertSwatch1"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productSwatchText(textSwatchProductAttribute2.adminSwatch)}}" stepKey="assertSwatch2"/>
+
+        <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
+        <comment userInput="Clean up configurable product" stepKey="cleanUpConfigurableProduct"/>
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProduct">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+    </test>
+</tests>

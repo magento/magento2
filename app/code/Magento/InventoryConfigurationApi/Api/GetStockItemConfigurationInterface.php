@@ -7,22 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfigurationApi\Api;
 
-use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
-
 /**
- * Returns stock item configuration data
+ * Returns stock item configuration data by sku and stock id.
  *
  * @api
  */
 interface GetStockItemConfigurationInterface
 {
     /**
-     * Return null if configuration for sku per stock is not exist
-     *
      * @param string $sku
      * @param int $stockId
-     * @return StockItemConfigurationInterface|null
+     * @return \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException
      */
-    public function execute(string $sku, int $stockId);
+    public function execute(
+        string $sku,
+        int $stockId
+    ): \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 }

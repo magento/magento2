@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOutOfStockThresholdOnVirtualProductPage">
+        <annotations>
+            <stories value="Admin user apply 'Only X left Treshhold' for Virtual product on Single stock mode"/>
+            <title value="Admin user apply 'Only X left Treshhold' for Virtual product on Single stock mode"/>
+            <description value="Admin user apply 'Only X left Treshhold' for Virtual product on Single stock mode."/>
+            <testCaseId value="MSI-1578"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="single_mode"/>
+        </annotations>
+        
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 5" stepKey="setThreshold1"/>
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
+            <createData entity="VirtualMsiProduct" stepKey="createProduct1"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer1"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductGridPage1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSimpleProduct1">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createProduct1.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createProduct1.product[sku]$$)}}" stepKey="editProduct1"/>
+        <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad1"/>
+
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="10" stepKey="fillProductQuantity"/>
+        <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad2"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="selectStockStatus"/>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory1.name$$]" stepKey="searchAndSelectCategory1"/>
+
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveVirtualProduct1"/>
+
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="newOrderExistingCustomer1">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="$$createProduct1.product[sku]$$" stepKey="fillSkuFilter"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
+        <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="5" stepKey="fillProductQty"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
+
+        <magentoCLI command="indexer:reindex" stepKey="runIndexerReindex2"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock2"/>
+
+        <amOnPage url="/$$createProduct1.product[sku]$$.html" stepKey="amOnProductPage2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+
+        <see selector=".availability.only" userInput="Only 5 left" stepKey="seeCurrentProductQuantity1"/>
+    </test>
+</tests>

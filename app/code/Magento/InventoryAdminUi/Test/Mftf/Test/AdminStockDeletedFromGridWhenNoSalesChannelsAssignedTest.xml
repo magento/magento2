@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStockDeletedFromGridWhenNoSalesChannelsAssignedTest">
+        <annotations>
+            <stories value="Delete Stock"/>
+            <title value="Delete Stock from Stock Grid"/>
+            <description value="You should be able to Delete a Stock from the Grid if it does NOT have a Sales Channel assigned."/>
+            <testCaseId value="MSI-842"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <actionGroup ref="AdminGoToStockGridFilterResultsByInputSelectStock" stepKey="goToStockGridFilterResultsByInputSelectStock1">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createStock1.stock[name]$$"/>
+        </actionGroup>
+
+        <click selector="{{AdminGridActionsMenu.dropDown}}" stepKey="clickOnTheActionMenu1"/>
+        <click selector="{{AdminGridActionsMenu.delete}}" stepKey="clickOnDelete1"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="clickOnOk2"/>
+
+        <see userInput="You deleted 1 Stock(s)." selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeDeleteMessage1"/>
+        <see userInput="We couldn't find any records." selector="{{AdminManageStockGridFilterControls.noRecords}}" stepKey="seeCodeInRow1"/>
+    </test>
+</tests>

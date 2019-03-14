@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="_defaultSource" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name">Default Source</data>
+        <data key="source_code">default</data>
+        <data key="enabled">1</data>
+        <data key="description">Default Source</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">0</data>
+        <data key="country">United States</data>
+        <data key="country_id">US</data>
+        <data key="postcode">00000</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="_minimalSource" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Minimal Source </data>
+        <data key="source_code" unique="suffix">minimal_source_</data>
+        <data key="enabled">1</data>
+        <data key="country_id">US</data>
+        <data key="postcode">90230</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource1" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 1 </data>
+        <data key="source_code" unique="suffix">test_source_1_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 1</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">100</data>
+        <data key="contact_name">First Last</data>
+        <data key="email" unique="prefix">test@test.com</data>
+        <data key="phone">123-456-7890</data>
+        <data key="fax">123-456-7890</data>
+        <data key="country">United States</data>
+        <data key="country_id">US</data>
+        <data key="stateProvince">California</data>
+        <data key="region_id">12</data>
+        <data key="city">Culver City</data>
+        <data key="street">6161 West Centinela Avenue</data>
+        <data key="postcode">90230</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource2" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 2 </data>
+        <data key="source_code" unique="suffix">test_source_2_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 2</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">200</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource3" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 3 </data>
+        <data key="source_code" unique="suffix">test_source_3_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 3</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">300</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource4" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 4 </data>
+        <data key="source_code" unique="suffix">test_source_4_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 4</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">400</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <!-- This entity shouldn't be used in tests as it will fail test AdminManageSourceGridColumnsSortingTest -->
+    <!-- The reason: source can't be deleted, only disabled-->
+    <entity name="SourceForColumnsSortingOrderTestOnly" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Source For Column Sorting Order Test Only </data>
+        <data key="source_code" unique="suffix">source_for_columns_sorting_test_only_</data>
+        <data key="enabled">1</data>
+        <data key="country_id">US</data>
+        <data key="postcode">90230</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <!-- Please don't use this entity in your tests otherwise AdminPaginationWorkedInManageSourcesGridTest will fail -->
+    <entity name="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Special Source </data>
+        <data key="source_code" unique="suffix">special_source_</data>
+        <data key="enabled">1</data>
+        <data key="country_id">US</data>
+        <data key="postcode">90230</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+</entities>

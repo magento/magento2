@@ -84,9 +84,7 @@ class Context
      */
     public function getValue($name)
     {
-        return isset($this->data[$name])
-            ? $this->data[$name]
-            : (isset($this->default[$name]) ? $this->default[$name] : null);
+        return $this->data[$name] ?? ($this->default[$name] ?? null);
     }
 
     /**

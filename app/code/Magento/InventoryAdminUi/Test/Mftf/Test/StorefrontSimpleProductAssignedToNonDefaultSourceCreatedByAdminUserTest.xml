@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSimpleProductAssignedToNonDefaultSourceCreatedByAdminUserTest">
+        <annotations>
+            <stories value="Assign Products to Sources"/>
+            <title value="Simple Product assigned to non-default Source"/>
+            <description value="Simple Product assigned to non-default Source created by Admin user visible on frontend."/>
+            <testCaseId value="MSI-954"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
+            <createData entity="SimpleSubCategory" stepKey="createSimpleSubCategory"/>
+            <createData entity="_minimalSource" stepKey="createCustomSource"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createCustomStock"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <waitForPageLoad stepKey="waitForPageLoadAfterLogin"/>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createCustomStock"/>
+                <requiredEntity createDataKey="createCustomSource"/>
+            </createData>
+
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGrid"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleSubCategory" stepKey="deleteSimpleSubCategory"/>
+
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+            <argument name="product" value="SimpleMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormInMultiSourceMode" stepKey="fillMainProductFieldsInAdmin">
+            <argument name="product" value="SimpleMsiProduct"/>
+        </actionGroup>
+
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesOnProductPage"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSourcesOnProductPage">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createCustomSource.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$createCustomSource.source[source_code]$$)}}" stepKey="clickOnCheckboxOnProductPage"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDoneOnProductPage"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createCustomSource.source[source_code]$$" stepKey="seeSourceIdInGridOnProductPage"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createCustomSource.source[name]$$" stepKey="seeSourceNameInGridOnProductPage"/>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillSourceQtyFieldOnProductPage"/>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createSimpleSubCategory.name$$]" stepKey="searchAndSelectCategory"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseSimpleProduct"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsOnProductGrid">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
+        </actionGroup>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.name}}" stepKey="seeNameInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.sku}}" stepKey="seeSkuInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.price}}" stepKey="seePriceInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="seeQuantityInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Enabled" stepKey="seeStatusInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Main Website" stepKey="seeWebsiteInFirstRow"/>
+
+        <!-- Go to storefront category page, assert product visibility -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSimpleSubCategory.name$$)}}" stepKey="navigateToCategoryPageOnStorefront"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoadOnStorefront"/>
+
+        <see userInput="{{SimpleMsiProduct.name}}" stepKey="assertProductNamePresentOnCategoryPageOnStorefront"/>
+        <see userInput="{{SimpleMsiProduct.price}}" stepKey="assertProductPricePresentOnCategoryPageOnStorefront"/>
+
+        <!-- Go to storefront product page, assert product visibility -->
+        <amOnPage url="{{SimpleMsiProduct.urlKey}}.html" stepKey="navigateToProductPageOnStorefront"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageLoadOnStorefront"/>
+
+        <seeInTitle userInput="{{SimpleMsiProduct.name}}" stepKey="assertProductNameTitleProductPageLoadOnStorefront"/>
+        <see userInput="{{SimpleMsiProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductNameOnProductPageLoadOnStorefront"/>
+        <see userInput="{{SimpleMsiProduct.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPriceOnProductPageLoadOnStorefront"/>
+        <see userInput="{{SimpleMsiProduct.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSkuOnProductPageLoadOnStorefront"/>
+        <see userInput="In Stock" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertProductStockStatusOnProductPageLoadOnStorefront"/>
+    </test>
+</tests>

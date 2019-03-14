@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRemoveSourcesAssignedToProductTest">
+        <annotations>
+            <stories value="Delete Sources from Products"/>
+            <title value="Delete Sources From Products"/>
+            <description value="You should be able to delete a Source assigned to a Product from the Product page."/>
+            <testCaseId value="MSI-937"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="FullSource2" stepKey="createSource2"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="simpleCategory1"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$simpleProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct2">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource2.source[source_code]$$"/>
+        </actionGroup>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillDefaultQuantityField1"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillDefaultQuantityField2"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="100" stepKey="fillDefaultQuantityField3"/>
+
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="default" stepKey="seeSourceIdInGrid1"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="Default Source" stepKey="seeSourceNameInGrid1"/>
+
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSourceIdInGrid2"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[name]$$" stepKey="seeSourceNameInGrid2"/>
+
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource2.source[source_code]$$" stepKey="seeSourceIdInGrid3"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource2.source[name]$$" stepKey="seeSourceNameInGrid3"/>
+
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue1"/>
+
+        <click selector="{{AdminProductSourcesGrid.rowDelete('1')}}" stepKey="clickOnDelete1"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[source_code]$$" stepKey="dontSeeSourceIdInGrid1"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[name]$$" stepKey="dontSeeSourceNameInGrid1"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[source_code]$$" stepKey="seeSourceIdInGrid5"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[name]$$" stepKey="seeSourceNameInGrid5"/>
+
+        <click selector="{{AdminProductSourcesGrid.rowDelete('1')}}" stepKey="clickOnDelete2"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource2.source[source_code]$$" stepKey="dontSeeSourceIdInGrid2"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource2.source[name]$$" stepKey="dontSeeSourceNameInGrid2"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="default" stepKey="seeSourceIdInGrid6"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="Default Source" stepKey="seeSourceNameInGrid6"/>
+
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue2"/>
+
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="default" stepKey="seeSourceIdInGrid7"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="Default Source" stepKey="seeSourceNameInGrid7"/>
+        <seeNumberOfElements selector=".data-row" userInput="1" stepKey="seeOneSourceRow1"/>
+    </test>
+</tests>

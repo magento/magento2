@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateSimpleProductQuantityInSingleStockModeViaTheAdminTest">
+        <annotations>
+            <stories value="Update Product"/>
+            <title value="Quantity of the Virtual product updated from product page in single stock mode by Admin user"/>
+            <description value="You should be able to update the Quantity for a Virtual Product via the Admin."/>
+            <testCaseId value="MSI-1612"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="single_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="VirtualMsiProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="simpleCategory1"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInput" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$simpleProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$simpleProduct1.product[name]$$" stepKey="seeProductNameInGrid1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$simpleProduct1.product[sku]$$" stepKey="seeProductSkuInGrid1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$simpleProduct1.product[price]$$" stepKey="seeProductPriceInGrid1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Enabled" stepKey="seeProductStatusInGrid1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Main Website" stepKey="seeProductWebsiteInGrid1"/>
+
+        <click selector="{{AdminGridRow.editByValue('$$simpleProduct1.product[name]$$')}}" stepKey="clickOnEditForDefaultStock1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="50" stepKey="fillProductQty1"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="selectStockStatus1"/>
+        <click selector="{{AdminGridMainControls.save}}" stepKey="clickOnSaveWebSite1"/>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInput" stepKey="goToProductGridFilterResultsByInputEditProduct2">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$simpleProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$simpleProduct1.product[name]$$" stepKey="seeProductNameInGrid2"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$simpleProduct1.product[sku]$$" stepKey="seeProductSkuInGrid2"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$simpleProduct1.product[price]$$" stepKey="seeProductPriceInGrid2"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="50" stepKey="seeProductQuantityInGrid2"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Enabled" stepKey="seeProductStatusInGrid2"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Main Website" stepKey="seeProductWebsiteInGrid2"/>
+    </test>
+</tests>

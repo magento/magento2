@@ -46,8 +46,8 @@ class AddStockStatusToSelectOnDefaultStockTest extends TestCase
     public function testAddStockStatusToSelect()
     {
         $actualIsSalableCount = $actualNotSalableCount = 0;
-        $expectedIsSalableCount = 3;
-        $expectedNotSalableCount = 1;
+        $expectedIsSalableCount = 4;
+        $expectedNotSalableCount = 2;
 
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->create(Collection::class);

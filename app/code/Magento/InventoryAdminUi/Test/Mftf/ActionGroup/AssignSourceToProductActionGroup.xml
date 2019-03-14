@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssignSourceToProductActionGroup">
+        <arguments>
+            <argument name="sourceCode"/>
+        </arguments>
+        <comment userInput="Assign Source to Product" stepKey="AssignSourceToProductComment"/>
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSource1"/>
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}"
+                          dependentSelector="{{AdminManageSourcesGridFilterControls.dropDown}}" visible="true"
+                          stepKey="clearTheFiltersIfPresent"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}"
+                          dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true"
+                          stepKey="clickClearFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{sourceCode}}"
+                   stepKey="fillKeywordSearchField"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad"/>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode(sourceCode)}}"
+               stepKey="clickOnCheckbox"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDone"/>
+        <waitForPageLoad time="5" stepKey="waitForSlideClosed"/>
+    </actionGroup>
+</actionGroups>
+

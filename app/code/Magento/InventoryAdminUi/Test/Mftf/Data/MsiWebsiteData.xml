@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="persistedStore" type="website">
+        <requiredEntity type="store">BasicMsiWebsite1</requiredEntity>
+        <data key="store_action">add</data>
+        <data key="store_type">website</data>
+    </entity>
+    <entity name="BasicMsiWebsite1" type="website">
+        <data key="name" unique="suffix">MSI Website 1 </data>
+        <data key="code" unique="suffix">msi_website_1_</data>
+        <data key="sort_order">0</data>
+    </entity>
+    <entity name="BasicMsiWebsite2" type="website">
+        <data key="name" unique="suffix">MSI Website 2 </data>
+        <data key="code" unique="suffix">msi_website_2_</data>
+        <data key="sort_order">0</data>
+    </entity>
+    <entity name="BasicMsiWebsite3" type="website">
+        <data key="name" unique="suffix">MSI Website 3 </data>
+        <data key="code" unique="suffix">msi_website_3_</data>
+        <data key="sort_order">0</data>
+    </entity>
+    <entity name="BasicMsiWebsite4" type="website">
+        <data key="name" unique="suffix">MSI Website 4 </data>
+        <data key="code" unique="suffix">msi_website_4_</data>
+        <data key="sort_order">0</data>
+    </entity>
+</entities>

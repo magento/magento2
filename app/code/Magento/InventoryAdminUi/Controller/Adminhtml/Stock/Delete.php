@@ -13,11 +13,12 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Delete Controller
  */
-class Delete extends Action
+class Delete extends Action implements HttpPostActionInterface
 {
     /**
      * @see _isAllowed()

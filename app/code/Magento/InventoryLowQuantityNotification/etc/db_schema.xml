@@ -11,10 +11,7 @@
         <column xsi:type="varchar" name="source_code" nullable="false" length="255"/>
         <column xsi:type="varchar" name="sku" nullable="false" length="64"/>
         <column xsi:type="decimal" name="notify_stock_qty" scale="4" precision="12" unsigned="false" nullable="true"/>
-        <constraint xsi:type="foreign" name="FK_B83B2F43C515D94DE6B92EEF9143CBA8"
-                    table="inventory_low_stock_notification_configuration" column="source_code"
-                    referenceTable="inventory_source_item" referenceColumn="source_code" onDelete="CASCADE"/>
-        <constraint xsi:type="primary" name="IDX_PRIMARY">
+        <constraint xsi:type="primary" referenceId="IDX_PRIMARY">
             <column name="source_code"/>
             <column name="sku"/>
         </constraint>

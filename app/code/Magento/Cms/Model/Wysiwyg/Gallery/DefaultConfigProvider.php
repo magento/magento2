@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Cms\Model\Wysiwyg\Gallery;
 
 class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
@@ -49,7 +51,7 @@ class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigPro
     /**
      * {@inheritdoc}
      */
-    public function getConfig($config)
+    public function getConfig(\Magento\Framework\DataObject $config) : \Magento\Framework\DataObject
     {
         $pluginData = (array) $config->getData('plugins');
         $imageData = [

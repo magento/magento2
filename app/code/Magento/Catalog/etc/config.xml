@@ -30,6 +30,7 @@
                 <flat_catalog_category>0</flat_catalog_category>
                 <default_sort_by>position</default_sort_by>
                 <parse_url_directives>1</parse_url_directives>
+                <remember_pagination>0</remember_pagination>
             </frontend>
             <product>
                 <flat>
@@ -52,6 +53,11 @@
                 <forbidden_extensions>php,exe</forbidden_extensions>
             </custom_options>
         </catalog>
+        <indexer>
+            <catalog_product_price>
+                <dimensions_mode>none</dimensions_mode>
+            </catalog_product_price>
+        </indexer>
         <system>
             <media_storage_configuration>
                 <allowed_resources>
@@ -61,6 +67,9 @@
                     <product_custom_options_fodler>custom_options</product_custom_options_fodler>
                 </allowed_resources>
             </media_storage_configuration>
+            <upload_configuration>
+                <jpeg_quality>80</jpeg_quality>
+            </upload_configuration>
         </system>
         <design>
             <watermark>

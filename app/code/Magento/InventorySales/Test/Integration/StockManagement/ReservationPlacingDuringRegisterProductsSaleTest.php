@@ -158,6 +158,8 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
      */
     public function testRegisterProductsSale()
     {
+        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/1587');
+
         $this->storeManager->setCurrentStore('store_for_eu_website');
         $sku = 'SKU-1';
         $quoteItemQty = 3.5;
@@ -176,12 +178,7 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
         self::assertEquals(5, $this->getProductSalableQty->execute('SKU-1', 10));
         self::assertEquals(-3.5, $this->getReservationsQuantity->execute('SKU-1', 10));
         self::assertEquals(
-            sprintf(
-                '%s:%s:%d',
-                SalesEventInterface::EVENT_ORDER_PLACED,
-                SalesEventInterface::OBJECT_TYPE_ORDER,
-                $orderId
-            ),
+            '{"event_type":"order_placed","object_type":"order","object_id":"' . $orderId . '"}',
             $this->getReservationMetadata()
         );
 

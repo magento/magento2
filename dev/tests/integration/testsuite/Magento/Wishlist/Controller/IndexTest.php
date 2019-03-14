@@ -122,11 +122,13 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_product_qty_increments.php
      */
     public function testAllcartAction()
     {
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class)->getFormKey();
+        $this->getRequest()->setMethod('POST');
         $this->getRequest()->setParam('form_key', $formKey);
         $this->dispatch('wishlist/index/allcart');
 

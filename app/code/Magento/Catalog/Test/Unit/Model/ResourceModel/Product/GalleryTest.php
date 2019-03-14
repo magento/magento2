@@ -281,6 +281,9 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->resource->bindValueToEntity($valueId, $entityId);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testLoadGallery()
     {
         $productId = 5;
@@ -329,7 +332,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             'main.value_id = entity.value_id',
             ['entity_id']
         )->willReturnSelf();
-        $this->product->expects($this->at(0))->method('getData')->with('entity_id')->willReturn($productId);
+        $this->product->expects($this->at(0))->method('getData')
+            ->with('entity_id')->willReturn($productId);
         $this->product->expects($this->at(1))->method('getStoreId')->will($this->returnValue($storeId));
         $this->connection->expects($this->exactly(2))->method('quoteInto')->withConsecutive(
             ['value.store_id = ?'],
@@ -338,26 +342,50 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             'value.store_id = ' . $storeId,
             'default_value.store_id = ' . 0
         );
+        $this->connection->expects($this->any())->method('getIfNullSql')->will(
+            $this->returnValueMap([
+                [
+                    '`value`.`label`',
+                    '`default_value`.`label`',
+                    'IFNULL(`value`.`label`, `default_value`.`label`)'
+                ],
+                [
+                    '`value`.`position`',
+                    '`default_value`.`position`',
+                    'IFNULL(`value`.`position`, `default_value`.`position`)'
+                ],
+                [
+                    '`value`.`disabled`',
+                    '`default_value`.`disabled`',
+                    'IFNULL(`value`.`disabled`, `default_value`.`disabled`)'
+                ]
+            ])
+        );
         $this->select->expects($this->at(2))->method('joinLeft')->with(
             ['value' => $getTableReturnValue],
             $quoteInfoReturnValue,
-            [
-                'label',
-                'position',
-                'disabled'
-            ]
+            []
         )->willReturnSelf();
         $this->select->expects($this->at(3))->method('joinLeft')->with(
             ['default_value' => $getTableReturnValue],
             $quoteDefaultInfoReturnValue,
-            ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
+            []
         )->willReturnSelf();
-        $this->select->expects($this->at(4))->method('where')->with(
+        $this->select->expects($this->at(4))->method('columns')->with([
+            'label' => 'IFNULL(`value`.`label`, `default_value`.`label`)',
+            'position' => 'IFNULL(`value`.`position`, `default_value`.`position`)',
+            'disabled' => 'IFNULL(`value`.`disabled`, `default_value`.`disabled`)',
+            'label_default' => 'default_value.label',
+            'position_default' => 'default_value.position',
+            'disabled_default' => 'default_value.disabled'
+        ])->willReturnSelf();
+        $this->select->expects($this->at(5))->method('where')->with(
             'main.attribute_id = ?',
             $attributeId
         )->willReturnSelf();
-        $this->select->expects($this->at(5))->method('where')->with('main.disabled = 0')->willReturnSelf();
-        $this->select->expects($this->at(7))->method('where')
+        $this->select->expects($this->at(6))->method('where')
+            ->with('main.disabled = 0')->willReturnSelf();
+        $this->select->expects($this->at(8))->method('where')
                      ->with('entity.entity_id = ?', $productId)
                      ->willReturnSelf();
         $this->select->expects($this->once())->method('order')

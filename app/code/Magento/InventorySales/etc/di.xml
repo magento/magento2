@@ -13,10 +13,11 @@
     <preference for="Magento\InventorySalesApi\Model\GetAssignedStockIdForWebsiteInterface" type="Magento\InventorySales\Model\ResourceModel\GetAssignedStockIdForWebsite"/>
     <preference for="Magento\InventorySalesApi\Model\DeleteSalesChannelToStockLinkInterface" type="Magento\InventorySales\Model\ResourceModel\DeleteSalesChannelToStockLink"/>
     <preference for="Magento\InventorySalesApi\Api\StockResolverInterface" type="Magento\InventorySales\Model\StockResolver"/>
+    <preference for="Magento\InventorySalesApi\Api\GetStockBySalesChannelInterface" type="Magento\InventorySales\Model\GetStockBySalesChannel"/>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="load_sales_channels_on_get_list" type="Magento\InventorySales\Plugin\InventoryApi\StockRepository\LoadSalesChannelsOnGetListPlugin"/>
         <plugin name="load_sales_channels_on_get" type="Magento\InventorySales\Plugin\InventoryApi\StockRepository\LoadSalesChannelsOnGetPlugin"/>
-        <plugin name="save_sales_channels_links" type="Magento\InventorySales\Plugin\InventoryApi\StockRepository\SaveSalesChannelsLinksPlugin"/>
+        <plugin name="save_sales_channels_links" type="Magento\InventorySales\Plugin\InventoryApi\StockRepository\SaveSalesChannelsLinksPlugin" sortOrder="20"/>
         <plugin name="prevent_deleting_assigned_to_sales_channels_stock"
                 type="Magento\InventorySales\Plugin\InventoryApi\StockRepository\PreventDeletingAssignedToSalesChannelsStockPlugin"/>
     </type>
@@ -41,9 +42,11 @@
     <type name="Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain">
         <arguments>
             <argument name="conditions" xsi:type="array">
+                <item name="backorders" xsi:type="object">Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\BackordersCondition</item>
                 <item name="manage_stock" xsi:type="object">Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\ManageStockCondition</item>
                 <!-- min_qty condition includes source_item_status check (need to proper work of min_qty) -->
                 <item name="min_qty" xsi:type="object">Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\MinQtyStockCondition</item>
+                <item name="non_existing_legacy_sku" xsi:type="object">Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\SkuIsAbsentInCatalogCondition</item>
             </argument>
         </arguments>
     </type>
@@ -52,6 +55,10 @@
     <type name="Magento\InventorySales\Model\IsProductSalableCondition\IsProductSalableConditionChain">
         <arguments>
             <argument name="conditions" xsi:type="array">
+                <item name="stock_item_is_in_stock" xsi:type="array">
+                    <item name="required" xsi:type="boolean">true</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\IsSetInStockStatusForCompositeProductCondition</item>
+                </item>
                 <item name="back_order" xsi:type="array">
                     <item name="sort_order" xsi:type="number">10</item>
                     <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\BackOrderCondition</item>
@@ -115,7 +122,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRegisterProductsSalePlugin">
+    <type name="Magento\InventorySales\Model\CheckItemsQuantity">
         <arguments>
             <argument name="isProductSalableForRequestedQty" xsi:type="object">IsProductSalableForRequestedQtyConditionChainOnPlaceOrder</argument>
         </arguments>
@@ -132,11 +139,35 @@
         <plugin name="inventory_reservations_placement" type="Magento\InventorySales\Plugin\Sales\OrderManagement\AppendReservationsAfterOrderPlacementPlugin"/>
     </type>
     <!-- Return Processor -->
-    <preference for="Magento\InventorySales\Model\ReturnProcessor\Request\ItemsToRefundInterface" type="Magento\InventorySales\Model\ReturnProcessor\Request\ItemsToRefund" />
-    <preference for="Magento\InventorySales\Model\ReturnProcessor\Request\BackItemQtyRequestInterface" type="Magento\InventorySales\Model\ReturnProcessor\Request\BackItemQtyRequest" />
-    <preference for="Magento\InventorySales\Model\ReturnProcessor\ProcessRefundItemsInterface" type="Magento\InventorySales\Model\ReturnProcessor\ProcessRefundItems" />
+    <preference for="Magento\InventorySalesApi\Model\ReturnProcessor\Request\ItemsToRefundInterface" type="Magento\InventorySales\Model\ReturnProcessor\Request\ItemsToRefund" />
+    <preference for="Magento\InventorySalesApi\Model\ReturnProcessor\ProcessRefundItemsInterface" type="Magento\InventorySales\Model\ReturnProcessor\ProcessRefundItems" />
     <type name="Magento\SalesInventory\Model\Order\ReturnProcessor">
         <plugin name="process_return_product_qty_on_credit_memo" type="Magento\InventorySales\Plugin\SalesInventory\ProcessReturnQtyOnCreditMemoPlugin" />
     </type>
+    <type name="Magento\InventorySalesApi\Model\ReturnProcessor\GetSourceDeductedOrderItemsChain">
+        <arguments>
+            <argument name="sourceDeductedItemsSelector" xsi:type="array">
+                <item name="source_deducted__virtual_invoice_items" xsi:type="object">Magento\InventorySales\Model\ReturnProcessor\GetInvoicedItemsPerSourceByPriority</item>
+            </argument>
+        </arguments>
+    </type>
     <preference for="Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface" type="Magento\InventorySales\Model\StockByWebsiteIdResolver"/>
+    <type name="Magento\Store\Model\ResourceModel\Website">
+        <plugin name="assign_website_to_default_stock" type="Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website\AssignWebsiteToDefaultStockPlugin"/>
+        <plugin name="delete_website_to_stock_link" type="Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website\DeleteWebsiteToStockLinkPlugin"/>
+        <plugin name="update_sales_channel_website_code" type="Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website\UpdateSalesChannelWebsiteCodePlugin"/>
+    </type>
+    <type name="Magento\InventoryApi\Model\StockValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="sales_channels" xsi:type="object">Magento\InventorySales\Model\Stock\Validator\SalesChannelsValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- StockItemConfiguration -->
+    <type name="Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface">
+        <plugin name="load_stock_item_is_in_stock"
+                type="Magento\InventoryCatalog\Plugin\InventoryConfigurationApi\GetStockItemConfiguration\LoadIsInStockPlugin"/>
+    </type>
+    <preference for="Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface" type="Magento\InventorySales\Model\GetSkuFromOrderItem"/>
 </config>

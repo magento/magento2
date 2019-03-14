@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model;
 
-use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
-use Magento\CatalogInventory\Model\Stock;
-use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
+use Magento\InventoryApi\Model\IsProductAssignedToStockInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
-use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForSkuInterface;
 
 /**
  * @inheritdoc
@@ -22,24 +20,9 @@ use Magento\Framework\Exception\LocalizedException;
 class GetStockItemConfiguration implements GetStockItemConfigurationInterface
 {
     /**
-     * @var GetStockItemDataInterface
+     * @var GetLegacyStockItem
      */
-    private $getStockItemData;
-
-    /**
-     * @var StockItemCriteriaInterfaceFactory
-     */
-    private $legacyStockItemCriteriaFactory;
-
-    /**
-     * @var StockItemRepositoryInterface
-     */
-    private $legacyStockItemRepository;
-
-    /**
-     * @var GetProductIdsBySkusInterface
-     */
-    private $getProductIdsBySkus;
+    private $getLegacyStockItem;
 
     /**
      * @var StockItemConfigurationFactory
@@ -47,68 +30,58 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     private $stockItemConfigurationFactory;
 
     /**
-     * @param GetStockItemDataInterface $getStockItemData
-     * @param StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory
-     * @param StockItemRepositoryInterface $legacyStockItemRepository
-     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
+     * @var IsProductAssignedToStockInterface
+     */
+    private $isProductAssignedToStock;
+
+    /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
+     * @var IsSourceItemManagementAllowedForSkuInterface
+     */
+    private $isSourceItemManagementAllowedForSku;
+
+    /**
+     * @param GetLegacyStockItem $getLegacyStockItem
      * @param StockItemConfigurationFactory $stockItemConfigurationFactory
+     * @param IsProductAssignedToStockInterface $isProductAssignedToStock
+     * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku
      */
     public function __construct(
-        GetStockItemDataInterface $getStockItemData,
-        StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory,
-        StockItemRepositoryInterface $legacyStockItemRepository,
-        GetProductIdsBySkusInterface $getProductIdsBySkus,
-        StockItemConfigurationFactory $stockItemConfigurationFactory
+        GetLegacyStockItem $getLegacyStockItem,
+        StockItemConfigurationFactory $stockItemConfigurationFactory,
+        IsProductAssignedToStockInterface $isProductAssignedToStock,
+        DefaultStockProviderInterface $defaultStockProvider,
+        IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku
     ) {
-        $this->getStockItemData = $getStockItemData;
-        $this->legacyStockItemCriteriaFactory = $legacyStockItemCriteriaFactory;
-        $this->legacyStockItemRepository = $legacyStockItemRepository;
-        $this->getProductIdsBySkus = $getProductIdsBySkus;
+        $this->getLegacyStockItem = $getLegacyStockItem;
         $this->stockItemConfigurationFactory = $stockItemConfigurationFactory;
+        $this->isProductAssignedToStock = $isProductAssignedToStock;
+        $this->defaultStockProvider = $defaultStockProvider;
+        $this->isSourceItemManagementAllowedForSku = $isSourceItemManagementAllowedForSku;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(string $sku, int $stockId)
+    public function execute(string $sku, int $stockId): StockItemConfigurationInterface
     {
-        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-        if (null === $stockItemData) {
-            // Sku is not assigned to Stock
-            return null;
+        if ($this->defaultStockProvider->getId() !== $stockId
+            && true === $this->isSourceItemManagementAllowedForSku->execute($sku)
+            && false === $this->isProductAssignedToStock->execute($sku, $stockId)) {
+            throw new SkuIsNotAssignedToStockException(
+                __('The requested sku is not assigned to given stock.')
+            );
         }
 
         return $this->stockItemConfigurationFactory->create(
             [
-                'stockItem' => $this->getLegacyStockItem($sku),
+                'stockItem' => $this->getLegacyStockItem->execute($sku)
             ]
         );
-    }
-
-    /**
-     * @param string $sku
-     * @return StockItemInterface
-     * @throws LocalizedException
-     */
-    private function getLegacyStockItem(string $sku): StockItemInterface
-    {
-        $searchCriteria = $this->legacyStockItemCriteriaFactory->create();
-
-        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
-        $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
-
-        // TODO We use Stock::DEFAULT_STOCK_ID until we have proper multi-stock item configuration
-        $searchCriteria->addFilter(StockItemInterface::STOCK_ID, StockItemInterface::STOCK_ID, Stock::DEFAULT_STOCK_ID);
-
-        $stockItemCollection = $this->legacyStockItemRepository->getList($searchCriteria);
-        if ($stockItemCollection->getTotalCount() === 0) {
-            // TODO:
-            return \Magento\Framework\App\ObjectManager::getInstance()->create(StockItemInterface::class);
-            #throw new LocalizedException(__('Legacy stock item is not found'));
-        }
-
-        $stockItems = $stockItemCollection->getItems();
-        $stockItem = reset($stockItems);
-        return $stockItem;
     }
 }

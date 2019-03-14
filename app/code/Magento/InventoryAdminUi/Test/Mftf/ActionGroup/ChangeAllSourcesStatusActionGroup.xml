@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ChangeAllSourcesStatusActionGroup">
+        <arguments>
+            <argument name="Status" defaultValue="AdminManageSourcesGridMassAction.changeStatusDisableButton"/>
+        </arguments>
+        <comment userInput="Disable all sources, except Default" stepKey="basicComment"/>
+        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheManageSourcePage"/>
+        <waitForPageLoad time="30" stepKey="waitForAdminManageSourcePageLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitFilterCleared"/>
+        <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
+        <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllSources"/>
+        <click selector="{{AdminManageSourcesGridMassAction.actionsButton}}" stepKey="clickActionsButton"/>
+        <click selector="{{AdminManageSourcesGridMassAction.changeStatusButton}}" stepKey="clickChangeStatus"/>
+        <click selector="{{Status}}" stepKey="clickDisable"/>
+        <waitForPageLoad stepKey="waitForStatusSaved"/>
+    </actionGroup>
+</actionGroups>

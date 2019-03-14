@@ -1,0 +1,45 @@
+"Quantity Per Source","Quantity Per Source"
+"Step 3: Bulk Images, Price and Quantity","Step 3: Bulk Images, Price and Quantity"
+"Based on your selections %1 new products will be created. Use this step to customize images and price for your new products.","Based on your selections %1 new products will be created. Use this step to customize images and price for your new products."
+Images,Images
+"Apply single set of images to all SKUs","Apply single set of images to all SKUs"
+"Apply unique images by attribute to each SKU","Apply unique images by attribute to each SKU"
+"Skip image uploading at this time","Skip image uploading at this time"
+"Browse Files...","Browse Files..."
+"Browse to find or drag image here","Browse to find or drag image here"
+"Remove image","Remove image"
+Hidden,Hidden
+"Alt Text","Alt Text"
+Role,Role
+"Image Size","Image Size"
+{size},{size}
+"Image Resolution","Image Resolution"
+"{width}^{height} px","{width}^{height} px"
+"Hide from Product Page","Hide from Product Page"
+"Select attribute","Select attribute"
+Select,Select
+Price,Price
+"Apply single price to all SKUs","Apply single price to all SKUs"
+"Apply unique prices by attribute to each SKU","Apply unique prices by attribute to each SKU"
+"Skip price at this time","Skip price at this time"
+"Quantity per source","Quantity per source"
+"Apply single quantity to each SKUs","Apply single quantity to each SKUs"
+"Apply unique quantity by attribute to each SKU","Apply unique quantity by attribute to each SKU"
+"Skip quantity at this time","Skip quantity at this time"
+"Step 4: Summary","Step 4: Summary"
+"New Product Review","New Product Review"
+"Here are the products you're about to create.","Here are the products you're about to create."
+"Associated Products","Associated Products"
+"You created these products for this configuration.","You created these products for this configuration."
+"Disassociated Products","Disassociated Products"
+"These products are not associated.","These products are not associated."
+Enabled,Enabled
+Disabled,Disabled
+Quantity,Quantity
+"Show more...","Show more..."
+"Please fill-in correct values.","Please fill-in correct values."
+SKU,SKU
+"Assign Sources","Assign Sources"
+Source,Source
+"Source Status","Source Status"
+Done,Done

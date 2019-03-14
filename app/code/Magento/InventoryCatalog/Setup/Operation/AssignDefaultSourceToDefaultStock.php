@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Setup\Operation;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-use Magento\InventoryApi\Api\Data\StockSourceLinkInterfaceFactory;
-use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 
@@ -29,31 +28,23 @@ class AssignDefaultSourceToDefaultStock
     private $defaultSourceProvider;
 
     /**
-     * @var StockSourceLinkInterfaceFactory
+     * @var ResourceConnection
      */
-    private $stockSourceLinkFactory;
-
-    /**
-     * @var StockSourceLinksSaveInterface
-     */
-    private $stockSourceLinksSave;
+    private $resource;
 
     /**
      * @param DefaultStockProviderInterface $defaultStockProvider
      * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param StockSourceLinkInterfaceFactory $stockSourceLinkFactory
-     * @param StockSourceLinksSaveInterface $stockSourceLinksSave
+     * @param ResourceConnection $resource
      */
     public function __construct(
         DefaultStockProviderInterface $defaultStockProvider,
         DefaultSourceProviderInterface $defaultSourceProvider,
-        StockSourceLinkInterfaceFactory $stockSourceLinkFactory,
-        StockSourceLinksSaveInterface $stockSourceLinksSave
+        ResourceConnection $resource
     ) {
         $this->defaultStockProvider = $defaultStockProvider;
         $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->stockSourceLinkFactory = $stockSourceLinkFactory;
-        $this->stockSourceLinksSave = $stockSourceLinksSave;
+        $this->resource = $resource;
     }
 
     /**
@@ -63,13 +54,12 @@ class AssignDefaultSourceToDefaultStock
      */
     public function execute()
     {
-        /** @var StockSourceLinkInterface $link */
-        $link = $this->stockSourceLinkFactory->create();
-
-        $link->setStockId($this->defaultStockProvider->getId());
-        $link->setSourceCode($this->defaultSourceProvider->getCode());
-        $link->setPriority(1);
-
-        $this->stockSourceLinksSave->execute([$link]);
+        $connection = $this->resource->getConnection();
+        $stockSourceLinkData = [
+            StockSourceLinkInterface::SOURCE_CODE => $this->defaultSourceProvider->getCode(),
+            StockSourceLinkInterface::STOCK_ID => $this->defaultStockProvider->getId(),
+            StockSourceLinkInterface::PRIORITY => 1,
+        ];
+        $connection->insert($this->resource->getTableName('inventory_source_stock_link'), $stockSourceLinkData);
     }
 }

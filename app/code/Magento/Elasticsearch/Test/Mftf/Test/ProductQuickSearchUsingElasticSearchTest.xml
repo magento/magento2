@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ProductQuickSearchUsingElasticSearchTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Quick Search of products on Storefront when ES 5.0+ is enabled"/>
+            <title value="Product quick search doesn't throw exception after ES is chosen as search engine"/>
+            <description value="Verify no elastic search exception is thrown when searching for product before catalogsearch reindexing"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-94995"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="categoryFirst"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="categoryFirst"/>
+            </createData>
+        </before>
+
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="categoryFirst" stepKey="deleteCategory"/>
+            <actionGroup ref="ResetSearchEngineConfiguration" stepKey="resetCatalogSearchConfiguration"/>
+            <actionGroup ref="updateIndexerOnSave" stepKey="resetIndexerBackToOriginalState">
+                <argument name="indexerName" value="catalogsearch_fulltext"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <comment userInput="Change Catalog search engine option to Elastic Search 5.0+" stepKey="chooseElasticSearch5"/>
+        <actionGroup ref="ChooseElasticSearchAsSearchEngine" stepKey="chooseES5"/>
+        <actionGroup ref="ClearPageCacheActionGroup" stepKey="clearing"/>
+        <actionGroup ref="updateIndexerBySchedule" stepKey="updateAnIndexerBySchedule">
+            <argument name="indexerName" value="catalogsearch_fulltext"/>
+        </actionGroup>
+        <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        <!--Navigate to storefront and do a quick search for the product -->
+        <comment userInput="Navigate to Storefront to check if quick search works" stepKey="commentCheckQuickSearch" />
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
+
+        <waitForPageLoad stepKey="waitForHomePageToLoad" time="30"/>
+        <fillField userInput="Simple" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="fillSearchBar"/>
+        <waitForPageLoad stepKey="wait2" time="30"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
+        <seeInTitle userInput="Search results for: 'Simple'" stepKey="assertQuickSearchTitle"/>
+        <see userInput="Search results for: 'Simple'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
+        <comment userInput="End of searching products" stepKey="endOfSearchingProducts"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin2"/>
+        </test>
+</tests>

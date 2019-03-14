@@ -22,5 +22,5 @@ interface ReplaceSalesChannelsForStockInterface
      * @param int $stockId
      * @return void
      */
-    public function execute(array $salesChannels, int $stockId);
+    public function execute(array $salesChannels, int $stockId): void;
 }

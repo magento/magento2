@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVirtualProductDisabledManageStockOnCustomStockTest">
+        <annotations>
+            <stories value="Manage Stock on Configuration page turned off for Virtual Product in admin"/>
+            <title value="Manage Stock on Configuration page turned off for Virtual Product in admin"/>
+            <description value="Manage Stock on Configuration page turned off for Virtual Product in admin."/>
+            <testCaseId value="MSI-1577"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="customStock"/>
+            <createData entity="FullSource1" stepKey="customSource1"/>
+            <createData entity="VirtualMsiProduct" stepKey="createProduct"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="customStock"/>
+                <requiredEntity createDataKey="customSource1"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductGridPage1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSimpleProduct1">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createProduct.product[sku]$$)}}" stepKey="editProduct1"/>
+        <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad1"/>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="searchAndSelectCategory"/>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$customSource1.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillSourceQuantityField1"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillSourceQuantityField2"/>
+
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveVirtualProduct1"/>
+
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="checkConfigurableIsPresentOnCategoryPage1">
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <amOnPage url="/$$createProduct.product[sku]$$.html" stepKey="navigateToProductPageOnStorefront1"/>
+        <waitForPageLoad time="30" stepKey="waitForProductStorefrontPageLoad1"/>
+        <seeInTitle userInput="$$createProduct.product[name]$$" stepKey="assertProductNameTitleOnProductPage1"/>
+        <see userInput="$$createProduct.product[name]$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductNameOnProductPage1"/>
+        <see userInput="$$createProduct.product[price]$$" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPriceOnProductPage1"/>
+        <see userInput="$$createProduct.product[sku]$$" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSkuOnProductPage1"/>
+        <see userInput="In Stock" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertProductStockStatusOnProductPage1"/>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductGridPage2"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSimpleProduct2">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createProduct.product[sku]$$)}}" stepKey="editProduct2"/>
+        <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad2"/>
+
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="selectOutOfStock1"/>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="Out of Stock" stepKey="selectOutOfStock2"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveVirtualProduct2"/>
+
+        <magentoCLI command="config:set cataloginventory/item_options/manage_stock 0" stepKey="magentoCLI1"/>
+        <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock"/>
+
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="checkConfigurableIsPresentOnCategoryPage2">
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <amOnPage url="/$$createProduct.product[sku]$$.html" stepKey="navigateToProductPageOnStorefront2"/>
+        <waitForPageLoad time="30" stepKey="waitForProductStorefrontPageLoad2"/>
+        <seeInTitle userInput="$$createProduct.product[name]$$" stepKey="assertProductNameTitleOnProductPage2"/>
+        <see userInput="$$createProduct.product[name]$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductNameOnProductPage2"/>
+        <see userInput="$$createProduct.product[price]$$" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPriceOnProductPage2"/>
+        <see userInput="$$createProduct.product[sku]$$" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSkuOnProductPage2"/>
+    </test>
+</tests>

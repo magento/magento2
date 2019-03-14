@@ -1,0 +1,30 @@
+{
+    "name": "magento/functional-test-module-inventory-catalog-admin-ui",
+    "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.1.3||~7.2.0",
+        "magento/magento2-functional-testing-framework": "2.2.0",
+        "magento/functional-test-module-catalog": "100.0.0-dev",
+        "magento/functional-test-module-catalog-inventory": "100.0.0-dev",
+        "magento/functional-test-module-inventory-api": "100.0.0-dev",
+        "magento/functional-test-module-ui": "100.0.0-dev",
+        "magento/functional-test-module-inventory-catalog-api": "100.0.0-dev",
+        "magento/functional-test-module-inventory-configuration-api": "100.0.0-dev",
+        "magento/functional-test-module-inventory-indexer": "100.0.0-dev",
+        "magento/functional-test-module-store": "100.0.0-dev",
+        "magento/functional-test-module-inventory": "100.0.0-dev",
+        "magento/functional-test-module-inventory-sales-api": "100.0.0-dev"
+    },
+    "suggest": {
+        "magento/functional-test-module-inventory-admin-ui": "100.0.0-dev",
+        "magento/functional-test-module-inventory-reservations-api": "100.0.0-dev"
+    },
+    "type": "magento2-test",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ]
+}

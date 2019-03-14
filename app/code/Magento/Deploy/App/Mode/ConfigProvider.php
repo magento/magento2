@@ -16,7 +16,7 @@ class ConfigProvider
      * [
      *      'developer' => [
      *          'production' => [
-     *              {{setting_path}} => ['value' => {{setting_value}}, 'lock' => {{lock_value}}]
+     *              {{setting_path}} => {{setting_value}}
      *          ]
      *      ]
      * ]
@@ -41,7 +41,7 @@ class ConfigProvider
      * need to turn off 'dev/debug/debug_logging' setting in this case method
      * will return array
      * [
-     *      {{setting_path}} => ['value' => {{setting_value}}, 'lock' => {{lock_value}}]
+     *      {{setting_path}} => {{setting_value}}
      * ]
      *
      * @param string $currentMode

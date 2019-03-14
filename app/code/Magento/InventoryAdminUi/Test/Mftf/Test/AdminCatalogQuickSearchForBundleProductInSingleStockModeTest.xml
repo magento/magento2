@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCatalogQuickSearchForBundleProductInSingleStockModeTest">
+        <annotations>
+            <stories value="Catalog Quick Search"/>
+            <title value="Quick Catalog Search for Bundle Product on Single stock mode"/>
+            <description value="Quick Catalog Search for Bundle Product on Single stock mode"/>
+            <testCaseId value="MSI-1812"/>
+            <severity value="AVERAGE"/>
+            <group value="msi"/>
+            <group value="single_mode"/>
+        </annotations>
+        
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <comment userInput="Create bundle product." stepKey="createBundleProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageBundle"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateBundleProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillBundleProductNameAndSku">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <comment userInput="Add bundle item." stepKey="addBundleItemComment"/>
+        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
+        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
+        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
+        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="5" stepKey="fillProductDefaultQty"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedBundleProduct"/>
+
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+
+        <fillField userInput="{{BundleProduct.name}}" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="fillSearchBar1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl1"/>
+        <seeInTitle userInput="Search results for: '{{BundleProduct.name}}'" stepKey="assertQuickSearchTitle1"/>
+        <see userInput="Search results for: '{{BundleProduct.name}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName1"/>
+        <see selector="{{CatalogSearchResultSection.productListBlock}}" userInput="{{BundleProduct.name}}" stepKey="verifyProductAppearedInSearchResults" />
+    </test>
+</tests>

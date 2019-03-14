@@ -24,5 +24,5 @@ interface StockSourceLinksDeleteInterface
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function execute(array $links);
+    public function execute(array $links): void;
 }

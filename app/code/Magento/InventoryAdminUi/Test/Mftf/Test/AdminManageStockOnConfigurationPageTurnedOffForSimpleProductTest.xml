@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminManageStockOnConfigurationPageTurnedOffForSimpleProductTest">
+        <annotations>
+            <stories value="Check 'Manage Stock' system configuration value affection on simple product with custom source."/>
+            <title value="Check 'Manage Stock' system configuration value affection on simple product with custom source."/>
+            <description value="Verify, that simple product with custom source and 'Out of Stock' status is visible on storefront in case 'Manage Stock' system configuration value is set to 'No'."/>
+            <testCaseId value="MSI-958"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="customStock"/>
+            <createData entity="FullSource1" stepKey="customSource"/>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="customStock"/>
+                <requiredEntity createDataKey="customSource"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+        </before>
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+
+            <comment userInput=" Disable source, as it can brake single source mode tests." stepKey="disableCustomSourceComment"/>
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="navigateToSourceList"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilter"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterCustomSourceBySourceCode">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$customSource.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$customSource.source[source_code]$$)}}" stepKey="clickEditCustomSource"/>
+            <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableCustomSource"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSource"/>
+
+            <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitFroDefaultStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+
+            <comment userInput="Enable 'Manage Stock' configuration." stepKey="revertManageStockConfigurationComment"/>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableMangeStock"/>
+
+            <comment userInput="Perform reindex and cache flush after save stock related config." stepKey="reindexCacheFlushComment"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+        </after>
+
+        <comment userInput="Create simple product with custom source." stepKey="createSimpleProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPage"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateSimpleProductPage">
+            <argument name="product" value="SimpleMsiProduct"/>
+        </actionGroup>
+        <fillField userInput="{{SimpleMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName"/>
+        <fillField userInput="{{SimpleMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSKU"/>
+        <fillField userInput="{{SimpleMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice"/>
+        <fillField userInput="{{SimpleMsiProduct.weight}}" selector="{{AdminProductFormSection.productWeight}}" stepKey="fillProductWeight"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="{{SimpleMsiProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillProductUrlKey"/>
+        <scrollToTopOfPage stepKey="scrollToTopOffProductEditPage"/>
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSourceToProduct"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="searchCreatedCustomSource">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$customSource.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$customSource.source[source_code]$$)}}" stepKey="selectCreatedCustomSource"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="doneSelectSource"/>
+
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$customSource.source[source_code]$$" stepKey="checkSelectedSourceCodeInProductAssignedSourcesList"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$customSource.source[name]$$" stepKey="checkSelectedSourceNameInProductAssignedSourcesList"/>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillSourceQtyField"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedSimpleProduct"/>
+
+        <comment userInput="Check, created product is present on category page." stepKey="checkProductIsPresentOnCategoryPageComment"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToSimpleProductCategoryPage"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoad"/>
+        <see userInput="{{SimpleMsiProduct.name}}" stepKey="checkProductNameIsPresentOnCategoryPage"/>
+        <see userInput="{{SimpleMsiProduct.price}}" stepKey="checkProductPriceIsPresentOnCategoryPage"/>
+
+        <comment userInput="Set product stock status to 'Out of 'Stock'." stepKey="setProductToOutOfStockComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditProduct"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
+        </actionGroup>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumns"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductEditPage"/>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="setProductToOutOfStock"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveEditedSimpleProduct"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkMessageAfterProductSave"/>
+
+        <comment userInput="Check, modified product is absent on category page" stepKey="checkProductIsAbsentOnCategoryPageComment" />
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToEditedProductCategoryPage"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryLoad"/>
+        <dontSee userInput="{{SimpleMsiProduct.name}}" stepKey="checkProductNameIsAbsentOnCategoryPage"/>
+        <dontSee userInput="{{SimpleMsiProduct.price}}" stepKey="checkProductPriceIsAbsentOnCategoryPage"/>
+
+        <comment userInput="Disable 'Manage Stock' configuration." stepKey="disableMangeStockComment"/>
+        <magentoCLI command="config:set cataloginventory/item_options/manage_stock 0" stepKey="disableManageStock"/>
+
+        <comment userInput="Perform reindex and cache flush after save stock related config." stepKey="reindexAndCacheFlushAfterStockConfigurationSaved"/>
+        <magentoCLI command="indexer:reindex" stepKey="performReindexAfterConfigurationIsSaved"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterConfigurationIsSaved"/>
+
+        <comment userInput="Check, product presents on category page after 'Manage Stock' has been disabled." stepKey="checkProductIsBackToCategoryPageComment"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToProductCategoryPage"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryViewPageLoadToCheckProductIsBack"/>
+        <see userInput="{{SimpleMsiProduct.name}}" stepKey="checkProductNameIsBackToCategoryPage"/>
+        <see userInput="{{SimpleMsiProduct.price}}" stepKey="checkProductPriceIsBackToCategoryPage"/>
+    </test>
+</tests>

@@ -4,12 +4,31 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="data-grid-cell-content">
-    <ul data-bind="foreach: { data: $col.getSourceItemsData($row()), as: '$sourceItemData' }">
+
+<div class="data-grid-cell-content" attr="'data-tooltip-trigger': ++ko.uid">
+    <ul data-bind="foreach: { data: $col.getSourceItemsDataCut($row()), as: '$sourceItemData' }">
         <li>
-            <strong data-bind="text: $sourceItemData.source_name"></strong>
-            :
+            <strong data-bind="text: $sourceItemData.source_name"></strong>:
             <span data-bind="text: $sourceItemData.qty"></span>
         </li>
     </ul>
+</div>
+<div tooltip="
+    trigger: '[data-tooltip-trigger=' + ko.uid + ']',
+    action: 'hover',
+    closeOnScroll: false,
+    delay: 0,
+    position: 'top',
+    step: 30,
+    track: false,
+    strict: true">
+    <div>
+        <div class="data-tooltip-title" data-bind="i18n: 'Quantity per Source:'"></div>
+        <div class="data-tooltip-content">
+            <!-- ko foreach: { data: $col.getSourceItemsData($row()), as: '$sourceItemData' } -->
+            <div><strong data-bind="text: $sourceItemData.source_name"></strong>: <span
+                    data-bind="text: $sourceItemData.qty"></span></div>
+            <!-- /ko -->
+        </div>
+    </div>
 </div>

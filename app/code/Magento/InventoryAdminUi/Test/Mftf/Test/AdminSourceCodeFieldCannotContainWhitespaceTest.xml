@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSourceCodeFieldCannotContainWhitespaceTest">
+        <annotations>
+            <stories value="Field Validation"/>
+            <title value="Source Code cannot contain Whitespace"/>
+            <description value="You should NOT be able to Save a Source with a Source Code that contains Whitespace."/>
+            <testCaseId value="MSI-939"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPage1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+            <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnTheAddButton1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <fillField userInput="{{FullSource1.name}}" selector="{{AdminEditSourceGeneralSection.name}}" stepKey="fillNameField1"/>
+        <fillField userInput="{{FullSource1.name}}" selector="{{AdminEditSourceGeneralSection.code}}" stepKey="fillCodeField1"/>
+        <checkOption selector="{{AdminEditSourceGeneralSection.isEnabled}}" stepKey="checkIsEnabled1"/>
+        <fillField userInput="{{FullSource1.description}}" selector="{{AdminEditSourceGeneralSection.description}}" stepKey="fillDescriptionField1"/>
+
+        <fillField userInput="{{FullSource1.latitude}}" selector="{{AdminEditSourceGeneralSection.latitude}}" stepKey="fillLatitudeField1"/>
+        <fillField userInput="{{FullSource1.longitude}}" selector="{{AdminEditSourceGeneralSection.longitude}}" stepKey="fillLongitudeField1"/>
+
+        <conditionalClick selector="{{AdminEditSourceContactInfoSection.closed}}" dependentSelector="{{AdminEditSourceContactInfoSection.opened}}" visible="false" stepKey="clickOnContactInfo1"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad1"/>
+        <fillField userInput="{{FullSource1.contact_name}}" selector="{{AdminEditSourceContactInfoSection.contactName}}" stepKey="fillContactNameField1"/>
+        <fillField userInput="{{FullSource1.email}}" selector="{{AdminEditSourceContactInfoSection.email}}" stepKey="fillEmailField1"/>
+        <fillField userInput="{{FullSource1.phone}}" selector="{{AdminEditSourceContactInfoSection.phone}}" stepKey="fillPhoneField1"/>
+        <fillField userInput="{{FullSource1.fax}}" selector="{{AdminEditSourceContactInfoSection.fax}}" stepKey="fillFaxField1"/>
+
+        <conditionalClick selector="{{AdminEditSourceAddressDataSection.closed}}" dependentSelector="{{AdminEditSourceAddressDataSection.opened}}" visible="false" stepKey="clickOnAddresses1"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad2"/>
+        <selectOption userInput="{{FullSource1.country}}" selector="{{AdminEditSourceAddressDataSection.country}}" stepKey="selectCountry1"/>
+        <selectOption userInput="{{FullSource1.stateProvince}}" selector="{{AdminEditSourceAddressDataSection.state}}" stepKey="selectState1"/>
+        <fillField userInput="{{FullSource1.city}}" selector="{{AdminEditSourceAddressDataSection.city}}" stepKey="fillCityField1"/>
+        <fillField userInput="{{FullSource1.street}}" selector="{{AdminEditSourceAddressDataSection.street}}" stepKey="fillStreetField1"/>
+        <fillField userInput="{{FullSource1.postcode}}" selector="{{AdminEditSourceAddressDataSection.postcode}}" stepKey="fillPostcodeField1"/>
+
+        <seeElement selector="{{AdminEditSourceGeneralSection.codeErrorMessage}}" stepKey="seeErrorMessage1"/>
+        <see selector="{{AdminEditSourceGeneralSection.codeErrorMessage}}" userInput="No white space please" stepKey="seeInErrorMessage1"/>
+
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue1"/>
+
+        <seeElement selector="{{AdminEditSourceGeneralSection.codeErrorMessage}}" stepKey="seeErrorMessage2"/>
+        <see selector="{{AdminEditSourceGeneralSection.codeErrorMessage}}" userInput="No white space please" stepKey="seeInErrorMessage2"/>
+    </test>
+</tests>

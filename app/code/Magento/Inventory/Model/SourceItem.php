@@ -30,7 +30,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function getSku()
+    public function getSku(): ?string
     {
         return $this->getData(self::SKU);
     }
@@ -38,7 +38,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function setSku($sku)
+    public function setSku(?string $sku): void
     {
         $this->setData(self::SKU, $sku);
     }
@@ -46,7 +46,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function getSourceCode()
+    public function getSourceCode(): ?string
     {
         return $this->getData(self::SOURCE_CODE);
     }
@@ -54,7 +54,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function setSourceCode($sourceCode)
+    public function setSourceCode(?string $sourceCode): void
     {
         $this->setData(self::SOURCE_CODE, $sourceCode);
     }
@@ -62,15 +62,17 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function getQuantity()
+    public function getQuantity(): ?float
     {
-        return $this->getData(self::QUANTITY);
+        return $this->getData(self::QUANTITY) === null ?
+            null:
+            (float)$this->getData(self::QUANTITY);
     }
 
     /**
      * @inheritdoc
      */
-    public function setQuantity($quantity)
+    public function setQuantity(?float $quantity): void
     {
         $this->setData(self::QUANTITY, $quantity);
     }
@@ -78,15 +80,17 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function getStatus()
+    public function getStatus(): ?int
     {
-        return $this->getData(self::STATUS);
+        return $this->getData(self::STATUS) === null ?
+            null:
+            (int)$this->getData(self::STATUS);
     }
 
     /**
      * @inheritdoc
      */
-    public function setStatus($status)
+    public function setStatus(?int $status): void
     {
         $this->setData(self::STATUS, $status);
     }
@@ -94,7 +98,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): ?SourceItemExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
@@ -107,7 +111,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(SourceItemExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(SourceItemExtensionInterface $extensionAttributes): void
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }

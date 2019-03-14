@@ -12,6 +12,27 @@
                 type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\SaveMultiple"/>
     <preference for="Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface"
                 type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Get"/>
-    <preference for="Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemConfigurationInterface"
-                type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Delete"/>
+    <preference for="Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemsConfigurationInterface"
+                type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\DeleteMultiple"/>
+
+    <type name="Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface">
+        <plugin name="inventory_low_quantity_bulk_transfer"
+                type="Magento\InventoryLowQuantityNotification\Plugin\InventoryCatalogApi\BulkConfigurationTransferInterfacePlugin"/>
+    </type>
+    <type name="Magento\InventoryCatalogApi\Api\BulkSourceAssignInterface">
+        <plugin name="inventory_low_quantity_bulk_source_assign"
+                type="Magento\InventoryLowQuantityNotification\Plugin\InventoryCatalogApi\BulkSourceAssignInterfacePlugin"/>
+    </type>
+    <type name="Magento\InventoryCatalogApi\Api\BulkSourceUnassignInterface">
+        <plugin name="inventory_low_quantity_bulk_source_unassign"
+                type="Magento\InventoryLowQuantityNotification\Plugin\InventoryCatalogApi\BulkSourceUnassignInterfacePlugin"/>
+    </type>
+    <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
+        <plugin name="inventory_low_quantity_notification_source_item_delete"
+                type="Magento\InventoryLowQuantityNotification\Plugin\InventoryApi\SourceItemsDeleteInterfacePlugin"/>
+    </type>
+    <type name="Magento\InventoryLowQuantityNotificationApi\Api\SourceItemConfigurationsSaveInterface">
+        <plugin name="update_legacy_stock_item_configuration_at_source_item_configuration_save"
+                type="Magento\InventoryLowQuantityNotification\Plugin\InventoryLowQuantityNotificationApi\UpdateLegacyStockItemConfigurationAtSourceItemConfigurationSavePlugin"/>
+    </type>
 </config>

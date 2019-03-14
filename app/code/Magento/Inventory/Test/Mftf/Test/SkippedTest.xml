@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <!-- MSI-1135 -->
+    <test name="AdminSourceSelectionAlgorithmSourcePriorityWithSimpleMsiProductTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+    <!-- MSI-1128 -->
+    <test name="AdminCreateInvoiceForVirtualProductInSingleStockModeTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+    <!-- MSI-1313 -->
+    <test name="AdminOrderCreatedForGuestCustomerWithConfigurableProductWithDropDownAttributeViaTheAdminTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <!-- MSI-1319 -->
+    <test name="AdminCreateOrderWithGroupedProductDefaultStockTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1759"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <!-- MAGETWO-87435 -->
+    <test name="EndToEndB2CGuestUserTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+    <!-- MAGETWO-87653 -->
+    <test name="EndToEndB2CLoggedInUserTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+    <!-- MC-138 -->
+    <test name="AdvanceCatalogSearchConfigurableByNameTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+    <!-- MC-144 -->
+    <test name="AdvanceCatalogSearchConfigurableBySkuTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+    <!-- MC-237 -->
+    <test name="AdvanceCatalogSearchConfigurableByDescriptionTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+    <!-- MC-240 -->
+    <test name="AdvanceCatalogSearchConfigurableByShortDescriptionTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+</tests>

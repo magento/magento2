@@ -12,7 +12,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemConfigurationInterface;
+use Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemsConfigurationInterface;
 use Magento\InventoryLowQuantityNotificationApi\Api\SourceItemConfigurationsSaveInterface;
 
 /**
@@ -36,33 +36,39 @@ class SourceItemsConfigurationProcessor
     private $dataObjectHelper;
 
     /**
-     * @var DeleteSourceItemConfigurationInterface
+     * @var DeleteSourceItemsConfigurationInterface
      */
-    private $sourceItemConfigurationDelete;
+    private $sourceItemsConfigurationDelete;
 
     /**
+     * SourceItemsConfigurationProcessor constructor.
+     *
      * @param SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory
      * @param SourceItemConfigurationsSaveInterface $sourceItemConfigurationsSave
-     * @param DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete
+     * @param DeleteSourceItemsConfigurationInterface $sourceItemsConfigurationDelete
      * @param DataObjectHelper $dataObjectHelper
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory,
         SourceItemConfigurationsSaveInterface $sourceItemConfigurationsSave,
-        DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete,
+        DeleteSourceItemsConfigurationInterface $sourceItemsConfigurationDelete,
         DataObjectHelper $dataObjectHelper
     ) {
         $this->sourceItemConfigurationsSave = $sourceItemConfigurationsSave;
         $this->sourceItemConfigurationFactory = $sourceItemConfigurationFactory;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->sourceItemConfigurationDelete = $sourceItemConfigurationDelete;
+        $this->sourceItemsConfigurationDelete = $sourceItemsConfigurationDelete;
     }
 
     /**
+     * Process configuration
+     *
      * @param string $sku
      * @param array $sourceItemsData
      * @return void
      * @throws InputException
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function process($sku, array $sourceItemsData)
     {
@@ -92,6 +98,8 @@ class SourceItemsConfigurationProcessor
     }
 
     /**
+     * Perform validation on source item data
+     *
      * @param array $sourceItemData
      * @return void
      * @throws InputException
@@ -104,17 +112,15 @@ class SourceItemsConfigurationProcessor
     }
 
     /**
+     * Delete source items configurations
+     *
      * @param SourceItemInterface[] $sourceItemsConfigurations
      * @return void
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     private function deleteSourceItemsConfiguration(array $sourceItemsConfigurations)
     {
         /** @var SourceItemInterface $sourceItemConfiguration */
-        foreach ($sourceItemsConfigurations as $sourceItemConfiguration) {
-            $this->sourceItemConfigurationDelete->execute(
-                $sourceItemConfiguration->getSourceCode(),
-                $sourceItemConfiguration->getSku()
-            );
-        }
+        $this->sourceItemsConfigurationDelete->execute($sourceItemsConfigurations);
     }
 }

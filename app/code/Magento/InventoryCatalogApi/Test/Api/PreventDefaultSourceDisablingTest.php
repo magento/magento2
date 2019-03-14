@@ -19,7 +19,7 @@ class PreventDefaultSourceDisablingTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source';
+    const RESOURCE_PATH = '/V1/inventory/sources';
     const SERVICE_NAME = 'inventoryApiSourceRepositoryV1';
     /**#@-*/
 

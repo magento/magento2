@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateNewSourceAndCheckDisableSourceCodeTest">
+        <annotations>
+            <stories value="Add Source"/>
+            <title value="Disable source code field"/>
+            <description value="You should be able to create a New Source, via the Admin and check that the source code field is disabled after create."/>
+            <testCaseId value="MSI-1799"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPage"/>
+
+        <comment userInput="Create new source" stepKey="createNewSource"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnTheAddButton"/>
+        <fillField userInput="{{FullSource1.name}}" selector="{{AdminEditSourceGeneralSection.name}}" stepKey="fillNameField"/>
+        <fillField userInput="{{FullSource1.source_code}}" selector="{{AdminEditSourceGeneralSection.code}}" stepKey="fillCodeField"/>
+        <checkOption selector="{{AdminEditSourceGeneralSection.isEnabled}}" stepKey="checkIsEnabled"/>
+        <fillField userInput="{{FullSource1.description}}" selector="{{AdminEditSourceGeneralSection.description}}" stepKey="fillDescriptionField"/>
+        <fillField userInput="{{FullSource1.latitude}}" selector="{{AdminEditSourceGeneralSection.latitude}}" stepKey="fillLatitudeField"/>
+        <fillField userInput="{{FullSource1.longitude}}" selector="{{AdminEditSourceGeneralSection.longitude}}" stepKey="fillLongitudeField"/>
+        <conditionalClick selector="{{AdminEditSourceContactInfoSection.closed}}" dependentSelector="{{AdminEditSourceContactInfoSection.opened}}" visible="false" stepKey="clickOnContactInfo"/>
+        <waitForPageLoad time="30" stepKey="waitForContactInfoSectionClosed"/>
+        <fillField userInput="{{FullSource1.contact_name}}" selector="{{AdminEditSourceContactInfoSection.contactName}}" stepKey="fillContactNameField"/>
+        <fillField userInput="{{FullSource1.email}}" selector="{{AdminEditSourceContactInfoSection.email}}" stepKey="fillEmailField"/>
+        <fillField userInput="{{FullSource1.phone}}" selector="{{AdminEditSourceContactInfoSection.phone}}" stepKey="fillPhoneField"/>
+        <fillField userInput="{{FullSource1.fax}}" selector="{{AdminEditSourceContactInfoSection.fax}}" stepKey="fillFaxField"/>
+        <conditionalClick selector="{{AdminEditSourceAddressDataSection.closed}}" dependentSelector="{{AdminEditSourceAddressDataSection.opened}}" visible="false" stepKey="clickOnAddresses"/>
+        <waitForPageLoad time="30" stepKey="waitForAddressDataSectionClosed"/>
+        <selectOption userInput="{{FullSource1.country}}" selector="{{AdminEditSourceAddressDataSection.country}}" stepKey="selectCountry"/>
+        <selectOption userInput="{{FullSource1.stateProvince}}" selector="{{AdminEditSourceAddressDataSection.state}}" stepKey="selectState"/>
+        <fillField userInput="{{FullSource1.city}}" selector="{{AdminEditSourceAddressDataSection.city}}" stepKey="fillCityField"/>
+        <fillField userInput="{{FullSource1.street}}" selector="{{AdminEditSourceAddressDataSection.street}}" stepKey="fillStreetField"/>
+        <fillField userInput="{{FullSource1.postcode}}" selector="{{AdminEditSourceAddressDataSection.postcode}}" stepKey="fillPostcodeField"/>
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue"/>
+        <waitForPageLoad time="30" stepKey="waitForSourceSaved"/>
+
+        <comment userInput="Check source code field is disabled" stepKey="checkDisabledSourceCode"/>
+        <assertElementContainsAttribute selector="{{AdminEditSourceGeneralSection.code}}" attribute="disabled" stepKey="seeSourceCodeFieldIsDisabled"/>
+    </test>
+</tests>

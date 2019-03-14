@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateSource" dataType="source" type="create"
+               auth="adminOauth" url="/V1/inventory/sources" method="POST">
+        <contentType>application/json</contentType>
+        <object dataType="source" key="source">
+            <field key="source_code">string</field>
+            <field key="name">string</field>
+            <field key="email">string</field>
+            <field key="contact_name">string</field>
+            <field key="enabled">boolean</field>
+            <field key="description">string</field>
+            <field key="latitude">integer</field>
+            <field key="longitude">integer</field>
+            <field key="country_id">string</field>
+            <field key="region_id">integer</field>
+            <field key="region">string</field>
+            <field key="city">string</field>
+            <field key="street">string</field>
+            <field key="postcode">string</field>
+            <field key="phone">string</field>
+            <field key="fax">string</field>
+            <field key="use_default_carrier_config">boolean</field>
+        </object>
+    </operation>
+    <operation name="DeleteSource" dataType="source" type="delete"
+               auth="adminOauth" url="/V1/inventory/sources/{source_code}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+</operations>

@@ -9,13 +9,14 @@ namespace Magento\InventoryShipping\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
-use Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionServiceInterface;
-use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterfaceFactory;
+use Magento\InventorySourceDeductionApi\Model\SourceDeductionServiceInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
-use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
-use Magento\InventoryShipping\Model\GetItemsToDeduct;
+use Magento\InventoryShipping\Model\GetItemsToDeductFromShipment;
+use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
+use Magento\InventoryShipping\Model\SourceDeductionRequestFromShipmentFactory;
+use Magento\InventorySourceDeductionApi\Model\SourceDeductionRequestInterface;
+use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
 
 /**
  * Class SourceDeductionProcessor
@@ -23,14 +24,9 @@ use Magento\InventoryShipping\Model\GetItemsToDeduct;
 class SourceDeductionProcessor implements ObserverInterface
 {
     /**
-     * @var SourceDeductionRequestInterfaceFactory
+     * @var IsSingleSourceModeInterface
      */
-    private $sourceDeductionRequestFactory;
-
-    /**
-     * @var SourceDeductionServiceInterface
-     */
-    private $sourceDeductionService;
+    private $isSingleSourceMode;
 
     /**
      * @var DefaultSourceProviderInterface
@@ -38,90 +34,107 @@ class SourceDeductionProcessor implements ObserverInterface
     private $defaultSourceProvider;
 
     /**
-     * @var SalesEventInterfaceFactory
+     * @var GetItemsToDeductFromShipment
      */
-    private $salesEventFactory;
+    private $getItemsToDeductFromShipment;
 
     /**
-     * @var IsSingleSourceModeInterface
+     * @var SourceDeductionRequestFromShipmentFactory
      */
-    private $isSingleSourceMode;
+    private $sourceDeductionRequestFromShipmentFactory;
 
     /**
-     * @var GetItemsToDeduct
+     * @var SourceDeductionServiceInterface
      */
-    private $getItemsToDeduct;
+    private $sourceDeductionService;
 
     /**
-     * @param SourceDeductionRequestInterfaceFactory $sourceDeductionRequestFactory
-     * @param SourceDeductionServiceInterface $sourceDeductionService
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param SalesEventInterfaceFactory $salesEventFactory
+     * @var ItemToSellInterfaceFactory
+     */
+    private $itemsToSellFactory;
+
+    /**
+     * @var PlaceReservationsForSalesEventInterface
+     */
+    private $placeReservationsForSalesEvent;
+
+    /**
      * @param IsSingleSourceModeInterface $isSingleSourceMode
-     * @param GetItemsToDeduct $getItemsToDeduct
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
+     * @param GetItemsToDeductFromShipment $getItemsToDeductFromShipment
+     * @param SourceDeductionRequestFromShipmentFactory $sourceDeductionRequestFromShipmentFactory
+     * @param SourceDeductionServiceInterface $sourceDeductionService
+     * @param ItemToSellInterfaceFactory $itemsToSellFactory
+     * @param PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
      */
     public function __construct(
-        SourceDeductionRequestInterfaceFactory $sourceDeductionRequestFactory,
-        SourceDeductionServiceInterface $sourceDeductionService,
-        DefaultSourceProviderInterface $defaultSourceProvider,
-        SalesEventInterfaceFactory $salesEventFactory,
         IsSingleSourceModeInterface $isSingleSourceMode,
-        GetItemsToDeduct $getItemsToDeduct
+        DefaultSourceProviderInterface $defaultSourceProvider,
+        GetItemsToDeductFromShipment $getItemsToDeductFromShipment,
+        SourceDeductionRequestFromShipmentFactory $sourceDeductionRequestFromShipmentFactory,
+        SourceDeductionServiceInterface $sourceDeductionService,
+        ItemToSellInterfaceFactory $itemsToSellFactory,
+        PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
     ) {
-        $this->sourceDeductionRequestFactory = $sourceDeductionRequestFactory;
-        $this->sourceDeductionService = $sourceDeductionService;
-        $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->salesEventFactory = $salesEventFactory;
         $this->isSingleSourceMode = $isSingleSourceMode;
-        $this->getItemsToDeduct = $getItemsToDeduct;
+        $this->defaultSourceProvider = $defaultSourceProvider;
+        $this->getItemsToDeductFromShipment = $getItemsToDeductFromShipment;
+        $this->sourceDeductionRequestFromShipmentFactory = $sourceDeductionRequestFromShipmentFactory;
+        $this->sourceDeductionService = $sourceDeductionService;
+        $this->itemsToSellFactory = $itemsToSellFactory;
+        $this->placeReservationsForSalesEvent = $placeReservationsForSalesEvent;
     }
 
     /**
      * @param EventObserver $observer
      * @return void
-     * @throws \Magento\Framework\Exception\InputException
      */
     public function execute(EventObserver $observer)
     {
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
         $shipment = $observer->getEvent()->getShipment();
-
         if ($shipment->getOrigData('entity_id')) {
             return;
         }
 
-        //TODO: I'm not sure that is good idea (with default source code)...
         if (!empty($shipment->getExtensionAttributes())
-            || !empty($shipment->getExtensionAttributes()->getSourceCode())) {
+            && !empty($shipment->getExtensionAttributes()->getSourceCode())) {
             $sourceCode = $shipment->getExtensionAttributes()->getSourceCode();
         } elseif ($this->isSingleSourceMode->execute()) {
             $sourceCode = $this->defaultSourceProvider->getCode();
         }
 
-        $websiteId = $shipment->getOrder()->getStore()->getWebsiteId();
-
-        $salesEvent = $this->salesEventFactory->create([
-            'type' => SalesEventInterface::EVENT_SHIPMENT_CREATED,
-            'objectType' => SalesEventInterface::OBJECT_TYPE_ORDER,
-            'objectId' => $shipment->getOrderId()
-        ]);
-
-        /** @var \Magento\Sales\Model\Order\Shipment\Item $shipmentItem */
-        foreach ($shipment->getItems() as $shipmentItem) {
-            foreach ($this->getItemsToDeduct->execute($shipmentItem) as $item) {
-                $shipmentItems[] = $item;
-            }
-        }
+        $shipmentItems = $this->getItemsToDeductFromShipment->execute($shipment);
 
         if (!empty($shipmentItems)) {
-            $sourceDeductionRequest = $this->sourceDeductionRequestFactory->create([
-                'websiteId' => $websiteId,
-                'sourceCode' => $sourceCode,
-                'items' => $shipmentItems,
-                'salesEvent' => $salesEvent
-            ]);
-
+            $sourceDeductionRequest = $this->sourceDeductionRequestFromShipmentFactory->execute(
+                $shipment,
+                $sourceCode,
+                $shipmentItems
+            );
             $this->sourceDeductionService->execute($sourceDeductionRequest);
+            $this->placeCompensatingReservation($sourceDeductionRequest);
         }
+    }
+
+    /**
+     * Place compensating reservation after source deduction
+     *
+     * @param SourceDeductionRequestInterface $sourceDeductionRequest
+     */
+    private function placeCompensatingReservation(SourceDeductionRequestInterface $sourceDeductionRequest): void
+    {
+        $items = [];
+        foreach ($sourceDeductionRequest->getItems() as $item) {
+            $items[] = $this->itemsToSellFactory->create([
+                'sku' => $item->getSku(),
+                'qty' => $item->getQty()
+            ]);
+        }
+        $this->placeReservationsForSalesEvent->execute(
+            $items,
+            $sourceDeductionRequest->getSalesChannel(),
+            $sourceDeductionRequest->getSalesEvent()
+        );
     }
 }

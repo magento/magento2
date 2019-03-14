@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- DO NOT use '_defaultStock' in <createData> or it will break other Tests. -->
+    <entity name="_defaultStock" type="stock">
+        <data key="name">Default Stock</data>
+        <data key="websites">Main Website</data>
+    </entity>
+    <entity name="BasicMsiStock1" type="stock">
+        <data key="name" unique="suffix">Basic MSI Stock 1 </data>
+        <data key="website">Main Website</data>
+    </entity>
+    <entity name="BasicMsiStock2" type="stock">
+        <data key="name" unique="suffix">Basic MSI Stock 2 </data>
+        <data key="website">Main Website</data>
+    </entity>
+    <entity name="BasicMsiStock3" type="stock">
+        <data key="name" unique="suffix">Basic MSI Stock 3 </data>
+        <data key="website">Main Website</data>
+    </entity>
+    <entity name="BasicMsiStock4" type="stock">
+        <data key="name" unique="suffix">Basic MSI Stock 4 </data>
+        <data key="website">Main Website</data>
+    </entity>
+    <entity name="BasicMsiStockWithMainWebsite1" type="stock">
+        <data key="name" unique="suffix">Basic MSI Stock 1 </data>
+        <data key="website">Main Website</data>
+        <requiredEntity type="stock_extension_attribute">MsiStockWebsite1</requiredEntity>
+    </entity>
+    <entity name="BasicMsiStockWithMainWebsite2" type="stock">
+        <data key="name" unique="suffix">Basic MSI Stock 2 </data>
+        <data key="website">Main Website</data>
+        <requiredEntity type="stock_extension_attribute">MsiStockWebsite1</requiredEntity>
+    </entity>
+    <!-- Please don't use this entity in your tests otherwise AdminPaginationWorkedInManageStocksGridTest will fail -->
+    <entity name="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" type="stock">
+        <data key="name" unique="suffix">Special Stock </data>
+    </entity>
+    <!-- Please don't use this entity in your tests otherwise AdminSelectDeselectManipulationsInManageStocksGridTest will fail -->
+    <entity name="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" type="stock">
+        <data key="name" unique="suffix">Unique Stock </data>
+    </entity>
+</entities>

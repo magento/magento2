@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCanDeleteSourcesAssignedToStockTest">
+        <annotations>
+            <stories value="Delete Sources from Stocks"/>
+            <title value="Delete Sources Assigned to Stock"/>
+            <description value="You should be able to Delete Sources that are assigned to a Stock."/>
+            <testCaseId value="MSI-951"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="FullSource2" stepKey="createSource2"/>
+            <createData entity="FullSource1" stepKey="createSource3"/>
+            <createData entity="FullSource2" stepKey="createSource4"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <actionGroup ref="AdminGoToStockGridFilterResultsByInputEditStock" stepKey="goToStockGridFilterResultsByInputEditStock1">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createStock1.stock[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock1">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource1.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock2">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource2.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock3">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource3.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock4">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource4.source[name]$$"/>
+        </actionGroup>
+
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSource1CodeInGrid1"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[name]$$" stepKey="seeSource1NameInGrid1"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[source_code]$$" stepKey="seeSource2CodeInGrid1"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[name]$$" stepKey="seeSource2NameInGrid1"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource3.source[source_code]$$" stepKey="seeSource3CodeInGrid1"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource3.source[name]$$" stepKey="seeSource3NameInGrid1"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('3')}}" userInput="$$createSource4.source[source_code]$$" stepKey="seeSource4CodeInGrid1"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('3')}}" userInput="$$createSource4.source[name]$$" stepKey="seeSource4NameInGrid1"/>
+
+        <click selector="{{AdminProductSourcesGrid.rowDeleteByCode($$createSource2.source[source_code]$$)}}" stepKey="clickOnDeleteForSource2"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSource1CodeInGrid2"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[name]$$" stepKey="seeSource1NameInGrid2"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[source_code]$$" stepKey="seeSource2CodeInGrid2"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[name]$$" stepKey="seeSource2NameInGrid2"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource3.source[source_code]$$" stepKey="seeSource3CodeInGrid2"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource3.source[name]$$" stepKey="seeSource3NameInGrid2"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource4.source[source_code]$$" stepKey="seeSource4CodeInGrid2"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource4.source[name]$$" stepKey="seeSource4NameInGrid2"/>
+
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue1"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSource1CodeInGrid3"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[name]$$" stepKey="seeSource1NameInGrid3"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[source_code]$$" stepKey="seeSource2CodeInGrid3"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[name]$$" stepKey="seeSource2NameInGrid3"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource3.source[source_code]$$" stepKey="seeSource3CodeInGrid3"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource3.source[name]$$" stepKey="seeSource3NameInGrid3"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource4.source[source_code]$$" stepKey="seeSource4CodeInGrid3"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource4.source[name]$$" stepKey="seeSource4NameInGrid3"/>
+
+        <click selector="{{AdminProductSourcesGrid.rowDeleteByCode($$createSource1.source[source_code]$$)}}" stepKey="clickOnDeleteForSource4"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSource1CodeInGrid4"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[name]$$" stepKey="seeSource1NameInGrid4"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[source_code]$$" stepKey="seeSource2CodeInGrid4"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[name]$$" stepKey="seeSource2NameInGrid4"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource3.source[source_code]$$" stepKey="seeSource3CodeInGrid4"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource3.source[name]$$" stepKey="seeSource3NameInGrid4"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource4.source[source_code]$$" stepKey="seeSource4CodeInGrid4"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource4.source[name]$$" stepKey="seeSource4NameInGrid4"/>
+
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue2"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSource1CodeInGrid5"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[name]$$" stepKey="seeSource1NameInGrid5"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[source_code]$$" stepKey="seeSource2CodeInGrid5"/>
+        <dontSee selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource2.source[name]$$" stepKey="seeSource2NameInGrid5"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource3.source[source_code]$$" stepKey="seeSource3CodeInGrid5"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource3.source[name]$$" stepKey="seeSource3NameInGrid5"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource4.source[source_code]$$" stepKey="seeSource4CodeInGrid5"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource4.source[name]$$" stepKey="seeSource4NameInGrid5"/>
+    </test>
+</tests>

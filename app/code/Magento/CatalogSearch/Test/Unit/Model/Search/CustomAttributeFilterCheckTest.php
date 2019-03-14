@@ -78,6 +78,9 @@ class CustomAttributeFilterCheckTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForIsCustomPositive()
     {
         return [

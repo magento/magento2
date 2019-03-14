@@ -119,6 +119,14 @@
                 </editor>
             </settings>
         </column>
+        <column name="assigned_sources"
+                component="Magento_InventoryAdminUi/js/stock/grid/cell/assigned-sources"
+                sortOrder="40">
+            <settings>
+                <label translate="true">Assigned Sources</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
         <actionsColumn name="actions" class="Magento\Backend\Ui\Component\Listing\Column\EditAction" sortOrder="100">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

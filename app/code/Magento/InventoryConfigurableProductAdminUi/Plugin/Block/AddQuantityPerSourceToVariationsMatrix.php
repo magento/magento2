@@ -9,7 +9,7 @@ namespace Magento\InventoryConfigurableProductAdminUi\Plugin\Block;
 
 use Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix;
 use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
-use Magento\InventoryConfigurableProduct\Model\GetQuantityInformationPerSource;
+use Magento\InventoryConfigurableProductAdminUi\Model\GetQuantityInformationPerSource;
 
 /**
  * Add value for field "quantityPerSource" for grid "Associated Products" and "Disassociated Products"

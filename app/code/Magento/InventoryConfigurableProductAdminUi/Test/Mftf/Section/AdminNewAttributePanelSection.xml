@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminNewAttributePanel">
+        <element name="addTextSwatch" type="button" selector="#add_new_swatch_text_option_button"/>
+        <element name="isDefaultTextSwatch" type="radio" selector="[data-role='swatch-text-options-container'] tr:nth-of-type({{row}}) input[name='defaulttext[]']" parameterized="true"/>
+        <element name="textSwatchAdminSwatchValue" type="input" selector="[data-role='swatch-text-options-container'] input[name='swatchtext[value][option_{{row}}][0]']" parameterized="true"/>
+        <element name="textSwatchAdminDescriptionValue" type="input" selector="[data-role='swatch-text-options-container'] input[name='optiontext[value][option_{{row}}][0]']" parameterized="true"/>
+        <element name="textSwatchDefaultStoreSwatchValue" type="input" selector="[data-role='swatch-text-options-container'] input[name='swatchtext[value][option_{{row}}][1]']" parameterized="true"/>
+        <element name="textSwatchDefaultStoreDescriptionValue" type="input" selector="[data-role='swatch-text-options-container'] input[name='optiontext[value][option_{{row}}][1]']" parameterized="true"/>
+        <element name="deleteTextSwatch" type="button" selector="#delete_button_swatch_container_option_{{row}}" parameterized="true"/>
+    </section>
+</sections>

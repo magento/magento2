@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithDownloadableProductDefaultStockTest">
+        <annotations>
+            <stories value="Create order with downloadable product on default stock from admin area."/>
+            <title value="Create order with downloadable product on default stock from admin area"/>
+            <description value="Check, admin user able to create order with downloadable product on default stock from admin area."/>
+            <testCaseId value="MSI-1301"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+            <createData entity="FullSource1" stepKey="customSource"/>
+            <createData entity="BasicMsiStock1" stepKey="customStock"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="customStock"/>
+                <requiredEntity createDataKey="customSource"/>
+            </createData>
+
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="Msi_US_Customer" stepKey="customer"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+
+            <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitFroDefaultStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+
+            <comment userInput="Perform reindex and cache flush after assign default stock to main website." stepKey="reindexCacheFlushAfterAssignDefaultStockToMainWebsite"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        </before>
+        <after>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
+                <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="customStock" stepKey="deleteCustomStock"/>
+        </after>
+
+        <comment userInput="Create downloadable product with category and link." stepKey="createDownloadableProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{DownloadableProduct.name}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{DownloadableProduct.sku}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{DownloadableProduct.price}}" stepKey="fillProductPrice"/>
+
+        <comment userInput="Assign category to product." stepKey="assignCategoryComment"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+
+        <comment userInput="Assign default source to product and set quantity to 100." stepKey="assignDefaultSourceToProductComment"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="_defaultSource.source_code"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillSourceQuantityField"/>
+
+        <comment userInput="Add downloadable links to product." stepKey="addDownloadableLinks"/>
+        <click selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="openDownloadableSection"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable"/>
+        <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillDownloadableLinkTitle"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkLinksPurchasedSeparately"/>
+        <fillField userInput="{{downloadableData.sample_title}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="fillDownloadableSampleTitle"/>
+        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableLinkWithMaxDownloads">
+            <argument name="link" value="downloadableLinkWithMaxDownloads"/>
+        </actionGroup>
+        <actionGroup ref="addDownloadableProductLink" stepKey="addDownloadableLink">
+            <argument name="link" value="downloadableLink"/>
+        </actionGroup>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedDownloadableProduct"/>
+
+        <comment userInput="Create order with downloadable product from admin area." stepKey="createOrderWithDownloadableProductComment"/>
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{DownloadableProduct.sku}}" stepKey="fillSkuFilterDownloadable"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchConfigurable"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectDownloadableProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <click selector="{{AdminOrderFormDownloadableProductSection.optionSelect(downloadableLink.title)}}" stepKey="selectLink"/>
+        <fillField selector="{{AdminOrderFormDownloadableProductSection.quantity}}" userInput="1" stepKey="setQuantity"/>
+        <click selector="{{AdminOrderFormDownloadableProductSection.ok}}" stepKey="confirmConfiguration"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+
+        <comment userInput="Check order grand total and shipping cost." stepKey="checkOrderGrandTotalComment"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="$51.99" stepKey="seeOrderSubTotal"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="0" stepKey="seeOrderShipping"/>
+        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="$51.99" stepKey="seeCorrectGrandTotal"/>
+
+        <comment userInput="Submit order." stepKey="submitOrderComment"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage"/>
+
+        <comment userInput="Check product quantity and salable quantity." stepKey="checkProductQuantityComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterPlaceOrder"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySkuToCheckQtyAfterPlaceOrder">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="{{DownloadableProduct.sku}}"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="100" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="99" stepKey="checkSalableQtyAfterPlaceOrder"/>
+    </test>
+</tests>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminNotifyQuantityUseDefaultAppliedToSimpleProductOnConfigurationAdminPageTest">
+        <annotations>
+            <stories value="Use 'Notify for Quantity Below' system value with custom source on simple product"/>
+            <title value="Use 'Notify for Quantity Below' system value with custom source on simple product"/>
+            <description value="Verify, that simple product with custom source can use 'Notify for Quantity Below' system value for specified source."/>
+            <testCaseId value="MSI-955"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="_minimalSource" stepKey="customSource"/>
+            <createData entity="BasicMsiStock1" stepKey="customStock"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+
+            <comment userInput="Assign source and sales channel to stock." stepKey="assignCustomSourceToCustomStockComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomStockByName">
+                <argument name="keyword" value="$$customStock.stock[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$customStock.stock[name]$$)}}" stepKey="clickEditCustomStock"/>
+            <waitForPageLoad time="30" stepKey="waitCustomStockPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectWebsiteAsSalesChannelForCustomStock"/>
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="openAssignSourcesModalWindow"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomSourceByName">
+                <argument name="keyword" value="$$customSource.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$customSource.source[name]$$)}}" stepKey="selectCustomSourceAsAssignment"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneAssignCustomSourceToCustomStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCustomStock"/>
+        </before>
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+
+            <comment userInput=" Disable source, as it can brake single source mode tests." stepKey="disableCustomSourceComment"/>
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="navigateToSourceGridPage"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourceFilters"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSourcesByCustomSourceName">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="{{_minimalSource.source_code}}"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$customSource.source[source_code]$$)}}" stepKey="editCustomSource"/>
+            <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableCustomSource"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveDisabledCustomSource"/>
+
+            <comment userInput=" Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockGridPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGrigPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="editDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForDefaultStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+
+            <comment userInput="Set 'Notify for Quantity Below' to '1' by default" stepKey="revertNotifyQtyBelowComment"/>
+            <magentoCLI command="config:set cataloginventory/item_options/notify_stock_qty 1" stepKey="setNotifyForQuantityBelowToOne"/>
+
+            <actionGroup ref="logout" stepKey="logOutFromAdminArea"/>
+        </after>
+
+        <comment userInput="Create simple product with custom source." stepKey="createSimpleProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToAdminProductGrid"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="navigateToCreateProductPage">
+            <argument name="product" value="SimpleMsiProduct"/>
+        </actionGroup>
+        <fillField userInput="{{SimpleMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName"/>
+        <fillField userInput="{{SimpleMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSKU"/>
+        <fillField userInput="{{SimpleMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice"/>
+        <fillField userInput="{{SimpleMsiProduct.weight}}" selector="{{AdminProductFormSection.productWeight}}" stepKey="fillProductWeight"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="{{SimpleMsiProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillProductUrlKey"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSources"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSourcesByCustomSourceCode">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$customSource.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$customSource.source[source_code]$$)}}" stepKey="assignCustomSourceToProduct"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="doneWithCustomSourceAssignment"/>
+
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$customSource.source[source_code]$$" stepKey="checkCustomSourceCode"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$customSource.source[name]$$" stepKey="checkCustomSourceName"/>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillSourceQty"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedProduct"/>
+
+        <comment userInput="Change config value for 'Notify for Quantity Below'." stepKey="setNotifyForQuantityBelowToFiveComment"/>
+        <magentoCLI command="config:set cataloginventory/item_options/notify_stock_qty 5" stepKey="setNotifyForQuantityBelowToFive"/>
+
+        <comment userInput="Set product 'Notify for Quantity Below' to use system config value." stepKey="setProductUseNotifyForQuantityBelowToUseSystemValueComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateBackToProductGrid"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterProductsByCreatedSimpleProductSku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
+        </actionGroup>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectGridColumns"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="resetColumnsVisibility"/>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="editCreatedSimpleProduct"/>
+        <checkOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="setNotifyForQuantityBelowForCustomSourceToUseSystemValue"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveModifiedProduct"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkProductModifiedSuccessfullyMessage"/>
+
+        <comment userInput="Check product 'Notify for Quantity Below' use system config value." stepKey="verifyNotifyForQtyBelowComment"/>
+        <seeCheckboxIsChecked selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="verifyNotifyForQtyBelowUseSystemValueChecked"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="5" stepKey="verifyNotifyFroQtyBelowUseSystemValueOfFive"/>
+    </test>
+</tests>

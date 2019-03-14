@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminManageStocksSearchByKeywordTest">
+        <annotations>
+            <stories value="Search By Keyword in a Grid"/>
+            <title value="Search by Keyword on the Manage Stock grid"/>
+            <description value="You should be able to Search by Keyword from the Manage Stock grid."/>
+            <testCaseId value="MSI-515"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+            <createData entity="BasicMsiStock2" stepKey="createStock2"/>
+            <createData entity="BasicMsiStock1" stepKey="createStock3"/>
+            <createData entity="BasicMsiStock2" stepKey="createStock4"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockListPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword1">
+            <argument name="keyword" value="$$createStock4.stock[name]$$"/>
+        </actionGroup>
+
+        <see userInput="$$createStock4.stock[name]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
+    </test>
+</tests>

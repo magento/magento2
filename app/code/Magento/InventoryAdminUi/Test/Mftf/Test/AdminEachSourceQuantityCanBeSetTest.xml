@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEachSourceQuantityCanBeSetTest">
+        <annotations>
+            <stories value="Update Source"/>
+            <title value="Set Source Quantity via the Admin"/>
+            <description value="You should be able to set each Source Quantity via the Admin."/>
+            <testCaseId value="MSI-861"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="FullSource2" stepKey="createSource2"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="simpleCategory1"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+                <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+                <argument name="filter_value" value="SimpleProduct.sku"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+        </after>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct2">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource2.source[source_code]$$"/>
+        </actionGroup>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="150" stepKey="fillDefaultQuantityField1"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="50" stepKey="fillDefaultQuantityField2"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="100" stepKey="fillDefaultQuantityField3"/>
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue1"/>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="150" stepKey="fillDefaultQuantityField4"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="50" stepKey="fillDefaultQuantityField5"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="100" stepKey="fillDefaultQuantityField6"/>
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue2"/>
+
+        <seeInField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="150" stepKey="seeSourceNameInGrid1"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="50" stepKey="seeSourceNameInGrid2"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="100" stepKey="seeSourceNameInGrid3"/>
+    </test>
+</tests>

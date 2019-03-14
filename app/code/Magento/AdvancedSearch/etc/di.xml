@@ -19,10 +19,23 @@
             <argument name="title" xsi:type="string" translatable="true">Did you mean</argument>
         </arguments>
     </type>
+    <type name="Magento\AdvancedSearch\Model\Client\ClientResolver">
+        <arguments>
+            <argument name="path" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
+            <argument name="scopeType" xsi:type="const">\Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
     <type name="Magento\AdvancedSearch\Model\SuggestedQueries">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="mysql" xsi:type="string">Magento\AdvancedSearch\Model\DataProvider\Suggestions</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\AdvancedSearch\Model\ResourceModel\Index">
+        <arguments>
+            <argument name="tableResolver" xsi:type="object">
+                Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver
             </argument>
         </arguments>
     </type>

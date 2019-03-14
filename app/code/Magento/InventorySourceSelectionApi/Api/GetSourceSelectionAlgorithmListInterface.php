@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelectionApi\Api;
 
-use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterface;
-
 /**
  * Returns the list of Data Interfaces which represent registered SSA in the system
  *

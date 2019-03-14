@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model;
 
+use \Magento\Framework\TranslateInterface;
+
 /**
  * Catalog Custom Category design Model
  *
@@ -32,13 +34,19 @@ class Design extends \Magento\Framework\Model\AbstractModel
     protected $_localeDate;
 
     /**
+     * @var TranslateInterface
+     */
+    private $translator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\View\DesignInterface $design
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param TranslateInterface|null $translator
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -47,10 +55,13 @@ class Design extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        TranslateInterface $translator = null
     ) {
         $this->_localeDate = $localeDate;
         $this->_design = $design;
+        $this->translator = $translator ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(TranslateInterface::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -63,6 +74,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
     public function applyCustomDesign($design)
     {
         $this->_design->setDesignTheme($design);
+        $this->translator->loadData(null, true);
         return $this;
     }
 

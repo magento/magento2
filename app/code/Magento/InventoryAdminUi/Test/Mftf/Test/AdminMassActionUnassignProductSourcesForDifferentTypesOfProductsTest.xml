@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassActionUnassignProductSourcesForDifferentTypesOfProductsTest">
+        <annotations>
+            <stories value="Unassign source to products"/>
+            <title value="Admin user apply to different types of products mass action 'Unassign product sources' on Products grid to unassign all assigned sources"/>
+            <description value="You should be able to unassign sources from different types of products via mass action"/>
+            <testCaseId value="MSI-1497"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="BasicMsiStock1" stepKey="customStock"/>
+
+            <comment userInput="Create sources" stepKey="createSourcesComment"/>
+            <createData entity="_minimalSource" stepKey="createFirstCustomSource"/>
+            <createData entity="_minimalSource" stepKey="createSecondCustomSource"/>
+            <createData entity="_minimalSource" stepKey="createThirdCustomSource"/>
+            <createData entity="_minimalSource" stepKey="createFourthCustomSource"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+
+            <comment userInput="Delete all products" stepKey="deleteAllProductsViaGridComment"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPage"/>
+            <waitForPageLoad time="30" stepKey="waitForProductsGridLoadForDeleteAllProducts"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAllFilters"/>
+            <conditionalClick selector="{{AdminGridSelectRows.multicheckDropdown}}" dependentSelector=".data-grid-tr-no-data" visible="false" stepKey="openMulticheckDropdown"/>
+            <conditionalClick selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" dependentSelector=".data-grid-tr-no-data" visible="false" stepKey="selectAllProductInFilteredGrid"/>
+            <conditionalClick selector="{{AdminGridSelectRows.bulkActionDropdown}}" dependentSelector=".data-grid-tr-no-data" visible="false" stepKey="clickActionDropdown"/>
+            <conditionalClick selector="{{AdminGridSelectRows.bulkActionOption('Delete')}}" dependentSelector=".data-grid-tr-no-data" visible="false" stepKey="clickDeleteAction"/>
+            <wait time="5" stepKey="waitModalDeleteOpen"/>
+            <conditionalClick selector="{{AdminGridConfirmActionSection.ok}}" dependentSelector="{{AdminGridConfirmActionSection.title}}" visible="true" stepKey="confirmProductsDelete"/>
+
+            <comment userInput="Create products" stepKey="createProductsComment"/>
+            <createData entity="SimpleProduct" stepKey="createFirstSimpleProduct">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="VirtualProduct" stepKey="createSecondVirtualProduct">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <comment userInput="Create downloadable product with category and link." stepKey="createDownloadableProductComment"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
+            <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+            <actionGroup ref="goToCreateProductPage" stepKey="goToCreateDownloadableProductPage">
+                <argument name="product" value="DownloadableProduct"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{DownloadableProduct.name}}" stepKey="fillDownloadableProductSku"/>
+            <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{DownloadableProduct.sku}}" stepKey="fillDownloadableProductName"/>
+            <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{DownloadableProduct.price}}" stepKey="fillDownloadableProductPrice"/>
+
+            <comment userInput="Assign category to product." stepKey="assignCategoryComment"/>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+
+            <comment userInput="Assign default source to product and set quantity to 1000." stepKey="assignDefaultSourceToProductComment"/>
+            <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+                <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="filter_value" value="_defaultSource.source_code"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="1000" stepKey="fillSourceQuantityField"/>
+
+            <comment userInput="Add downloadable links to product." stepKey="addDownloadableLinks"/>
+            <click selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="openDownloadableSection"/>
+            <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable"/>
+            <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillDownloadableLinkTitle"/>
+            <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkLinksPurchasedSeparately"/>
+            <fillField userInput="{{downloadableData.sample_title}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="fillDownloadableSampleTitle"/>
+            <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableLinkWithMaxDownloads">
+                <argument name="link" value="downloadableLinkWithMaxDownloads"/>
+            </actionGroup>
+            <actionGroup ref="addDownloadableProductLink" stepKey="addDownloadableLink">
+                <argument name="link" value="downloadableLink"/>
+            </actionGroup>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedDownloadableProduct"/>
+
+            <comment userInput="Assign all created source to stock" stepKey="assignSourcesToStock"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPageToAssignCustomSourcesToCustomStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGridLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomStockByName">
+                <argument name="keyword" value="$$customStock.stock[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$customStock.stock[name]$$)}}" stepKey="clickEditCustomStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockEditPageLoad"/>
+            <!--Assign first source-->
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesForFirstSource"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchFirstCustomSourceByName">
+                <argument name="keyword" value="$$createFirstCustomSource.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$createFirstCustomSource.source[name]$$)}}" stepKey="selectFirstCustomSourceForCustomStock"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneFirstCustomSourceAssignment"/>
+            <!--Assign second source-->
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesForSecondSource"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchSecondCustomSourceByName">
+                <argument name="keyword" value="$$createSecondCustomSource.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$createSecondCustomSource.source[name]$$)}}" stepKey="selectSecondCustomSourceForCustomStock"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneSecondCustomSourceAssignment"/>
+            <!--Assign third source-->
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesForThirdSource"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchThirdCustomSourceByName">
+                <argument name="keyword" value="$$createThirdCustomSource.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$createThirdCustomSource.source[name]$$)}}" stepKey="selectThirdCustomSourceForCustomStock"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneThirdCustomSourceAssignment"/>
+            <!--Assign fourth source-->
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesForFourthSource"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchFourthCustomSourceByName">
+                <argument name="keyword" value="$$createFourthCustomSource.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$createFourthCustomSource.source[name]$$)}}" stepKey="selectFourthCustomSourceForCustomStock"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneFourthCustomSourceAssignment"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCustomStock"/>
+
+            <comment userInput="Assign main website to default stock" stepKey="assignMainWebsiteChannelToStockComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPageToAssignMainWebsiteToDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByNameForAssignMainWebsiteChannel">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForDefaultStockPageLoaded"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+        </before>
+        <after>
+            <comment userInput="Delete all products after test" stepKey="deleteAllProductsViaGridAfterTestComment"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPageForDeleteDownloadableProduct"/>
+            <waitForPageLoad time="30" stepKey="waitForProductsGridLoadForDeleteDownloadableProduct"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAllFiltersForForFoundDownloadableProduct"/>
+            <conditionalClick selector="{{AdminGridSelectRows.multicheckDropdown}}" dependentSelector=".data-grid-tr-no-data" visible="false" stepKey="openMulticheckDropdownForGrid"/>
+            <conditionalClick selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" dependentSelector=".data-grid-tr-no-data" visible="false" stepKey="selectDownloadableProductInFilteredGrid"/>
+            <conditionalClick selector="{{AdminGridSelectRows.bulkActionDropdown}}" dependentSelector=".data-grid-tr-no-data" visible="false" stepKey="clickActionDropdownForClickDelete"/>
+            <conditionalClick selector="{{AdminGridSelectRows.bulkActionOption('Delete')}}" dependentSelector=".data-grid-tr-no-data" visible="false" stepKey="clickDeleteActionForDeleteDownloadableProduct"/>
+            <wait time="5" stepKey="waitModalForDeleteDownloadableProductOpen"/>
+            <conditionalClick selector="{{AdminGridConfirmActionSection.ok}}" dependentSelector="{{AdminGridConfirmActionSection.title}}" visible="true" stepKey="confirmDownloadableProductDelete"/>
+
+            <comment userInput="Disable created sources." stepKey="disableCreatedSourcesComment"/>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableFirstCreatedSource">
+                <argument name="sourceCode" value="$$createFirstCustomSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSecondCreatedSource">
+                <argument name="sourceCode" value="$$createSecondCustomSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableThirdCreatedSource">
+                <argument name="sourceCode" value="$$createThirdCustomSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableFourthCreatedSource">
+                <argument name="sourceCode" value="$$createFourthCustomSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="customStock" stepKey="deleteCustomStock"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPageForCheckAssignThatTheDefaultSourceAssignedToProducts"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+
+        <comment userInput="Check if that the default source assigned to created products." stepKey="checkDefaultSourceAssignedToCreatedProductsComment"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', _defaultSource.name)}}" userInput="1000" stepKey="checkSourceQtyForFirstCreatedProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('2', _defaultSource.name)}}" userInput="1000" stepKey="checkSourceQtyForSecondCreatedProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('3', _defaultSource.name)}}" userInput="1000" stepKey="checkSourceQtyForThirdCreatedProduct"/>
+
+        <comment userInput="Assign sources to all products" stepKey="assignSourcesToAllCreatedProductsComment"/>
+        <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdownForSelectAllProducts"/>
+        <click selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" stepKey="selectAllProductInGrid"/>
+        <click selector="{{AdminGridSelectRows.bulkActionDropdown}}" stepKey="clickActionDropdownForSelectAssignInventorySource"/>
+        <click selector="{{AdminGridSelectRows.bulkActionOption('Assign Inventory Source')}}" stepKey="clickAssignInventorySource"/>
+        <waitForElementVisible selector="{{AdminGridConfirmActionSection.title}}" stepKey="waitForConfirmModalToAssignSources"/>
+        <click selector="{{AdminGridConfirmActionSection.ok}}" stepKey="confirmAssignSources"/>
+        <waitForPageLoad stepKey="waitForAssignSourcePageLoad"/>
+        <click selector="{{AdminAssignSourcesToProductMassActionSection.source('$$createFirstCustomSource.source[source_code]$$')}}" stepKey="selectFirstSourceCodeForAssign"/>
+        <click selector="{{AdminAssignSourcesToProductMassActionSection.source('$$createSecondCustomSource.source[source_code]$$')}}" stepKey="selectSecondSourceCodeForAssign"/>
+        <click selector="{{AdminAssignSourcesToProductMassActionSection.source('$$createThirdCustomSource.source[source_code]$$')}}" stepKey="selectThirdSourceCodeForAssign"/>
+        <click selector="{{AdminAssignSourcesToProductMassActionSection.source('$$createFourthCustomSource.source[source_code]$$')}}" stepKey="selectFourthSourceCodeForAssign"/>
+        <click selector="{{AdminAssignSourcesToProductMassActionSection.assignSources}}" stepKey="clickButtonAssignSources"/>
+        <waitForPageLoad stepKey="waitForProductsWillBeAssign"/>
+
+        <comment userInput="Check for all sources was assigned" stepKey="checkAllCreatedSourcesAssignedToProductsComment"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$createFirstCustomSource.source[name]$$)}}" userInput="0" stepKey="checkSourceQtyForFirstCreatedProductForFirstSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$createSecondCustomSource.source[name]$$)}}" userInput="0" stepKey="checkSourceQtyForFirstCreatedProductForSecondSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$createThirdCustomSource.source[name]$$)}}" userInput="0" stepKey="checkSourceQtyForFirstCreatedProductForThirdSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$createFourthCustomSource.source[name]$$)}}" userInput="0" stepKey="checkSourceQtyForFirstCreatedProductForFourthSource"/>
+
+        <see selector="{{AdminProductGridSection.productQtyPerSource('2', $$createFirstCustomSource.source[name]$$)}}" userInput="0" stepKey="checkSourceQtyForSecondCreatedProductForFirstSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('2', $$createSecondCustomSource.source[name]$$)}}" userInput="0" stepKey="checkSourceQtyForSecondCreatedProductForSecondSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('2', $$createThirdCustomSource.source[name]$$)}}" userInput="0" stepKey="checkSourceQtyForSecondCreatedProductForThirdSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('2', $$createFourthCustomSource.source[name]$$)}}" userInput="0" stepKey="checkSourceQtyForSecondCreatedProductForFourthSource"/>
+
+        <see selector="{{AdminProductGridSection.productQtyPerSource('3', $$createFirstCustomSource.source[name]$$)}}" userInput="0" stepKey="checkSourceQtyForThirdCreatedProductForFirstSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('3', $$createSecondCustomSource.source[name]$$)}}" userInput="0" stepKey="checkSourceQtyForThirdCreatedProductForSecondSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('3', $$createThirdCustomSource.source[name]$$)}}" userInput="0" stepKey="checkSourceQtyForThirdCreatedProductForThirdSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('3', $$createFourthCustomSource.source[name]$$)}}" userInput="0" stepKey="checkSourceQtyForThirdCreatedProductForFourthSource"/>
+
+        <comment userInput="Unassign all sources from all products" stepKey="unassignSourcesFromAllCreatedProductsComment"/>
+        <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdownForSelectAllProductsForUnassignSources"/>
+        <click selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" stepKey="selectAllProductInGridForUnassignSources"/>
+        <click selector="{{AdminGridSelectRows.bulkActionDropdown}}" stepKey="clickActionDropdownForSelectUnassignProductSources"/>
+        <click selector="{{AdminGridSelectRows.bulkActionOption('Unassign Inventory Source')}}" stepKey="clickUnassignProductSources"/>
+        <waitForElementVisible selector="{{AdminGridConfirmActionSection.title}}" stepKey="waitForConfirmModalToUnassignSources"/>
+        <click selector="{{AdminGridConfirmActionSection.ok}}" stepKey="confirmUnassignSources"/>
+
+        <click selector="{{AdminUnassignSourceFromProductMassActionSection.source('$$createFirstCustomSource.source[source_code]$$')}}" stepKey="selectForUnassignFirstSourceCodeForAssign"/>
+        <click selector="{{AdminUnassignSourceFromProductMassActionSection.source('$$createSecondCustomSource.source[source_code]$$')}}" stepKey="selectForUnassignSecondSourceCodeForAssign"/>
+        <click selector="{{AdminUnassignSourceFromProductMassActionSection.source('$$createThirdCustomSource.source[source_code]$$')}}" stepKey="selectForUnassignThirdSourceCodeForAssign"/>
+        <click selector="{{AdminUnassignSourceFromProductMassActionSection.source('$$createFourthCustomSource.source[source_code]$$')}}" stepKey="selectForUnassignFourthSourceCodeForAssign"/>
+        <click selector="{{AdminUnassignSourceFromProductMassActionSection.unassignSources}}" stepKey="clickButtonUnassignSources"/>
+        <waitForPageLoad stepKey="waitForSourcesWillBeUnassign"/>
+
+        <comment userInput="Check if default source still assigned to created products." stepKey="checkDefaultSourceStillAssignedToCreatedProductsComment"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', _defaultSource.name)}}" userInput="1000" stepKey="checkDefaultSourceStillForFirstCreatedProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('2', _defaultSource.name)}}" userInput="1000" stepKey="checkDefaultSourceStillForSecondCreatedProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('3', _defaultSource.name)}}" userInput="1000" stepKey="checkDefaultSourceStillForThirdCreatedProduct"/>
+
+        <comment userInput="Check for all sources was unassigned" stepKey="checkAllCreatedSourcesUnassignedFromProductsComment"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('1', $$createFirstCustomSource.source[name]$$)}}" stepKey="checkSourceQtyForFirstCreatedProductForFirstSourceUnassined"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('1', $$createSecondCustomSource.source[name]$$)}}" stepKey="checkSourceQtyForFirstCreatedProductForSecondSourceUnassined"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('1', $$createThirdCustomSource.source[name]$$)}}" stepKey="checkSourceQtyForFirstCreatedProductForThirdSourceUnassined"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('1', $$createFourthCustomSource.source[name]$$)}}" stepKey="checkSourceQtyForFirstCreatedProductForFourthSourceUnassined"/>
+
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('2', $$createFirstCustomSource.source[name]$$)}}" stepKey="checkSourceQtyForSecondCreatedProductForFirstSourceUnassined"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('2', $$createSecondCustomSource.source[name]$$)}}" stepKey="checkSourceQtyForSecondCreatedProductForSecondSourceUnassined"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('2', $$createThirdCustomSource.source[name]$$)}}" stepKey="checkSourceQtyForSecondCreatedProductForThirdSourceUnassined"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('2', $$createFourthCustomSource.source[name]$$)}}" stepKey="checkSourceQtyForSecondCreatedProductForFourthSourceUnassined"/>
+
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('3', $$createFirstCustomSource.source[name]$$)}}" stepKey="checkSourceQtyForThirdCreatedProductForFirstSourceUnassined"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('3', $$createSecondCustomSource.source[name]$$)}}" stepKey="checkSourceQtyForThirdCreatedProductForSecondSourceUnassined"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('3', $$createThirdCustomSource.source[name]$$)}}" stepKey="checkSourceQtyForThirdCreatedProductForThirdSourceUnassined"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('3', $$createFourthCustomSource.source[name]$$)}}" stepKey="checkSourceQtyForThirdCreatedProductForFourthSourceUnassined"/>
+    </test>
+</tests>

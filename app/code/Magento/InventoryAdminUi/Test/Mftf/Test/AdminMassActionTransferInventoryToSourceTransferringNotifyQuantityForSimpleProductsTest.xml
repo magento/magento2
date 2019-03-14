@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassActionTransferInventoryToSourceTransferringNotifyQuantityForSimpleProductsTest">
+        <annotations>
+            <stories value="Transfer notify quantity"/>
+            <title value="Notify Quantity transferring when admin user apply mass action 'Transfer Inventory To Source' on Products grid to several simple products"/>
+            <description value="You should be able use massaction 'Transfer inventory to source' to transfer notify quantity via mass action on products grid"/>
+            <testCaseId value="MSI-1522"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+            <skip>
+                <issueId value="MSI-1509"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="BasicMsiStock1" stepKey="createStock"/>
+            <createData entity="_minimalSource" stepKey="createSource"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+
+            <comment userInput="Delete all products" stepKey="deleteAllProductsViaGridComment"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPage"/>
+            <waitForPageLoad time="30" stepKey="waitForProductsGridLoadForDeleteAllProducts"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAllFilters"/>
+            <conditionalClick selector="{{AdminGridSelectRows.multicheckDropdown}}" dependentSelector=".data-grid-tr-no-data" visible="false" stepKey="openMulticheckDropdown"/>
+            <conditionalClick selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" dependentSelector=".data-grid-tr-no-data" visible="false" stepKey="selectAllProductInFilteredGrid"/>
+            <conditionalClick selector="{{AdminGridSelectRows.bulkActionDropdown}}" dependentSelector=".data-grid-tr-no-data" visible="false" stepKey="clickActionDropdown"/>
+            <conditionalClick selector="{{AdminGridSelectRows.bulkActionOption('Delete')}}" dependentSelector=".data-grid-tr-no-data" visible="false" stepKey="clickDeleteAction"/>
+            <wait time="5" stepKey="waitModalDeleteOpen"/>
+            <conditionalClick selector="{{AdminGridConfirmActionSection.ok}}" dependentSelector="{{AdminGridConfirmActionSection.title}}" visible="true" stepKey="confirmProductsDelete"/>
+
+            <comment userInput="Create products" stepKey="createProductsComment"/>
+            <createData entity="SimpleProduct" stepKey="createFirstSimpleProduct">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSecondSimpleProduct">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createThirdSimpleProduct">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createFourthSimpleProduct">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <comment userInput="Assign created source to stock" stepKey="assignSourceToStock"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPageToAssignCreatedSourceToCreatedStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGridLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomStockByName">
+                <argument name="keyword" value="$$createStock.stock[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$createStock.stock[name]$$)}}" stepKey="clickEditCustomStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockEditPageLoad"/>
+            <!--Assign first source-->
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesForAssignCreatedSource"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCreatedSourceByName">
+                <argument name="keyword" value="$$createSource.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$createSource.source[name]$$)}}" stepKey="selectCreatedSourceForCreatedStock"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneCreatedSourceAssignment"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCreatedStock"/>
+
+            <comment userInput="Assign main website to default stock" stepKey="assignMainWebsiteChannelToStockComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPageToAssignMainWebsiteToDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByNameForAssignMainWebsiteChannel">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForDefaultStockPageLoaded"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+        </before>
+        <after>
+            <comment userInput="Disable created sources." stepKey="disableCreatedSourcesComment"/>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableFirstCreatedSource">
+                <argument name="sourceCode" value="$$createSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCreatedCategory"/>
+            <deleteData createDataKey="createStock" stepKey="deleteCreatedStock"/>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createThirdSimpleProduct" stepKey="deleteThirdSimpleProduct"/>
+            <deleteData createDataKey="createFourthSimpleProduct" stepKey="deleteFourthSimpleProduct"/>
+        </after>
+
+        <comment userInput="Fill notify quantity on all products." stepKey="setOutOfStockToAllProductsComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPageForSetNotifyQuantityToAllProducts"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoadForSetNotifyQuantityToAllProducts"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findFirstSimpleProductBySkuForSetNotifyQuantity">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createFirstSimpleProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createFirstSimpleProduct.product[sku]$$)}}" stepKey="clickOnEditFirstProductForSetNotifyQuantity"/>
+        <waitForPageLoad time="30" stepKey="waitForFirstProductPageLoadForSetNotifyQuantity"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="1" stepKey="fillNotifyQuantityForFirstProduct"/>
+        <checkOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="checkNotifyQuantityUseDefaultForSecondProduct"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseFirstProductForm"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoadForSecondProductForSetNotifyQuantity"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSecondSimpleProductBySkuForSetNotifyQuantity">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createSecondSimpleProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createSecondSimpleProduct.product[sku]$$)}}" stepKey="clickOnEditSecondProductForSetNotifyQuantity"/>
+        <waitForPageLoad time="30" stepKey="waitForSecondProductPageLoadForSetNotifyQuantity"/>
+        <uncheckOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="uncheckNotifyQuantityUseDefaultForSecondProduct"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="5" stepKey="fillNotifyQuantityForSecondProduct"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseSecondProductForm"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoadForThirdProductForSetNotifyQuantity"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findThirdSimpleProductBySkuForSetNotifyQuantity">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createThirdSimpleProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createThirdSimpleProduct.product[sku]$$)}}" stepKey="clickOnEditThirdProductForSetNotifyQuantity"/>
+        <waitForPageLoad time="30" stepKey="waitForThirdProductPageLoadForSetNotifyQuantity"/>
+        <uncheckOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="uncheckNotifyQuantityUseDefaultForThirdProduct"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="10" stepKey="fillNotifyQuantityForThirdProduct"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseThirdProductForm"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoadForFourthProductForSetNotifyQuantity"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findFourthSimpleProductBySkuForSetNotifyQuantity">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createFourthSimpleProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createFourthSimpleProduct.product[sku]$$)}}" stepKey="clickOnEditFourthProductForSetNotifyQuantity"/>
+        <waitForPageLoad time="30" stepKey="waitForFourthProductPageLoadForSetNotifyQuantity"/>
+        <uncheckOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="uncheckNotifyQuantityUseDefaultForFourthProduct"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="15" stepKey="fillNotifyQuantityForFourthProduct"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseFourthProductForm"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoadForCheckDefaultProductsAssignedToProducts"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAllFiltersForCheckDefaultSourcesAssignedToProducts"/>
+
+        <comment userInput="Check if that the default source assigned to created products." stepKey="checkDefaultSourceAssignedToCreatedProductsComment"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', _defaultSource.name)}}" userInput="1000" stepKey="checkSourceQtyForFirstCreatedProduct"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('1', $$createSource.source[name]$$)}}" stepKey="createdSourceIsNotAssignedToFirstProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('2', _defaultSource.name)}}" userInput="1000" stepKey="checkSourceQtyForSecondCreatedProduct"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('2', $$createSource.source[name]$$)}}" stepKey="createdSourceIsNotAssignedToSecondProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('3', _defaultSource.name)}}" userInput="1000" stepKey="checkSourceQtyForThirdCreatedProduct"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('3', $$createSource.source[name]$$)}}" stepKey="createdSourceIsNotAssignedToThirdProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('4', _defaultSource.name)}}" userInput="1000" stepKey="checkSourceQtyForFourthCreatedProduct"/>
+        <dontSee selector="{{AdminProductGridSection.productQtyPerSource('4', $$createSource.source[name]$$)}}" stepKey="createdSourceIsNotAssignedToFourthProduct"/>
+
+        <comment userInput="Transfer inventory from default source to created source" stepKey="selectAllProductsForTransferInventoryComment"/>
+        <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdownForSelectAllProducts"/>
+        <click selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" stepKey="selectAllProductInGrid"/>
+        <click selector="{{AdminGridSelectRows.bulkActionDropdown}}" stepKey="clickActionDropdownForSelectTransferInventoryToSource"/>
+        <click selector="{{AdminGridSelectRows.bulkActionOption('Transfer Inventory To Source')}}" stepKey="clickTransferInventoryToSource"/>
+        <waitForElementVisible selector="{{AdminGridConfirmActionSection.title}}" stepKey="waitForConfirmModalToTransferInventoryIsOpened"/>
+        <click selector="{{AdminGridConfirmActionSection.ok}}" stepKey="confirmTransferInventory"/>
+        <waitForPageLoad stepKey="waitForTransferInventoryPageLoad"/>
+        <selectOption selector="{{AdminTransferInventoryToSourcePageSection.originSourceSelect}}" userInput="{{_defaultSource.name}}" stepKey="selectOriginSource"/>
+        <selectOption selector="{{AdminTransferInventoryToSourcePageSection.destinationSourceSelect}}" userInput="$$createSource.source[name]$$" stepKey="selectDestinationSource"/>
+        <click selector="{{AdminTransferInventoryToSourcePageSection.transferInventory}}" stepKey="clickButtonTransferInventory"/>
+        <waitForPageLoad stepKey="waitForInventoryWillBeTransfer"/>
+
+        <comment userInput="Check that the default source inventory transfered to created source" stepKey="checkTheInventoryTransferedComment"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', _defaultSource.name)}}" userInput="0" stepKey="checkDefaultSourceQtyForFirstProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$createSource.source[name]$$)}}" userInput="1000" stepKey="checkCreatedSourceQtyForFirstProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('2', _defaultSource.name)}}" userInput="0" stepKey="checkDefaultSourceQtyForSecondProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('2', $$createSource.source[name]$$)}}" userInput="1000" stepKey="checkCreatedSourceQtyForSecondProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('3', _defaultSource.name)}}" userInput="0" stepKey="checkDefaultSourceQtyForThirdProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('3', $$createSource.source[name]$$)}}" userInput="1000" stepKey="checkCreatedSourceQtyForThirdProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('4', _defaultSource.name)}}" userInput="0" stepKey="checkDefaultSourceQtyForFourthProduct"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('4', $$createSource.source[name]$$)}}" userInput="1000" stepKey="checkCreatedSourceQtyForFourthProduct"/>
+
+        <comment userInput="Check notify quantity for all products on created source." stepKey="checkNotifyQuantityForAllProductsOnCreatedSourceComment"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findFirstSimpleProductBySku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createFirstSimpleProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createFirstSimpleProduct.product[sku]$$)}}" stepKey="clickOnEditFirstProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForFirstProductPageLoad"/>
+        <seeCheckboxIsChecked selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('1')}}" stepKey="checkNotifyQuantityUseDefaultUncheckedOnTestSourceForFirstProduct"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('1')}}" userInput="1" stepKey="seeNotifyQuantityOnTestSourceForFirstProduct"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPageForCheckStockOnSecondProduct"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoadForSecondProduct"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSecondSimpleProductBySku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createSecondSimpleProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createSecondSimpleProduct.product[sku]$$)}}" stepKey="clickOnEditSecondProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForSecondProductPageLoad"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('1')}}" stepKey="checkNotifyQuantityUseDefaultUncheckedOnTestSourceForSecondProduct"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('1')}}" userInput="5" stepKey="seeNotifyQuantityOnTestSourceForSecondProduct"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPageForCheckStockOnThirdProduct"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoadForThirdProduct"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findThirdSimpleProductBySku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createThirdSimpleProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createThirdSimpleProduct.product[sku]$$)}}" stepKey="clickOnEditThirdProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForThirdProductPageLoad"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('1')}}" stepKey="checkNotifyQuantityUseDefaultUncheckedOnTestSourceForThirdProduct"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('1')}}" userInput="10" stepKey="seeNotifyQuantityOnTestSourceForThirdProduct"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPageForCheckStockOnFourthProduct"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoadForFourthProduct"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findFourthSimpleProductBySku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createFourthSimpleProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createFourthSimpleProduct.product[sku]$$)}}" stepKey="clickOnEditFourthProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForFourthProductPageLoad"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('1')}}" stepKey="checkNotifyQuantityUseDefaultUncheckedOnTestSourceForFourthProduct"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('1')}}" userInput="15" stepKey="seeNotifyQuantityOnTestSourceForFourthProduct"/>
+
+        <comment userInput="Transfer inventory from created source to default source" stepKey="transferInventoryFromCreatedSourceToCustomSourceComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPageForTransferInventoryFromCreatedSourceToDefault"/>
+        <waitForPageLoad stepKey="waitForPageLoadAndTransferFromCustomSourceToDefault"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAllFiltersForTransferInventory"/>
+        <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdownForSelectAllProductsAndTransferInventory"/>
+        <click selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" stepKey="selectAllProductInGridForTransferInventory"/>
+        <click selector="{{AdminGridSelectRows.bulkActionDropdown}}" stepKey="clickActionDropdownForSelectTransferInventoryToSourceFromCreatedSourceToDefault"/>
+        <click selector="{{AdminGridSelectRows.bulkActionOption('Transfer Inventory To Source')}}" stepKey="clickTransferInventoryToSourceOption"/>
+        <waitForElementVisible selector="{{AdminGridConfirmActionSection.title}}" stepKey="waitForConfirmModalToTransferInventoryIsOpenedOnPage"/>
+        <click selector="{{AdminGridConfirmActionSection.ok}}" stepKey="confirmTransferInventoryToDefaultSource"/>
+        <waitForPageLoad stepKey="waitForTransferInventoryPageLoadForTransferToDefaultSource"/>
+        <selectOption selector="{{AdminTransferInventoryToSourcePageSection.originSourceSelect}}" userInput="$$createSource.source[name]$$" stepKey="selectOriginSourceForTransfer"/>
+        <selectOption selector="{{AdminTransferInventoryToSourcePageSection.destinationSourceSelect}}" userInput="{{_defaultSource.name}}" stepKey="selectDestinationSourceForTransfer"/>
+        <click selector="{{AdminTransferInventoryToSourcePageSection.transferInventory}}" stepKey="clickButtonTransferInventoryToDefaultSource"/>
+        <waitForPageLoad stepKey="waitForInventoryWillBeTransferToDefaultSource"/>
+
+        <comment userInput="Check that the default source inventory transfered to created source" stepKey="checkTheInventoryTransferedFromCustomToDefaultSourceComment"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', _defaultSource.name)}}" userInput="1000" stepKey="checkDefaultSourceQtyForFirstProductAfterTransferFromCustomSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$createSource.source[name]$$)}}" userInput="0" stepKey="checkCreatedSourceQtyForFirstProductAfterTransferFromCustomSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('2', _defaultSource.name)}}" userInput="1000" stepKey="checkDefaultSourceQtyForSecondProductAfterTransferFromCustomSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('2', $$createSource.source[name]$$)}}" userInput="0" stepKey="checkCreatedSourceQtyForSecondProductAfterTransferFromCustomSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('3', _defaultSource.name)}}" userInput="1000" stepKey="checkDefaultSourceQtyForThirdProductAfterTransferFromCustomSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('3', $$createSource.source[name]$$)}}" userInput="0" stepKey="checkCreatedSourceQtyForThirdProductAfterTransferFromCustomSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('4', _defaultSource.name)}}" userInput="1000" stepKey="checkDefaultSourceQtyForFourthProductAfterTransferFromCustomSource"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('4', $$createSource.source[name]$$)}}" userInput="0" stepKey="checkCreatedSourceQtyForFourthProductAfterTransferFromCustomSource"/>
+
+        <comment userInput="Check notify quantity for all products on default source." stepKey="checkAllProductsInStockOnDefaultSourceComment"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findFirstSimpleProductBySkuForCheckInStock">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createFirstSimpleProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createFirstSimpleProduct.product[sku]$$)}}" stepKey="clickOnEditFirstProductForCheckInStock"/>
+        <waitForPageLoad time="30" stepKey="waitForFirstProductPageLoadForCheckInStock"/>
+        <seeCheckboxIsChecked selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="checkNotifyQuantityUseDefaultUncheckedOnDefaultSourceForFirstProduct"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="1" stepKey="seeNotifyQuantityOnDefaultSourceForFirstProduct"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPageForCheckDefaultStockOnSecondProduct"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoadForSecondProductForCheckInStock"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSecondSimpleProductBySkuForCheckInStock">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createSecondSimpleProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createSecondSimpleProduct.product[sku]$$)}}" stepKey="clickOnEditSecondProductForCheckInStock"/>
+        <waitForPageLoad time="30" stepKey="waitForSecondProductPageLoadForCheckInStock"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="checkNotifyQuantityUseDefaultUncheckedOnDefaultSourceForSecondProduct"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="5" stepKey="seeNotifyQuantityOnDefaultSourceForSecondProduct"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPageForCheckDefaultStockOnThirdProduct"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoadForThirdProductForCheckInStock"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findThirdSimpleProductBySkuForCheckInStock">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createThirdSimpleProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createThirdSimpleProduct.product[sku]$$)}}" stepKey="clickOnEditThirdProductForCheckInStock"/>
+        <waitForPageLoad time="30" stepKey="waitForThirdProductPageLoadForCheckInStock"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="checkNotifyQuantityUseDefaultUncheckedOnDefaultSourceForThirdProduct"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="10" stepKey="seeNotifyQuantityOnDefaultSourceForThirdProduct"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPageForCheckDefaultStockOnFourthProduct"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoadForFourthProductForCheckInStock"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findFourthSimpleProductBySkuForCheckInStock">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createFourthSimpleProduct.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createFourthSimpleProduct.product[sku]$$)}}" stepKey="clickOnEditFourthProductForCheckInStock"/>
+        <waitForPageLoad time="30" stepKey="waitForFourthProductPageLoadForCheckInStock"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="checkNotifyQuantityUseDefaultUncheckedOnDefaultSourceForFourthProduct"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="15" stepKey="seeNotifyQuantityOnDefaultSourceForFourthProduct"/>
+    </test>
+</tests>

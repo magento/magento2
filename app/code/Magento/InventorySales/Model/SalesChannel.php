@@ -21,7 +21,7 @@ class SalesChannel extends AbstractExtensibleModel implements SalesChannelInterf
     /**
      * @inheritdoc
      */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->getData(self::TYPE);
     }
@@ -29,7 +29,7 @@ class SalesChannel extends AbstractExtensibleModel implements SalesChannelInterf
     /**
      * @inheritdoc
      */
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->setData(self::TYPE, $type);
     }
@@ -37,7 +37,7 @@ class SalesChannel extends AbstractExtensibleModel implements SalesChannelInterf
     /**
      * @inheritdoc
      */
-    public function getCode()
+    public function getCode(): ?string
     {
         return $this->getData(self::CODE);
     }
@@ -45,7 +45,7 @@ class SalesChannel extends AbstractExtensibleModel implements SalesChannelInterf
     /**
      * @inheritdoc
      */
-    public function setCode(string $code)
+    public function setCode(string $code): void
     {
         $this->setData(self::CODE, $code);
     }
@@ -53,7 +53,7 @@ class SalesChannel extends AbstractExtensibleModel implements SalesChannelInterf
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): ?SalesChannelExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
@@ -66,7 +66,7 @@ class SalesChannel extends AbstractExtensibleModel implements SalesChannelInterf
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(SalesChannelExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(SalesChannelExtensionInterface $extensionAttributes): void
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }

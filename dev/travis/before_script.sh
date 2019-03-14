@@ -11,11 +11,14 @@ case $TEST_SUITE in
     integration)
         cd dev/tests/integration
 
-        test_set_list=$(find testsuite/* -maxdepth 1 -mindepth 1 -type d | sort)
+        tests_directory=$(find testsuite/* -maxdepth 1 -mindepth 1 -type d | sort)
+        module_directories=$(find ../../../app/code/*/*/Test/Integration -maxdepth 0 -mindepth 0 -type d | sort)
+        test_set_list=("${tests_directory[@]}" "${module_directories[@]}")
+
         test_set_count=$(printf "$test_set_list" | wc -l)
-        test_set_size[1]=$(printf "%.0f" $(echo "$test_set_count*0.12" | bc))
-        test_set_size[2]=$(printf "%.0f" $(echo "$test_set_count*0.10" | bc))
-        test_set_size[3]=$(printf "%.0f" $(echo "$test_set_count*0.20" | bc))
+        test_set_size[1]=$(printf "%.0f" $(echo "$test_set_count*0.13" | bc))
+        test_set_size[2]=$(printf "%.0f" $(echo "$test_set_count*0.31" | bc))
+        test_set_size[3]=$(printf "%.0f" $(echo "$test_set_count*0.48" | bc))
         test_set_size[4]=$((test_set_count-test_set_size[1]-test_set_size[2]-test_set_size[3]))
         echo "Total = ${test_set_count}; Batch #1 = ${test_set_size[1]}; Batch #2 = ${test_set_size[2]}; Batch #3 = ${test_set_size[3]}; Batch #4 = ${test_set_size[4]};";
 
@@ -30,7 +33,7 @@ case $TEST_SUITE in
 
         # divide test sets up by indexed testsuites
         i=0; j=1; dirIndex=1; testIndex=1;
-        for test_set in $test_set_list; do
+        for test_set in ${test_set_list[@]}; do
             test_xml[j]+="            <directory suffix=\"Test.php\">$test_set</directory>\n"
 
             if [[ $j -eq $INTEGRATION_INDEX ]]; then
@@ -51,6 +54,9 @@ case $TEST_SUITE in
 
         # replace test sets for current index into testsuite
         perl -pi -e "s#\s+<directory.*>testsuite</directory>#${test_xml[INTEGRATION_INDEX]}#g" phpunit.xml
+
+        # remove testsuite with tests in modules folders
+        perl -pi -e "s#\s+<directory.*>.*/app/code/\*/\*/Test/Integration</directory>##g" phpunit.xml
 
         echo "==> testsuite preparation complete"
 
@@ -130,8 +136,65 @@ case $TEST_SUITE in
         sed -e "s?basic?travis_acceptance?g" --in-place ./phpunit.xml
         cp ./.htaccess.sample ./.htaccess
         cd ./utils
+        php -f generate/moduleSequence.php
         php -f mtf troubleshooting:check-all
 
         cd ../../..
+        ;;
+
+    msi-api-functional)
+        echo "Installing Magento"
+        mysql -uroot -e 'CREATE DATABASE magento2;'
+        php bin/magento setup:install -q \
+            --language="en_US" \
+            --timezone="UTC" \
+            --currency="USD" \
+            --base-url="http://${MAGENTO_HOST_NAME}/" \
+            --admin-firstname="John" \
+            --admin-lastname="Doe" \
+            --backend-frontname="backend" \
+            --admin-email="admin@example.com" \
+            --admin-user="admin" \
+            --use-rewrites=1 \
+            --admin-use-security-key=0 \
+            --admin-password="123123q"
+
+        echo "Prepare api-functional tests for running"
+        cd dev/tests/api-functional
+
+        cp ./phpunit_msi.xml.dist ./phpunit.xml
+        sed -e "s?magento.url?${MAGENTO_HOST_NAME}?g" --in-place ./phpunit.xml
+
+        ;;
+
+    graphql-api-functional)
+        echo "Installing Magento"
+        mysql -uroot -e 'CREATE DATABASE magento2;'
+        php bin/magento setup:install -q \
+            --language="en_US" \
+            --timezone="UTC" \
+            --currency="USD" \
+            --base-url="http://${MAGENTO_HOST_NAME}/" \
+            --admin-firstname="John" \
+            --admin-lastname="Doe" \
+            --backend-frontname="backend" \
+            --admin-email="admin@example.com" \
+            --admin-user="admin" \
+            --use-rewrites=1 \
+            --admin-use-security-key=0 \
+            --admin-password="123123q"
+
+        echo "Prepare api-functional tests for running"
+        cd dev/tests/api-functional
+        cp -r _files/Magento/TestModuleGraphQl* ../../../app/code/Magento # Deploy and enable test modules before running tests
+
+        cp ./phpunit_graphql.xml.dist ./phpunit.xml
+        sed -e "s?magento.url?${MAGENTO_HOST_NAME}?g" --in-place ./phpunit.xml
+
+        cd ../../..
+        php bin/magento setup:upgrade
+
+        echo "Enabling production mode"
+        php bin/magento deploy:mode:set production
         ;;
 esac

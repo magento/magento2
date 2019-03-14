@@ -17,6 +17,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
@@ -57,6 +58,10 @@ class StockDataProvider extends DataProvider
      * @var SortOrderBuilder
      */
     private $sortOrderBuilder;
+    /**
+     * @var GetSourcesAssignedToStockOrderedByPriorityInterface
+     */
+    private $getSourcesAssignedToStockOrderedByPriority;
 
     /**
      * @param string $name
@@ -74,6 +79,7 @@ class StockDataProvider extends DataProvider
      * @param SortOrderBuilder $sortOrderBuilder
      * @param array $meta
      * @param array $data
+     * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
      */
     public function __construct(
@@ -90,6 +96,7 @@ class StockDataProvider extends DataProvider
         SourceRepositoryInterface $sourceRepository,
         SearchCriteriaBuilder $apiSearchCriteriaBuilder,
         SortOrderBuilder $sortOrderBuilder,
+        GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority,
         array $meta = [],
         array $data = []
     ) {
@@ -110,6 +117,7 @@ class StockDataProvider extends DataProvider
         $this->sourceRepository = $sourceRepository;
         $this->apiSearchCriteriaBuilder = $apiSearchCriteriaBuilder;
         $this->sortOrderBuilder = $sortOrderBuilder;
+        $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
     }
 
     /**
@@ -134,7 +142,14 @@ class StockDataProvider extends DataProvider
             } else {
                 $data = [];
             }
+        } elseif ('inventory_stock_listing_data_stock' === $this->name) {
+            if ($data['totalRecords'] > 0) {
+                foreach ($data['items'] as $index => $stock) {
+                    $data['items'][$index]['assigned_sources'] = $this->getAssignedSourcesById($stock['stock_id']);
+                }
+            }
         }
+
         return $data;
     }
 
@@ -188,5 +203,25 @@ class StockDataProvider extends DataProvider
             ];
         }
         return $assignedSourcesData;
+    }
+
+    /**
+     * @param int $stockId
+     * @return array
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getAssignedSourcesById(int $stockId): array
+    {
+        $sources = $this->getSourcesAssignedToStockOrderedByPriority->execute($stockId);
+        $sourcesData = [];
+        foreach ($sources as $source) {
+            $sourcesData[] = [
+                'sourceCode' => $source->getSourceCode(),
+                'name' => $source->getName()
+            ];
+        }
+
+        return $sourcesData;
     }
 }

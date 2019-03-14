@@ -6,9 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeductInterface" type="Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeduct"/>
-    <preference for="Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterface" type="Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequest"/>
-    <preference for="Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionServiceInterface" type="Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionService"/>
     <type name="Magento\Sales\Model\Order\ShipmentFactory">
         <plugin name="assign_source_code_to_shipment" type="Magento\InventoryShipping\Plugin\Sales\Shipment\AssignSourceCodeToShipmentPlugin"/>
     </type>
@@ -24,4 +21,21 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\InventoryShipping\Model\GetSourceSelectionResultFromInvoice">
+        <arguments>
+            <!-- @deprecated parameter stockByWebsiteIdResolver has been deprecated and not in use now -->
+            <argument name="stockByWebsiteIdResolver" xsi:type="null"/>
+            <!-- @deprecated parameter inventoryRequestFactory has been deprecated and not in use now -->
+            <argument name="inventoryRequestFactory" xsi:type="null"/>
+        </arguments>
+    </type>
+    <!-- Return Processor -->
+    <type name="Magento\InventorySalesApi\Model\ReturnProcessor\GetSourceDeductedOrderItemsChain">
+        <arguments>
+            <argument name="sourceDeductedItemsSelector" xsi:type="array">
+                <item name="source_deducted_shipping_items" xsi:type="object">Magento\InventoryShipping\Model\ReturnProcessor\GetShippedItemsPerSourceByPriority</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction" type="Magento\InventoryShipping\Controller\Adminhtml\Order\Shipment\NewAction"/>
 </config>

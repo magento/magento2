@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStockCanBeDeletedFromEditStockPageTest">
+        <annotations>
+            <stories value="Delete Stock"/>
+            <title value="Delete Stock From Edit Stock Page"/>
+            <description value="You should be able to Delete a Stock from the Edit Stock page."/>
+            <testCaseId value="MSI-949"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <actionGroup ref="AdminGoToStockGridFilterResultsByInputEditStock" stepKey="goToStockGridFilterResultsByInputEditStock1">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createStock1.stock[name]$$"/>
+        </actionGroup>
+
+        <click selector="#delete" stepKey="clickOnDelete1"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad2"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="clickOnOk2"/>
+
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSuccessMessage1"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="The Stock has been deleted." stepKey="seeSuccessMessage2"/>
+    </test>
+</tests>

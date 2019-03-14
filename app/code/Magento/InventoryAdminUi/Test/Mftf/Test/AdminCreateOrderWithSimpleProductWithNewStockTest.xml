@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithSimpleProductWithNewStockTest">
+        <annotations>
+            <stories value="Guest Customer created Order with Simple product"/>
+            <title value="Guest Customer created Order with Simple product"/>
+            <description value="Guest Customer created Order with Simple product."/>
+            <testCaseId value="MSI-1613"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+            <skip>
+                <issueId value="MSI-1597"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
+            <createData entity="SimpleMsiProduct" stepKey="createProduct1"/>
+            <createData entity="MsiCustomer1" stepKey="createCustomer1"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        </before>
+        <after>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource1">
+                <argument name="sourceCode" value="$$createSource1.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+
+            <deleteData createDataKey="createCategory1" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer1" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="findSimpleProductBySku1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$createProduct1.sku$$"/>
+        </actionGroup>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillDefaultQuantityField1"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillDefaultQuantityField2"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedSimpleProduct1"/>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory1.name$$)}}" stepKey="navigateToCategoryPage"/>
+
+        <actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$createProduct1$$"/>
+            <argument name="quantity" value="5"/>
+            <argument name="checkQuantity" value="1"/>
+        </actionGroup>
+
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitFroPaymentSelectionPageLoad"/>
+
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{MsiCustomer1.email}}" stepKey="enterEmail"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterEmail"/>
+        <fillField selector=".payment-method-billing-address input[name=firstname]" userInput="{{MsiCustomer1.firstname}}" stepKey="enterFirstName"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterFirstName"/>
+        <fillField selector=".payment-method-billing-address input[name=lastname]" userInput="{{MsiCustomer1.lastname}}" stepKey="enterLastName"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterLastName"/>
+        <fillField selector=".payment-method-billing-address input[name='street[0]']" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterStreet"/>
+        <fillField selector=".payment-method-billing-address input[name=city]" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterCity"/>
+        <selectOption selector=".payment-method-billing-address select[name=region_id]" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterRegionId"/>
+        <fillField selector=".payment-method-billing-address input[name=postcode]" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterPostcode"/>
+        <fillField selector=".payment-method-billing-address input[name=telephone]" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterTelephone"/>
+        <click selector="{{CheckoutPaymentSection.update}}" stepKey="updateCustomerBillingAddress"/>
+
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="seeOrderNumber"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad24"/>
+
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show" visible="true" stepKey="clearTheFiltersIfPresent"/>
+
+        <fillField userInput="$grabOrderNumber" selector="{{OrdersGridSection.search}}" stepKey="fillCodeField2"/>
+        <click selector=".data-grid-search-control-wrap button" stepKey="clickOnApplyFilters1"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad25"/>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createCustomer1.customer[firstname]$$" stepKey="seeFirstName1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createCustomer1.customer[lastname]$$" stepKey="seeLastName1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Pending" stepKey="seeFirstName3"/>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad26"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults3">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createProduct1.name$$"/>
+        </actionGroup>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock1.stock[name]$$" stepKey="seeUpdatedQuantity1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="95" stepKey="seeUpdatedQuantity3"/>
+    </test>
+</tests>

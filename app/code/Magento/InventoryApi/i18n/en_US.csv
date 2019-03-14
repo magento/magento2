@@ -1,0 +1,11 @@
+"Source item Validator must implement SourceItemValidatorInterface.","Source item Validator must implement SourceItemValidatorInterface."
+"Source Validator must implement SourceValidatorInterface.","Source Validator must implement SourceValidatorInterface."
+"Validator must implement StockSourceLinkValidatorInterface.","Validator must implement StockSourceLinkValidatorInterface."
+"Stock Validator must implement StockValidatorInterface.","Stock Validator must implement StockValidatorInterface."
+Inventory,Inventory
+Sources,Sources
+"Edit Sources","Edit Sources"
+Stocks,Stocks
+"Edit Stocks","Edit Stocks"
+"Delete Stocks","Delete Stocks"
+"Source to Stock Assigning","Source to Stock Assigning"

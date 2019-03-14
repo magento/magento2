@@ -62,14 +62,18 @@ class UpdateInventorySourceItem
         $selectForInsert = $this->resourceConnection->getConnection()
             ->select()
             ->from(
-                $legacyStockItemTable,
+                ['legacy_stock_item' => $legacyStockItemTable],
                 [
-                    'source_code' => new \Zend_Db_Expr('\'' .$defaultSourceCode . '\''),
+                    'source_code' => new \Zend_Db_Expr('\'' . $defaultSourceCode . '\''),
                     'qty',
                     'is_in_stock'
                 ]
             )
-            ->join($productTable, 'entity_id = product_id', 'sku')
+            ->join(
+                ['product' => $productTable],
+                'product.entity_id = legacy_stock_item.product_id',
+                'sku'
+            )
             ->where('website_id = ?', 0);
 
         $sql = $this->resourceConnection->getConnection()->insertFromSelect(

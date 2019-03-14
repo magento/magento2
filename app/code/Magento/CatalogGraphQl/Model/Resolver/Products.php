@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
@@ -14,10 +15,9 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\SearchFilter;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
  * Products field resolver, used for GraphQL request processing.
@@ -45,39 +45,25 @@ class Products implements ResolverInterface
     private $searchFilter;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
-     * @var Layer\DataProvider\Filters
-     */
-    private $filtersDataProvider;
-
-    /**
      * @param Builder $searchCriteriaBuilder
      * @param Search $searchQuery
      * @param Filter $filterQuery
-     * @param ValueFactory $valueFactory
+     * @param SearchFilter $searchFilter
      */
     public function __construct(
         Builder $searchCriteriaBuilder,
         Search $searchQuery,
         Filter $filterQuery,
-        SearchFilter $searchFilter,
-        ValueFactory $valueFactory,
-        \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider
+        SearchFilter $searchFilter
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
         $this->filterQuery = $filterQuery;
         $this->searchFilter = $searchFilter;
-        $this->valueFactory = $valueFactory;
-        $this->filtersDataProvider = $filtersDataProvider;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -85,7 +71,7 @@ class Products implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) : Value {
+    ) {
         $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
         $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
@@ -96,10 +82,10 @@ class Products implements ResolverInterface
         } elseif (isset($args['search'])) {
             $layerType = Resolver::CATALOG_LAYER_SEARCH;
             $this->searchFilter->add($args['search'], $searchCriteria);
-            $searchResult = $this->searchQuery->getResult($searchCriteria, $info);
+            $searchResult = $this->getSearchResult($this->searchQuery, $searchCriteria, $info);
         } else {
             $layerType = Resolver::CATALOG_LAYER_CATEGORY;
-            $searchResult = $this->filterQuery->getResult($searchCriteria, $info);
+            $searchResult = $this->getSearchResult($this->filterQuery, $searchCriteria, $info);
         }
         //possible division by 0
         if ($searchCriteria->getPageSize()) {
@@ -110,10 +96,10 @@ class Products implements ResolverInterface
 
         $currentPage = $searchCriteria->getCurrentPage();
         if ($searchCriteria->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
-            $currentPage = new GraphQlInputException(
+            throw new GraphQlInputException(
                 __(
-                    'currentPage value %1 specified is greater than the number of pages available.',
-                    [$maxPages]
+                    'currentPage value %1 specified is greater than the %2 page(s) available.',
+                    [$currentPage, $maxPages]
                 )
             );
         }
@@ -123,15 +109,33 @@ class Products implements ResolverInterface
             'items' => $searchResult->getProductsSearchResult(),
             'page_info' => [
                 'page_size' => $searchCriteria->getPageSize(),
-                'current_page' => $currentPage
+                'current_page' => $currentPage,
+                'total_pages' => $maxPages
             ],
-            'filters' => $this->filtersDataProvider->getData($layerType)
+            'layer_type' => $layerType
         ];
 
-        $result = function () use ($data) {
-            return $data;
-        };
+        return $data;
+    }
 
-        return $this->valueFactory->create($result);
+    /**
+     * Get search result.
+     *
+     * @param Filter|Search $query
+     * @param SearchCriteriaInterface $searchCriteria
+     * @param ResolveInfo $info
+     *
+     * @return \Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult
+     * @throws GraphQlInputException
+     */
+    private function getSearchResult($query, SearchCriteriaInterface $searchCriteria, ResolveInfo $info)
+    {
+        try {
+            $searchResult = $query->getResult($searchCriteria, $info);
+        } catch (InputException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
+        }
+
+        return $searchResult;
     }
 }

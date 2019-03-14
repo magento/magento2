@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminAssignSourcesSlideOutSection">
+        <element name="cancel" type="button" selector=".product_form_product_form_sources_assign_sources_modal button.action-secondary" timeout="30"/>
+        <element name="done" type="button" selector=".product_form_product_form_sources_assign_sources_modal button.action-primary" timeout="30"/>
+        <element name="inventory_done" type="button" selector=".inventory_stock_form_inventory_stock_form_sources_assign_sources_modal button.action-primary" timeout="30"/>
+
+        <element name="defaultSourceCheckbox" type="checkbox" selector="#idscheckdefault"/>
+    </section>
+    <section name="AdminAssignSourcesSlideOutGridSection">
+        <element name="checkboxByIndex" type="checkbox" selector=".admin__data-grid-outer-wrap .data-row[data-repeat-index='{{var1}}'] .admin__control-checkbox" parameterized="true"/>
+        <element name="checkboxByCode" type="checkbox" selector="//tr[td[contains(.,'{{var1}}')]]//input[@data-action='select-row']" parameterized="true"/>
+    </section>
+</sections>

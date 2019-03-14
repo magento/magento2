@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontLoggedInCustomerOrderedVirtualProductOnDefaultStockTest">
+        <annotations>
+            <stories value="Add Virtual Product"/>
+            <title value="Logged customer place order with virtual product on default stock"/>
+            <description value="Customer should be able to place order with virtual product on default stock."/>
+            <testCaseId value="MSI-1298"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="_minimalSource" stepKey="customSource"/>
+            <createData entity="BasicMsiStock1" stepKey="customStock"/>
+            <createData entity="Msi_US_Customer" stepKey="customer"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+
+            <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPageToAssignDefaultStockToMainWebsite"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitFroDefaultStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+
+            <comment userInput="Assign source to stock." stepKey="assignSourceToStockComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPageToAssignCustomSourceToCustomStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGridLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomStockByName">
+                <argument name="keyword" value="$$customStock.stock[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$customStock.stock[name]$$)}}" stepKey="clickEditCustomStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockEditPageLoad"/>
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSources"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomSourceByName">
+                <argument name="keyword" value="$$customSource.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$customSource.source[name]$$)}}" stepKey="selectCustomSourceForCustomStock"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneCustomSourceAssignment"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCustomStock"/>
+
+            <createData entity="VirtualProduct" stepKey="product"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+        </after>
+
+        <comment userInput="Assign category to created virtual product." stepKey="assignCategoryToProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditProduct"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumns"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductEditPage"/>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedVirtualProduct"/>
+
+        <comment userInput="Login and buy fifty pieces of virtual product on storefront." stepKey="buyVirtualProductComment"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityActionGroup" stepKey="addVirtualProductToCart">
+            <argument name="product" value="$$product$$"/>
+            <argument name="quantity" value="50"/>
+            <argument name="checkQuantity" value="1"/>
+        </actionGroup>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForPaymentSelectionPageLoad"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+
+        <comment userInput="Back to admin area, to check ordered quantity" stepKey="checkOrderedQuantity"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitOrderListPageLoad"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 50" stepKey="orderedQuantity"/>
+
+        <comment userInput="Check product sources quantity and salable quantity after order placed." stepKey="checkProductQtyAfterPlaceOrderComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterPlaceOrder"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySkuToCheckQtyAfterPlaceOrder">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="950" stepKey="checkSalableQtyAfterPlaceOrder"/>
+    </test>
+</tests>

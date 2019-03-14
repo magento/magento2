@@ -1,0 +1,135 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// TODO: Temporary implementation. UI components rework needed.
+// TODO: Form validation when no source is set
+
+// @codingStandardsIgnoreFile
+
+/** @var Magento\Backend\Block\Template $block */
+/** @var Magento\InventoryCatalogAdminUi\ViewModel\SourcesSelection $viewModel */
+$viewModel = $block->getViewModel();
+$originSources = $viewModel->getAssignedSources();
+$destinationSources = $viewModel->getSources();
+?>
+<div class="page-main-actions">
+    <div class="page-actions">
+        <div class="page-actions-buttons">
+            <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+                <div class="page-actions-inner" data-title="Import">
+                    <div class="page-actions-buttons">
+                        <button
+                                id="back"
+                                title="Back"
+                                type="button"
+                                class="action-scalable back">
+                            <span><?= /* @noEscape */ __('Back') ?></span>
+                        </button>
+
+                        <button id="bulk-operation"
+                                title="<?= $block->escapeHtmlAttr(__($block->getData('button_title'))) ?>"
+                                type="button"
+                                class="action-default scalable save primary">
+                            <span><?= $block->escapeHtml(__($block->getData('button_title'))) ?></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="entry-edit form-inline">
+    <form
+            action="<?= /* @noEscape */ $block->getUrl($block->getData('submit_url')) ?>"
+            id="bulk-operation-form"
+            method="post"
+            enctype="multipart/form-data">
+        <div>
+            <input name="form_key" type="hidden" value="<?= /* @noEscape */ $block->getFormKey() ?>">
+        </div>
+
+        <fieldset class="fieldset admin__fieldset" id="base_fieldset">
+            <legend class="admin__legend legend">
+                <span><?= /* @noEscape */ __('Bulk operation') ?></span>
+            </legend>
+
+            <div class="admin__field field field-entity">
+                <div class="admin__field-control control">
+                    <div class="admin__field">
+                        <?= /* @noEscape */ __('You selected <strong>%count</strong> products for this bulk operation.', [
+                                'count' => $viewModel->getProductsCount()
+                        ]) ?><br />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="fieldset admin__fieldset" id="base_fieldset">
+            <legend class="admin__legend legend">
+                <span><?= /* @noEscape */ __('Transfer source') ?></span>
+            </legend>
+
+            <div class="admin__field field field-entity">
+                <div class="admin__field-control control">
+                    <div class="admin__field">
+                        <label class="label admin__field-label" for="origin-source">
+                            <?= /* @noEscape */ __('Transfer from source') ?>
+                        </label>&nbsp;
+
+                        <select class="admin__control-select" name="origin_source" id="origin-source">
+                            <?php foreach ($originSources as $source) : ?>
+                                <?php /** @var \Magento\InventoryApi\Api\Data\SourceInterface $source */ ?>
+                                <option value="<?= $block->escapeHtmlAttr($source->getSourceCode()) ?>">
+                                    <?= $block->escapeHtml($source->getName())?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>&nbsp;
+
+                        <label class="label admin__field-label" for="destination-source">
+                            <?= /* @noEscape */ __('to source') ?>
+                        </label>&nbsp;
+
+                        <select class="admin__control-select" name="destination_source" id="destination-source">
+                            <?php foreach ($destinationSources as $source) : ?>
+                                <?php /** @var \Magento\InventoryApi\Api\Data\SourceInterface $source */ ?>
+                                <option value="<?= $block->escapeHtmlAttr($source->getSourceCode()) ?>">
+                                    <?= $block->escapeHtml($source->getName())?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin__field field field-entity">
+                <div class="admin__field-control control">
+                    <div class="admin__field">
+                        <input
+                                class="admin__control-checkbox"
+                                id="unassign-origin-source"
+                                type="checkbox"
+                                name="unassign_origin_source"
+                                value="1" />
+                        <label for="unassign-origin-source">&nbsp;<?= /* @noEscape */ __('Unassign from origin source after transfer.') ?></label><br />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    require(['jquery'], function ($) {
+        $('#back').click(function () {
+            self.location.href='<?= /* @noEscape */ $block->getUrl('catalog/product/index') ?>';
+        });
+
+        $('#bulk-operation').click(function () {
+           $('#bulk-operation-form').submit();
+        });
+    })
+</script>

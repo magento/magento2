@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOutOfStockThresholdOnConfigurationPageTest">
+        <annotations>
+            <stories value="Configuration Settings"/>
+            <title value="Out-of-Stock Threshold on the Configuration page functions correctly"/>
+            <description value="You should be able to set the Out-of-Stock Threshold on the Configuration page."/>
+            <testCaseId value="MSI-1244"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+            <skip>
+                <issueId value="MSI-1588"/>
+            </skip>
+        </annotations>
+        
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="SimpleMsiProduct" stepKey="simpleProduct1"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <magentoCLI command="config:set cataloginventory/item_options/min_qty 1" stepKey="setNotifyForQuantityBelowToOne1"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock1"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock1"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set cataloginventory/item_options/min_qty 1" stepKey="setNotifyForQuantityBelowToOne"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock1"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock1"/>
+
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$simpleProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
+        <fillField selector="input[name='sources[assigned_sources][0][quantity]']" userInput="100" stepKey="fillSourceQtyField1"/>
+        <fillField selector="input[name='sources[assigned_sources][1][quantity]']" userInput="100" stepKey="fillSourceQtyField2"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$simpleCategory1.name$$)}}" stepKey="navigateToCategoryPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <see userInput="$$simpleProduct1.product[name]$$" stepKey="assertProductPresent1"/>
+        <see userInput="$$simpleProduct1.product[price]$$" stepKey="assertProductPricePresent1"/>
+
+        <magentoCLI command="config:set cataloginventory/item_options/min_qty 100" stepKey="setNotifyForQuantityBelowToOne1"/>
+        <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock1"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock1"/>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$simpleCategory1.name$$)}}" stepKey="navigateToCategoryPage2"/>
+        <see selector=".empty" userInput="We can't find products matching the selection." stepKey="seeErrorMessage1"/>
+
+        <magentoCLI command="config:set cataloginventory/item_options/min_qty 99" stepKey="setNotifyForQuantityBelowToOne2"/>
+        <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock2"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock2"/>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$simpleCategory1.name$$)}}" stepKey="navigateToCategoryPage3"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <see userInput="$$simpleProduct1.product[name]$$" stepKey="assertProductPresent2"/>
+        <see userInput="$$simpleProduct1.product[price]$$" stepKey="assertProductPricePresent2"/>
+    </test>
+</tests>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminNewWebsiteHasDefaultStockAssignedAutomaticallyTest">
+        <annotations>
+            <stories value="Stock Assignment"/>
+            <title value="New Website should be assigned to the Default Stock automatically"/>
+            <description value="You should see new Websites automatically added to the Default Stock after they are created."/>
+            <testCaseId value="MSI-740"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite1"/>
+        <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="enterWebsiteName1"/>
+        <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite1.code}}" stepKey="enterWebsiteCode1"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite1"/>
+
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockGridPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminManageSourcesGridFilterControls.dropDown}}" visible="true" stepKey="clearTheFiltersIfPresent1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
+            <argument name="selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="value" value="default"/>
+        </actionGroup>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="seeTheNewWebsiteAssignedToDefaultSource1"/>
+    </test>
+</tests>

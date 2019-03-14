@@ -17,7 +17,7 @@ class UpdateTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/stock';
+    const RESOURCE_PATH = '/V1/inventory/stocks';
     const SERVICE_NAME = 'inventoryApiStockRepositoryV1';
     /**#@-*/
 

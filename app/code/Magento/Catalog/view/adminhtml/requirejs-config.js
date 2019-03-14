@@ -17,5 +17,18 @@ var config = {
     },
     deps: [
         'Magento_Catalog/catalog/product'
-    ]
+    ],
+    config: {
+        mixins: {
+            'Magento_Catalog/js/components/use-parent-settings/select': {
+                'Magento_Catalog/js/components/use-parent-settings/toggle-disabled-mixin': true
+            },
+            'Magento_Catalog/js/components/use-parent-settings/textarea': {
+                'Magento_Catalog/js/components/use-parent-settings/toggle-disabled-mixin': true
+            },
+            'Magento_Catalog/js/components/use-parent-settings/single-checkbox': {
+                'Magento_Catalog/js/components/use-parent-settings/toggle-disabled-mixin': true
+            }
+        }
+    }
 };

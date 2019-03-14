@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminAdvancedInventorySlideOutSection">
+        <element name="close" type="button" selector="button.action-close" timeout="30"/>
+        <element name="done" type="button" selector=".page-actions-buttons button.action-primary" timeout="30"/>
+        <element name="checkboxManageStock" type="checkbox" selector="fieldset[data-index='container_manage_stock'] input[name='product[stock_data][use_config_manage_stock]']"/>
+        <element name="selectManageStock" type="select" selector="fieldset[data-index='container_manage_stock'] select[name='product[stock_data][manage_stock]']"/>
+    </section>
+</sections>

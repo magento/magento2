@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCatalogQuickSearchForSimpleProductOnTestStockTest">
+        <annotations>
+            <stories value="Catalog Quick Search"/>
+            <title value="Quick Catalog Search for Simple Product on Test stock"/>
+            <description value="Quick Catalog Search for Simple Product on Test stock"/>
+            <testCaseId value="MSI-1787"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="SimpleMsiProduct" stepKey="simpleProduct1"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$simpleProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
+
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToCreatedProduct1">
+            <argument name="sourceCode" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillTestSourceQtyField1"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedVirtualProduct1"/>
+
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+
+        <fillField userInput="$$simpleProduct1.product[name]$$" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="fillSearchBar1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl1"/>
+        <seeInTitle userInput="Search results for: '$$simpleProduct1.product[name]$$'" stepKey="assertQuickSearchTitle1"/>
+        <see userInput="Search results for: '$$simpleProduct1.product[name]$$'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName1"/>
+        <see selector="{{CatalogSearchResultSection.productListBlock}}" userInput="$$simpleProduct1.product[name]$$" stepKey="verifyProductAppearedInSearchResults" />
+    </test>
+</tests>

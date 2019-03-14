@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminFilterSourcesInGridTest">
+        <annotations>
+            <stories value="Filtering in a Grid"/>
+            <title value="Filter Sources on the Manage Sources grid"/>
+            <description value="You should be able to Filter the Sources from the Manage Sources grid."/>
+            <testCaseId value="MSI-493"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="FullSource2" stepKey="createSource2"/>
+            <createData entity="FullSource1" stepKey="createSource3"/>
+            <createData entity="FullSource2" stepKey="createSource4"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createSource3.source[source_code]$$"/>
+        </actionGroup>
+
+        <see userInput="$$createSource3.source[source_code]$$" selector="{{AdminManageSourcesGridFilterControls.dropDown}}" stepKey="seeFilterName1"/>
+        <see userInput="$$createSource3.source[source_code]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
+        <see userInput="$$createSource3.source[name]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeNameInRow1"/>
+        <see userInput="Enabled" selector="{{AdminGridRow.rowOne}}" stepKey="seeIsEnabledInRow1"/>
+
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns1"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns2"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults2">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createSource4.source[source_code]$$"/>
+        </actionGroup>
+
+        <see userInput="$$createSource4.source[source_code]$$" selector="{{AdminManageSourcesGridFilterControls.dropDown}}" stepKey="seeFilterName2"/>
+        <see userInput="$$createSource4.source[source_code]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow2"/>
+        <see userInput="$$createSource4.source[name]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeNameInRow2"/>
+        <see userInput="Enabled" selector="{{AdminGridRow.rowOne}}" stepKey="seeIsEnabledInRow2"/>
+    </test>
+</tests>

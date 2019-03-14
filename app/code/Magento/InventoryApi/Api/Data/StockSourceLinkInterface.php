@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Represents relation between Stock and Source entities.
  *
@@ -16,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * @api
  */
-interface StockSourceLinkInterface extends ExtensibleDataInterface
+interface StockSourceLinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -31,7 +29,7 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      *
      * @return int|null
      */
-    public function getStockId();
+    public function getStockId(): ?int;
 
     /**
      * Set stock id
@@ -39,14 +37,14 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      * @param int|null $stockId
      * @return void
      */
-    public function setStockId($stockId);
+    public function setStockId(?int $stockId): void;
 
     /**
      * Get source code of the link
      *
      * @return string|null
      */
-    public function getSourceCode();
+    public function getSourceCode(): ?string;
 
     /**
      * Set source code of the link
@@ -55,14 +53,14 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      *
      * @return void
      */
-    public function setSourceCode($sourceCode);
+    public function setSourceCode(?string $sourceCode): void;
 
     /**
      * Get priority of the link
      *
      * @return int|null
      */
-    public function getPriority();
+    public function getPriority(): ?int;
 
     /**
      * Set priority of the link
@@ -71,16 +69,14 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      *
      * @return void
      */
-    public function setPriority($priority);
+    public function setPriority(?int $priority): void;
 
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?\Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -88,5 +84,7 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(StockSourceLinkExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(
+        \Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface $extensionAttributes
+    ): void;
 }

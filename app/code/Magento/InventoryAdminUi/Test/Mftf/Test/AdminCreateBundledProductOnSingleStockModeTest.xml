@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateBundledProductOnSingleStockModeTest">
+        <annotations>
+            <stories value="Add Bundled Product"/>
+            <title value="Bundle Product on Single stock mode created by Admin user"/>
+            <description value="Bundle Product on Single stock mode created by Admin user"/>
+            <testCaseId value="MSI-1774"/>
+            <severity value="MAJOR"/>
+            <group value="msi"/>
+            <group value="single_mode"/>
+        </annotations>
+        
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableStockManagement1"/>
+
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="simpleCategory1"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <comment userInput="Create bundle product." stepKey="createBundleProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageBundle"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateBundleProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillBundleProductNameAndSku">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <comment userInput="Add bundle item." stepKey="addBundleItemComment"/>
+        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
+        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
+        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
+        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="5" stepKey="fillProductDefaultQty"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedBundleProduct"/>
+
+        <!-- Go to storefront category page, assert product visibility -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$simpleCategory1.name$$)}}" stepKey="navigateToStorefrontCategoryPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <see userInput="{{BundleProduct.name}}" stepKey="assertProductPresentOnCategoryPage"/>
+        <see userInput="$615.00" stepKey="assertProductPricePresentOnCategoryPage"/>
+
+        <!-- Go to storefront product page, assert product visibility -->
+        <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(BundleProduct.name)}}" stepKey="openProductPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <seeInTitle userInput="{{BundleProduct.name}}" stepKey="assertProductNameTitleOnProductPage"/>
+        <see userInput="{{BundleProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductNameOnProductPage"/>
+        <see userInput="$615.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPriceOnProductPage"/>
+        <see userInput="{{BundleProduct.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSkuOnProductPage"/>
+        <see userInput="In Stock" selector=".product-info-stock-sku span" stepKey="assertProductStockStatusOnProductPage"/>
+    </test>
+</tests>

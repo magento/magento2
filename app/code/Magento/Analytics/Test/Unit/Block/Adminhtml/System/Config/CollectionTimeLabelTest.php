@@ -87,7 +87,7 @@ class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
         $this->localeResolver->expects($this->once())
             ->method('getLocale')
             ->willReturn('en_US');
-        $this->assertRegexp(
+        $this->assertRegExp(
             "/Eastern Standard Time \(America\/New_York\)/",
             $this->collectionTimeLabel->render($this->abstractElementMock)
         );

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEditSourceGeneralSection">
+        <element name="name" type="input" selector="input[name='general[name]']"/>
+        <element name="code" type="input" selector="input[name='general[source_code]']"/>
+        <element name="codeErrorMessage" type="text" selector="//input[@name='general[source_code]']//..//label"/>
+        <element name="isEnabled" type="checkbox" selector="input[name='general[enabled]']"/>
+        <element name="isEnabledLabel" type="text" selector="input[name='general[enabled]']+label"/>
+        <element name="description" type="textarea" selector="textarea[name='general[description]']"/>
+        <element name="latitude" type="input" selector="input[name='general[latitude]']"/>
+        <element name="longitude" type="input" selector="input[name='general[longitude]']"/>
+    </section>
+    <section name="AdminEditSourceContactInfoSection">
+        <element name="opened" type="button" selector="div[data-index='contact_info'] .fieldset-wrapper-title[data-state-collapsible='open']"/>
+        <element name="closed" type="button" selector="div[data-index='contact_info'] .fieldset-wrapper-title[data-state-collapsible='closed']"/>
+
+        <element name="contactName" type="input" selector="input[name='general[contact_name]']"/>
+        <element name="email" type="input" selector="input[name='general[email]']"/>
+        <element name="phone" type="input" selector="input[name='general[phone]']"/>
+        <element name="fax" type="input" selector="input[name='general[fax]']"/>
+    </section>
+    <section name="AdminEditSourceAddressDataSection">
+        <element name="opened" type="button" selector="div[data-index='address'] .fieldset-wrapper-title[data-state-collapsible='open']"/>
+        <element name="closed" type="button" selector="div[data-index='address'] .fieldset-wrapper-title[data-state-collapsible='closed']"/>
+
+        <element name="country" type="select" selector="select[name='general[country_id]']" timeout="10"/>
+        <element name="province" type="input" selector="input[name='general[region]']"/>
+        <element name="state" type="select" selector="select[name='general[region_id]']"/>
+        <element name="city" type="input" selector="input[name='general[city]']"/>
+        <element name="street" type="input" selector="input[name='general[street]']"/>
+        <element name="postcode" type="input" selector="input[name='general[postcode]']"/>
+    </section>
+    <section name="AdminEditSourceCarriersSection">
+        <element name="opened" type="button" selector="div[data-index='carriers'] .fieldset-wrapper-title[data-state-collapsible='open']"/>
+        <element name="closed" type="button" selector="div[data-index='carriers'] .fieldset-wrapper-title[data-state-collapsible='closed']"/>
+
+        <element name="useGlobalShippingConfiguration" type="radio" selector="input[name='general[use_default_carrier_config]']"/>
+    </section>
+</sections>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminGoToInventoryConfigurationUpdateOutOfStockThreshold">
+        <arguments>
+            <argument name="updatedValue" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminInventoryConfiguration.url}}" stepKey="amOnTheInventoryConfigurationPage1"/>
+        <conditionalClick selector="#cataloginventory_item_options-head" dependentSelector="#cataloginventory_item_options" visible="true" stepKey="clickOnSubSectionIfNotOpen1"/>
+
+        <click selector="#cataloginventory_item_options-head" stepKey="clickOnProductStockOptions1"/>
+        <waitForPageLoad stepKey="waitForPageLoad6"/>
+
+        <uncheckOption selector="#cataloginventory_item_options_min_qty_inherit" stepKey="clickOnUseSystemValue1"/>
+        <fillField selector="#cataloginventory_item_options_min_qty" userInput="{{updatedValue}}" stepKey="fillOutOfStockThreshold1"/>
+
+        <click selector="#save" stepKey="clickOnSave1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+
+        <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock1"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock1"/>
+    </actionGroup>
+</actionGroups>

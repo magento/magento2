@@ -250,8 +250,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ['inventory', [], [7]],
         ]));
 
-        $this->messageManager->expects($this->never())->method('addError');
-        $this->messageManager->expects($this->never())->method('addException');
+        $this->messageManager->expects($this->never())->method('addErrorMessage');
+        $this->messageManager->expects($this->never())->method('addExceptionMessage');
 
         $this->object->execute();
     }

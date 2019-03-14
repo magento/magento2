@@ -14,7 +14,7 @@ use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 
 class InventoryRequestFromOrderFactory
 {
@@ -34,27 +34,26 @@ class InventoryRequestFromOrderFactory
     private $stockByWebsiteIdResolver;
 
     /**
-     * @var GetSkusByProductIdsInterface
+     * @var GetSkuFromOrderItemInterface
      */
-    private $getSkusByProductIds;
+    private $getSkuFromOrderItem;
 
     /**
-     * InventoryRequestFactory constructor.
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
-     * @param GetSkusByProductIdsInterface $getSkusByProductIds
+     * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
      */
     public function __construct(
         ItemRequestInterfaceFactory $itemRequestFactory,
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
-        GetSkusByProductIdsInterface $getSkusByProductIds
+        GetSkuFromOrderItemInterface $getSkuFromOrderItem
     ) {
         $this->itemRequestFactory = $itemRequestFactory;
         $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
-        $this->getSkusByProductIds = $getSkusByProductIds;
+        $this->getSkuFromOrderItem = $getSkuFromOrderItem;
     }
 
     /**
@@ -69,9 +68,7 @@ class InventoryRequestFromOrderFactory
 
         /** @var OrderItemInterface|OrderItem $orderItem */
         foreach ($order->getItems() as $orderItem) {
-            $itemSku = $orderItem->getSku() ?: $this->getSkusByProductIds->execute(
-                [$orderItem->getProductId()]
-            )[$orderItem->getProductId()];
+            $itemSku = $this->getSkuFromOrderItem->execute($orderItem);
             $qtyToDeliver = $orderItem->getQtyToShip();
 
             //check if order item is not delivered yet

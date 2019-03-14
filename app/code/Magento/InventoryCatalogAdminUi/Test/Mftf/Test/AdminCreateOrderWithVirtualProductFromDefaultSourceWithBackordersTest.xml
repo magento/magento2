@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithVirtualProductFromDefaultSourceWithBackordersTest">
+        <annotations>
+            <stories value="Sales-Backorder"/>
+            <title value="Admin user set negative 'Out-of-Stock Threshold' in combination with backorders for virtual product on Default source"/>
+            <description value="You should be able to create order from Default Source with backorders in combination with negative out of stock threshold."/>
+            <testCaseId value="MSI-1477"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="_minimalSource" stepKey="customSource"/>
+            <createData entity="BasicMsiStock1" stepKey="customStock"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="customStock"/>
+                <requiredEntity createDataKey="customSource"/>
+            </createData>
+
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+
+            <comment userInput="Assign main website to default stock" stepKey="assignChannelToStockComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPageToAssignMainWebsiteToDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByNameForAssignMainWebsiteChannel">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForDefaultStockPageLoaded"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+
+            <!--Set advanced inventory config for Out-of-Stock Threshold and backorders and assign category-->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPage"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySku">
+                <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+                <argument name="value" value="$$createVirtualProduct.sku$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumns"/>
+            <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+            <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductEditPage"/>
+            <waitForPageLoad time="30" stepKey="waitProductPageLoaded"/>
+            <comment userInput="Config advanced inventory" stepKey="configAdvancedInventoryComment"/>
+            <click selector="{{AdminProductSourcesSection.advancedInventory}}" stepKey="goToAdvancedInventory"/>
+            <waitForPageLoad time="30" stepKey="waitAdvancedInventoryLoaded"/>
+            <uncheckOption selector="{{AdminAdvancedInventorySection.outOfStockThresholdUseDefault}}" stepKey="clickOnUseDefaultMinQty"/>
+            <fillField selector="{{AdminAdvancedInventorySection.outOfStockThreshold}}" userInput="-50" stepKey="setNegativeOutOfStockTreshold"/>
+            <uncheckOption selector="{{AdminAdvancedInventorySection.backordersUseDefault}}" stepKey="clickOnUseDefaultBackorders"/>
+            <selectOption selector="{{AdminAdvancedInventorySection.backorders}}" userInput="Allow Qty Below 0" stepKey="selectAllowQtyBellow0"/>
+            <click selector="{{AdminAdvancedInventoryControlsSection.done}}" stepKey="clickOnDoneToSetOutOfStockThreshold"/>
+            <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose"/>
+        </before>
+        <after>
+            <comment userInput="Disable source, as it can brake single source mode tests." stepKey="disableCustomSourceComment"/>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customStock" stepKey="deleteCustomStock"/>
+        </after>
+
+        <!-- add Product to Cart-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategory"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoad"/>
+        <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(VirtualProduct.name)}}" stepKey="openProductPage"/>
+        <waitForAjaxLoad stepKey="waitForImageLoader"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1051" stepKey="fillWrongQuantity"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="wrongAddToCart"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1050" stepKey="fillCorrectQuantity"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="correctAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
+
+        <!-- Place Order -->
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForGuestCheckoutPageLoad"/>
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{MsiCustomer1.email}}" stepKey="enterEmail"/>
+        <waitForPageLoad stepKey="waitAfterEnterEmail"/>
+        <fillField selector=".billing-address-form input[name=firstname]" userInput="{{MsiCustomer1.firstname}}" stepKey="enterFirstName"/>
+        <waitForPageLoad stepKey="waitAfterEnterFirstName"/>
+        <fillField selector=".billing-address-form input[name=lastname]" userInput="{{MsiCustomer1.lastname}}" stepKey="enterLastName"/>
+        <waitForPageLoad stepKey="waitAfterEnterLastName"/>
+        <fillField selector=".billing-address-form input[name='street[0]']" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
+        <waitForPageLoad stepKey="waitAfterEnterStreet"/>
+        <fillField selector=".billing-address-form input[name=city]" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
+        <waitForPageLoad stepKey="waitAfterEnterCity"/>
+        <selectOption selector=".billing-address-form select[name=region_id]" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
+        <waitForPageLoad stepKey="waitAfterEnterRegionId"/>
+        <fillField selector=".billing-address-form input[name=postcode]" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
+        <waitForPageLoad stepKey="waitAfterEnterPostcode"/>
+        <fillField selector=".billing-address-form input[name=telephone]" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
+        <waitForPageLoad stepKey="waitAfterEnterTelephone"/>
+        <click selector="{{CheckoutPaymentSection.update}}" stepKey="updateCustomerBillingAddress"/>
+
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="seeOrderNumber"/>
+    </test>
+</tests>

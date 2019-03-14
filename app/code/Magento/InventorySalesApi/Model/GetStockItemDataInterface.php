@@ -32,5 +32,5 @@ interface GetStockItemDataInterface
      * @return array|null
      * @throws LocalizedException
      */
-    public function execute(string $sku, int $stockId);
+    public function execute(string $sku, int $stockId): ?array;
 }

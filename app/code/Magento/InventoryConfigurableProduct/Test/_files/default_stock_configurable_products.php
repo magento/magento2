@@ -118,7 +118,7 @@ foreach ($options as $option) {
         ->setTestConfigurable($option->getValue())
         ->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE)
         ->setStatus(Status::STATUS_ENABLED)
-        ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
+        ->setStockData(['use_config_manage_stock' => 1, 'qty' => 0, 'is_qty_decimal' => 0, 'is_in_stock' => 0]);
     $product = $productRepository->save($product);
 
     $attributeValues[] = [
@@ -161,6 +161,6 @@ $product->setTypeId(Configurable::TYPE_CODE)
     ->setSku('configurable_out_of_stock')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 0]);
+    ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 1]);
 $productRepository->cleanCache();
 $productRepository->save($product);

@@ -25,7 +25,8 @@
     },
     "suggest": {
         "magento/module-webapi": "*",
-        "magento/module-bundle-sample-data": "*"
+        "magento/module-bundle-sample-data": "*",
+        "magento/module-sales-rule": "*"
     },
     "type": "magento2-module",
     "license": [

@@ -139,6 +139,7 @@
                         <dataType>text</dataType>
                         <dataScope>source_code</dataScope>
                         <label translate="true">Code</label>
+                        <labelVisible>false</labelVisible>
                     </settings>
                 </field>
                 <field name="name" formElement="input" sortOrder="20">
@@ -147,6 +148,7 @@
                         <dataType>text</dataType>
                         <dataScope>name</dataScope>
                         <label translate="true">Name</label>
+                        <labelVisible>false</labelVisible>
                     </settings>
                 </field>
                 <field name="priority" formElement="input" sortOrder="30">

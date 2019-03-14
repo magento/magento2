@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOutOfStockThresholdAppliedToSimpleInAdvancedInventoryOnProductPageTest">
+        <annotations>
+            <stories value="Out-of-Stock Threshold applied to Simple product on Product page in admin"/>
+            <title value="Out-of-Stock Threshold applied to Simple product on Product page in admin"/>
+            <description value="Out-of-Stock Threshold applied to Simple product on Product page in admin"/>
+            <testCaseId value="MSI-960"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+            <skip>
+                <issueId value="MSI-1588"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createSimpleSubCategory"/>
+            <createData entity="_minimalSource" stepKey="createCustomSource"/>
+            <createData entity="BasicMsiStock1" stepKey="createCustomStock"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <waitForPageLoad stepKey="waitForPageLoadAfterLogin"/>
+
+            <!--assign source and sales channel to stock-->
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockGridPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGridPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomStockByKeyword">
+                <argument name="keyword" value="$$createCustomStock.stock[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$createCustomStock.stock[name]$$)}}" stepKey="clickOnEditForCustomStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectWebsiteAsSalesChannel"/>
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSources"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomSourceByKeyword">
+                <argument name="keyword" value="$$createCustomSource.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$createCustomSource.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDone"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCustomStock"/>
+
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGrid"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleSubCategory" stepKey="deleteCategory1"/>
+
+            <!-- Set out of stock threshold to use system value. -->
+            <!-- todo change it "Use system value" whet metadata will be created -->
+            <magentoCLI command="config:set cataloginventory/item_options/min_qty 1" stepKey="setMinQtyToDefaultValue"/>
+
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage1">
+            <argument name="product" value="SimpleMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormInMultiSourceMode" stepKey="fillMainProductFieldsInAdmin">
+            <argument name="product" value="SimpleMsiProduct"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createSimpleSubCategory.name$$]" stepKey="searchAndSelectCategory"/>
+
+        <!-- Assign default source. -->
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesToAssignDefaultSource"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToAssignDefaultSource">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="{{_defaultSource.source_code}}"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode(_defaultSource.source_code)}}" stepKey="clickOnCheckboxToAssignDefaultSource"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDoneToAssignDefaultSource"/>
+
+        <!-- Assign custom source. -->
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesToAssignCustomSource"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToAssignCustomSource">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createCustomSource.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$createCustomSource.source[source_code]$$)}}" stepKey="clickOnCheckboxToAssignCustomSource"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDoneToAssignCustomSource"/>
+
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="{{_defaultSource.source_code}}" stepKey="seeDefaultSourceCodeInGrid"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="{{_defaultSource.name}}" stepKey="seeDefaultSourceNameInGrid"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createCustomSource.source[source_code]$$" stepKey="seeCustomSourceIdInGrid"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createCustomSource.source[name]$$" stepKey="seeCustomSourceNameInGrid"/>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillDefaultSourceQtyField"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSourceQtyField"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseSimpleProduct"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSimpleProduct">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
+        </actionGroup>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.name}}" stepKey="seeSimpleProductNameInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.sku}}" stepKey="seeSimpleProductSkuInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.price}}" stepKey="seeSimpleProductPriceInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="seeSimpleProductQuantityInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Enabled" stepKey="seeSimpleProductStatusInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Main Website" stepKey="seeSimpleProductWebsiteInFirstRow"/>
+
+        <!-- Go to storefront category page, assert product visibility. -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSimpleSubCategory.name$$)}}" stepKey="navigateToCategoryPageOnStorefront"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoadOnStorefront"/>
+        <see userInput="{{SimpleMsiProduct.name}}" stepKey="assertProductPresentOnCategoryPageOnStorefront"/>
+        <see userInput="{{SimpleMsiProduct.price}}" stepKey="assertProductPricePresentOnCategoryPageOnStorefront"/>
+
+        <!-- Set out of stock threshold in admin configuration. -->
+        <magentoCLI command="config:set cataloginventory/item_options/min_qty 101" stepKey="setMinQtyInConfiguration"/>
+        <magentoCLI command="indexer:reindex" stepKey="runIndexerReindex" />
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock"/>
+
+        <!-- Go to storefront category page, assert product isn't visible. -->
+        <reloadPage stepKey="reloadPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadToNotSeeTheProduct1"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSimpleSubCategory.name$$)}}" stepKey="navigateToCategoryPageOnStorefrontToNotSeeTheProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadToNotSeeTheProduct2"/>
+        <dontSee userInput="{{SimpleMsiProduct.name}}" stepKey="assertProductNotPresentOnCategoryPageOnStorefront"/>
+        <dontSee userInput="{{SimpleMsiProduct.price}}" stepKey="assertProductPriceNotPresentOnCategoryPageOnStorefront"/>
+    </test>
+</tests>

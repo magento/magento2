@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="GuestCustomerOrderedVirtualProductOnDefaultSourceFromHomepageTest">
+        <annotations>
+            <stories value="Add Virtual Product"/>
+            <title value="Guest ordered virtual product on default source"/>
+            <description value="Guest should be able to place order with virtual product on default source."/>
+            <testCaseId value="MSI-1296"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="_minimalSource" stepKey="customSource"/>
+            <createData entity="BasicMsiStock1" stepKey="customStock"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="customStock"/>
+                <requiredEntity createDataKey="customSource"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+
+            <comment userInput="Assign main website to default stock" stepKey="assignChannelToStockComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPageToAssignMainWebsiteToDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByNameForAssignMainWebsiteChannel">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForDefaultStockPageLoaded"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+
+            <createData entity="VirtualProduct" stepKey="product"/>
+        </before>
+        <after>
+            <comment userInput="Disable source, as it can brake single source mode tests." stepKey="disableCustomSourceComment"/>
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="navigateToSourceList"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilterForDisable"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterCustomSourceBySourceCode">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$customSource.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$customSource.source[source_code]$$)}}" stepKey="clickEditCustomSource"/>
+            <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableCustomSource"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSource"/>
+
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customStock" stepKey="deleteCustomStock"/>
+        </after>
+
+        <comment userInput="Assign category to created virtual product." stepKey="assignCategoryToProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditProduct"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumns"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductEditPage"/>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedVirtualProduct"/>
+
+        <comment userInput="Buy fifty pieces of virtual product on storefront." stepKey="buyVirtualProductComment"/>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
+
+        <actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityActionGroup" stepKey="addVirtualProductToCart">
+            <argument name="product" value="$$product$$"/>
+            <argument name="quantity" value="50"/>
+            <argument name="checkQuantity" value="1"/>
+        </actionGroup>
+
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitFroPaymentSelectionPageLoad"/>
+
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{MsiCustomer1.email}}" stepKey="enterEmail"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterEmail"/>
+        <fillField selector=".payment-method-billing-address input[name=firstname]" userInput="{{MsiCustomer1.firstname}}" stepKey="enterFirstName"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterFirstName"/>
+        <fillField selector=".payment-method-billing-address input[name=lastname]" userInput="{{MsiCustomer1.lastname}}" stepKey="enterLastName"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterLastName"/>
+        <fillField selector=".payment-method-billing-address input[name='street[0]']" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterStreet"/>
+        <fillField selector=".payment-method-billing-address input[name=city]" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterCity"/>
+        <selectOption selector=".payment-method-billing-address select[name=region_id]" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterRegionId"/>
+        <fillField selector=".payment-method-billing-address input[name=postcode]" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterPostcode"/>
+        <fillField selector=".payment-method-billing-address input[name=telephone]" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
+        <waitForPageLoad time="10" stepKey="waitAfterEnterTelephone"/>
+        <click selector="{{CheckoutPaymentSection.update}}" stepKey="updateCustomerBillingAddress"/>
+
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="seeOrderNumber"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <comment userInput="Back to admin area, to check ordered quantity" stepKey="checkOrderedQuantity"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitOrderListPageLoad"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 50" stepKey="orderedQuantity"/>
+
+        <comment userInput="Check product sources quantity and salable quantity after order placed." stepKey="checkProductQtyAfterPlaceOrderComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterPlaceOrder"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySkuToCheckQtyAfterPlaceOrder">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="950" stepKey="checkSalableQtyAfterPlaceOrder"/>
+    </test>
+</tests>

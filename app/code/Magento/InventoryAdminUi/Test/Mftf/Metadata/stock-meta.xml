@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateStock" dataType="stock" type="create"
+               auth="adminOauth" url="/V1/inventory/stocks" method="POST">
+        <contentType>application/json</contentType>
+        <object dataType="stock" key="stock">
+            <field key="id">integer</field>
+            <field key="stock_id">integer</field>
+            <field key="name">string</field>
+            <object dataType="stock_extension_attribute" key="extension_attributes">
+                <array key="sales_channels">
+                    <object dataType="sales_channel">
+                        <field key="type">string</field>
+                        <field key="code">string</field>
+                    </object>
+                </array>
+            </object>
+        </object>
+    </operation>
+    <operation name="DeleteStock" dataType="stock" type="delete"
+               auth="adminOauth" url="/V1/inventory/stocks/{return}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+</operations>

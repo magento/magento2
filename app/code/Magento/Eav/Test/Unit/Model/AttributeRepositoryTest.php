@@ -124,7 +124,12 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
         $collectionSize = 1;
 
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
+            ->setMethods(['getPageSize'])
             ->getMockForAbstractClass();
+
+        $searchCriteriaMock->expects($this->any())
+            ->method('getPageSize')
+            ->willReturn($collectionSize);
 
         $attributeMock = $this->createAttributeMock($attributeCode, $attributeId);
 

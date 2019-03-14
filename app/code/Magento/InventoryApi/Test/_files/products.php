@@ -28,12 +28,14 @@ $stockData = [
     'SKU-1' => [
         'qty' => 8.5,
         'is_in_stock' => true,
-        'manage_stock' => true
+        'manage_stock' => true,
+        'is_qty_decimal' => true
     ],
     'SKU-2' => [
         'qty' => 5,
         'is_in_stock' => true,
-        'manage_stock' => true
+        'manage_stock' => true,
+        'is_qty_decimal' => false
     ],
     'SKU-3' => [
         'qty' => 0,
@@ -42,16 +44,31 @@ $stockData = [
     ],
     'SKU-4' => [
         'use_config_manage_stock' => false
+    ],
+    'SKU-5' => [
+        'qty' => 0,
+        'is_in_stock' => false,
+        'manage_stock' => true
+    ],
+    'SKU-6' => [
+        'qty' => 0,
+        'is_in_stock' => true,
+        'manage_stock' => true,
+        'is_qty_decimal' => true,
+        'min_qty' => -3,
+        'backorders' => true
     ]
 ];
 $productsData = [
     1 => 'Orange',
     2 => 'Blue',
     3 => 'White',
-    4 => 'Purple'
+    4 => 'Purple',
+    5 => 'Black',
+    6 => 'Red'
 ];
 
-for ($i = 1; $i <= 4; $i++) {
+for ($i = 1; $i <= 6; $i++) {
     $product = $productFactory->create();
     $product->setTypeId(Type::TYPE_SIMPLE)
         ->setAttributeSetId(4)
@@ -78,7 +95,7 @@ if ($moduleManager->isEnabled('Magento_InventoryCatalog')) {
 
     // Unassign created product from default Source
     $searchCriteria = $searchCriteriaBuilder
-        ->addFilter(SourceItemInterface::SKU, ['SKU-1', 'SKU-2', 'SKU-3', 'SKU-4'], 'in')
+        ->addFilter(SourceItemInterface::SKU, ['SKU-1', 'SKU-2', 'SKU-3', 'SKU-4', 'SKU-5', 'SKU-6'], 'in')
         ->addFilter(SourceItemInterface::SOURCE_CODE, $defaultSourceProvider->getCode())
         ->create();
     $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();

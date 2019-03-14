@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCanSetOnlyXLeftThresholdForVirtualProductWithDefaultSourceTest">
+        <annotations>
+            <stories value="Admin user apply 'Only X left Threshold' for Virtual product on Default source"/>
+            <title value="Admin user apply 'Only X left Threshold' for Virtual product on Default source"/>
+            <description value="Admin user apply 'Only X left Threshold' for Virtual product on Default source"/>
+            <testCaseId value="MSI-1501"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <createData entity="Msi_US_Customer" stepKey="customer"/>
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
+            <createData entity="VirtualMsiProduct" stepKey="virtualProduct1">
+                <requiredEntity createDataKey="createCategory1"/>
+            </createData>
+
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 0" stepKey="setMinQtyToDefaultValue1"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache1"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitFroDefaultStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+
+            <comment userInput="Perform reindex and cache flush after assign default stock to main website." stepKey="reindexCacheFlushAfterAssignDefaultStockToMainWebsite"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$virtualProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="10" stepKey="fillSourceQuantityField1"/>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                    parameterArray="[$$createCategory1.name$$]" requiredAction="true"
+                                    stepKey="searchAndSelectCategory"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
+
+        <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 5" stepKey="setMinQtyToDefaultValue1"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache1"/>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+
+        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addVirtualProductToOrder">
+            <argument name="product" value="$$virtualProduct1$$"/>
+        </actionGroup>
+
+        <fillField selector=".item-qty" userInput="5" stepKey="fillQtyField1"/>
+        <click selector=".order-discounts button[title='Update Items and Quantities']" stepKey="clickOnUpdateItems1"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+
+        <comment userInput="Submit order." stepKey="submitOrderComment"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage"/>
+
+        <magentoCLI command="cache:flush" stepKey="flushCache2"/>
+
+        <amOnPage url="/$$virtualProduct1.product[sku]$$.html" stepKey="amOnProductPage2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+
+        <see selector=".availability.only" userInput="Only 5 left" stepKey="seeCurrentProductQuantity1"/>
+    </test>
+</tests>

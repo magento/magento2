@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserSetStatusForEachSourceItemTest">
+        <annotations>
+            <stories value="Admin user set for Product stock status for each Source"/>
+            <title value="Admin user set for Product stock status for each Source"/>
+            <description value="Admin user set for Product stock status for each Source"/>
+            <testCaseId value="MSI-860"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="FullSource2" stepKey="createSource2"/>
+            <createData entity="FullSource1" stepKey="createSource3"/>
+            <createData entity="FullSource2" stepKey="createSource4"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="SimpleMsiProduct" stepKey="simpleProduct1"/>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock2">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource2"/>
+            </createData>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock3">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource3"/>
+            </createData>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock4">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource4"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <waitForPageLoad stepKey="waitForPageLoadAfterLogin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$simpleProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct2">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource2.source[source_code]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct3">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource3.source[source_code]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct4">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource4.source[source_code]$$"/>
+        </actionGroup>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource1QtyField"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource2QtyField"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource3QtyField"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('3')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource4QtyField"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('4')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource5QtyField"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseSimpleProduct"/>
+        <waitForPageLoad stepKey="waitForSimpleProductGridPageLoad"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSimpleProduct">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
+        </actionGroup>
+
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{SimpleMsiProduct.name}}"  stepKey="seeSimpleProductNameInFirstRow"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{SimpleMsiProduct.sku}}" stepKey="seeSimpleProductSkuInFirstRow"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Price')}}" userInput="{{SimpleMsiProduct.price}}"  stepKey="seeSimpleProductPriceInFirstRow"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Quantity')}}" userInput="{{SimpleMsiProduct.quantity}}"  stepKey="seeSimpleProductQuantityInFirstRow"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Status')}}" userInput="Enabled" stepKey="seeSimpleProductStatusInFirstRow"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Websites')}}" userInput="Main Website" stepKey="seeSimpleProductWebsiteInFirstRow"/>
+
+        <click selector="{{AdminGridColumnsControls.cancel}}" stepKey="clickOnCancelToHideColumnsBlock"/>
+        <click selector="{{AdminGridRow.editByValue(SimpleMsiProduct.sku)}}" stepKey="clickOnEditSimpleMsiProduct"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
+
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="Out of Stock" stepKey="fillOutOfStockForCustomSource1Item"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinueToCheckCustomSource1ItemIsOutOfStock"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoadToSeeCustomSource1ItemIsOutOfStock"/>
+        <see selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="Out of Stock" stepKey="seeCustomSource1ItemIsOutOfStock"/>
+
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="In Stock" stepKey="fillInStockForCustomSource1Item"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinueToCheckCustomSource1ItemIsInStock"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoadToSeeCustomSource1ItemIsInStock"/>
+        <see selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="In Stock" stepKey="seeCustomSource1ItemIsInStock"/>
+
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('2')}}" userInput="Out of Stock" stepKey="fillOutOfStockForCustomSource2Item"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinueToCheckCustomSource2ItemIsOutOfStock"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoadToSeeCustomSource2ItemIsOutOfStock"/>
+        <see selector="{{AdminProductSourcesGrid.rowStatus('2')}}" userInput="Out of Stock" stepKey="seeCustomSource2ItemIsOutOfStock"/>
+
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('2')}}" userInput="In Stock" stepKey="fillInStockForCustomSource2Item"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinueToCheckCustomSource2ItemIsInStock"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoadToSeeCustomSource2ItemIsInStock"/>
+        <see selector="{{AdminProductSourcesGrid.rowStatus('2')}}" userInput="In Stock" stepKey="seeCustomSource2ItemIsInStock"/>
+    </test>
+</tests>

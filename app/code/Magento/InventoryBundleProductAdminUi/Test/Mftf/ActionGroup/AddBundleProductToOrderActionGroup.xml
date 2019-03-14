@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Add bundle product to order -->
+    <actionGroup name="addBundleProductToOrder">
+        <arguments>
+            <argument name="product"/>
+            <argument name="quantity" type="string" defaultValue="1"/>
+        </arguments>
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterBundle"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchBundle"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectBundleProduct"/>
+        <waitForElementVisible selector="{{AdminOrderFormBundleProductSection.quantity}}" stepKey="waitForBundleOptionLoad"/>
+        <wait time="2" stepKey="waitForOptionsToLoad"/>
+        <fillField selector="{{AdminOrderFormBundleProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+    </actionGroup>
+
+    <!--Add downloadable product to order -->
+    <actionGroup name="addDownloadableProductToOrder">
+        <arguments>
+            <argument name="product"/>
+            <argument name="link"/>
+            <argument name="quantity" defaultValue="1" type="string"/>
+        </arguments>
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterDownloadable"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchConfigurable"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectDownloadableProduct"/>
+        <waitForElementVisible selector="{{AdminOrderFormDownloadableProductSection.optionSelect(link.title)}}" stepKey="waitForLinkLoad"/>
+        <click selector="{{AdminOrderFormDownloadableProductSection.optionSelect(link.title)}}" stepKey="selectLink"/>
+        <fillField selector="{{AdminOrderFormDownloadableProductSection.quantity}}" userInput="{{quantity}}" stepKey="setQuantity"/>
+        <click selector="{{AdminOrderFormDownloadableProductSection.ok}}" stepKey="confirmConfiguration"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+    </actionGroup>
+</actionGroups>

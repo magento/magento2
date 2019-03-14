@@ -11,11 +11,12 @@ use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Index Controller
  */
-class Index extends Action
+class Index extends Action implements HttpGetActionInterface
 {
     /**
      * @see _isAllowed()
@@ -29,7 +30,7 @@ class Index extends Action
     {
         /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('Magento_InventoryApi::stock')
+        $resultPage->setActiveMenu('Magento_InventoryAdminUi::stock')
             ->addBreadcrumb(__('Sources'), __('List'));
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Stock'));
 

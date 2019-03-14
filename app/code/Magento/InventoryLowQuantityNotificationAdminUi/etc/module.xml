@@ -10,6 +10,7 @@
         <sequence>
             <module name="Magento_Catalog"/>
             <module name="Magento_Inventory"/>
+            <module name="Magento_InventoryCatalogApi"/>
             <module name="Magento_InventoryCatalog"/>
         </sequence>
     </module>

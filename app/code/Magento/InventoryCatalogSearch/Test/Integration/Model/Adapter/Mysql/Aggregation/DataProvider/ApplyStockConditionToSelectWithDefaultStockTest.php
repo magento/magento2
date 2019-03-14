@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright :copyright: Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -37,6 +37,8 @@ class ApplyStockConditionToSelectWithDefaultStockTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalogSearch/Test/_files/clean_catalog_product_index_eav_table.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalogSearch/Test/_files/clean_cataloginventory_stock_status_table.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
      *
@@ -52,6 +54,6 @@ class ApplyStockConditionToSelectWithDefaultStockTest extends TestCase
         )->distinct();
 
         $this->applyStockConditionToSelect->execute($select);
-        self::assertEquals(3, count($select->query()->fetchAll()));
+        self::assertEquals(4, count($select->query()->fetchAll()));
     }
 }

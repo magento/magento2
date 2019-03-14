@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+    <listingToolbar name="listing_top">
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+            <action name="assign_to_source">
+                <settings>
+                    <confirm>
+                        <title translate="true">Mass source assignment</title>
+                        <message translate="true">Are you sure you want to assign selected items to inventory sources?</message>
+                    </confirm>
+                    <url path="inventorycatalog/source/bulkAssign"/>
+                    <type>assign-sources</type>
+                    <label translate="true">Assign Inventory Source</label>
+                </settings>
+            </action>
+            <action name="unassign_source">
+                <settings>
+                    <confirm>
+                        <title translate="true">Unassign Inventory Source</title>
+                        <message translate="true">Are you sure you want to unassign one or more sources from the selected items?</message>
+                    </confirm>
+                    <url path="inventorycatalog/source/bulkUnassign"/>
+                    <type>unassign-sources</type>
+                    <label translate="true">Unassign Inventory Source</label>
+                </settings>
+            </action>
+            <action name="inventory_transfer">
+                <settings>
+                    <confirm>
+                        <title translate="true">Transfer Inventory To Source</title>
+                        <message translate="true">Are you sure you want to transfer the inventory of the selected items?</message>
+                    </confirm>
+                    <url path="inventorycatalog/inventory/bulkTransfer"/>
+                    <type>inventory-transfer</type>
+                    <label translate="true">Transfer Inventory To Source</label>
+                </settings>
+            </action>
+        </massaction>
+    </listingToolbar>
+</listing>

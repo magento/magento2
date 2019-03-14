@@ -52,7 +52,7 @@ class ApplyConfigurationCondition
 
         $globalManageStockEnabledCondition = implode(
             [
-                $connection->prepareSqlCondition('invtr.use_config_manage_stock', 1),
+                $connection->prepareSqlCondition('legacy_stock_item.use_config_manage_stock', 1),
                 $connection->prepareSqlCondition($configManageStock, 1),
                 $connection->prepareSqlCondition('main_table.quantity', ['lt' => $qtyCondition]),
             ],
@@ -60,8 +60,8 @@ class ApplyConfigurationCondition
         );
         $globalManageStockDisabledCondition = implode(
             [
-                $connection->prepareSqlCondition('invtr.use_config_manage_stock', 0),
-                $connection->prepareSqlCondition('invtr.manage_stock', 1),
+                $connection->prepareSqlCondition('legacy_stock_item.use_config_manage_stock', 0),
+                $connection->prepareSqlCondition('legacy_stock_item.manage_stock', 1),
                 $connection->prepareSqlCondition('main_table.quantity', ['lt' => $qtyCondition]),
             ],
             ' ' . Select::SQL_AND . ' '

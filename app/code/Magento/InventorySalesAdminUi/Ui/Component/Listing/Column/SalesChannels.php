@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesAdminUi\Ui\Component\Listing\Column;
 
-use Magento\InventorySalesAdminUi\Ui\SalesChannelNameResolverInterface;
-use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\InventorySalesAdminUi\Model\SalesChannelNameResolverInterface;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Add grid column for sales channels. Prepare data
@@ -48,7 +48,9 @@ class SalesChannels extends Column
      */
     public function prepareDataSource(array $dataSource)
     {
-        if ($dataSource['data']['totalRecords'] > 0) {
+        if (isset($dataSource['data']['totalRecords'])
+            && $dataSource['data']['totalRecords'] > 0
+        ) {
             foreach ($dataSource['data']['items'] as &$row) {
                 $row['sales_channels'] = isset($row['sales_channels'])
                     ? $this->prepareSalesChannelData($row['sales_channels']) : [];

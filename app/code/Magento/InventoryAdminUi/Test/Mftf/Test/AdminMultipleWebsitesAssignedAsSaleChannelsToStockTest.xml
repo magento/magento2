@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMultipleWebsitesAssignedAsSalesChannelsToStockTest">
+        <annotations>
+            <stories value="Assign Websites to Stocks"/>
+            <title value="Assign Multiple Websites as Sales Channels to Stock"/>
+            <description value="You should be able to assign multiple Websites as Sales Channels to a Stock."/>
+            <testCaseId value="MSI-526"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage1"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite1"/>
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="enterWebsiteName1"/>
+        <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite1.code}}" stepKey="enterWebsiteCode1"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite1"/>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage2"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite2"/>
+        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{BasicMsiWebsite2.name}}" stepKey="enterWebsiteName2"/>
+        <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite2.code}}" stepKey="enterWebsiteCode2"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite2"/>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage3"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite3"/>
+        <waitForPageLoad stepKey="waitForPageLoad3" />
+        <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{BasicMsiWebsite3.name}}" stepKey="enterWebsiteName3"/>
+        <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite3.code}}" stepKey="enterWebsiteCode3"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite3"/>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage4"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite4"/>
+        <waitForPageLoad stepKey="waitForPageLoad4" />
+        <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{BasicMsiWebsite4.name}}" stepKey="enterWebsiteName4"/>
+        <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite4.code}}" stepKey="enterWebsiteCode4"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite4"/>
+
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStocksListPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
+        <click selector="{{AdminGridRow.editByValue('Default Stock')}}" stepKey="clickOnEditForDefaultStock1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+
+        <unselectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="unSelectNewWebsite1"/>
+        <unselectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite2.name}}" stepKey="unSelectNewWebsite2"/>
+        <unselectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite3.name}}" stepKey="unSelectNewWebsite3"/>
+        <unselectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite4.name}}" stepKey="unSelectNewWebsite4"/>
+        <dontSeeOptionIsSelected selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="dontSeeBasicWebbSiteSelected1"/>
+        <dontSeeOptionIsSelected selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite2.name}}" stepKey="dontSeeBasicWebbSiteSelected2"/>
+        <dontSeeOptionIsSelected selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite3.name}}" stepKey="dontSeeBasicWebbSiteSelected3"/>
+        <dontSeeOptionIsSelected selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite4.name}}" stepKey="dontSeeBasicWebbSiteSelected4"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
+
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword1">
+            <argument name="keyword" value="$$createStock1.stock[name]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createStock1.stock[name]$$)}}" stepKey="clickOnEditForDefaultStock2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+
+        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" parameterArray="[{{BasicMsiWebsite1.name}},{{BasicMsiWebsite2.name}},{{BasicMsiWebsite3.name}},{{BasicMsiWebsite4.name}}]" stepKey="stuff"/>
+
+        <click selector="#save-button" stepKey="clickOnSaveWebSite5"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
+
+        <seeOptionIsSelected selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="seeBasicWebbSiteSelected1"/>
+        <seeOptionIsSelected selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite2.name}}" stepKey="seeBasicWebbSiteSelected2"/>
+        <seeOptionIsSelected selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite3.name}}" stepKey="seeBasicWebbSiteSelected3"/>
+        <seeOptionIsSelected selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite4.name}}" stepKey="seeBasicWebbSiteSelected4"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose2"/>
+
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword2">
+            <argument name="keyword" value="$$createStock1.stock[name]$$"/>
+        </actionGroup>
+
+        <see userInput="{{BasicMsiWebsite1.name}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeWebsiteInRow1"/>
+        <see userInput="{{BasicMsiWebsite2.name}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeWebsiteInRow2"/>
+        <see userInput="{{BasicMsiWebsite3.name}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeWebsiteInRow3"/>
+        <see userInput="{{BasicMsiWebsite4.name}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeWebsiteInRow4"/>
+    </test>
+</tests>

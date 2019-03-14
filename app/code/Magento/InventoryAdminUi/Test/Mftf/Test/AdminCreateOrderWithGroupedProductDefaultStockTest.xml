@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithGroupedProductDefaultStockTest">
+        <annotations>
+            <stories value="Create order with grouped product on default stock from admin area."/>
+            <title value="Create order with grouped product on default stock from admin area"/>
+            <description value="Check, admin user able to create order with grouped product on default stock from admin area."/>
+            <testCaseId value="MSI-1319"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
+            <createData entity="FullSource1" stepKey="customSource"/>
+            <createData entity="BasicMsiStock1" stepKey="customStock"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="customStock"/>
+                <requiredEntity createDataKey="customSource"/>
+            </createData>
+
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="VirtualProduct" stepKey="virtualProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="GroupedProduct" stepKey="groupedProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+
+            <createData entity="Msi_US_Customer" stepKey="customer"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+
+            <actionGroup ref="AdminUpdateCustomerGroupByEmailActionGroup" stepKey="updateCustomerGroup1">
+                <argument name="emailAddress" value="$customer.customer[email]$"/>
+                <argument name="customerGroup" value="General"/>
+            </actionGroup>
+
+            <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitFroDefaultStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+
+            <comment userInput="Perform reindex and cache flush after assign default stock to main website." stepKey="reindexCacheFlushAfterAssignDefaultStockToMainWebsite"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="customStock" stepKey="deleteCustomStock"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="virtualProduct" stepKey="deleteVirtualProduct"/>
+        </after>
+
+        <comment userInput="Assign category to created virtual product." stepKey="assignCategoryToVirtualProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditVirtualProduct"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$virtualProduct.sku$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumnsForVirtualProduct"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumnsVirtualProduct"/>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openVirtualProductEditPage"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategoryForGroupedProduct"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedVirtualProduct"/>
+
+        <comment userInput="Assign category to created grouped product." stepKey="assignCategoryToGroupedProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditGroupedProduct"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findGroupedProductBySku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$groupedProduct.sku$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openGroupedProductEditPage"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategoryForSimpleProduct"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterGroupedProductOptionsBySimple">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad12"/>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkSimpleProductFilterResult"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterGroupedProductOptionsByVirtual">
+            <argument name="product" value="$$virtualProduct$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkVirtualProductFilterResult"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <actionGroup ref="fillDefaultQuantityForLinkedToGroupProductInGrid" stepKey="fillDefaultQtyForSimpleProduct">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+            <argument name="qty" value="2"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad13"/>
+        <actionGroup ref="fillDefaultQuantityForLinkedToGroupProductInGrid" stepKey="fillDefaultQtyForVirtualProduct">
+            <argument name="productName" value="$$virtualProduct.name$$"/>
+            <argument name="qty" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedGroupedProduct"/>
+
+        <comment userInput="Create order with grouped product from admin area." stepKey="createOrderWithGroupedProductComment"/>
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+
+        <comment userInput="Add Simple Grouped product to order." stepKey="addSimpleGroupedProductToOrderComment"/>
+        <actionGroup ref="addGroupedProductOptionToOrderMsi" stepKey="addGroupedProductSimpleOptionToOrder">
+            <argument name="product" value="GroupedProduct"/>
+            <argument name="option" value="$$simpleProduct$$"/>
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage3"/>
+
+        <comment userInput="Add Virtual Grouped product to order." stepKey="addVirtualGroupedProductToOrderComment"/>
+        <actionGroup ref="addGroupedProductOptionToOrderMsi" stepKey="addGroupedProductVirtualOptionToOrder">
+            <argument name="product" value="$$groupedProduct$$"/>
+            <argument name="option" value="$$virtualProduct$$"/>
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <comment userInput="Select shipping method and check grand total and shipping cost." stepKey="selectShippingMethodComment"/>
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="$445.98" stepKey="seeOrderSubTotal"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="$10.00" stepKey="seeOrderShipping"/>
+        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="$455.98" stepKey="seeCorrectGrandTotal"/>
+
+        <comment userInput="Submit order." stepKey="submitOrderComment"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage"/>
+
+        <comment userInput="Check simple product quantity and salable quantity." stepKey="checkSimpleProductQuantityComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckSimpleProductQtyAfterPlaceOrder"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySkuToCheckQtyAfterPlaceOrder">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$simpleProduct.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkSimpleProductSourceQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="998" stepKey="checkSimpleProductSalableQtyAfterPlaceOrder"/>
+
+        <comment userInput="Check virtual product quantity and salable quantity." stepKey="checkVirtualProductQuantityComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckVirtualProductQtyAfterPlaceOrder"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySkuToCheckQtyAfterPlaceOrder">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$virtualProduct.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkVirtualProductSourceQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="998" stepKey="checkVirtualProductSalableQtyAfterPlaceOrder"/>
+    </test>
+</tests>

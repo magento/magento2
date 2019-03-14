@@ -38,14 +38,18 @@ define([
             /** Stub */
             turnOffInlineTranslation = function () {
                 manageInlineTranslation(false);
-            };
+            },
+
+            storedConfig;
 
         beforeEach(function () {
+            storedConfig = context.config.config;
             $(document.body).append(elWithStaticText);
             $(document.body).append(elWithVariable);
         });
 
         afterEach(function () {
+            context.config.config = storedConfig;
             elWithStaticText.remove();
             elWithVariable.remove();
         });

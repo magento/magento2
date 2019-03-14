@@ -79,7 +79,7 @@ class GetStockStatusBySkuOnDefaultStockTest extends TestCase
         return [
             ['SKU-1', 1, 5.5],
             ['SKU-2', 1, 5],
-            ['SKU-3', 0, 6],
+            ['SKU-3', 0, 0], // Qty = 6 and Status = Out_Of_Stock thus Salable Quantity = 0
         ];
     }
 

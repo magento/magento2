@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -156,6 +155,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
                     'aggregation2' => [2, 4],
                 ],
             ],
+            'total' => 1
         ];
 
         $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)

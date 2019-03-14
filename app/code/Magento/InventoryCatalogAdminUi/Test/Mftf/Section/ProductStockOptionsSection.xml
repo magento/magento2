@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="ProductStockOptionsSection">
+        <element name="CheckIfTabExpand" type="button" selector="#cataloginventory_item_options-head:not(.open)"/>
+        <element name="ProductStockOptions" type="button" selector="#cataloginventory_item_options-head"/>
+        <element name="OutOfStockThresholdSystemValue" type="button" selector="#cataloginventory_item_options_min_qty_inherit"/>
+        <element name="OutOfStockThresholdValue" type="input" selector="#cataloginventory_item_options_min_qty"/>
+        <element name="Save" type="button" selector="#save"/>
+    </section>
+</sections>

@@ -26,7 +26,7 @@
             </group>
             <group id="create_account" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Create New Account Options</label>
-                <field id="auto_group_assign" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="auto_group_assign" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Automatic Assignment to Customer Group</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
@@ -170,7 +170,7 @@
                     <comment>Use 0 to disable account locking.</comment>
                     <frontend_class>required-entry validate-digits</frontend_class>
                 </field>
-                <field id="lockout_threshold" translate="label" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="lockout_threshold" translate="label comment" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Lockout Time (minutes)</label>
                     <comment>Account will be unlocked after provided time.</comment>
                     <frontend_class>required-entry validate-digits</frontend_class>
@@ -272,16 +272,16 @@
             </group>
             <group id="address_templates" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Address Templates</label>
-                <field id="text" type="textarea" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="text" translate="label" type="textarea" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Text</label>
                 </field>
-                <field id="oneline" type="textarea" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="oneline" translate="label" type="textarea" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Text One Line</label>
                 </field>
-                <field id="html" type="textarea" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="html" translate="label" type="textarea" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>HTML</label>
                 </field>
-                <field id="pdf" type="textarea" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="pdf" translate="label" type="textarea" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>PDF</label>
                 </field>
             </group>

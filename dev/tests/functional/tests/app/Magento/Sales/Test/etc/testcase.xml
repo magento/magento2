@@ -36,7 +36,8 @@
         <step name="fillShippingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="selectPaymentMethodForOrder" />
         <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="submitOrder" />
-        <step name="submitOrder" module="Magento_Sales" />
+        <step name="submitOrder" module="Magento_Sales" next="createShipment"/>
+        <step name="createShipment" module="Magento_Sales"/>
     </scenario>
     <scenario name="CreateOrderBackendPartOneTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
@@ -54,7 +55,8 @@
         <step name="fillShippingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="selectPaymentMethodForOrder" />
         <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="submitOrder" />
-        <step name="submitOrder" module="Magento_Sales" />
+        <step name="submitOrder" module="Magento_Sales" next="createShipment" />
+        <step name="createShipment" module="Magento_Sales"/>
     </scenario>
     <scenario name="VoidAuthorizationTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
@@ -145,7 +147,8 @@
     <scenario name="CreateCreditMemoEntityTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createOrder" />
         <step name="createOrder" module="Magento_Sales" next="createInvoice" />
-        <step name="createInvoice" module="Magento_Sales" next="createCreditMemo" />
+        <step name="createInvoice" module="Magento_Sales" next="createShipment" />
+        <step name="createShipment" module="Magento_Sales" next="createCreditMemo" />
         <step name="createCreditMemo" module="Magento_Sales" />
     </scenario>
 </config>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductSourcesSection">
+        <element name="assignSources" type="button" selector="button[data-index='assign_sources_button']" timeout="30"/>
+        <element name="advancedInventory" type="button" selector="button[data-index='advanced_inventory_button']" timeout="30"/>
+    </section>
+    <section name="AdminProductSourcesGrid">
+        <element name="rowByIndex" type="input" selector="div[data-index='sources'] .data-row[data-repeat-index='{{arg1}}']" parameterized="true"/>
+        <element name="firstRow" type="input" selector="div[data-index='sources'] .data-row[data-repeat-index='0']"/>
+
+        <element name="rowId" type="button" selector=".data-row[data-repeat-index='{{arg1}}'] span[data-index='source_code']" parameterized="true"/>
+        <element name="rowName" type="button" selector=".data-row[data-repeat-index='{{arg1}}'] span[data-index='name']" parameterized="true"/>
+        <element name="rowStatus" type="button" selector=".data-row[data-repeat-index='{{arg1}}'] select[name='sources[assigned_sources][{{arg1}}][status]']" parameterized="true"/>
+        <element name="rowQty" type="button" selector=".data-row[data-repeat-index='{{arg1}}'] input[name='sources[assigned_sources][{{arg1}}][quantity]']" parameterized="true"/>
+        <element name="rowNotifyQuantity" type="button" selector=".data-row[data-repeat-index='{{arg1}}'] input[name='sources[assigned_sources][{{arg1}}][notify_stock_qty]']" parameterized="true"/>
+        <element name="rowUnAssign" type="button" selector=".data-row[data-repeat-index='{{arg1}}'] button[data-action='remove_row']" parameterized="true"/>
+        <element name="rowNotifyQuantityUseDefault" type="button" selector=".data-row[data-repeat-index='{{arg1}}'] input[name='sources[assigned_sources][{{arg1}}][notify_stock_qty_use_default]']" parameterized="true"/>
+        <element name="rowDelete" type="button" selector=".data-row[data-repeat-index='{{arg1}}'] .action-delete" parameterized="true" timeout="5"/>
+
+        <element name="rowDeleteByCode" type="button" selector="//button[ancestor::tr[contains(., '{{var1}}')]]" parameterized="true" timeout="5"/>
+    </section>
+</sections>

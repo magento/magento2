@@ -12,7 +12,7 @@ namespace Magento\InventorySourceSelectionApi\Api\Data;
  *
  * @api
  */
-interface SourceSelectionItemInterface
+interface SourceSelectionItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Get source code
@@ -41,4 +41,21 @@ interface SourceSelectionItemInterface
      * @return float
      */
     public function getQtyAvailable(): float;
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * @return \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ?SourceSelectionItemExtensionInterface;
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(
+        \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemExtensionInterface $extensionAttributes
+    ): void;
 }

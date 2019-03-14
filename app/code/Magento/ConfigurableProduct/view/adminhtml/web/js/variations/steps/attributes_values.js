@@ -233,7 +233,7 @@ define([
          */
         requestAttributes: function (attributeIds) {
             $.ajax({
-                type: 'POST',
+                type: 'GET',
                 url: this.optionsUrl,
                 data: {
                     attributes: attributeIds

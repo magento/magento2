@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Represents sales channels (which are a linkage between stocks and websites, customer groups, etc.)
  *
@@ -16,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * @api
  */
-interface SalesChannelInterface extends ExtensibleDataInterface
+interface SalesChannelInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -35,7 +33,7 @@ interface SalesChannelInterface extends ExtensibleDataInterface
      *
      * @return string|null
      */
-    public function getType();
+    public function getType(): ?string;
 
     /**
      * Set sales channel type
@@ -43,14 +41,14 @@ interface SalesChannelInterface extends ExtensibleDataInterface
      * @param string $type
      * @return void
      */
-    public function setType(string $type);
+    public function setType(string $type): void;
 
     /**
      * Get sales channel code
      *
      * @return string|null
      */
-    public function getCode();
+    public function getCode(): ?string;
 
     /**
      * Set sales channel code
@@ -58,16 +56,14 @@ interface SalesChannelInterface extends ExtensibleDataInterface
      * @param string $code
      * @return void
      */
-    public function setCode(string $code);
+    public function setCode(string $code): void;
 
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?\Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -75,5 +71,7 @@ interface SalesChannelInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(SalesChannelExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(
+        \Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface $extensionAttributes
+    ): void;
 }

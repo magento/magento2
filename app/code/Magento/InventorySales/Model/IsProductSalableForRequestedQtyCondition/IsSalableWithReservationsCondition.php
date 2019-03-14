@@ -84,10 +84,11 @@ class IsSalableWithReservationsCondition implements IsProductSalableForRequested
             return $this->productSalableResultFactory->create(['errors' => $errors]);
         }
 
-        $qtyWithReservation = $stockItemData[GetStockItemDataInterface::QUANTITY] +
-            $this->getReservationsQuantity->execute($sku, $stockId);
         /** @var StockItemConfigurationInterface $stockItemConfiguration */
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+
+        $qtyWithReservation = $stockItemData[GetStockItemDataInterface::QUANTITY] +
+            $this->getReservationsQuantity->execute($sku, $stockId);
         $qtyLeftInStock = $qtyWithReservation - $stockItemConfiguration->getMinQty() - $requestedQty;
         $isEnoughQty = (bool)$stockItemData[GetStockItemDataInterface::IS_SALABLE] && $qtyLeftInStock >= 0;
         if (!$isEnoughQty) {

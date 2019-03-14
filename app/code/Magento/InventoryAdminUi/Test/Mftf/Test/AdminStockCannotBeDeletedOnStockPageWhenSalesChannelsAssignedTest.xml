@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStockCannotBeDeletedOnStockPageWhenSalesChannelIsAssignedTest">
+        <annotations>
+            <stories value="Delete Stock"/>
+            <title value="Cannot Delete Stock from Stock Edit Page when Sales Channel assigned"/>
+            <description value="You should not be able to delete a Stock fro Stock Edit Page when a Sales Channel is assigned."/>
+            <testCaseId value="MSI-950"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="BasicMsiStock1" stepKey="createCustomStock"/>
+            <createData entity="customWebsite" stepKey="createCustomWebsite"/>
+            <!-- todo temporary solution as it is impossible to parse website_id from the post request and as a consequence can not create store group via post -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateStoreGroupActionGroup" stepKey="createStoreGroup">
+                <argument name="Website" value="customWebsite"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="StoreGroup" value="CustomStoreGroupCustomWebsite"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- todo temporary solution as it is impossible to parse website_id from the post request and as a consequence can not delete it via post -->
+            <actionGroup ref="DeleteCustomWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="$$createCustomWebsite.website[name]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStocksListPage"/>
+        <waitForPageLoad time="30" stepKey="waitForStockGridPageLoad"/>
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchStockByKeyword">
+            <argument name="keyword" value="$$createCustomStock.stock[name]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$createCustomStock.stock[name]$$)}}" stepKey="clickOnEditForCustomStock"/>
+        <waitForPageLoad time="30" stepKey="waitForDefaultStockPageLoad"/>
+        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{customWebsite.name}}" stepKey="selectCustomWebsiteAsSalesChannel"/>
+
+        <see userInput="Delete" selector="{{AdminEditStockActionsSection.delete}}" stepKey="seeDeleteButton"/>
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="waitForStockPageLoadAfterSave"/>
+        <dontSee userInput="Delete" selector="{{AdminEditStockActionsSection.delete}}" stepKey="dontSeeDeleteButton"/>
+    </test>
+</tests>

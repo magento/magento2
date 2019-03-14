@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminPriorityOfSourcesChangedByDragAndDropTest">
+        <annotations>
+            <stories value="Configuration-Stocks"/>
+            <title value="Priority of Sources assigned to the Stock changed by drag-n-drop action in the grid by Admin user"/>
+            <description value="You should be able to change Source priority on Stock edit page"/>
+            <testCaseId value="MSI-952"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="_minimalSource" stepKey="createSource1"/>
+            <createData entity="_minimalSource" stepKey="createSource2"/>
+            <createData entity="_minimalSource" stepKey="createSource3"/>
+            <createData entity="_minimalSource" stepKey="createSource4"/>
+            <createData entity="BasicMsiStock1" stepKey="createStock"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!-- Assign Sources to Stock -->
+        <actionGroup ref="AssignSourceToStockActionGroup" stepKey="assignSourceToStock1">
+            <argument name="stockName" value="$$createStock.stock[name]$$"/>
+            <argument name="sourceName" value="$$createSource1.source[name]$$"/>
+        </actionGroup>
+        <actionGroup ref="AssignSourceToStockActionGroup" stepKey="assignSourceToStock2">
+            <argument name="stockName" value="$$createStock.stock[name]$$"/>
+            <argument name="sourceName" value="$$createSource2.source[name]$$"/>
+        </actionGroup>
+        <actionGroup ref="AssignSourceToStockActionGroup" stepKey="assignSourceToStock3">
+            <argument name="stockName" value="$$createStock.stock[name]$$"/>
+            <argument name="sourceName" value="$$createSource3.source[name]$$"/>
+        </actionGroup>
+        <actionGroup ref="AssignSourceToStockActionGroup" stepKey="assignSourceToStock4">
+            <argument name="stockName" value="$$createStock.stock[name]$$"/>
+            <argument name="sourceName" value="$$createSource4.source[name]$$"/>
+        </actionGroup>
+
+        <!-- Check default Sources priority -->
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheManageStockPage"/>
+        <waitForPageLoad time="30" stepKey="waitForSourceGridLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad stepKey="waitForPageLoad" time="30"/>
+        <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters"/>
+        <waitForPageLoad time="30" stepKey="waitFiltersLoad"/>
+        <fillField userInput="$$createStock.stock[name]$$" selector="{{AdminManageStockGridFilterControls.name}}" stepKey="fillStockCodeField"/>
+        <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters"/>
+        <waitForPageLoad time="30" stepKey="waitForFiltersApplied"/>
+        <click selector="{{AdminGridRow.editByValue($$createStock.stock[name]$$)}}" stepKey="clickOnEditForStock"/>
+        <waitForPageLoad time="30" stepKey="waitForStockPageLoad"/>
+
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('0')}}" userInput="$$createSource1.source[name]$$" stepKey="checkDefaultSourcesOrder1"/>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('1')}}" userInput="$$createSource2.source[name]$$" stepKey="checkDefaultSourcesOrder2"/>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('2')}}" userInput="$$createSource3.source[name]$$" stepKey="checkDefaultSourcesOrder3"/>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('3')}}" userInput="$$createSource4.source[name]$$" stepKey="checkDefaultSourcesOrder4"/>
+
+        <!-- Change Sources priority-->
+        <dragAndDrop selector1="{{AdminEditStockSourcesSection.rowSourceDrag('3')}}"
+                     selector2="{{AdminEditStockSourcesSection.rowSourceDrag('1')}}"
+                     stepKey="dragAndDropCategory"/>
+        <waitForPageLoad time="30" stepKey="waitForMoveConfirmation"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinue"/>
+        <waitForPageLoad time="30" stepKey="waitForStockSaved"/>
+
+        <!-- Check Sources priority saved -->
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('0')}}" userInput="$$createSource1.source[name]$$" stepKey="checkChangedtSourcesOrder1"/>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('1')}}" userInput="$$createSource4.source[name]$$" stepKey="checkChangedtSourcesOrder2"/>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('2')}}" userInput="$$createSource2.source[name]$$" stepKey="checkChangedtSourcesOrder3"/>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('3')}}" userInput="$$createSource3.source[name]$$" stepKey="checkChangedtSourcesOrder4"/>
+    </test>
+</tests>

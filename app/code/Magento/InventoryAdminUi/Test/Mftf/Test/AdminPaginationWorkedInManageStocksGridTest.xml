@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminPaginationWorkedInManageStocksGridTest">
+        <annotations>
+            <stories value="Configuration-Stocks"/>
+            <title value="Pagination worked in Manage Stocks grid - Admin user"/>
+            <description value="You should be able to switch between pages on Manage Stocks grid"/>
+            <testCaseId value="MSI-936"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock1"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock2"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock3"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock4"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock5"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock6"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock7"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock8"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock9"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock10"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock11"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock12"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock13"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock14"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock15"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock16"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock17"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock18"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock19"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock20"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock21"/>
+            <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock22"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheManageStockPage"/>
+        <waitForPageLoad time="30" stepKey="waitForAdminManageStockPageLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad time="30" stepKey="waitFilterCleared"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
+            <argument name="selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="value" value="Special Stock"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitFilterApplied"/>
+        <actionGroup ref="adminDataGridSelectPerPage" stepKey="select20StocksPerPage">
+            <argument name="perPage" value="20"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitSelectPerPageApplied"/>
+        <see selector="{{AdminDataGridPaginationSection.totalPages}}" userInput="2" stepKey="seeTotalPages"/>
+        <seeNumberOfElements selector="{{AdminManageStockGridBody.dataRows}}" userInput="20" stepKey="checkNumberOfRowsOnFirstPage"/>
+        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="goToNextPage"/>
+        <waitForPageLoad time="30" stepKey="waitNextGridPageOpened"/>
+        <seeNumberOfElements selector="{{AdminManageStockGridBody.dataRows}}" userInput="2" stepKey="checkNumberOfRowsOnSecondPage"/>
+        <click selector="{{AdminDataGridPaginationSection.previousPage}}" stepKey="goToPreviousPage"/>
+        <waitForPageLoad time="30" stepKey="waitPrevGridPageOpened"/>
+        <seeNumberOfElements selector="{{AdminManageStockGridBody.dataRows}}" userInput="20" stepKey="checkNumberOfRowsOnFirstPageAgain"/>
+    </test>
+</tests>

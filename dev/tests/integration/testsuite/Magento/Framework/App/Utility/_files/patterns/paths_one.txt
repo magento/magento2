@@ -1,2 +1,2 @@
 module Magento_Module *
-theme frontent/Test/theme One*
+theme frontend/Test/theme One*

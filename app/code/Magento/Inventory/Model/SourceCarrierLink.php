@@ -30,7 +30,7 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
     /**
      * @inheritdoc
      */
-    public function getCarrierCode()
+    public function getCarrierCode(): ?string
     {
         return $this->getData(self::CARRIER_CODE);
     }
@@ -38,7 +38,7 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
     /**
      * @inheritdoc
      */
-    public function setCarrierCode($carrierCode)
+    public function setCarrierCode(?string $carrierCode): void
     {
         $this->setData(self::CARRIER_CODE, $carrierCode);
     }
@@ -46,15 +46,17 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
     /**
      * @inheritdoc
      */
-    public function getPosition()
+    public function getPosition(): ?int
     {
-        return $this->getData(self::POSITION);
+        return $this->getData(self::POSITION) === null ?
+            null:
+            (int)$this->getData(self::POSITION);
     }
 
     /**
      * @inheritdoc
      */
-    public function setPosition($position)
+    public function setPosition(?int $position): void
     {
         $this->setData(self::POSITION, $position);
     }
@@ -62,7 +64,7 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): ?SourceCarrierLinkExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
@@ -75,7 +77,7 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(SourceCarrierLinkExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(SourceCarrierLinkExtensionInterface $extensionAttributes): void
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }

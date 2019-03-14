@@ -15,6 +15,7 @@ use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Registry;
 
 class AssignWebsiteToDefaultStockTest extends TestCase
 {
@@ -38,12 +39,18 @@ class AssignWebsiteToDefaultStockTest extends TestCase
      */
     private $storeManager;
 
+    /**
+     * @var Registry
+     */
+    private $registry;
+
     protected function setUp()
     {
         $this->websiteFactory = Bootstrap::getObjectManager()->get(WebsiteFactory::class);
         $this->stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
         $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
     }
 
     public function testThatMainWebsiteIsAssignedToDefaultStock()
@@ -93,5 +100,19 @@ class AssignWebsiteToDefaultStockTest extends TestCase
         $salesChannelOfCreatedWebsite = reset($salesChannelsOfCreatedWebsite);
         self::assertEquals($website->getCode(), $salesChannelOfCreatedWebsite->getCode());
         self::assertEquals(SalesChannelInterface::TYPE_WEBSITE, $salesChannelOfCreatedWebsite->getType());
+        $this->deleteWebsite($website);
+    }
+
+    /**
+     * @param Website $website
+     * @return void
+     */
+    private function deleteWebsite(Website $website)
+    {
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+        $website->delete();
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', false);
     }
 }

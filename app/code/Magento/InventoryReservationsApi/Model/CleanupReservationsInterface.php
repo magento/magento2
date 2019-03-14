@@ -20,5 +20,5 @@ interface CleanupReservationsInterface
      *
      * @return void
      */
-    public function execute();
+    public function execute(): void;
 }

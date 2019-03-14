@@ -15,11 +15,6 @@
                 </arguments>
             </block>
         </referenceBlock>
-        <block class="Magento\Theme\Block\Html\Header" name="header" as="header">
-            <arguments>
-                <argument name="show_part" xsi:type="string">welcome</argument>
-            </arguments>
-        </block>
         <move element="header" destination="header.links" before="-"/>
         <move element="register-link" destination="header.links"/>
         <move element="top.links" destination="customer"/>

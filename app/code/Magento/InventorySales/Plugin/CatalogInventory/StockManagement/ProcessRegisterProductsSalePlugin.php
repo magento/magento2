@@ -111,7 +111,7 @@ class ProcessRegisterProductsSalePlugin
         }
 
         $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
-        $stockId = (int)$this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
+        $stockId = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
         $this->checkItemsQuantity->execute($itemsBySku, $stockId);
         return [];
     }

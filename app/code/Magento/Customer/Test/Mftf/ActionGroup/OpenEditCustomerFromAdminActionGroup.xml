@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="OpenEditCustomerFromAdminActionGroup">
+        <arguments>
+            <argument name="customer"/>
+        </arguments>
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilter"/>
+        <fillField userInput="{{customer.email}}" selector="{{AdminCustomerFiltersSection.emailInput}}" stepKey="filterEmail"/>
+        <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEdit"/>
+        <waitForPageLoad stepKey="waitForPageLoad2" />
+    </actionGroup>
+    <actionGroup name="OpenEditCustomerAddressFromAdminActionGroup">
+        <arguments>
+            <argument name="address"/>
+        </arguments>
+        <click selector="{{AdminCustomerAccountInformationSection.addressesButton}}" stepKey="openAddressesTab"/>
+        <waitForElementVisible selector="{{AdminCustomerAddressFiltersSection.filtersButton}}" stepKey="waitForComponentLoad"/>
+        <click selector="{{AdminCustomerAddressFiltersSection.filtersButton}}" stepKey="openAddressesFilter"/>
+        <fillField userInput="{{address.firstname}}" selector="{{AdminCustomerAddressFiltersSection.firstnameInput}}" stepKey="fillFirstname"/>
+        <fillField userInput="{{address.lastname}}" selector="{{AdminCustomerAddressFiltersSection.lastnameInput}}" stepKey="fillLastname"/>
+        <fillField userInput="{{address.telephone}}" selector="{{AdminCustomerAddressFiltersSection.telephoneInput}}" stepKey="fillCountry"/>
+        <fillField userInput="{{address.postcode}}" selector="{{AdminCustomerAddressFiltersSection.postcodeInput}}" stepKey="fillPostcode"/>
+        <click selector="{{AdminCustomerAddressFiltersSection.applyFilter}}" stepKey="applyAddressesFilter"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <click selector="{{AdminCustomerAddressGridSection.firstRowSelectActionLink}}" stepKey="clickAction"/>
+        <click selector="{{AdminCustomerAddressGridSection.firstRowEditActionLink}}" stepKey="clickEdit"/>
+        <waitForPageLoad stepKey="waitForModalWindow" />
+    </actionGroup>
+    <actionGroup name="DeleteCustomerFromAdminActionGroup">
+        <arguments>
+            <argument name="customer" defaultValue="CustomerEntityOne"/>
+        </arguments>
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{customer.email}}" stepKey="fillSearch"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickSubmit"/>
+        <waitForAjaxLoad stepKey="waitForLoadAjax"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.multicheck}}" stepKey="selectAll"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.actions}}" stepKey="clickActions"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.delete}}" stepKey="clickDelete"/>
+        <waitForAjaxLoad stepKey="waitForLoadConfirmation"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="A total of 1 record(s) were deleted" stepKey="seeSuccess"/>
+    </actionGroup>
+    <actionGroup name="AdminClearCustomersFiltersActionGroup">
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="amOnCustomersPage"/>
+        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+    </actionGroup>
+</actionGroups>

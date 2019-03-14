@@ -28,7 +28,6 @@ $cartId = $cartManagement->createEmptyCart();
 $cart = $cartRepository->get($cartId);
 $cart->setCustomerEmail('admin@example.com');
 $cart->setCustomerIsGuest(true);
-$cart->setStoreId($storeRepository->getActiveStoreByCode('default')->getId());
 
 /** @var AddressInterface $address */
 $address = $addressFactory->create(
@@ -46,7 +45,7 @@ $address = $addressFactory->create(
         ]
     ]
 );
-$cart->setReservedOrderId('test_order_virt_1');
+$cart->setReservedOrderId('created_order_for_test');
 $cart->setBillingAddress($address);
 $cart->setShippingAddress($address);
 $cart->getPayment()->setMethod('checkmo');

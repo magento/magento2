@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Add Bundle Product to Cart from the category page with specified quantity to cart -->
+    <actionGroup name="StorefrontAddCategoryBundleProductToCartActionGroup">
+        <arguments>
+            <argument name="product"/>
+            <argument name="quantity" defaultValue="1" type="string"/>
+        </arguments>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart" />
+        <waitForElementVisible selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="waitForBundleProductPageLoad"/>
+        <click selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="clickCustomizeAndAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontProductActionSection.quantity}}" stepKey="waitForQuantityVisible"/>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="{{quantity}}" stepKey="fillBundleProductQuantity"/>
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddBundleProductToCart"/>
+        <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCart(product.name)}}" time="30" stepKey="assertMessage"/>
+        <waitForText userInput="{{quantity}}" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
+    </actionGroup>
+</actionGroups>

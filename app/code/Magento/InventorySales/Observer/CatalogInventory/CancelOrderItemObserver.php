@@ -7,18 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Observer\CatalogInventory;
 
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
-use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\InventorySales\Model\GetItemsToCancelFromOrderItem;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
-use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\Framework\Exception\LocalizedException;
 
 class CancelOrderItemObserver implements ObserverInterface
 {
@@ -33,11 +32,6 @@ class CancelOrderItemObserver implements ObserverInterface
     private $salesEventFactory;
 
     /**
-     * @var GetSkusByProductIdsInterface
-     */
-    private $getSkusByProductIds;
-
-    /**
      * @var PlaceReservationsForSalesEventInterface
      */
     private $placeReservationsForSalesEvent;
@@ -48,82 +42,71 @@ class CancelOrderItemObserver implements ObserverInterface
     private $salesChannelFactory;
 
     /**
-     * @var ItemToSellInterfaceFactory
-     */
-    private $itemsToSellFactory;
-
-    /**
      * @var WebsiteRepositoryInterface
      */
     private $websiteRepository;
 
     /**
+     * @var GetItemsToCancelFromOrderItem
+     */
+    private $getItemsToCancelFromOrderItem;
+
+    /**
      * @param Processor $priceIndexer
      * @param SalesEventInterfaceFactory $salesEventFactory
-     * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
      * @param SalesChannelInterfaceFactory $salesChannelFactory
-     * @param ItemToSellInterfaceFactory $itemsToSellFactory
      * @param WebsiteRepositoryInterface $websiteRepository
+     * @param GetItemsToCancelFromOrderItem $getItemsToCancelFromOrderItem
      */
     public function __construct(
         Processor $priceIndexer,
         SalesEventInterfaceFactory $salesEventFactory,
-        GetSkusByProductIdsInterface $getSkusByProductIds,
         PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent,
         SalesChannelInterfaceFactory $salesChannelFactory,
-        ItemToSellInterfaceFactory $itemsToSellFactory,
-        WebsiteRepositoryInterface $websiteRepository
+        WebsiteRepositoryInterface $websiteRepository,
+        GetItemsToCancelFromOrderItem $getItemsToCancelFromOrderItem
     ) {
         $this->priceIndexer = $priceIndexer;
         $this->salesEventFactory = $salesEventFactory;
-        $this->getSkusByProductIds = $getSkusByProductIds;
         $this->placeReservationsForSalesEvent = $placeReservationsForSalesEvent;
         $this->salesChannelFactory = $salesChannelFactory;
-        $this->itemsToSellFactory = $itemsToSellFactory;
         $this->websiteRepository = $websiteRepository;
+        $this->getItemsToCancelFromOrderItem = $getItemsToCancelFromOrderItem;
     }
 
     /**
      * @param EventObserver $observer
      * @return void
-     * @throws LocalizedException
      */
-    public function execute(EventObserver $observer)
+    public function execute(EventObserver $observer): void
     {
-        /** @var \Magento\Sales\Model\Order\Item $item */
-        $item = $observer->getEvent()->getItem();
-        $children = $item->getChildrenItems();
-        $qty = $item->getQtyOrdered() - max($item->getQtyShipped(), $item->getQtyInvoiced()) - $item->getQtyCanceled();
-        if ($item->getId() && $item->getProductId() && empty($children) && $qty) {
-            $productSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
-                [$item->getProductId()]
-            )[$item->getProductId()];
+        /** @var OrderItem $item */
+        $orderItem = $observer->getEvent()->getItem();
 
-            $itemToSell = $this->itemsToSellFactory->create([
-                'sku' => $productSku,
-                'qty' => (float)$qty
-            ]);
+        $itemsToCancel = $this->getItemsToCancelFromOrderItem->execute($orderItem);
 
-            $websiteId = $item->getStore()->getWebsiteId();
-            $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
-            $salesChannel = $this->salesChannelFactory->create([
-                'data' => [
-                    'type' => SalesChannelInterface::TYPE_WEBSITE,
-                    'code' => $websiteCode
-                ]
-            ]);
-
-            /** @var SalesEventInterface $salesEvent */
-            $salesEvent = $this->salesEventFactory->create([
-                'type' => SalesEventInterface::EVENT_ORDER_CANCELED,
-                'objectType' => SalesEventInterface::OBJECT_TYPE_ORDER,
-                'objectId' => (string)$item->getOrderId()
-            ]);
-
-            $this->placeReservationsForSalesEvent->execute([$itemToSell], $salesChannel, $salesEvent);
+        if (empty($itemsToCancel)) {
+            return;
         }
 
-        $this->priceIndexer->reindexRow($item->getProductId());
+        $websiteId = $orderItem->getStore()->getWebsiteId();
+        $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
+        $salesChannel = $this->salesChannelFactory->create([
+            'data' => [
+                'type' => SalesChannelInterface::TYPE_WEBSITE,
+                'code' => $websiteCode
+            ]
+        ]);
+
+        $salesEvent = $this->salesEventFactory->create([
+            'type' => SalesEventInterface::EVENT_ORDER_CANCELED,
+            'objectType' => SalesEventInterface::OBJECT_TYPE_ORDER,
+            'objectId' => (string)$orderItem->getOrderId()
+        ]);
+
+        $this->placeReservationsForSalesEvent->execute($itemsToCancel, $salesChannel, $salesEvent);
+
+        $this->priceIndexer->reindexRow($orderItem->getProductId());
     }
 }

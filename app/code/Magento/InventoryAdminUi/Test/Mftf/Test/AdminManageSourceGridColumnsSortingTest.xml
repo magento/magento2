@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminManageSourceGridColumnsSortingTest">
+        <annotations>
+            <stories value="Columns sorting order changed by Admin user"/>
+            <title value="Columns sorting order changed in Manage Source grid by Admin user"/>
+            <description value="You should be able to Change Columns Sorting Order in Manage Source grid."/>
+            <testCaseId value="MSI-862"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="sort_order_test"/>
+        </annotations>
+
+        <before>
+            <createData entity="SourceForColumnsSortingOrderTestOnly" stepKey="createCustomSource1"/>
+            <createData entity="SourceForColumnsSortingOrderTestOnly" stepKey="createCustomSource2"/>
+            <createData entity="SourceForColumnsSortingOrderTestOnly" stepKey="createCustomSource3"/>
+            <createData entity="SourceForColumnsSortingOrderTestOnly" stepKey="createCustomSource4"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Disable source as it can broke single source mode tests. -->
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersForSourceToDisableCustomSource1"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSourcesToDisableCustomSource1">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$createCustomSource1.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$createCustomSource1.source[source_code]$$)}}" stepKey="clickOnEditCustomSourceToDisableCustomSource1"/>
+            <waitForPageLoad time="30" stepKey="waitForSourceEditPageLoadToDisableCustomSource1"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="clickIsEnabledToDisableCustomSource1"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSourceToDisableCustomSource1"/>
+
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersForSourceToDisableCustomSource2"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSourcesToDisableCustomSource2">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$createCustomSource2.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$createCustomSource2.source[source_code]$$)}}" stepKey="clickOnEditCustomSourceToDisableCustomSource2"/>
+            <waitForPageLoad time="30" stepKey="waitForSourceEditPageLoadToDisableCustomSource2"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="clickIsEnabledToDisableCustomSource2"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSourceToDisableCustomSource2"/>
+
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersForSourceToDisableCustomSource3"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSourcesToDisableCustomSource3">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$createCustomSource3.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$createCustomSource3.source[source_code]$$)}}" stepKey="clickOnEditCustomSourceToDisableCustomSource3"/>
+            <waitForPageLoad time="30" stepKey="waitForSourceEditPageLoadToDisableCustomSource3"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="clickIsEnabledToDisableCustomSource3"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSourceToDisableCustomSource3"/>
+
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersForSourceToDisableCustomSource4"/>            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSourcesToDisableCustomSource4">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$createCustomSource4.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$createCustomSource4.source[source_code]$$)}}" stepKey="clickOnEditCustomSourceToDisableCustomSource4"/>
+            <waitForPageLoad time="30" stepKey="waitForSourceEditPageLoadToDisableCustomSource4"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="clickIsEnabledToDisableCustomSource4"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSourceToDisableCustomSource4"/>
+            
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesGridPage"/>
+        <waitForPageLoad time="30" stepKey="waitForSourceGridPageLoad"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="source_for_columns_sorting_test_only"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForFilterApplied"/>
+
+        <comment userInput="Reset sorting for Code to avoid wrong behavior" stepKey="resetSortingForCodeComment"/>
+        <click selector="{{AdminGridHeaders.headerByName('Name')}}" stepKey="clickOnNameHeaderToResetSorting"/>
+        <waitForPageLoad time="10" stepKey="waitForSourceGridPageLoadAfterResetSorting"/>
+
+        <comment userInput="Ascend sorting for Code" stepKey="ascendSortingForCodeComment"/>
+        <click selector="{{AdminGridHeaders.headerByName('Code')}}" stepKey="clickOnCodeHeaderToSetAscendSorting"/>
+        <waitForPageLoad time="10" stepKey="waitForSourceGridPageLoadAfterSettingAscendSortingForCode"/>
+        <see userInput="$$createCustomSource1.source[return]$$" selector="{{AdminGridRow.rowByIndex('0')}}" stepKey="seeCustomSource1CodeInRow1WhenAscendSorting"/>
+        <see userInput="$$createCustomSource2.source[return]$$" selector="{{AdminGridRow.rowByIndex('1')}}" stepKey="seeCustomSource2CodeInRow2WhenAscendSorting"/>
+        <see userInput="$$createCustomSource3.source[return]$$" selector="{{AdminGridRow.rowByIndex('2')}}" stepKey="seeCustomSource3CodeInRow3WhenAscendSorting"/>
+        <see userInput="$$createCustomSource4.source[return]$$" selector="{{AdminGridRow.rowByIndex('3')}}" stepKey="seeCustomSource4CodeInRow4WhenAscendSorting"/>
+
+        <comment userInput="Descend sorting for Code" stepKey="descendSortingForCodeComment"/>
+        <click selector="{{AdminGridHeaders.headerByName('Code')}}" stepKey="clickOnCodeHeaderToSetDescendSorting"/>
+        <waitForPageLoad time="10" stepKey="waitForSourceGridPageLoadAfterSettingDescendSortingForCode"/>
+        <see userInput="$$createCustomSource4.source[return]$$" selector="{{AdminGridRow.rowByIndex('0')}}" stepKey="seeCustomSource4CodeInRow1WhenDescendSorting"/>
+        <see userInput="$$createCustomSource3.source[return]$$" selector="{{AdminGridRow.rowByIndex('1')}}" stepKey="seeCustomSource3CodeInRow2WhenDescendSorting"/>
+        <see userInput="$$createCustomSource2.source[return]$$" selector="{{AdminGridRow.rowByIndex('2')}}" stepKey="seeCustomSource2CodeInRow3WhenDescendSorting"/>
+        <see userInput="$$createCustomSource1.source[return]$$" selector="{{AdminGridRow.rowByIndex('3')}}" stepKey="seeCustomSource1CodeInRow4WhenDescendSorting"/>
+
+        <comment userInput="Ascend sorting for Name" stepKey="ascendSortingForNameComment"/>
+        <click selector="{{AdminGridHeaders.headerByName('Name')}}" stepKey="clickOnNameHeaderToSetAscendSorting"/>
+        <waitForPageLoad time="10" stepKey="waitForSourceGridPageLoadAfterSettingAscendSortingForName"/>
+        <see userInput="$$createCustomSource1.source[name]$$" selector="{{AdminGridRow.rowByIndex('0')}}" stepKey="seeCustomSource1NameInRow1WhenAscendSorting"/>
+        <see userInput="$$createCustomSource2.source[name]$$" selector="{{AdminGridRow.rowByIndex('1')}}" stepKey="seeCustomSource2NameInRow2WhenAscendSorting"/>
+        <see userInput="$$createCustomSource3.source[name]$$" selector="{{AdminGridRow.rowByIndex('2')}}" stepKey="seeCustomSource3NameInRow3WhenAscendSorting"/>
+        <see userInput="$$createCustomSource4.source[name]$$" selector="{{AdminGridRow.rowByIndex('3')}}" stepKey="seeCustomSource4NameInRow4WhenAscendSorting"/>
+
+        <comment userInput="Descend sorting for Name" stepKey="descendSortingForNameComment"/>
+        <click selector="{{AdminGridHeaders.headerByName('Name')}}" stepKey="clickOnNameHeaderToSetDescendSorting"/>
+        <waitForPageLoad time="10" stepKey="waitForSourceGridPageLoadAfterSettingDescendSortingForName"/>
+        <see userInput="$$createCustomSource4.source[name]$$" selector="{{AdminGridRow.rowByIndex('0')}}" stepKey="seeCustomSource4NameInRow1WhenDescendSorting"/>
+        <see userInput="$$createCustomSource3.source[name]$$" selector="{{AdminGridRow.rowByIndex('1')}}" stepKey="seeCustomSource3NameInRow2WhenDescendSorting"/>
+        <see userInput="$$createCustomSource2.source[name]$$" selector="{{AdminGridRow.rowByIndex('2')}}" stepKey="seeCustomSource2NameInRow3WhenDescendSorting"/>
+        <see userInput="$$createCustomSource1.source[name]$$" selector="{{AdminGridRow.rowByIndex('3')}}" stepKey="seeCustomSource1NameInRow4WhenDescendSorting"/>
+    </test>
+</tests>

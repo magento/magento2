@@ -7,10 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryApi\Api;
 
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\InventoryApi\Api\Data\StockInterface;
-use Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
-
 /**
  * In Magento 2 Repository considered as an implementation of Facade pattern which provides a simplified interface
  * to a larger body of code responsible for Domain Entity management
@@ -37,7 +33,7 @@ interface StockRepositoryInterface
      * @throws \Magento\Framework\Validation\ValidationException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(StockInterface $stock): int;
+    public function save(\Magento\InventoryApi\Api\Data\StockInterface $stock): int;
 
     /**
      * Get Stock data by given stockId. If you want to create plugin on get method, also you need to create separate
@@ -47,7 +43,7 @@ interface StockRepositoryInterface
      * @return \Magento\InventoryApi\Api\Data\StockInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get(int $stockId): StockInterface;
+    public function get(int $stockId): \Magento\InventoryApi\Api\Data\StockInterface;
 
     /**
      * Find Stocks by given SearchCriteria
@@ -56,14 +52,17 @@ interface StockRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\StockSearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null): StockSearchResultsInterface;
+    public function getList(
+        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null
+    ): \Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
 
     /**
      * Delete the Stock data by stockId. If stock is not found do nothing
      *
      * @param int $stockId
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function deleteById(int $stockId);
+    public function deleteById(int $stockId): void;
 }

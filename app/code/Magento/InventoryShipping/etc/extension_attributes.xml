@@ -9,4 +9,7 @@
     <extension_attributes for="Magento\Sales\Api\Data\ShipmentInterface">
         <attribute code="source_code" type="string" />
     </extension_attributes>
+    <extension_attributes for="Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface">
+        <attribute code="source_code" type="string" />
+    </extension_attributes>
 </config>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSourcePrioritySelectionAlgorithmSimpleProductCustomStockTest">
+        <annotations>
+            <stories value="Source Selection Algorithm by source priority with simple product on custom stock."/>
+            <title value="Source Selection Algorithm by source priority with simple product on custom stock."/>
+            <description value="Check, 'Source Selection Algorithm' by source priority select corrects source for simple product on custom stock."/>
+            <testCaseId value="MSI-1126"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="FullSource1" stepKey="lowPrioritySource"/>
+            <createData entity="FullSource2" stepKey="highPrioritySource"/>
+            <createData entity="BasicMsiStock1" stepKey="customStock"/>
+            <createData entity="Msi_US_Customer" stepKey="customer"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+
+            <comment userInput="Assign sources and sales channel to stock." stepKey="assignSourcesToStockComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGridLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomStockByName">
+                <argument name="keyword" value="$$customStock.stock[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$customStock.stock[name]$$)}}" stepKey="clickEditCustomStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectWebsiteAsSalesChannelForCustomStock"/>
+
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesToAssignHighPrioritySource"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchHighPrioritySourceByName">
+                <argument name="keyword" value="$$highPrioritySource.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$highPrioritySource.source[name]$$)}}" stepKey="selectHighPrioritySourceForCustomStock"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickDoneOnHighPrioritySourcesAssignment"/>
+
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesToAssignLowPrioritySource"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchLowPrioritySourceByName">
+                <argument name="keyword" value="$$lowPrioritySource.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$lowPrioritySource.source[name]$$)}}" stepKey="selectLowPrioritySourceForCustomStock"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickDoneOnLowPrioritySourcesAssignment"/>
+
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCustomStock"/>
+
+            <comment userInput="Perform reindex and cache flush after save custom stock." stepKey="reindexCacheFlushAfterSaveStockComment"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterStockSave"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterStockSave"/>
+        </before>
+        <after>
+            <comment userInput="Disable sources, as they can brake single source mode tests." stepKey="disableSourcesComment"/>
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="navigateToSourceList"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilter"/>
+
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterLowPrioritySourceBySourceCode">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$lowPrioritySource.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$lowPrioritySource.source[source_code]$$)}}" stepKey="clickEditLowPrioritySource"/>
+            <waitForPageLoad time="30" stepKey="waitForLowPrioritySourceEditPageLoad"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableLowPrioritySource"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseLowPrioritySource"/>
+
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterHighPrioritySourceBySourceCode">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$highPrioritySource.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$highPrioritySource.source[source_code]$$)}}" stepKey="clickEditHighPrioritySource"/>
+            <waitForPageLoad time="30" stepKey="waitForHighPrioritySourceEditPageLoad"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableHighPrioritySource"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseHighPrioritySource"/>
+
+            <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitFroDefaultStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <comment userInput="Assign custom sources to created simple product." stepKey="assignSourcesToProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditProduct"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumns"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductEditPage"/>
+
+        <comment userInput="Remove default source from simple product." stepKey="removeDefaultSourceFromSimpleProductComment"/>
+        <click selector="{{AdminProductSourcesGrid.rowUnAssign('0')}}" stepKey="removeDefaultSource"/>
+
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSourceToAssignLowPrioritySource"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="searchLowPrioritySource">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$lowPrioritySource.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$lowPrioritySource.source[source_code]$$)}}" stepKey="selectLowPrioritySource"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="doneSelectLowPrioritySource"/>
+
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSourceToAssignHighPrioritySource"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="searchHighPrioritySource">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$highPrioritySource.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$highPrioritySource.source[source_code]$$)}}" stepKey="selectHighPrioritySource"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="doneSelectHighPrioritySource"/>
+
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$lowPrioritySource.source[source_code]$$" stepKey="checkLowPrioritySourceCode"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$lowPrioritySource.source[name]$$" stepKey="checkLowPrioritySourceName"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$highPrioritySource.source[source_code]$$" stepKey="checkHighPrioritySourceCode"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$highPrioritySource.source[name]$$" stepKey="checkHighPrioritySourceName"/>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleProduct.quantity}}" stepKey="fillSourceQtyFieldForLowPrioritySource"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="{{SimpleProduct.quantity}}" stepKey="fillSourceQtyFieldForHighPrioritySource"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedSimpleProduct"/>
+
+        <comment userInput="Login and buy fifty pieces of simple product on storefront." stepKey="buySimpleProductComment"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$product$$"/>
+            <argument name="quantity" value="50"/>
+            <argument name="checkQuantity" value="1"/>
+        </actionGroup>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectShippingMethod"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="navigateToSecondCheckoutStep"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+
+        <comment userInput="Back to admin area, to check product salable quantity, apply 'Source Selection Algorithm' and create shipment" stepKey="createShipmentComment"/>
+
+        <comment userInput="Check product sources quantity and salable quantity after order placed." stepKey="checkProductQtyAfterPlaceOrderComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterPlaceOrder"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySkuToCheckQtyAfterPlaceOrder">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$highPrioritySource.source[name]$$)}}" userInput="1000" stepKey="checkLowPrioritySourceQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$lowPrioritySource.source[name]$$)}}" userInput="1000" stepKey="checkHighPrioritySourceQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',$$customStock.stock[name]$$)}}" userInput="1950" stepKey="checkSalableQtyAfterPlaceOrder"/>
+
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
+
+        <comment userInput="Run 'Source Selection Algorithm'" stepKey="runSourceSelectionAlgorithm"/>
+        <click selector="{{AdminSourceSelectionFormSection.sourceSelectionAlgorithmToggle}}" stepKey="openSourceSelectionAlgorithmList"/>
+        <click selector="{{AdminSourceSelectionFormSection.selectSourcePriority}}" stepKey="selectSourcePriorityAlgorithm"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
+
+        <comment userInput="Check, 'Source Selection Algorithm' by source priority applied correctly." stepKey="checkAlgorithmAppliedComment"/>
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowProductSku('0')}}" userInput="$$product.sku$$" stepKey="checkProductSku"/>
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowQtyToShip('0')}}" userInput="50" stepKey="checkQtyToShip"/>
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesName('0','0')}}" userInput="$$highPrioritySource.source[name]$$" stepKey="CheckHighPrioritySourceName"/>
+        <seeInField selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesQtyToDeduct('0','0')}}" userInput="50" stepKey="CheckHighPrioritySourceQty"/>
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesName('0','1')}}" userInput="$$lowPrioritySource.source[name]$$" stepKey="CheckLowPrioritySourceName"/>
+        <seeInField selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesQtyToDeduct('0','1')}}" userInput="0" stepKey="CheckLowPrioritySourceQty"/>
+
+        <comment userInput="Select source and proceed to shipment" stepKey="selectSourceAndProceedToShipmentComment"/>
+        <selectOption selector="{{AdminSourceSelectionFormSection.sourceSelection}}" userInput="$$highPrioritySource.source[name]$$" stepKey="selectSourceToCreateShipment"/>
+        <click selector="{{AdminSourceSelectionFormSection.proceedToShipment}}" stepKey="createShipment"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
+
+        <see selector="{{AdminShipmentOrderInformationSection.orderStatus}}" userInput="Pending" stepKey="seeShipmentOrderStatus"/>
+        <actionGroup ref="verifyBasicShipmentInformation" stepKey="checkBasicShipmentOrderInfo">
+            <argument name="customer" value="$$customer$$"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+
+        <actionGroup ref="seeProductInShipmentItems" stepKey="checkProductInShipment">
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+
+        <see selector="{{AdminShipmentInventorySection.sourceList}}" userInput="$$highPrioritySource.source[name]$$" stepKey="checkSourceNameOnShipmentPage"/>
+
+        <comment userInput="Submit and check shipment" stepKey="submitAndCheckShipmentComment"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageShipping"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="checkShipmentCreateSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="checkOrderStatus"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 50" stepKey="checkShippedQuantity"/>
+
+        <comment userInput="Check product sources quantity and salable quantity after shipment created." stepKey="checkProductQtyAfterCreateShipmentComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterCreateShipment"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySkuToCheckQtyAfterCreateShipment">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$highPrioritySource.source[name]$$)}}" userInput="950" stepKey="checkHighPrioritySourceQtyAfterCreateShipment"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$lowPrioritySource.source[name]$$)}}" userInput="1000" stepKey="checkLowPrioritySourceQtyAfterCreateShipment"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',$$customStock.stock[name]$$)}}" userInput="1950" stepKey="checkSalableQtyAfterCreateShipment"/>
+    </test>
+</tests>

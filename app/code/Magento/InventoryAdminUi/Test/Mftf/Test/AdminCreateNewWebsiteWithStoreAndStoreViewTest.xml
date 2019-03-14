@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateNewWebsiteWithStoreAndStoreViewTest">
+        <annotations>
+            <stories value="Add Website with Store and Store View"/>
+            <title value="Add a New Website with a Store and Store View"/>
+            <description value="You should be able to add a New Website then assign a Store and Store View to it."/>
+            <testCaseId value="MSI-796"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage1"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite1"/>
+        <waitForPageLoad stepKey="waitForPageLoad" time="30" />
+        <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="enterWebsiteName1"/>
+        <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite1.code}}" stepKey="enterWebsiteCode1"/>
+        <click selector="{{StoreConfigSection.Save}}" stepKey="clickOnSaveWebSite1"/>
+
+        <fillField selector="{{AdminStoresGridSection.websiteFilterTextField}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="searchForWebsiteTitle1"/>
+        <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="clickOnTheSearchButton1"/>
+
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="seeTheNewWebsite1"/>
+
+        <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="clickOnCreateStoreButton1"/>
+        <selectOption selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="selectWebsiteFromDropDown1"/>
+        <fillField selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" userInput="{{BasicMsiStore.name}}" stepKey="fillStoreName1"/>
+        <fillField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{BasicMsiStore.code}}" stepKey="fillStoreCode1"/>
+        <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="Default Category" stepKey="selectRootCategory1"/>
+        <click selector="{{StoreConfigSection.Save}}" stepKey="clickOnSaveWebSite2"/>
+
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="seeTheNewWebsite2"/>
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiStore.name}}" stepKey="seeTheNewStore2"/>
+
+        <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="clickOnCreateStoreView1"/>
+        <selectOption selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="{{BasicMsiStore.name}}" stepKey="selectStoreName1"/>
+        <fillField selector="{{AdminNewStoreSection.storeNameTextField}}" userInput="{{BasicMsiStoreView.name}}" stepKey="fillStoreViewName1"/>
+        <fillField selector="{{AdminNewStoreSection.storeCodeTextField}}" userInput="{{BasicMsiStoreView.code}}" stepKey="fillStoreViewCode1"/>
+        <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="{{BasicMsiStoreView.status}}" stepKey="setStoreViewStatus1"/>
+        <click selector="{{StoreConfigSection.Save}}" stepKey="clickOnSaveWebSite3"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="clickOnOk1"/>
+
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="seeTheNewWebsite3"/>
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiStore.name}}" stepKey="seeTheNewStore3"/>
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiStoreView.name}}" stepKey="seeTheNewStoreView3"/>
+    </test>
+</tests>

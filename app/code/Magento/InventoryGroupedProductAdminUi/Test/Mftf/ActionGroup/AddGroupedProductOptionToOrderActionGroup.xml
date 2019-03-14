@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Add grouped product option to order -->
+    <actionGroup name="addGroupedProductOptionToOrderMsi">
+        <arguments>
+            <argument name="product"/>
+            <argument name="option"/>
+            <argument name="quantity" type="string" defaultValue="1"/>
+        </arguments>
+
+        <click selector="#add_products" stepKey="clickAddProducts"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterConfigurable"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchGrouped"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectGroupedProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <fillField selector="{{AdminOrderFormGroupedProductSection.optionQty(option.sku)}}" userInput="{{quantity}}" stepKey="fillOptionQuantity"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+    </actionGroup>
+
+    <!--Fill product min quantity in group products grid-->
+    <actionGroup name="fillDefaultQuantityForLinkedToGroupProductInGrid">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="qty" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminAddedProductsToGroupGrid.inputByProductName(productName)}}" userInput="{{qty}}" stepKey="fillDefaultQtyForLinkedProduct"/>
+    </actionGroup>
+</actionGroups>

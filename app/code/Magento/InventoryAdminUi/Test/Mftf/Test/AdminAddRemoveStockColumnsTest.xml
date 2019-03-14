@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddRemoveStockColumnsTest">
+        <annotations>
+            <stories value="Add/Remove Grid Columns"/>
+            <title value="Add/Remove Stock Grid Columns"/>
+            <description value="You should be able to toggle Columns on/off in the Stock Grid."/>
+            <testCaseId value="MSI-620"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnStockListPage1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        </before>
+        <after>
+            <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen1"/>
+            <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen1"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
+        <see selector="{{AdminManageSourcesGridColumnControls.dropDown}}" userInput="5 out of 5 visible" stepKey="seeAllColumnsAreActive1"/>
+
+        <see selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="seeTheHeaderId1"/>
+        <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeTheHeaderName1"/>
+        <see selector="{{AdminGridHeaders.headerByName('Sales Channels')}}" userInput="Sales Channels" stepKey="seeTheHeaderSalesChannel1"/>
+        <see selector="{{AdminGridHeaders.headerByName('Assigned Sources')}}" userInput="Assigned Sources" stepKey="seeTheHeaderAssignedSources1"/>
+        <see selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="seeTheHeaderAction1"/>
+
+        <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen2"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetColumnReaders1"/>
+        <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen3"/>
+        <click selector="{{AdminGridColumnsControls.columnName('ID')}}" stepKey="disableIdColumn1"/>
+        <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen4"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Name')}}" stepKey="disableNameColumn1"/>
+        <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen5"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Sales Channels')}}" stepKey="disableSalesChannelColumn1"/>
+        <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen6"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Assigned Sources')}}" stepKey="disableAssignedSourcesColumn1"/>
+
+        <see selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="seeTheHeaderAction2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="dontSeeIdColumn1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="dontSeeNameColumn1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Sales Channels')}}" userInput="Sales Channels" stepKey="dontSeeSalesChannelColumn1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Assigned Sources')}}" userInput="Assigned Sources" stepKey="dontSeeAssignedSourcesColumn1"/>
+
+        <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen7"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetColumnReaders2"/>
+        <see selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="seeTheHeaderId2"/>
+        <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeTheHeaderName2"/>
+        <see selector="{{AdminGridHeaders.headerByName('Sales Channels')}}" userInput="Sales Channels" stepKey="seeTheHeaderSalesChannel2"/>
+        <see selector="{{AdminGridHeaders.headerByName('Assigned Sources')}}" userInput="Assigned Sources" stepKey="seeTheHeaderAssignedSources2"/>
+        <see selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="seeTheHeaderAction3"/>
+
+        <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen8"/>
+        <click selector="{{AdminGridColumnsControls.columnName('ID')}}" stepKey="disableIdColumn3"/>
+        <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen9"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Name')}}" stepKey="disableNameColumn3"/>
+        <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen10"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Action')}}" stepKey="disableActionColumn3"/>
+        <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen11"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Assigned Sources')}}" stepKey="disableAssignedSourcesColumn3"/>
+        <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen12"/>
+        <click selector="{{AdminGridColumnsControls.cancel}}" stepKey="clickOnCancel1"/>
+
+        <see selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="seeTheHeaderId3"/>
+        <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeTheHeaderName3"/>
+        <see selector="{{AdminGridHeaders.headerByName('Sales Channels')}}" userInput="Sales Channels" stepKey="seeTheHeaderSalesChannel3"/>
+        <see selector="{{AdminGridHeaders.headerByName('Assigned Sources')}}" userInput="Assigned Sources" stepKey="seeTheHeaderAssignedSources3"/>
+        <see selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="seeTheHeaderAction4"/>
+    </test>
+</tests>

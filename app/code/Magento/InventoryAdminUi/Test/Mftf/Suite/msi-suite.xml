@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Suite/etc/suiteSchema.xsd">
+    <suite name="MSI_Single_Mode">
+        <before>
+            <magentoCLI stepKey="enableBackup" command = "config:set system/backup/functionality_enabled 1" />
+            <magentoCLI stepKey="dbBackup" command="setup:backup" arguments="--db" />
+            <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
+            <magentoCLI stepKey="enableStockManagement" command="config:set cataloginventory/item_options/manage_stock 1"/>
+        </before>
+        <include>
+            <group name="single_mode"/>
+        </include>
+        <exclude>
+            <group name="skip"/>
+            <group name="multi_mode"/>
+        </exclude>
+        <after>
+            <magentoCLI stepKey="dbRollback" command="setup:rollback" arguments="--db-file%3D%24%28ls%20..%2F..%2F..%2F..%2Fvar%2Fbackups%29%20-n" />
+            <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
+            <magentoCLI stepKey="disableBackup" command = "config:set system/backup/functionality_enabled 0" />
+        </after>
+    </suite>
+    <suite name="MSI_Multi_Mode">
+        <before>
+            <magentoCLI stepKey="enableBackup" command = "config:set system/backup/functionality_enabled 1" />
+            <magentoCLI stepKey="dbBackup" command="setup:backup" arguments="--db" />
+            <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
+        </before>
+        <include>
+            <group name="multi_mode"/>
+        </include>
+        <exclude>
+            <group name="skip"/>
+            <group name="single_mode"/>
+        </exclude>
+        <after>
+            <magentoCLI stepKey="dbRollback" command="setup:rollback" arguments="--db-file%3D%24%28ls%20..%2F..%2F..%2F..%2Fvar%2Fbackups%29%20-n" />
+            <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
+            <magentoCLI stepKey="disableBackup" command = "config:set system/backup/functionality_enabled 0" />
+        </after>
+    </suite>
+    <suite name="MSI_Sort_Order_Tests">
+        <before>
+            <magentoCLI stepKey="enableBackup" command = "config:set system/backup/functionality_enabled 1" />
+            <magentoCLI stepKey="dbBackup" command="setup:backup" arguments="--db" />
+            <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
+        </before>
+        <include>
+            <group name="sort_order_test"/>
+        </include>
+        <exclude>
+            <group name="skip"/>
+            <group name="single_mode"/>
+            <group name="multi_mode"/>
+        </exclude>
+        <after>
+            <magentoCLI stepKey="dbRollback" command="setup:rollback" arguments="--db-file%3D%24%28ls%20..%2F..%2F..%2F..%2Fvar%2Fbackups%29%20-n" />
+            <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
+            <magentoCLI stepKey="disableBackup" command = "config:set system/backup/functionality_enabled 0" />
+        </after>
+    </suite>
+</suites>

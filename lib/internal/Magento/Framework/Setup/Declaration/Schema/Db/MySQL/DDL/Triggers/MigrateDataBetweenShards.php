@@ -62,7 +62,7 @@ class MigrateDataBetweenShards implements DDLTriggerInterface
     /**
      * @inheritdoc
      */
-    public function getCallback(ElementHistory $elementHistory) : Callable
+    public function getCallback(ElementHistory $elementHistory) : callable
     {
         /** @var Table $newTable */
         $newTable = $elementHistory->getNew();

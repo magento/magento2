@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Navigate to create order page (New Order -> Select Customer)-->
+    <actionGroup name="navigateToNewOrderPageExistingCustomer">
+        <arguments>
+            <argument name="customer"/>
+        </arguments>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
+        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <waitForPageLoad stepKey="waitForCustomerGridLoad"/>
+        <fillField userInput="{{customer.email}}" selector="{{AdminOrderCustomersGridSection.emailInput}}" stepKey="filterEmail"/>
+        <click selector="{{AdminOrderCustomersGridSection.apply}}" stepKey="applyFilter"/>
+        <waitForPageLoad stepKey="waitForFilteredCustomerGridLoad"/>
+        <click selector="{{AdminOrderCustomersGridSection.firstRow}}" stepKey="clickOnCustomer"/>
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoad" />
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+    </actionGroup>
+</actionGroups>

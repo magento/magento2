@@ -18,11 +18,13 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\InventoryAdminUi\Model\Source\SourceCoordinatesDataProcessor;
 
 /**
  * InlineEdit Controller
  */
-class InlineEdit extends Action
+class InlineEdit extends Action implements HttpPostActionInterface
 {
     /**
      * @see _isAllowed()
@@ -40,18 +42,26 @@ class InlineEdit extends Action
     private $sourceRepository;
 
     /**
+     * @var SourceCoordinatesDataProcessor
+     */
+    private $sourceCoordinatesDataProcessor;
+
+    /**
      * @param Context $context
      * @param DataObjectHelper $dataObjectHelper
      * @param SourceRepositoryInterface $sourceRepository
+     * @param SourceCoordinatesDataProcessor $sourceCoordinatesDataProcessor
      */
     public function __construct(
         Context $context,
         DataObjectHelper $dataObjectHelper,
-        SourceRepositoryInterface $sourceRepository
+        SourceRepositoryInterface $sourceRepository,
+        SourceCoordinatesDataProcessor $sourceCoordinatesDataProcessor
     ) {
         parent::__construct($context);
         $this->dataObjectHelper = $dataObjectHelper;
         $this->sourceRepository = $sourceRepository;
+        $this->sourceCoordinatesDataProcessor = $sourceCoordinatesDataProcessor;
     }
 
     /**
@@ -67,6 +77,7 @@ class InlineEdit extends Action
             foreach ($requestData as $itemData) {
                 try {
                     $sourceCode = $itemData[SourceInterface::SOURCE_CODE];
+                    $itemData = $this->sourceCoordinatesDataProcessor->execute($itemData);
                     $source = $this->sourceRepository->get($sourceCode);
                     $this->dataObjectHelper->populateWithArray($source, $itemData, SourceInterface::class);
                     $this->sourceRepository->save($source);

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminIndexManagementSection">
+        <element name="catalogSearchCheckbox" type="checkbox" selector="input[value='catalogsearch_fulltext']"/>
+        <element name="indexerCheckbox" type="checkbox" selector="input[value='{{var1}}']" parameterized="true"/>
+        <element name="massActionSelect" type="select" selector="#gridIndexer_massaction-select"/>
+        <element name="massActionSubmit" type="button" selector="#gridIndexer_massaction-form button"/>
+        <element name="indexerSelect" type="select" selector="//select[contains(@class,'action-select-multiselect')]"/>
+        <element name="indexerStatus" type="text" selector="//tr[descendant::td[contains(., '{{status}}')]]//*[contains(@class, 'col-indexer_status')]/span" parameterized="true"/>
+        <element name="successMessage" type="text" selector="//*[@data-ui-id='messages-message-success']"/>
+    </section>
+</sections>

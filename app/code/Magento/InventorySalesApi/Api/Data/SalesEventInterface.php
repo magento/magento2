@@ -12,7 +12,7 @@ namespace Magento\InventorySalesApi\Api\Data;
  *
  * @api
  */
-interface SalesEventInterface
+interface SalesEventInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for event types
@@ -30,9 +30,35 @@ interface SalesEventInterface
     const OBJECT_TYPE_ORDER = 'order';
     /**#@-*/
 
+    /**
+     * @return string
+     */
     public function getType(): string;
 
+    /**
+     * @return string
+     */
     public function getObjectType(): string;
 
+    /**
+     * @return string
+     */
     public function getObjectId(): string;
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * @return \Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ?\Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface;
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(
+        \Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface $extensionAttributes
+    ): void;
 }

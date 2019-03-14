@@ -30,6 +30,16 @@
             <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
         </arguments>
     </type>
+    <type name="Magento\InventoryIndexer\Model\ResourceModel\GetProductIdsBySourceItemIds">
+        <arguments>
+            <argument name="productTableName" xsi:type="string">catalog_product_entity</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryIndexer\Indexer\SelectBuilder">
+        <arguments>
+            <argument name="productTableName" xsi:type="string">catalog_product_entity</argument>
+        </arguments>
+    </type>
     <!-- Source Item -->
     <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
         <plugin name="reindex_after_source_items_save" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterSourceItemsSavePlugin"/>
@@ -54,13 +64,6 @@
     <type name="Magento\InventoryIndexer\Model\StockIndexTableNameResolver">
         <arguments>
             <argument name="dimensionName" xsi:type="string">stock_</argument>
-        </arguments>
-    </type>
-    <type name="Magento\InventoryIndexer\Model\ResourceModel\GetProductIdsBySourceItemIds">
-        <arguments>
-            <argument name="tableNameSourceItem" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::TABLE_NAME_SOURCE_ITEM</argument>
-            <argument name="sourceItemIdFieldName" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::ID_FIELD_NAME</argument>
-            <argument name="productInterfaceClassName" xsi:type="string">Magento\Catalog\Api\Data\ProductInterface</argument>
         </arguments>
     </type>
 </config>

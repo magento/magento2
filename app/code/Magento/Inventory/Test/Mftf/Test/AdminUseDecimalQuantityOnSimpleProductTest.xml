@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUseDecimalQuantityOnSimpleProductTest">
+        <annotations>
+            <stories value="Admin user applied 'Use decimals' to Simple product in Advanced inventory on  product page"/>
+            <title value="Admin user applied 'Use decimals' to Simple product in Advanced inventory on  product page"/>
+            <description value="Admin user applied 'Use decimals' to Simple product in Advanced inventory on  product page"/>
+            <testCaseId value="MSI-1472"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <comment userInput="Enable 'Manage Stock' configuration." stepKey="revertManageStockConfigurationComment"/>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableMangeStock"/>
+
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="SimpleMsiProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="simpleCategory1"/>
+            </createData>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$simpleProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                    parameterArray="[$$simpleCategory1.name$$]" stepKey="searchAndSelectCategory"/>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillDefaultQuantityField1"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillDefaultQuantityField2"/>
+
+        <click selector="button[data-index='advanced_inventory_button']" stepKey="clickOnAdvancedInventory1"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad1"/>
+
+        <selectOption selector="select[name='product[stock_data][is_qty_decimal]']" userInput="Yes" stepKey="selectQtyUsesDecimals1"/>
+        <click selector=".product_form_product_form_advanced_inventory_modal .page-actions button" stepKey="clickOnDone1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection1"/>
+        <fillField userInput="{{SimpleMsiProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillProductUrlKey1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton1"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage1"/>
+
+        <amOnPage url="{{SimpleMsiProduct.urlKey}}.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad8"/>
+
+        <fillField selector="#qty" userInput="1.25" stepKey="fillQtyField1"/>
+
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCart1"/>
+        <waitForPageLoad stepKey="waitForPageLoad9"/>
+
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnTheShoppingCart1"/>
+        <waitForPageLoad stepKey="waitForPageLoad10"/>
+
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="clickOnProceedToCheckout1"/>
+
+        <fillField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.street}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.city}}" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutShippingGuestInfoSection.region}}" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
+
+        <click selector=".action.continue" stepKey="clickOnUpdate1"/>
+        <waitForPageLoad stepKey="waitForPageLoad19"/>
+
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder1"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="seeOrderNumber1"/>
+    </test>
+</tests>

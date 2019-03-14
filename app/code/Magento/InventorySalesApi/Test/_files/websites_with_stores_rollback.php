@@ -21,8 +21,10 @@ $websiteCodes = ['eu_website', 'us_website', 'global_website'];
 foreach ($websiteCodes as $websiteCode) {
     /** @var Website $website */
     $website = Bootstrap::getObjectManager()->create(Website::class);
-    $website->load($websiteCode);
-    $website->delete();
+    $website->load($websiteCode, 'code');
+    if ($website->getId()) {
+        $website->delete();
+    }
 }
 
 $registry->unregister('isSecureArea');

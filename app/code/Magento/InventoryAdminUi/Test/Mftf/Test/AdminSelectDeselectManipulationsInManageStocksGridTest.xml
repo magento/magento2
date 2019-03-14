@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSelectDeselectManipulationsInManageStocksGridTest">
+        <annotations>
+            <stories value="Configuration-Stocks"/>
+            <title value="Select / Deselect manipulations in Manage Stocks grid by Admin user"/>
+            <description value="You should be able to mass Select and Deselect stocks on Manage Stocks grid"/>
+            <testCaseId value="MSI-859"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="sort_order_test"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock1"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock2"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock3"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock4"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock5"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock6"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock7"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock8"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock9"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock10"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock11"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock12"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock13"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock14"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock15"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock16"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock17"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock18"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock19"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock20"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock21"/>
+            <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock22"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+
+            <deleteData createDataKey="createStock1" stepKey="deleteStock1"/>
+            <deleteData createDataKey="createStock2" stepKey="deleteStock2"/>
+            <deleteData createDataKey="createStock3" stepKey="deleteStock3"/>
+            <deleteData createDataKey="createStock4" stepKey="deleteStock4"/>
+            <deleteData createDataKey="createStock5" stepKey="deleteStock5"/>
+            <deleteData createDataKey="createStock6" stepKey="deleteStock6"/>
+            <deleteData createDataKey="createStock7" stepKey="deleteStock7"/>
+            <deleteData createDataKey="createStock8" stepKey="deleteStock8"/>
+            <deleteData createDataKey="createStock9" stepKey="deleteStock9"/>
+            <deleteData createDataKey="createStock10" stepKey="deleteStock10"/>
+            <deleteData createDataKey="createStock11" stepKey="deleteStock11"/>
+            <deleteData createDataKey="createStock12" stepKey="deleteStock12"/>
+            <deleteData createDataKey="createStock13" stepKey="deleteStock13"/>
+            <deleteData createDataKey="createStock14" stepKey="deleteStock14"/>
+            <deleteData createDataKey="createStock15" stepKey="deleteStock15"/>
+            <deleteData createDataKey="createStock16" stepKey="deleteStock16"/>
+            <deleteData createDataKey="createStock17" stepKey="deleteStock17"/>
+            <deleteData createDataKey="createStock18" stepKey="deleteStock18"/>
+            <deleteData createDataKey="createStock19" stepKey="deleteStock19"/>
+            <deleteData createDataKey="createStock20" stepKey="deleteStock20"/>
+            <deleteData createDataKey="createStock21" stepKey="deleteStock21"/>
+            <deleteData createDataKey="createStock22" stepKey="deleteStock22"/>
+        </after>
+
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheManageStockPage"/>
+        <waitForPageLoad time="30" stepKey="waitForAdminManageStockPageLoad"/>
+        <click selector="{{AdminGridDefaultViewControls.defaultView}}" stepKey="clickOnDefaultView3"/>
+        <click selector="{{AdminGridDefaultViewControls.viewByName('Default View')}}" stepKey="clickOnDefaultViewMenuOption1"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad time="30" stepKey="waitFilterCleared"/>
+        <actionGroup ref="adminDataGridSelectPerPage" stepKey="select20StocksPerPage">
+            <argument name="perPage" value="20"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitSelectPerPageApplied"/>
+        <click selector="{{AdminManageStockGridControls.multicheckDropdown}}" stepKey="openDropdownToSelectAll"/>
+        <click selector="{{AdminManageStockGridControls.multicheckOption('Select All')}}" stepKey="selectAll"/>
+        <seeCheckboxIsChecked selector="#idscheck1" stepKey="checkDefaultStockSelectedOnFirstPage"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock1.return$$)}}" stepKey="checkStockSelectedOnFirstPage1"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock2.return$$)}}" stepKey="checkStockSelectedOnFirstPage2"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock3.return$$)}}" stepKey="checkStockSelectedOnFirstPage3"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock4.return$$)}}" stepKey="checkStockSelectedOnFirstPage4"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock5.return$$)}}" stepKey="checkStockSelectedOnFirstPage5"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock6.return$$)}}" stepKey="checkStockSelectedOnFirstPage6"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock7.return$$)}}" stepKey="checkStockSelectedOnFirstPage7"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock8.return$$)}}" stepKey="checkStockSelectedOnFirstPage8"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock9.return$$)}}" stepKey="checkStockSelectedOnFirstPage9"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock10.return$$)}}" stepKey="checkStockSelectedOnFirstPage10"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock11.return$$)}}" stepKey="checkStockSelectedOnFirstPage11"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock12.return$$)}}" stepKey="checkStockSelectedOnFirstPage12"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock13.return$$)}}" stepKey="checkStockSelectedOnFirstPage13"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock14.return$$)}}" stepKey="checkStockSelectedOnFirstPage14"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock15.return$$)}}" stepKey="checkStockSelectedOnFirstPage15"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock16.return$$)}}" stepKey="checkStockSelectedOnFirstPage16"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock17.return$$)}}" stepKey="checkStockSelectedOnFirstPage17"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock18.return$$)}}" stepKey="checkStockSelectedOnFirstPage18"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock19.return$$)}}" stepKey="checkStockSelectedOnFirstPage19"/>
+        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="goToNextPage"/>
+        <waitForPageLoad time="30" stepKey="waitNextGridPageOpened"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock20.return$$)}}" stepKey="checkStockSelectedOnSecondPage1"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock21.return$$)}}" stepKey="checkStockSelectedOnSecondPage2"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock22.return$$)}}" stepKey="checkStockSelectedOnSecondPage3"/>
+        <click selector="{{AdminManageStockGridControls.multicheckDropdown}}" stepKey="openDropdownToDeselectAll"/>
+        <click selector="{{AdminManageStockGridControls.multicheckOption('Deselect All')}}" stepKey="deselectAll"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock20.return$$)}}" stepKey="checkStockNotSelectedOnSecondPage1"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock21.return$$)}}" stepKey="checkStockNotSelectedOnSecondPage2"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock22.return$$)}}" stepKey="checkStockNotSelectedOnSecondPage3"/>
+        <click selector="{{AdminDataGridPaginationSection.previousPage}}" stepKey="goToPreviousPage"/>
+        <waitForPageLoad time="30" stepKey="waitPrevGridPageOpened"/>
+        <dontSeeCheckboxIsChecked selector="#idscheck1" stepKey="checkDefaultStockSNotelectedOnFirstPage"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock1.return$$)}}" stepKey="checkStockSNotelectedOnFirstPage1"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock2.return$$)}}" stepKey="checkStockSNotelectedOnFirstPage2"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock3.return$$)}}" stepKey="checkStockSNotelectedOnFirstPage3"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock4.return$$)}}" stepKey="checkStockSNotelectedOnFirstPage4"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock5.return$$)}}" stepKey="checkStockSNotelectedOnFirstPage5"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock6.return$$)}}" stepKey="checkStockSNotelectedOnFirstPage6"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock7.return$$)}}" stepKey="checkStockSNotelectedOnFirstPage7"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock8.return$$)}}" stepKey="checkStockSNotelectedOnFirstPage8"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock9.return$$)}}" stepKey="checkStockSNotelectedOnFirstPage9"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock10.return$$)}}" stepKey="checkStockNotSelectedOnFirstPage10"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock11.return$$)}}" stepKey="checkStockNotSelectedOnFirstPage11"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock12.return$$)}}" stepKey="checkStockNotSelectedOnFirstPage12"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock13.return$$)}}" stepKey="checkStockNotSelectedOnFirstPage13"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock14.return$$)}}" stepKey="checkStockNotSelectedOnFirstPage14"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock15.return$$)}}" stepKey="checkStockNotSelectedOnFirstPage15"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock16.return$$)}}" stepKey="checkStockNotSelectedOnFirstPage16"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock17.return$$)}}" stepKey="checkStockNotSelectedOnFirstPage17"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock18.return$$)}}" stepKey="checkStockNotSelectedOnFirstPage18"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock19.return$$)}}" stepKey="checkStockNotSelectedOnFirstPage19"/>
+        <click selector="{{AdminManageStockGridControls.multicheckDropdown}}" stepKey="openDropdownToSelectAllOnPage"/>
+        <click selector="{{AdminManageStockGridControls.multicheckOption('Select All on This Page')}}" stepKey="selectAllOnPage"/>
+        <seeCheckboxIsChecked selector="#idscheck1" stepKey="checkDefaultStockSelectedOnFirstPage2"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock1.return$$)}}" stepKey="checkStockSelectedOnFirstPage21"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock2.return$$)}}" stepKey="checkStockSelectedOnFirstPage22"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock3.return$$)}}" stepKey="checkStockSelectedOnFirstPage23"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock4.return$$)}}" stepKey="checkStockSelectedOnFirstPage24"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock5.return$$)}}" stepKey="checkStockSelectedOnFirstPage25"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock6.return$$)}}" stepKey="checkStockSelectedOnFirstPage26"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock7.return$$)}}" stepKey="checkStockSelectedOnFirstPage27"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock8.return$$)}}" stepKey="checkStockSelectedOnFirstPage28"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock9.return$$)}}" stepKey="checkStockSelectedOnFirstPage29"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock10.return$$)}}" stepKey="checkStockSelectedOnFirstPage30"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock11.return$$)}}" stepKey="checkStockSelectedOnFirstPage31"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock12.return$$)}}" stepKey="checkStockSelectedOnFirstPage32"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock13.return$$)}}" stepKey="checkStockSelectedOnFirstPage33"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock14.return$$)}}" stepKey="checkStockSelectedOnFirstPage34"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock15.return$$)}}" stepKey="checkStockSelectedOnFirstPage35"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock16.return$$)}}" stepKey="checkStockSelectedOnFirstPage36"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock17.return$$)}}" stepKey="checkStockSelectedOnFirstPage37"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock18.return$$)}}" stepKey="checkStockSelectedOnFirstPage38"/>
+        <seeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock19.return$$)}}" stepKey="checkStockSelectedOnFirstPage39"/>
+        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="openNextPage"/>
+        <waitForPageLoad time="30" stepKey="waitNextPageOpened"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock20.return$$)}}" stepKey="checkStockNotSelectedOnSecondPage4"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock21.return$$)}}" stepKey="checkStockNotSelectedOnSecondPage5"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageStockGridBody.stockSelectedCheckbox($$createStock22.return$$)}}" stepKey="checkStockNotSelectedOnSecondPage6"/>
+    </test>
+</tests>

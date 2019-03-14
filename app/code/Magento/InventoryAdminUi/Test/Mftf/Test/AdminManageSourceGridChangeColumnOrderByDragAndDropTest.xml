@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminManageSourceGridChangeColumnOrderByDragAndDropTest">
+        <annotations>
+            <stories value="Column drag and drop changed column order."/>
+            <title value="Column drag and drop changed column order in Manage Sources grid by Admin user."/>
+            <description value="Column drag and drop changed column order in Manage Sources grid by Admin user."/>
+            <testCaseId value="MSI-932"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="_minimalSource" stepKey="createCustomSource"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <waitForPageLoad stepKey="waitForPageLoadAfterLogin"/>
+
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesGridPage"/>
+            <waitForPageLoad stepKey="waitForTheSourcesGridPageLoad"/>
+            <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnTheColumnsButton"/>
+            <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+            <click selector="{{AdminGridColumnsControls.cancel}}" stepKey="clickOnCancelToCloseDropdownMenu"/>
+        </before>
+        <after>
+            <dragAndDrop selector1="{{AdminGridHeaders.headerByName('Is Enabled')}}"
+                         selector2="{{AdminGridHeaders.headerByName('Name')}}"
+                         stepKey="dragAndDropIsEnabledColumnToDefaultPosition"/>
+            <waitForPageLoad time="30" stepKey="waitForMoveConfirmationAfterMoveIsEnabledColumnToDefaultPosition"/>
+
+            <!-- Disable source as it can broke single source mode tests. -->
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersForSource"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSources">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$createCustomSource.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$createCustomSource.source[source_code]$$)}}" stepKey="clickOnEditCustomSource"/>
+            <waitForPageLoad time="30" stepKey="waitForSourceEditPageLoad"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="clickIsEnabledToDisable"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSource"/>
+
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <grabMultiple selector="{{AdminGridHeaders.columnsNames}}" stepKey="grabColumnsDefaultOrder" />
+        <assertEquals stepKey="assertDefaultOrder">
+            <actualResult type="variable">grabColumnsDefaultOrder</actualResult>
+            <expectedResult type="array">["Code", "Name", "Is Enabled", "Action"]</expectedResult>
+        </assertEquals>
+
+        <dragAndDrop selector1="{{AdminGridHeaders.headerByName('Code')}}"
+                     selector2="{{AdminGridHeaders.headerByName('Is Enabled')}}"
+                     stepKey="dragAndDroCodepColumn"/>
+        <waitForPageLoad time="30" stepKey="waitForMoveConfirmationAfterCodeColumnMoved"/>
+        <grabMultiple selector="{{AdminGridHeaders.columnsNames}}" stepKey="grabColumnsAfterCodeColumnMoved" />
+        <assertEquals stepKey="assertOrderAfterCodeColumnMoved">
+            <actualResult type="variable">grabColumnsAfterCodeColumnMoved</actualResult>
+            <expectedResult type="array">["Name", "Is Enabled", "Code", "Action"]</expectedResult>
+        </assertEquals>
+
+        <dragAndDrop selector1="{{AdminGridHeaders.headerByName('Name')}}"
+                     selector2="{{AdminGridHeaders.headerByName('Is Enabled')}}"
+                     stepKey="dragAndDropNameColumn"/>
+        <waitForPageLoad time="30" stepKey="waitForMoveConfirmationAfterNameColumnMoved"/>
+        <grabMultiple selector="{{AdminGridHeaders.columnsNames}}" stepKey="grabColumnsAfterNameColumnMoved" />
+        <assertEquals stepKey="assertOrderAfterNameColumnMoved">
+            <actualResult type="variable">grabColumnsAfterNameColumnMoved</actualResult>
+            <expectedResult type="array">["Is Enabled", "Name", "Code", "Action"]</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

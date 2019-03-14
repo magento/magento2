@@ -7,20 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Plugin\SalesInventory;
 
-use Magento\InventorySales\Model\ReturnProcessor\Request\ItemsToRefundInterfaceFactory;
-use Magento\InventorySales\Model\ReturnProcessor\ProcessRefundItemsInterface;
+use Magento\InventorySalesApi\Model\ReturnProcessor\Request\ItemsToRefundInterfaceFactory;
+use Magento\InventorySalesApi\Model\ReturnProcessor\ProcessRefundItemsInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 use Magento\SalesInventory\Model\Order\ReturnProcessor;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 
 class ProcessReturnQtyOnCreditMemoPlugin
 {
     /**
-     * @var GetSkusByProductIdsInterface
+     * @var GetSkuFromOrderItemInterface
      */
-    private $getSkusByProductIds;
+    private $getSkuFromOrderItem;
 
     /**
      * @var ItemsToRefundInterfaceFactory
@@ -33,18 +35,34 @@ class ProcessReturnQtyOnCreditMemoPlugin
     private $processRefundItems;
 
     /**
-     * @param GetSkusByProductIdsInterface $getSkusByProductIds
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemManagementAllowedForProductType;
+
+    /**
+     * @var GetProductTypesBySkusInterface
+     */
+    private $getProductTypesBySkus;
+
+    /**
+     * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
      * @param ItemsToRefundInterfaceFactory $itemsToRefundFactory
      * @param ProcessRefundItemsInterface $processRefundItems
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
+     * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      */
     public function __construct(
-        GetSkusByProductIdsInterface $getSkusByProductIds,
+        GetSkuFromOrderItemInterface $getSkuFromOrderItem,
         ItemsToRefundInterfaceFactory $itemsToRefundFactory,
-        ProcessRefundItemsInterface $processRefundItems
+        ProcessRefundItemsInterface $processRefundItems,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
+        GetProductTypesBySkusInterface $getProductTypesBySkus
     ) {
-        $this->getSkusByProductIds = $getSkusByProductIds;
+        $this->getSkuFromOrderItem = $getSkuFromOrderItem;
         $this->itemsToRefundFactory = $itemsToRefundFactory;
         $this->processRefundItems = $processRefundItems;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
+        $this->getProductTypesBySkus = $getProductTypesBySkus;
     }
 
     /**
@@ -55,8 +73,6 @@ class ProcessReturnQtyOnCreditMemoPlugin
      * @param array $returnToStockItems
      * @param bool $isAutoReturn
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
-     * @throws \Magento\Framework\Exception\InputException
      */
     public function aroundExecute(
         ReturnProcessor $subject,
@@ -68,13 +84,13 @@ class ProcessReturnQtyOnCreditMemoPlugin
     ) {
         $items = [];
         foreach ($creditmemo->getItems() as $item) {
+            /** @var OrderItemInterface $orderItem */
             $orderItem = $item->getOrderItem();
-            $qty = (float)$item->getQty();
-            if ($this->canReturnItem($orderItem, $qty, $returnToStockItems) && !$orderItem->isDummy()) {
-                $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
-                    [$item->getProductId()]
-                )[$item->getProductId()];
-                $processedQty = $orderItem->getQtyCanceled() - $orderItem->getQtyRefunded();
+            $itemSku = $this->getSkuFromOrderItem->execute($orderItem);
+
+            if ($this->isValidItem($itemSku, $orderItem->getProductType())) {
+                $qty = (float)$item->getQty();
+                $processedQty = $orderItem->getQtyInvoiced() - $orderItem->getQtyRefunded() + $qty;
                 $items[$itemSku] = [
                     'qty' => ($items[$itemSku]['qty'] ?? 0) + $qty,
                     'processedQty' => ($items[$itemSku]['processedQty'] ?? 0) + (float)$processedQty
@@ -94,15 +110,22 @@ class ProcessReturnQtyOnCreditMemoPlugin
     }
 
     /**
-     * @param OrderItemInterface $orderItem
-     * @param float $qty
-     * @param array $returnToStockItems
+     * @param string $sku
+     * @param string|null $typeId
      * @return bool
      */
-    private function canReturnItem(OrderItemInterface $orderItem, float $qty, array $returnToStockItems): bool
+    private function isValidItem(string $sku, ?string $typeId): bool
     {
-        $parentItemId = $orderItem->getParentItemId();
-        return (in_array($orderItem->getId(), $returnToStockItems)
-                || in_array($parentItemId, $returnToStockItems)) && $qty;
+        //TODO: https://github.com/magento-engcom/msi/issues/1761
+        // If product type located in table sales_order_item is "grouped" replace it with "simple"
+        if ($typeId === 'grouped') {
+            $typeId = 'simple';
+        }
+
+        $productType = $typeId ?: $this->getProductTypesBySkus->execute(
+            [$sku]
+        )[$sku];
+
+        return $this->isSourceItemManagementAllowedForProductType->execute($productType);
     }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="LinksSourceStock" dataType="source-stock-links" type="create" auth="adminOauth" url="/V1/inventory/stock-source-links" method="POST">
+        <contentType>application/json</contentType>
+        <array key="links">
+            <value>source-stock-link</value>
+        </array>
+    </operation>
+    <operation name="LinkSourceStock" dataType="source-stock-link" type="create" auth="adminOauth" method="POST">
+        <field key="stock_id">integer</field>
+        <field key="source_code">string</field>
+        <field key="priority">integer</field>
+    </operation>
+</operations>

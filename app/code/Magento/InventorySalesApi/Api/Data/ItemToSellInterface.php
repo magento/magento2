@@ -13,7 +13,7 @@ namespace Magento\InventorySalesApi\Api\Data;
  *
  * @api
  */
-interface ItemToSellInterface
+interface ItemToSellInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @return string
@@ -29,11 +29,28 @@ interface ItemToSellInterface
      * @param string $sku
      * @return void
      */
-    public function setSku(string $sku);
+    public function setSku(string $sku): void;
 
     /**
      * @param float $qty
      * @return void
      */
-    public function setQuantity(float $qty);
+    public function setQuantity(float $qty): void;
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * @return \Magento\InventorySalesApi\Api\Data\ItemToSellExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ?\Magento\InventorySalesApi\Api\Data\ItemToSellExtensionInterface;
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventorySalesApi\Api\Data\ItemToSellExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(
+        \Magento\InventorySalesApi\Api\Data\ItemToSellExtensionInterface $extensionAttributes
+    ): void;
 }

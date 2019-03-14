@@ -10,9 +10,10 @@ namespace Magento\InventorySales\Test\Integration\Order;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -95,6 +96,16 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      */
     private $storeManager;
 
+    /**
+     * @var GetStockItemConfigurationInterface
+     */
+    private $getStockItemConfiguration;
+
+    /**
+     * @var SaveStockItemConfigurationInterface
+     */
+    private $saveStockItemConfiguration;
+
     protected function setUp()
     {
         $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
@@ -109,6 +120,10 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
         $this->orderManagement = Bootstrap::getObjectManager()->get(OrderManagementInterface::class);
+        $this->getStockItemConfiguration =
+            Bootstrap::getObjectManager()->get(GetStockItemConfigurationInterface::class);
+        $this->saveStockItemConfiguration =
+            Bootstrap::getObjectManager()->get(SaveStockItemConfigurationInterface::class);
     }
 
     /**
@@ -130,6 +145,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $stockId = 30;
         $quoteItemQty = 2.2;
 
+        $this->setStockItemConfigIsDecimal($sku, $stockId);
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
         $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
@@ -161,6 +177,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $stockId = 30;
         $quoteItemQty = 6.2;
 
+        $this->setStockItemConfigIsDecimal($sku, $stockId);
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
         $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
@@ -193,6 +210,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $stockId = 30;
         $quoteItemQty = 6.5;
 
+        $this->setStockItemConfigIsDecimal($sku, $stockId);
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
         $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
@@ -227,6 +245,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $stockId = 30;
         $quoteItemQty = 6.5;
 
+        $this->setStockItemConfigIsDecimal($sku, $stockId);
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
         $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
@@ -306,6 +325,17 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
                 ]
             );
         return $cartItem;
+    }
+
+    /**
+     * @param $sku
+     * @param $stockId
+     */
+    private function setStockItemConfigIsDecimal(string $sku, int $stockId): void
+    {
+        $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+        $stockItemConfiguration->setIsQtyDecimal(true);
+        $this->saveStockItemConfiguration->execute($sku, $stockId, $stockItemConfiguration);
     }
 
     protected function tearDown()

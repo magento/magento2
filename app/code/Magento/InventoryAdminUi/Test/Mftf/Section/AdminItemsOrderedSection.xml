@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminItemsOrderedSection">
+        <element name="product" type="text"
+                 selector="tr[data-repeat-index='{{arg1}}'] td[data-index='product'] span.admin__field-value"
+                 parameterized="true"/>
+        <element name="sku" type="text"
+                 selector="tr[data-repeat-index='{{arg1}}'] td[data-index='sku'] span[name='items[{{arg1}}][sku]']"
+                 parameterized="true"/>
+        <element name="qtyToShip" type="text"
+                 selector="tr[data-repeat-index='{{arg1}}'] td[data-index='qtyToShip'] div[data-index='qtyToShip']"
+                 parameterized="true"/>
+        <element name="availableSourcesSource" type="text"
+                 selector="tr[data-repeat-index='{{arg1}}'] td[data-index='sources'] table[data-index='sources'] tr.data-row[data-repeat-index='{{arg2}}'] span[data-index='sourceName']"
+                 parameterized="true"/>
+        <element name="availableSourcesQtyAvailable" type="text"
+                 selector="tr[data-repeat-index='{{arg1}}'] td[data-index='sources'] table[data-index='sources'] tr.data-row[data-repeat-index='{{arg2}}'] span[data-index='qtyAvailable']"
+                 parameterized="true"/>
+        <element name="availableSourcesQtyToDeduct" type="input"
+                 selector="tr[data-repeat-index='{{arg1}}'] td[data-index='sources'] table[data-index='sources'] tr.data-row[data-repeat-index='{{arg2}}'] div[data-index='qtyToDeduct'] input[name='items[{{arg1}}][sources][{{arg2}}][qtyToDeduct]']"
+                 parameterized="true"/>
+    </section>
+</sections>

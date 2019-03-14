@@ -19,7 +19,7 @@
     </virtualType>
     <virtualType name="Magento\InventoryAdminUi\Ui\Component\Control\Stock\DeleteButton" type="Magento\Backend\Ui\Component\Control\DeleteButton">
         <arguments>
-            <argument name="confirmationMessage" xsi:type="string" translate="true">Are you sure you want to delete this stock?</argument>
+            <argument name="confirmationMessage" xsi:type="string" translatable="true">Are you sure you want to delete this stock?</argument>
             <argument name="idFieldName" xsi:type="const">Magento\InventoryApi\Api\Data\StockInterface::STOCK_ID</argument>
             <argument name="deleteRoutePath" xsi:type="string">*/*/delete</argument>
             <argument name="sortOrder" xsi:type="number">30</argument>

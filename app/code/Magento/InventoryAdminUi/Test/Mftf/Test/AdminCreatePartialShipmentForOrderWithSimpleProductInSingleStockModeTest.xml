@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreatePartialShipmentForOrderWithSimpleProductInSingleStockModeTest">
+        <annotations>
+            <stories value="Sales-Shipments"/>
+            <title value="Admin user created partial shipment for order placed from Main website with Simple product in Single Stock mode"/>
+            <description value="You should be able to create partial shipment in Single Stock mode."/>
+            <testCaseId value="MSI-1145"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="single_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create Product -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPage"/>
+            <waitForPageLoad time="30" stepKey="waitForProductGridLoad"/>
+            <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropDown"/>
+            <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+            <actionGroup ref="fillMainProductForm" stepKey="fillSimpleProductMain">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                        parameterArray="[$$createCategory.name$$]" requiredAction="true"
+                                        stepKey="searchAndSelectCategory"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveProduct"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Login as Customer and add Product to Cart-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategory"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoad"/>
+        <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(SimpleProduct.name)}}"
+               stepKey="openProductPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="5" stepKey="fillQuantity"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+
+        <!-- Place Order -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}"
+                          dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true"
+                          stepKey="exposeMiniCart"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" stepKey="clickCheckMoneyOrderPayment" />
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+
+        <!-- Source Selection -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateShipment"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}"
+                   stepKey="searchOrderNum"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+
+        <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="3" stepKey="ship3Items"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="submitShipment"/>
+
+        <!-- Verify Shipment created correctly" -->
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" userInput="Partial" stepKey="seeItemStatus"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 5" stepKey="seeOrderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 3" stepKey="seeShippedQuantity"/>
+
+        <!-- Verify Shipment is present in "Shipments" tab of Order -->
+        <click selector="{{AdminOrderDetailsOrderViewSection.shipments}}" stepKey="clickOrderShipmentsTab"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
+        <seeElement selector="{{AdminOrderShipmentsTabSection.gridRow('1')}}" stepKey="seeShipmentInGrid"/>
+
+        <!-- Verify Source Quantities and Salable Quantity are Correct-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexToFinalCheck"/>
+        <waitForPageLoad time="30" stepKey="waitFoProductIndexPageLoad"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToFinalCheck">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="{{SimpleProduct.sku}}"/>
+        </actionGroup>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInGrid"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleProduct.sku}}" stepKey="seeProductSkuInGrid"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleProduct.price}}" stepKey="seeProductPriceInGrid"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="997" stepKey="seeProductQuantityInGrid"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Default Stock: 995" stepKey="seeProductSalableQuantityInGrid"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Enabled" stepKey="seeProductStatusInGrid"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Main Website" stepKey="seeProductWebsiteInGrid"/>
+    </test>
+</tests>

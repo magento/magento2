@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCatalogQuickSearchForVirtualProductInSingleStockModeTest">
+        <annotations>
+            <stories value="Catalog Quick Search"/>
+            <title value="Quick Catalog Search for Virtual Product on Single stock"/>
+            <description value="Quick Catalog Search for Virtual Product on Single stock"/>
+            <testCaseId value="MSI-1813"/>
+            <severity value="MAJOR"/>
+            <group value="msi"/>
+            <group value="single_mode"/>
+        </annotations>
+        
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="Msi_US_Customer" stepKey="customer"/>
+            <createData entity="VirtualMsiProduct" stepKey="product"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <comment userInput="Assign category to created virtual product." stepKey="assignCategoryToProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditProduct"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductEditPage"/>
+
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQty1"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="selectStockStatus1"/>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedVirtualProduct"/>
+
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+
+        <fillField userInput="$$product.product[name]$$" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="fillSearchBar1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl1"/>
+        <seeInTitle userInput="Search results for: '$$product.product[name]$$'" stepKey="assertQuickSearchTitle1"/>
+        <see userInput="Search results for: '$$product.product[name]$$'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName1"/>
+        <see selector="{{CatalogSearchResultSection.productListBlock}}" userInput="$$product.product[name]$$" stepKey="verifyProductAppearedInSearchResults" />
+    </test>
+</tests>

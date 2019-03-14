@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
+        <plugin name="grouped_product_index" type="Magento\InventoryGroupedProductIndexer\Plugin\InventoryIndexer\SourceItemIndexerPlugin" />
+    </type>
+    <type name="Magento\InventoryIndexer\Indexer\Stock\StockIndexer">
+        <plugin name="grouped_product_index" type="Magento\InventoryGroupedProductIndexer\Plugin\InventoryIndexer\StockIndexerPlugin" />
+    </type>
+    <type name="Magento\InventoryGroupedProductIndexer\Indexer\Stock\StockIndexer">
+        <arguments>
+            <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
+            <argument name="indexStructure" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexStructure</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryGroupedProductIndexer\Indexer\SourceItem\SourceItemIndexer">
+        <arguments>
+            <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
+            <argument name="indexStructure" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexStructure</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryGroupedProductIndexer\Indexer\SourceItem\SiblingSkuListInStockProvider">
+        <arguments>
+            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
+            <argument name="tableNameSourceItem" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::TABLE_NAME_SOURCE_ITEM</argument>
+            <argument name="tableNameStockSourceLink" xsi:type="const">Magento\Inventory\Model\ResourceModel\StockSourceLink::TABLE_NAME_STOCK_SOURCE_LINK</argument>
+        </arguments>
+    </type>
+</config>

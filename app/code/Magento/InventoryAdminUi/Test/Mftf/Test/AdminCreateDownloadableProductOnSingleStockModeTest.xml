@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDownloadableProductOnSingleStockModeTest">
+        <annotations>
+            <stories value="Add Downloadable Product"/>
+            <title value="Downloadable Product created on Single stock mode by Admin user"/>
+            <description value="Downloadable Product created on Single stock mode by Admin user"/>
+            <testCaseId value="MSI-1748"/>
+            <severity value="MAJOR"/>
+            <group value="msi"/>
+            <group value="single_mode"/>
+        </annotations>
+        
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableStockManagement1"/>
+
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="DownloadableMsiProduct" stepKey="downloadableProduct1">
+                <requiredEntity createDataKey="simpleCategory1"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findDownloadableProductBySkuForFillData">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$downloadableProduct1.product[sku]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue($$downloadableProduct1.product[sku]$$)}}" stepKey="clickOnEditDownloadableProductForCheckInStock"/>
+
+        <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{DownloadableMsiProduct.quantity}}" stepKey="fillSourceQtyField1"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="setProductQuantity1"/>
+
+        <comment userInput="Assign category to product." stepKey="assignCategoryComment"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+
+        <click selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="openDownloadableSection1"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable1"/>
+        <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillDownloadableLinkTitle1"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkLinksPurchasedSeparately1"/>
+        <fillField userInput="{{downloadableData.sample_title}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="fillDownloadableSampleTitle1"/>
+
+        <click selector="{{AdminProductDownloadableSection.linksAddLinkButton}}" stepKey="clickLinkAddLinkButton1"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <fillField userInput="{{downloadableLink.title}}" selector="{{AdminProductDownloadableSection.addLinkTitleInput('0')}}" stepKey="fillDownloadableLinkTitle2"/>
+        <fillField userInput="{{downloadableLink.price}}" selector="{{AdminProductDownloadableSection.addLinkPriceInput('0')}}" stepKey="fillDownloadableLinkPrice2"/>
+        <selectOption userInput="{{downloadableLink.file_type}}" selector="{{AdminProductDownloadableSection.addLinkFileTypeSelector('0')}}" stepKey="selectDownloadableLinkFileType2"/>
+        <selectOption userInput="{{downloadableLink.sample_type}}" selector="{{AdminProductDownloadableSection.addLinkSampleTypeSelector('0')}}" stepKey="selectDownloadableLinkSampleType2"/>
+        <selectOption userInput="{{downloadableLink.shareable}}" selector="{{AdminProductDownloadableSection.addLinkShareableSelector('0')}}" stepKey="selectDownloadableLinkShareable2"/>
+        <checkOption selector="{{AdminProductDownloadableSection.addLinkIsUnlimitedDownloads('0')}}" stepKey="checkDownloadableLinkUnlimited2"/>
+        <fillField userInput="{{downloadableLink.file}}" selector="{{AdminProductDownloadableSection.addLinkFileUrlInput('0')}}" stepKey="fillDownloadableLinkFileUrl2"/>
+        <attachFile userInput="{{downloadableLink.sample}}" selector="{{AdminProductDownloadableSection.addLinkSampleUploadFile('0')}}" stepKey="attachDownloadableLinkUploadSample2"/>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseProduct"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$downloadableProduct1.product[sku]$$"/>
+        </actionGroup>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{DownloadableMsiProduct.name}}" stepKey="seeNameInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{DownloadableMsiProduct.sku}}" stepKey="seeSkuInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{DownloadableMsiProduct.price}}" stepKey="seePriceInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{DownloadableMsiProduct.quantity}}" stepKey="seeQuantityInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Enabled" stepKey="seeStatusInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Main Website" stepKey="seeWebsiteInFirstRow"/>
+
+        <!-- Go to storefront category page, assert product visibility -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$simpleCategory1.name$$)}}" stepKey="navigateToStorefrontCategoryPage"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryStorefrontPageLoad"/>
+        <see userInput="{{DownloadableMsiProduct.name}}" stepKey="assertProductPresentOnCategoryPage"/>
+        <see userInput="{{DownloadableMsiProduct.price}}" stepKey="assertProductPricePresentOnCategoryPage"/>
+
+        <!-- Go to storefront product page, assert product visibility -->
+        <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(DownloadableMsiProduct.name)}}" stepKey="openProductPage"/>
+        <waitForPageLoad time="30" stepKey="waitForProductStorefrontPageLoad"/>
+        <seeInTitle userInput="{{DownloadableMsiProduct.name}}" stepKey="assertProductNameTitleOnProductPage"/>
+        <see userInput="{{DownloadableMsiProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductNameOnProductPage"/>
+        <see userInput="{{DownloadableMsiProduct.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPriceOnProductPage"/>
+        <see userInput="{{DownloadableMsiProduct.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSkuOnProductPage"/>
+        <see userInput="In Stock" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertProductStockStatusOnProductPage"/>
+    </test>
+</tests>

@@ -72,7 +72,7 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
     /**
      * @inheritdoc
      */
-    public function saveCarrierLinksBySource(SourceInterface $source)
+    public function saveCarrierLinksBySource(SourceInterface $source): void
     {
         $this->deleteCurrentCarrierLinks($source);
 
@@ -119,7 +119,7 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
     /**
      * @inheritdoc
      */
-    public function loadCarrierLinksBySource(SourceInterface $source)
+    public function loadCarrierLinksBySource(SourceInterface $source): void
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceCarrierLinkInterface::SOURCE_CODE, $source->getSourceCode())

@@ -6,11 +6,9 @@
 declare(strict_types=1);
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Registry;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var Registry $registry */
@@ -22,7 +20,7 @@ $cartRepository = Bootstrap::getObjectManager()->get(CartRepositoryInterface::cl
 $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
 
 $searchCriteria = $searchCriteriaBuilder
-    ->addFilter('reserved_order_id', 'test_order_virt_1')
+    ->addFilter('reserved_order_id', 'created_order_for_test')
     ->create();
 
 $registry->unregister('isSecureArea');

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddStockToVirtualProductTest">
+        <annotations>
+            <stories value="Assign Products to Stocks"/>
+            <title value="Assign Virtual Product to a Stock"/>
+            <description value="You should be able to assigned a Virtual Product to a Stock via the Admin."/>
+            <testCaseId value="MSI-1042"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory1"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="createPreReqCategory1" stepKey="deletePreReqCategory1"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnTheAddProductToggle1"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct('virtual')}}" stepKey="clickOnAddVirtualProduct1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+
+        <fillField userInput="{{VirtualMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName1"/>
+        <fillField userInput="{{VirtualMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSku1"/>
+        <fillField userInput="{{VirtualMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice1"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad5"/>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createPreReqCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
+
+        <conditionalClick selector="//*[contains(@class,'admin__collapsible-title')]//span[contains(text(), 'Content')]" dependentSelector="//span[contains(@data-bind, 'label')][contains(text(),'Content')]/../../..//div[contains(@class, '_show')]" visible="false" stepKey="clickOnTheContentHeaderIfClosed1"/>
+        <waitForPageLoad time="15" stepKey="waitForPageLoad8"/>
+        <fillField selector="#product_form_short_description" userInput="Best Product" stepKey="fillShortDescriptionField1"/>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillSourceQuantityField1"/>
+
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage1"/>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInput" stepKey="goToProductGridFilterResultsByInput1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="VirtualMsiProduct.sku"/>
+        </actionGroup>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{VirtualMsiProduct.name}}" stepKey="seeProductNameInGrid1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Virtual Product" stepKey="seeProductTypeInGrid1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{VirtualMsiProduct.sku}}" stepKey="seeProductSkuInGrid1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{VirtualMsiProduct.price}}" stepKey="seeProductPriceInGrid1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Enabled" stepKey="seeProductStatusInGrid1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Main Website" stepKey="seeProductWebsiteInGrid1"/>
+    </test>
+</tests>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SourceStockLinked1" type="source-stock-links">
+        <requiredEntity type="source-stock-link">Link1</requiredEntity>
+    </entity>
+    <entity name="Link1" type="source-stock-link">
+        <data key="priority">1</data>
+        <var key="stock_id" entityKey="return" entityType="stock"/>
+        <var key="source_code" entityKey="source[source_code]" entityType="source"/>
+    </entity>
+</entities>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontOrderCreatedWithConfigurableProductWithDropDownAttributeTest">
+        <annotations>
+            <stories value="Add Order"/>
+            <title value="Create an Order with a Configurable Product with Drop Down Attributes via the Storefront"/>
+            <description value="You should be able to create an Order with a Configurable Product with Drop Down Attributes from the Storefront."/>
+            <testCaseId value="MSI-1027"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnTheAddProductToggle1"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct('configurable')}}" stepKey="clickOnAddConfigurableProduct1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+
+        <fillField userInput="{{ConfigurableMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName1"/>
+        <fillField userInput="{{ConfigurableMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice1"/>
+        <fillField userInput="{{ConfigurableMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSku1"/>
+        <fillField userInput="{{ConfigurableMsiProduct.quantity}}" selector="{{AdminConfigurableProductFormSection.productQuantity}}" stepKey="fillProductQuantity1"/>
+        <fillField userInput="{{ConfigurableMsiProduct.weight}}" selector="{{AdminConfigurableProductFormSection.productWeight}}" stepKey="fillProductWeight1"/>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]"  stepKey="searchAndSelectCategory1"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButton1"/>
+        <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="30" stepKey="waitForGridPresent1"/>
+
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <click selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="clickOnTheColorAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
+        <fillField userInput="{{colorProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillNameForNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue2"/>
+        <fillField userInput="{{colorProductAttribute2.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillNameForNewAttribute2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute2"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue3"/>
+        <fillField userInput="{{colorProductAttribute3.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillNameForNewAttribute3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute3"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku1"/>
+
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="clickOnAssignSources2"/>
+
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.checkboxByValue($$createSource1.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource1"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="clickOnDone2"/>
+
+        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForMultiMode}}" userInput="100" stepKey="fillTheQuantityField1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton5"/>
+
+        <waitForLoadingMaskToDisappear stepKey="waitUntilMaskDisappear" />
+        <waitForPageLoad stepKey="waitUntilPageIsReady" />
+
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <conditionalClick selector="button[data-index='confirm_button']" dependentSelector="button[data-index='confirm_button']" visible="true" stepKey="clickOnConfirm1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad0"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage1"/>
+
+        <waitForLoadingMaskToDisappear stepKey="waitUntilMaskDisappear1" />
+        <waitForPageLoad stepKey="waitUntilPageIsReady1" />
+
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
+            <argument name="category" value="$$simpleCategory1$$"/>
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="assertProductInStorefront2">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+
+        <selectOption selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute2.name}}" stepKey="selectRedProductAttribute1"/>
+
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCart1"/>
+        <waitForPageLoad stepKey="waitForPageLoad9"/>
+
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnTheShoppingCart1"/>
+        <waitForPageLoad stepKey="waitForPageLoad10"/>
+
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="clickOnProceedToCheckout1"/>
+
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{MsiCustomer1.email}}" stepKey="enterEmail"/>
+        <waitForPageLoad stepKey="waitForPageLoad11"/>
+        <fillField selector="#shipping-new-address-form input[name=firstname]" userInput="{{MsiCustomer1.firstname}}" stepKey="enterFirstName"/>
+        <waitForPageLoad stepKey="waitForPageLoad12"/>
+        <fillField selector="#shipping-new-address-form input[name=lastname]" userInput="{{MsiCustomer1.lastname}}" stepKey="enterLastName"/>
+        <waitForPageLoad stepKey="waitForPageLoad13"/>
+        <fillField selector="#shipping-new-address-form input[name='street[0]']" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
+        <waitForPageLoad stepKey="waitForPageLoad14"/>
+        <fillField selector="#shipping-new-address-form input[name=city]" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
+        <waitForPageLoad stepKey="waitForPageLoad15"/>
+        <selectOption selector="#shipping-new-address-form select[name=region_id]" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
+        <waitForPageLoad stepKey="waitForPageLoad16"/>
+        <fillField selector="#shipping-new-address-form input[name=postcode]" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
+        <waitForPageLoad stepKey="waitForPageLoad17"/>
+        <fillField selector="#shipping-new-address-form input[name=telephone]" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
+        <waitForPageLoad stepKey="waitForPageLoad18"/>
+
+        <click selector=".continue" stepKey="clickOnNext1"/>
+        <waitForPageLoad stepKey="waitForPageLoad19"/>
+
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder1"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="seeOrderNumber1"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber1"/>
+
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad20"/>
+
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show" visible="true" stepKey="clearTheFiltersIfPresent"/>
+
+        <fillField userInput="$grabOrderNumber1" selector="{{OrdersGridSection.search}}" stepKey="fillCodeField2"/>
+        <click selector=".data-grid-search-control-wrap button" stepKey="clickOnApplyFilters1"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad21"/>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{MsiCustomer1.firstname}}" stepKey="seeFirstName1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{MsiCustomer1.lastname}}" stepKey="seeLastName1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Pending" stepKey="seeFirstName3"/>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInput" stepKey="goToProductGridFilterResultsByInput1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="colorProductAttribute2.name"/>
+        </actionGroup>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock1.stock[sku]$$" stepKey="seeUpdatedQuantity1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock1.stock[name]$$" stepKey="seeUpdatedQuantity2"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="99" stepKey="seeUpdatedQuantity3"/>
+    </test>
+</tests>

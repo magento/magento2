@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyDataViewsOnManageSourcesGridPageTest">
+        <annotations>
+            <stories value="Save and Load Admin Grid Views"/>
+            <title value="Save and Load Admin Source Grid Views"/>
+            <description value="You should be able to Save and Load a Grid View for the Sources Grid."/>
+            <testCaseId value="MSI-915"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnSourceListPage1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        </before>
+        <after>
+            <click selector="{{AdminGridDefaultViewControls.defaultView}}" stepKey="clickOnDefaultView3"/>
+            <click selector="{{AdminGridDefaultViewControls.viewByName('Default View')}}" stepKey="clickOnDefaultViewMenuOption1"/>
+            <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnTheColumnsButton1"/>
+            <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnTheColumnsButton1"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetColumnReaders1"/>
+
+        <click selector="{{AdminGridColumnsControls.columnName('Code')}}" stepKey="disableCodeColumn1"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Action')}}" stepKey="disableActionColumn1"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Is Enabled')}}" stepKey="disableIsEnabledColumn1"/>
+
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnTheColumnsButton2"/>
+
+        <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeNameColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Code')}}" userInput="Code" stepKey="dontSeeCodeColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Is Enabled')}}" userInput="Is Enabled" stepKey="dontSeeIsEnabledColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Longitude')}}" userInput="Longitude" stepKey="dontSeeLongitudeColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('City')}}" userInput="City" stepKey="dontSeeCityColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Phone')}}" userInput="Phone" stepKey="dontSeePhoneColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Email')}}" userInput="Email" stepKey="dontSeeEmailColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Country')}}" userInput="Country" stepKey="dontSeeCountryColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Street')}}" userInput="Street" stepKey="dontSeeStreetColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Fax')}}" userInput="Fax" stepKey="dontSeeFaxColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Contact Name')}}" userInput="Contact Name" stepKey="dontSeeContactNameColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Latitude')}}" userInput="Latitude" stepKey="dontSeeLatitudeColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('State/Province')}}" userInput="State/Province" stepKey="dontSeeStateProvinceColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Postcode')}}" userInput="Postcode" stepKey="dontSeePostcodeColumnHeader1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="dontSeeActionColumnHeader1"/>
+
+        <click selector="{{AdminGridDefaultViewControls.defaultView}}" stepKey="clickOnDefaultView1"/>
+        <click selector="{{AdminGridDefaultViewControls.saveViewAs}}" stepKey="clickOnSaveViewAs1"/>
+        <fillField selector="{{AdminGridDefaultViewControls.viewName}}" userInput="{{SourceView1.name}}" stepKey="fillTheViewNameField1"/>
+        <click selector="{{AdminGridDefaultViewControls.save}}" stepKey="clickOnSave1"/>
+        <click selector="{{AdminGridDefaultViewControls.defaultView}}" stepKey="clickOnDefaultView2"/>
+
+        <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeNameColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Code')}}" userInput="Code" stepKey="dontSeeCodeColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Is Enabled')}}" userInput="Is Enabled" stepKey="dontSeeIsEnabledColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Longitude')}}" userInput="Longitude" stepKey="dontSeeLongitudeColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('City')}}" userInput="City" stepKey="dontSeeCityColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Phone')}}" userInput="Phone" stepKey="dontSeePhoneColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Email')}}" userInput="Email" stepKey="dontSeeEmailColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Country')}}" userInput="Country" stepKey="dontSeeCountryColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Street')}}" userInput="Street" stepKey="dontSeeStreetColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Fax')}}" userInput="Fax" stepKey="dontSeeFaxColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Contact Name')}}" userInput="Contact Name" stepKey="dontSeeContactNameColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Latitude')}}" userInput="Latitude" stepKey="dontSeeLatitudeColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('State/Province')}}" userInput="State/Province" stepKey="dontSeeStateProvinceColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Postcode')}}" userInput="Postcode" stepKey="dontSeePostcodeColumnHeader2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="dontSeeActionColumnHeader2"/>
+
+        <click selector="{{AdminGridDefaultViewControls.defaultView}}" stepKey="clickOnDefaultView3"/>
+        <click selector="{{AdminGridDefaultViewControls.viewByName('Default View')}}" stepKey="clickOnDefaultViewMenuOption1"/>
+
+        <see selector="{{AdminGridHeaders.headerByName('Code')}}" userInput="Code" stepKey="seeCodeHeader3"/>
+        <see selector="{{AdminGridHeaders.headerByName('Is Enabled')}}" userInput="Is Enabled" stepKey="seeIsEnabledHeader3"/>
+        <see selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="seeActionHeader3"/>
+        <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeNameHeader3"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Longitude')}}" userInput="Longitude" stepKey="dontSeeLongitudeColumnHeader3"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('State/Province')}}" userInput="State/Province" stepKey="dontSeeStateProvinceColumnHeader3"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Postcode')}}" userInput="Postcode" stepKey="dontSeePostcodeColumnHeader3"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Email')}}" userInput="Email" stepKey="dontSeeEmailColumnHeader3"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Country')}}" userInput="Country" stepKey="dontSeeCountryColumnHeader3"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('City')}}" userInput="City" stepKey="dontSeeCityColumnHeader3"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Phone')}}" userInput="Phone" stepKey="dontSeePhoneColumnHeader3"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Contact Name')}}" userInput="Contact Name" stepKey="dontSeeContactNameColumnHeader3"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Latitude')}}" userInput="Latitude" stepKey="dontSeeLatitudeColumnHeader3"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Street')}}" userInput="Street" stepKey="dontSeeStreetColumnHeader3"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Fax')}}" userInput="Fax" stepKey="dontSeeFaxColumnHeader3"/>
+
+        <click selector="{{AdminGridDefaultViewControls.defaultView}}" stepKey="clickOnDefaultView4"/>
+        <click selector="{{AdminGridDefaultViewControls.viewByName(SourceView1.name)}}" stepKey="clickOnDefaultViewMenuOption2"/>
+
+        <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeNameColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Code')}}" userInput="Code" stepKey="dontSeeCodeColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Is Enabled')}}" userInput="Is Enabled" stepKey="dontSeeIsEnabledColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Longitude')}}" userInput="Longitude" stepKey="dontSeeLongitudeColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('City')}}" userInput="City" stepKey="dontSeeCityColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Phone')}}" userInput="Phone" stepKey="dontSeePhoneColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Email')}}" userInput="Email" stepKey="dontSeeEmailColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Country')}}" userInput="Country" stepKey="dontSeeCountryColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Street')}}" userInput="Street" stepKey="dontSeeStreetColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Fax')}}" userInput="Fax" stepKey="dontSeeFaxColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Contact Name')}}" userInput="Contact Name" stepKey="dontSeeContactNameColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Latitude')}}" userInput="Latitude" stepKey="dontSeeLatitudeColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('State/Province')}}" userInput="State/Province" stepKey="dontSeeStateProvinceColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Postcode')}}" userInput="Postcode" stepKey="dontSeePostcodeColumnHeader4"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="dontSeeActionColumnHeader4"/>
+    </test>
+</tests>

@@ -25,6 +25,9 @@ class InputtypeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->toOptionArray());
     }
 
+    /**
+     * @return array
+     */
     private function getOptionsArray()
     {
         return [

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOnProductEditPageAssignSourceToProduct">
+        <arguments>
+            <argument name="filter_selector"/>
+            <argument name="filter_value"/>
+        </arguments>
+
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSources1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show" visible="true" stepKey="clearTheFiltersIfPresent"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
+        <fillField userInput="{{filter_value}}" selector="{{filter_selector}}" stepKey="fillCodeField2"/>
+        <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters1"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode(filter_value)}}" stepKey="clickOnCheckbox1"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDone1"/>
+    </actionGroup>
+</actionGroups>

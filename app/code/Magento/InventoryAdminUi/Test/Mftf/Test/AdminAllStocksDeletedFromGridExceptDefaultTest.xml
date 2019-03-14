@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAllStocksDeletedFromGridExceptDefaultTest">
+        <annotations>
+            <stories value="Delete Stock"/>
+            <title value="Delete all Stocks from Stock Grid"/>
+            <description value="You should be able to Delete all Stocks from the Grid except Default if it does NOT have a Sales Channel assigned."/>
+            <testCaseId value="MSI-858"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- need to delete all stocks previously created -->
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnStockGridPageToDeleteAllNeedlesslyStocks"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGridLoadToDeleteAllNeedlesslyStocks"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAllFilters"/>
+            <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdownToDeleteAllNeedlesslyStocks"/>
+            <click selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGridToDeleteAllNeedlesslyStocks"/>
+            <click selector="{{AdminGridSelectRows.bulkActionDropdown}}" stepKey="clickActionDropdownToDeleteAllNeedlesslyStocks"/>
+            <click selector="{{AdminGridSelectRows.bulkActionOption('Delete')}}" stepKey="clickDeleteActionToDeleteAllNeedlesslyStocks"/>
+            <waitForElementVisible selector="{{AdminGridConfirmActionSection.title}}" stepKey="waitForConfirmModalToDeleteAllNeedlesslyStocks"/>
+            <click selector="{{AdminGridConfirmActionSection.ok}}" stepKey="confirmStocksDeleteToDeleteAllNeedlesslyStocks"/>
+
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+            <createData entity="BasicMsiStock2" stepKey="createStock2"/>
+            <createData entity="BasicMsiStock2" stepKey="createStock3"/>
+
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnStockGridPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGridLoad"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
+        <click selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid"/>
+        <click selector="{{AdminGridSelectRows.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminGridSelectRows.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
+        <waitForElementVisible selector="{{AdminGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminGridConfirmActionSection.ok}}" stepKey="confirmStocksDelete"/>
+
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted 3 Stock(s)." stepKey="seeSuccessDeleteMessage"/>
+        <see selector="{{AdminMessagesSection.errorMessage}}" userInput="[ID: 1] Default Stock could not be deleted." stepKey="seeErrorDeleteMessage"/>
+    </test>
+</tests>

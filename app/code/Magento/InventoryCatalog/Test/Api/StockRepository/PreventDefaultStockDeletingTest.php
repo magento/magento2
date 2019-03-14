@@ -33,7 +33,7 @@ class PreventDefaultStockDeletingTest extends WebapiAbstract
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/inventory/stock/' . $this->defaultStockProvider->getId(),
+                'resourcePath' => '/V1/inventory/stocks/' . $this->defaultStockProvider->getId(),
                 'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [

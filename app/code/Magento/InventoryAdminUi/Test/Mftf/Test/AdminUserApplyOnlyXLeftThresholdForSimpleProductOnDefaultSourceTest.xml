@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserApplyOnlyXLeftThresholdForSimpleProductOnDefaultSourceModeTest">
+        <annotations>
+            <stories value="CatalogInventory stock option"/>
+            <title value="Admin user apply 'Only X left Threshold' for Simple product on Default source"/>
+            <description value="In default source you should be able to create order with simple order and enabled config 'Only X left Threshold'."/>
+            <testCaseId value="MSI-1527"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <comment userInput="Fill config 'Only X left Threshold'." stepKey="fillConfigComment"/>
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 500" stepKey="fillConfigValue"/>
+
+            <comment userInput="Perform reindex and cache flush after fill 'Only X left Threshold' configuration config." stepKey="reindexCacheFlushAfterFillThresholdConfigComment"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterFillThresholdConfig"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterFillThresholdConfig"/>
+
+            <createData entity="_minimalSource" stepKey="createSource"/>
+            <createData entity="BasicMsiStock1" stepKey="createStock"/>
+
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="createStock"/>
+                <requiredEntity createDataKey="createSource"/>
+            </createData>
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Msi_US_Customer" stepKey="createCustomer"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+
+            <comment userInput="Assign main website to default stock" stepKey="assignChannelToStockComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPageToAssignMainWebsiteToDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByNameForAssignMainWebsiteChannel">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForDefaultStockPageLoaded"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+        </before>
+        <after>
+            <comment userInput="Disable created source." stepKey="disableCreatedSourceComment"/>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$createSource.source[source_code]$$"/>
+            </actionGroup>
+
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+
+            <comment userInput="Revert config 'Only X left Threshold' changes." stepKey="revertConfigChangesComment"/>
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 0" stepKey="revertConfigValue"/>
+
+            <comment userInput="Perform reindex and cache flush after revert 'Only X left Threshold' configuration config." stepKey="reindexCacheFlushAfterFillThresholdConfigComment"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterRevertThresholdConfig"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterRevertThresholdConfig"/>
+
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createStock" stepKey="deleteStock"/>
+        </after>
+
+        <comment userInput="Customer login to storefront." stepKey="customerLoginToStorefrontComment"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <comment userInput="Add product to cart" stepKey="addProductToCartComment"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategory"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo($$createSimpleProduct.product[name]$$)}}" stepKey="openProductPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="500" stepKey="fillCorrectQuantity"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addProductToCart"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectShippingMethod"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="navigateToSecondCheckoutStep"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+
+        <magentoCLI command="indexer:reindex" stepKey="performReindexAfterRevertThresholdConfig"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterRevertThresholdConfig"/>
+
+        <comment userInput="Verify that message 'Only 500 left' appeared on product page on frontend." stepKey="verifyMessageIsDisplayedComment"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryForVerifyMessage"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoadForVerifyMessage1"/>
+        <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(SimpleProduct.name)}}" stepKey="openProductPageForVerifyMessage"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoadForVerifyMessage2"/>
+        <see selector=".availability.only" userInput="Only 500 left" stepKey="checkProductsLeftMessage"/>
+    </test>
+</tests>

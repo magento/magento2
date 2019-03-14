@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="textSwatchProductAttribute" type="product_attribute">
+        <data key="default_label" unique="suffix">Text swatch attribute</data>
+        <data key="input_type">Text Swatch</data>
+    </entity>
+    <entity name="textSwatchProductAttribute1" type="product_attribute">
+        <data key="adminSwatch">Text 1</data>
+        <data key="adminDescription">description 1</data>
+        <data key="defaultStoreSwatch">Text 1</data>
+        <data key="defaultStoreDescription">description 1</data>
+    </entity>
+    <entity name="textSwatchProductAttribute2" type="product_attribute">
+        <data key="adminSwatch">Text 2</data>
+        <data key="adminDescription">description 2</data>
+        <data key="defaultStoreSwatch">Text 2</data>
+        <data key="defaultStoreDescription">description 2</data>
+    </entity>
+</entities>

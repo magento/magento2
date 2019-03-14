@@ -46,6 +46,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
         $context = $this->createMock(\Magento\Framework\App\Helper\Context::class);
         $context->expects($this->any())
             ->method('getScopeConfig')

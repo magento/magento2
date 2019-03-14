@@ -1,0 +1,33 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="data-grid-cell-content" attr="'data-tooltip-trigger': ++ko.uid">
+    <ul data-bind="foreach: { data: $col.getSourcesAssignedToStockOrderedByPriority($row()), as: '$assignedSource' }">
+        <li>
+            <span data-bind="text: $assignedSource.name"></span>
+            (<span data-bind="text: $assignedSource.sourceCode"></span>)
+        </li>
+    </ul>
+</div>
+<div tooltip="
+    trigger: '[data-tooltip-trigger=' + ko.uid + ']',
+    action: 'hover',
+    closeOnScroll: false,
+    delay: 0,
+    position: 'top',
+    step: 30,
+    track: false,
+    strict: true">
+    <div>
+        <div class="data-tooltip-title" data-bind="i18n: 'Assigned Sources:'"></div>
+        <div class="data-tooltip-content">
+            <!-- ko foreach: { data: $col.getTooltipData($row()), as: '$assignedSource' } -->
+            <div><span data-bind="text: $assignedSource.name"></span>: <span data-bind="text: $assignedSource.sourceCode"></span></div>
+            <!-- /ko -->
+        </div>
+    </div>
+</div>
+

@@ -10,7 +10,7 @@ namespace Magento\InventorySalesApi\Api\Data;
 /**
  * @api
  */
-interface ProductSalabilityErrorInterface
+interface ProductSalabilityErrorInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @return string
@@ -21,4 +21,21 @@ interface ProductSalabilityErrorInterface
      * @return string
      */
     public function getMessage(): string;
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * @return \Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ?ProductSalabilityErrorExtensionInterface;
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(
+        \Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorExtensionInterface $extensionAttributes
+    ): void;
 }

@@ -9,7 +9,7 @@
     <preference for="Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface" type="Magento\InventoryCatalog\Model\DefaultStockProvider"/>
     <preference for="Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface" type="Magento\InventoryCatalog\Model\DefaultSourceProvider"/>
     <preference for="Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface" type="Magento\InventoryCatalog\Model\GetProductIdsBySkus"/>
-    <preference for="Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface" type="Magento\InventoryCatalog\Model\GetProductTypesBySkus" />
+    <preference for="Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface" type="Magento\InventoryCatalog\Model\ResourceModel\GetProductTypesBySkus" />
     <preference for="Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface" type="Magento\InventoryCatalog\Model\GetSkusByProductIds"/>
     <preference for="Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface" type="Magento\InventoryCatalog\Model\IsSingleSourceMode"/>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
@@ -19,6 +19,15 @@
     <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
         <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin"/>
+    </type>
+    <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
+        <plugin name="priceIndexUpdater" type="Magento\InventoryCatalog\Plugin\InventoryIndexer\Indexer\SourceItem\PriceIndexUpdater" sortOrder="20"/>
+    </type>
+    <type name="Magento\InventoryIndexer\Indexer\Stock\StockIndexer">
+        <plugin name="priceIndexUpdater" type="Magento\InventoryCatalog\Plugin\InventoryIndexer\Indexer\Stock\PriceIndexUpdater"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter">
+        <plugin name="change_select_for_price_modifier" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\Indexer\ModifySelectInProductPriceIndexFilter"/>
     </type>
     <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
         <plugin name="set_to_zero_legacy_catalog_inventory_at_source_items_delete"
@@ -30,6 +39,7 @@
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
         <plugin name="update_source_item_at_legacy_stock_item_save"
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyStockItemSavePlugin"/>
+        <plugin name="priceIndexUpdater" disabled="true"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
         <plugin name="adapt_add_stock_data_to_collection"
@@ -60,7 +70,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\InventorySalesApi\Api\StockResolverInterface">
+    <type name="Magento\InventorySalesApi\Api\GetStockBySalesChannelInterface">
         <plugin name="adapt_stock_resolver_to_admin_website"
                 type="Magento\InventoryCatalog\Plugin\InventorySalesApi\StockResolver\AdaptStockResolverToAdminWebsitePlugin"/>
     </type>
@@ -85,5 +95,49 @@
         <plugin name="adapt_get_stock_status_by_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetStockStatusBySkuPlugin"/>
         <plugin name="adapt_get_product_stock_status" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusPlugin"/>
         <plugin name="adapt_get_product_stock_status_by_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusBySkuPlugin"/>
+    </type>
+    <!-- Mass Source Assignment -->
+    <preference for="Magento\InventoryCatalogApi\Api\BulkSourceAssignInterface"
+                type="Magento\InventoryCatalog\Model\BulkSourceAssign"/>
+    <preference for="Magento\InventoryCatalogApi\Api\BulkSourceUnassignInterface"
+                type="Magento\InventoryCatalog\Model\BulkSourceUnassign"/>
+    <preference for="Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface"
+                type="Magento\InventoryCatalog\Model\BulkInventoryTransfer"/>
+    <type name="\Magento\InventoryCatalogApi\Model\BulkSourceAssignValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="sources"
+                      xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\Bulk\AssignSourcesValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="\Magento\InventoryCatalogApi\Model\BulkSourceUnassignValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="sources"
+                      xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\Bulk\UnassignSourcesValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="\Magento\InventoryCatalogApi\Model\BulkInventoryTransferValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="sources"
+                      xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\Bulk\TransferSourceValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Negative Min Quantity Threshold for Backorders -->
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter">
+        <plugin name="allow_negative_min_qty"
+                type="Magento\InventoryCatalog\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter\AllowNegativeMinQtyPlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Api\Data\StockItemInterface">
+        <plugin name="adapt_min_qty_to_backorders"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\Data\StockItemInterface\AdaptMinQtyToBackordersPlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\Spi\StockStateProviderInterface">
+        <plugin name="adapt_verify_stock_to_negative_min_qty"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\Spi\StockStateProvider\AdaptVerifyStockToNegativeMinQtyPlugin"/>
     </type>
 </config>

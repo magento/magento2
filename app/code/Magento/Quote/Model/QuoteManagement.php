@@ -25,6 +25,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class QuoteManagement
  *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -159,7 +160,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
-     * @param \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
+     * @param \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -221,7 +222,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createEmptyCart()
     {
@@ -241,7 +242,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createEmptyCartForCustomer($customerId)
     {
@@ -253,11 +254,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__("The quote can't be created."));
         }
-        return $quote->getId();
+        return (int)$quote->getId();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function assignCustomer($cartId, $customerId, $storeId)
     {
@@ -332,7 +333,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
     {
@@ -349,11 +350,20 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
             $data = $paymentMethod->getData();
             $quote->getPayment()->importData($data);
+        } else {
+            $quote->collectTotals();
         }
 
         if ($quote->getCheckoutMethod() === self::METHOD_GUEST) {
             $quote->setCustomerId(null);
             $quote->setCustomerEmail($quote->getBillingAddress()->getEmail());
+            if ($quote->getCustomerFirstname() === null && $quote->getCustomerLastname() === null) {
+                $quote->setCustomerFirstname($quote->getBillingAddress()->getFirstname());
+                $quote->setCustomerLastname($quote->getBillingAddress()->getLastname());
+                if ($quote->getBillingAddress()->getMiddlename() === null) {
+                    $quote->setCustomerMiddlename($quote->getBillingAddress()->getMiddlename());
+                }
+            }
             $quote->setCustomerIsGuest(true);
             $quote->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID);
         }
@@ -379,7 +389,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCartForCustomer($customerId)
     {
@@ -406,6 +416,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
+     * Convert quote items to order items for quote
+     *
      * @param Quote $quote
      * @return array
      */
@@ -564,6 +576,10 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 //Make provided address as default shipping address
                 $shippingAddress->setIsDefaultShipping(true);
                 $hasDefaultShipping = true;
+                if (!$hasDefaultBilling && !$billing->getSaveInAddressBook()) {
+                    $shippingAddress->setIsDefaultBilling(true);
+                    $hasDefaultBilling = true;
+                }
             }
             //save here new customer address
             $shippingAddress->setCustomerId($quote->getCustomerId());

@@ -6,12 +6,13 @@
     "magento/framework": "*",
     "magento/module-catalog": "*",
     "magento/module-catalog-inventory": "*",
-    "magento/module-inventory": "*",
+    "magento/module-backend": "*",
     "magento/module-inventory-api": "*",
     "magento/module-ui": "*",
     "magento/module-inventory-catalog-api": "*",
     "magento/module-inventory-configuration-api": "*",
-    "magento/module-inventory-indexer": "*"
+    "magento/module-inventory-indexer": "*",
+    "magento/module-asynchronous-operations": "*"
   },
   "suggest": {
     "magento/module-inventory-admin-ui": "*"

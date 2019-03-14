@@ -11,12 +11,4 @@
         <data key="code">base</data>
         <data key="sort_order">0</data>
     </entity>
-    <entity name="customWebsite" type="website">
-        <data key="name" unique="suffix">Second Website</data>
-        <data key="code" unique="suffix">second_website</data>
-        <data key="sort_order">10</data>
-        <data key="store_action">add</data>
-        <data key="store_type">website</data>
-        <data key="website_id">null</data>
-    </entity>
 </entities>

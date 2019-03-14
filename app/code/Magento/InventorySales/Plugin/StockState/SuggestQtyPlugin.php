@@ -16,6 +16,9 @@ use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Replace legacy suggest quantity
+ */
 class SuggestQtyPlugin
 {
     /**
@@ -49,6 +52,7 @@ class SuggestQtyPlugin
      * @param StockResolverInterface $stockResolver
      * @param StoreManagerInterface $storeManager
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         GetProductSalableQtyInterface $getProductSalableQty,
@@ -65,6 +69,8 @@ class SuggestQtyPlugin
     }
 
     /**
+     * Replace legacy suggest quantity
+     *
      * @param StockStateInterface $subject
      * @param \Closure $proceed
      * @param int $productId
@@ -74,20 +80,21 @@ class SuggestQtyPlugin
      *
      * @return float
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function aroundSuggestQty(
         StockStateInterface $subject,
         \Closure $proceed,
         $productId,
         $qty,
-        $scopeId
+        $scopeId = null
     ): float {
         try {
             $skus = $this->getSkusByProductIds->execute([$productId]);
             $productSku = $skus[$productId];
 
             $websiteCode = $this->storeManager->getWebsite()->getCode();
-            $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+            $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
             $stockId = (int)$stock->getStockId();
 
             $stockItemConfiguration = $this->getStockItemConfiguration->execute($productSku, $stockId);
@@ -100,7 +107,7 @@ class SuggestQtyPlugin
             $minQty = max($stockItemConfiguration->getMinSaleQty(), $qtyIncrements);
             $divisibleMin = ceil($minQty / $qtyIncrements) * $qtyIncrements;
             $maxQty = min(
-                $this->getProductSalableQty->execute($productSku, $stockId) - $stockItemConfiguration->getMinQty(),
+                $this->getProductSalableQty->execute($productSku, $stockId),
                 $stockItemConfiguration->getMaxSaleQty()
             );
             $divisibleMax = floor($maxQty / $qtyIncrements) * $qtyIncrements;

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CustomStoreGroupCustomWebsite" type="group">
+        <data key="group_id">null</data>
+        <data key="name" unique="suffix">Store Group Custom Website</data>
+        <data key="code" unique="suffix">store_group_custom_website</data>
+        <data key="root_category_id">2</data>
+        <data key="store_action">add</data>
+        <data key="store_type">group</data>
+        <requiredEntity type="website">customWebsite</requiredEntity>
+    </entity>
+</entities>

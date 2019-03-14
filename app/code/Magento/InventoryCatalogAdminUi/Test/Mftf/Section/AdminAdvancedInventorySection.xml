@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminAdvancedInventoryControlsSection">
+        <element name="done" type="button" selector=".page-main-actions button.action-primary" timeout="10"/>
+    </section>
+    <section name="AdminAdvancedInventorySection">
+        <element name="manageStock" type="select" selector="select[name='product[stock_data][manage_stock]']"/>
+        <element name="manageStockUseDefault" type="checkbox" selector="input[name='product[stock_data][use_config_manage_stock]']"/>
+        <element name="outOfStockThreshold" type="text" selector="input[name='product[stock_data][min_qty]']"/>
+        <element name="outOfStockThresholdUseDefault" type="checkbox" selector="input[name='product[stock_data][use_config_min_qty]']"/>
+        <element name="backorders" type="select" selector="select[name='product[stock_data][backorders]']"/>
+        <element name="backordersUseDefault" type="checkbox" selector="input[name='product[stock_data][use_config_backorders]']"/>
+    </section>
+</sections>

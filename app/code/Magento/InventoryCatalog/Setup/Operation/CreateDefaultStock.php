@@ -7,11 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Setup\Operation;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryApi\Api\Data\StockInterface;
-use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
-use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
-use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * Create default stock during installation
@@ -24,36 +22,20 @@ class CreateDefaultStock
     private $defaultStockProvider;
 
     /**
-     * @var StockInterfaceFactory
+     * @var ResourceConnection
      */
-    private $stockFactory;
-
-    /**
-     * @var DataObjectHelper
-     */
-    private $dataObjectHelper;
-
-    /**
-     * @var StockRepositoryInterface
-     */
-    private $stockRepository;
+    private $resource;
 
     /**
      * @param DefaultStockProviderInterface $defaultStockProvider
-     * @param StockInterfaceFactory $stockFactory
-     * @param DataObjectHelper $dataObjectHelper
-     * @param StockRepositoryInterface $stockRepository
+     * @param ResourceConnection $resource
      */
     public function __construct(
         DefaultStockProviderInterface $defaultStockProvider,
-        StockInterfaceFactory $stockFactory,
-        DataObjectHelper $dataObjectHelper,
-        StockRepositoryInterface $stockRepository
+        ResourceConnection $resource
     ) {
         $this->defaultStockProvider = $defaultStockProvider;
-        $this->stockFactory = $stockFactory;
-        $this->dataObjectHelper = $dataObjectHelper;
-        $this->stockRepository = $stockRepository;
+        $this->resource = $resource;
     }
 
     /**
@@ -63,12 +45,11 @@ class CreateDefaultStock
      */
     public function execute()
     {
-        $data = [
+        $connection = $this->resource->getConnection();
+        $stockData = [
             StockInterface::STOCK_ID => $this->defaultStockProvider->getId(),
-            StockInterface::NAME => 'Default Stock'
+            StockInterface::NAME => 'Default Stock',
         ];
-        $source = $this->stockFactory->create();
-        $this->dataObjectHelper->populateWithArray($source, $data, StockInterface::class);
-        $this->stockRepository->save($source);
+        $connection->insert($this->resource->getTableName('inventory_stock'), $stockData);
     }
 }

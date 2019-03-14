@@ -74,7 +74,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
             ]
         );
 
-        $this->assertTrue($response);
+        $this->assertNotNull($response);
         $updatedData = $this->getAttributeOptions($testAttributeCode);
         $lastOption = array_pop($updatedData);
         $this->assertEquals(
@@ -110,6 +110,9 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
             ],
             'option_with_value_node_that_starts_with_a_number' => [
                 array_merge($optionPayload, [AttributeOptionInterface::VALUE => '123_some_text'])
+            ],
+            'option_with_value_node_that_is_a_number' => [
+                array_merge($optionPayload, [AttributeOptionInterface::VALUE => '123'])
             ],
 
         ];

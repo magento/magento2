@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryApi\Api;
 
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
-
 /**
  * In Magento 2 Repository considered as an implementation of Facade pattern which provides a simplified interface
  * to a larger body of code responsible for Domain Entity management
@@ -43,5 +40,7 @@ interface SourceItemRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria): SourceItemSearchResultsInterface;
+    public function getList(
+        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+    ): \Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
 }

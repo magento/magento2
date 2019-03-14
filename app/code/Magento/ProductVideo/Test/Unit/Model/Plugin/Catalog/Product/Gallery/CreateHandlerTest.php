@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ProductVideo\Test\Unit\Model\Plugin\Catalog\Product\Gallery;
 
 /**
@@ -37,6 +38,9 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected $mediaGalleryCreateHandler;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -62,72 +66,18 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testAfterExecute()
+    /**
+     * @dataProvider provideImageForAfterExecute
+     * @param array $image
+     * @param array $expectedSave
+     * @param int $rowSaved
+     */
+    public function testAfterExecute($image, $expectedSave, $rowSaved): void
     {
-        $mediaData = [
-            'images' => [
-                '72mljfhmasfilp9cuq' => [
-                    'position' => '3',
-                    'media_type' => 'external-video',
-                    'file' => '/i/n/index111111.jpg',
-                    'value_id' => '4',
-                    'label' => '',
-                    'disabled' => '0',
-                    'removed' => '',
-                    'video_provider' => 'youtube',
-                    'video_url' => 'https://www.youtube.com/watch?v=ab123456',
-                    'video_title' => 'Some second title',
-                    'video_description' => 'Description second',
-                    'video_metadata' => 'meta two',
-                    'role' => '',
-                ],
-                'w596fi79hv1p6wj21u' => [
-                    'position' => '4',
-                    'media_type' => 'image',
-                    'video_provider' => '',
-                    'file' => '/h/d/hd_image.jpg',
-                    'value_id' => '7',
-                    'label' => '',
-                    'disabled' => '0',
-                    'removed' => '',
-                    'video_url' => '',
-                    'video_title' => '',
-                    'video_description' => '',
-                    'video_metadata' => '',
-                    'role' => '',
-                ],
-                'tcodwd7e0dirifr64j' => [
-                    'position' => '4',
-                    'media_type' => 'external-video',
-                    'file' => '/s/a/sample_3.jpg',
-                    'value_id' => '5',
-                    'label' => '',
-                    'disabled' => '0',
-                    'removed' => '',
-                    'video_provider' => 'youtube',
-                    'video_url' => 'https://www.youtube.com/watch?v=ab123456',
-                    'video_title' => 'Some second title',
-                    'video_description' => 'Description second',
-                    'video_metadata' => 'meta two',
-                    'role' => '',
-                    'additional_store_data' => [
-                        0 => [
-                                'store_id' => '0',
-                                'video_provider' => null,
-                                'video_url' => 'https://www.youtube.com/watch?v=ab123456',
-                                'video_title' => 'New Title',
-                                'video_description' => 'New Description',
-                                'video_metadata' => 'New metadata',
-                            ],
-                    ]
-                ],
-            ],
-        ];
-
         $this->product->expects($this->once())
             ->method('getData')
             ->with('media_gallery')
-            ->willReturn($mediaData);
+            ->willReturn(['images' => $image]);
         $this->product->expects($this->once())
             ->method('getStoreId')
             ->willReturn(0);
@@ -136,13 +86,150 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('getAttribute')
             ->willReturn($this->attribute);
 
-        $this->subject->afterExecute(
-            $this->mediaGalleryCreateHandler,
-            $this->product
-        );
+        $this->resourceModel->expects($this->exactly($rowSaved))
+            ->method('saveDataRow')
+            ->with('catalog_product_entity_media_gallery_value_video', $expectedSave)
+            ->willReturn(1);
+
+        $this->subject->afterExecute($this->mediaGalleryCreateHandler, $this->product);
     }
 
-    public function testAfterExecuteEmpty()
+    /**
+     * DataProvider for testAfterExecute
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array
+     */
+    public function provideImageForAfterExecute(): array
+    {
+        return [
+            'new_video' => [
+                [
+                    '72mljfhmasfilp9cuq' => [
+                        'position' => '3',
+                        'media_type' => 'external-video',
+                        'file' => '/i/n/index111111.jpg',
+                        'value_id' => '4',
+                        'label' => '',
+                        'disabled' => '0',
+                        'removed' => '',
+                        'video_provider' => 'youtube',
+                        'video_url' => 'https://www.youtube.com/watch?v=ab123456',
+                        'video_title' => 'Some second title',
+                        'video_description' => 'Description second',
+                        'video_metadata' => 'meta two',
+                        'role' => '',
+                    ],
+                ],
+                [
+                    'value_id' => '4',
+                    'store_id' => 0,
+                    'provider' => 'youtube',
+                    'url' => 'https://www.youtube.com/watch?v=ab123456',
+                    'title' => 'Some second title',
+                    'description' => 'Description second',
+                    'metadata' => 'meta two',
+                ],
+                2
+            ],
+            'image' => [
+                [
+                    'w596fi79hv1p6wj21u' => [
+                        'position' => '4',
+                        'media_type' => 'image',
+                        'video_provider' => '',
+                        'file' => '/h/d/hd_image.jpg',
+                        'value_id' => '7',
+                        'label' => '',
+                        'disabled' => '0',
+                        'removed' => '',
+                        'video_url' => '',
+                        'video_title' => '',
+                        'video_description' => '',
+                        'video_metadata' => '',
+                        'role' => '',
+                    ],
+                ],
+                [],
+                0
+            ],
+            'new_video_with_additional_data' => [
+                [
+                    'tcodwd7e0dirifr64j' => [
+                        'position' => '4',
+                        'media_type' => 'external-video',
+                        'file' => '/s/a/sample_3.jpg',
+                        'value_id' => '5',
+                        'label' => '',
+                        'disabled' => '0',
+                        'removed' => '',
+                        'video_provider' => 'youtube',
+                        'video_url' => 'https://www.youtube.com/watch?v=ab123456',
+                        'video_title' => 'Some second title',
+                        'video_description' => 'Description second',
+                        'video_metadata' => 'meta two',
+                        'role' => '',
+                        'additional_store_data' => [
+                            0 => [
+                                'store_id' => 0,
+                                'video_provider' => 'youtube',
+                                'video_url' => 'https://www.youtube.com/watch?v=ab123456',
+                                'video_title' => 'Some second title',
+                                'video_description' => 'Description second',
+                                'video_metadata' => 'meta two',
+                            ],
+                        ]
+                    ],
+                ],
+                [
+                    'value_id' => '5',
+                    'store_id' => 0,
+                    'provider' => 'youtube',
+                    'url' => 'https://www.youtube.com/watch?v=ab123456',
+                    'title' => 'Some second title',
+                    'description' => 'Description second',
+                    'metadata' => 'meta two',
+                ],
+                3
+            ],
+            'not_new_video' => [
+                [
+                    '72mljfhmasfilp9cuq' => [
+                        'position' => '3',
+                        'media_type' => 'external-video',
+                        'file' => '/i/n/index111111.jpg',
+                        'value_id' => '4',
+                        'label' => '',
+                        'disabled' => '0',
+                        'removed' => '',
+                        'video_provider' => 'youtube',
+                        'video_url' => 'https://www.youtube.com/watch?v=ab123456',
+                        'video_url_default' => 'https://www.youtube.com/watch?v=ab123456',
+                        'video_title' => 'Some second title',
+                        'video_title_default' => 'Some second title',
+                        'video_description' => 'Description second',
+                        'video_metadata' => 'meta two',
+                        'role' => '',
+                    ],
+                ],
+                [
+                    'value_id' => '4',
+                    'store_id' => 0,
+                    'provider' => 'youtube',
+                    'url' => 'https://www.youtube.com/watch?v=ab123456',
+                    'title' => 'Some second title',
+                    'description' => 'Description second',
+                    'metadata' => 'meta two',
+                ],
+                1
+            ],
+        ];
+    }
+
+    /**
+     * Tests empty media gallery
+     */
+    public function testAfterExecuteEmpty(): void
     {
         $this->product->expects($this->once())
             ->method('getData')
@@ -162,7 +249,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testBeforeExecute()
+    public function testBeforeExecute(): void
     {
         $mediaData = [
             'images' => [

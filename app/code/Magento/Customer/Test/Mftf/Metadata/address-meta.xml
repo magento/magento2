@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateAddress" dataType="address" type="create">
+        <field key="region">region</field>
+        <field key="country_id">string</field>
+        <array key="street">
+            <value>string</value>
+        </array>
+        <field key="company">string</field>
+        <field key="telephone">string</field>
+        <field key="fax">string</field>
+        <field key="postcode">string</field>
+        <field key="city">string</field>
+        <field key="firstname">string</field>
+        <field key="lastname">string</field>
+        <field key="middlename">string</field>
+        <field key="prefix">string</field>
+        <field key="suffix">string</field>
+        <field key="vat_id">string</field>
+        <field key="default_shipping">boolean</field>
+        <field key="default_billing">boolean</field>
+        <field key="extension_attributes">empty_extension_attribute</field>
+        <array key="custom_attributes">
+            <value>custom_attribute</value>
+        </array>
+    </operation>
+    <operation name="UpdateAddress" dataType="address" type="update">
+        <field key="id">integer</field>
+        <field key="customer_id">integer</field>
+        <field key="region">region</field>
+        <field key="region_id">integer</field>
+        <field key="country_id">string</field>
+        <array key="street">
+            <value>string</value>
+        </array>
+        <field key="company">string</field>
+        <field key="telephone">string</field>
+        <field key="fax">string</field>
+        <field key="postcode">string</field>
+        <field key="city">string</field>
+        <field key="firstname">string</field>
+        <field key="lastname">string</field>
+        <field key="middlename">string</field>
+        <field key="prefix">string</field>
+        <field key="suffix">string</field>
+        <field key="vat_id">string</field>
+        <field key="default_shipping">boolean</field>
+        <field key="default_billing">boolean</field>
+        <field key="extension_attributes">empty_extension_attribute</field>
+        <array key="custom_attributes">
+            <value>custom_attribute</value>
+        </array>
+    </operation>
+</operations>

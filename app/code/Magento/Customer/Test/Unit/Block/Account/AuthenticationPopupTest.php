@@ -128,6 +128,9 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->model->getConfig());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderGetConfig()
     {
         return [

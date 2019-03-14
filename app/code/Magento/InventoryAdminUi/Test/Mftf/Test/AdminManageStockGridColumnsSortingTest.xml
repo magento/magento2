@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminManageStockGridColumnsSortingTest">
+        <annotations>
+            <stories value="Columns sorting order changed by Admin user"/>
+            <title value="Columns sorting order changed in Manage Stocks grid by Admin user"/>
+            <description value="You should be able to Change Columns Sorting Order in Manage Stock grid."/>
+            <testCaseId value="MSI-935"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="sort_order_test"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <createData entity="BasicMsiStock1" stepKey="createCustomStock1"/>
+            <createData entity="BasicMsiStock2" stepKey="createCustomStock2"/>
+            <createData entity="BasicMsiStock3" stepKey="createCustomStock3"/>
+            <createData entity="BasicMsiStock4" stepKey="createCustomStock4"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+
+            <deleteData createDataKey="createCustomStock1" stepKey="deleteStock1"/>
+            <deleteData createDataKey="createCustomStock2" stepKey="deleteStock2"/>
+            <deleteData createDataKey="createCustomStock3" stepKey="deleteStock3"/>
+            <deleteData createDataKey="createCustomStock4" stepKey="deleteStock4"/>
+        </after>
+
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockGridPage"/>
+        <waitForPageLoad time="30" stepKey="waitForStockGridPageLoad"/>
+
+        <comment userInput="Reset sorting for ID to avoid wrong behavior" stepKey="resetSortingForIdComment"/>
+        <click selector="{{AdminGridHeaders.headerByName('Name')}}" stepKey="clickOnNameHeaderToResetSorting"/>
+        <waitForPageLoad time="10" stepKey="waitForStockGridPageLoadAfterResetSorting"/>
+
+        <comment userInput="Ascend sorting for Id" stepKey="ascendSortingForIdComment"/>
+        <click selector="{{AdminGridHeaders.headerByName('ID')}}" stepKey="clickOnIdHeaderToSetAscendSorting"/>
+        <waitForPageLoad time="10" stepKey="waitForStockGridPageLoadAfterSettingAscendSortingForId"/>
+        <see userInput="Default Stock" selector="{{AdminGridRow.rowByIndex('0')}}" stepKey="seeDefaultStockIdInRow1WhenAscendSorting"/>
+        <see userInput="$$createCustomStock1.return$$" selector="{{AdminGridRow.rowByIndex('1')}}" stepKey="seeCustomStock1IdInRow2WhenAscendSorting"/>
+        <see userInput="$$createCustomStock2.return$$" selector="{{AdminGridRow.rowByIndex('2')}}" stepKey="seeCustomStock2IdInRow3WhenAscendSorting"/>
+        <see userInput="$$createCustomStock3.return$$" selector="{{AdminGridRow.rowByIndex('3')}}" stepKey="seeCustomStock3IdInRow4WhenAscendSorting"/>
+        <see userInput="$$createCustomStock4.return$$" selector="{{AdminGridRow.rowByIndex('4')}}" stepKey="seeCustomStock4IdInRow5WhenAscendSorting"/>
+
+        <comment userInput="Descend sorting for Id" stepKey="descendSortingForIdComment"/>
+        <click selector="{{AdminGridHeaders.headerByName('ID')}}" stepKey="clickOnIdHeaderToSetDescendSorting"/>
+        <waitForPageLoad time="10" stepKey="waitForStockGridPageLoadAfterSettingDescendSortingForId"/>
+        <see userInput="$$createCustomStock4.return$$" selector="{{AdminGridRow.rowByIndex('0')}}" stepKey="seeCustomStock4IdInRow1WhenDescendSorting"/>
+        <see userInput="$$createCustomStock3.return$$" selector="{{AdminGridRow.rowByIndex('1')}}" stepKey="seeCustomStock3IdInRow2WhenDescendSorting"/>
+        <see userInput="$$createCustomStock2.return$$" selector="{{AdminGridRow.rowByIndex('2')}}" stepKey="seeCustomStock2IdInRow3WhenDescendSorting"/>
+        <see userInput="$$createCustomStock1.return$$" selector="{{AdminGridRow.rowByIndex('3')}}" stepKey="seeCustomStock1IdInRow4WhenDescendSorting"/>
+        <see userInput="Default Stock" selector="{{AdminGridRow.rowByIndex('4')}}" stepKey="seeDefaultStockIdInRow5WhenDescendSorting"/>
+
+        <comment userInput="Ascend sorting for Name" stepKey="ascendSortingForNameComment"/>
+        <click selector="{{AdminGridHeaders.headerByName('Name')}}" stepKey="clickOnNameHeaderToSetAscendSorting"/>
+        <waitForPageLoad time="10" stepKey="waitForStockGridPageLoadAfterSettingAscendSortingForName"/>
+        <see userInput="$$createCustomStock1.stock[name]$$" selector="{{AdminGridRow.rowByIndex('0')}}" stepKey="seeCustomStock1NameInRow1WhenAscendSorting"/>
+        <see userInput="$$createCustomStock2.stock[name]$$" selector="{{AdminGridRow.rowByIndex('1')}}" stepKey="seeCustomStock2NameInRow2WhenAscendSorting"/>
+        <see userInput="$$createCustomStock3.stock[name]$$" selector="{{AdminGridRow.rowByIndex('2')}}" stepKey="seeCustomStock3NameInRow3WhenAscendSorting"/>
+        <see userInput="$$createCustomStock4.stock[name]$$" selector="{{AdminGridRow.rowByIndex('3')}}" stepKey="seeCustomStock4NameInRow4WhenAscendSorting"/>
+        <see userInput="Default Stock" selector="{{AdminGridRow.rowByIndex('4')}}" stepKey="seeDefaultStockNameInRow5WhenAscendSorting"/>
+
+        <comment userInput="Descend sorting for Name" stepKey="descendSortingForNameComment"/>
+        <click selector="{{AdminGridHeaders.headerByName('Name')}}" stepKey="clickOnNameHeaderToSetDescendSorting"/>
+        <waitForPageLoad time="10" stepKey="waitForStockGridPageLoadAfterSettingDescendSortingForName"/>
+        <see userInput="Default Stock" selector="{{AdminGridRow.rowByIndex('0')}}" stepKey="seeDefaultStockNameInRow1WhenDescendSorting"/>
+        <see userInput="$$createCustomStock4.stock[name]$$" selector="{{AdminGridRow.rowByIndex('1')}}" stepKey="seeCustomStock4NameInRow2WhenDescendSorting"/>
+        <see userInput="$$createCustomStock3.stock[name]$$" selector="{{AdminGridRow.rowByIndex('2')}}" stepKey="seeCustomStock3NameInRow3WhenDescendSorting"/>
+        <see userInput="$$createCustomStock2.stock[name]$$" selector="{{AdminGridRow.rowByIndex('3')}}" stepKey="seeCustomStock2NameInRow4WhenDescendSorting"/>
+        <see userInput="$$createCustomStock1.stock[name]$$" selector="{{AdminGridRow.rowByIndex('4')}}" stepKey="seeCustomStock1NameInRow5WhenDescendSorting"/>
+    </test>
+</tests>

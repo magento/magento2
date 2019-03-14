@@ -12,7 +12,7 @@ namespace Magento\InventorySourceSelectionApi\Api\Data;
  *
  * @api
  */
-interface SourceSelectionResultInterface
+interface SourceSelectionResultInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @return \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface[]
@@ -23,4 +23,21 @@ interface SourceSelectionResultInterface
      * @return bool
      */
     public function isShippable() : bool;
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * @return \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ?SourceSelectionResultExtensionInterface;
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(
+        \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultExtensionInterface $extensionAttributes
+    ): void;
 }

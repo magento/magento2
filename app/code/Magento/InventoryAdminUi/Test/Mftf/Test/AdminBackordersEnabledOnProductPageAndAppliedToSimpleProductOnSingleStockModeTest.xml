@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="BackordersEnabledOnProductPageAndAppliedToSimpleProductOnSingleStockModeTest">
+        <annotations>
+            <stories value="CatalogInventory stock option"/>
+            <title value="Backorders enabled on Product page and applied from Homepage to Simple product on Single Stock mode"/>
+            <description value="In single stock mode you should be able to create order with simple product and enabled backorders on product page"/>
+            <testCaseId value="MSI-1559"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="single_mode"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Msi_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+
+            <comment userInput="On created product enable backorders." stepKey="inCreatedProductEnableBackordersComment"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductGridForFindCreatedProduct"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAllFilters"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findCreatedProductBySku">
+                <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+                <argument name="value" value="$$createProduct.product[sku]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$createProduct.product[sku]$$)}}" stepKey="clickOnEditCreatedProduct"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+
+            <comment userInput="Config advanced inventory" stepKey="configAdvancedInventoryComment"/>
+            <click selector="{{AdminProductSourcesSection.advancedInventory}}" stepKey="goToAdvancedInventory"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+            <uncheckOption selector="{{AdminAdvancedInventorySection.backordersUseDefault}}" stepKey="clickOnUseDefaultBackorders"/>
+            <selectOption selector="{{AdminAdvancedInventorySection.backorders}}" userInput="Allow Qty Below 0" stepKey="selectAllowQtyBellow0"/>
+            <click selector="{{AdminAdvancedInventoryControlsSection.done}}" stepKey="clickOnDoneToSetOutOfStockThreshold"/>
+
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseProductForm"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <comment userInput="Customer login to storefront." stepKey="customerLoginToStorefrontComment"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <comment userInput="Add product to cart." stepKey="addProductToCartComment"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategory"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo($$createProduct.product[name]$$)}}" stepKey="openProductPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1001" stepKey="fillCorrectQuantity"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addProductToCart"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectShippingMethod"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="navigateToSecondCheckoutStep"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+
+        <comment userInput="Go to order in admin panel for verify data." stepKey="searchAndVerifyOrderDataComment"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrderPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderByNumber"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad11"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad12"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 1001" stepKey="seeOrderedQty"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemProductName('1')}}" userInput="$$createProduct.product[name]$$" stepKey="seeOrderedProductName"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemProductSku('1')}}" userInput="$$createProduct.product[sku]$$" stepKey="seeOrderedProductSku"/>
+    </test>
+</tests>

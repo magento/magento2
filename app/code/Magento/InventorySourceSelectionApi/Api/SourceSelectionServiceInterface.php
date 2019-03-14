@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelectionApi\Api;
 
-use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
-use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
-
 /**
  * Returns source selection algorithm result for given Inventory Request
  *
@@ -18,12 +15,12 @@ use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
 interface SourceSelectionServiceInterface
 {
     /**
-     * @param InventoryRequestInterface $inventoryRequest
+     * @param \Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface $inventoryRequest
      * @param string $algorithmCode
      * @return \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface
      */
     public function execute(
-        InventoryRequestInterface $inventoryRequest,
+        \Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface $inventoryRequest,
         string $algorithmCode
-    ): SourceSelectionResultInterface;
+    ): \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
 }

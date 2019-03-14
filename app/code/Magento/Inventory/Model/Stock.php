@@ -30,15 +30,17 @@ class Stock extends AbstractExtensibleModel implements StockInterface
     /**
      * @inheritdoc
      */
-    public function getStockId()
+    public function getStockId(): ?int
     {
-        return $this->getData(self::STOCK_ID);
+        return $this->getData(self::STOCK_ID) === null ?
+            null:
+            (int)$this->getData(self::STOCK_ID);
     }
 
     /**
      * @inheritdoc
      */
-    public function setStockId($stockId)
+    public function setStockId(?int $stockId): void
     {
         $this->setData(self::STOCK_ID, $stockId);
     }
@@ -46,7 +48,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
     /**
      * @inheritdoc
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->getData(self::NAME);
     }
@@ -54,7 +56,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
     /**
      * @inheritdoc
      */
-    public function setName($name)
+    public function setName(?string $name): void
     {
         $this->setData(self::NAME, $name);
     }
@@ -62,7 +64,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): ?StockExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
@@ -75,7 +77,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(StockExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(StockExtensionInterface $extensionAttributes): void
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }

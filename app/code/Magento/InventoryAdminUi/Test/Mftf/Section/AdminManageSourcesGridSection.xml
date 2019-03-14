@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminManageSourcesGridBody">
+        <element name="dataRows" type="input" selector=".data-row"/>
+    </section>
+    <section name="AdminManageSourcesGridControls">
+        <element name="addNewSource" type="button" selector="#add" timeout="30"/>
+        <element name="done" type="button" selector=".page-main-actions button.action-primary" timeout="10"/>
+        <element name="multicheckDropdown" type="button" selector="div[data-role='grid-wrapper'] th.data-grid-multicheck-cell button.action-multicheck-toggle"/>
+        <element name="multicheckOption" type="button" selector="//div[@data-role='grid-wrapper']//th[contains(@class, data-grid-multicheck-cell)]//li//span[text() = '{{label}}']" parameterized="true"/>
+    </section>
+    <section name="AdminManageSourcesGridFilterControls">
+        <element name="dropDown" type="button" selector=".admin__data-grid-header .admin__data-grid-filters-current._show"/>
+        <element name="code" type="input" selector=".admin__data-grid-filters-wrap input[name='source_code']"/>
+        <element name="name" type="input" selector=".admin__data-grid-filters-wrap input[name='name']"/>
+        <element name="priority" type="input" selector=".admin__data-grid-filters-wrap input[name='priority']"/>
+        <element name="selectStatus" type="input" selector=".admin__data-grid-filters-wrap div[data-role='advanced-select']"/>
+        <element name="enabledOption" type="text" selector="li[data-role='option-group']:nth-of-type(1)"/>
+        <element name="disabledOption" type="text" selector="li[data-role='option-group']:nth-of-type(2)"/>
+        <element name="doneButton" type="button" selector=".admin__data-grid-filters-wrap div.action-menu button[data-action='close-advanced-select']"/>
+    </section>
+    <section name="AdminManageSourcesGridColumnControls">
+        <element name="dropDown" type="textarea" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu"/>
+    </section>
+    <section name="AdminManageSourcesGridMassAction">
+        <element name="actionsButton" type="button" selector="div.admin__data-grid-header-row button.action-select"/>
+        <element name="changeStatusButton" type="text" selector="div.action-menu-items>ul.action-menu>li:nth-of-type(1)>span.action-menu-item"/>
+        <element name="changeStatusEnableButton" type="text" selector="div.action-menu-items>ul.action-menu>li:nth-of-type(1)>ul.action-submenu>li:nth-of-type(1)>span.action-menu-item"/>
+        <element name="changeStatusDisableButton" type="text" selector="div.action-menu-items>ul.action-menu>li:nth-of-type(1)>ul.action-submenu>li:nth-of-type(2)>span.action-menu-item"/>
+    </section>
+    <section name="AdminManageSourceGridBody">
+        <element name="dataRows" type="input" selector=".data-row"/>
+        <element name="sourceSelectedCheckbox" type="checkbox" selector="#idscheck{{code}}" parameterized="true"/>
+        <element name="idSelectedCheckbox" type="checkbox" selector="table[data-role='grid'] tr.data-row[data-repeat-index='{{id}}'] input[type='checkbox']" parameterized="true"/>
+    </section>
+</sections>
