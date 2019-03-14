@@ -22,7 +22,7 @@ namespace Magento\Authorizenet\Model;
  * @method \Magento\Authorizenet\Model\Debug setRequestDump(string $value)
  * @method string getResultDump()
  * @method \Magento\Authorizenet\Model\Debug setResultDump(string $value)
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ * @deprecated 100.3.1 Authorize.net is removing all support for this payment method
  */
 class Debug extends \Magento\Framework\Model\AbstractModel
 {

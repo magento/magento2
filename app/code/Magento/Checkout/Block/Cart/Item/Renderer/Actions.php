@@ -11,6 +11,7 @@ use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Actions extends Text
 {

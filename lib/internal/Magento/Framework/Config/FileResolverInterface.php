@@ -9,6 +9,7 @@ namespace Magento\Framework\Config;
  * File resolver interface.
  *
  * @api
+ * @since 100.0.2
  */
 interface FileResolverInterface
 {

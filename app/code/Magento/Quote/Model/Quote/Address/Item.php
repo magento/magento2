@@ -199,6 +199,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
 
     /**
      * @inheritdoc
+     * @since 101.1.1
      */
     public function getOptionByCode($code)
     {

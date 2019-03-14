@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote;
  * Purchase products from quote.
  *
  * @api May be used for pluginization.
+ * @since 100.2.0
  */
 class Purchase
 {
@@ -46,6 +47,7 @@ class Purchase
      * @param Quote $quote
      * @return int Order id
      * @throws LocalizedException if order can not be placed for a quote.
+     * @since 100.2.0
      */
     public function purchase(Quote $quote): int
     {

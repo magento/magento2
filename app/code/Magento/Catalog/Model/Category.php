@@ -98,6 +98,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @var ResourceModel\Category
+     * @since 102.0.6
      */
     protected $_resource;
 
@@ -105,7 +106,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * URL rewrite model
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     protected $_urlRewrite;
 
@@ -133,7 +134,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Attributes are that part of interface
      *
-     * @deprecated
+     * @deprecated 103.0.0
      * @see CategoryInterface::ATTRIBUTES
      * @var array
      */
@@ -316,7 +317,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Category
-     * @deprecated because resource models should be used directly
+     * @deprecated 102.0.6 because resource models should be used directly
+     * @since 102.0.6
      */
     protected function _getResource()
     {

@@ -11,6 +11,7 @@ namespace Magento\CatalogImportExport\Model;
  * Interface StockItemImporterInterface
  *
  * @api
+ * @since 101.0.0
  */
 interface StockItemImporterInterface
 {
@@ -22,6 +23,7 @@ interface StockItemImporterInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Validation\ValidationException
+     * @since 101.0.0
      */
     public function import(array $stockData);
 }

@@ -13,7 +13,7 @@ use Magento\Framework\Search\Request\Query\Filter;
 /**
  * Class is responsible for checking if fulltext search is required for search query
  *
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class FullTextSearchCheck

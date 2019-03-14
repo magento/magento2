@@ -16,7 +16,7 @@ use Magento\Payment\Model\Method\TransparentInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ * @deprecated 100.3.1 Authorize.net is removing all support for this payment method
  */
 class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements TransparentInterface, ConfigInterface
 {

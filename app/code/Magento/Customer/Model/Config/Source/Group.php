@@ -17,13 +17,13 @@ class Group implements \Magento\Framework\Option\ArrayInterface
     protected $_options;
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @var GroupManagementInterface
      */
     protected $_groupManagement;
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @var \Magento\Framework\Convert\DataObject
      */
     protected $_converter;

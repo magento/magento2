@@ -14,6 +14,7 @@ use Magento\Framework\Search\Request\QueryInterface;
  *
  * @codeCoverageIgnore
  * @api
+ * @since 100.0.2
  */
 class Request implements RequestInterface
 {

@@ -10,6 +10,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class ImageProvider
 {
@@ -20,12 +21,15 @@ class ImageProvider
 
     /**
      * @var \Magento\Checkout\CustomerData\ItemPoolInterface
-     * @deprecated No need for the pool as images are resolved in the default item implementation
+     * @deprecated 100.2.7 No need for the pool as images are resolved in the default item implementation
      * @see \Magento\Checkout\CustomerData\DefaultItem::getProductForThumbnail
      */
     protected $itemPool;
 
-    /** @var \Magento\Checkout\CustomerData\DefaultItem */
+    /**
+     * @var \Magento\Checkout\CustomerData\DefaultItem
+     * @since 100.2.7
+     */
     protected $customerDataItem;
 
     /**

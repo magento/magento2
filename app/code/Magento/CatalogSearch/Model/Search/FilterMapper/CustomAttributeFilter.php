@@ -18,7 +18,7 @@ use Magento\Catalog\Model\Product;
 /**
  * Applies filters by custom attributes to base select.
  *
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class CustomAttributeFilter

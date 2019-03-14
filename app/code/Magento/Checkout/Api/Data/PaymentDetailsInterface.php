@@ -8,6 +8,7 @@ namespace Magento\Checkout\Api\Data;
 /**
  * Interface PaymentDetailsInterface
  * @api
+ * @since 100.0.2
  */
 interface PaymentDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

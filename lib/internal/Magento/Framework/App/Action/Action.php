@@ -20,6 +20,7 @@ use Magento\Framework\Exception\NotFoundException;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class Action extends AbstractAction
 {

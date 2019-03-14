@@ -563,6 +563,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @return Import\AbstractSource
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.2.7
      */
     public function uploadFileAndGetSource()
     {

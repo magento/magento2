@@ -155,7 +155,7 @@ class LocationDirectory
      * @param int $countryId
      * @param string $regionCode
      * @return string
-     * @deprecated
+     * @deprecated 100.3.1
      */
     public function getRegionId($countryId, $regionCode)
     {

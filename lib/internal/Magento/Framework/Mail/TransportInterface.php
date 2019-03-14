@@ -9,6 +9,7 @@ namespace Magento\Framework\Mail;
  * Mail Transport interface
  *
  * @api
+ * @since 100.0.2
  */
 interface TransportInterface
 {
@@ -24,7 +25,7 @@ interface TransportInterface
      * Get message
      *
      * @return \Magento\Framework\Mail\MessageInterface
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getMessage();
 }

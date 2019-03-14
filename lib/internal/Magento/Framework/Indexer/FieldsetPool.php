@@ -9,6 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @api Retrieve Fieldset when implementing custom Indexer\Action
+ * @since 100.0.2
  */
 class FieldsetPool
 {

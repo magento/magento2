@@ -12,6 +12,7 @@ use Magento\Framework\Api\SearchCriteriaInterface as BaseSearchCriteriaInterface
  *
  * @api
  * @package Magento\Framework\Api\Search
+ * @since 100.0.2
  */
 interface SearchCriteriaInterface extends BaseSearchCriteriaInterface
 {

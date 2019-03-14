@@ -30,7 +30,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     protected $priceCurrency;
 

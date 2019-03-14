@@ -15,6 +15,7 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Factory
 {

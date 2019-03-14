@@ -35,6 +35,7 @@ class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Optio
 
     /**
      * @inheritdoc
+     * @since 100.3.1
      */
     public function getSelectionPrice($selection)
     {

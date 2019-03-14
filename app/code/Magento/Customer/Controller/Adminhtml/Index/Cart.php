@@ -16,7 +16,7 @@ use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  */
 class Cart extends \Magento\Customer\Controller\Adminhtml\Index
 {

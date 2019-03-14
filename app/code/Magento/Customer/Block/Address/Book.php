@@ -93,7 +93,7 @@ class Book extends \Magento\Framework\View\Element\Template
      * Generate and return "New Address" URL
      *
      * @return string
-     * @deprecated not used in this block
+     * @deprecated 102.0.1 not used in this block
      * @see \Magento\Customer\Block\Address\Grid::getAddAddressUrl
      */
     public function getAddAddressUrl()
@@ -118,7 +118,7 @@ class Book extends \Magento\Framework\View\Element\Template
      * Generate and return "Delete" URL
      *
      * @return string
-     * @deprecated not used in this block
+     * @deprecated 102.0.1 not used in this block
      * @see \Magento\Customer\Block\Address\Grid::getDeleteUrl
      */
     public function getDeleteUrl()
@@ -133,7 +133,7 @@ class Book extends \Magento\Framework\View\Element\Template
      *
      * @param int $addressId
      * @return string
-     * @deprecated not used in this block
+     * @deprecated 102.0.1 not used in this block
      * @see \Magento\Customer\Block\Address\Grid::getAddressEditUrl
      */
     public function getAddressEditUrl($addressId)
@@ -159,7 +159,7 @@ class Book extends \Magento\Framework\View\Element\Template
      *
      * @return \Magento\Customer\Api\Data\AddressInterface[]|bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @deprecated not used in this block
+     * @deprecated 102.0.1 not used in this block
      * @see \Magento\Customer\Block\Address\Grid::getAdditionalAddresses
      */
     public function getAdditionalAddresses()

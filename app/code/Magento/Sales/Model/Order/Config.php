@@ -157,6 +157,7 @@ class Config
      *
      * @param string|null $code
      * @return string|null
+     * @since 102.0.1
      */
     public function getStatusFrontendLabel(?string $code): ?string
     {
@@ -307,7 +308,7 @@ class Config
      * @param string $state
      * @param string $status
      * @return \Magento\Framework\Phrase|string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getStateLabelByStateAndStatus($state, $status)
     {

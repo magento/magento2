@@ -47,7 +47,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\Collection
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $quoteCollection;
 
@@ -246,7 +246,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      * @param FilterGroup $filterGroup The filter group.
      * @param QuoteCollection $collection The quote collection.
      * @return void
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @throws InputException The specified filter group or quote collection does not exist.
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, QuoteCollection $collection)

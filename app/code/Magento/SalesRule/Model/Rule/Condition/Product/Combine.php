@@ -89,6 +89,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
 
     /**
      * @inheritdoc
+     * @since 101.1.0
      */
     protected function _isValid($entity)
     {

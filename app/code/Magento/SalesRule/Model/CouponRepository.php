@@ -198,7 +198,7 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      *
      * @param FilterGroup $filterGroup
      * @param Collection $collection
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return void
      */
     protected function addFilterGroupToCollection(
@@ -220,7 +220,7 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     /**
      * Retrieve collection processor
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

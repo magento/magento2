@@ -23,6 +23,7 @@ use Magento\Framework\GraphQl\Query\Fields as QueryFields;
  * Front controller for web API GraphQL area.
  *
  * @api
+ * @since 100.3.0
  */
 class GraphQl implements FrontControllerInterface
 {
@@ -101,6 +102,7 @@ class GraphQl implements FrontControllerInterface
      *
      * @param RequestInterface $request
      * @return ResponseInterface
+     * @since 100.3.0
      */
     public function dispatch(RequestInterface $request) : ResponseInterface
     {

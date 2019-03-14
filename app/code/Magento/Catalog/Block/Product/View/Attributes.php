@@ -106,6 +106,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @param array $excludeAttr
      * @return bool
+     * @since 103.0.0
      */
     protected function isVisibleOnFrontend(
         \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute,

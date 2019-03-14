@@ -19,6 +19,7 @@ use Magento\Framework\View\Element\Template;
  * @method string getPriceRenderHandle()
  *
  * @api
+ * @since 100.0.2
  */
 class Render extends AbstractBlock
 {

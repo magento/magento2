@@ -12,6 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * An advanced context that contains information necessary for view files fallback system
  *
  * @api
+ * @since 100.0.2
  */
 class FallbackContext extends Context
 {

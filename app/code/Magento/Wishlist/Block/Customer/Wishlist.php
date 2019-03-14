@@ -31,6 +31,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 
     /**
      * @var  \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @since 101.1.1
      */
     protected $_collection;
 
@@ -101,6 +102,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * Retrieve Wishlist Product Items collection
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @since 101.1.1
      */
     public function getWishlistItems()
     {

@@ -54,7 +54,7 @@ class Image implements ProductRenderCollectorInterface
 
     /**
      * @var DesignInterface
-     * @deprecated 2.3.0 DesignLoader is used for design theme loading
+     * @deprecated 103.0.1 DesignLoader is used for design theme loading
      */
     private $design;
 

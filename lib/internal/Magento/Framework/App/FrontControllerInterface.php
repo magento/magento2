@@ -11,6 +11,7 @@ namespace Magento\Framework\App;
  * Evary application area has own front controller
  *
  * @api
+ * @since 100.0.2
  */
 interface FrontControllerInterface
 {

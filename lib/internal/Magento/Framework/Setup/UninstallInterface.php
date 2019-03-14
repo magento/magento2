@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup;
  * Interface for handling data removal during module uninstall
  *
  * @api
+ * @since 100.0.2
  */
 interface UninstallInterface
 {
