@@ -144,8 +144,9 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
                     'options' => [
                         [
                             'label' => 'Label',
-                            'value' => 'Value'
-                        ]
+                            'value' => 'Value',
+                            '__disableTmpl' => true,
+                        ],
                     ],
                     'is_used_in_grid' => true,
                     'is_visible_in_grid' => true,
