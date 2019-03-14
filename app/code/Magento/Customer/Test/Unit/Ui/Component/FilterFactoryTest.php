@@ -72,6 +72,7 @@ class FilterFactoryTest extends \PHPUnit_Framework_TestCase
                 'config' => [
                     'dataScope' => $filterName,
                     'label' => __('Label'),
+                    '__disableTmpl' => 'true',
                     'options' => [['value' => 'Value', 'label' => 'Label']],
                     'caption' => __('Select...'),
                 ],
