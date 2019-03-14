@@ -37,7 +37,7 @@ class Enum implements ConfigElementInterface
     public function __construct(
         string $name,
         array $values,
-        string $description = ""
+        string $description
     ) {
         $this->name = $name;
         $this->values = $values;

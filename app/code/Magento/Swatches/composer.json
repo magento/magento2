@@ -13,6 +13,7 @@
         "magento/module-configurable-product": "*",
         "magento/module-customer": "*",
         "magento/module-eav": "*",
+        "magento/module-page-cache": "*",
         "magento/module-media-storage": "*",
         "magento/module-store": "*",
         "magento/module-theme": "*"

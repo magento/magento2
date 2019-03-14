@@ -14,7 +14,7 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 
 /**
  * Iterate through all attribute sets to retrieve attributes for any given entity type
@@ -69,7 +69,7 @@ class EntityAttributeList
      * @param string $entityCode
      * @param MetadataServiceInterface $metadataService
      * @return boolean[]
-     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
      */
     public function getDefaultEntityAttributes(
         string $entityCode,
@@ -93,7 +93,7 @@ class EntityAttributeList
                     $this->attributeManagement->getAttributes($entityCode, $attributeSet->getAttributeSetId())
                 );
             } catch (NoSuchEntityException $exception) {
-                throw new GraphQlInputException(__('Entity code %1 does not exist.', [$entityCode]));
+                throw new GraphQlNoSuchEntityException(__('Entity code %1 does not exist.', [$entityCode]));
             }
         }
         $attributeCodes = [];

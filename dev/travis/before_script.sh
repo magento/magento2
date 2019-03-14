@@ -16,9 +16,9 @@ case $TEST_SUITE in
         test_set_list=("${tests_directory[@]}" "${module_directories[@]}")
 
         test_set_count=$(printf "$test_set_list" | wc -l)
-        test_set_size[1]=$(printf "%.0f" $(echo "$test_set_count*0.17" | bc))
-        test_set_size[2]=$(printf "%.0f" $(echo "$test_set_count*0.32" | bc))
-        test_set_size[3]=$(printf "%.0f" $(echo "$test_set_count*0.50" | bc))
+        test_set_size[1]=$(printf "%.0f" $(echo "$test_set_count*0.13" | bc))
+        test_set_size[2]=$(printf "%.0f" $(echo "$test_set_count*0.31" | bc))
+        test_set_size[3]=$(printf "%.0f" $(echo "$test_set_count*0.48" | bc))
         test_set_size[4]=$((test_set_count-test_set_size[1]-test_set_size[2]-test_set_size[3]))
         echo "Total = ${test_set_count}; Batch #1 = ${test_set_size[1]}; Batch #2 = ${test_set_size[2]}; Batch #3 = ${test_set_size[3]}; Batch #4 = ${test_set_size[4]};";
 
@@ -141,6 +141,7 @@ case $TEST_SUITE in
 
         cd ../../..
         ;;
+
     msi-api-functional)
         echo "Installing Magento"
         mysql -uroot -e 'CREATE DATABASE magento2;'
@@ -164,5 +165,36 @@ case $TEST_SUITE in
         cp ./phpunit_msi.xml.dist ./phpunit.xml
         sed -e "s?magento.url?${MAGENTO_HOST_NAME}?g" --in-place ./phpunit.xml
 
+        ;;
+
+    graphql-api-functional)
+        echo "Installing Magento"
+        mysql -uroot -e 'CREATE DATABASE magento2;'
+        php bin/magento setup:install -q \
+            --language="en_US" \
+            --timezone="UTC" \
+            --currency="USD" \
+            --base-url="http://${MAGENTO_HOST_NAME}/" \
+            --admin-firstname="John" \
+            --admin-lastname="Doe" \
+            --backend-frontname="backend" \
+            --admin-email="admin@example.com" \
+            --admin-user="admin" \
+            --use-rewrites=1 \
+            --admin-use-security-key=0 \
+            --admin-password="123123q"
+
+        echo "Prepare api-functional tests for running"
+        cd dev/tests/api-functional
+        cp -r _files/Magento/TestModuleGraphQl* ../../../app/code/Magento # Deploy and enable test modules before running tests
+
+        cp ./phpunit_graphql.xml.dist ./phpunit.xml
+        sed -e "s?magento.url?${MAGENTO_HOST_NAME}?g" --in-place ./phpunit.xml
+
+        cd ../../..
+        php bin/magento setup:upgrade
+
+        echo "Enabling production mode"
+        php bin/magento deploy:mode:set production
         ;;
 esac

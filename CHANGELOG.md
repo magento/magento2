@@ -4,7 +4,7 @@ To get detailed information about changes in Magento 2.3.0, see the [Release Not
 
 2.1.0
 =============
-To get detailed information about changes in Magento 2.1.0, please visit [Magento Community Edition (CE) Release Notes](http://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.0CE.html "Magento Community Edition (CE) Release Notes")
+To get detailed information about changes in Magento 2.1.0, please visit [Magento Community Edition (CE) Release Notes](https://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.0CE.html "Magento Community Edition (CE) Release Notes")
 
 2.0.0
 =============
@@ -157,7 +157,7 @@ To get detailed information about changes in Magento 2.1.0, please visit [Magent
     * Updated styles 
 * Sample Data:
     * Improved sample data installation UX
-    * Updated sample data with Product Heros, color swatches, MAP and rule based product relations
+    * Updated sample data with Product Heroes, color swatches, MAP and rule based product relations
     * Improved sample data upgrade flow
     * Added the ability to log errors and set the error flag during sample data installation
 * Various improvements:
@@ -1025,7 +1025,7 @@ Tests:
     * Improved backend menu keyboard accessibility
     * Accessibility improvements: WAI-ARIA in a product item on a category page and related products
     * Checkout flow code can work with a separate DB storage
-    * <a href="http://devdocs.magento.com/guides/v1.0/release-notes/changes.html#change-devrc-unit">Unit tests moved to module directories</a>
+    * <a href="https://devdocs.magento.com/guides/v1.0/release-notes/changes.html#change-devrc-unit">Unit tests moved to module directories</a>
     * Addressed naming inconsistencies in REST routes
     * Added Advanced Developer workflow for frontend developers
 * Setup
@@ -2284,7 +2284,7 @@ Tests:
   * Fixed an issue where no results were found for Coupons reports
   * Fixed an issue with incremental Qty setting
   * Fixed an issue with allowing importing of negative weight values
-  * Fixed an issue with Inventory - Only X left Treshold being not dependent on Qty for Item's Status to Become Out of Stock
+  * Fixed an issue with Inventory - Only X left Threshold being not dependent on Qty for Item's Status to Become Out of Stock
   * Fixed an issue where the "Catalog Search Index index was rebuilt." message was displayed when reindexing the Catalog Search index
  * Search module:
   * Integrated the Search library to the advanced search functionality
@@ -2706,7 +2706,7 @@ Tests:
    * Ability to support extensible service data objects
    * No Code Duplication in Root Templates
  * Fixed bugs:
-   * Persistance session application. Loggin out the customer
+   * Persistence session application. Logging out the customer
    * Placing the order with two terms and conditions
    * Saving of custom option by service catalogProductCustomOptionsWriteServiceV1
    * Placing the order on frontend if enter in the street address line 1 and 2 255 symbols
@@ -2965,7 +2965,7 @@ Tests:
   * Fixed an issue with incorrect items label for the cases when there are more than one item in the category
   * Fixed an issue when configurable product was out of stock in Google Shopping while being in stock in the Magento backend
   * Fixed an issue when swipe gesture in menu widget was not supported on mobile
-  * Fixed an issue when it was impossible to enter alpha-numeric zip code on the stage of  estimating shipping and tax rates
+  * Fixed an issue when it was impossible to enter alphanumeric zip code on the stage of  estimating shipping and tax rates
   * Fixed an issue when custom price was not applied when editing an order
   * Fixed an issue when items were not returned to stock after unsuccessful order was placed
   * Fixed an issue when error message appeared "Cannot save the credit memo” while creating credit memo

@@ -8,7 +8,11 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 
+/**
+ * The copier creates product duplicates.
+ */
 class Copier
 {
     /**
@@ -49,7 +53,7 @@ class Copier
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
      */
-    public function copy(\Magento\Catalog\Model\Product $product)
+    public function copy(Product $product)
     {
         $product->getWebsiteIds();
         $product->getCategoryIds();
@@ -79,6 +83,7 @@ class Copier
                 ? $matches[1] . '-' . ($matches[2] + 1)
                 : $urlKey . '-1';
             $duplicate->setUrlKey($urlKey);
+            $duplicate->setData('url_path', null);
             try {
                 $duplicate->save();
                 $isDuplicateSaved = true;
@@ -94,6 +99,8 @@ class Copier
     }
 
     /**
+     * Returns product option repository.
+     *
      * @return Option\Repository
      * @deprecated 101.0.0
      */
@@ -107,6 +114,8 @@ class Copier
     }
 
     /**
+     * Returns metadata pool.
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      * @deprecated 101.0.0
      */

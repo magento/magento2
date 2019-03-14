@@ -98,9 +98,9 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider getFilesDataProvider
      *
-     * @param $libraryFiles array Files in lib directory
-     * @param $baseFiles array Files in base directory
-     * @param $themeFiles array Files in theme
+     * @param array $libraryFiles Files in lib directory
+     * @param array $baseFiles Files in base directory
+     * @param array $themeFiles Files in theme
      * *
      * @return void
      */
