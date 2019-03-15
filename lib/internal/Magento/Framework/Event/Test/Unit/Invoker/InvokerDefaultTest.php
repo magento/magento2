@@ -32,6 +32,11 @@ class InvokerDefaultTest extends \PHPUnit\Framework\TestCase
      */
     protected $_invokerDefault;
 
+    /**
+     * @var |Psr\Log|LoggerInterface
+     */
+    private $loggerMock;
+
     protected function setUp()
     {
         $this->_observerFactoryMock = $this->createMock(\Magento\Framework\Event\ObserverFactory::class);
@@ -41,10 +46,12 @@ class InvokerDefaultTest extends \PHPUnit\Framework\TestCase
             ['execute']
         );
         $this->_appStateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
 
         $this->_invokerDefault = new \Magento\Framework\Event\Invoker\InvokerDefault(
             $this->_observerFactoryMock,
-            $this->_appStateMock
+            $this->_appStateMock,
+            $this->loggerMock
         );
     }
 
@@ -166,12 +173,14 @@ class InvokerDefaultTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($notObserver)
         );
         $this->_appStateMock->expects(
-            $this->once()
+            $this->exactly(2)
         )->method(
             'getMode'
         )->will(
             $this->returnValue(\Magento\Framework\App\State::MODE_PRODUCTION)
         );
+
+        $this->loggerMock->expects($this->once())->method('warning');
 
         $this->_invokerDefault->dispatch(
             [

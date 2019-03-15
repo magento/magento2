@@ -9,7 +9,12 @@
 namespace Magento\Framework\Event\Invoker;
 
 use Magento\Framework\Event\Observer;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\App\State;
 
+/**
+ * Default Invoker.
+ */
 class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
 {
     /**
@@ -22,20 +27,29 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
     /**
      * Application state
      *
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected $_appState;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Framework\Event\ObserverFactory $observerFactory
-     * @param \Magento\Framework\App\State $appState
+     * @param State $appState
+     * @param LoggerInterface $logger
      */
     public function __construct(
         \Magento\Framework\Event\ObserverFactory $observerFactory,
-        \Magento\Framework\App\State $appState
+        State $appState,
+        LoggerInterface $logger = null
     ) {
         $this->_observerFactory = $observerFactory;
         $this->_appState = $appState;
+        $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(LoggerInterface::class);
     }
 
     /**
@@ -61,6 +75,8 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
     }
 
     /**
+     * Execute Observer.
+     *
      * @param \Magento\Framework\Event\ObserverInterface $object
      * @param Observer $observer
      * @return $this
@@ -70,7 +86,7 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
     {
         if ($object instanceof \Magento\Framework\Event\ObserverInterface) {
             $object->execute($observer);
-        } elseif ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
+        } elseif ($this->_appState->getMode() == State::MODE_DEVELOPER) {
             throw new \LogicException(
                 sprintf(
                     'Observer "%s" must implement interface "%s"',
@@ -78,6 +94,12 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
                     \Magento\Framework\Event\ObserverInterface::class
                 )
             );
+        } else {
+            $this->logger->warning(sprintf(
+                'Observer "%s" must implement interface "%s"',
+                get_class($object),
+                \Magento\Framework\Event\ObserverInterface::class
+            ));
         }
         return $this;
     }
