@@ -109,7 +109,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     }
 
     /**
-     *  @inheritdoc
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -117,7 +117,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     }
 
     /**
-     *  @inheritdoc
+     * @inheritdoc
      */
     public function isHidden()
     {
