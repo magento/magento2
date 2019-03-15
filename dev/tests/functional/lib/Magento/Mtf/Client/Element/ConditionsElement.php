@@ -285,7 +285,7 @@ class ConditionsElement extends SimpleElement
             $newCondition->find($this->addNew, Locator::SELECTOR_XPATH)->click();
 
             try {
-                $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select')->setValue($type);
+                $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'selectcondition')->setValue($type);
                 $isSetType = true;
             } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
                 $isSetType = false;
