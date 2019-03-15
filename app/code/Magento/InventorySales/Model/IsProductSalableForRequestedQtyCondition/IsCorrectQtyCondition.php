@@ -99,7 +99,8 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
         if ($this->isMinSaleQuantityCheckFailed($stockItemConfiguration, $requestedQty)) {
             return $this->createErrorResult(
                 'is_correct_qty-min_sale_qty',
-                __('The fewest you may purchase is %1',
+                __(
+                    'The fewest you may purchase is %1',
                     $stockItemConfiguration->getMinSaleQty()
                 )
             );
