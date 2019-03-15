@@ -11,5 +11,8 @@
     <section name="AdminCmsBlockContentSection">
         <element name="content" type="textarea" selector="#cms_block_form_content"/>
         <element name="insertWidgetButton" type="button" selector=".scalable.action-add-widget.plugin"/>
+        <element name="title" type="input" selector="input[name=title]"/>
+        <element name="identifier" type="input" selector="input[name=identifier]"/>
+        <element name="storeView" type="multiselect" selector="select[name=store_id]"/>
     </section>
 </sections>

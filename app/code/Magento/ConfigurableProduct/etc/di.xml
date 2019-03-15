@@ -245,4 +245,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector">
+        <plugin name="apply_tax_class_id" type="Magento\ConfigurableProduct\Plugin\Tax\Model\Sales\Total\Quote\CommonTaxCollector" />
+    </type>
 </config>
