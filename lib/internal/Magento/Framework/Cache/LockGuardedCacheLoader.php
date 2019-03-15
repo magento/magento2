@@ -52,7 +52,13 @@ class LockGuardedCacheLoader
     }
 
     /**
-     * @inheritdoc
+     * Load data.
+     *
+     * @param string $lockName
+     * @param callable $dataLoader
+     * @param callable $dataCollector
+     * @param callable $dataSaver
+     * @return array
      */
     public function lockedLoadData(
         string $lockName,

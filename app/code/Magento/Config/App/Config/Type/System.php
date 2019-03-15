@@ -231,8 +231,8 @@ class System implements ConfigTypeInterface
         return $this->lockQuery->lockedLoadData(
             self::$lockName,
             $loadAction,
-            [$this, 'readData'],
-            [$this, 'cacheData']
+            \Closure::fromCallable([$this, 'readData']),
+            \Closure::fromCallable([$this, 'cacheData'])
         );
     }
 
@@ -256,8 +256,8 @@ class System implements ConfigTypeInterface
         return $this->lockQuery->lockedLoadData(
             self::$lockName,
             $loadAction,
-            [$this, 'readData'],
-            [$this, 'cacheData']
+            \Closure::fromCallable([$this, 'readData']),
+            \Closure::fromCallable([$this, 'cacheData'])
         );
     }
 
@@ -295,8 +295,8 @@ class System implements ConfigTypeInterface
         return $this->lockQuery->lockedLoadData(
             self::$lockName,
             $loadAction,
-            [$this, 'readData'],
-            [$this, 'cacheData']
+            \Closure::fromCallable([$this, 'readData']),
+            \Closure::fromCallable([$this, 'cacheData'])
         );
     }
 
