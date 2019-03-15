@@ -68,15 +68,15 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
         self::assertCount(1, $response['cart']['shipping_addresses'][0]['available_shipping_methods']);
 
         $expectedAddressData = [
-            'amount' => 0,
-            'base_amount' => 0,
+            'amount' => 10,
+            'base_amount' => 10,
             'carrier_code' => 'flatrate',
             'carrier_title' => 'Flat Rate',
             'error_message' => '',
             'method_code' => 'flatrate',
             'method_title' => 'Fixed',
-            'price_incl_tax' => 0,
-            'price_excl_tax' => 0,
+            'price_incl_tax' => 10,
+            'price_excl_tax' => 10,
         ];
         self::assertEquals(
             $expectedAddressData,
