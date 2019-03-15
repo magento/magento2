@@ -136,67 +136,76 @@
 </section>
 
 <script>
-require(['jquery', 'prototype'], function(jQuery){
+require(['jquery'], function(jQuery){
 
 //<![CDATA[
-var submitButtons = $$('.submit-button');
-var updateButtons = $$('.update-button');
-var fields = $$('.qty-input');
+var submitButtons = jQuery('.submit-button');
+var updateButtons = jQuery('.update-button');
+var fields = jQuery('.qty-input');
 
-updateButtons.each(function (elem) {elem.disabled=true;elem.addClassName('disabled');});
-
-for(var i=0;i<fields.length;i++){
-    fields[i].observe('change', checkButtonsRelation)
-    fields[i].baseValue = fields[i].value;
+function enableButtons(buttons) {
+    buttons.removeClass('disabled').prop('disabled', false);
 }
+
+function disableButtons(buttons) {
+    buttons.addClass('disabled').prop('disabled', true);
+}
+
+disableButtons(updateButtons);
+
+fields.on('change', checkButtonsRelation);
+fields.each(function (i, elem) {
+    elem.baseValue = elem.value;
+});
 
 function checkButtonsRelation() {
     var hasChanges = false;
-    fields.each(function (elem) {
+    fields.each(function (i, elem) {
         if (elem.baseValue != elem.value) {
             hasChanges = true;
         }
     }.bind(this));
     if (hasChanges) {
-        submitButtons.each(function (elem) {elem.disabled=true;elem.addClassName('disabled');});
-        updateButtons.each(function (elem) {elem.disabled=false;elem.removeClassName('disabled');});
+        disableButtons(submitButtons);
+        enableButtons(updateButtons);
     }
     else {
-        submitButtons.each(function (elem) {elem.disabled=false;elem.removeClassName('disabled');});
-        updateButtons.each(function (elem) {elem.disabled=true;elem.addClassName('disabled');});
+        enableButtons(submitButtons);
+        disableButtons(updateButtons);
     }
 }
 
 submitCreditMemo = function() {
-    if ($('creditmemo_do_offline')) $('creditmemo_do_offline').value=0;
+    var creditMemoOffline = jQuery('#creditmemo_do_offline');
+    if (creditMemoOffline.length) {
+        creditMemoOffline.prop('value', 0);
+    }
     // Temporary solution will be replaced after refactoring order functionality
     jQuery('#edit_form').triggerHandler('save');
-}
+};
 
 submitCreditMemoOffline = function() {
-    if ($('creditmemo_do_offline')) $('creditmemo_do_offline').value=1;
+    var creditMemoOffline = jQuery('#creditmemo_do_offline');
+    if (creditMemoOffline.length) {
+        creditMemoOffline.prop('value', 1);
+    }
     // Temporary solution will be replaced after refactoring order functionality
     jQuery('#edit_form').triggerHandler('save');
-}
+};
 
-var sendEmailCheckbox = $('send_email');
-
-if (sendEmailCheckbox) {
-    var notifyCustomerCheckbox = $('notify_customer');
-    var creditmemoCommentText = $('creditmemo_comment_text');
-    Event.observe(sendEmailCheckbox, 'change', bindSendEmail);
+var sendEmailCheckbox = jQuery('#send_email');
+if (sendEmailCheckbox.length) {
+    var notifyCustomerCheckbox = jQuery('#notify_customer');
+    sendEmailCheckbox.on('change', bindSendEmail);
     bindSendEmail();
 }
 
-function bindSendEmail()
-{
-    if (sendEmailCheckbox.checked == true) {
-        notifyCustomerCheckbox.disabled = false;
-        //creditmemoCommentText.disabled = false;
+function bindSendEmail() {
+    if (sendEmailCheckbox.prop('checked') == true) {
+        notifyCustomerCheckbox.prop('disabled', false);
     }
     else {
-        notifyCustomerCheckbox.disabled = true;
-        //creditmemoCommentText.disabled = true;
+        notifyCustomerCheckbox.prop('disabled', true);
     }
 }
 
