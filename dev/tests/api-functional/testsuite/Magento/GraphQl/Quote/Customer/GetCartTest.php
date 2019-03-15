@@ -115,6 +115,26 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Current user does not have an active cart.
+     */
+    public function testGetInactiveCart()
+    {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
+        $quote->setCustomerId(1);
+        $quote->setIsActive(false);
+        $this->quoteResource->save($quote);
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
+
+        $query = $this->getCartQuery($maskedQuoteId);
+
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @return string
      */
