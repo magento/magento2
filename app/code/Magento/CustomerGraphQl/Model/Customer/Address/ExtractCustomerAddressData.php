@@ -17,9 +17,9 @@ use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
- * Customer Address field data provider, used for GraphQL request processing.
+ * Transform single customer address data from object to in array format
  */
-class CustomerAddressDataProvider
+class ExtractCustomerAddressData
 {
     /**
      * @var ServiceOutputProcessor
@@ -82,24 +82,27 @@ class CustomerAddressDataProvider
     /**
      * Transform single customer address data from object to in array format
      *
-     * @param AddressInterface $addressObject
+     * @param AddressInterface $address
      * @return array
      */
-    public function getAddressData(AddressInterface $addressObject): array
+    public function execute(AddressInterface $address): array
     {
-        $address = $this->serviceOutputProcessor->process(
-            $addressObject,
+        $addressData = $this->serviceOutputProcessor->process(
+            $address,
             AddressRepositoryInterface::class,
             'getById'
         );
-        $address = $this->curateAddressDefaultValues($address, $addressObject);
+        $addressData = $this->curateAddressDefaultValues($addressData, $address);
 
-        if (isset($address[CustomAttributesDataInterface::EXTENSION_ATTRIBUTES_KEY])) {
-            $address = array_merge($address, $address[CustomAttributesDataInterface::EXTENSION_ATTRIBUTES_KEY]);
+        if (isset($addressData[CustomAttributesDataInterface::EXTENSION_ATTRIBUTES_KEY])) {
+            $addressData = array_merge(
+                $addressData,
+                $addressData[CustomAttributesDataInterface::EXTENSION_ATTRIBUTES_KEY]
+            );
         }
         $customAttributes = [];
-        if (isset($address[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES])) {
-            foreach ($address[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] as $attribute) {
+        if (isset($addressData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES])) {
+            foreach ($addressData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] as $attribute) {
                 $isArray = false;
                 if (is_array($attribute['value'])) {
                     $isArray = true;
@@ -120,8 +123,8 @@ class CustomerAddressDataProvider
                 $customAttributes[$attribute['attribute_code']] = $attribute['value'];
             }
         }
-        $address = array_merge($address, $customAttributes);
+        $addressData = array_merge($addressData, $customAttributes);
 
-        return $address;
+        return $addressData;
     }
 }
