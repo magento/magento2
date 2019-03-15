@@ -73,6 +73,9 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
      */
     private $formKeyValidatorMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->prepareContext();
@@ -92,12 +95,6 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['validate'])
             ->getMock();
 
-        $this->request->expects($this->once())->method('isPost')->willReturn(true);
-        $this->formKeyValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with($this->request)
-            ->willReturn(true);
-
         $this->controller = new ForgotPasswordPost(
             $this->context,
             $this->session,
@@ -107,8 +104,12 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteEmptyEmail()
     {
+        $this->validateRequest();
         $this->request->expects($this->once())
             ->method('getPost')
             ->with('email')
@@ -127,10 +128,14 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultRedirect, $this->controller->execute());
     }
 
+    /**
+     * @return void
+     */
     public function testExecute()
     {
         $email = 'user1@example.com';
 
+        $this->validateRequest();
         $this->request->expects($this->once())
             ->method('getPost')
             ->with('email')
@@ -163,10 +168,14 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
         $this->controller->execute();
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteNoSuchEntityException()
     {
         $email = 'user1@example.com';
 
+        $this->validateRequest();
         $this->request->expects($this->once())
             ->method('getPost')
             ->with('email')
@@ -199,11 +208,15 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
         $this->controller->execute();
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteException()
     {
         $email = 'user1@example.com';
         $exception = new \Exception(__('Exception'));
 
+        $this->validateRequest();
         $this->request->expects($this->once())
             ->method('getPost')
             ->with('email')
@@ -227,6 +240,38 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
         $this->controller->execute();
     }
 
+    /**
+     * @return void
+     * @expectedException \Magento\Framework\Exception\NotFoundException
+     * @expectedExceptionMessage Page not found.
+     */
+    public function testExecuteWithNonPostRequest()
+    {
+        $this->request->expects($this->once())->method('isPost')->willReturn(false);
+
+        $this->controller->execute();
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteWithInvalidFormKey()
+    {
+        $this->request->expects($this->once())->method('isPost')->willReturn(true);
+        $this->formKeyValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(false);
+        $this->resultRedirect->expects($this->once())->method('setPath')->with('*/*/forgotpassword')->willReturnSelf();
+
+        $this->controller->execute();
+    }
+
+    /**
+     * Prepare action context.
+     *
+     * @return void
+     */
     protected function prepareContext()
     {
         $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
@@ -266,5 +311,19 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
+    }
+
+    /**
+     * Validate request.
+     *
+     * @return void
+     */
+    private function validateRequest()
+    {
+        $this->request->expects($this->once())->method('isPost')->willReturn(true);
+        $this->formKeyValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
     }
 }
