@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Indexer\Model;
 
 use Magento\Framework\Indexer\ActionFactory;
@@ -14,6 +15,8 @@ use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
 
 /**
+ * Indexer model.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
