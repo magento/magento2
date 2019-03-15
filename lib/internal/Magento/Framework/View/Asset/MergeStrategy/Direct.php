@@ -33,20 +33,21 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
     /**
      * @var \Magento\Framework\Math\Random
      */
-    protected $mathRandom;
+    private $mathRandom;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Url\CssResolver $cssUrlResolver
+     * @param \Magento\Framework\Math\Random|null $mathRandom
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Url\CssResolver $cssUrlResolver,
-        \Magento\Framework\Math\Random $mathRandom
+        \Magento\Framework\Math\Random $mathRandom = null
     ) {
         $this->filesystem = $filesystem;
         $this->cssUrlResolver = $cssUrlResolver;
-        $this->mathRandom = $mathRandom;
+        $this->mathRandom = $mathRandom ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Math\Random::class);;
     }
 
     /**
