@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\View\Test\Unit\Element;
 
-use Magento\Framework\Cache\LockQueryInterface;
+use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Context;
 use Magento\Framework\Config\View;
@@ -53,7 +53,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     private $sessionMock;
 
     /**
-     * @var LockQueryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LockGuardedCacheLoader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $lockQuery;
 
@@ -65,7 +65,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $this->eventManagerMock = $this->getMockForAbstractClass(EventManagerInterface::class);
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->cacheStateMock = $this->getMockForAbstractClass(CacheStateInterface::class);
-        $this->lockQuery = $this->getMockForAbstractClass(LockQueryInterface::class);
+        $this->lockQuery = $this->getMockForAbstractClass(LockGuardedCacheLoader::class);
         $this->sidResolverMock = $this->getMockForAbstractClass(SidResolverInterface::class);
         $this->sessionMock = $this->getMockForAbstractClass(SessionManagerInterface::class);
         $contextMock = $this->createMock(Context::class);

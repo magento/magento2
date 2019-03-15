@@ -94,11 +94,11 @@
         </arguments>
     </type>
 
-    <virtualType name="systemConfigQueryLocker" type="Magento\Framework\Cache\Lock\Query">
+    <virtualType name="systemConfigQueryLocker" type="Magento\Framework\Cache\LockGuardedCacheLoader">
         <arguments>
             <argument name="locker" xsi:type="object">Magento\Framework\Lock\Backend\Cache</argument>
-            <argument name="lockTimeout" xsi:type="number">42</argument>
-            <argument name="delayTimeout" xsi:type="number">100000</argument>
+            <argument name="lockTimeout" xsi:type="number">42000</argument>
+            <argument name="delayTimeout" xsi:type="number">100</argument>
         </arguments>
     </virtualType>
 

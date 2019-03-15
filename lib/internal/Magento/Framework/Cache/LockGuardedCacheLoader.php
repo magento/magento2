@@ -4,15 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Cache\Lock;
+namespace Magento\Framework\Cache;
 
-use Magento\Framework\Cache\LockQueryInterface;
 use Magento\Framework\Lock\LockManagerInterface;
 
 /**
- * Default mutex for cache concurrent access.
+ * Default mutex that provide concurrent access to cache storage.
  */
-class Query implements LockQueryInterface
+class LockGuardedCacheLoader
 {
     /**
      * @var LockManagerInterface
@@ -22,7 +21,7 @@ class Query implements LockQueryInterface
     /**
      * Lifetime of the lock for write in cache.
      *
-     * Value of the variable in seconds.
+     * Value of the variable in milliseconds.
      *
      * @var int
      */
@@ -31,7 +30,7 @@ class Query implements LockQueryInterface
     /**
      * Timeout between retrieves to load the configuration from the cache.
      *
-     * Value of the variable in microseconds.
+     * Value of the variable in milliseconds.
      *
      * @var int
      */
@@ -44,8 +43,8 @@ class Query implements LockQueryInterface
      */
     public function __construct(
         LockManagerInterface $locker,
-        int $lockTimeout = 10,
-        int $delayTimeout = 20000
+        int $lockTimeout = 10000,
+        int $delayTimeout = 20
     ) {
         $this->locker = $locker;
         $this->lockTimeout = $lockTimeout;
@@ -59,35 +58,28 @@ class Query implements LockQueryInterface
         string $lockName,
         callable $dataLoader,
         callable $dataCollector,
-        callable $dataSaver,
-        callable $dataCleaner,
-        bool $flush = false
+        callable $dataSaver
     ) {
         $cachedData = $dataLoader(); //optimistic read
 
         while ($cachedData === false && $this->locker->isLocked($lockName)) {
-            usleep($this->delayTimeout);
+            usleep($this->delayTimeout * 1000);
             $cachedData = $dataLoader();
         }
 
         while ($cachedData === false) {
             try {
-                if ($this->locker->lock($lockName, $this->lockTimeout)) {
-                    if (!$flush) {
-                        $data = $dataCollector();
-                        $dataSaver($data);
-                        $cachedData = $data;
-                    } else {
-                        $dataCleaner();
-                        $cachedData = [];
-                    }
+                if ($this->locker->lock($lockName, $this->lockTimeout / 1000)) {
+                    $data = $dataCollector();
+                    $dataSaver($data);
+                    $cachedData = $data;
                 }
             } finally {
                 $this->locker->unlock($lockName);
             }
 
             if ($cachedData === false) {
-                usleep($this->delayTimeout);
+                usleep($this->delayTimeout * 1000);
                 $cachedData = $dataLoader();
             }
         }

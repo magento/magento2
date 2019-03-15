@@ -14,7 +14,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Config\App\Config\Type\System\Reader;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\Cache\FrontendInterface;
-use Magento\Framework\Cache\LockQueryInterface;
+use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
@@ -92,7 +92,7 @@ class System implements ConfigTypeInterface
     private $encryptor;
 
     /**
-     * @var LockQueryInterface
+     * @var LockGuardedCacheLoader
      */
     private $lockQuery;
 
@@ -108,7 +108,7 @@ class System implements ConfigTypeInterface
      * @param Reader|null $reader
      * @param Encryptor|null $encryptor
      * @param LockManagerInterface|null $locker
-     * @param LockQueryInterface|null $lockQuery
+     * @param LockGuardedCacheLoader|null $lockQuery
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -124,7 +124,7 @@ class System implements ConfigTypeInterface
         Reader $reader = null,
         Encryptor $encryptor = null,
         LockManagerInterface $locker = null,
-        LockQueryInterface $lockQuery = null
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->postProcessor = $postProcessor;
         $this->cache = $cache;
@@ -134,7 +134,7 @@ class System implements ConfigTypeInterface
         $this->encryptor = $encryptor
             ?: ObjectManager::getInstance()->get(Encryptor::class);
         $this->lockQuery = $lockQuery
-            ?: ObjectManager::getInstance()->get(LockQueryInterface::class);
+            ?: ObjectManager::getInstance()->get(LockGuardedCacheLoader::class);
     }
 
     /**
@@ -227,18 +227,12 @@ class System implements ConfigTypeInterface
             }
             return $data;
         };
-        $loadAction->bindTo($this);
-
-        $collectAction = \Closure::fromCallable([$this, 'readData']);
-        $saveAction = \Closure::fromCallable([$this, 'cacheData']);
-        $cleanAction = \Closure::fromCallable([$this, 'cleanCacheAction']);
 
         return $this->lockQuery->lockedLoadData(
             self::$lockName,
             $loadAction,
-            $collectAction,
-            $saveAction,
-            $cleanAction
+            [$this, 'readData'],
+            [$this, 'cacheData']
         );
     }
 
@@ -258,18 +252,12 @@ class System implements ConfigTypeInterface
             }
             return $scopeData;
         };
-        $loadAction->bindTo($this);
-
-        $collectAction = \Closure::fromCallable([$this, 'readData']);
-        $saveAction = \Closure::fromCallable([$this, 'cacheData']);
-        $cleanAction = \Closure::fromCallable([$this, 'cleanCacheAction']);
 
         return $this->lockQuery->lockedLoadData(
             self::$lockName,
             $loadAction,
-            $collectAction,
-            $saveAction,
-            $cleanAction
+            [$this, 'readData'],
+            [$this, 'cacheData']
         );
     }
 
@@ -303,18 +291,12 @@ class System implements ConfigTypeInterface
 
             return $scopeData;
         };
-        $loadAction->bindTo($this);
-
-        $collectAction = \Closure::fromCallable([$this, 'readData']);
-        $saveAction = \Closure::fromCallable([$this, 'cacheData']);
-        $cleanAction = \Closure::fromCallable([$this, 'cleanCacheAction']);
 
         return $this->lockQuery->lockedLoadData(
             self::$lockName,
             $loadAction,
-            $collectAction,
-            $saveAction,
-            $cleanAction
+            [$this, 'readData'],
+            [$this, 'cacheData']
         );
     }
 
@@ -354,16 +336,6 @@ class System implements ConfigTypeInterface
             $this->configType . '_scopes',
             [self::CACHE_TAG]
         );
-    }
-
-    /**
-     * Clean cache action.
-     *
-     * @return void
-     */
-    private function cleanCacheAction()
-    {
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
     }
 
     /**
@@ -416,21 +388,6 @@ class System implements ConfigTypeInterface
     public function clean()
     {
         $this->data = [];
-        $loadAction = function () {
-            return false;
-        };
-
-        $collectAction = \Closure::fromCallable([$this, 'readData']);
-        $saveAction = \Closure::fromCallable([$this, 'cacheData']);
-        $cleanAction = \Closure::fromCallable([$this, 'cleanCacheAction']);
-
-        $this->lockQuery->lockedLoadData(
-            self::$lockName,
-            $loadAction,
-            $collectAction,
-            $saveAction,
-            $cleanAction,
-            true
-        );
+        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
     }
 }

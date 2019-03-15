@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\View\Element;
 
-use Magento\Framework\Cache\LockQueryInterface;
+use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\App\ObjectManager;
 
@@ -179,7 +179,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $_cache;
 
     /**
-     * @var LockQueryInterface
+     * @var LockGuardedCacheLoader
      */
     private $lockQuery;
 
@@ -188,12 +188,12 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param array $data
-     * @param LockQueryInterface|null $lockQuery
+     * @param LockGuardedCacheLoader|null $lockQuery
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         array $data = [],
-        LockQueryInterface $lockQuery = null
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->_request = $context->getRequest();
         $this->_layout = $context->getLayout();
@@ -217,7 +217,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             unset($data['jsLayout']);
         }
         $this->lockQuery = $lockQuery
-            ?: ObjectManager::getInstance()->get(LockQueryInterface::class);
+            ?: ObjectManager::getInstance()->get(LockGuardedCacheLoader::class);
         parent::__construct($data);
         $this->_construct();
     }
@@ -1096,7 +1096,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             $this->_beforeToHtml();
             return $this->_toHtml();
         };
-        $collectAction->bindTo($this);
 
         if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
             $html = $collectAction();
@@ -1119,7 +1118,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             }
             return $cacheData;
         };
-        $loadAction->bindTo($this);
 
         $saveAction = function ($data) {
             $this->_saveCache($data);
@@ -1127,17 +1125,12 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
                 $this->inlineTranslation->resume();
             }
         };
-        $saveAction->bindTo($this);
-
-        $cleanAction = function () {
-        };
 
         return $this->lockQuery->lockedLoadData(
             $this->getCacheKey(),
             $loadAction,
             $collectAction,
-            $saveAction,
-            $cleanAction
+            $saveAction
         );
     }
 
