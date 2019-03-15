@@ -99,8 +99,7 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
         if ($this->isMinSaleQuantityCheckFailed($stockItemConfiguration, $requestedQty)) {
             return $this->createErrorResult(
                 'is_correct_qty-min_sale_qty',
-                __(
-                    'The fewest you may purchase is %1',
+                __('The fewest you may purchase is %1',
                     $stockItemConfiguration->getMinSaleQty()
                 )
             );
@@ -140,7 +139,7 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
      * @param Phrase $message
      * @return ProductSalableResultInterface
      */
-    private function createErrorResult(string $code, Phrase $message) : ProductSalableResultInterface
+    private function createErrorResult(string $code, Phrase $message): ProductSalableResultInterface
     {
         $errors = [
             $this->productSalabilityErrorFactory->create([
@@ -175,7 +174,7 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
     private function isMinSaleQuantityCheckFailed(
         StockItemConfigurationInterface $stockItemConfiguration,
         float $requestedQty
-    ) : bool {
+    ): bool {
         // Minimum Qty Allowed in Shopping Cart
         if ($stockItemConfiguration->getMinSaleQty() && $requestedQty < $stockItemConfiguration->getMinSaleQty()) {
             return true;
@@ -193,7 +192,7 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
     private function isMaxSaleQuantityCheckFailed(
         StockItemConfigurationInterface $stockItemConfiguration,
         float $requestedQty
-    ) : bool {
+    ): bool {
         // Maximum Qty Allowed in Shopping Cart
         if ($stockItemConfiguration->getMaxSaleQty() && $requestedQty > $stockItemConfiguration->getMaxSaleQty()) {
             return true;
@@ -211,7 +210,7 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
     private function isQuantityIncrementCheckFailed(
         StockItemConfigurationInterface $stockItemConfiguration,
         float $requestedQty
-    ) : bool {
+    ): bool {
         // Qty Increments
         $qtyIncrements = $stockItemConfiguration->getQtyIncrements();
         if ($qtyIncrements !== (float)0 && $this->mathDivision->getExactDivision($requestedQty, $qtyIncrements) !== 0) {
