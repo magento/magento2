@@ -29,14 +29,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
 
     const GUAM_REGION_CODE = 'GU';
 
-    const SPAIN_COUNTRY_ID = 'ES';
-
-    const CANARY_ISLANDS_COUNTRY_ID = 'IC';
-
-    const SANTA_CRUZ_DE_TENERIFE_REGION_ID = 'Santa Cruz de Tenerife';
-
-    const LAS_PALMAS_REGION_ID = 'Las Palmas';
-
     /**
      * Array of quotes
      *

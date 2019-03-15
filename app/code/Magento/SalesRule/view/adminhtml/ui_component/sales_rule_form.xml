@@ -452,7 +452,7 @@
                 <dataScope>discount_step</dataScope>
             </settings>
         </field>
-        <field name="apply_to_shipping" component="Magento_Ui/js/form/element/single-checkbox-toggle-notice" formElement="checkbox">
+        <field name="apply_to_shipping" component="Magento_SalesRule/js/form/element/apply_to_shipping" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">sales_rule</item>
