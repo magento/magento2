@@ -729,7 +729,7 @@ class Eav extends AbstractModifier
                 $meta = [];
                 break;
             case 'date':
-                $meta['data']['js_config']['showsTime'] = 1;
+                $meta['arguments']['data']['config']['options']['showsTime'] = 1;
                 break;
         }
 
