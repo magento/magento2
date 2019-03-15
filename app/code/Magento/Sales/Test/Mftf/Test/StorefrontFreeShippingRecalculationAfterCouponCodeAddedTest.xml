@@ -14,8 +14,8 @@
             <stories value="Checkout Free Shipping Recalculation after Coupon Code Applied"/>
             <description value="User should be able to do checkout free shipping recalculation after adding coupon code"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-96537"/>
-            <useCaseId value="MC-14807"/>
+            <testCaseId value="MC-15412"/>
+            <useCaseId value="MAGETWO-96375"/>
             <group value="sales"/>
             <group value="salesRule"/>
         </annotations>
