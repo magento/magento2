@@ -38,7 +38,7 @@
                     <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="col date"><?= /* @escapeNotVerified */ $block->formatDate($_item->getPurchased()->getCreatedAt()) ?></td>
                     <td data-th="<?= $block->escapeHtml(__('Title')) ?>" class="col title">
                         <strong class="product-name"><?= $block->escapeHtml($_item->getPurchased()->getProductName()) ?></strong>
-                        <?php if ($_item->getStatus() == \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_AVAILABLE): ?>
+                        <?php if ($block->isItemAvailable($_item)): ?>
                         <a href="<?= /* @escapeNotVerified */ $block->getDownloadUrl($_item) ?>" title="<?= $block->escapeHtml(__('Start Download')) ?>" class="action download" <?= $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : '' ?>><?= $block->escapeHtml($_item->getLinkTitle()) ?></a>
                         <?php endif; ?>
                     </td>
