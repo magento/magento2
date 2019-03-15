@@ -141,7 +141,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function load($indexerId): self
+    public function load($indexerId): IndexerInterface
     {
         $this->indexer->load($indexerId);
         return $this;
@@ -166,7 +166,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function setState(StateInterface $state): self
+    public function setState(StateInterface $state): IndexerInterface
     {
         $this->indexer->setState($state);
         return $this;
@@ -214,6 +214,7 @@ class DependencyDecorator implements IndexerInterface
 
     /**
      * @inheritdoc
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function invalidate()
     {
@@ -250,6 +251,7 @@ class DependencyDecorator implements IndexerInterface
 
     /**
      * @inheritdoc
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function reindexRow($id)
     {
@@ -262,6 +264,7 @@ class DependencyDecorator implements IndexerInterface
 
     /**
      * @inheritdoc
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function reindexList($ids)
     {
