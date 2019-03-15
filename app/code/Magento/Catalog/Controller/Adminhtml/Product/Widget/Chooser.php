@@ -50,7 +50,7 @@ class Chooser extends \Magento\Backend\App\Action
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
         $this->layoutFactory = $layoutFactory;
-        $this->escaper = $escaper ?: ObjectManager::getInstance()->create(\Magento\Framework\Escaper::class);
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
     }
 
     /**
