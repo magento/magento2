@@ -284,6 +284,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * Get move url
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getMoveUrl()
     {
@@ -450,6 +451,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * Check if page loaded by outside link to category edit
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function isClearEdit()
     {
