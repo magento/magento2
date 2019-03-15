@@ -170,7 +170,7 @@ class Preprocessor implements PreprocessorInterface
         } elseif ($filter->getField() === VisibilityFilter::VISIBILITY_FILTER_FIELD) {
             return '';
         } elseif ($filter->getType() === FilterInterface::TYPE_TERM &&
-            in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
+            in_array($attribute->getFrontendInput(), ['select', 'multiselect', 'boolean'], true)
         ) {
             $resultQuery = $this->processTermSelect($filter, $isNegation);
         } elseif ($filter->getType() === FilterInterface::TYPE_RANGE &&
