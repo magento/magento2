@@ -171,6 +171,11 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getMetadata')
             ->will($this->returnValue($metadata));
 
+        $this->pageConfigMock
+            ->expects($this->any())
+            ->method('getAdditionalMetaAssets')
+            ->will($this->returnValue(['msapplication-TileImage']));
+
         $this->assertEquals($expected, $this->renderer->renderMetadata());
     }
 

@@ -157,6 +157,10 @@ class Renderer implements RendererInterface
         if (method_exists($this->pageConfig, $method)) {
             $content = $this->pageConfig->$method();
         }
+        if ($content && in_array($name, $this->pageConfig->getAdditionalMetaAssets())) {
+            $content = $this->pageConfig->getMetaAssetUrl($content);
+        }
+
         return $content;
     }
 
