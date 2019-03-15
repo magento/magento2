@@ -86,9 +86,7 @@ class CategoryListTest extends \PHPUnit\Framework\TestCase
         $categoryIdSecond = 2;
 
         $categoryFirst = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
-        $categoryFirst->expects($this->atLeastOnce())->method('getId')->willReturn($categoryIdFirst);
         $categorySecond = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
-        $categorySecond->expects($this->atLeastOnce())->method('getId')->willReturn($categoryIdSecond);
 
         /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteria */
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
