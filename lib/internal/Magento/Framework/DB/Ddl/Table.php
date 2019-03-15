@@ -480,13 +480,13 @@ class Table
         }
 
         switch ($onDelete) {
-            case self::ACTION_CASCADE:
+            case self::ACTION_NO_ACTION:
             case self::ACTION_RESTRICT:
             case self::ACTION_SET_DEFAULT:
             case self::ACTION_SET_NULL:
                 break;
             default:
-                $onDelete = self::ACTION_NO_ACTION;
+                $onDelete = self::ACTION_CASCADE;
         }
 
         $this->_foreignKeys[$upperName] = [
