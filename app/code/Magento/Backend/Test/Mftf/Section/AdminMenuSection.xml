@@ -24,6 +24,6 @@
 
         <!-- Navigate menu selectors -->
         <element name="mainMenuItem" type="button" selector="//li[contains(@id, 'menu-magento') and contains(@id, '{{var}}')]" parameterized="true" timeout="30"/>
-        <element name="submenuItem" type="button" selector="//li[contains(@class, 'item') and contains(@class, '{{var}}')]" parameterized="true" timeout="30"/>
+        <element name="submenuItem" type="button" selector="//li[contains(@class, 'item') and contains(@class, '{{var}}')][position()=1]" parameterized="true" timeout="30"/>
     </section>
 </sections>

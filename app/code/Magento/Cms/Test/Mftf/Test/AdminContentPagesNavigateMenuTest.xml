@@ -27,7 +27,7 @@
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentPagesPage">
             <argument name="menuItem" value="backend-content"/>
-            <argument name="submenuItem" value="versionscms-page-page"/>
+            <argument name="submenuItem" value="cms-page"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
             <argument name="title" value="Pages"/>
