@@ -46,17 +46,17 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     /**
      * @var ProductRepositoryInterface
      */
-    private $productRepository;
+    protected $productRepository;
 
     /**
      * @var CartManagementInterface
      */
-    private $cartManagement;
+    protected $cartManagement;
 
     /**
      * @var CartRepositoryInterface
      */
-    private $cartRepository;
+    protected $cartRepository;
 
     /**
      * @var CartItemInterfaceFactory
@@ -200,7 +200,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     /**
      * @return CartInterface
      */
-    private function getCart(): CartInterface
+    protected function getCart(): CartInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('reserved_order_id', 'test_order_1')
@@ -215,7 +215,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     /**
      * @param int $orderId
      */
-    private function deleteOrderById(int $orderId)
+    protected function deleteOrderById(int $orderId)
     {
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);
@@ -231,7 +231,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
      * @param int $cartId
      * @return CartItemInterface
      */
-    private function getCartItem(ProductInterface $product, float $quoteItemQty, int $cartId): CartItemInterface
+    protected function getCartItem(ProductInterface $product, float $quoteItemQty, int $cartId): CartItemInterface
     {
         /** @var CartItemInterface $cartItem */
         $cartItem =
