@@ -147,7 +147,10 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
                 []
             );
 
-            $valueExpr = $tableName . '.value';
+            $valueExpr = $collection->getConnection()->getCheckSql(
+                $tableName2 . '.value',
+                $tableName . '.value'
+            );
             $collection->getSelect()->order(
                 [
                     "ISNULL($valueExpr)",
