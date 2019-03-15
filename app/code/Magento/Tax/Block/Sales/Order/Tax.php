@@ -12,6 +12,8 @@ namespace Magento\Tax\Block\Sales\Order;
 use Magento\Sales\Model\Order;
 
 /**
+ * Tax totals modification block.
+ *
  * @api
  * @since 100.0.2
  */
@@ -84,7 +86,11 @@ class Tax extends \Magento\Framework\View\Element\Template
         $allowTax = $this->_source->getTaxAmount() > 0 || $this->_config->displaySalesZeroTax($store);
         $grandTotal = (double)$this->_source->getGrandTotal();
         if (!$grandTotal || $allowTax && !$this->_config->displaySalesTaxWithGrandTotal($store)) {
-            $this->_addTax();
+            $taxTotal = new \Magento\Framework\DataObject(['code' => 'tax', 'block_name' => $this->getNameInLayout()]);
+            $totals = $this->getParentBlock()->getTotals();
+            if ($totals['grand_total']) {
+                $this->getParentBlock()->addTotalBefore($taxTotal, 'grand_total');
+            }
         }
 
         $this->_initSubtotal();
@@ -118,6 +124,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Init Subtotals.
+     *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -199,6 +207,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Init Shipping.
+     *
      * @return $this
      */
     protected function _initShipping()
@@ -260,6 +270,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Init discount.
+     *
      * @return void
      */
     protected function _initDiscount()
@@ -267,6 +279,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Initialization grand total.
+     *
      * @return $this
      */
     protected function _initGrandTotal()
@@ -311,6 +325,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get order.
+     *
      * @return Order
      */
     public function getOrder()
@@ -319,6 +335,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get Label Properties.
+     *
      * @return array
      */
     public function getLabelProperties()
@@ -327,6 +345,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get Value Properties.
+     *
      * @return array
      */
     public function getValueProperties()
