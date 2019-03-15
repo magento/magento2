@@ -896,7 +896,8 @@
         <data key="name" unique="suffix">BBB Product</data>
     </entity>
     <entity name="productWithSpecialCharacters" type="product" extends="_defaultProduct">
-        <data key="name" unique="suffix">Product \&#39;!@#$%^&amp;*()+:;\\|}{][?=~` </data>
+        <data key="name" unique="suffix">Product "!@#$%^&amp;*()+:;\|}{][?=~` </data>
+        <data key="nameWithSafeChars" unique="suffix">|}{][?=~` </data>
     </entity>
     <entity name="productWith130CharName" type="product" extends="_defaultProduct">
         <data key="name" unique="suffix">ProductWith128Chars 1234567891123456789112345678911234567891123456789112345678911234567891123456789112345678 endnums</data>

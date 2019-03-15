@@ -73,6 +73,7 @@
             <argument name="attributeType" type="string" defaultValue="TextField"/>
         </arguments>
         <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickAddAttributeBtn"/>
+        <waitForPageLoad stepKey="waitForSidePanel"/>
         <see userInput="Select Attribute" stepKey="checkNewAttributePopUpAppeared"/>
         <click selector="{{AdminProductFormAttributeSection.createNewAttribute}}" stepKey="clickCreateNewAttribute"/>
         <fillField selector="{{AdminProductFormNewAttributeSection.attributeLabel}}" userInput="{{attributeName}}" stepKey="fillAttributeLabel"/>

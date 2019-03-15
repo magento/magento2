@@ -405,7 +405,6 @@
         </before>
         <after>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
-            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
@@ -516,16 +515,19 @@
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
+        <comment userInput="$simpleProduct1.name$" stepKey="asdf"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
-        <argument name="phrase" value="$createBundleProduct.name$"/>
+            <argument name="phrase" value="$createBundleProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="openAndCheckProduct">
-        <argument name="productName" value="$createBundleProduct.name$"/>
-        <argument name="productUrlKey" value="$createBundleProduct.custom_attributes[url_key]$"/>
+            <argument name="productName" value="$createBundleProduct.name$"/>
+            <argument name="productUrlKey" value="$createBundleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAddBundleProductFromProductToCartActionGroup" stepKey="addProductToCart">
-        <argument name="productName" value="$createBundleProduct.name$"/>
+        <actionGroup ref="StorefrontAddBundleProductFromProductToCartWithMultiOption" stepKey="addProductToCart">
+            <argument name="productName" value="$createBundleProduct.name$"/>
+            <argument name="optionName" value="$createBundleOption1_1.name$"/>
+            <argument name="value" value="$simpleProduct1.name$"/>
         </actionGroup>
     </test>
 
