@@ -24,8 +24,7 @@ class Link extends \Magento\Downloadable\Controller\Download
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    )
-    {
+    ) {
         $this->_scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
