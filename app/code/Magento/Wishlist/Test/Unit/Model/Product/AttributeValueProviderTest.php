@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**
- * @covers CreditCardTokenFormatter
+ * AttributeValueProviderTest
  */
 class AttributeValueProviderTest extends TestCase
 {
