@@ -99,7 +99,7 @@ class CreditmemoSender extends Sender
      */
     public function send(Creditmemo $creditmemo, $forceSyncMode = false)
     {
-        $creditmemo->setSendEmail(true);
+        $creditmemo->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $creditmemo->getOrder();

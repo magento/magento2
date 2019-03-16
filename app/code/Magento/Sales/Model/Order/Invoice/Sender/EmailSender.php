@@ -96,7 +96,7 @@ class EmailSender extends Sender implements SenderInterface
         \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
         $forceSyncMode = false
     ) {
-        $invoice->setSendEmail(true);
+        $invoice->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $transport = [

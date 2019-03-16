@@ -99,7 +99,7 @@ class ShipmentSender extends Sender
      */
     public function send(Shipment $shipment, $forceSyncMode = false)
     {
-        $shipment->setSendEmail(true);
+        $shipment->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $shipment->getOrder();

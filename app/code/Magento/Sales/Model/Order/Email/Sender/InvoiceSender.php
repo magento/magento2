@@ -99,7 +99,7 @@ class InvoiceSender extends Sender
      */
     public function send(Invoice $invoice, $forceSyncMode = false)
     {
-        $invoice->setSendEmail(true);
+        $invoice->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $invoice->getOrder();
