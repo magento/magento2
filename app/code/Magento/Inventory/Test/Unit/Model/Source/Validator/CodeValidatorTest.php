@@ -34,7 +34,7 @@ class CodeValidatorTest extends TestCase
 
     protected function setUp()
     {
-        $this->validationResultFactory = $this->getMockBuilder(ValidationResultFactory::class)->getMock();
+        $this->validationResultFactory = $this->createMock(ValidationResultFactory::class);
         $this->source = $this->getMockBuilder(SourceInterface::class)->getMock();
     }
 
