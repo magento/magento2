@@ -197,7 +197,6 @@ class CreditmemoSenderTest extends AbstractSenderTest
      * @param bool $isVirtualOrder
      * @param int $formatCallCount
      * @param string|null $expectedShippingAddress
-     * @param bool $emailSendingResult
      *
      * @return void
      * @dataProvider sendVirtualOrderDataProvider
