@@ -46,24 +46,32 @@ class CreateCustomerAccount
     private $changeSubscriptionStatus;
 
     /**
+     * @var GetAllowedCustomerAttributes
+     */
+    private $getAllowedCustomerAttributes;
+
+    /**
      * @param DataObjectHelper $dataObjectHelper
      * @param CustomerInterfaceFactory $customerFactory
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $accountManagement
      * @param ChangeSubscriptionStatus $changeSubscriptionStatus
+     * @param GetAllowedCustomerAttributes $getAllowedCustomerAttributes
      */
     public function __construct(
         DataObjectHelper $dataObjectHelper,
         CustomerInterfaceFactory $customerFactory,
         StoreManagerInterface $storeManager,
         AccountManagementInterface $accountManagement,
-        ChangeSubscriptionStatus $changeSubscriptionStatus
+        ChangeSubscriptionStatus $changeSubscriptionStatus,
+        GetAllowedCustomerAttributes $getAllowedCustomerAttributes
     ) {
         $this->dataObjectHelper = $dataObjectHelper;
         $this->customerFactory = $customerFactory;
         $this->accountManagement = $accountManagement;
         $this->storeManager = $storeManager;
         $this->changeSubscriptionStatus = $changeSubscriptionStatus;
+        $this->getAllowedCustomerAttributes = $getAllowedCustomerAttributes;
     }
 
     /**
@@ -96,6 +104,7 @@ class CreateCustomerAccount
      */
     private function createAccount(array $data): CustomerInterface
     {
+        $this->validateData($data);
         $customerDataObject = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customerDataObject,
@@ -108,5 +117,30 @@ class CreateCustomerAccount
 
         $password = array_key_exists('password', $data) ? $data['password'] : null;
         return $this->accountManagement->createAccount($customerDataObject, $password);
+    }
+
+    /**
+     * @param array $customerData
+     * @return void
+     * @throws GraphQlInputException
+     */
+    public function validateData(array $customerData): void
+    {
+        $attributes = $this->getAllowedCustomerAttributes->execute();
+        $errorInput = [];
+
+        foreach ($attributes as $attributeName => $attributeInfo) {
+            if ($attributeInfo->getIsRequired()
+                && (isset($customerData[$attributeName]) && empty($customerData[$attributeName]))
+            ) {
+                $errorInput[] = $attributeName;
+            }
+        }
+
+        if ($errorInput) {
+            throw new GraphQlInputException(
+                __('Required parameters are missing: %1', [implode(', ', $errorInput)])
+            );
+        }
     }
 }
