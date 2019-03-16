@@ -31,7 +31,7 @@ class AttributeValueProviderTest extends TestCase
     private $productCollectionFactoryMock;
 
     /**
-     * @var @var Product|PHPUnit_Framework_MockObject_MockObject
+     * @var Product|PHPUnit_Framework_MockObject_MockObject
      */
     private $productMock;
 
@@ -107,7 +107,6 @@ class AttributeValueProviderTest extends TestCase
 
         $this->assertEquals($attributeText, $actual);
     }
-
 
     /**
      * Get attribute text when the flat table is enabled
