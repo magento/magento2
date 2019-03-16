@@ -101,8 +101,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testMergeNestedNodes()
     {
-        /** @var \Magento\Framework\ObjectManager\Config\Config $config */
-        $config = $this->objectManagerHelper->getObject(\Magento\Framework\ObjectManager\Config\Config::class);
+        $config = new Config();
         $config->extend(['Some\Class' => ['arguments' => ['nested' => ['global_scope' => 'value']]]]);
         $config->extend(['Some\Class' => ['arguments' => ['nested' => ['adminhtml_scope' => 'value']]]]);
         $actualArguments = $config->getArguments('Some\Class');
@@ -112,5 +111,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'adminhtml_scope' => 'value'
             ]
         ], $actualArguments);
+    }
+
+    public function testExtendMergeDifferentConfigsNodesWithSlashIgnoring()
+    {
+        /** @var \Magento\Framework\ObjectManager\Config\Config $config */
+        $config = new Config();
+        $config->extend(['Some\Class' => ['arguments' => ['data' => ['key1' => 'value1']]]]);
+        $config->extend(['\Some\Class' => ['arguments' => ['data' => ['key2' => 'value2']]]]);
+        $this->assertEquals(['data' => ['key1' => 'value1', 'key2' => 'value2']], $config->getArguments('Some\Class'));
     }
 }
