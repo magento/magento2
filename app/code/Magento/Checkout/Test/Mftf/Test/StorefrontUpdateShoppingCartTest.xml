@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UpdateShoppingCartTestVariation1">
+        <annotations>
+            <features value="Checkout"/>
+            <title value="Check updating shopping cart while updating items qty"/>
+            <description value="Check updating shopping cart while updating items qty"/>
+            <group value="shoppingCart"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100</field>
+            </createData>
+
+            <!-- Add the newly created product to the shopping cart -->
+            <amOnPage url="$$createProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage"/>
+            <waitForPageLoad stepKey="waitForCatalogPageLoad1"/>
+            <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage1">
+                <argument name="productName" value="$$createProduct.name$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Go to the shopping cart -->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad1"/>
+
+        <!-- Change the product QTY -->
+        <fillField selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}"  userInput="3" stepKey="changeCartQty"/>
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="openShoppingCart"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad2"/>
+
+        <!-- The price and QTY values should be updated for the product -->
+        <grabValueFrom selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}" stepKey="grabProductQtyInCart"/>
+        <see userInput="$300" selector="{{CheckoutCartProductSection.ProductSubtotalByName($$createProduct.name$$)}}" stepKey="assertProductPrice"/>
+        <assertEquals expected="3" actual="$grabProductQtyInCart" stepKey="assertProductQtyInCart"/>
+
+        <!-- Subtotal should be updated -->
+        <see userInput="$300" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertCartSubtotal"/>
+
+        <!-- Minicart product price and subtotal should be updated -->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="openMinicart"/>
+        <grabValueFrom selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" stepKey="grabProductQtyInMinicart"/>
+        <assertEquals expected="3" actual="$grabProductQtyInMinicart" stepKey="assertProductQtyInMinicart"/>
+        <see userInput="$300" selector="{{StorefrontMinicartSection.subtotal}}" stepKey="assertMinicartSubtotal"/>
+    </test>
+    <test name="UpdateShoppingCartTestVariation2">
+        <annotations>
+            <features value="Checkout"/>
+            <title value="Check updating shopping cart while updating qty of items with custom options"/>
+            <description value="Check updating shopping cart while updating qty of items with custom options"/>
+            <group value="shoppingCart"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100</field>
+            </createData>
+
+            <!-- Add two custom options to the product: field and textarea -->
+            <updateData createDataKey="createProduct" entity="productWithOptions3" stepKey="updateProductWithOption"/>
+
+            <!-- Go to the product page, fill the custom options values and add the product to the shopping cart -->
+            <amOnPage url="{{StorefrontHomePage.url}}$createProduct.custom_attributes[url_key]$.html" stepKey="amOnProductPage"/>
+            <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
+            <fillField userInput="OptionField" selector="{{StorefrontProductInfoMainSection.productOptionFieldInput(ProductOptionField.title)}}" stepKey="fillProductOptionInputField"/>
+            <fillField userInput="OptionArea" selector="{{StorefrontProductInfoMainSection.productOptionAreaInput(ProductOptionArea.title)}}" stepKey="fillProductOptionInputArea"/>
+            <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+                <argument name="productName" value="$createProduct.name$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Go to the shopping cart -->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad1"/>
+
+        <!-- Change the product QTY -->
+        <fillField selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}"  userInput="11" stepKey="changeCartQty"/>
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="openShoppingCart"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad2"/>
+
+        <!-- The price and QTY values should be updated for the product -->
+        <grabValueFrom selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}" stepKey="grabProductQtyInCart"/>
+        <see userInput="$1,320.00" selector="{{CheckoutCartProductSection.ProductSubtotalByName($$createProduct.name$$)}}" stepKey="assertProductPrice"/>
+        <assertEquals expected="11" actual="$grabProductQtyInCart" stepKey="assertProductQtyInCart"/>
+        <see userInput="$1,320.00" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
+
+        <!-- Minicart product price and subtotal should be updated -->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="openMinicart"/>
+        <grabValueFrom selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" stepKey="grabProductQtyInMinicart"/>
+        <assertEquals expected="11" actual="$grabProductQtyInMinicart" stepKey="assertProductQtyInMinicart"/>
+        <see userInput="1,320.00" selector="{{StorefrontMinicartSection.subtotal}}" stepKey="assertMinicartSubtotal"/>
+    </test>
+</tests>
