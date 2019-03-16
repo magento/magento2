@@ -68,13 +68,13 @@ class SwatchDataProvider
      * @param string $optionId
      * @param ProductInterface $product
      *
-     * @return array
+     * @return array|null
      *
      * @throws LocalizedException
      * @throws NoSuchEntityException
      * @throws \LogicException
      */
-    public function getData(string $optionId, ProductInterface $product): array
+    public function getData(string $optionId, ProductInterface $product): ?array
     {
         $swatches = $this->swatchHelper->getSwatchesByOptionsId([$optionId]);
         if (!isset($swatches[$optionId], $swatches[$optionId]['type'], $swatches[$optionId]['value'])) {
