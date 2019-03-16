@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model\ResourceModel;
 
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 
@@ -43,21 +46,21 @@ class BulkInventoryTransfer
     private $defaultSourceProvider;
 
     /**
-     * @var SetDataToLegacyStockItem
-     */
-    private $setDataToLegacyStockItem;
-
-    /**
      * @var BulkZeroLegacyStockItem
      */
     private $bulkZeroLegacyStockItem;
+
+    /**
+     * @var GetProductIdsBySkusInterface
+     */
+    private $getProductIdsBySkus;
 
     /**
      * @param ResourceConnection $resourceConnection
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param SetDataToLegacyStockItem $setDataToLegacyStockItem
+     * @param SetDataToLegacyStockItem $setDataToLegacyStockItem @deprecated
      * @param BulkZeroLegacyStockItem $bulkZeroLegacyStockItem
      * @SuppressWarnings(PHPMD.LongVariable)
      */
@@ -67,88 +70,98 @@ class BulkInventoryTransfer
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         DefaultSourceProviderInterface $defaultSourceProvider,
         SetDataToLegacyStockItem $setDataToLegacyStockItem,
-        BulkZeroLegacyStockItem $bulkZeroLegacyStockItem
+        BulkZeroLegacyStockItem $bulkZeroLegacyStockItem,
+        GetProductIdsBySkusInterface $getProductIdsBySkus = null
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->getProductTypesBySkus = $getProductTypesBySkus;
         $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->setDataToLegacyStockItem = $setDataToLegacyStockItem;
         $this->bulkZeroLegacyStockItem = $bulkZeroLegacyStockItem;
+        $this->getProductIdsBySkus =
+            $getProductIdsBySkus ?: ObjectManager::getInstance()->get(GetProductIdsBySkusInterface::class);
     }
 
     /**
-     * @param string $sku
-     * @param string $source
-     * @return array|null
-     */
-    private function getSourceItemData(string $sku, string $source): ?array
-    {
-        $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
-
-        $query = $connection->select()->from($tableName)
-            ->where(SourceItemInterface::SOURCE_CODE . ' = ?', $source)
-            ->where(SourceItemInterface::SKU . ' = ?', $sku);
-
-        $res = $connection->fetchRow($query);
-        if ($res === false) {
-            return null;
-        }
-
-        return $res;
-    }
-
-    /**
-     * @param string $sku
+     * @param array $skus
      * @param string $originSource
      * @param string $destinationSource
      * @return void
      */
     private function transferInventory(
-        string $sku,
+        array $skus,
         string $originSource,
         string $destinationSource
     ): void {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
 
-        $orgSourceItem = $this->getSourceItemData($sku, $originSource);
-        $dstSourceItem = $this->getSourceItemData($sku, $destinationSource);
+        $defaultSourceDestination = ($destinationSource === $this->defaultSourceProvider->getCode());
 
-        $orgSourceItemQty = $orgSourceItem === null ? 0.0 : (float) $orgSourceItem[SourceItemInterface::QUANTITY];
-        $dstSourceItemQty = $dstSourceItem === null ? 0.0 : (float) $dstSourceItem[SourceItemInterface::QUANTITY];
+        $orgSourceItemsData = $connection->fetchAssoc(
+            $connection->select()
+                ->from($tableName, [SourceItemInterface::SKU, '*'])
+                ->where(SourceItemInterface::SOURCE_CODE . ' = ?', $originSource)
+                ->where(SourceItemInterface::SKU . ' IN (?)', $skus)
+        );
+        $dstSourceItemsData = $connection->fetchAssoc(
+            $connection->select()
+                ->from($tableName, [SourceItemInterface::SKU, '*'])
+                ->where(SourceItemInterface::SOURCE_CODE . ' = ?', $destinationSource)
+                ->where(SourceItemInterface::SKU . ' IN (?)', $skus)
+        );
 
-        $finalQuantity = $orgSourceItemQty + $dstSourceItemQty;
-
-        if ($orgSourceItem !== null) {
-            $status = (int) $orgSourceItem[SourceItemInterface::STATUS];
-        } elseif ($dstSourceItemQty !== null) {
-            $status = (int) $dstSourceItem[SourceItemInterface::STATUS];
-        } else {
-            $status = (int) SourceItemInterface::STATUS_OUT_OF_STOCK;
+        $productIds = [];
+        if ($defaultSourceDestination) {
+            $productIds = $this->getProductIdsBySkus->execute($skus);
         }
 
-        $updateOperation = [
-            SourceItemInterface::QUANTITY => $finalQuantity,
-            SourceItemInterface::STATUS => $status,
-        ];
+        $finalSourceItemsData = [];
+        $legacySyncData = [];
+        foreach ($skus as $sku) {
+            $finalQuantity = (float)
+                ($orgSourceItemsData[$sku][SourceItemInterface::QUANTITY] ?? 0.0) +
+                ($dstSourceItemsData[$sku][SourceItemInterface::QUANTITY] ?? 0.0);
 
-        if ($dstSourceItem === null) {
-            $updateOperation[SourceItemInterface::SOURCE_CODE] = $destinationSource;
-            $updateOperation[SourceItemInterface::SKU] = $sku;
+            $finalStatus = $orgSourceItemsData[$sku][SourceItemInterface::STATUS] ??
+                $dstSourceItemsData[$sku][SourceItemInterface::STATUS] ??
+                SourceItemInterface::STATUS_OUT_OF_STOCK;
 
-            $connection->insert($tableName, $updateOperation);
-        } elseif ($orgSourceItem !== null) {
-            $connection->update($tableName, $updateOperation, [
-                SourceItemInterface::SOURCE_CODE . '=?' => $destinationSource,
-                SourceItemInterface::SKU . '=?' => $sku,
-            ]);
+            $finalSourceItemsData[] = [
+                SourceItemInterface::SOURCE_CODE => $destinationSource,
+                SourceItemInterface::SKU => $sku,
+                SourceItemInterface::QUANTITY => $finalQuantity,
+                SourceItemInterface::STATUS => $finalStatus,
+            ];
+
+            if (isset($productIds[$sku]) && $defaultSourceDestination) {
+                $legacySyncData[] = [
+                    StockItemInterface::QTY => $finalQuantity,
+                    StockItemInterface::IS_IN_STOCK => $finalStatus,
+                    StockItemInterface::PRODUCT_ID => $productIds[$sku],
+                    'website_id' => 0
+                ];
+            }
         }
 
-        // Align legacy stock
-        if ($destinationSource === $this->defaultSourceProvider->getCode()) {
-            $this->setDataToLegacyStockItem->execute($sku, $finalQuantity, $status);
+        $connection->insertOnDuplicate(
+            $tableName,
+            $finalSourceItemsData,
+            [
+                SourceItemInterface::QUANTITY,
+                SourceItemInterface::STATUS
+            ]
+        );
+
+        if ($defaultSourceDestination) {
+            $connection->insertOnDuplicate( // Mass update via insert on duplicate
+                $this->resourceConnection->getTableName('cataloginventory_stock_item'),
+                $legacySyncData,
+                [
+                    StockItemInterface::QTY,
+                    StockItemInterface::IS_IN_STOCK,
+                ]
+            );
         }
     }
 
@@ -203,17 +216,21 @@ class BulkInventoryTransfer
         $types = $this->getProductTypesBySkus->execute($skus);
         $processedSkus = [];
 
-        $connection->beginTransaction();
+        $filteredSkus = [];
         foreach ($types as $sku => $type) {
             if ($this->isSourceItemManagementAllowedForProductType->execute($type)) {
-                $this->transferInventory((string)$sku, $originSource, $destinationSource);
-                $processedSkus[] = $sku;
+                $filteredSkus[] = $sku;
             }
         }
 
-        if (!empty($processedSkus)) {
-            $this->clearSource($processedSkus, $originSource, $unassignFromOrigin);
+        if (empty($filteredSkus)) {
+            return;
         }
+
+        $connection->beginTransaction();
+
+        $this->transferInventory($filteredSkus, $originSource, $destinationSource);
+        $this->clearSource($filteredSkus, $originSource, $unassignFromOrigin);
 
         $connection->commit();
     }
