@@ -34,16 +34,6 @@ class GetDefaultSortedSourcesResult
     private $sourceSelectionResultFactory;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var SourceItemRepositoryInterface
-     */
-    private $sourceItemRepository;
-
-    /**
      * @var GetAvailableSourceItemsBySkusAndSortedSourceInterface
      */
     private $getAvailableSourceItemsBySkusAndSortedSource;
@@ -53,8 +43,9 @@ class GetDefaultSortedSourcesResult
      *
      * @param SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory
      * @param SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param SourceItemRepositoryInterface $sourceItemRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder @deprecated
+     * @param SourceItemRepositoryInterface $sourceItemRepository @deprecated
+     * @param GetAvailableSourceItemsBySkusAndSortedSourceInterface $getAvailableSourceItemsBySkusAndSortedSource = null
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
@@ -66,8 +57,6 @@ class GetDefaultSortedSourcesResult
     ) {
         $this->sourceSelectionItemFactory = $sourceSelectionItemFactory;
         $this->sourceSelectionResultFactory = $sourceSelectionResultFactory;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->sourceItemRepository = $sourceItemRepository;
         $this->getAvailableSourceItemsBySkusAndSortedSource = $getAvailableSourceItemsBySkusAndSortedSource ?:
             ObjectManager::getInstance()->get(GetAvailableSourceItemsBySkusAndSortedSourceInterface::class);
     }
@@ -82,24 +71,6 @@ class GetDefaultSortedSourcesResult
     private function isZero(float $floatNumber): bool
     {
         return $floatNumber < 0.0000001;
-    }
-
-    /**
-     * Returns source item from specific source by given SKU. Return null if source item is not found
-     *
-     * @param string $sourceCode
-     * @param string $sku
-     * @return SourceItemInterface|null
-     */
-    private function getSourceItemBySourceCodeAndSku(string $sourceCode, string $sku): ?SourceItemInterface
-    {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceItemInterface::SOURCE_CODE, $sourceCode)
-            ->addFilter(SourceItemInterface::SKU, $sku)
-            ->create();
-        $sourceItemsResult = $this->sourceItemRepository->getList($searchCriteria);
-
-        return $sourceItemsResult->getTotalCount() > 0 ? current($sourceItemsResult->getItems()) : null;
     }
 
     /**
