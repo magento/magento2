@@ -264,6 +264,38 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @dataProvider dataProviderSetWithoutRequiredParameters
+     * @param string $input
+     * @param string $message
+     * @throws \Exception
+     */
+    public function testSetBillingAddressWithoutRequiredParameters(string $input, string $message)
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      {$input}
+    }
+  ) {
+    cart {
+        billing_address {
+            city
+          }
+    }
+  }
+}
+QUERY;
+
+        $this->expectExceptionMessage($message);
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * Verify the all the whitelisted fields for a New Address Object
      *
      * @param array $addressResponse
@@ -296,5 +328,22 @@ QUERY;
         $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
 
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderSetWithoutRequiredParameters()
+    {
+        return [
+            'missed_billing_address' => [
+                'cart_id: "cart_id_value"',
+                'Field SetBillingAddressOnCartInput.billing_address of required type BillingAddressInput! was not provided.',
+            ],
+            'missed_cart_id' => [
+                'billing_address: {}',
+                'Required parameter "cart_id" is missing'
+            ]
+        ];
     }
 }
