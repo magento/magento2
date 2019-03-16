@@ -237,4 +237,39 @@ mutation {
 QUERY;
         $this->graphQlQuery($query);
     }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required parameters are missing: firstname
+     */
+    public function testCreateCustomerIfNameEmpty()
+    {
+        $newEmail = 'customer_created' . rand(1, 2000000) . '@example.com';
+        $newFirstname = '';
+        $newLastname = 'Rowe';
+        $currentPassword = 'test123#';
+
+        $query = <<<QUERY
+mutation {
+    createCustomer(
+        input: {
+            email: "{$newEmail}"
+            firstname: "{$newFirstname}"
+            lastname: "{$newLastname}"
+            password: "{$currentPassword}"
+          	is_subscribed: true
+        }
+    ) {
+        customer {
+            id
+            firstname
+            lastname
+            email
+            is_subscribed
+        }
+    }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
 }
