@@ -248,24 +248,25 @@ class IsSalableWithReservationsConditionTest extends TestCase
 
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
         $stockItemConfiguration->setUseConfigMinQty(false);
+        $stockItemConfiguration->setUseConfigMinSaleQty(false);
         $stockItemConfiguration->setIsQtyDecimal(true);
-        $stockItemConfiguration->setMaxSaleQty(0.001);
+        $stockItemConfiguration->setMinSaleQty(-1.0);
         $stockItemConfiguration->setMinQty(-1.0);
         $stockItemConfiguration->setUseConfigBackorders(false);
         $stockItemConfiguration->setBackorders(StockItemConfigurationInterface::BACKORDERS_YES_NONOTIFY);
         $this->saveStockItemConfiguration->execute($sku, $stockId, $stockItemConfiguration);
 
         $this->appendReservations->execute([
-            $this->reservationBuilder->setStockId($stockId)->setSku($sku )->setQuantity(-8.33)->build(),
+            $this->reservationBuilder->setStockId($stockId)->setSku($sku )->setQuantity(-9.33)->build(),
         ]);
 
         self::assertEquals(
             true,
-            $this->isProductSalableForRequestedQty->execute($sku, $stockId, 1.17)->isSalable()
+            $this->isProductSalableForRequestedQty->execute($sku, $stockId, 0.17)->isSalable()
         );
 
         $this->appendReservations->execute([
-            $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(8.33)->build(),
+            $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(9.33)->build(),
         ]);
 
         $this->cleanupReservations->execute();
