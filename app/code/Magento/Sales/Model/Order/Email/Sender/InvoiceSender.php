@@ -96,6 +96,7 @@ class InvoiceSender extends Sender
      * @param Invoice $invoice
      * @param bool $forceSyncMode
      * @return bool
+     * @throws \Exception
      */
     public function send(Invoice $invoice, $forceSyncMode = false)
     {
@@ -146,6 +147,7 @@ class InvoiceSender extends Sender
      *
      * @param Order $order
      * @return string
+     * @throws \Exception
      */
     protected function getPaymentHtml(Order $order)
     {

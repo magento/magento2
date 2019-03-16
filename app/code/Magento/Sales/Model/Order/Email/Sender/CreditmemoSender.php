@@ -96,6 +96,7 @@ class CreditmemoSender extends Sender
      * @param Creditmemo $creditmemo
      * @param bool $forceSyncMode
      * @return bool
+     * @throws \Exception
      */
     public function send(Creditmemo $creditmemo, $forceSyncMode = false)
     {
@@ -146,6 +147,7 @@ class CreditmemoSender extends Sender
      *
      * @param Order $order
      * @return string
+     * @throws \Exception
      */
     protected function getPaymentHtml(Order $order)
     {
