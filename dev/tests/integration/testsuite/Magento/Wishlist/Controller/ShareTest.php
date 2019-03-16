@@ -76,7 +76,7 @@ class ShareTest extends AbstractController
     private function prepareRequestData($invalidData = false)
     {
         Bootstrap::getInstance()->loadArea(Area::AREA_FRONTEND);
-        $emails = !$invalidData ? 'email-1@example.com,email-1@example.com' : '';
+        $emails = !$invalidData ? 'email-1@example.com,email-2@example.com' : '';
 
         /** @var FormKey $formKey */
         $formKey = $this->_objectManager->get(FormKey::class);
