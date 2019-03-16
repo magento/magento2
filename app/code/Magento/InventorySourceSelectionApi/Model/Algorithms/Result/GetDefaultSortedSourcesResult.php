@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelectionApi\Model\Algorithms\Result;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\GetAvailableSourceItemsBySkusAndSortedSourceInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
@@ -42,23 +44,32 @@ class GetDefaultSortedSourcesResult
     private $sourceItemRepository;
 
     /**
+     * @var GetAvailableSourceItemsBySkusAndSortedSourceInterface
+     */
+    private $getAvailableSourceItemsBySkusAndSortedSource;
+
+    /**
      * GetDefaultSortedSourcesResult constructor.
      *
      * @param SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory
      * @param SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SourceItemRepositoryInterface $sourceItemRepository
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory,
         SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        SourceItemRepositoryInterface $sourceItemRepository
+        SourceItemRepositoryInterface $sourceItemRepository,
+        GetAvailableSourceItemsBySkusAndSortedSourceInterface $getAvailableSourceItemsBySkusAndSortedSource = null
     ) {
         $this->sourceSelectionItemFactory = $sourceSelectionItemFactory;
         $this->sourceSelectionResultFactory = $sourceSelectionResultFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sourceItemRepository = $sourceItemRepository;
+        $this->getAvailableSourceItemsBySkusAndSortedSource = $getAvailableSourceItemsBySkusAndSortedSource ?:
+            ObjectManager::getInstance()->get(GetAvailableSourceItemsBySkusAndSortedSourceInterface::class);
     }
 
     /**
@@ -105,44 +116,40 @@ class GetDefaultSortedSourcesResult
         $isShippable = true;
         $sourceItemSelections = [];
 
-        //TODO from performance perspective it's better to switch these foreaches and make the inner one
-        //TODO which loops over sources to be outermost and iterate over inventory request items inside
+        $itemsTdDeliver = [];
         foreach ($inventoryRequest->getItems() as $item) {
-            $itemSku = $item->getSku();
-            $qtyToDeliver = $item->getQty();
+            $itemsTdDeliver[$item->getSku()] = (float) $item->getQty();
+        }
 
-            foreach ($sortedSources as $source) {
-                $sourceItem = $this->getSourceItemBySourceCodeAndSku($source->getSourceCode(), $itemSku);
-                if (null === $sourceItem) {
-                    continue;
-                }
+        $sortedSourceCodes = [];
+        foreach ($sortedSources as $sortedSource) {
+            $sortedSourceCodes[] = $sortedSource->getSourceCode();
+        }
 
-                if ($sourceItem->getStatus() !== SourceItemInterface::STATUS_IN_STOCK) {
-                    continue;
-                }
+        $sourceItems =
+            $this->getAvailableSourceItemsBySkusAndSortedSource->execute(
+                array_keys($itemsTdDeliver),
+                $sortedSourceCodes
+            );
 
-                $sourceItemQty = $sourceItem->getQuantity();
-                $qtyToDeduct = min($sourceItemQty, $qtyToDeliver);
+        foreach ($sourceItems as $sourceItem) {
+            $qtyToDeduct = min($sourceItem->getQuantity(), $itemsTdDeliver[$sourceItem->getSku()] ?? 0.0);
 
-                // check if source has some qty of SKU, so it's possible to take them into account
-                if ($this->isZero((float)$sourceItemQty)) {
-                    continue;
-                }
+            $sourceItemSelections[] = $this->sourceSelectionItemFactory->create([
+                'sourceCode' => $sourceItem->getSourceCode(),
+                'sku' => $sourceItem->getSku(),
+                'qtyToDeduct' => $qtyToDeduct,
+                'qtyAvailable' => $sourceItem->getQuantity()
+            ]);
 
-                $sourceItemSelections[] = $this->sourceSelectionItemFactory->create([
-                    'sourceCode' => $sourceItem->getSourceCode(),
-                    'sku' => $itemSku,
-                    'qtyToDeduct' => $qtyToDeduct,
-                    'qtyAvailable' => $sourceItemQty
-                ]);
+            $itemsTdDeliver[$sourceItem->getSku()] -= $qtyToDeduct;
+        }
 
-                $qtyToDeliver -= $qtyToDeduct;
-            }
-
-            // if we go through all sources from the stock and there is still some qty to delivery,
-            // then it doesn't have enough items to delivery
-            if (!$this->isZero($qtyToDeliver)) {
+        $isShippable = true;
+        foreach ($itemsTdDeliver as $itemToDeliver) {
+            if (!$this->isZero($itemToDeliver)) {
                 $isShippable = false;
+                break;
             }
         }
 
