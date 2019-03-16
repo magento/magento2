@@ -67,10 +67,14 @@ class GetSourceItemsBySkusAndSortedSourceTest extends TestCase
 
         self::assertCount(count($expected), $sourceItems);
 
+        $keys = [];
         foreach ($sourceItems as $sourceItem) {
             $key = $sourceItem->getSourceCode() . '/' . $sourceItem->getSku();
+            $keys[] = $key;
             self::assertSame($expected[$key], $sourceItem->getQuantity());
             self::assertSame(SourceItemInterface::STATUS_IN_STOCK, $sourceItem->getStatus());
         }
+
+        self::assertSame(array_keys($expected), $keys, 'Sources sorting is not preserved');
     }
 }
