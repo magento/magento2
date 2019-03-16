@@ -38,10 +38,10 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
     private $serializerMock;
 
     /** @var \Magento\Eav\Model\Entity\Collection\AbstractCollection|\PHPUnit_Framework_MockObject_MockObject */
-    protected $collection;
+    private $collection;
 
     /** @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $countryFactory;
+    private $countryFactory;
 
     /**
      * @var AbstractAttribute | \PHPUnit_Framework_MockObject_MockObject
@@ -114,7 +114,7 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
     {
         return
             [
-                ['cachedDataSrl' =>  json_encode(['key' => 'data']), 'cachedDataUnsrl' => ['key' => 'data']]
+                ['cachedDataSrl' => json_encode(['key' => 'data']), 'cachedDataUnsrl' => ['key' => 'data']]
             ];
     }
 
