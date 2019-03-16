@@ -264,6 +264,34 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required parameters are missing: firstname
+     */
+    public function testEmptyCustomerName()
+    {
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+
+        $query = <<<QUERY
+mutation {
+    updateCustomer(
+        input: {
+            email: "{$currentEmail}"
+            password: "{$currentPassword}"
+            firstname: ""
+        }
+    ) {
+        customer {
+            email
+        }
+    }
+}
+QUERY;
+        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+    }
+
+    /**
      * @param string $email
      * @param string $password
      * @return array
