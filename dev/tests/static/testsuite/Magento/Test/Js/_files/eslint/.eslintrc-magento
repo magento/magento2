@@ -5,7 +5,8 @@
         "jasmine": true,
         "jquery": true,
         "prototypejs": true,
-        "node": true
+        "node": true,
+        "es6": true
     },
     "rules": {
         "eqeqeq": [2, "smart"],
