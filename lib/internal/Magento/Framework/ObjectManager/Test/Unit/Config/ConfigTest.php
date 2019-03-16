@@ -98,4 +98,19 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $config->extend(['\Some\Class' => ['shared' => true]]);
         $this->assertTrue($config->isShared('Some\Class'));
     }
+
+    public function testMergeNestedNodes()
+    {
+        /** @var \Magento\Framework\ObjectManager\Config\Config $config */
+        $config = $this->objectManagerHelper->getObject(\Magento\Framework\ObjectManager\Config\Config::class);
+        $config->extend(['Some\Class' => ['arguments' => ['nested' => ['global_scope' => 'value']]]]);
+        $config->extend(['Some\Class' => ['arguments' => ['nested' => ['adminhtml_scope' => 'value']]]]);
+        $actualArguments = $config->getArguments('Some\Class');
+        $this->assertEquals([
+            'nested' => [
+                'global_scope' => 'value',
+                'adminhtml_scope' => 'value'
+            ]
+        ], $actualArguments);
+    }
 }
