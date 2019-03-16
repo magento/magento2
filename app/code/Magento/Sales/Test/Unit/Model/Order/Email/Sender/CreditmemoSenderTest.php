@@ -90,7 +90,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
 
         $this->creditmemoMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with($emailSendingResult);
 
         $this->globalConfig->expects($this->once())
             ->method('getValue')
@@ -130,7 +130,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
                     ]
                 );
 
-            $this->identityContainerMock->expects($this->once())
+            $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
 
@@ -197,6 +197,8 @@ class CreditmemoSenderTest extends AbstractSenderTest
      * @param bool $isVirtualOrder
      * @param int $formatCallCount
      * @param string|null $expectedShippingAddress
+     *
+     * @return void
      * @dataProvider sendVirtualOrderDataProvider
      */
     public function testSendVirtualOrder($isVirtualOrder, $formatCallCount, $expectedShippingAddress)
@@ -207,7 +209,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
 
         $this->creditmemoMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with(false);
 
         $this->globalConfig->expects($this->once())
             ->method('getValue')
@@ -242,7 +244,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
                 ]
             );
 
-        $this->identityContainerMock->expects($this->once())
+        $this->identityContainerMock->expects($this->exactly(2))
             ->method('isEnabled')
             ->willReturn(false);
 
