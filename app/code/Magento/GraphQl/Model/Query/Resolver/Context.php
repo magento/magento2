@@ -11,6 +11,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Concrete implementation for @see ContextInterface
@@ -25,7 +26,13 @@ class Context extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     const USER_TYPE_ID  = 'user_type';
     const USER_ID = 'user_id';
+    const STORE_ID = 'store_id';
     /**#@-*/
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * @var UserContextInterface
@@ -38,6 +45,7 @@ class Context extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param UserContextInterface|null $userContext
+     * @param StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -46,6 +54,7 @@ class Context extends \Magento\Framework\Model\AbstractExtensibleModel implement
         ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         UserContextInterface $userContext,
+        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         parent::__construct(
@@ -61,6 +70,7 @@ class Context extends \Magento\Framework\Model\AbstractExtensibleModel implement
             $this->setId($data['type']);
         }
         $this->userContext = $userContext;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -121,5 +131,24 @@ class Context extends \Magento\Framework\Model\AbstractExtensibleModel implement
     public function setUserType(int $typeId) : ContextInterface
     {
         return $this->setData(self::USER_TYPE_ID, $typeId);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getStoreId(): int
+    {
+        if (!$this->getData(self::STORE_ID)) {
+            $this->setStoreId($this->storeManager->getStore()->getId());
+        }
+        return (int) $this->getData(self::STORE_ID);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setStoreId(int $storeId) : ContextInterface
+    {
+        return $this->setData(self::STORE_ID, $storeId);
     }
 }
