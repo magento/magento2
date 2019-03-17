@@ -82,6 +82,66 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     */
+    public function testRemoveCouponFromAonotherCustomerCart()
+    {
+        $couponCode = '2?ds5!2d';
+
+        /* Apply coupon to the quote */
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_with_simple_product_without_address',
+            'reserved_order_id'
+        );
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+
+        $this->quote->setCustomerId(1);
+        $this->quoteResource->save($this->quote);
+
+        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
+        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
+        $this->graphQlQuery($query, [], '', $queryHeaders);
+
+        /* Remove coupon from quote */
+        $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
+        $queryHeaders = $this->prepareAuthorizationHeaders('customer_two@example.com', 'password');
+
+        $this->expectExceptionMessage("The current user cannot perform operations on cart \"$maskedQuoteId\"");
+        $this->graphQlQuery($query, [], '', $queryHeaders);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     */
+    public function testRemoveCouponFromGuestCart()
+    {
+        $couponCode = '2?ds5!2d';
+
+        /* Apply coupon to the quote */
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_with_simple_product_without_address',
+            'reserved_order_id'
+        );
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+
+        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
+        $this->graphQlQuery($query);
+
+        /* Remove coupon from quote */
+        $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
+        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
+        
+        $this->expectExceptionMessage("The current user cannot perform operations on cart \"$maskedQuoteId\"");
+        $this->graphQlQuery($query, [], '', $queryHeaders);
+    }
+
+    /**
      * Retrieve customer authorization headers
      *
      * @param string $email
