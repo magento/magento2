@@ -74,7 +74,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
     {
         $couponCode = '2?ds5!2d';
 
-        /* Apply coupon to the customer quote */
+        /* Assign the quote to the customer */
         $this->quoteResource->load(
             $this->quote,
             'test_order_with_simple_product_without_address',
@@ -85,6 +85,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $this->quote->setCustomerId(1);
         $this->quoteResource->save($this->quote);
 
+        /* Apply coupon to the customer quote */
         $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
         $this->graphQlQuery($query, [], '', $queryHeaders);
@@ -106,7 +107,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
     {
         $couponCode = '2?ds5!2d';
 
-        /* Apply coupon to the customer quote */
+        /* Assign the quote to the customer */
         $this->quoteResource->load(
             $this->quote,
             'test_order_with_simple_product_without_address',
@@ -117,6 +118,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $this->quote->setCustomerId(1);
         $this->quoteResource->save($this->quote);
 
+        /* Apply coupon to the customer quote */
         $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
         $this->graphQlQuery($query, [], '', $queryHeaders);
@@ -130,6 +132,32 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
 
         /* Remove coupon from the quote the second time */
         $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query, [], '', $queryHeaders);
+
+        self::assertArrayHasKey('removeCouponFromCart', $response);
+        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     */
+    public function testRemoveCouponFromCartWithNoCouponApplied()
+    {
+        /* Assign the quote to the customer */
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_with_simple_product_without_address',
+            'reserved_order_id'
+        );
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+
+        $this->quote->setCustomerId(1);
+        $this->quoteResource->save($this->quote);
+
+        /* Remove coupon from the quote */
+        $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
+        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
         $response = $this->graphQlQuery($query, [], '', $queryHeaders);
 
         self::assertArrayHasKey('removeCouponFromCart', $response);
