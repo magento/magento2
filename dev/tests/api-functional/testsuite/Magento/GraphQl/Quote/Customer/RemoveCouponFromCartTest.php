@@ -58,7 +58,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
     {
         $couponCode = '2?ds5!2d';
 
-        /* Apply coupon to the quote */
+        /* Apply coupon to the customer quote */
         $this->quoteResource->load(
             $this->quote,
             'test_order_with_simple_product_without_address',
@@ -73,7 +73,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
         $this->graphQlQuery($query, [], '', $queryHeaders);
 
-        /* Remove coupon from quote */
+        /* Remove coupon from the quote */
         $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query, [], '', $queryHeaders);
 
@@ -90,7 +90,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
     {
         $couponCode = '2?ds5!2d';
 
-        /* Apply coupon to the quote */
+        /* Apply coupon to the first customer quote */
         $this->quoteResource->load(
             $this->quote,
             'test_order_with_simple_product_without_address',
@@ -105,7 +105,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
         $this->graphQlQuery($query, [], '', $queryHeaders);
 
-        /* Remove coupon from quote */
+        /* Remove coupon from the quote from the second customer */
         $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
         $queryHeaders = $this->prepareAuthorizationHeaders('customer_two@example.com', 'password');
 
@@ -122,7 +122,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
     {
         $couponCode = '2?ds5!2d';
 
-        /* Apply coupon to the quote */
+        /* Apply coupon to the guest quote */
         $this->quoteResource->load(
             $this->quote,
             'test_order_with_simple_product_without_address',
@@ -136,7 +136,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         /* Remove coupon from quote */
         $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
         $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        
+
         $this->expectExceptionMessage("The current user cannot perform operations on cart \"$maskedQuoteId\"");
         $this->graphQlQuery($query, [], '', $queryHeaders);
     }
