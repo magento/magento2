@@ -553,6 +553,7 @@ class Config
     {
         return $this->additionalMetaAssets;
     }
+
     /**
      * Adjust metadata content url
      *
