@@ -84,9 +84,15 @@ class Zookeeper implements LockManagerInterface
      */
     public function __construct(string $host, string $path = self::DEFAULT_PATH)
     {
-        if (empty($path)) {
+        if (!$path) {
             throw new RuntimeException(
                 new Phrase('The path needs to be a non-empty string.')
+            );
+        }
+
+        if (!$host) {
+            throw new RuntimeException(
+                new Phrase('The host needs to be a non-empty string.')
             );
         }
 
@@ -221,18 +227,18 @@ class Zookeeper implements LockManagerInterface
      */
     private function getIndex(string $key)
     {
-        if (!preg_match("/[0-9]+$/", $key, $matches))
+        if (!preg_match('/' . $this->lockName . '([0-9]+)$/', $key, $matches))
             return null;
 
-        return intval($matches[0]);
+        return intval($matches[1]);
     }
 
     /**
      * Checks if there is any sequence node under parent of $fullKey.
      * At first checks that the $fullKey node is present, if not - returns false.
      *
-     * If $indexKey is non-null and there is a smaller index that $indexKey then returns true,
-     * if all the nodes are larger than $indexKey then returns false.
+     * If $indexKey is non-null and there is a smaller index than $indexKey then returns true,
+     * otherwise returns false.
      *
      * @param string $fullKey The full path without any sequence info
      * @param int|null $indexKey The index to compare
@@ -249,12 +255,11 @@ class Zookeeper implements LockManagerInterface
 
         $children = $this->getProvider()->getChildren($parent);
 
+        if (is_null($indexKey) && !empty($children)) {
+            return true;
+        }
+
         foreach ($children as $childKey) {
-
-            if (is_null($indexKey)) {
-                return true;
-            }
-
             $childIndex = $this->getIndex($childKey);
 
             if (is_null($childIndex)) {

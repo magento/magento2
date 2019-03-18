@@ -43,9 +43,19 @@ class ZookeeperTest extends TestCase
      * @expectedExceptionMessage The path needs to be a non-empty string.
      * @return void
      */
-    public function testConstructionWithException()
+    public function testConstructionWithPathException()
     {
         $this->zookeeperProvider = new ZookeeperProvider($this->host, '');
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage The host needs to be a non-empty string.
+     * @return void
+     */
+    public function testConstructionWithHostException()
+    {
+        $this->zookeeperProvider = new ZookeeperProvider('', $this->path);
     }
 
     /**

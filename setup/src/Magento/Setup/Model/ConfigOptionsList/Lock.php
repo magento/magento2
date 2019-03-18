@@ -241,7 +241,7 @@ class Lock implements ConfigOptionsListInterface
      */
     private function getLockProvider(array $options, DeploymentConfig $deploymentConfig): string
     {
-        if (empty($options[self::INPUT_KEY_LOCK_PROVIDER])) {
+        if (!isset($options[self::INPUT_KEY_LOCK_PROVIDER])) {
             return (string) $deploymentConfig->get(
                 self::CONFIG_PATH_LOCK_PROVIDER,
                 $this->getDefaultValue(self::INPUT_KEY_LOCK_PROVIDER)
