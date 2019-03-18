@@ -8,6 +8,7 @@
 
 namespace Magento\Ups\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
@@ -16,6 +17,7 @@ use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Ups\Helper\Config;
 use Magento\Framework\Xml\Security;
+use Magento\Framework\HTTP\ClientFactory;
 
 /**
  * UPS shipping implementation
@@ -130,6 +132,11 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     ];
 
     /**
+     * @var ClientFactory
+     */
+    private $httpClientFactory;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -148,6 +155,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param Config $configHelper
      * @param array $data
+     * @param ClientFactory $httpClientFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -169,7 +177,8 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         Config $configHelper,
-        array $data = []
+        array $data = [],
+        ClientFactory $httpClientFactory = null
     ) {
         $this->_localeFormat = $localeFormat;
         $this->configHelper = $configHelper;
@@ -191,6 +200,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $stockRegistry,
             $data
         );
+        $this->httpClientFactory = $httpClientFactory ?: ObjectManager::getInstance()->get(ClientFactory::class);
     }
 
     /**
@@ -734,22 +744,17 @@ XMLRequest;
         if ($xmlResponse === null) {
             $debugData['request'] = $xmlParams;
             try {
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_HEADER, 0);
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlRequest);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, (bool)$this->getConfigFlag('mode_xml'));
-                $xmlResponse = curl_exec($ch);
-                if ($xmlResponse !== false) {
-                    $debugData['result'] = $xmlResponse;
-                    $this->_setCachedQuotes($xmlRequest, $xmlResponse);
-                } else {
-                    $debugData['result'] = ['error' => curl_error($ch)];
-                }
-                curl_close($ch);
+                $client = $this->httpClientFactory->create();
+                $client->setOptions(
+                    [
+                        CURLOPT_SSL_VERIFYPEER => (bool)$this->getConfigFlag('mode_xml'),
+                        CURLOPT_HEADER => 0,
+                    ]
+                );
+                $client->post($url, $xmlRequest);
+                $xmlResponse = $client->getBody();
+                $debugData['result'] = $xmlResponse;
+                $this->_setCachedQuotes($xmlRequest, $xmlResponse);
             } catch (\Exception $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                 $xmlResponse = '';
@@ -1005,20 +1010,11 @@ XMLAuth;
             $debugData = ['request' => $xmlRequest];
 
             try {
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_HEADER, 0);
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlRequest);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-                $xmlResponse = curl_exec($ch);
-                if ($xmlResponse !== false) {
-                    $debugData['result'] = $xmlResponse;
-                } else {
-                    $debugData['result'] = ['error' => curl_error($ch)];
-                }
-                curl_close($ch);
+                $client = $this->httpClientFactory->create();
+                $client->setOption(CURLOPT_HEADER, 0);
+                $client->post($url, $xmlRequest);
+                $xmlResponse = $client->getBody();
+                $debugData['result'] = $xmlResponse;
             } catch (\Exception $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                 $xmlResponse = '';
@@ -1441,15 +1437,15 @@ XMLAuth;
         $debugData = ['request' => $xmlRequest->asXML()];
 
         try {
-            $ch = curl_init($this->getShipAcceptUrl());
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_xmlAccessRequest . $xmlRequest->asXML());
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, (bool)$this->getConfigFlag('mode_xml'));
-            $xmlResponse = curl_exec($ch);
-
+            $client = $this->httpClientFactory->create();
+            $client->setOptions(
+                [
+                    CURLOPT_SSL_VERIFYPEER => (bool)$this->getConfigFlag('mode_xml'),
+                    CURLOPT_HEADER => 0,
+                ]
+            );
+            $client->post($this->getShipAcceptUrl(), $this->_xmlAccessRequest . $xmlRequest->asXML());
+            $xmlResponse = $client->getBody();
             $debugData['result'] = $xmlResponse;
             $this->_setCachedQuotes($xmlRequest, $xmlResponse);
         } catch (\Exception $e) {
@@ -1510,23 +1506,22 @@ XMLAuth;
         $xmlResponse = $this->_getCachedQuotes($xmlRequest);
 
         if ($xmlResponse === null) {
-            $url = $this->getShipConfirmUrl();
-
             $debugData = ['request' => $xmlRequest];
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlRequest);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, (bool)$this->getConfigFlag('mode_xml'));
-            $xmlResponse = curl_exec($ch);
-            if ($xmlResponse === false) {
-                throw new \Exception(curl_error($ch));
-            } else {
+            $url = $this->getShipConfirmUrl();
+            try {
+                $client = $this->httpClientFactory->create();
+                $client->setOptions(
+                    [
+                        CURLOPT_SSL_VERIFYPEER => (bool)$this->getConfigFlag('mode_xml'),
+                        CURLOPT_HEADER => 0,
+                    ]
+                );
+                $client->post($url, $xmlRequest);
+                $xmlResponse = $client->getBody();
                 $debugData['result'] = $xmlResponse;
                 $this->_setCachedQuotes($xmlRequest, $xmlResponse);
+            } catch (\Exception $e) {
+                $debugData['result'] = ['code' => $e->getCode(), 'error' => $e->getMessage()];
             }
         }
 
