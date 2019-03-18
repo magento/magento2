@@ -15,6 +15,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\Quote\Model\Quote\Address\Rate;
+use Magento\Quote\Model\Quote\Address\RateFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
@@ -35,9 +36,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     private $productRepository;
 
     /**
-     * @var Rate
+     * @var RateFactory
      */
-    private $rate;
+    private $rateFactory;
 
     /**
      * @var QuoteResource
@@ -66,7 +67,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
-        $this->rate = $objectManager->get(Rate::class);
+        $this->rateFactory = $objectManager->get(RateFactory::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
@@ -88,7 +89,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $this->quoteResource->load($quote, 'test_order_with_virtual_product', 'reserved_order_id');
 
         $shippingAddress = $quote->getShippingAddress();
-        $rate = $this->rate;
+
+        /** @var Rate $rate */
+        $rate = $this->rateFactory->create();
 
         $rate->setPrice(2)
             ->setAddressId($shippingAddress->getId())
@@ -127,7 +130,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $quote->addProduct($product, 1);
 
         $shippingAddress = $quote->getShippingAddress();
-        $rate = $this->rate;
+
+        /** @var Rate $rate */
+        $rate = $this->rateFactory->create();
 
         $rate->setPrice(2)
             ->setAddressId($shippingAddress->getId())
@@ -162,7 +167,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
 
         $shippingAddress = $quote->getShippingAddress();
-        $rate = $this->rate;
+
+        /** @var Rate $rate */
+        $rate = $this->rateFactory->create();
 
         $rate->setPrice(2)
             ->setAddressId($shippingAddress->getId())
@@ -225,7 +232,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $quote->addProduct($product, 1);
 
         $shippingAddress = $quote->getShippingAddress();
-        $rate = $this->rate;
+
+        /** @var Rate $rate */
+        $rate = $this->rateFactory->create();
 
         $rate->setPrice(2)
             ->setAddressId($shippingAddress->getId())
@@ -269,7 +278,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $quote->addProduct($product, 1);
 
         $shippingAddress = $quote->getShippingAddress();
-        $rate = $this->rate;
+
+        /** @var Rate $rate */
+        $rate = $this->rateFactory->create();
 
         $rate->setPrice(2)
             ->setAddressId($shippingAddress->getId())
