@@ -21,12 +21,4 @@ class PoisonPill extends \Magento\Framework\Model\AbstractModel implements Poiso
     {
         return $this->_getData('version');
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function setVersion(int $version)
-    {
-        $this->setData('version', $version);
-    }
 }

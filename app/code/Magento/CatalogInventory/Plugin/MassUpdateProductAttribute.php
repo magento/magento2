@@ -40,19 +40,9 @@ class MassUpdateProductAttribute
     private $stockConfiguration;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute
      */
-    private $request;
-
-    /**
-     * @var \Magento\Backend\Model\Session
-     */
-    private $session;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
+    private $attributeHelper;
 
     /**
      * @var \Magento\Backend\Model\View\Result\Redirect
@@ -69,9 +59,7 @@ class MassUpdateProductAttribute
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Backend\Model\Session $session
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $redirectFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -82,9 +70,7 @@ class MassUpdateProductAttribute
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Backend\Model\Session $session,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper,
         \Magento\Backend\Model\View\Result\RedirectFactory $redirectFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
@@ -93,9 +79,7 @@ class MassUpdateProductAttribute
         $this->stockRegistry = $stockRegistry;
         $this->stockItemRepository = $stockItemRepository;
         $this->stockConfiguration = $stockConfiguration;
-        $this->request = $request;
-        $this->session = $session;
-        $this->storeManager = $storeManager;
+        $this->attributeHelper = $attributeHelper;
         $this->redirectFactory = $redirectFactory;
         $this->messageManager = $messageManager;
     }
@@ -107,17 +91,18 @@ class MassUpdateProductAttribute
      * @param callable $proceed
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(Save $subject, callable $proceed)
     {
         try {
-            $inventoryData = $this->request->getParam('inventory', []);
-            $storeId = $this->request->getParam('store', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
-            $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
-            $productIds = $this->session->getData('product_ids');
+            /** @var \Magento\Framework\App\RequestInterface $request */
+            $request = $subject->getRequest();
+            $inventoryData = $request->getParam('inventory', []);
             $inventoryData = $this->addConfigSettings($inventoryData);
+
+            $storeId = $this->attributeHelper->getSelectedStoreId();
+            $websiteId = $this->attributeHelper->getStoreWebsiteId($storeId);
+            $productIds = $this->attributeHelper->getProductIds();
 
             if (!empty($inventoryData)) {
                 $this->updateInventoryInProducts($productIds, $websiteId, $inventoryData);
