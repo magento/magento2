@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
 class LinkTest extends \PHPUnit\Framework\TestCase
@@ -108,7 +109,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->assertEquals(
-            'href="http://site.com/link.html" shape="shape" tabindex="tabindex" onfocus="onfocus" onblur="onblur" id="id"',
+            'href="http://site.com/link.html" shape="shape" tabindex="tabindex"'
+            . ' onfocus="onfocus" onblur="onblur" id="id"',
             $linkWithoutAttributes->getLinkAttributes()
         );
     }

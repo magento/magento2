@@ -27,6 +27,7 @@ use Magento\Store\Model\ScopeInterface as StoreScope;
  * @api
  * @since 100.1.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
  */
 class System implements ConfigTypeInterface
 {
