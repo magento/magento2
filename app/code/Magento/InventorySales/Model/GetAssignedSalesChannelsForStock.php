@@ -42,7 +42,7 @@ class GetAssignedSalesChannelsForStock implements GetAssignedSalesChannelsForSto
     /**
      * @inheritdoc
      */
-    public function execute(int $stockId) : array
+    public function execute(int $stockId): array
     {
         $salesChannelsData = $this->getAssignedSalesChannelsDataForStock->execute($stockId);
 
