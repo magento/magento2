@@ -32,6 +32,7 @@ class AddToCompareAvailability implements ArgumentInterface
     /**
      * Is product available for comparison.
      *
+     * @param ProductInterface $product
      * @return bool
      */
     public function isAvailableForCompare(ProductInterface $product): bool
@@ -43,6 +44,7 @@ class AddToCompareAvailability implements ArgumentInterface
     /**
      * Get is in stock status.
      *
+     * @param ProductInterface $product
      * @return bool
      */
     private function isInStock(ProductInterface $product): bool

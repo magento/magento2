@@ -29,6 +29,7 @@
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="noDisplayOutOfStockProduct" stepKey="noDisplayOutOfStockProduct"/>
         </after>
 
         <!--Check 'out of stock' is turned off by default-->
