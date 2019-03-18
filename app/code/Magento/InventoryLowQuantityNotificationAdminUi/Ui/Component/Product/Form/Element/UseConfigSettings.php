@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotificationAdminUi\Ui\Component\Product\Form\Element;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\ValueSourceInterface;
 use Magento\Framework\Serialize\JsonValidator;
 use Magento\Framework\Serialize\Serializer\Json;

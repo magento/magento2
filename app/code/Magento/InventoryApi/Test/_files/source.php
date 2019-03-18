@@ -6,7 +6,6 @@
 declare(strict_types=1);
 
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
