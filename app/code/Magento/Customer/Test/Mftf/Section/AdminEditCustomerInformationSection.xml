@@ -13,5 +13,6 @@
         <element name="addresses" type="button" selector="//a[@id='tab_address']" timeout="30"/>
         <element name="newsLetter" type="button" selector="//a[@class='admin__page-nav-link' and @id='tab_newsletter_content']" timeout="30"/>
         <element name="group" type="text" selector="//th[text()='Customer Group:']/../td"/>
+        <element name="customerTitle" type="text" selector="h1.page-title"/>
     </section>
 </sections>
