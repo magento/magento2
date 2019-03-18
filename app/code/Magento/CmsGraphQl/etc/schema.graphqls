@@ -30,3 +30,8 @@ type CmsBlock @doc(description: "CMS block defines all CMS block information") {
     title: String @doc(description: "CMS block title")
     content: String @doc(description: "CMS block content")
 }
+
+interface CategoryInterface  {
+    categoryBlock:
+    CmsBlock @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\CategoryBlock") @doc(description: "The CMS block query returns information about CMS blocks")
+}
