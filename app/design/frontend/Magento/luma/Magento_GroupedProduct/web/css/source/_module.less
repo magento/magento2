@@ -70,6 +70,10 @@
                 clear: left;
             }
         }
+
+        .box-tocart {
+            margin-top: @indent__s;
+        }
     }
 }
 
@@ -133,9 +137,18 @@
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .table-wrapper.grouped {
-        .lib-css(margin-left, -@layout__width-xs-indent);
-        .lib-css(margin-right, -@layout__width-xs-indent);
+    .product-add-form {
+        .table-wrapper.grouped {
+            .lib-css(margin-left, -@layout__width-xs-indent);
+            .lib-css(margin-right, -@layout__width-xs-indent);
+            .table.data.grouped {
+                tr {
+                    td {
+                        padding: 5px 10px 5px 15px;
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -14,7 +14,8 @@
           method="post"
           id="form-validate"
           data-mage-init='{"Magento_Checkout/js/action/update-shopping-cart":
-              {"validationURL" : "/checkout/cart/updateItemQty"}
+              {"validationURL" : "/checkout/cart/updateItemQty",
+              "updateCartActionContainer": "#update_cart_action_container"}
           }'
           class="form form-cart">
     <?= $block->getBlockHtml('formkey') ?>

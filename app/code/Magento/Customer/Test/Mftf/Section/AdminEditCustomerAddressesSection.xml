@@ -13,6 +13,8 @@
         <element name="addNewAddress" type="button" selector="//span[text()='Add New Address']"/>
         <element name="defaultBillingAddress" type="text" selector="input[name='default_billing']"/>
         <element name="defaultShippingAddress" type="text" selector="input[name='default_shipping']"/>
+        <element name="defaultBillingAddressButton" type="text" selector="//input[@name='default_billing']/following-sibling::label"/>
+        <element name="defaultShippingAddressButton" type="text" selector="//input[@name='default_shipping']/following-sibling::label"/>
         <element name="prefixName" type="text" selector="input[name='prefix']"/>
         <element name="firstName" type="text" selector="input[name='firstname']" />
         <element name="middleName" type="text" selector="input[name='middlename']" />
