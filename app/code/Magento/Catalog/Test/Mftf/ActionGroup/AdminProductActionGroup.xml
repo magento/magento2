@@ -265,6 +265,6 @@
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
         <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{attributeSet.attribute_set_name}}" stepKey="searchForAttrSet"/>
-        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResultByName(attributeSet.attribute_set_name)}}" stepKey="selectAttrSet"/>
     </actionGroup>
 </actionGroups>
