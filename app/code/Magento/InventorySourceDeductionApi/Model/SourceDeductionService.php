@@ -7,11 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceDeductionApi\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventorySalesApi\Api\GetStockBySalesChannelInterface;
-use Magento\InventorySalesApi\Api\StockResolverInterface;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @inheritdoc

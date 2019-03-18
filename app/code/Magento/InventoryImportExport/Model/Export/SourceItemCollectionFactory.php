@@ -7,14 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryImportExport\Model\Export;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection as AttributeCollection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryImportExport\Model\Export\ColumnProviderInterface;
 use Magento\InventoryImportExport\Model\Export\SourceItemCollectionFactoryInterface;
 use Magento\ImportExport\Model\Export;
