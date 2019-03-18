@@ -125,52 +125,21 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
         $decodedJson = $this->jsonSerializer->unserialize($json);
 
         $this->assertSame('thumbs', $decodedJson['nav']);
-        $this->assertInternalType("string", $decodedJson['nav']);
-
         $this->assertSame(false, $decodedJson['loop']);
-        $this->assertInternalType("bool", $decodedJson['loop']);
-
         $this->assertSame(true, $decodedJson['keyboard']);
-        $this->assertInternalType("bool", $decodedJson['keyboard']);
-
         $this->assertSame(true, $decodedJson['arrows']);
-        $this->assertInternalType("bool", $decodedJson['arrows']);
-
         $this->assertSame(false, $decodedJson['showCaption']);
-        $this->assertInternalType("bool", $decodedJson['showCaption']);
-
         $this->assertSame(true, $decodedJson['allowfullscreen']);
-        $this->assertInternalType("bool", $decodedJson['allowfullscreen']);
-
         $this->assertSame('horizontal', $decodedJson['navdir']);
-        $this->assertInternalType("string", $decodedJson['navdir']);
-
         $this->assertSame(true, $decodedJson['navarrows']);
-        $this->assertInternalType("bool", $decodedJson['navarrows']);
-
         $this->assertSame('slides', $decodedJson['navtype']);
-        $this->assertInternalType("string", $decodedJson['navtype']);
-
         $this->assertSame(5, $decodedJson['thumbmargin']);
-        $this->assertInternalType("int", $decodedJson['thumbmargin']);
-
         $this->assertSame('slide', $decodedJson['transition']);
-        $this->assertInternalType("string", $decodedJson['transition']);
-
         $this->assertSame(500, $decodedJson['transitionduration']);
-        $this->assertInternalType("int", $decodedJson['transitionduration']);
-
         $this->assertSame(100, $decodedJson['height']);
-        $this->assertInternalType("int", $decodedJson['height']);
-
         $this->assertSame(200, $decodedJson['width']);
-        $this->assertInternalType("int", $decodedJson['width']);
-
         $this->assertSame(300, $decodedJson['thumbheight']);
-        $this->assertInternalType("int", $decodedJson['thumbheight']);
-
         $this->assertSame(400, $decodedJson['thumbwidth']);
-        $this->assertInternalType("int", $decodedJson['thumbwidth']);
     }
 
     public function testGetFSOptionsJson()
@@ -200,37 +169,16 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
         //Note, this tests the special case for nav variable set to false. It
         //Should not be converted to boolean.
         $this->assertSame('false', $decodedJson['nav']);
-        $this->assertInternalType("string", $decodedJson['nav']);
-
         $this->assertSame(true, $decodedJson['loop']);
-        $this->assertInternalType("bool", $decodedJson['loop']);
-
         $this->assertSame(false, $decodedJson['arrows']);
-        $this->assertInternalType("bool", $decodedJson['arrows']);
-
         $this->assertSame(true, $decodedJson['keyboard']);
-        $this->assertInternalType("bool", $decodedJson['keyboard']);
-
         $this->assertSame(true, $decodedJson['showCaption']);
-        $this->assertInternalType("bool", $decodedJson['showCaption']);
-
         $this->assertSame('vertical', $decodedJson['navdir']);
-        $this->assertInternalType("string", $decodedJson['navdir']);
-
         $this->assertSame(false, $decodedJson['navarrows']);
-        $this->assertInternalType("bool", $decodedJson['navarrows']);
-
         $this->assertSame(10, $decodedJson['thumbmargin']);
-        $this->assertInternalType("int", $decodedJson['thumbmargin']);
-
         $this->assertSame('thumbs', $decodedJson['navtype']);
-        $this->assertInternalType("string", $decodedJson['navtype']);
-
         $this->assertSame('dissolve', $decodedJson['transition']);
-        $this->assertInternalType("string", $decodedJson['transition']);
-
         $this->assertSame(300, $decodedJson['transitionduration']);
-        $this->assertInternalType("int", $decodedJson['transitionduration']);
     }
 
     public function testGetOptionsJsonOptionals()
