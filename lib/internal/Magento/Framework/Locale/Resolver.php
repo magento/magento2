@@ -64,16 +64,19 @@ class Resolver implements ResolverInterface
      * @param string $defaultLocalePath
      * @param string $scopeType
      * @param mixed $locale
+     * @param DeploymentConfig|null $deploymentConfig
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         $defaultLocalePath,
         $scopeType,
-        $locale = null
+        $locale = null,
+        DeploymentConfig $deploymentConfig = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->defaultLocalePath = $defaultLocalePath;
         $this->scopeType = $scopeType;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->create(DeploymentConfig::class);
         $this->setLocale($locale);
     }
 
@@ -101,7 +104,7 @@ class Resolver implements ResolverInterface
     {
         if (!$this->defaultLocale) {
             $locale = false;
-            if ($this->getDeploymentConfig()->isAvailable() && $this->getDeploymentConfig()->isDbAvailable()) {
+            if ($this->deploymentConfig->isAvailable() && $this->deploymentConfig->isDbAvailable()) {
                 $locale = $this->scopeConfig->getValue($this->getDefaultLocalePath(), $this->scopeType);
             }
             if (!$locale) {
@@ -168,19 +171,5 @@ class Resolver implements ResolverInterface
             $result = $this->locale;
         }
         return $result;
-    }
-
-    /**
-     * Retrieve Deployment Config
-     *
-     * @return DeploymentConfig
-     */
-    private function getDeploymentConfig()
-    {
-        if (!$this->deploymentConfig) {
-            $this->deploymentConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
-        }
-
-        return $this->deploymentConfig;
     }
 }
