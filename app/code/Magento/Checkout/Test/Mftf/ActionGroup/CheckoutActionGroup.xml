@@ -115,8 +115,8 @@
         <conditionalClick selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName(shippingMethod)}}" dependentSelector="{{CheckoutShippingMethodsSection.checkShippingMethodByName(shippingMethod)}}" visible="true" stepKey="selectShippingMethod"/>
         <waitForLoadingMaskToDisappear stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForPaymentMethod"/>
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <waitForPageLoad stepKey="waitForPaymentMethod"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
     </actionGroup>
 </actionGroups>

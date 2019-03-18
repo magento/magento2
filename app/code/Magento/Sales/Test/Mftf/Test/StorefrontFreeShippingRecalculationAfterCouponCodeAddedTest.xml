@@ -65,7 +65,7 @@
 
         <!-- Proceed to Checkout and make sure Free Shipping method isn't displaying -->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
-        <dontSee selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free')}}" stepKey="dontSeeFreeShipping"/>
+        <dontSeeElement selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free')}}" stepKey="dontSeeFreeShipping"/>
 
         <!-- Back to Shopping Cart page and cancel coupon-->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage"/>
@@ -81,12 +81,12 @@
             <argument name="couponCode" value="$$createCouponForCartPriceRule.code$$"/>
             <argument name="successMessage" value="Your coupon was successfully applied."/>
         </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
 
         <!-- Try to Place Order -->
-        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.errorMessage}}" stepKey="waitForError"/>
-        <see selector="{{StorefrontMessagesSection.errorMessage}}" userInput="The shipping method is missing. Select the shipping method and try again." stepKey="seeShippingMethodError"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrderNoWait}}" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrderNoWait}}" stepKey="clickPlaceOrder"/>
+        <waitForText selector="{{StorefrontMessagesSection.errorMessage}}" userInput="The shipping method is missing. Select the shipping method and try again." time="30" stepKey="seeShippingMethodError"/>
 
         <!-- Go back to Shipping step and select Shipping method -->
         <amOnPage url="{{CheckoutPage.url}}/#shipping" stepKey="navigateToShippingStep"/>
@@ -95,7 +95,7 @@
         </actionGroup>
 
         <!-- Select Payment method and Place order-->
-        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod1"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>

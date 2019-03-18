@@ -14,14 +14,14 @@
         <data key="value">1</data>
     </entity>
 
-    <entity name="MinimumOrderAmount90" type="minimum_order_amount">
+    <entity name="MinimumOrderAmount90" type="free_shipping_config_state">
         <requiredEntity type="free_shipping_subtotal">Price</requiredEntity>
     </entity>
     <entity name="Price" type="free_shipping_subtotal">
         <data key="value">90</data>
     </entity>
 
-    <entity name="DefaultMinimumOrderAmount" type="minimum_order_amount">
+    <entity name="DefaultMinimumOrderAmount" type="free_shipping_config_state">
         <requiredEntity type="free_shipping_subtotal">DefaultPrice</requiredEntity>
     </entity>
     <entity name="DefaultPrice" type="free_shipping_subtotal">
@@ -29,9 +29,12 @@
     </entity>
 
     <entity name="DefaultShippingMethodsConfig" type="free_shipping_config_state">
-        <requiredEntity type="active">DefaultFreeShipping</requiredEntity>
+        <requiredEntity type="active">DefaultActive</requiredEntity>
     </entity>
-    <entity name="DefaultFreeShipping" type="active">
+    <entity name="DefaultActive" type="active">
+        <requiredEntity type="active_inherit">DefaultFreeShipping</requiredEntity>
+    </entity>
+    <entity name="DefaultFreeShipping" type="active_inherit">
         <data key="value">0</data>
     </entity>
 </entities>

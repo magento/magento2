@@ -28,7 +28,7 @@
         <arguments>
             <argument name="couponCode" type="string"/>
         </arguments>
-        <waitForElement selector="{{StorefrontDiscountSection.discountTab}}" time="30" stepKey="waitForCouponHeader" />
+        <waitForElementVisible selector="{{StorefrontDiscountSection.discountTab}}" time="30" stepKey="waitForCouponHeader" />
         <conditionalClick selector="{{StorefrontDiscountSection.discountTab}}" dependentSelector="{{StorefrontDiscountSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader" />
         <waitForElementVisible selector="{{StorefrontDiscountSection.couponInput}}" stepKey="waitForCouponField" />
         <fillField userInput="{{couponCode}}" selector="{{StorefrontDiscountSection.couponInput}}" stepKey="fillCouponField"/>
@@ -47,7 +47,7 @@
 
     <!-- Cancel Sales Rule Coupon applied to the cart -->
     <actionGroup name="StorefrontCancelCouponActionGroup">
-        <waitForElement selector="{{StorefrontDiscountSection.discountTab}}" time="30" stepKey="waitForCouponHeader" />
+        <waitForElementVisible selector="{{StorefrontDiscountSection.discountTab}}" time="30" stepKey="waitForCouponHeader" />
         <conditionalClick selector="{{StorefrontDiscountSection.discountTab}}" dependentSelector="{{AdminCartPriceRuleDiscountSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader" />
         <waitForElementVisible selector="{{StorefrontDiscountSection.couponInput}}" stepKey="waitForCouponField" />
         <click selector="{{StorefrontDiscountSection.cancelCoupon}}" stepKey="clickCancelButton"/>
@@ -61,6 +61,7 @@
         </arguments>
         <waitForElementVisible selector="{{StorefrontDiscountSection.discountInput}}" stepKey="waitForCouponField"/>
         <fillField userInput="{{couponCode}}" selector="{{StorefrontDiscountSection.discountInput}}" stepKey="fillCouponField"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.successMessage}}" stepKey="waitForSuccessMessage" />
         <see userInput='{{successMessage}}' selector="{{StorefrontMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>
