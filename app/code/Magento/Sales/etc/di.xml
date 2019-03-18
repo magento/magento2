@@ -1015,4 +1015,11 @@
     <preference
             for="Magento\Sales\Api\OrderCustomerDelegateInterface"
             type="Magento\Sales\Model\Order\OrderCustomerDelegate" />
+    <type name="Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker">
+        <arguments>
+            <argument name="productAvailabilityChecks" xsi:type="array">
+                <item name="configurable" xsi:type="object">Magento\ConfigurableProductSales\Model\Order\Reorder\OrderedProductAvailabilityChecker</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
