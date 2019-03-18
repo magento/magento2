@@ -69,38 +69,6 @@ class UpdateDefaultSourceItemAtLegacyStockItemSaveTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
-     * @magentoAdminConfigFixture cataloginventory/legacy_stock/async 1
-     * @magentoDbIsolation enabled
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function testSaveLegacyStockItemAssignedToDefaultSourceAsynchronously()
-    {
-        $stockItem = $this->stockRegistry->getStockItemBySku('SKU-1');
-        $stockItem->setQty(10);
-        $this->stockRegistry->updateStockItemBySku('SKU-1', $stockItem);
-
-        $defaultSourceItem = $this->getDefaultSourceItemBySku->execute('SKU-1');
-        self::assertEquals(
-            5.5,
-            $defaultSourceItem->getQuantity(),
-            'Source item was update synchronously even if asynchronous operation was requested'
-        );
-
-        $this->consumer->process(1);
-
-        $defaultSourceItem = $this->getDefaultSourceItemBySku->execute('SKU-1');
-        self::assertEquals(
-            10,
-            $defaultSourceItem->getQuantity(),
-            'Asynchronous source item update failed'
-        );
-    }
-
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
      * @magentoDbIsolation enabled
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
