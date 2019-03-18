@@ -46,7 +46,7 @@ class Captcha extends DataObject implements SectionSourceInterface
     public function __construct(
         CaptchaHelper $helper,
         array $formIds,
-        array $data =[],
+        array $data = [],
         ?CustomerSession $customerSession = null
     ) {
         $this->helper = $helper;
