@@ -7,6 +7,9 @@ namespace Magento\Review\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Review block observer.
+ */
 class CatalogBlockProductCollectionBeforeToHtmlObserver implements ObserverInterface
 {
     /**
@@ -35,7 +38,9 @@ class CatalogBlockProductCollectionBeforeToHtmlObserver implements ObserverInter
     {
         $productCollection = $observer->getEvent()->getCollection();
         if ($productCollection instanceof \Magento\Framework\Data\Collection) {
-            $productCollection->load();
+            if (!$productCollection->isLoaded()) {
+                $productCollection->load();
+            }
             $this->_reviewFactory->create()->appendSummary($productCollection);
         }
 

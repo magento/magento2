@@ -24,14 +24,17 @@
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
         <!--Verify Created root Category-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForCategoryIndexPageToBeLoaded"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <seeElement selector="{{AdminCategoryBasicFieldSection.CategoryNameInput(NewRootCategory.name)}}" stepKey="seeRootCategory"/>
+
         <!--Delete Root Category-->
         <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
+
         <!--Verify Root Category is not listed in backend-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage1"/>
         <waitForPageLoad stepKey="waitForCategoryIndexPageToBeLoaded1"/>

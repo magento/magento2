@@ -54,7 +54,16 @@ class ProductCustomOptionsDataProviderTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->collectionMock = $this->getMockBuilder(AbstractCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getSelect', 'getTable', 'getIterator', 'isLoaded', 'toArray', 'getSize'])
+            ->setMethods([
+                'load',
+                'getSelect',
+                'getTable',
+                'getIterator',
+                'isLoaded',
+                'toArray',
+                'getSize',
+                'setStoreId'
+            ])
             ->getMockForAbstractClass();
         $this->dbSelectMock = $this->getMockBuilder(DbSelect::class)
             ->disableOriginalConstructor()

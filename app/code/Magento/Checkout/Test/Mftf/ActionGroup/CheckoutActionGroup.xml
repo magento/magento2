@@ -17,6 +17,7 @@
     <!-- Go to checkout from minicart -->
     <actionGroup name="GoToCheckoutFromMinicartActionGroup">
         <waitForElementNotVisible selector="{{StorefrontMinicartSection.emptyCart}}" stepKey="waitUpdateQuantity" />
+        <wait time="5" stepKey="waitMinicartRendering"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
     </actionGroup>

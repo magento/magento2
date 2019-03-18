@@ -81,7 +81,7 @@ class QueryProcessor
             [$this->errorHandler, 'handle']
         )->toArray(
             $this->exceptionFormatter->shouldShowDetail() ?
-                \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE | \GraphQL\Error\Debug::INCLUDE_TRACE : false
+                \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE : false
         );
     }
 }
