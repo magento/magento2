@@ -7,13 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\CustomerGraphQl\Model\Customer\Address\CustomerAddressDataProvider;
-use Magento\CustomerGraphQl\Model\Customer\Address\CustomerAddressUpdateDataValidator;
-use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddressForUser;
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
-use Magento\Framework\Api\DataObjectHelper;
+use Magento\CustomerGraphQl\Model\Customer\Address\ExtractCustomerAddressData;
+use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddress;
+use Magento\CustomerGraphQl\Model\Customer\Address\UpdateCustomerAddress as UpdateCustomerAddressModel;
+use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -24,57 +22,41 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class UpdateCustomerAddress implements ResolverInterface
 {
     /**
-     * @var CheckCustomerAccount
+     * @var GetCustomer
      */
-    private $checkCustomerAccount;
+    private $getCustomer;
 
     /**
-     * @var AddressRepositoryInterface
+     * @var GetCustomerAddress
      */
-    private $addressRepository;
+    private $getCustomerAddress;
 
     /**
-     * @var CustomerAddressDataProvider
+     * @var UpdateCustomerAddressModel
      */
-    private $customerAddressDataProvider;
+    private $updateCustomerAddress;
 
     /**
-     * @var DataObjectHelper
+     * @var ExtractCustomerAddressData
      */
-    private $dataObjectHelper;
+    private $extractCustomerAddressData;
 
     /**
-     * @var CustomerAddressUpdateDataValidator
-     */
-    private $customerAddressUpdateDataValidator;
-
-    /**
-     * @var GetCustomerAddressForUser
-     */
-    private $getCustomerAddressForUser;
-
-    /**
-     * @param CheckCustomerAccount $checkCustomerAccount
-     * @param AddressRepositoryInterface $addressRepository
-     * @param CustomerAddressDataProvider $customerAddressDataProvider
-     * @param DataObjectHelper $dataObjectHelper
-     * @param CustomerAddressUpdateDataValidator $customerAddressUpdateDataValidator
-     * @param GetCustomerAddressForUser $getCustomerAddressForUser
+     * @param GetCustomer $getCustomer
+     * @param GetCustomerAddress $getCustomerAddress
+     * @param UpdateCustomerAddressModel $updateCustomerAddress
+     * @param ExtractCustomerAddressData $extractCustomerAddressData
      */
     public function __construct(
-        CheckCustomerAccount $checkCustomerAccount,
-        AddressRepositoryInterface $addressRepository,
-        CustomerAddressDataProvider $customerAddressDataProvider,
-        DataObjectHelper $dataObjectHelper,
-        CustomerAddressUpdateDataValidator $customerAddressUpdateDataValidator,
-        GetCustomerAddressForUser $getCustomerAddressForUser
+        GetCustomer $getCustomer,
+        GetCustomerAddress $getCustomerAddress,
+        UpdateCustomerAddressModel $updateCustomerAddress,
+        ExtractCustomerAddressData $extractCustomerAddressData
     ) {
-        $this->checkCustomerAccount = $checkCustomerAccount;
-        $this->addressRepository = $addressRepository;
-        $this->customerAddressDataProvider = $customerAddressDataProvider;
-        $this->dataObjectHelper = $dataObjectHelper;
-        $this->customerAddressUpdateDataValidator = $customerAddressUpdateDataValidator;
-        $this->getCustomerAddressForUser = $getCustomerAddressForUser;
+        $this->getCustomer = $getCustomer;
+        $this->getCustomerAddress = $getCustomerAddress;
+        $this->updateCustomerAddress = $updateCustomerAddress;
+        $this->extractCustomerAddressData = $extractCustomerAddressData;
     }
 
     /**
@@ -87,32 +69,18 @@ class UpdateCustomerAddress implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $currentUserId = $context->getUserId();
-        $currentUserType = $context->getUserType();
-
-        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
-        $this->customerAddressUpdateDataValidator->validate($args['input']);
-
-        $address = $this->updateCustomerAddress((int)$currentUserId, (int)$args['id'], $args['input']);
-        return $this->customerAddressDataProvider->getAddressData($address);
-    }
-
-    /**
-     * Update customer address
-     *
-     * @param int $customerId
-     * @param int $addressId
-     * @param array $addressData
-     * @return AddressInterface
-     */
-    private function updateCustomerAddress(int $customerId, int $addressId, array $addressData)
-    {
-        $address = $this->getCustomerAddressForUser->execute($addressId, $customerId);
-        $this->dataObjectHelper->populateWithArray($address, $addressData, AddressInterface::class);
-        if (isset($addressData['region']['region_id'])) {
-            $address->setRegionId($address->getRegion()->getRegionId());
+        if (!isset($args['id']) || empty($args['id'])) {
+            throw new GraphQlInputException(__('Address "id" value should be specified'));
         }
 
-        return $this->addressRepository->save($address);
+        if (!isset($args['input']) || !is_array($args['input']) || empty($args['input'])) {
+            throw new GraphQlInputException(__('"input" value should be specified'));
+        }
+
+        $customer = $this->getCustomer->execute($context);
+        $address = $this->getCustomerAddress->execute((int)$args['id'], (int)$customer->getId());
+
+        $this->updateCustomerAddress->execute($address, $args['input']);
+        return $this->extractCustomerAddressData->execute($address);
     }
 }
