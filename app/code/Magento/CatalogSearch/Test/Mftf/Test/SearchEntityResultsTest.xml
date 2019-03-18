@@ -29,7 +29,7 @@
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createSimpleProduct.sku$"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="openAndCheckProduct">
@@ -48,7 +48,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <!-- Overwrite search to use name -->
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createSimpleProduct.name$"/>
         </actionGroup>
     </test>
@@ -68,7 +68,7 @@
             </createData>
         </before>
         <!-- Overwrite search to use name -->
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createSimpleProduct.name$"/>
         </actionGroup>
     </test>
@@ -93,7 +93,7 @@
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="ThisShouldn'tReturnAnything"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmpty"/>
@@ -109,7 +109,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,2); return ret;" stepKey="getFirstTwoLetters" before="searchStorefront"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="{$getFirstTwoLetters}"/>
         </actionGroup>
     </test>
@@ -124,7 +124,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,3); return ret;" stepKey="getFirstThreeLetters" before="searchStorefront"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="{$getFirstThreeLetters}"/>
         </actionGroup>
     </test>
@@ -144,7 +144,7 @@
             </createData>
         </before>
         <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,128); return ret;" stepKey="get128Letters" before="searchStorefront"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="{$get128Letters}"/>
         </actionGroup>
     </test>
@@ -219,7 +219,7 @@
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="{{_defaultProduct.name}}"/>
         </actionGroup>
         <actionGroup ref="StorefrontQuickSearchCheckProductNameInGrid" stepKey="assertProduct1Position">
@@ -281,7 +281,7 @@
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createSimpleProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
@@ -309,7 +309,7 @@
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createVirtualProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
@@ -341,7 +341,7 @@
             </actionGroup>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="{{_defaultProduct.name}}"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="openAndCheckProduct">
@@ -378,7 +378,7 @@
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
@@ -407,7 +407,7 @@
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
@@ -454,7 +454,7 @@
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createBundleProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="openAndCheckProduct">
@@ -517,7 +517,7 @@
         </after>
         <comment userInput="$simpleProduct1.name$" stepKey="asdf"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createBundleProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="openAndCheckProduct">
@@ -600,7 +600,7 @@
             </createData>
         </before>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createConfigProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontQuickSearchCheckProductNameInGrid" stepKey="seeProductInGrid">
@@ -616,7 +616,7 @@
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
 
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPageAgain"/>
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchStorefrontAgain">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefrontAgain">
             <argument name="phrase" value="$createConfigProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontQuickSearchCheckProductNameNotInGrid" stepKey="dontSeeProductAnymore">

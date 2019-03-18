@@ -21,6 +21,19 @@
         <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
     </actionGroup>
 
+    <!-- Quick search the phrase and check if the result page contains correct information, usable with type="string" -->
+    <actionGroup name="StorefrontCheckQuickSearchStringActionGroup">
+        <arguments>
+            <argument name="phrase" type="string"/>
+        </arguments>
+        <fillField stepKey="fillInput" selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{phrase}}"/>
+        <submitForm selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" parameterArray="[]" stepKey="submitQuickSearch" />
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
+        <dontSeeInCurrentUrl url="form_key=" stepKey="checkUrlFormKey"/>
+        <seeInTitle userInput="Search results for: '{{phrase}}'" stepKey="assertQuickSearchTitle"/>
+        <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
+    </actionGroup>
+
     <!-- Opens product from QuickSearch and performs assertions-->
     <actionGroup name="StorefrontOpenProductFromQuickSearch">
         <arguments>
