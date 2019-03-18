@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UpdateProductFromMiniShoppingCartEntityTest">
+        <annotations>
+            <stories value="Shopping Cart"/>
+            <title value="Check updating product from mini shopping cart"/>
+            <description value="Update Product Qty on Mini Shopping Cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-29812"/>
+            <group value="shoppingCart"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <!--Create product according to dataset.-->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct"/>
+
+            <!-- Go to frontend -->
+            <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="navigateToProductPage"/>
+
+            <!--Add product to cart-->
+            <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+                <argument name="productName" value="$$createProduct.name$$"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct" />
+        </after>
+
+        <!-- Click on mini shopping cart icon -->
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="goToMiniShoppingCart"/>
+
+        <!-- Click Edit -->
+        <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="editMiniCartItem"/>
+
+        <!-- Fill data from dataset -->
+        <clearField selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}" stepKey="deleteFiled"/>
+        <fillField selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}"  userInput="{{simpleOrderQty2.qty}}" stepKey="changeQty"/>
+
+        <!-- Click Update -->
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="updateQty"/>
+
+        <!-- Perform all assertions -->
+        <actionGroup ref="ShoppingCartCheckSummaryTotalActionGroup" stepKey="checkSummary">
+            <argument name="dataQuote" value="simpleOrderQty2"/>
+        </actionGroup>
+    </test>
+</tests>
