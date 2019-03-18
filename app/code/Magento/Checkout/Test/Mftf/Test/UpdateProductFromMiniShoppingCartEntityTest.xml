@@ -14,7 +14,7 @@
             <title value="Check updating product from mini shopping cart"/>
             <description value="Update Product Qty on Mini Shopping Cart"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-29812"/>
+            <testCaseId value="MC-15068"/>
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -23,12 +23,9 @@
             <!--Create product according to dataset.-->
             <createData entity="simpleProductWithoutCategory" stepKey="createProduct"/>
 
-            <!-- Go to frontend -->
-            <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="navigateToProductPage"/>
-
             <!--Add product to cart-->
-            <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
-                <argument name="productName" value="$$createProduct.name$$"/>
+            <actionGroup ref="AddSimpleProductToCart" stepKey="addToCartFromStorefrontProductPage">
+                <argument name="product" value="$$createProduct$$"/>
             </actionGroup>
         </before>
 
@@ -37,21 +34,13 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct" />
         </after>
 
-        <!-- Click on mini shopping cart icon -->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="goToMiniShoppingCart"/>
-
-        <!-- Click Edit -->
-        <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="editMiniCartItem"/>
-
-        <!-- Fill data from dataset -->
-        <clearField selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}" stepKey="deleteFiled"/>
-        <fillField selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}"  userInput="{{simpleOrderQty2.qty}}" stepKey="changeQty"/>
-
-        <!-- Click Update -->
-        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="updateQty"/>
+        <actionGroup ref="StorefrontUpdateProductQtyMiniShoppingCartActionGroup" stepKey="updateProductQty">
+            <argument name="product" value="$$createProduct$$" />
+            <argument name="quote" value="simpleOrderQty2" />
+        </actionGroup>
 
         <!-- Perform all assertions -->
-        <actionGroup ref="ShoppingCartCheckSummaryTotalActionGroup" stepKey="checkSummary">
+        <actionGroup ref="AssertMiniShoppingCartSubTotalActionGroup" stepKey="checkSummary">
             <argument name="dataQuote" value="simpleOrderQty2"/>
         </actionGroup>
     </test>

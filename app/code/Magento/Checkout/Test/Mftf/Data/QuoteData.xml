@@ -22,5 +22,6 @@
         <data key="shipping">10.00</data>
         <data key="total">1,130.00</data>
         <data key="shippingMethod">Flat Rate - Fixed</data>
+        <data key="currency">$</data>
     </entity>
 </entities>
