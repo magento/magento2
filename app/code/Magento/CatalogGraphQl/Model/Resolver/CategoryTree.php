@@ -11,6 +11,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromC
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
@@ -72,11 +73,12 @@ class CategoryTree implements ResolverInterface
 
         $rootCategoryId = $this->getCategoryId($args);
         $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
-        if (!empty($categoriesTree)) {
-            $result = $this->extractDataFromCategoryTree->execute($categoriesTree);
-            return current($result);
-        } else {
-            return null;
+
+        if (empty($categoriesTree) || ($categoriesTree->count() == 0)) {
+            throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
         }
+
+        $result = $this->extractDataFromCategoryTree->execute($categoriesTree);
+        return current($result);
     }
 }

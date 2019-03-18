@@ -9,7 +9,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterfa
 use Magento\Store\Model\ScopeInterface;
 use Magento\Search\Model\QueryInterface;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
-use Magento\Elasticsearch6\Model\Config;
+use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Search\Model\QueryResultFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
