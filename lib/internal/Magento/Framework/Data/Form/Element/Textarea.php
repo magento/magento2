@@ -64,6 +64,7 @@ class Textarea extends AbstractElement
             'rows',
             'cols',
             'readonly',
+            'maxlength',
             'disabled',
             'onkeyup',
             'tabindex',

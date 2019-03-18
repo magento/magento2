@@ -76,6 +76,7 @@ class TextareaTest extends \PHPUnit\Framework\TestCase
                     'rows',
                     'cols',
                     'readonly',
+                    'maxlength',
                     'disabled',
                     'onkeyup',
                     'tabindex',
