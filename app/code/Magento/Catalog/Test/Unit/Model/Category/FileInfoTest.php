@@ -57,7 +57,7 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
 
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
-            ->with(DirectoryList::PUB)
+            ->with(DirectoryList::ROOT)
             ->willReturn($this->baseDirectory);
 
         $this->mime = $this->getMockBuilder(Mime::class)

@@ -76,7 +76,7 @@ class FileInfo
     private function getBaseDirectory()
     {
         if (!isset($this->baseDirectory)) {
-            $this->baseDirectory = $this->filesystem->getDirectoryRead(DirectoryList::PUB);
+            $this->baseDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
         }
 
         return $this->baseDirectory;
@@ -135,7 +135,7 @@ class FileInfo
     {
         $filePath = ltrim($fileName, '/');
 
-        $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToBaseDirectoryPath();
+        $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToBaseDirectoryPath($filePath);
         $isFileNameBeginsWithMediaDirectoryPath = $this->isBeginsWithMediaDirectoryPath($fileName);
 
         // if the file is not using a relative path, it resides in the catalog/category media directory
@@ -160,7 +160,7 @@ class FileInfo
     {
         $filePath = ltrim($fileName, '/');
 
-        $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToBaseDirectoryPath();
+        $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToBaseDirectoryPath($filePath);
         $isFileNameBeginsWithMediaDirectoryPath = strpos($filePath, $mediaDirectoryRelativeSubpath) === 0;
 
         return $isFileNameBeginsWithMediaDirectoryPath;
@@ -169,14 +169,20 @@ class FileInfo
     /**
      * Get media directory subpath relative to base directory path
      *
+     * @param string $filePath
      * @return string
      */
-    private function getMediaDirectoryPathRelativeToBaseDirectoryPath()
+    private function getMediaDirectoryPathRelativeToBaseDirectoryPath(string $filePath = '')
     {
         $baseDirectoryPath = $this->getBaseDirectory()->getAbsolutePath();
         $mediaDirectoryPath = $this->getMediaDirectory()->getAbsolutePath();
 
         $mediaDirectoryRelativeSubpath = substr($mediaDirectoryPath, strlen($baseDirectoryPath));
+        $pubDirectory = 'pub/';
+
+        if (strpos($mediaDirectoryRelativeSubpath, $pubDirectory) === 0 && strpos($filePath, $pubDirectory) !== 0) {
+            $mediaDirectoryRelativeSubpath = substr($mediaDirectoryRelativeSubpath, strlen($pubDirectory));
+        }
 
         return $mediaDirectoryRelativeSubpath;
     }
