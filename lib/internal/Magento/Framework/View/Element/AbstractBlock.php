@@ -686,7 +686,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         ]);
         $html = $transportObject->getHtml();
 
-        return (string)$html;
+        return $html;
     }
 
     /**

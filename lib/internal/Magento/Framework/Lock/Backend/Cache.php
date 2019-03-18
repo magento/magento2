@@ -37,7 +37,7 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function lock(string $name, int $timeout = -1): bool
     {
-        return $this->cache->save('1', self::LOCK_PREFIX . $name, [], $timeout);
+        return $this->cache->save('1', $this->getIdentifier($name), [], $timeout);
     }
 
     /**
@@ -45,7 +45,7 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function unlock(string $name): bool
     {
-        return $this->cache->remove(self::LOCK_PREFIX . $name);
+        return $this->cache->remove($this->getIdentifier($name));
     }
 
     /**
@@ -53,6 +53,15 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function isLocked(string $name): bool
     {
-        return (bool)$this->cache->test(self::LOCK_PREFIX . $name);
+        return (bool)$this->cache->test($this->getIdentifier($name));
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    private function getIdentifier(string $name): string
+    {
+        return self::LOCK_PREFIX . $name;
     }
 }
