@@ -5,7 +5,6 @@
  */
 namespace Magento\Sitemap\Model;
 
-use Magento\Store\Model\App\Emulation;
 use Magento\Sitemap\Model\EmailNotification as SitemapEmail;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
@@ -58,11 +57,6 @@ class Observer
     private $collectionFactory;
 
     /**
-     * @var Emulation
-     */
-    private $appEmulation;
-
-    /**
      * @var $emailNotification
      */
     private $emailNotification;
@@ -72,17 +66,14 @@ class Observer
      * @param ScopeConfigInterface $scopeConfig
      * @param CollectionFactory $collectionFactory
      * @param EmailNotification $emailNotification
-     * @param Emulation $appEmulation
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         CollectionFactory $collectionFactory,
-        SitemapEmail $emailNotification,
-        Emulation $appEmulation
+        SitemapEmail $emailNotification
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->collectionFactory = $collectionFactory;
-        $this->appEmulation = $appEmulation;
         $this->emailNotification = $emailNotification;
     }
 
@@ -114,17 +105,9 @@ class Observer
         foreach ($collection as $sitemap) {
             /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
             try {
-                $this->appEmulation->startEnvironmentEmulation(
-                    $sitemap->getStoreId(),
-                    \Magento\Framework\App\Area::AREA_FRONTEND,
-                    true
-                );
-
                 $sitemap->generateXml();
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
-            } finally {
-                $this->appEmulation->stopEnvironmentEmulation();
             }
         }
         if ($errors && $recipient) {
