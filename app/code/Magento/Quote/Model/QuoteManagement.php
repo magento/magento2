@@ -532,19 +532,28 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             );
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            if (!empty($this->addressesToSync)) {
-                foreach ($this->addressesToSync as $addressId) {
-                    $this->addressRepository->deleteById($addressId);
+            try {
+                if (!empty($this->addressesToSync)) {
+                    foreach ($this->addressesToSync as $addressId) {
+                        $this->addressRepository->deleteById($addressId);
+                    }
                 }
+                $this->eventManager->dispatch(
+                    'sales_model_service_quote_submit_failure',
+                    [
+                        'order' => $order,
+                        'quote' => $quote,
+                        'exception' => $e,
+                    ]
+                );
+            } catch (\Exception $consecutiveException) {
+                $message = sprintf(
+                    "An exception occurred on 'sales_model_service_quote_submit_failure' event: %s",
+                    $consecutiveException->getMessage()
+                );
+
+                throw new \Exception($message, 0, $e);
             }
-            $this->eventManager->dispatch(
-                'sales_model_service_quote_submit_failure',
-                [
-                    'order'     => $order,
-                    'quote'     => $quote,
-                    'exception' => $e
-                ]
-            );
             throw $e;
         }
         return $order;
