@@ -144,7 +144,7 @@ class MassSchedule
                 $requestItem->setId($key);
                 $requestItem->setStatus(ItemStatusInterface::STATUS_ACCEPTED);
                 $requestItem->setDataHash($this->encryptor->hash($operation->getSerializedData(), Encryptor::HASH_VERSION_SHA256));
-                $requestItems[] = $requestItem;git
+                $requestItems[] = $requestItem;
             } catch (\Exception $exception) {
                 $this->logger->error($exception);
                 $requestItem->setId($key);
