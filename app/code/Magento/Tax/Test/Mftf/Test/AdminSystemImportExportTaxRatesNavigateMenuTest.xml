@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemImportExportTaxRatesPage">
-            <argument name="menuItem" value="backend-system"/>
-            <argument name="submenuItem" value="system-convert-tax"/>
+            <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSystemDataTransferImportAndExportTaxRates.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Import and Export Tax Rates"/>
+            <argument name="title" value="{{AdminMenuSystemDataTransferImportAndExportTaxRates.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

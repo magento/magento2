@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterProblemsReportPage">
-            <argument name="menuItem" value="reports-report"/>
-            <argument name="submenuItem" value="newsletter-problem"/>
+            <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuReportsMarketingNewsletterProblemReports.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Newsletter Problems Report"/>
+            <argument name="title" value="{{AdminMenuReportsMarketingNewsletterProblemReports.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToBillingAgreementsPage">
-            <argument name="menuItem" value="sales-sales"/>
-            <argument name="submenuItem" value="paypal-billing-agreement"/>
+            <argument name="menuUiId" value="{{AdminMenuSales.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSalesBillingAgreements.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Billing Agreements"/>
+            <argument name="title" value="{{AdminMenuSalesBillingAgreements.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

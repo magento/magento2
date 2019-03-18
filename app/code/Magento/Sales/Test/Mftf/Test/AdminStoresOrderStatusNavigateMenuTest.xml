@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresOrderStatusPage">
-            <argument name="menuItem" value="backend-stores"/>
-            <argument name="submenuItem" value="system-order-statuses"/>
+            <argument name="menuUiId" value="{{AdminMenuStores.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuStoresSettingsOrderStatus.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Order Status"/>
+            <argument name="title" value="{{AdminMenuStoresSettingsOrderStatus.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

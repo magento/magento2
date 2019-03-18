@@ -25,9 +25,9 @@
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <click selector="{{AdminMenuSection.mainMenuItem('backend-dashboard')}}" stepKey="clickOnMenuItem"/>
+        <click selector="{{AdminMenuSection.menuItem(AdminMenuDashboard.dataUiId)}}" stepKey="clickOnMenuItem"/>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Dashboard"/>
+            <argument name="title" value="{{AdminMenuDashboard.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

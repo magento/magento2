@@ -26,8 +26,8 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateAdvancedReportingPage">
-            <argument name="menuItem" value="reports-report"/>
-            <argument name="submenuItem" value="advanced-reporting"/>
+            <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuReportsBusinessIntelligenceAdvancedReporting.dataUiId}}"/>
         </actionGroup>
         <switchToNextTab stepKey="switchToNewTab"/>
         <seeInCurrentUrl url="advancedreporting.rjmetrics.com/report" stepKey="seeAssertAdvancedReportingPageUrl"/>

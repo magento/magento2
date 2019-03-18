@@ -23,7 +23,6 @@
         <element name="findPartners" type="button" selector="//li[@id='menu-magento-marketplace-partners']"/>
 
         <!-- Navigate menu selectors -->
-        <element name="mainMenuItem" type="button" selector="//li[contains(@id, 'menu-magento') and contains(@id, '{{var}}')]" parameterized="true" timeout="30"/>
-        <element name="submenuItem" type="button" selector="//li[contains(@class, 'item') and contains(@class, '{{var}}')][position()=1]" parameterized="true" timeout="30"/>
+        <element name="menuItem" type="button" selector="li[data-ui-id='menu-{{dataUiId}}']" parameterized="true" timeout="30"/>
     </section>
 </sections>

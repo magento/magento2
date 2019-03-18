@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNowOnlinePage">
-            <argument name="menuItem" value="customer-customer"/>
-            <argument name="submenuItem" value="customer-online"/>
+            <argument name="menuUiId" value="{{AdminMenuCustomers.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuCustomersNowOnline.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Customers Now Online"/>
+            <argument name="title" value="{{AdminMenuCustomersNowOnline.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

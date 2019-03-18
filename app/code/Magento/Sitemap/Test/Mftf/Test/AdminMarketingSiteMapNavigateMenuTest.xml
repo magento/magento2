@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingSiteMapPage">
-            <argument name="menuItem" value="backend-marketing"/>
-            <argument name="submenuItem" value="catalog-sitemap"/>
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSEOAndSearchSiteMap.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Site Map"/>
+            <argument name="title" value="{{AdminMenuSEOAndSearchSiteMap.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

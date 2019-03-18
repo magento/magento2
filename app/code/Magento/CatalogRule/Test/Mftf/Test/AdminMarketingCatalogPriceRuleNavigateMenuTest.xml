@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToCatalogPriceRulePage">
-            <argument name="menuItem" value="backend-marketing"/>
-            <argument name="submenuItem" value="promo-catalog"/>
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuMarketingPromotionsCatalogPriceRule.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Catalog Price Rule"/>
+            <argument name="title" value="{{AdminMenuMarketingPromotionsCatalogPriceRule.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

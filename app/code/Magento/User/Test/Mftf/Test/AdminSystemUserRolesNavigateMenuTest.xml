@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemUserRolesPage">
-            <argument name="menuItem" value="backend-system"/>
-            <argument name="submenuItem" value="system-acl-roles"/>
+            <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSystemPermissionsUserRoles.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Roles"/>
+            <argument name="title" value="{{AdminMenuSystemPermissionsUserRoles.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

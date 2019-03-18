@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterQueuePage">
-            <argument name="menuItem" value="backend-marketing"/>
-            <argument name="submenuItem" value="newsletter-queue"/>
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsNewsletterQueue.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Newsletter Queue"/>
+            <argument name="title" value="{{AdminMenuMarketingCommunicationsNewsletterQueue.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

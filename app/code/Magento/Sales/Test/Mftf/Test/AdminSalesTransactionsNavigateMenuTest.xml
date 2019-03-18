@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSalesTransactionsPage">
-            <argument name="menuItem" value="sales-sales"/>
-            <argument name="submenuItem" value="sales-transactions"/>
+            <argument name="menuUiId" value="{{AdminMenuSales.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSalesTransactions.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Transactions"/>
+            <argument name="title" value="{{AdminMenuSalesTransactions.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

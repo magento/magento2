@@ -26,12 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsRefreshStatisticsPage">
-            <argument name="menuItem" value="reports-report"/>
-            <argument name="submenuItem" value="report-statistics-refresh"/>
+            <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuReportsStatisticsRefreshStatistics.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Refresh Statistics"/>
+            <argument name="title" value="{{AdminMenuReportsStatisticsRefreshStatistics.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>
-

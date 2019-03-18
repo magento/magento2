@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToCategoriesPage">
-            <argument name="menuItem" value="catalog-catalog"/>
-            <argument name="submenuItem" value="catalog-categories"/>
+            <argument name="menuUiId" value="{{AdminMenuCatalog.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuCatalogCategories.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Default Category (ID: 2)"/>
+            <argument name="title" value="{{AdminMenuCatalogCategories.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

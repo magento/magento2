@@ -25,12 +25,12 @@
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingReviewsPage">
-            <argument name="menuItem" value="backend-marketing"/>
-            <argument name="submenuItem" value="catalog-reviews-ratings-reviews-all"/>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsViewsPage">
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuUserContentReviews.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Reviews"/>
+            <argument name="title" value="{{AdminMenuUserContentReviews.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

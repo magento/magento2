@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToManageEncryptionKeyPage">
-            <argument name="menuItem" value="backend-system"/>
-            <argument name="submenuItem" value="system-crypt-key"/>
+            <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSystemOtherSettingsManageEncryptionKey.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Encryption Key"/>
+            <argument name="title" value="{{AdminMenuSystemOtherSettingsManageEncryptionKey.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

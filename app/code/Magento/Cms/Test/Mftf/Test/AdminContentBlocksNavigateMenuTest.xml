@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentBlocksPage">
-            <argument name="menuItem" value="backend-content"/>
-            <argument name="submenuItem" value="cms-block"/>
+            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuContentElementsBlocks.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Blocks"/>
+            <argument name="title" value="{{AdminMenuContentElementsBlocks.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

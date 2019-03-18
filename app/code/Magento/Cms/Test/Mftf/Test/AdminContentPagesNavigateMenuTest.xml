@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentPagesPage">
-            <argument name="menuItem" value="backend-content"/>
-            <argument name="submenuItem" value="cms-page"/>
+            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuContentElementsPages.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Pages"/>
+            <argument name="title" value="{{AdminMenuContentElementsPages.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

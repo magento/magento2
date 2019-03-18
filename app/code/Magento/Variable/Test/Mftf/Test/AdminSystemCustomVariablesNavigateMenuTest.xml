@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemCustomVariablesPage">
-            <argument name="menuItem" value="backend-system"/>
-            <argument name="submenuItem" value="system-variable"/>
+            <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSystemOtherSettingsCustomVariables.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Custom Variables"/>
+            <argument name="title" value="{{AdminMenuSystemOtherSettingsCustomVariables.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

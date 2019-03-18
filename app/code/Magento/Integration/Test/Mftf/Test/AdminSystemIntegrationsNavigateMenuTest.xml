@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIntegrationsPage">
-            <argument name="menuItem" value="backend-system"/>
-            <argument name="submenuItem" value="system-integrations"/>
+            <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSystemExtensionsIntegrations.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Integrations"/>
+            <argument name="title" value="{{AdminMenuSystemExtensionsIntegrations.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

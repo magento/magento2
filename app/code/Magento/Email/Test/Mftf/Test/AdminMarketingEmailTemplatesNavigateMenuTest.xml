@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingEmailTemplatesPage">
-            <argument name="menuItem" value="backend-marketing"/>
-            <argument name="submenuItem" value="template"/>
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsEmailTemplates.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Email Templates"/>
+            <argument name="title" value="{{AdminMenuMarketingCommunicationsEmailTemplates.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

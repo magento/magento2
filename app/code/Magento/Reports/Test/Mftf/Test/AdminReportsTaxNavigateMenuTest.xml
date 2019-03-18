@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsTaxPage">
-            <argument name="menuItem" value="reports-report"/>
-            <argument name="submenuItem" value="report-salesroot-tax"/>
+            <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuReportsSalesTax.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
-            <argument name="title" value="Tax Report"/>
+            <argument name="title" value="{{AdminMenuReportsSalesTax.pageTitle}}"/>
         </actionGroup>
     </test>
 </tests>

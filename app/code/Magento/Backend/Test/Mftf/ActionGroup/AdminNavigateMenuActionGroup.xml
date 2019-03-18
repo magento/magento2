@@ -10,10 +10,10 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminNavigateMenuActionGroup">
         <arguments>
-            <argument name="menuItem" type="string"/>
-            <argument name="submenuItem" type="string"/>
+            <argument name="menuUiId" type="string"/>
+            <argument name="submenuUiId" type="string"/>
         </arguments>
-        <click selector="{{AdminMenuSection.mainMenuItem(menuItem)}}" stepKey="clickOnMenuItem"/>
-        <click selector="{{AdminMenuSection.submenuItem(submenuItem)}}" stepKey="clickOnSubmenuItem"/>
+        <click selector="{{AdminMenuSection.menuItem(menuUiId)}}" stepKey="clickOnMenuItem"/>
+        <click selector="{{AdminMenuSection.menuItem(submenuUiId)}}" stepKey="clickOnSubmenuItem"/>
     </actionGroup>
 </actionGroups>
