@@ -94,6 +94,7 @@ define([
             ) {
                 isShippingAddress = false;
             } else if (
+                    quote.guestEmail !== null &&
                     quote.guestEmail.length === 0 &&
                     shippingAddress.email.length === 0 ||
                     shippingAddress.firstname.length === 0 ||
