@@ -192,10 +192,10 @@ class SwatchDataProvider
      */
     private function getSwatchProductImage(ProductInterface $product, $imageType) : ?string
     {
-        if ($this->isProductHasImage($product, Swatch::SWATCH_IMAGE_NAME)) {
+        if ($this->productHasImage($product, Swatch::SWATCH_IMAGE_NAME)) {
             $swatchImageId = $imageType;
             $imageAttributes = ['type' => Swatch::SWATCH_IMAGE_NAME];
-        } elseif ($this->isProductHasImage($product, 'image')) {
+        } elseif ($this->productHasImage($product, 'image')) {
             $swatchImageId = $imageType == Swatch::SWATCH_IMAGE_NAME ? 'swatch_image_base' : 'swatch_thumb_base';
             $imageAttributes = ['type' => 'image'];
         }
@@ -208,14 +208,14 @@ class SwatchDataProvider
     }
 
     /**
-     * Is product has image
+     * Check if product has image
      *
      * @param ProductInterface $product
      * @param string $imageType
      *
      * @return bool
      */
-    private function isProductHasImage(ProductInterface $product, string $imageType) : bool
+    private function productHasImage(ProductInterface $product, string $imageType) : bool
     {
         return $product->getData($imageType) !== null && $product->getData($imageType) != SwatchData::EMPTY_IMAGE_VALUE;
     }
