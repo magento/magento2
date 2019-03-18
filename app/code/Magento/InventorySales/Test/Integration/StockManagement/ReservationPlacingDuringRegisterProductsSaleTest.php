@@ -34,6 +34,14 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Tests correct Product Salable Quantity decreasing after Order placing.
+ *
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+
 class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
 {
     /**
