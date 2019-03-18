@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="AdminCreateStoreViewStatusDisabledVerifyBackendAndFrontendTest">
+            <annotations>
+                <stories value="Create Store View"/>
+                <title value="Create Store View Status Disabled and Verify Backend and Frontend"/>
+                <description value="Test log in to Stores and Create Store View Status Disabled Test"/>
+                <testCaseId value="MC-14305"/>
+                <severity value="CRITICAL"/>
+                <group value="store"/>
+                <group value="mtf_migrated"/>
+            </annotations>
+            <before>
+                <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            </before>
+            <after>
+                <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                    <argument name="customStore" value="storeViewDataDisabled"/>
+                </actionGroup>
+                <actionGroup ref="logout" stepKey="logout"/>
+            </after>
+
+            <!--Create store view-->
+            <actionGroup ref="CreateStoreView" stepKey="createStoreView">
+                <argument name="storeView" value="storeViewDataDisabled"/>
+                <argument name="storeGroupName" value="_defaultStoreGroup.name"/>
+                <argument name="storeViewStatus" value="storeViewDataDisabled.is_active"/>
+            </actionGroup>
+
+            <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
+            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage">
+            </actionGroup>
+
+            <!--Go to store configuration page and verify AssertStoreBackend-->
+            <amOnPage url="{{AdminConfigPage.url}}" stepKey="goToConfigStoreConfigurationPage"/>
+            <waitForPageLoad stepKey="waitForSystemStoreConfigurationPageLoad"/>
+            <click selector="{{AdminConfigSection.defaultConfigButton}}" stepKey="clickDefaultConfigButton"/>
+            <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{storeViewDataDisabled.name}}" stepKey="seeAssertStoreViewInDefaultConfigDropdown"/>
+
+            <!--Go to storefront and verify AssertStoreNotOnFrontend-->
+            <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
+            <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
+            <dontSee selector="{{StorefrontHeaderSection.storeViewDropdown}}" userInput="{{storeViewDataDisabled.name}}" stepKey="AssertStoreNotOnFrontend"/>
+        </test>
+</tests>
