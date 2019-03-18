@@ -41,7 +41,6 @@ use PHPUnit\Framework\TestCase;
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-
 class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
 {
     /**
