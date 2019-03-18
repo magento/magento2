@@ -65,7 +65,10 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $this->eventManagerMock = $this->getMockForAbstractClass(EventManagerInterface::class);
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->cacheStateMock = $this->getMockForAbstractClass(CacheStateInterface::class);
-        $this->lockQuery = $this->getMockForAbstractClass(LockGuardedCacheLoader::class);
+        $this->lockQuery = $this->getMockBuilder(LockGuardedCacheLoader::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['lockedLoadData'])
+            ->getMockForAbstractClass();
         $this->sidResolverMock = $this->getMockForAbstractClass(SidResolverInterface::class);
         $this->sessionMock = $this->getMockForAbstractClass(SessionManagerInterface::class);
         $contextMock = $this->createMock(Context::class);
