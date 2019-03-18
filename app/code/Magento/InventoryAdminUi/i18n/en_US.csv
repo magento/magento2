@@ -24,7 +24,7 @@ List,List
 "The Stock has been saved.","The Stock has been saved."
 "The Stock does not exist.","The Stock does not exist."
 "Could not save Stock.","Could not save Stock."
-"Assigned sources:","Assigned sources:"
+"Assigned Sources:","Assigned Sources:"
 "Are you sure you want to delete this stock?","Are you sure you want to delete this stock?"
 Inventory,Inventory
 Stocks,Stocks
@@ -63,4 +63,4 @@ Done,Done
 "Delete items","Delete items"
 Delete,Delete
 ID,ID
-"Assigned sources","Assigned sources"
+"Assigned Sources","Assigned Sources"

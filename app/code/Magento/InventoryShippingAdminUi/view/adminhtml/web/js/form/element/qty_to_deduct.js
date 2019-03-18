@@ -40,7 +40,7 @@ define([
          * @param {String} selected
          */
         toggleDisable: function (selected) {
-            this.disabled(selected ? selected !== this.sourceCode : !selected);
+            this.disabled(selected ? selected.toString() !== this.sourceCode : !selected);
         }
     });
 });

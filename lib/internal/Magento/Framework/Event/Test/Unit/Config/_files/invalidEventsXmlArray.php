@@ -4,10 +4,6 @@
  * See COPYING.txt for license details.
  */
 return [
-    'without_event_handle' => [
-        '<?xml version="1.0"?><config></config>',
-        ["Element 'config': Missing child element(s). Expected is ( event ).\nLine: 1\n"],
-    ],
     'event_without_required_name_attribute' => [
         '<?xml version="1.0"?><config><event name="some_name"></event></config>',
         ["Element 'event': Missing child element(s). Expected is ( observer ).\nLine: 1\n"],

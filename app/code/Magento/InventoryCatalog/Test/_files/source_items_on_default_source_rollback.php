@@ -6,7 +6,6 @@
 declare(strict_types=1);
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
@@ -21,7 +20,7 @@ $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilde
 
 $searchCriteria = $searchCriteriaBuilder->addFilter(
     SourceItemInterface::SKU,
-    ['SKU-1', 'SKU-2', 'SKU-3', 'SKU-4'],
+    ['SKU-1', 'SKU-2', 'SKU-3', 'SKU-4', 'SKU-6'],
     'in'
 )->create();
 $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();

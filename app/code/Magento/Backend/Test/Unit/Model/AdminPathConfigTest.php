@@ -76,17 +76,35 @@ class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
      * @param $unsecureBaseUrl
      * @param $useSecureInAdmin
      * @param $secureBaseUrl
+     * @param $useCustomUrl
+     * @param $customUrl
      * @param $expected
      * @dataProvider shouldBeSecureDataProvider
      */
-    public function testShouldBeSecure($unsecureBaseUrl, $useSecureInAdmin, $secureBaseUrl, $expected)
-    {
-        $coreConfigValueMap = [
+    public function testShouldBeSecure(
+        $unsecureBaseUrl,
+        $useSecureInAdmin,
+        $secureBaseUrl,
+        $useCustomUrl,
+        $customUrl,
+        $expected
+    ) {
+        $coreConfigValueMap = $this->returnValueMap([
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, 'default', null, $unsecureBaseUrl],
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, 'default', null, $secureBaseUrl],
-        ];
-        $this->coreConfig->expects($this->any())->method('getValue')->will($this->returnValueMap($coreConfigValueMap));
-        $this->backendConfig->expects($this->any())->method('isSetFlag')->willReturn($useSecureInAdmin);
+            ['admin/url/custom', 'default', null, $customUrl],
+        ]);
+        $backendConfigFlagsMap = $this->returnValueMap([
+            [\Magento\Store\Model\Store::XML_PATH_SECURE_IN_ADMINHTML, $useSecureInAdmin],
+            ['admin/url/use_custom', $useCustomUrl],
+        ]);
+        $this->coreConfig->expects($this->atLeast(1))->method('getValue')
+            ->will($coreConfigValueMap);
+        $this->coreConfig->expects($this->atMost(2))->method('getValue')
+            ->will($coreConfigValueMap);
+
+        $this->backendConfig->expects($this->atMost(2))->method('isSetFlag')
+            ->will($backendConfigFlagsMap);
         $this->assertEquals($expected, $this->adminPathConfig->shouldBeSecure(''));
     }
 
@@ -96,13 +114,13 @@ class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
     public function shouldBeSecureDataProvider()
     {
         return [
-            ['http://localhost/', false, 'default', false],
-            ['http://localhost/', true, 'default', false],
-            ['https://localhost/', false, 'default', true],
-            ['https://localhost/', true, 'default', true],
-            ['http://localhost/', false, 'https://localhost/', false],
-            ['http://localhost/', true, 'https://localhost/', true],
-            ['https://localhost/', true, 'https://localhost/', true],
+            ['http://localhost/', false, 'default', false, '', false],
+            ['http://localhost/', true, 'default', false, '', false],
+            ['https://localhost/', false, 'default', false, '', true],
+            ['https://localhost/', true, 'default', false, '', true],
+            ['http://localhost/', false, 'https://localhost/', false, '', false],
+            ['http://localhost/', true, 'https://localhost/', false, '', true],
+            ['https://localhost/', true, 'https://localhost/', false, '', true],
         ];
     }
 

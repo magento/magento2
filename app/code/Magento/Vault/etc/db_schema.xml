@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="vault_payment_token" resource="default" engine="innodb" comment="Vault tokens of payment">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Customer Id"/>
         <column xsi:type="varchar" name="public_hash" nullable="false" length="128"

@@ -17,5 +17,9 @@
         <element name="catalogPriceScopeValue" type="select" selector="//select[@id='catalog_price_scope']/option[text()='{{args}}']" parameterized="true"/>
         <element name="defaultProductPrice" type="input" selector="#catalog_price_default_product_price"/>
         <element name="save" type="button" selector="#save"/>
+        <element name="flatCatalogCategoryCheckBox" type="checkbox" selector="#catalog_frontend_flat_catalog_category_inherit"/>
+        <element name="flatCatalogCategory" type="select" selector="#catalog_frontend_flat_catalog_category"/>
+        <element name="flatCatalogProduct" type="select" selector="#catalog_frontend_flat_catalog_product"/>
+        <element name="successMessage" type="text" selector="#messages"/>
     </section>
 </sections>

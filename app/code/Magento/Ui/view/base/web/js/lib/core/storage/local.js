@@ -51,7 +51,7 @@ define([
             },
 
             /**
-             * Retrieves specfied item.
+             * Retrieves specified item.
              *
              * @param {String} key - Key of the property to be retrieved.
              */
@@ -60,7 +60,7 @@ define([
             },
 
             /**
-             * Removes specfied item.
+             * Removes specified item.
              *
              * @param {String} key - Key of the property to be removed.
              */

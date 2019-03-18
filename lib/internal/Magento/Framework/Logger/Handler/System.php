@@ -9,6 +9,9 @@ namespace Magento\Framework\Logger\Handler;
 use Magento\Framework\Filesystem\DriverInterface;
 use Monolog\Logger;
 
+/**
+ * System stream handler
+ */
 class System extends Base
 {
     /**
@@ -43,7 +46,7 @@ class System extends Base
     /**
      * Writes formatted record through the handler.
      *
-     * @param $record array The record metadata
+     * @param array $record The record metadata
      * @return void
      */
     public function write(array $record)

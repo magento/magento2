@@ -14,6 +14,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
+use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Modal;
 
 /**
@@ -69,13 +70,26 @@ class BundlePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function modifyMeta(array $meta)
     {
         $meta = $this->removeFixedTierPrice($meta);
-        $path = $this->arrayManager->findPath(static::CODE_BUNDLE_DATA, $meta, null, 'children');
+
+        $groupCode = static::CODE_BUNDLE_DATA;
+        $path = $this->arrayManager->findPath($groupCode, $meta, null, 'children');
+        if (empty($path)) {
+            $meta[$groupCode]['children'] = [];
+            $meta[$groupCode]['arguments']['data']['config'] = [
+                'componentType' => Fieldset::NAME,
+                'label' => __('Bundle Items'),
+                'collapsible' => true
+            ];
+
+            $path = $this->arrayManager->findPath($groupCode, $meta, null, 'children');
+        }
 
         $meta = $this->arrayManager->merge(
             $path,
@@ -220,7 +234,7 @@ class BundlePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
