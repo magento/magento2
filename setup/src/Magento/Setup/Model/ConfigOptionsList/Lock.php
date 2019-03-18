@@ -210,12 +210,12 @@ class Lock implements ConfigOptionsListInterface
             $errors[] = 'php extension Zookeeper is not installed.';
         }
 
-        $host = (string) $options[self::INPUT_KEY_LOCK_ZOOKEEPER_HOST]
+        $host = $options[self::INPUT_KEY_LOCK_ZOOKEEPER_HOST]
             ?? $deploymentConfig->get(
                    self::CONFIG_PATH_LOCK_ZOOKEEPER_HOST,
                    $this->getDefaultValue(self::INPUT_KEY_LOCK_ZOOKEEPER_HOST)
                );
-        $path = (string) $options[self::INPUT_KEY_LOCK_ZOOKEEPER_PATH]
+        $path = $options[self::INPUT_KEY_LOCK_ZOOKEEPER_PATH]
             ?? $deploymentConfig->get(
                 self::CONFIG_PATH_LOCK_ZOOKEEPER_PATH,
                 $this->getDefaultValue(self::INPUT_KEY_LOCK_ZOOKEEPER_PATH)

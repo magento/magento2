@@ -46,7 +46,7 @@ class LockBackendFactoryTest extends TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Unknown locks provider.
+     * @expectedExceptionMessage Unknown locks provider: someProvider
      */
     public function testCreateWithException()
     {

@@ -90,7 +90,7 @@ class LockBackendFactory
         $config = $this->deploymentConfig->get('lock/config', []);
 
         if (!isset($this->lockers[$provider])) {
-            throw new RuntimeException(new Phrase('Unknown locks provider.'));
+            throw new RuntimeException(new Phrase('Unknown locks provider: %1', [$provider]));
         }
 
         if (self::LOCK_ZOOKEEPER === $provider && !extension_loaded(self::LOCK_ZOOKEEPER)) {

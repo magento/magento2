@@ -14,11 +14,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 class ZookeeperTest extends TestCase
 {
     /**
-     * @var \Zookeeper|MockObject
-     */
-    private $zookeeperMock;
-
-    /**
      * @var ZookeeperProvider
      */
     private $zookeeperProvider;
@@ -41,15 +36,23 @@ class ZookeeperTest extends TestCase
         if (!extension_loaded('zookeeper')) {
             $this->markTestSkipped('Test was skipped because php extension Zookeeper is not installed.');
         }
-        $this->zookeeperProvider = new ZookeeperProvider($this->host, '/some/path/');
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\RuntimeException
      * @expectedExceptionMessage The path needs to be a non-empty string.
+     * @return void
      */
     public function testConstructionWithException()
     {
-        $this->zookeeperProvider = new ZookeeperProvider('some host', '');
+        $this->zookeeperProvider = new ZookeeperProvider($this->host, '');
+    }
+
+    /**
+     * @return void
+     */
+    public function testConstructionWithoutException()
+    {
+        $this->zookeeperProvider = new ZookeeperProvider($this->host, $this->path);
     }
 }
