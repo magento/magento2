@@ -139,8 +139,8 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             \Magento\Authorization\Model\Role::class,
             ['load', 'getId', 'getRoleType', 'delete'],
             [],
-            ''
-            ,false
+            '',
+            false
         );
 
         $this->controller = $objectManagerHelper->getObject(
@@ -325,7 +325,8 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock->expects($this->atLeastOnce())->method('getParam')->with('rid')->willReturn($id);
 
-        $userModelMock = $this->getMock(\Magento\User\Model\User::class,
+        $userModelMock = $this->getMock(
+            \Magento\User\Model\User::class,
             ['getId', 'setId', 'getRoles'],
             [],
             '',
