@@ -155,6 +155,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
                     'aggregation2' => [2, 4],
                 ],
             ],
+            'total' => 1
         ];
 
         $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
