@@ -23,7 +23,7 @@ class Cart extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
     /**
      * @var View
      */
-    protected $productView;
+    private $productView;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
