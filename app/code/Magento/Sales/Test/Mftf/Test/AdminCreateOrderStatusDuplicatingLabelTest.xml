@@ -13,9 +13,10 @@
             <stories value="Create order status"/>
             <title value="Create order status with duplicating label"/>
             <description value="Create an order status and get success message"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-15433" />
             <group value="sales"/>
             <group value="mtf_migrated"/>
-            <severity value="AVERAGE"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
