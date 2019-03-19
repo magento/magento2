@@ -752,6 +752,21 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoAppArea frontend
+     */
+    public function testCheckVisitorModel()
+    {
+        /** @var \Magento\Customer\Model\Visitor $visitor */
+        $visitor = $this->_objectManager->get(\Magento\Customer\Model\Visitor::class);
+        $this->login(1);
+        $this->assertNull($visitor->getId());
+        $this->dispatch('customer/account/index');
+        $this->assertNotNull($visitor->getId());
+    }
+
+    /**
      * @param string $email
      * @return void
      */

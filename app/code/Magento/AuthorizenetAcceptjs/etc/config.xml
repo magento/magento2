@@ -7,6 +7,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
+        <dev>
+            <js>
+                <minify_exclude>
+                    <authorizenet_acceptjs>\.authorize\.net/v1/Accept</authorizenet_acceptjs>
+                </minify_exclude>
+            </js>
+        </dev>
         <payment>
             <authorizenet_acceptjs>
                 <active>0</active>
