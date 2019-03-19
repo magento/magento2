@@ -6,10 +6,10 @@
 
 namespace Magento\Backend\Test\Block\System\Store;
 
+use Magento\Mtf\Client\Locator;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Store\Test\Fixture\StoreGroup;
 use Magento\Store\Test\Fixture\Website;
-use Magento\Mtf\Client\Locator;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
@@ -17,6 +17,20 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
  */
 class StoreGrid extends DataGrid
 {
+    /**
+     * Secondary part of row locator template for getRow() method
+     *
+     * @var string
+     */
+    protected $rowTemplate = 'td[div[*[contains(.,normalize-space("%s"))]]]';
+
+    /**
+     * Secondary part of row locator template for getRow() method with strict option
+     *
+     * @var string
+     */
+    protected $rowTemplateStrict = 'td[div[*[text()[normalize-space()="%s"]]]]';
+
     /**
      * Locator value for opening needed row.
      *
