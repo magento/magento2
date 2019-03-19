@@ -10,7 +10,7 @@
     <test name="AdminChangeProductAttributeSetTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Update product attribute set"/>
+            <stories value="Update product"/>
             <title value="Attributes from the selected attribute set should be shown"/>
             <description value="Attributes from the selected attribute set should be shown"/>
             <severity value="CRITICAL"/>
@@ -47,11 +47,13 @@
         </after>
         <!--Open created product-->
         <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="openProductEditPage"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageIsLoaded"/>
+        <dontSeeElement selector="{{AdminProductFormSection.customAttributeInputField($$createProductAttribute.attribute_code$$)}}" stepKey="dontSeeCreatedAttribute"/>
         <!--Change product attribute set-->
         <actionGroup ref="AdminChangeProductAttributeSet" stepKey="changeProductAttributeSet">
             <argument name="attributeSet" value="$$createAttributeSet$$"/>
         </actionGroup>
         <!--Check new attribute is visible on product edit page-->
-        <waitForText userInput="$$createProductAttribute.default_frontend_label$$" stepKey="seeAttributeInForm"/>
+        <seeElement selector="{{AdminProductFormSection.customAttributeInputField($$createProductAttribute.attribute_code$$)}}" stepKey="seeAttributeInForm"/>
     </test>
 </tests>
