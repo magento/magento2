@@ -49,8 +49,8 @@ class Validator
 
     /**
      * @param DirectoryHelper $directoryHelper
-     * @param CountryFactory  $countryFactory
-     * @param EavConfig       $eavConfig
+     * @param CountryFactory $countryFactory
+     * @param EavConfig $eavConfig
      */
     public function __construct(
         DirectoryHelper $directoryHelper,
@@ -64,6 +64,7 @@ class Validator
     }
 
     /**
+     * Validate address.
      *
      * @param \Magento\Sales\Model\Order\Address $address
      * @return array
@@ -196,7 +197,10 @@ class Validator
     }
 
     /**
+     * Check whether telephone is required for address.
+     *
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function isTelephoneRequired()
     {
@@ -204,7 +208,10 @@ class Validator
     }
 
     /**
+     * Check whether company is required for address.
+     *
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function isCompanyRequired()
     {
@@ -212,7 +219,10 @@ class Validator
     }
 
     /**
+     * Check whether telephone is required for address.
+     *
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function isFaxRequired()
     {

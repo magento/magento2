@@ -9,6 +9,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Manages locale config information.
+ */
 class Resolver implements ResolverInterface
 {
     /**
@@ -81,7 +84,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultLocalePath()
     {
@@ -89,7 +92,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDefaultLocale($locale)
     {
@@ -98,7 +101,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultLocale()
     {
@@ -116,7 +119,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setLocale($locale = null)
     {
@@ -129,7 +132,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLocale()
     {
@@ -140,7 +143,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function emulate($scopeId)
     {
@@ -160,7 +163,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function revert()
     {
