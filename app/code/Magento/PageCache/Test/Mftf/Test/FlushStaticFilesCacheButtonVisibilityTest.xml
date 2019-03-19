@@ -11,10 +11,11 @@
     <test name="FlushStaticFilesCacheButtonVisibilityTest">
         <annotations>
             <features value="PageCache"/>
+            <stories value="Page Cache"/>
             <title value="Check visibility of flush static files cache button"/>
             <description value="Flush Static Files Cache button visibility"/>
             <severity value="MAJOR"/>
-            <stories value="Check flush static files cache button"/>
+            <testCaseId value="MC-15454"/>
             <group value="production_mode_only"/>
             <group value="pagecache"/>
             <group value="mtf_migrated"/>
