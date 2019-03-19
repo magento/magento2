@@ -48,6 +48,7 @@ class GalleryOptions extends AbstractView implements ArgumentInterface
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function getOptionsJson()
     {
@@ -111,6 +112,7 @@ class GalleryOptions extends AbstractView implements ArgumentInterface
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function getFSOptionsJson()
     {
