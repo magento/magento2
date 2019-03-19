@@ -44,4 +44,28 @@ QUERY;
         self::assertNotNull($guestCart->getId());
         self::assertNull($guestCart->getCustomer()->getId());
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testCreateEmptyCartWithNotDefaultStore()
+    {
+        $query = <<<QUERY
+mutation {
+  createEmptyCart
+}
+QUERY;
+        $headerMap = ['Store' => 'fixture_second_store'];
+
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        self::assertArrayHasKey('createEmptyCart', $response);
+
+        $maskedCartId = $response['createEmptyCart'];
+        $guestCart = $this->guestCartRepository->get($maskedCartId);
+
+        self::assertNotNull($guestCart->getId());
+        self::assertNull($guestCart->getCustomer()->getId());
+        self::assertSame('fixture_second_store', $guestCart->getStore()->getCode());
+    }
 }
