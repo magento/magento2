@@ -1084,7 +1084,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Load block html from cache storage
      *
-     * @return string|false
+     * @return string
      */
     protected function _loadCache()
     {
@@ -1126,7 +1126,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             }
         };
 
-        return $this->lockQuery->lockedLoadData(
+        return (string)$this->lockQuery->lockedLoadData(
             $this->getCacheKey(),
             $loadAction,
             $collectAction,

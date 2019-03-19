@@ -58,7 +58,7 @@ class LockGuardedCacheLoader
      * @param callable $dataLoader
      * @param callable $dataCollector
      * @param callable $dataSaver
-     * @return array
+     * @return mixed
      */
     public function lockedLoadData(
         string $lockName,
