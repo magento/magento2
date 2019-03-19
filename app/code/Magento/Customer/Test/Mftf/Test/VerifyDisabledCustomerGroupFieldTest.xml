@@ -29,11 +29,10 @@
         <waitForPageLoad stepKey="waitForCustomerGroupsPageLoad" />
 
         <!-- 3. Select system Customer Group specified in data set from grid -->
-        <click selector="{{AdminCustomerGroupMainSection.selectIdZeroRow}}" stepKey="clickOnEditCustomerGroup" />
+        <click selector="{{AdminCustomerGroupMainSection.editButtonByCustomerGroupCode(NotLoggedInCustomerGroup.code)}}" stepKey="clickOnEditCustomerGroup" />
 
         <!-- 4. Perform all assertions -->
-        <seeInField selector="#customer_group_code" userInput="NOT LOGGED IN" stepKey="seeNotLoggedInTextInGroupName" />
-        <assertElementContainsAttribute selector="#customer_group_code" attribute="disabled" expectedValue="true" stepKey="checkIfGroupNameIsDisabled" />
-
+        <seeInField selector="{{AdminNewCustomerGroupSection.groupName}}" userInput="NOT LOGGED IN" stepKey="seeNotLoggedInTextInGroupName" />
+        <assertElementContainsAttribute selector="{{AdminNewCustomerGroupSection.groupName}}" attribute="disabled" expectedValue="true" stepKey="checkIfGroupNameIsDisabled" />
     </test>
 </tests>
