@@ -22,7 +22,7 @@ class ShoppingCartsTab extends TabWrapper
      *
      * @var Registry
      */
-    protected $coreRegistry = null;
+    private $coreRegistry;
 
     /**
      * @var bool
