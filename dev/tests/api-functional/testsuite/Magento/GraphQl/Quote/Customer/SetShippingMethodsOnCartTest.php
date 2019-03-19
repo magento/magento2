@@ -77,7 +77,6 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      * @throws \Exception
      */
     public function testShippingMethodWithVirtualProduct()
@@ -105,7 +104,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $maskedQuoteId,
             'flatrate',
             'flatrate_flatrate',
-            $shippingAddress->getId()
+            (int)$shippingAddress->getId()
         );
 
         $this->graphQlQuery($mutation, [], '', $this->getHeaderMap());
@@ -113,7 +112,6 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      * @throws \Exception
      */
     public function testShippingMethodWithSimpleProduct()
@@ -146,7 +144,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $maskedQuoteId,
             'flatrate',
             'flatrate',
-            $shippingAddress->getId()
+            (int)$shippingAddress->getId()
         );
 
         $this->graphQlQuery($mutation, [], '', $this->getHeaderMap());
@@ -155,7 +153,6 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      * @throws \Exception
      */
     public function testShippingMethodWithSimpleProductWithoutAddress()
@@ -183,7 +180,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $maskedQuoteId,
             'flatrate',
             'flatrate',
-            $shippingAddress->getId()
+            (int)$shippingAddress->getId()
         );
 
         self::expectExceptionMessage(
@@ -204,7 +201,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $maskedQuoteId,
             '',
             '',
-            '1'
+            1
         );
 
         self::expectExceptionMessage(
@@ -215,7 +212,6 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      * @throws \Exception
      */
     public function testSetNonExistentShippingMethod()
@@ -248,7 +244,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $maskedQuoteId,
             'non-existed-method-code',
             'non-existed-carrier-code',
-            $shippingAddress->getId()
+            (int)$shippingAddress->getId()
         );
 
         self::expectExceptionMessage(
@@ -261,7 +257,6 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      * @throws \Exception
      */
     public function testSetShippingMethodIfAddressIsNotBelongToCart()
@@ -294,7 +289,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $maskedQuoteId,
             'flatrate',
             'flatrate',
-            '2'
+            2
         );
 
         self::expectExceptionMessage(
@@ -317,7 +312,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $maskedQuoteId,
             'flatrate',
             'flatrate',
-            '80900'
+            80900
         );
 
         $this->graphQlQuery($mutation, [], '', $this->getHeaderMap());
@@ -340,7 +335,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $maskedQuoteId,
             'flatrate',
             'flatrate',
-            $quote->getShippingAddress()->getId()
+            (int)$quote->getShippingAddress()->getId()
         );
 
         $this->graphQlQuery($mutation);
@@ -363,7 +358,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $maskedQuoteId,
             'flatrate',
             'flatrate',
-            $quote->getShippingAddress()->getId()
+            (int)$quote->getShippingAddress()->getId()
         );
 
         self::expectExceptionMessage(
@@ -384,7 +379,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $maskedQuoteId,
             'flatrate',
             'flatrate',
-            '16800'
+            16800
         );
         self::expectExceptionMessage(
             'Could not find a cart address with ID "16800"'
@@ -395,7 +390,6 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      * @throws \Exception
      */
     public function testSetShippingMethodToGuestCartAddress()
@@ -410,7 +404,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $maskedQuoteId,
             'flatrate',
             'flatrate',
-            $quote->getShippingAddress()->getId()
+            (int)$quote->getShippingAddress()->getId()
         );
 
         $this->graphQlQuery($mutation);
@@ -419,7 +413,6 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      * @throws \Exception
      */
     public function testSetShippingMethodToAnotherCustomerCartAddress()
@@ -434,7 +427,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $maskedQuoteId,
             'flatrate',
             'flatrate',
-            $quote->getShippingAddress()->getId()
+            (int)$quote->getShippingAddress()->getId()
         );
 
         self::expectExceptionMessage(
@@ -445,7 +438,6 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      * @throws \Exception
      */
     public function testSetMultipleShippingMethods()
@@ -456,7 +448,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
 
-        $shippingAddressId = $quote->getShippingAddress()->getId();
+        $shippingAddressId = (int)$quote->getShippingAddress()->getId();
 
         $mutation = <<<MUTATION
 mutation {
@@ -503,7 +495,7 @@ MUTATION;
      * @param string $maskedQuoteId
      * @param string $shippingMethodCode
      * @param string $shippingCarrierCode
-     * @param string $shippingAddressId
+     * @param int $shippingAddressId
      * @return string
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
@@ -511,7 +503,7 @@ MUTATION;
         string $maskedQuoteId,
         string $shippingMethodCode,
         string $shippingCarrierCode,
-        string $shippingAddressId
+        int $shippingAddressId
     ) : string {
         return <<<QUERY
 mutation {
