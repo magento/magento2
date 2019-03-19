@@ -47,6 +47,7 @@
 
         <!--Clear cache-->
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache" />
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!--Open product page-->
         <amOnPage url="$$product.name$$.html" stepKey="goToSimpleProductPage2"/>
