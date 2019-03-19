@@ -266,7 +266,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
-            ->with(__('An error occurred while deleting this role.'))
+            ->with(__('We can\'t find a role to delete.'))
             ->willReturnSelf();
 
         $this->resultRedirectMock->expects($this->once())
