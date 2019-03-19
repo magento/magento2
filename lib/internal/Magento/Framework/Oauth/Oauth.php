@@ -199,7 +199,7 @@ class Oauth implements OauthInterface
         );
 
         if (!Security::compareStrings($calculatedSign, $params['oauth_signature'])) {
-            throw new Exception(new Phrase('The signatire is invalid. Verify and try again.'));
+            throw new Exception(new Phrase('The signature is invalid. Verify and try again.'));
         }
     }
 
