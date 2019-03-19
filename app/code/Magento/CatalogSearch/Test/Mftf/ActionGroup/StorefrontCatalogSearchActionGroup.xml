@@ -11,10 +11,9 @@
     <!-- Quick search the phrase and check if the result page contains correct information -->
     <actionGroup name="StorefrontCheckQuickSearchActionGroup">
         <arguments>
-            <argument name="phrase" type="string"/>
+            <argument name="phrase" />
         </arguments>
-        <fillField stepKey="fillInput" selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{phrase}}"/>
-        <submitForm selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" parameterArray="[]" stepKey="submitQuickSearch" />
+        <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{phrase}}]" stepKey="fillQuickSearch" />
         <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
         <dontSeeInCurrentUrl url="form_key=" stepKey="checkUrlFormKey"/>
         <seeInTitle userInput="Search results for: '{{phrase}}'" stepKey="assertQuickSearchTitle"/>

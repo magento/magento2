@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Store\Test\TestCase\UpdateWebsiteEntityTest" summary="Update Website" ticketId="MAGETWO-27690">
         <variation name="UpdateWebsiteEntityTestVariation1">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="websiteOrigin/dataset" xsi:type="string">custom_website</data>
             <data name="website/data/name" xsi:type="string">website_upd%isolation%</data>
             <data name="website/data/code" xsi:type="string">code_upd%isolation%</data>
