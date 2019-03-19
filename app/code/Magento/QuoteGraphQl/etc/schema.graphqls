@@ -11,6 +11,7 @@ type Mutation {
     addVirtualProductsToCart(input: AddVirtualProductsToCartInput): AddVirtualProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
     applyCouponToCart(input: ApplyCouponToCartInput): ApplyCouponToCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ApplyCouponToCart")
     removeCouponFromCart(input: RemoveCouponFromCartInput): RemoveCouponFromCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\RemoveCouponFromCart")
+    updateCartItems(input: UpdateCartItemsInput): UpdateCartItemsOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\UpdateCartItems")
     removeItemFromCart(input: RemoveItemFromCartInput): RemoveItemFromCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\RemoveItemFromCart")
     setShippingAddressesOnCart(input: SetShippingAddressesOnCartInput): SetShippingAddressesOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingAddressesOnCart")
     setBillingAddressOnCart(input: SetBillingAddressOnCartInput): SetBillingAddressOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetBillingAddressOnCart")
@@ -51,6 +52,16 @@ input CustomizableOptionInput {
 input ApplyCouponToCartInput {
     cart_id: String!
     coupon_code: String!
+}
+
+input UpdateCartItemsInput {
+    cart_id: String!
+    cart_items: [CartItemQuantityInput!]!
+}
+
+input CartItemQuantityInput {
+    cart_item_id: Int!
+    quantity: Float!
 }
 
 input RemoveItemFromCartInput {
@@ -227,6 +238,10 @@ type AddSimpleProductsToCartOutput {
 }
 
 type AddVirtualProductsToCartOutput {
+    cart: Cart!
+}
+
+type UpdateCartItemsOutput {
     cart: Cart!
 }
 
