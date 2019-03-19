@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontTaxInformationInShoppingCartForCustomerVirtualQuoteTest">
         <annotations>
             <features value="Tax information in shopping cart for Customer with default addresses (virtual quote)"/>
@@ -37,6 +37,7 @@
             <createData entity="Simple_US_NY_Customer" stepKey="createCustomer"/>
         </before>
         <after>
+            <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
@@ -59,9 +60,13 @@
         <actionGroup ref="StorefrontViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <!--  Step 4: Open Estimate Shipping and Tax section -->
         <conditionalClick  selector="{{StorefrontCheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{StorefrontCheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
-        <see selector="{{StorefrontCheckoutCartSummarySection.country}}" userInput="$$createCustomer.country_id$$" stepKey="checkCustomerCountry" />
-        <see selector="{{StorefrontCheckoutCartSummarySection.region}}" userInput="$$createCustomer.state$$" stepKey="checkCustomerRegion" />
-        <see selector="{{StorefrontCheckoutCartSummarySection.postcode}}" userInput="$$createCustomer.postcode$$" stepKey="checkCustomerPostcode" />
+        <seeOptionIsSelected selector="{{StorefrontCheckoutCartSummarySection.country}}" userInput="{{US_Address_NY.country}}" stepKey="checkCustomerCountry" />
+        <seeOptionIsSelected selector="{{StorefrontCheckoutCartSummarySection.region}}" userInput="{{US_Address_NY.state}}" stepKey="checkCustomerRegion" />
+        <grabValueFrom  selector="{{StorefrontCheckoutCartSummarySection.postcode}}" stepKey="grabTextPostCode"/>
+        <assertEquals message="Customer postcode is invalid" stepKey="checkCustomerPostcode">
+            <expectedResult type="string">{{US_Address_NY.postcode}}</expectedResult>
+            <actualResult type="variable">grabTextPostCode</actualResult>
+        </assertEquals>
         <scrollTo selector="{{StorefrontCheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary" />
         <click selector="{{StorefrontCheckoutCartSummarySection.taxSummary}}" stepKey="expandTaxSummary"/>
         <see selector="{{StorefrontCheckoutCartSummarySection.rate}}" userInput="US-NY-*-Rate 1 (8.375%)" stepKey="checkRateNY" />

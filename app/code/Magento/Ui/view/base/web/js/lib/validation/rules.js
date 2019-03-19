@@ -115,6 +115,12 @@ define([
             },
             $.mage.__('No white space please')
         ],
+        'no-marginal-whitespace': [
+            function (value) {
+                return !/^\s+|\s+$/i.test(value);
+            },
+            $.mage.__('No marginal white space please')
+        ],
         'zip-range': [
             function (value) {
                 return utils.isEmpty(value) || /^90[2-5]-\d{2}-\d{4}$/.test(value);
@@ -684,6 +690,24 @@ define([
                 return result;
             },
             $.mage.__('The value is not within the specified range.')
+        ],
+        'validate-positive-percent-decimal': [
+            function (value) {
+                var numValue;
+
+                if (utils.isEmptyNoTrim(value) || !/^\s*-?\d*(\.\d*)?\s*$/.test(value)) {
+                    return false;
+                }
+
+                numValue = utils.parseNumber(value);
+
+                if (isNaN(numValue)) {
+                    return false;
+                }
+
+                return utils.isBetween(numValue, 0.01, 100);
+            },
+            $.mage.__('Please enter a valid percentage discount value greater than 0.')
         ],
         'validate-digits': [
             function (value) {

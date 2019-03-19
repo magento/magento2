@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AddSimpleProductToCart">
         <arguments>
             <argument name="product" defaultValue="product"/>
@@ -15,7 +15,8 @@
         <amOnPage stepKey="navigateProductPage" url="/{{product.name}}.html"/>
         <click stepKey="addToCart" selector="{{StorefrontProductPageSection.addToCartBtn}}"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
-    </actionGroup>.
+    </actionGroup>
+
     <!--Click Add to Cart button in storefront product page-->
     <actionGroup name="addToCartFromStorefrontProductPage">
         <arguments>
@@ -26,6 +27,15 @@
         <waitForElementNotVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAddToCart}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAddToCart"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForProductAddedMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontAddProductToCartQuantityActionGroup" extends="addToCartFromStorefrontProductPage">
+        <arguments>
+            <argument name="quantity" type="string" defaultValue="1"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.qtyInput}}" time="30" before="addToCart" stepKey="waitQuantityFieldVisible"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{quantity}}" after="waitQuantityFieldVisible" stepKey="fillQuantityField"/>
     </actionGroup>
 </actionGroups>

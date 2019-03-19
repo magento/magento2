@@ -100,16 +100,19 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         }
 
         $mapsGenerated = false;
-        if ($category->dataHasChangedFor('url_key')
-            || $category->dataHasChangedFor('is_anchor')
-            || $category->getChangedProductIds()
-        ) {
+        if ($this->isCategoryHasChanged($category)) {
             if ($category->dataHasChangedFor('url_key')) {
                 $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category);
                 $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
             }
-            $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
-            $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
+            if ($this->isChangedOnlyProduct($category)) {
+                $productUrlRewriteResult =
+                    $this->urlRewriteHandler->updateProductUrlRewritesForChangedProduct($category);
+                $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
+            } else {
+                $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
+                $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
+            }
             $mapsGenerated = true;
         }
 
@@ -120,8 +123,42 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
     }
 
     /**
-     * in case store_id is not set for category then we can assume that it was passed through product import.
-     * store group must have only one root category, so receiving category's path and checking if one of it parts
+     * Check is category changed changed.
+     *
+     * @param Category $category
+     * @return bool
+     */
+    private function isCategoryHasChanged(Category $category): bool
+    {
+        if ($category->dataHasChangedFor('url_key')
+            || $category->dataHasChangedFor('is_anchor')
+            || !empty($category->getChangedProductIds())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check is only product changed.
+     *
+     * @param Category $category
+     * @return bool
+     */
+    private function isChangedOnlyProduct(Category $category): bool
+    {
+        if (!empty($category->getChangedProductIds())
+            && !$category->dataHasChangedFor('is_anchor')
+            && !$category->dataHasChangedFor('url_key')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * In case store_id is not set for category then we can assume that it was passed through product import.
+     * Store group must have only one root category, so receiving category's path and checking if one of it parts
      * is the root category for store group, we can set default_store_id value from it to category.
      * it prevents urls duplication for different stores
      * ("Default Category/category/sub" and "Default Category2/category/sub")

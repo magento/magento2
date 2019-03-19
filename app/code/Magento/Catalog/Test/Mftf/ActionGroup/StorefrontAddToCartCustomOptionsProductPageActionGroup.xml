@@ -13,7 +13,6 @@
             <argument name="productName"/>
         </arguments>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
         <see selector="{{StorefrontProductPageSection.successMsg}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
     </actionGroup>
 </actionGroups>

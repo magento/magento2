@@ -100,7 +100,7 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
     public function testGetTransport($templateType, $messageType, $bodyText, $templateNamespace)
     {
         $this->builder->setTemplateModel($templateNamespace);
-
+        
         $vars = ['reason' => 'Reason', 'customer' => 'Customer'];
         $options = ['area' => 'frontend', 'store' => 1];
 
@@ -160,23 +160,24 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
             ]
         ];
     }
-
+    
     /**
      * @return void
      */
-    public function testSetFrom()
+    public function testSetFromByScope()
     {
         $sender = ['email' => 'from@example.com', 'name' => 'name'];
+        $scopeId = 1;
         $this->senderResolverMock->expects($this->once())
             ->method('resolve')
-            ->with($sender)
+            ->with($sender, $scopeId)
             ->willReturn($sender);
         $this->messageMock->expects($this->once())
-            ->method('setFrom')
+            ->method('setFromAddress')
             ->with('from@example.com', 'name')
             ->willReturnSelf();
 
-        $this->builder->setFrom($sender);
+        $this->builder->setFromByScope($sender, $scopeId);
     }
 
     /**

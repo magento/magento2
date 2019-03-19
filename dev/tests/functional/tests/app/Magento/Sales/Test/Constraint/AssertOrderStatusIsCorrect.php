@@ -39,8 +39,8 @@ class AssertOrderStatusIsCorrect extends AbstractConstraint
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
         \PHPUnit_Framework_Assert::assertEquals(
-            $infoTab->getOrderStatus(),
-            $orderStatus
+            $orderStatus,
+            $infoTab->getOrderStatus()
         );
     }
 
