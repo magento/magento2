@@ -45,10 +45,6 @@ class MassUpdateProductAttribute
     private $attributeHelper;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect
-     */
-    private $redirectFactory;
-    /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
     private $messageManager;
@@ -60,7 +56,6 @@ class MassUpdateProductAttribute
      * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $redirectFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -71,7 +66,6 @@ class MassUpdateProductAttribute
         \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper,
-        \Magento\Backend\Model\View\Result\RedirectFactory $redirectFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->stockIndexerProcessor = $stockIndexerProcessor;
@@ -80,7 +74,6 @@ class MassUpdateProductAttribute
         $this->stockItemRepository = $stockItemRepository;
         $this->stockConfiguration = $stockConfiguration;
         $this->attributeHelper = $attributeHelper;
-        $this->redirectFactory = $redirectFactory;
         $this->messageManager = $messageManager;
     }
 
@@ -111,14 +104,14 @@ class MassUpdateProductAttribute
             return $proceed();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
+            return $proceed();
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('Something went wrong while updating the product(s) attributes.')
             );
+            return $proceed();
         }
-
-        return $this->redirectFactory->create()->setPath('catalog/product/', ['_current' => true]);
     }
 
     /**
