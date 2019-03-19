@@ -26,16 +26,16 @@
 
             <!--Create new website,store and store view-->
             <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="goToAdminSystemStorePage"/>
-            <actionGroup ref="AdminCreateWebsite" stepKey="AdminCreateNewWebsite">
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateNewWebsite">
                 <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
                 <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
             </actionGroup>
-            <actionGroup ref="AdminCreateNewStore" stepKey="AdminCreateNewStore">
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="AdminCreateNewStore">
                 <argument name="website" value="{{NewWebSiteData.name}}"/>
                 <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
                 <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
             </actionGroup>
-            <actionGroup ref="AdminCreateStoreView" stepKey="AdminCreateNewStoreView">
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="AdminCreateNewStoreView">
                 <argument name="StoreGroup" value="NewStoreData"/>
             </actionGroup>
             <!--Set account sharing option - Default value is 'Per Website'-->
