@@ -75,17 +75,7 @@ class Factory
     protected function _initializeConfigList()
     {
         if (!$this->_configFiles) {
-            $this->_configFiles = $this->cache->load(self::CACHE_KEY);
-            if (!$this->_configFiles) {
-                $this->_configFiles = $this->moduleReader->getConfigurationFiles('validation.xml');
-                $this->cache->save(
-                    $this->getSerializer()->serialize($this->_configFiles->toArray()),
-                    self::CACHE_KEY
-                );
-            } else {
-                $filesArray = $this->getSerializer()->unserialize($this->_configFiles);
-                $this->_configFiles = $this->getFileIteratorFactory()->create(array_keys($filesArray));
-            }
+            $this->_configFiles = $this->moduleReader->getConfigurationFiles('validation.xml');
         }
     }
 
