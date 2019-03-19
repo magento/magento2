@@ -7,6 +7,7 @@
 namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
+use Magento\CatalogRule\Model\ResourceModel\Rule\Collection as RuleCollection;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\App\ObjectManager;
@@ -263,14 +264,11 @@ class IndexBuilder
      */
     protected function doReindexByIds($ids)
     {
-        foreach ($this->getInactiveRules() as $rule) {
-            $this->cleanProductIndex($ids, $rule->getId());
-            $this->cleanProductPriceIndex($ids, $rule->getId());
-        }
+        $this->cleanByIds($ids);
 
         $products = $this->productLoader->getProducts($ids);
-        foreach ($this->getActiveRules() as $rule) {
-            foreach ($products as $product) {
+        foreach ($products as $product) {
+            foreach ($this->getActiveRules() as $rule) {
                 $this->applyRule($rule, $product);
             }
         }
@@ -321,36 +319,22 @@ class IndexBuilder
     /**
      * Clean product index
      *
-     * @param array|int $productIds
-     * @param int|null $ruleId
+     * @param array $productIds
      */
-    private function cleanProductIndex($productIds, int $ruleId = null)
+    private function cleanProductIndex(array $productIds)
     {
-        $productIds = (array) $productIds;
-        $where = count($productIds) > 1
-            ? ['product_id IN (?)' => $productIds]
-            : ['product_id = ?' => $productIds];
-        if ($ruleId) {
-            $where['rule_id = ?'] = $ruleId;
-        }
+        $where = ['product_id IN (?)' => $productIds];
         $this->connection->delete($this->getTable('catalogrule_product'), $where);
     }
 
     /**
      * Clean product price index
      *
-     * @param array|int $productIds
-     * @param int|null $ruleId
+     * @param array $productIds
      */
-    private function cleanProductPriceIndex($productIds, int $ruleId = null)
+    private function cleanProductPriceIndex(array $productIds)
     {
-        $productIds = (array) $productIds;
-        $where = count($productIds) > 1
-            ? ['product_id IN (?)' => $productIds]
-            : ['product_id = ?' => $productIds];
-        if ($ruleId) {
-            $where['rule_id = ?'] = $ruleId;
-        }
+        $where = ['product_id IN (?)' => $productIds];
         $this->connection->delete($this->getTable('catalogrule_product_price'), $where);
     }
 
@@ -367,6 +351,8 @@ class IndexBuilder
     }
 
     /**
+     * Apply rule
+     *
      * @param Rule $rule
      * @param Product $product
      * @return $this
@@ -380,10 +366,16 @@ class IndexBuilder
         $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
 
         if (!$rule->validate($product)) {
-            $this->cleanProductIndex($productEntityId, $ruleId);
-            $this->cleanProductPriceIndex($productEntityId, $ruleId);
             return $this;
         }
+
+        $this->connection->delete(
+            $this->resource->getTableName('catalogrule_product'),
+            [
+                $this->connection->quoteInto('rule_id = ?', $ruleId),
+                $this->connection->quoteInto('product_id = ?', $productEntityId)
+            ]
+        );
 
         $customerGroupIds = $rule->getCustomerGroupIds();
         $fromTime = strtotime($rule->getFromDate());
@@ -395,60 +387,41 @@ class IndexBuilder
         $actionStop = $rule->getStopRulesProcessing();
 
         $rows = [];
-        $ruleProductTable = $this->getTable('catalogrule_product');
-        try {
-            $this->connection->beginTransaction();
+        foreach ($websiteIds as $websiteId) {
+            foreach ($customerGroupIds as $customerGroupId) {
+                $rows[] = [
+                    'rule_id' => $ruleId,
+                    'from_time' => $fromTime,
+                    'to_time' => $toTime,
+                    'website_id' => $websiteId,
+                    'customer_group_id' => $customerGroupId,
+                    'product_id' => $productEntityId,
+                    'action_operator' => $actionOperator,
+                    'action_amount' => $actionAmount,
+                    'action_stop' => $actionStop,
+                    'sort_order' => $sortOrder,
+                ];
 
-            $this->cleanProductIndex($productEntityId, $ruleId);
-
-            foreach ($websiteIds as $websiteId) {
-                foreach ($customerGroupIds as $customerGroupId) {
-                    $rows[] = [
-                        'rule_id' => $ruleId,
-                        'from_time' => $fromTime,
-                        'to_time' => $toTime,
-                        'website_id' => $websiteId,
-                        'customer_group_id' => $customerGroupId,
-                        'product_id' => $productEntityId,
-                        'action_operator' => $actionOperator,
-                        'action_amount' => $actionAmount,
-                        'action_stop' => $actionStop,
-                        'sort_order' => $sortOrder,
-                    ];
-
-                    if (count($rows) == $this->batchCount) {
-                        $this->connection->insertMultiple($ruleProductTable, $rows);
-                        $rows = [];
-                    }
+                if (count($rows) == $this->batchCount) {
+                    $this->connection->insertMultiple($this->getTable('catalogrule_product'), $rows);
+                    $rows = [];
                 }
             }
-
-            if (!empty($rows)) {
-                $this->connection->insertMultiple($ruleProductTable, $rows);
-                unset($rows);
-            }
-            $this->connection->commit();
-        } catch (\Exception $e) {
-            $this->connection->rollBack();
-            throw $e;
+        }
+        if (!empty($rows)) {
+            $this->connection->insertMultiple($this->resource->getTableName('catalogrule_product'), $rows);
+            unset($rows);
         }
 
-        try {
-            $this->connection->beginTransaction();
-            $this->cleanProductPriceIndex($productEntityId, $ruleId);
-            $this->reindexRuleProductPrice->execute($this->batchCount, $product);
-            $this->connection->commit();
-        } catch (\Exception $e) {
-            $this->connection->rollBack();
-            throw $e;
-        }
-
+        $this->reindexRuleProductPrice->execute($this->batchCount, $product);
         $this->reindexRuleGroupWebsite->execute();
 
         return $this;
     }
 
     /**
+     * Retrieve table name
+     *
      * @param string $tableName
      * @return string
      */
@@ -458,6 +431,8 @@ class IndexBuilder
     }
 
     /**
+     * Update rule product data
+     *
      * @param Rule $rule
      * @return $this
      * @deprecated 100.2.0
@@ -483,6 +458,8 @@ class IndexBuilder
     }
 
     /**
+     * Apply all rules
+     *
      * @param Product|null $product
      * @throws \Exception
      * @return $this
@@ -522,6 +499,8 @@ class IndexBuilder
     }
 
     /**
+     * Calculate rule product price
+     *
      * @param array $ruleData
      * @param null $productData
      * @return float
@@ -534,6 +513,8 @@ class IndexBuilder
     }
 
     /**
+     * Get rule products statement
+     *
      * @param int $websiteId
      * @param Product|null $product
      * @return \Zend_Db_Statement_Interface
@@ -547,6 +528,8 @@ class IndexBuilder
     }
 
     /**
+     * Save rule product prices
+     *
      * @param array $arrData
      * @return $this
      * @throws \Exception
@@ -562,7 +545,7 @@ class IndexBuilder
     /**
      * Get active rules
      *
-     * @return \Magento\CatalogRule\Model\ResourceModel\Rule\Collection
+     * @return RuleCollection
      */
     protected function getActiveRules()
     {
@@ -570,19 +553,9 @@ class IndexBuilder
     }
 
     /**
-     * Get inactive rules
-     *
-     * @return \Magento\CatalogRule\Model\ResourceModel\Rule\Collection
-     */
-    private function getInactiveRules()
-    {
-        return $this->ruleCollectionFactory->create()->addFieldToFilter('is_active', 0);
-    }
-
-    /**
      * Get active rules
      *
-     * @return array
+     * @return RuleCollection
      */
     protected function getAllRules()
     {
@@ -590,6 +563,8 @@ class IndexBuilder
     }
 
     /**
+     * Get product
+     *
      * @param int $productId
      * @return Product
      */
@@ -602,6 +577,8 @@ class IndexBuilder
     }
 
     /**
+     * Log critical exception
+     *
      * @param \Exception $e
      * @return void
      */
