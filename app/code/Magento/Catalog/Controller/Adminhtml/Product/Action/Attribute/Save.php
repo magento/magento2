@@ -43,6 +43,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     private $userContext;
 
     /**
+     * @var int
+     */
+    private $bulkSize;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Framework\Bulk\BulkManagementInterface $bulkManagement
@@ -50,6 +55,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param \Magento\Framework\DataObject\IdentityGeneratorInterface $identityService
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param \Magento\Authorization\Model\UserContextInterface $userContext
+     * @param int $bulkSize
      */
     public function __construct(
         Action\Context $context,
@@ -58,7 +64,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         \Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory $operartionFactory,
         \Magento\Framework\DataObject\IdentityGeneratorInterface $identityService,
         \Magento\Framework\Serialize\SerializerInterface $serializer,
-        \Magento\Authorization\Model\UserContextInterface $userContext
+        \Magento\Authorization\Model\UserContextInterface $userContext,
+        int $bulkSize = 100
     ) {
         parent::__construct($context, $attributeHelper);
         $this->bulkManagement = $bulkManagement;
@@ -66,6 +73,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $this->identityService = $identityService;
         $this->serializer = $serializer;
         $this->userContext = $userContext;
+        $this->bulkSize = $bulkSize;
     }
 
     /**
@@ -171,9 +179,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $websiteId,
         $productIds
     ):void {
-        $productIdsChunks = array_chunk($productIds, 100);
+        $productIdsChunks = array_chunk($productIds, $this->bulkSize);
         $bulkUuid = $this->identityService->generateId();
-        $bulkDescription = __('Update attributes to ' . count($productIds) . ' selected products');
+        $bulkDescription = __('Update attributes for ' . count($productIds) . ' selected products');
         $operations = [];
         foreach ($productIdsChunks as $productIdsChunk) {
             if ($websiteRemoveData || $websiteAddData) {

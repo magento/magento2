@@ -110,7 +110,7 @@ class Consumer
             ) {
                 $status = OperationInterface::STATUS_TYPE_RETRIABLY_FAILED;
                 $errorCode = $e->getCode();
-                $message = __($e->getMessage());
+                $message = $e->getMessage();
             } else {
                 $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
                 $errorCode = $e->getCode();
