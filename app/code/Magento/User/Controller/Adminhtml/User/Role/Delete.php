@@ -36,12 +36,14 @@ class Delete extends \Magento\User\Controller\Adminhtml\User\Role
 
             return $resultRedirect->setPath('adminhtml/*/editrole', ['rid' => $rid]);
         }
+        $role = $this->_initRole();
+        if (!$role->getId()) {
+            $this->messageManager->addError(__('We can\'t find a role to delete.'));
+
+            return $resultRedirect->setPath("*/*/");
+        }
 
         try {
-            $role = $this->_initRole();
-            if (!$role->getId()) {
-                throw new \Exception();
-            }
             $role->delete();
             $this->messageManager->addSuccess(__('You deleted the role.'));
         } catch (\Exception $e) {
