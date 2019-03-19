@@ -101,7 +101,8 @@ class Zookeeper implements LockManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * You can see the lock algorithm by the link
      * @link https://zookeeper.apache.org/doc/r3.1.2/recipes.html#sc_recipes_Locks
      *
@@ -124,7 +125,7 @@ class Zookeeper implements LockManagerInterface
             throw new RuntimeException(new Phrase('Failed creating lock %1', [$lockPath]));
         }
 
-        while($this->isAnyLock($lockKey, $this->getIndex($lockKey))) {
+        while ($this->isAnyLock($lockKey, $this->getIndex($lockKey))) {
             if (!$skipDeadline && $deadline <= microtime(true)) {
                 $this->getProvider()->delete($lockKey);
                 return false;
@@ -139,7 +140,8 @@ class Zookeeper implements LockManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws RuntimeException
      */
     public function unlock(string $name): bool
@@ -152,7 +154,8 @@ class Zookeeper implements LockManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws RuntimeException
      */
     public function isLocked(string $name): bool
@@ -184,7 +187,7 @@ class Zookeeper implements LockManagerInterface
         }
 
         $deadline = microtime(true) + $this->connectionTimeout;
-        while($this->zookeeper->getState() != \Zookeeper::CONNECTED_STATE) {
+        while ($this->zookeeper->getState() != \Zookeeper::CONNECTED_STATE) {
             if ($deadline <= microtime(true)) {
                 throw new RuntimeException(new Phrase('Zookeeper connection timed out!'));
             }
@@ -227,16 +230,17 @@ class Zookeeper implements LockManagerInterface
      */
     private function getIndex(string $key)
     {
-        if (!preg_match('/' . $this->lockName . '([0-9]+)$/', $key, $matches))
+        if (!preg_match('/' . $this->lockName . '([0-9]+)$/', $key, $matches)) {
             return null;
+        }
 
         return intval($matches[1]);
     }
 
     /**
      * Checks if there is any sequence node under parent of $fullKey.
-     * At first checks that the $fullKey node is present, if not - returns false.
      *
+     * At first checks that the $fullKey node is present, if not - returns false.
      * If $indexKey is non-null and there is a smaller index than $indexKey then returns true,
      * otherwise returns false.
      *
@@ -255,14 +259,14 @@ class Zookeeper implements LockManagerInterface
 
         $children = $this->getProvider()->getChildren($parent);
 
-        if (is_null($indexKey) && !empty($children)) {
+        if (null === $indexKey && !empty($children)) {
             return true;
         }
 
         foreach ($children as $childKey) {
             $childIndex = $this->getIndex($childKey);
 
-            if (is_null($childIndex)) {
+            if (null === $childIndex) {
                 continue;
             }
 

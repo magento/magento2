@@ -163,7 +163,10 @@ class LockTest extends TestCase
         $this->deploymentConfigMock->expects($this->any())
             ->method('get')
             ->willReturnArgument(1);
-        $this->assertSame($expectedResult, $this->lockConfigOptionsList->validate($options, $this->deploymentConfigMock));
+        $this->assertSame(
+            $expectedResult,
+            $this->lockConfigOptionsList->validate($options, $this->deploymentConfigMock)
+        );
     }
 
     /**
@@ -186,10 +189,16 @@ class LockTest extends TestCase
                     LockConfigOptionsList::INPUT_KEY_LOCK_ZOOKEEPER_HOST => '',
                     LockConfigOptionsList::INPUT_KEY_LOCK_ZOOKEEPER_PATH => '',
                 ],
-                'expectedResult' => [
-                    'Zookeeper path needs to be a non-empty string.',
-                    'Zookeeper host is should be set.',
-                ],
+                'expectedResult' => extension_loaded('zookeeper')
+                    ? [
+                        'Zookeeper path needs to be a non-empty string.',
+                        'Zookeeper host is should be set.',
+                    ]
+                    : [
+                        'php extension Zookeeper is not installed.',
+                        'Zookeeper path needs to be a non-empty string.',
+                        'Zookeeper host is should be set.',
+                    ],
             ],
         ];
     }

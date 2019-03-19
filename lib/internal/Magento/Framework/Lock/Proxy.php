@@ -37,7 +37,8 @@ class Proxy implements LockManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws RuntimeException
      */
     public function isLocked(string $name): bool
@@ -46,7 +47,8 @@ class Proxy implements LockManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws RuntimeException
      */
     public function lock(string $name, int $timeout = -1): bool
@@ -55,7 +57,8 @@ class Proxy implements LockManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws RuntimeException
      */
     public function unlock(string $name): bool

@@ -212,9 +212,9 @@ class Lock implements ConfigOptionsListInterface
 
         $host = $options[self::INPUT_KEY_LOCK_ZOOKEEPER_HOST]
             ?? $deploymentConfig->get(
-                   self::CONFIG_PATH_LOCK_ZOOKEEPER_HOST,
-                   $this->getDefaultValue(self::INPUT_KEY_LOCK_ZOOKEEPER_HOST)
-               );
+                self::CONFIG_PATH_LOCK_ZOOKEEPER_HOST,
+                $this->getDefaultValue(self::INPUT_KEY_LOCK_ZOOKEEPER_HOST)
+            );
         $path = $options[self::INPUT_KEY_LOCK_ZOOKEEPER_PATH]
             ?? $deploymentConfig->get(
                 self::CONFIG_PATH_LOCK_ZOOKEEPER_PATH,
@@ -250,7 +250,6 @@ class Lock implements ConfigOptionsListInterface
 
         return (string) $options[self::INPUT_KEY_LOCK_PROVIDER];
     }
-
 
     /**
      * Sets default configuration for locks

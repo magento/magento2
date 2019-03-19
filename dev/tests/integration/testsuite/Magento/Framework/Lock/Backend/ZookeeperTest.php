@@ -88,4 +88,3 @@ class ZookeeperTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->model->unlock($name));
     }
 }
-
