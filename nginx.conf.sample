@@ -33,6 +33,13 @@ charset UTF-8;
 error_page 404 403 = /errors/404.php;
 #add_header "X-UA-Compatible" "IE=Edge";
 
+# Allow .well-known directory to serve files for SSL verification.
+location ^~ /.well-known {
+    alias $MAGE_ROOT/.well-known/;
+    auth_basic off;
+    allow all;
+}
+
 # PHP entry point for setup application
 location ~* ^/setup($|/) {
     root $MAGE_ROOT;
