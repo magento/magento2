@@ -9,7 +9,6 @@ namespace Magento\MessageQueue\Model;
 
 use Magento\Framework\MessageQueue\CallbackInvokerInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
-use Magento\MessageQueue\Api\Data\PoisonPillInterface;
 use Magento\MessageQueue\Api\PoisonPillCompareInterface;
 use Magento\MessageQueue\Api\PoisonPillReadInterface;
 
@@ -24,9 +23,9 @@ class CallbackInvoker implements CallbackInvokerInterface
     private $poisonPillRead;
 
     /**
-     * @var PoisonPillInterface $poisonPill
+     * @var int $poisonPillVersion
      */
-    private $poisonPill;
+    private $poisonPillVersion;
 
     /**
      * @var PoisonPillCompareInterface
@@ -51,12 +50,12 @@ class CallbackInvoker implements CallbackInvokerInterface
      */
     public function invoke(QueueInterface $queue, $maxNumberOfMessages, $callback)
     {
-        $this->poisonPill = $this->poisonPillRead->getLatest();
+        $this->poisonPillVersion = $this->poisonPillRead->getLatestVersion();
         for ($i = $maxNumberOfMessages; $i > 0; $i--) {
             do {
                 $message = $queue->dequeue();
             } while ($message === null && (sleep(1) === 0));
-            if (false === $this->poisonPillCompare->isLatest($this->poisonPill)) {
+            if (false === $this->poisonPillCompare->isLatestVersion($this->poisonPillVersion)) {
                 $queue->reject($message);
                 exit(0);
             }

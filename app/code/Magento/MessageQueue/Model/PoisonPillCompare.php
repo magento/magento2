@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MessageQueue\Model;
 
-use Magento\MessageQueue\Api\Data\PoisonPillInterface;
 use Magento\MessageQueue\Api\PoisonPillCompareInterface;
 use Magento\MessageQueue\Api\PoisonPillReadInterface;
 
@@ -34,8 +33,8 @@ class PoisonPillCompare implements PoisonPillCompareInterface
     /**
      * @inheritdoc
      */
-    public function isLatest(PoisonPillInterface $poisonPill): bool
+    public function isLatestVersion(int $poisonPillVersion): bool
     {
-        return $poisonPill->getVersion() === $this->poisonPillRead->getLatest()->getVersion();
+        return $poisonPillVersion === $this->poisonPillRead->getLatestVersion();
     }
 }

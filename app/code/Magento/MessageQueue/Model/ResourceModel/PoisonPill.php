@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MessageQueue\Model\ResourceModel;
 
-use Magento\MessageQueue\Api\Data\PoisonPillInterface;
-use Magento\MessageQueue\Api\Data\PoisonPillInterfaceFactory;
 use Magento\MessageQueue\Api\PoisonPillReadInterface;
 use Magento\MessageQueue\Api\PoisonPillPutInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
@@ -25,23 +23,15 @@ class PoisonPill extends AbstractDb implements PoisonPillPutInterface, PoisonPil
     const QUEUE_POISON_PILL_TABLE = 'queue_poison_pill';
 
     /**
-     * @var PoisonPillInterfaceFactory
-     */
-    private $poisonPillFactory;
-
-    /**
      * PoisonPill constructor.
      *
      * @param Context $context
-     * @param PoisonPillInterfaceFactory $poisonPillFactory
      * @param string|null $connectionName
      */
     public function __construct(
         Context $context,
-        PoisonPillInterfaceFactory $poisonPillFactory,
         string $connectionName = null
     ) {
-        $this->poisonPillFactory = $poisonPillFactory;
         parent::__construct($context, $connectionName);
     }
 
@@ -67,7 +57,7 @@ class PoisonPill extends AbstractDb implements PoisonPillPutInterface, PoisonPil
     /**
      * @inheritdoc
      */
-    public function getLatest() : PoisonPillInterface
+    public function getLatestVersion() : int
     {
         $select = $this->getConnection()->select()->from(
             $this->getTable(self::QUEUE_POISON_PILL_TABLE),
@@ -78,10 +68,8 @@ class PoisonPill extends AbstractDb implements PoisonPillPutInterface, PoisonPil
             1
         );
 
-        $version = $this->getConnection()->fetchOne($select);
+        $version = (int)$this->getConnection()->fetchOne($select);
 
-        $poisonPill = $this->poisonPillFactory->create(['data' => ['version' => (int) $version]]);
-
-        return $poisonPill;
+        return $version;
     }
 }

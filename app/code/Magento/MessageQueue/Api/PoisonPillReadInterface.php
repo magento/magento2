@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MessageQueue\Api;
 
-use Magento\MessageQueue\Api\Data\PoisonPillInterface;
-
 /**
  * Describes how to get latest version of poison pill.
  *
@@ -17,9 +15,9 @@ use Magento\MessageQueue\Api\Data\PoisonPillInterface;
 interface PoisonPillReadInterface
 {
     /**
-     * Returns latest poison pill.
+     * Returns get latest version of poison pill.
      *
-     * @return PoisonPillInterface
+     * @return int
      */
-    public function getLatest(): PoisonPillInterface;
+    public function getLatestVersion(): int;
 }

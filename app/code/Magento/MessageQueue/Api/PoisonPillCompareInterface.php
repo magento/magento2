@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MessageQueue\Api;
 
-use Magento\MessageQueue\Api\Data\PoisonPillInterface;
-
 /**
  * Interface describes how to describes how to compare poison pill with latest in DB.
  *
@@ -19,8 +17,8 @@ interface PoisonPillCompareInterface
     /**
      * Check if version of current poison pill is latest.
      *
-     * @param PoisonPillInterface $poisonPill
+     * @param int $poisonPillVersion
      * @return bool
      */
-    public function isLatest(PoisonPillInterface $poisonPill): bool;
+    public function isLatestVersion(int $poisonPillVersion): bool;
 }
