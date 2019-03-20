@@ -562,10 +562,10 @@ class Config
      */
     public function getMetaAssetUrl($content)
     {
-        $parsed = parse_url($content);
-        if (empty($parsed['scheme'])) {
+        if (!parse_url($content, PHP_URL_SCHEME)) {
             return $this->assetRepo->getUrl($content);
         }
+
         return $content;
     }
 
