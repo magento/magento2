@@ -12,29 +12,26 @@ require __DIR__ . '/address_list.php';
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
-try {
-    /** @var \Magento\Catalog\Model\Product $product */
-    $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
-    $product->setTypeId('simple')
-        ->setAttributeSetId($product->getDefaultAttributeSetId())
-        ->setName('Simple Product')
-        ->setSku('simple-product-guest-quote')
-        ->setPrice(10)
-        ->setTaxClassId(0)
-        ->setMetaTitle('meta title')
-        ->setMetaKeyword('meta keyword')
-        ->setMetaDescription('meta description')
-        ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-        ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-        ->setStockData(
-            [
-                'qty' => 100,
-                'is_in_stock' => 1,
-            ]
-        )->save();
-} catch (\Magento\Framework\Exception\AlreadyExistsException $exception) {
-    //Product already exists
-}
+/** @var \Magento\Catalog\Model\Product $product */
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
+$product->setTypeId('simple')
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
+    ->setName('Simple Product')
+    ->setSku('simple-product-guest-quote')
+    ->setUrlKey('simple-product-guest-quote')
+    ->setPrice(10)
+    ->setTaxClassId(0)
+    ->setMetaTitle('meta title')
+    ->setMetaKeyword('meta keyword')
+    ->setMetaDescription('meta description')
+    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->setStockData(
+        [
+            'qty' => 100,
+            'is_in_stock' => 1,
+        ]
+    )->save();
 $product = $productRepository->get('simple-product-guest-quote');
 
 $addressData = reset($addresses);

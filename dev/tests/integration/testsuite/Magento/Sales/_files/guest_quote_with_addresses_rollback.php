@@ -13,9 +13,15 @@ $registry->register('isSecureArea', true);
 
 /** @var $quote \Magento\Quote\Model\Quote */
 $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
+/** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+$quoteIdMask = $objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
+
 $quote->load('guest_quote', 'reserved_order_id');
-if ($quote->getId()) {
+
+$quoteId = $quote->getId();
+if ($quoteId > 0) {
     $quote->delete();
+    $quoteIdMask->delete($quoteId);
 }
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
@@ -27,6 +33,11 @@ try {
 } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
     //Product already removed
 }
+
+/** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */
+$stockRegistryStorage = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
+$stockRegistryStorage->clean();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
