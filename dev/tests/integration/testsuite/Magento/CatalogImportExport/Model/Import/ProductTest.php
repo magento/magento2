@@ -19,11 +19,10 @@ use Magento\Catalog\Model\Category;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Error\Warning;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -64,6 +63,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     protected $objectManager;
 
     /**
+     * @var \Magento\TestFramework\App\Filestsyem
+     */
+    protected $filesystem;
+
+    /**
      * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $logger;
@@ -74,10 +78,19 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->getBootstrap()
+            ->getApplication()
+            ->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
+        $mediaPath = $appParams[DirectoryList::MEDIA][DirectoryList::PATH];
+        $this->filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Filesystem::class);
+        $this->filesystem->overridePath(DirectoryList::MEDIA, $mediaPath);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\CatalogImportExport\Model\Import\Product::class,
             ['logger' => $this->logger]
         );
+
         parent::setUp();
     }
 
@@ -279,9 +292,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @param string $importFile
      * @param string $sku
      * @param int $expectedOptionsQty
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoAppIsolation enabled
      *
-     * @return void
      */
     public function testSaveCustomOptions(string $importFile, string $sku, int $expectedOptionsQty): void
     {
@@ -469,6 +484,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @param string $productSku
      * @return array ['optionId' => ['optionValueId' => 'optionValueTitle', ...], ...]
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getCustomOptionValues($productSku)
     {
@@ -812,6 +828,33 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Test that import for an existing product will correctly update images
+     * New unique images as per MD5 should be added, images not mentioned in the import should be removed
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoAppIsolation enabled
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testUpdateExistingProductMedia()
+    {
+        $this->importDataForMediaTest('import_media.csv');
+        $this->importDataForMediaTest('import_media_update_images.csv');
+
+        $product = $this->getProductBySku('simple_new');
+        $this->assertEquals('/m/a/magento_image_2.jpg', $product->getData('image'));
+        // small_image should be skipped from update as it is a duplicate (md5 is the same)
+        $this->assertEquals('/m/a/magento_small_image.jpg', $product->getData('small_image'));
+        $this->assertEquals('/m/a/magento_thumbnail.jpg', $product->getData('thumbnail'));
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('swatch_image'));
+
+        $gallery = $product->getMediaGalleryImages();
+        $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $gallery);
+
+        $items = $gallery->getItems();
+        $this->assertCount(4, $items);
+    }
+
+    /**
      * Test that errors occurred during importing images are logged.
      *
      * @magentoAppIsolation enabled
@@ -837,29 +880,39 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             DirectoryList::MEDIA
         );
 
+        $path = 'catalog' . DIRECTORY_SEPARATOR . 'product';
         $mediaDirectory->create('import');
-        $dirPath = $mediaDirectory->getAbsolutePath('import');
+        $importMediaPath = $mediaDirectory->getAbsolutePath('import');
+        $mediaDirectory->create($path);
 
         $items = [
             [
                 'source' => __DIR__ . '/../../../../Magento/Catalog/_files/magento_image.jpg',
-                'dest' => $dirPath . '/magento_image.jpg',
+                'dest' => $importMediaPath . '/magento_image.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/../../../../Magento/Catalog/_files/magento_image_2.jpg',
+                'dest' => $importMediaPath . '/magento_image_2.jpg',
             ],
             [
                 'source' => __DIR__ . '/../../../../Magento/Catalog/_files/magento_small_image.jpg',
-                'dest' => $dirPath . '/magento_small_image.jpg',
+                'dest' => $importMediaPath . '/magento_small_image.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/../../../../Magento/Catalog/_files/magento_small_image.jpg',
+                'dest' => $importMediaPath . '/magento_small_image_2.jpg',
             ],
             [
                 'source' => __DIR__ . '/../../../../Magento/Catalog/_files/magento_thumbnail.jpg',
-                'dest' => $dirPath . '/magento_thumbnail.jpg',
+                'dest' => $importMediaPath . '/magento_thumbnail.jpg',
             ],
             [
                 'source' => __DIR__ . '/_files/magento_additional_image_one.jpg',
-                'dest' => $dirPath . '/magento_additional_image_one.jpg',
+                'dest' => $importMediaPath . '/magento_additional_image_one.jpg',
             ],
             [
                 'source' => __DIR__ . '/_files/magento_additional_image_two.jpg',
-                'dest' => $dirPath . '/magento_additional_image_two.jpg',
+                'dest' => $importMediaPath . '/magento_additional_image_two.jpg',
             ],
         ];
 
@@ -1593,7 +1646,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
-     * Make sure the non existing image in the csv file won't erase the qty key of the existing products.
+     * Make sure the non existing image in the csv file causes import to stop.
+     * This test will also catch the exception
      *
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
@@ -1603,9 +1657,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $products = [
             'simple_new' => 100,
         ];
-
         $this->importFile('products_to_import_with_non_existing_image.csv');
-
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         foreach ($products as $productSku => $productQty) {
             $product = $productRepository->get($productSku);
@@ -1876,24 +1928,18 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @param string $fileName
      * @param int $expectedErrors
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function importDataForMediaTest(string $fileName, int $expectedErrors = 0)
     {
-        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-
         $source = $this->objectManager->create(
             \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/' . $fileName,
                 'directory' => $directory
-            ]
-        );
-        $this->_model->setParameters(
-            [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product',
-                'import_images_file_dir' => 'pub/media/import'
             ]
         );
         $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()
@@ -1914,6 +1960,13 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->validateData();
         $this->assertTrue($errors->getErrorsCount() == 0);
 
+        $this->_model->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product',
+                'import_images_file_dir' => $mediaPath . '/import'
+            ]
+        );
         $this->_model->importData();
         $this->assertTrue($this->_model->getErrorAggregator()->getErrorsCount() == $expectedErrors);
     }
@@ -2075,11 +2128,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testImportWithFilesystemImages()
     {
-        /** @var Filesystem $filesystem */
-        $filesystem = ObjectManager::getInstance()->get(Filesystem::class);
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $writeAdapter */
-        $writeAdapter = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-
+        $writeAdapter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Filesystem::class)
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
         if (!$writeAdapter->isWritable()) {
             $this->markTestSkipped('Due to unwritable media directory');
         }

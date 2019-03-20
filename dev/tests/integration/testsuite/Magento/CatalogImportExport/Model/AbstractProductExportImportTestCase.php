@@ -430,6 +430,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
             [
                 'behavior' => $behavior,
                 'entity' => 'catalog_product',
+                'import_images_file_dir' => $tmpDir
             ]
         )->setSource(
             $source

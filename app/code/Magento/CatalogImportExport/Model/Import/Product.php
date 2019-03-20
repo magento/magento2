@@ -996,6 +996,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Delete products for replacement.
      *
      * @return $this
+     * @throws \Exception
      */
     public function deleteProductsForReplacement()
     {
@@ -1085,6 +1086,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Replace imported products.
      *
      * @return $this
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Validation\ValidationException
+     * @throws \Zend_Validate_Exception
      */
     protected function _replaceProducts()
     {
@@ -1104,6 +1110,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Save products data.
      *
      * @return $this
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Validation\ValidationException
+     * @throws \Zend_Validate_Exception
      */
     protected function _saveProductsData()
     {
@@ -1247,6 +1258,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws LocalizedException
      * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function _saveLinks()
@@ -1382,6 +1394,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $attributesData
      * @return $this
+     * @throws \Exception
      */
     protected function _saveProductAttributes(array $attributesData)
     {
@@ -1452,6 +1465,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $entityRowsUp Row for update
      * @return $this
      * @since 100.1.0
+     * @throws \Exception
      */
     public function saveProductEntity(array $entityRowsIn, array $entityRowsUp)
     {
@@ -1504,6 +1518,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $newProducts
      * @return void
+     * @throws \Exception
      */
     private function updateOldSku(array $newProducts)
     {
@@ -1527,6 +1542,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Get new SKU fields for select
      *
      * @return array
+     * @throws \Exception
      */
     private function getNewSkuFieldsForSelect()
     {
@@ -1563,6 +1579,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $bunch
      * @return array
+     * @throws \Exception
      */
     protected function getExistingImages($bunch)
     {
@@ -1610,6 +1627,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @throws LocalizedException
+     * @throws \Zend_Validate_Exception
      * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function _saveProducts()
@@ -1627,12 +1645,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->categoriesCache = [];
             $tierPrices = [];
             $mediaGallery = [];
+            $uploadedFiles = [];
+            $galleryItemsToRemove = [];
             $labelsForUpdate = [];
             $imagesForChangeVisibility = [];
             $uploadedImages = [];
             $previousType = null;
             $prevAttributeSet = null;
+            $importDir = $this->_mediaDirectory->getAbsolutePath($this->getImportDir());
+
             $existingImages = $this->getExistingImages($bunch);
+            $this->addImageHashes($existingImages);
 
             foreach ($bunch as $rowNum => $rowData) {
                 // reset category processor's failed categories array
@@ -1721,6 +1744,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 if (!array_key_exists($rowSku, $this->websitesCache)) {
                     $this->websitesCache[$rowSku] = [];
                 }
+
                 // 2. Product-to-Website phase
                 if (!empty($rowData[self::COL_PRODUCT_WEBSITES])) {
                     $websiteCodes = explode($this->getMultipleValueSeparator(), $rowData[self::COL_PRODUCT_WEBSITES]);
@@ -1794,27 +1818,61 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $position = 0;
                 foreach ($rowImages as $column => $columnImages) {
                     foreach ($columnImages as $columnImageKey => $columnImage) {
-                        if (!isset($uploadedImages[$columnImage])) {
-                            $uploadedFile = $this->uploadMediaFiles($columnImage);
-                            $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
-                            if ($uploadedFile) {
-                                $uploadedImages[$columnImage] = $uploadedFile;
+                        if (filter_var($columnImage, FILTER_VALIDATE_URL) === false) {
+                            $filename = $importDir . DIRECTORY_SEPARATOR . $columnImage;
+                            if (file_exists($filename)) {
+                                $hash = md5_file($importDir . DIRECTORY_SEPARATOR . $columnImage);
                             } else {
-                                unset($rowData[$column]);
-                                $this->addRowError(
-                                    ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
-                                    $rowNum,
-                                    null,
-                                    null,
-                                    ProcessingError::ERROR_LEVEL_NOT_CRITICAL
-                                );
+                                $hash = md5($filename);
                             }
                         } else {
-                            $uploadedFile = $uploadedImages[$columnImage];
+                            $hash = md5_file($columnImage);
+                        }
+
+                        // Add new images
+                        if (!isset($existingImages[$rowSku])) {
+                            $imageAlreadyExists = false;
+                        } else {
+                            $imageAlreadyExists = array_reduce($existingImages[$rowSku], function ($exists, $file) use ($hash) {
+                                if ($exists) {
+                                    return $exists;
+                                }
+                                if ($file['hash'] === $hash) {
+                                    return $file['value'];
+                                }
+                                return $exists;
+                            }, '');
+                        }
+
+                        if ($imageAlreadyExists) {
+                            $uploadedFile = $imageAlreadyExists;
+                        } else {
+                            if (!isset($uploadedImages[$columnImage])) {
+                                $uploadedFile = $this->uploadMediaFiles($columnImage);
+                                $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
+                                if ($uploadedFile) {
+                                    $uploadedImages[$columnImage] = $uploadedFile;
+                                } else {
+                                    unset($rowData[$column]);
+                                    $this->addRowError(
+                                        ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
+                                        $rowNum,
+                                        null,
+                                        null,
+                                        ProcessingError::ERROR_LEVEL_NOT_CRITICAL
+                                    );
+                                }
+                            } else {
+                                $uploadedFile = $uploadedImages[$columnImage];
+                            }
                         }
 
                         if ($uploadedFile && $column !== self::COL_MEDIA_IMAGE) {
                             $rowData[$column] = $uploadedFile;
+                        }
+
+                        if ($uploadedFile) {
+                            $uploadedFiles[] = $uploadedFile;
                         }
 
                         if ($uploadedFile && !isset($mediaGallery[$storeId][$rowSku][$uploadedFile])) {
@@ -1855,6 +1913,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             }
                         }
                     }
+                }
+
+                // 5.1 Items to remove phase
+                if (isset($existingImages[$rowSku])) {
+                    $galleryItemsToRemove = \array_diff(\array_keys($existingImages[$rowSku]), $uploadedFiles);
                 }
 
                 // 6. Attributes phase
@@ -1967,6 +2030,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $tierPrices
             )->_saveMediaGallery(
                 $mediaGallery
+            )->_removeOldMediaGalleryItems(
+                $galleryItemsToRemove
             )->_saveProductAttributes(
                 $attributes
             )->updateMediaGalleryVisibility(
@@ -1984,6 +2049,22 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         return $this;
     }
     // phpcs:enable
+
+    /**
+     * Generate md5 hashes for existing images for comparison with newly uploaded images.
+     *
+     * @param array $images
+     */
+    public function addImageHashes(&$images)
+    {
+        $productMediaPath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath('/catalog/product');
+
+        foreach ($images as $sku => $files) {
+            foreach ($files as $path => $file) {
+                $images[$sku][$path]['hash'] = md5_file($productMediaPath . $file['value']);
+            }
+        }
+    }
 
     /**
      * Prepare array with image states (visible or hidden from product page)
@@ -2086,6 +2167,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $tierPriceData
      * @return $this
+     * @throws \Exception
      */
     protected function _saveProductTierPrices(array $tierPriceData)
     {
@@ -2121,6 +2203,24 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Returns the import directory if specified or a default import directory (media/import).
+     *
+     * @return string
+     */
+    protected function getImportDir()
+    {
+        $dirConfig = DirectoryList::getDefaultConfig();
+        $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
+
+        if (!empty($this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR])) {
+            $tmpPath = $this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR];
+        } else {
+            $tmpPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath('import');
+        }
+        return $tmpPath;
+    }
+
+    /**
      * Returns an object for upload a media files
      *
      * @return \Magento\CatalogImportExport\Model\Import\Uploader
@@ -2136,11 +2236,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $dirConfig = DirectoryList::getDefaultConfig();
             $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
 
-            if (!empty($this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR])) {
-                $tmpPath = $this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR];
-            } else {
-                $tmpPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath('import');
-            }
+            $tmpPath = $this->getImportDir();
 
             if (!$this->_fileUploader->setTmpDir($tmpPath)) {
                 throw new LocalizedException(
@@ -2212,6 +2308,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $mediaGalleryData
      * @return $this
+     * @throws \Exception
      */
     protected function _saveMediaGallery(array $mediaGalleryData)
     {
@@ -2219,6 +2316,22 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return $this;
         }
         $this->mediaProcessor->saveMediaGallery($mediaGalleryData);
+
+        return $this;
+    }
+
+    /**
+     * Remove old media gallery items.
+     *
+     * @param array $itemsToRemove
+     * @return $this
+     */
+    protected function _removeOldMediaGalleryItems(array $itemsToRemove)
+    {
+        if (empty($itemsToRemove)) {
+            return $this;
+        }
+        $this->mediaProcessor->removeOldMediaItems($itemsToRemove);
 
         return $this;
     }
@@ -2265,6 +2378,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Stock item saving.
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Validation\ValidationException
      */
     protected function _saveStockItem()
     {
@@ -2815,6 +2931,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Validate data rows and save bunches to DB
      *
      * @return $this|AbstractEntity
+     * @throws LocalizedException
      */
     protected function _saveValidatedBunches()
     {
@@ -2954,6 +3071,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Get product entity link field
      *
      * @return string
+     * @throws \Exception
      */
     private function getProductEntityLinkField()
     {
@@ -2969,6 +3087,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Get product entity identifier field
      *
      * @return string
+     * @throws \Exception
      */
     private function getProductIdentifierField()
     {
@@ -2985,6 +3104,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $labels
      * @return void
+     * @throws \Exception
      */
     private function updateMediaGalleryLabels(array $labels)
     {
@@ -2998,6 +3118,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $images
      * @return $this
+     * @throws \Exception
      */
     private function updateMediaGalleryVisibility(array $images)
     {

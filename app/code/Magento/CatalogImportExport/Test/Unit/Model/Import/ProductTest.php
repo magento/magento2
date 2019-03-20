@@ -1603,6 +1603,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      * @param $methodName
      * @param array $parameters
      * @return mixed
+     * @throws \ReflectionException
      */
     protected function invokeMethod(&$object, $methodName, array $parameters = [])
     {
@@ -1617,6 +1618,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      * @param $object
      * @param $property
      * @param $value
+     * @throws \ReflectionException
      */
     protected function setPropertyValue(&$object, $property, $value)
     {
@@ -1630,6 +1632,8 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /**
      * @param $object
      * @param $property
+     * @return mixed
+     * @throws \ReflectionException
      */
     protected function getPropertyValue(&$object, $property)
     {
@@ -1645,6 +1649,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      * @param $methodName
      * @param array $parameters
      * @return mixed
+     * @throws \ReflectionException
      */
     protected function overrideMethod(&$object, $methodName, array $parameters = [])
     {
@@ -1681,6 +1686,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      *
      * @param Product
      * @return \Magento\CatalogImportExport\Model\Import\Product\Validator|MockObject
+     * @throws \ReflectionException
      */
     private function _setValidatorMockInImportProduct($importProduct)
     {
