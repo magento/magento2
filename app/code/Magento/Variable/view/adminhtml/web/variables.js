@@ -109,9 +109,9 @@ define([
                 content = '<a href="#" onclick="' +
                     this.insertFunction +
                     '(\'' +
-                    value +
+                    value.escapeHTML() +
                     '\');return false;">' +
-                    varLabel +
+                    varLabel.escapeHTML() +
                     '</a>';
 
             return content;
