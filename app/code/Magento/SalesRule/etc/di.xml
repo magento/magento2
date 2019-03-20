@@ -182,4 +182,8 @@
     <type name="Magento\Quote\Model\Cart\CartTotalRepository">
         <plugin name="coupon_label_plugin" type="Magento\SalesRule\Plugin\CartTotalRepository" />
     </type>
+
+    <preference
+            for="Magento\SalesRule\Model\Spi\CodeLimitManagerInterface"
+            type="Magento\SalesRule\Model\Coupon\CodeLimitManager" />
 </config>
