@@ -70,13 +70,14 @@ class CreateCustomerAccount
      * Creates new customer account
      *
      * @param array $data
+     * @param int $storeId
      * @return CustomerInterface
      * @throws GraphQlInputException
      */
-    public function execute(array $data): CustomerInterface
+    public function execute(array $data, int $storeId): CustomerInterface
     {
         try {
-            $customer = $this->createAccount($data);
+            $customer = $this->createAccount($data, $storeId);
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
@@ -91,10 +92,12 @@ class CreateCustomerAccount
      * Create account
      *
      * @param array $data
+     * @param int $storeId
      * @return CustomerInterface
      * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function createAccount(array $data): CustomerInterface
+    private function createAccount(array $data, int $storeId): CustomerInterface
     {
         $customerDataObject = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
@@ -102,7 +105,7 @@ class CreateCustomerAccount
             $data,
             CustomerInterface::class
         );
-        $store = $this->storeManager->getStore();
+        $store = $this->storeManager->getStore($storeId);
         $customerDataObject->setWebsiteId($store->getWebsiteId());
         $customerDataObject->setStoreId($store->getId());
 

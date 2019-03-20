@@ -58,13 +58,15 @@ class StoreConfigDataProvider
     /**
      * Get store config data
      *
+     * @param int $storeId
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getStoreConfigData(): array
+    public function getStoreConfigData(int $storeId): array
     {
         $storeConfigData = array_merge(
-            $this->getBaseConfigData(),
-            $this->getExtendedConfigData()
+            $this->getBaseConfigData($storeId),
+            $this->getExtendedConfigData($storeId)
         );
         return $storeConfigData;
     }
@@ -72,11 +74,13 @@ class StoreConfigDataProvider
     /**
      * Get base config data
      *
+     * @param int $storeId
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function getBaseConfigData() : array
+    private function getBaseConfigData(int $storeId) : array
     {
-        $store = $this->storeManager->getStore();
+        $store = $this->storeManager->getStore($storeId);
         $storeConfig = current($this->storeConfigManager->getStoreConfigs([$store->getCode()]));
 
         $storeConfigData = [
@@ -103,17 +107,17 @@ class StoreConfigDataProvider
     /**
      * Get extended config data
      *
+     * @param int $storeId
      * @return array
      */
-    private function getExtendedConfigData()
+    private function getExtendedConfigData(int $storeId)
     {
-        $store = $this->storeManager->getStore();
         $extendedConfigData = [];
         foreach ($this->extendedConfigData as $key => $path) {
             $extendedConfigData[$key] = $this->scopeConfig->getValue(
                 $path,
                 ScopeInterface::SCOPE_STORE,
-                $store->getId()
+                $storeId
             );
         }
         return $extendedConfigData;
