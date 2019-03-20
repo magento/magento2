@@ -37,7 +37,7 @@ window.Variables = {
             this.variablesContent = '<ul class="insert-variable">';
             variables.each(function(variableGroup) {
                 if (variableGroup.label && variableGroup.value) {
-                    this.variablesContent += '<li><b>' + variableGroup.label + '</b></li>';
+                    this.variablesContent += '<li><b>' + variableGroup.label.escapeHTML() + '</b></li>';
                     (variableGroup.value).each(function(variable){
                         if (variable.value && variable.label) {
                             this.variablesContent += '<li>' +
@@ -72,7 +72,7 @@ window.Variables = {
     },
     prepareVariableRow: function(varValue, varLabel) {
         var value = (varValue).replace(/"/g, '&quot;').replace(/'/g, '\\&#39;');
-        var content = '<a href="#" onclick="'+this.insertFunction+'(\''+ value +'\');return false;">' + varLabel + '</a>';
+        var content = '<a href="#" onclick="'+this.insertFunction+'(\''+ value.escapeHTML() +'\');return false;">' + varLabel.escapeHTML() + '</a>';
         return content;
     },
     insertVariable: function(value) {
