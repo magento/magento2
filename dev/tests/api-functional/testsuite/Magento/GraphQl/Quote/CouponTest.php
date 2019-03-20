@@ -92,14 +92,16 @@ class CouponTest extends GraphQlAbstract
      */
     public function testApplyCouponToCartWithNoItems()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/191');
         $couponCode = '2?ds5!2d';
 
         $this->quoteResource->load($this->quote, 'test_order_1', 'reserved_order_id');
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $cartId = (int)$this->quote->getId();
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute($cartId);
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
 
-        self::expectExceptionMessageRegExp('/Cart doesn\'t contain products/');
+        self::expectExceptionMessage(
+            str_replace('$cartId', $cartId, 'The "$cartId" Cart doesn\'t contain products.')
+        );
         $this->graphQlQuery($query);
     }
 
