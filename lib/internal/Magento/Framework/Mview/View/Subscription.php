@@ -117,8 +117,19 @@ class Subscription implements SubscriptionInterface
 
             // Add statements for linked views
             foreach ($this->getLinkedViews() as $view) {
+                // Store current column name for reverting back later.
+                $originalColumnName = $this->getColumnName();
+
                 /** @var \Magento\Framework\Mview\ViewInterface $view */
+                // Use the column name from specific subscription instead of
+                // use from the one which is currently updated.
+                $subscriptions = $view->getSubscriptions();
+                $subscription = $subscriptions[$this->getTableName()];
+                $this->columnName = $subscription['column'];
                 $trigger->addStatement($this->buildStatement($event, $view->getChangelog()));
+
+                // Revert back the column name.
+                $this->columnName = $originalColumnName;
             }
 
             $this->connection->dropTrigger($trigger->getName());
@@ -146,8 +157,19 @@ class Subscription implements SubscriptionInterface
 
             // Add statements for linked views
             foreach ($this->getLinkedViews() as $view) {
+                // Store current column name for reverting back later.
+                $originalColumnName = $this->columnName;
+
                 /** @var \Magento\Framework\Mview\ViewInterface $view */
+                // Use the column name from specific subscription instead of
+                // use from the one which is currently updated.
+                $subscriptions = $view->getSubscriptions();
+                $subscription = $subscriptions[$this->getTableName()];
+                $this->columnName = $subscription['column'];
                 $trigger->addStatement($this->buildStatement($event, $view->getChangelog()));
+
+                // Revert back the column name.
+                $this->columnName = $originalColumnName;
             }
 
             $this->connection->dropTrigger($trigger->getName());
