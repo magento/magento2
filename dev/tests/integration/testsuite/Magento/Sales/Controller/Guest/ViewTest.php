@@ -5,6 +5,8 @@
  */
 declare(strict_types=1);
 
+namespace Magento\Sales\Controller\Guest;
+
 use Magento\TestFramework\Request;
 use Magento\TestFramework\TestCase\AbstractController;
 
