@@ -264,14 +264,14 @@ class IndexBuilder
      */
     protected function doReindexByIds($ids)
     {
-        $this->cleanByIds($ids);
+        $this->cleanProductIndex($ids);
 
         $products = $this->productLoader->getProducts($ids);
+        $activeRules = $this->getActiveRules();
         foreach ($products as $product) {
-            foreach ($this->getActiveRules() as $rule) {
-                $this->applyRule($rule, $product);
-            }
+            $this->applyRules($activeRules, $product);
         }
+        $this->reindexRuleGroupWebsite->execute();
     }
 
     /**
@@ -351,32 +351,30 @@ class IndexBuilder
     }
 
     /**
-     * Apply rule
+     * Assign product to rule
      *
      * @param Rule $rule
      * @param Product $product
-     * @return $this
-     * @throws \Exception
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @return void
      */
-    protected function applyRule(Rule $rule, $product)
+    private function assignProductToRule(Rule $rule, Product $product)
     {
-        $ruleId = $rule->getId();
-        $productEntityId = $product->getId();
-        $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
-
         if (!$rule->validate($product)) {
-            return $this;
+            return;
         }
 
+        $ruleId = (int) $rule->getId();
+        $productEntityId = (int) $product->getId();
+        $ruleProductTable = $this->getTable('catalogrule_product');
         $this->connection->delete(
-            $this->resource->getTableName('catalogrule_product'),
+            $ruleProductTable,
             [
-                $this->connection->quoteInto('rule_id = ?', $ruleId),
-                $this->connection->quoteInto('product_id = ?', $productEntityId)
+                'rule_id = ?' => $ruleId,
+                'product_id = ?' => $productEntityId,
             ]
         );
 
+        $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
         $customerGroupIds = $rule->getCustomerGroupIds();
         $fromTime = strtotime($rule->getFromDate());
         $toTime = strtotime($rule->getToDate());
@@ -403,20 +401,41 @@ class IndexBuilder
                 ];
 
                 if (count($rows) == $this->batchCount) {
-                    $this->connection->insertMultiple($this->getTable('catalogrule_product'), $rows);
+                    $this->connection->insertMultiple($ruleProductTable, $rows);
                     $rows = [];
                 }
             }
         }
-        if (!empty($rows)) {
-            $this->connection->insertMultiple($this->resource->getTableName('catalogrule_product'), $rows);
-            unset($rows);
+        if ($rows) {
+            $this->connection->insertMultiple($ruleProductTable, $rows);
         }
+    }
 
+    /**
+     * Apply rule
+     *
+     * @param Rule $rule
+     * @param Product $product
+     * @return $this
+     * @throws \Exception
+     */
+    protected function applyRule(Rule $rule, $product)
+    {
+        $this->assignProductToRule($rule, $product);
         $this->reindexRuleProductPrice->execute($this->batchCount, $product);
         $this->reindexRuleGroupWebsite->execute();
 
         return $this;
+    }
+
+    private function applyRules(RuleCollection $ruleCollection, Product $product)
+    {
+        foreach ($ruleCollection as $rule) {
+            $this->assignProductToRule($rule, $product);
+        }
+
+        $this->cleanProductPriceIndex([$product->getId()]);
+        $this->reindexRuleProductPrice->execute($this->batchCount, $product);
     }
 
     /**
