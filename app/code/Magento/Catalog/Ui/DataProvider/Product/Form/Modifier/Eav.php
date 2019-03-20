@@ -627,18 +627,19 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * Convert options value to string
+     * Convert options value to string.
      *
      * @param array $options
      * @return array
      */
-    private function convertOptionsValueToString(array $options): array
+    private function convertOptionsValueToString(array $options)
     {
         array_walk($options, function (&$value) {
             if (isset($value['value']) && is_scalar($value['value'])) {
                 $value['value'] = (string)$value['value'];
             }
         });
+
         return $options;
     }
 
