@@ -69,5 +69,9 @@
         <item>
             <path>dev/build/publication/sanity/ce.xml</path>
         </item>
+        <item>
+            <path>app/design/adminhtml/Magento/backend/Magento_Rma/web/css/source/_module.less</path>
+            <word>rma</word>
+        </item>
     </whitelist>
 </config>
