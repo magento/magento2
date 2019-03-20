@@ -10,7 +10,7 @@ use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 use Magento\Sales\Ui\Component\Listing\Column\Status\Options;
 
 /**
- * Class OptionsTest
+ * Class OptionsTest for Magento\Sales\Ui\Component\Listing\Column\Status\Options.
  */
 class OptionsTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,6 +24,9 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      */
     protected $collectionFactoryMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -37,11 +40,31 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Unit test for toOptionArray method.
+     *
+     * @return void
+     */
     public function testToOptionArray()
     {
-        $collectionMock =
-            $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Status\Collection::class);
-        $options = ['options'];
+        $collectionMock = $this->createMock(
+            \Magento\Sales\Model\ResourceModel\Order\Status\Collection::class
+        );
+
+        $options = [
+            [
+                'value' => '1',
+                'label' => 'Label',
+            ],
+        ];
+
+        $expectedOptions = [
+            [
+                'value' => '1',
+                'label' => 'Label',
+                '__disableTmpl' => true,
+            ],
+        ];
 
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')
@@ -49,7 +72,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $collectionMock->expects($this->once())
             ->method('toOptionArray')
             ->willReturn($options);
-        $this->assertEquals($options, $this->model->toOptionArray());
-        $this->assertEquals($options, $this->model->toOptionArray());
+
+        $this->assertEquals($expectedOptions, $this->model->toOptionArray());
     }
 }
