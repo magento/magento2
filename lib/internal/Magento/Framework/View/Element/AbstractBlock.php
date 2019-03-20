@@ -487,6 +487,37 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
+     * Retrive descendant block by name
+     *
+     * @param string $alias
+     * @return \Magento\Framework\View\Element\AbstractBlock|bool
+     */
+    public function getDescendantBlock($alias)
+    {
+        $parent = $this;
+        $child = $parent->getChildBlock($alias);
+
+        if ($child) {
+            return $child;
+        } else {
+            $layout = $parent->getLayout();
+            $name = $parent->getNameInLayout();
+
+            foreach ($layout->getChildBlocks($name) as $child) {
+                $descendant = $child->getDescendantBlock($alias);
+
+                if ($descendant) {
+                    return $descendant;
+                }
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
+    /**
      * Retrieve child block HTML
      *
      * @param   string $alias
@@ -513,6 +544,25 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         }
 
         return $out;
+    }
+
+    /**
+     * Retrieve descendant block HTML
+     *
+     * @param   string $alias
+     * @param   boolean $useCache
+     * @return  string
+     */
+    public function getDescendantHtml($alias, $useCache = true)
+    {
+        $descendant = $this->getDescendantBlock($alias);
+
+        if ($descendant) {
+            $layout = $descendant->getLayout();
+            return $layout->renderElement($alias, $useCache);
+        }
+
+        return '';
     }
 
     /**
