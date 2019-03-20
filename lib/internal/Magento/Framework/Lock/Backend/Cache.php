@@ -57,11 +57,13 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
     }
 
     /**
-     * @param string $name
+     * Get cache locked identifier based on cache identifier.
+     *
+     * @param string $cacheIdentifier
      * @return string
      */
-    private function getIdentifier(string $name): string
+    private function getIdentifier(string $cacheIdentifier): string
     {
-        return self::LOCK_PREFIX . $name;
+        return self::LOCK_PREFIX . $cacheIdentifier;
     }
 }
