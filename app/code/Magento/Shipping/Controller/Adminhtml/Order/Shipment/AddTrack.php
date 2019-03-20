@@ -8,18 +8,20 @@ declare(strict_types=1);
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Api\Data\ShipmentTrackInterfaceFactory;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
-use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 
-class AddTrack extends \Magento\Backend\App\Action
+/**
+ * Add new tracking number to shipment controller.
+ */
+class AddTrack extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -39,7 +41,7 @@ class AddTrack extends \Magento\Backend\App\Action
     private $shipmentRepository;
 
     /**
-     * @var TrackFactory
+     * @var ShipmentTrackInterfaceFactory
      */
     private $trackFactory;
 
@@ -52,14 +54,14 @@ class AddTrack extends \Magento\Backend\App\Action
      * @param Action\Context $context
      * @param ShipmentLoader $shipmentLoader
      * @param ShipmentRepositoryInterface|null $shipmentRepository
-     * @param TrackFactory|null $trackFactory
+     * @param ShipmentTrackInterfaceFactory|null $trackFactory
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
         Action\Context $context,
         ShipmentLoader $shipmentLoader,
         ShipmentRepositoryInterface $shipmentRepository = null,
-        TrackFactory $trackFactory = null,
+        ShipmentTrackInterfaceFactory $trackFactory = null,
         SerializerInterface $serializer = null
     ) {
         parent::__construct($context);
