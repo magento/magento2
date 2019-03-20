@@ -389,6 +389,13 @@ class System implements ConfigTypeInterface
     public function clean()
     {
         $this->data = [];
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
+        $cleanAction = function () {
+            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
+        };
+
+        $this->lockQuery->lockedCleanData(
+            self::$lockName,
+            $cleanAction
+        );
     }
 }

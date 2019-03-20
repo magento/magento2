@@ -92,4 +92,25 @@ class LockGuardedCacheLoader
 
         return $cachedData;
     }
+
+    /**
+     * Clean data.
+     *
+     * @param string $lockName
+     * @param callable $dataCleaner
+     * @return void
+     */
+    public function lockedCleanData(string $lockName, callable $dataCleaner)
+    {
+        while ($this->locker->isLocked($lockName)) {
+            usleep($this->delayTimeout * 1000);
+        }
+        try {
+            if ($this->locker->lock($lockName, $this->lockTimeout / 1000)) {
+                $dataCleaner();
+            }
+        } finally {
+            $this->locker->unlock($lockName);
+        }
+    }
 }
