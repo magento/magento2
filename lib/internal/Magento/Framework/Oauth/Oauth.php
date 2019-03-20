@@ -9,6 +9,9 @@ namespace Magento\Framework\Oauth;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Phrase;
 
+/**
+ * Authorization service.
+ */
 class Oauth implements OauthInterface
 {
     /**
@@ -61,7 +64,7 @@ class Oauth implements OauthInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRequestToken($params, $requestUrl, $httpMethod = 'POST')
     {
@@ -74,7 +77,7 @@ class Oauth implements OauthInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAccessToken($params, $requestUrl, $httpMethod = 'POST')
     {
@@ -102,7 +105,7 @@ class Oauth implements OauthInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateAccessTokenRequest($params, $requestUrl, $httpMethod = 'POST')
     {
@@ -125,7 +128,7 @@ class Oauth implements OauthInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateAccessToken($accessToken)
     {
@@ -133,7 +136,7 @@ class Oauth implements OauthInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function buildAuthorizationHeader(
         $params,
