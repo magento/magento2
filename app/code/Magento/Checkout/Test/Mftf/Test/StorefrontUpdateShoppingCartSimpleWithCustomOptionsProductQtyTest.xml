@@ -13,6 +13,7 @@
             <features value="Checkout"/>
             <title value="Check updating shopping cart while updating qty of items with custom options"/>
             <description value="Check updating shopping cart while updating qty of items with custom options"/>
+            <testCaseId value="MC-14732" />
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -26,7 +27,7 @@
             <updateData createDataKey="createProduct" entity="ProductWithTextFieldAndAreaOptions" stepKey="updateProductWithOption"/>
 
             <!-- Go to the product page, fill the custom options values and add the product to the shopping cart -->
-            <amOnPage url="{{StorefrontHomePage.url}}$createProduct.custom_attributes[url_key]$.html" stepKey="amOnProductPage"/>
+            <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnProductPage"/>
             <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
             <fillField userInput="OptionField" selector="{{StorefrontProductInfoMainSection.productOptionFieldInput(ProductOptionField.title)}}" stepKey="fillProductOptionInputField"/>
             <fillField userInput="OptionArea" selector="{{StorefrontProductInfoMainSection.productOptionAreaInput(ProductOptionArea.title)}}" stepKey="fillProductOptionInputArea"/>
@@ -41,23 +42,29 @@
 
         <!-- Go to the shopping cart -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
-        <waitForPageLoad stepKey="waitForCheckoutPageLoad1"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
 
         <!-- Change the product QTY -->
-        <fillField selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}"  userInput="11" stepKey="changeCartQty"/>
-        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="openShoppingCart"/>
-        <waitForPageLoad stepKey="waitForCheckoutPageLoad2"/>
+        <fillField selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}"  userInput="{{quoteQty11Subtotal1320.qty}}" stepKey="changeCartQty"/>
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="updateShoppingCart"/>
+        <waitForPageLoad stepKey="waitShoppingCartUpdated"/>
 
         <!-- The price and QTY values should be updated for the product -->
         <grabValueFrom selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}" stepKey="grabProductQtyInCart"/>
-        <see userInput="$1,320.00" selector="{{CheckoutCartProductSection.productSubtotalByName($$createProduct.name$$)}}" stepKey="assertProductPrice"/>
-        <assertEquals expected="11" actual="$grabProductQtyInCart" stepKey="assertProductQtyInCart"/>
-        <see userInput="$1,320.00" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
+        <see userInput="{{quoteQty11Subtotal1320.currency}}{{quoteQty11Subtotal1320.subtotal}}" selector="{{CheckoutCartProductSection.productSubtotalByName($$createProduct.name$$)}}" stepKey="assertProductPrice"/>
+        <assertEquals stepKey="assertProductQtyInCart">
+            <expectedResult type="string">{{quoteQty11Subtotal1320.qty}}</expectedResult>
+            <actualResult type="variable">grabProductQtyInCart</actualResult>
+        </assertEquals>
+        <see userInput="{{quoteQty11Subtotal1320.currency}}{{quoteQty11Subtotal1320.subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
 
         <!-- Minicart product price and subtotal should be updated -->
         <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="openMinicart"/>
         <grabValueFrom selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" stepKey="grabProductQtyInMinicart"/>
-        <assertEquals expected="11" actual="$grabProductQtyInMinicart" stepKey="assertProductQtyInMinicart"/>
-        <see userInput="1,320.00" selector="{{StorefrontMinicartSection.subtotal}}" stepKey="assertMinicartSubtotal"/>
+        <assertEquals stepKey="assertProductQtyInMinicart">
+            <expectedResult type="string">{{quoteQty11Subtotal1320.qty}}</expectedResult>
+            <actualResult type="variable">grabProductQtyInMinicart</actualResult>
+        </assertEquals>
+        <see userInput="{{quoteQty11Subtotal1320.currency}}{{quoteQty11Subtotal1320.subtotal}}" selector="{{StorefrontMinicartSection.subtotal}}" stepKey="assertMinicartSubtotal"/>
     </test>
 </tests>
