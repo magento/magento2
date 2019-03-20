@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for setting offline shipping methods on cart
+ * Test for setting "UPS" shipping method on cart
  */
 class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
 {
