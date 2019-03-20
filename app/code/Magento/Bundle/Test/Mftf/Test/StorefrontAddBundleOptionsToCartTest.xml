@@ -131,10 +131,10 @@
 
         <!--Check all products and Cart Subtotal -->
         <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert" after="waitForDetailsOpen">
-            <argument name="subtotal" value="BundleProductsSummary.subtotal"/>
-            <argument name="shipping" value="BundleProductsSummary.shipping"/>
-            <argument name="shippingMethod" value="BundleProductsSummary.shippingMethod"/>
-            <argument name="total" value="BundleProductsSummary.total"/>
+            <argument name="subtotal" value="1,968.00"/>
+            <argument name="shipping" value="5.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="1,973.00"/>
         </actionGroup>
     </test>
 </tests>
