@@ -91,7 +91,7 @@ class GetBillingAddressTest extends GraphQlAbstract
      */
     public function testGetBillingAddressFromAnotherCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
