@@ -72,7 +72,7 @@ class CurrencyConverterApiTest extends \PHPUnit\Framework\TestCase
         $currencyFromList = ['USD'];
         $currencyToList = ['EUR', 'UAH'];
         $responseBody = '{"USD_EUR":0.879215}';
-        $expectedCurrencyRateList = ['USD' => ['EUR' => 0.879215, 'UAH' => null]];
+        $expectedRateList = ['USD' => ['EUR' => 0.879215, 'UAH' => null]];
         $message = "We can't retrieve a rate for UAH.";
 
         $this->scopeConfig->method('getValue')
@@ -114,7 +114,7 @@ class CurrencyConverterApiTest extends \PHPUnit\Framework\TestCase
         $httpResponse->method('getBody')
             ->willReturn($responseBody);
 
-        self::assertEquals($expectedCurrencyRateList, $this->model->fetchRates());
+        self::assertEquals($expectedRateList, $this->model->fetchRates());
 
         $messages = $this->model->getMessages();
         self::assertNotEmpty($messages);
