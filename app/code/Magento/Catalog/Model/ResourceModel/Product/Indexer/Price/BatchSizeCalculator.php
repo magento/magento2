@@ -32,7 +32,7 @@ class BatchSizeCalculator
      * @param array $estimators
      * @param array $batchSizeAdjusters
      */
-    public function __construct(array $batchRowsCount, array $estimators, array $batchSizeAdjusters)
+    public function __construct(array $batchRowsCount, array $estimators, array $batchSizeAdjusters = [])
     {
         $this->batchRowsCount = $batchRowsCount;
         $this->estimators = $estimators;
