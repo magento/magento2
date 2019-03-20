@@ -386,7 +386,7 @@
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
     </entity>
-    <entity name="productWithOptions3" type="product">
+    <entity name="ProductWithTextFieldAndAreaOptions" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionField</requiredEntity>
         <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
