@@ -100,14 +100,15 @@ class NotificationsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetText()
     {
+        $url = 'http://info-url';
         $this->notificationMock->expects($this->once())->method('getText')->willReturn('Notification Text.');
-        $this->taxConfigMock->expects($this->once())->method('getInfoUrl')->willReturn('http://info-url');
+        $this->taxConfigMock->expects($this->once())->method('getInfoUrl')->willReturn($url);
         $this->urlBuilderMock->expects($this->once())->method('getUrl')
             ->with('adminhtml/system_config/edit/section/tax')->willReturn('http://tax-config-url');
         $this->escaperMock->expects($this->once())
             ->method('escapeUrl')
-            ->with('http://info-url')
-            ->willReturn('http://info-url');
+            ->with($url)
+            ->willReturn($url);
 
         $this->assertEquals(
             'Notification Text.<p>Please see <a href="http://info-url">documentation</a> for more details. '
@@ -123,12 +124,13 @@ class NotificationsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetInfoUrl()
     {
-        $this->taxConfigMock->expects($this->once())->method('getInfoUrl')->willReturn('http://info-url');
+        $url = 'http://info-url';
+        $this->taxConfigMock->expects($this->once())->method('getInfoUrl')->willReturn($url);
         $this->escaperMock->expects($this->once())
             ->method('escapeUrl')
-            ->with('http://info-url')
-            ->willReturn('http://info-url');
+            ->with($url)
+            ->willReturn($url);
 
-        $this->notifications->getInfoUrl();
+        $this->assertEquals($url, $this->notifications->getInfoUrl());
     }
 }
