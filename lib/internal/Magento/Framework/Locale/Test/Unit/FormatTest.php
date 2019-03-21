@@ -68,15 +68,17 @@ class FormatTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $localeCode
+     * @param string $currencyCode
      * @param array $expectedResult
      * @dataProvider getPriceFormatDataProvider
      */
-    public function testGetPriceFormat($localeCode, array $expectedResult): void
+    public function testGetPriceFormat($localeCode, $currencyCode, array $expectedResult): void
     {
         $this->scope->expects($this->once())
             ->method('getCurrentCurrency')
             ->willReturn($this->currency);
 
+        $this->currency->method('getCode')->willReturn($currencyCode);
         $result = $this->formatModel->getPriceFormat($localeCode);
         $intersection = array_intersect_assoc($result, $expectedResult);
         $this->assertCount(count($expectedResult), $intersection);
@@ -89,17 +91,17 @@ class FormatTest extends \PHPUnit\Framework\TestCase
     public function getPriceFormatDataProvider(): array
     {
         return [
-            ['en_US', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
-            ['de_DE', ['decimalSymbol' => ',', 'groupSymbol' => '.']],
-            ['de_CH', ['decimalSymbol' => '.', 'groupSymbol' => '\'']],
-            ['uk_UA', ['decimalSymbol' => ',', 'groupSymbol' => ' ']]
+            ['en_US', 'USD', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
+            ['de_DE', 'EUR', ['decimalSymbol' => ',', 'groupSymbol' => '.']],
+            ['de_CH', 'CHF', ['decimalSymbol' => '.', 'groupSymbol' => '’']],
+            ['uk_UA', 'UAH', ['decimalSymbol' => ',', 'groupSymbol' => ' ']]
         ];
     }
 
     /**
      *
-     * @param        mixed $value
-     * @param        float $expected
+     * @param mixed $value
+     * @param float $expected
      * @dataProvider provideNumbers
      */
     public function testGetNumber($value, $expected): void
