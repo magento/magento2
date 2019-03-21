@@ -601,7 +601,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      * @expectedExceptionMessage Entity is unknown
      * @dataProvider unknownEntitiesProvider
      */
-    public function testGetUnknownEntity()
+    public function testGetUnknownEntity($entity)
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
         $this->_importConfig->method('getEntities')
