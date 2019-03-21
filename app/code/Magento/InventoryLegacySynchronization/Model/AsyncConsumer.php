@@ -5,11 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\LegacySynchronization;
+namespace Magento\InventoryLegacySynchronization\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Consumer class for asynchronous legacy synchronization.
+ * Works bot from MSI to legacy and vice versa.
+ */
 class AsyncConsumer
 {
     /**
@@ -18,22 +22,21 @@ class AsyncConsumer
     private $serializer;
 
     /**
-     * @var SetDataToDestination
+     * @var SynchronizeInventoryData
      */
-    private $setDataToDestination;
+    private $synchronizeInventoryData;
 
     /**
-     * Consumer constructor.
      * @param SerializerInterface $serializer
-     * @param SetDataToDestination $setDataToDestination
+     * @param SynchronizeInventoryData $synchronizeInventoryData
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         SerializerInterface $serializer,
-        SetDataToDestination $setDataToDestination
+        SynchronizeInventoryData $synchronizeInventoryData
     ) {
         $this->serializer = $serializer;
-        $this->setDataToDestination = $setDataToDestination;
+        $this->synchronizeInventoryData = $synchronizeInventoryData;
     }
 
     /**
@@ -46,6 +49,6 @@ class AsyncConsumer
     public function processOperations(OperationInterface $operation): void
     {
         $data = $this->serializer->unserialize($operation->getSerializedData());
-        $this->setDataToDestination->execute($data['direction'], $data['items']);
+        $this->synchronizeInventoryData->execute($data['direction'], $data['items']);
     }
 }

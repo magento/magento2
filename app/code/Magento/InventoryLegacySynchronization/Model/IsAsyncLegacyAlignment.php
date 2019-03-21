@@ -5,12 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\LegacySynchronization;
+namespace Magento\InventoryLegacySynchronization\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class IsAsyncLegacyAlignment
 {
+    /**
+     * Configuration path for legacy stock asynchronous operation enabling status
+     */
     private const XML_PATH = 'cataloginventory/legacy_stock/async';
 
     /**

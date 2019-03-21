@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\InventoryApi;
+namespace Magento\InventoryLegacySynchronization\Plugin;
 
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -60,6 +60,7 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
      * @param Processor $indexerProcessor
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypeBySku
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         DefaultSourceProviderInterface $defaultSourceProvider,

@@ -16,10 +16,6 @@
         <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
     </type>
-    <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
-        <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save"
-                type="Magento\InventoryCatalog\Plugin\InventoryApi\SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin"/>
-    </type>
     <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
         <plugin name="priceIndexUpdater" type="Magento\InventoryCatalog\Plugin\InventoryIndexer\Indexer\SourceItem\PriceIndexUpdater" sortOrder="20"/>
     </type>
@@ -28,18 +24,6 @@
     </type>
     <type name="Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter">
         <plugin name="change_select_for_price_modifier" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\Indexer\ModifySelectInProductPriceIndexFilter"/>
-    </type>
-    <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
-        <plugin name="set_to_zero_legacy_catalog_inventory_at_source_items_delete"
-                type="Magento\InventoryCatalog\Plugin\InventoryApi\SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin"/>
-    </type>
-    <type name="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface">
-        <plugin name="update_source_item_at_legacy_qty_counter" type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyQtyCounterPlugin"/>
-    </type>
-    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
-        <plugin name="update_source_item_at_legacy_stock_item_save"
-                type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyStockItemSavePlugin"/>
-        <plugin name="priceIndexUpdater" disabled="true"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
         <plugin name="adapt_add_stock_data_to_collection"
@@ -139,11 +123,5 @@
     <type name="Magento\CatalogInventory\Model\Spi\StockStateProviderInterface">
         <plugin name="adapt_verify_stock_to_negative_min_qty"
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\Spi\StockStateProvider\AdaptVerifyStockToNegativeMinQtyPlugin"/>
-    </type>
-
-    <type name="Magento\InventoryCatalog\Model\LegacySynchronization\Synchronize">
-        <arguments>
-            <argument name="batchSize" xsi:type="number">100</argument>
-        </arguments>
     </type>
 </config>

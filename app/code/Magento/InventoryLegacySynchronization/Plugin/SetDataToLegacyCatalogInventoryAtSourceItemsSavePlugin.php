@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\InventoryApi;
+namespace Magento\InventoryLegacySynchronization\Plugin;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
@@ -95,6 +95,6 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
             $sourceItemsData[] = $sourceItem->getData();
         }
 
-        $this->synchronize->execute(Synchronize::DIRECTION_TO_LEGACY, $sourceItemsData);
+        $this->synchronize->execute(Synchronize::MSI_TO_LEGACY, $sourceItemsData);
     }
 }

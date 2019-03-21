@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model;
+namespace Magento\InventoryLegacySynchronization\Model;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
@@ -33,7 +33,6 @@ class GetDefaultSourceItemsBySkus
     private $sourceItemRepository;
 
     /**
-     * GetDefaultSourceItemsBySkus constructor.
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param SourceItemRepositoryInterface $sourceItemRepository

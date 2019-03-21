@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
+namespace Magento\InventoryLegacySynchronization\Plugin;
 
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel;
 use Magento\CatalogInventory\Model\Stock\Item;
@@ -103,7 +103,7 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
             if ($this->isSourceItemManagementAllowedForProductType->execute($typeId)) {
                 if ($this->shouldAlignDefaultSourceWithLegacy($legacyStockItem)) {
                     $this->synchronize->execute(
-                        Synchronize::DIRECTION_TO_INVENTORY,
+                        Synchronize::LEGACY_TO_MSI,
                         [
                             $legacyStockItem->getData()
                         ]

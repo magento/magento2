@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\LegacySynchronization;
+namespace Magento\InventoryLegacySynchronization\Model;
 
-use Magento\InventoryCatalog\Model\LegacySynchronization\ToInventory\SetDataToSourceItem;
-use Magento\InventoryCatalog\Model\LegacySynchronization\ToLegacyCatalogInventory\SetDataToLegacyInventory;
+use Magento\InventoryLegacySynchronization\Model\ToMsi\SetDataToSourceItem;
+use Magento\InventoryLegacySynchronization\Model\ToLegacy\SetDataToLegacyInventory;
 
 /**
  * Set Qty and status for legacy CatalogInventory Stock Item table
  */
-class SetDataToDestination
+class SynchronizeInventoryData
 {
     /**
      * @var SetDataToLegacyInventory
@@ -40,13 +40,13 @@ class SetDataToDestination
     }
 
     /**
-     * @param string $direction
+     * @param string $destination
      * @param array $items
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(string $direction, array $items): void
+    public function execute(string $destination, array $items): void
     {
-        if ($direction === Synchronize::DIRECTION_TO_LEGACY) {
+        if ($destination === Synchronize::MSI_TO_LEGACY) {
             $this->setDataToLegacyInventory->execute($items);
         } else {
             $this->setDataToSourceItem->execute($items);

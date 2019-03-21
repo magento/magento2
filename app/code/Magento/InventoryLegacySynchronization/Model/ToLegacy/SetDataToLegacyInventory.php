@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\LegacySynchronization\ToLegacyCatalogInventory;
+namespace Magento\InventoryLegacySynchronization\Model\ToLegacy;
 
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkus;
-use Magento\InventoryCatalog\Model\LegacySynchronization\GetLegacyStockItemsByProductIds;
+use Magento\InventoryLegacySynchronization\Model\GetLegacyStockItemsByProductIds;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 

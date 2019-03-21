@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\LegacySynchronization\ToInventory;
+namespace Magento\InventoryLegacySynchronization\Model\ToMsi;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory;
 use Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem;

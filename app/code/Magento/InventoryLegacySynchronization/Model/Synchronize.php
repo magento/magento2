@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\LegacySynchronization;
+namespace Magento\InventoryLegacySynchronization\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
@@ -18,10 +18,20 @@ use Magento\Framework\Serialize\SerializerInterface;
  */
 class Synchronize
 {
-    private const TOPIC_NAME = 'inventory.catalog.product.legacy_inventory.set_data';
+    /**
+     * Asynchronous operation topic name
+     */
+    private const TOPIC_NAME = 'inventory.legacy_synchronization.set_data';
 
-    public const DIRECTION_TO_LEGACY = 'to-legacy';
-    public const DIRECTION_TO_INVENTORY = 'to-inventory';
+    /**
+     * Define synchronization from MSI source items to legacy catalog inventory
+     */
+    public const MSI_TO_LEGACY = 'msi-to-legacy';
+
+    /**
+     * Define synchronization from legacy catalog inventory to MSI source items
+     */
+    public const LEGACY_TO_MSI = 'legacy-to-msi';
 
     /**
      * @var BulkManagementInterface
@@ -49,9 +59,9 @@ class Synchronize
     private $isAsyncLegacyAlignment;
 
     /**
-     * @var SetDataToDestination
+     * @var SynchronizeInventoryData
      */
-    private $setDataToDestination;
+    private $synchronizeInventoryData;
 
     /**
      * @var int
@@ -59,13 +69,12 @@ class Synchronize
     private $batchSize;
 
     /**
-     * AsyncSetDataToLegacyCatalogInventory constructor.
      * @param BulkManagementInterface $bulkManagement
      * @param SerializerInterface $serializer
      * @param IdentityGeneratorInterface $identityService
      * @param OperationInterfaceFactory $operationInterfaceFactory
      * @param IsAsyncLegacyAlignment $isAsyncLegacyAlignment
-     * @param SetDataToDestination $setDataToDestination
+     * @param SynchronizeInventoryData $synchronizeInventoryData
      * @param int $batchSize
      */
     public function __construct(
@@ -74,7 +83,7 @@ class Synchronize
         IdentityGeneratorInterface $identityService,
         OperationInterfaceFactory $operationInterfaceFactory,
         IsAsyncLegacyAlignment $isAsyncLegacyAlignment,
-        SetDataToDestination $setDataToDestination,
+        SynchronizeInventoryData $synchronizeInventoryData,
         int $batchSize
     ) {
         $this->bulkManagement = $bulkManagement;
@@ -83,7 +92,7 @@ class Synchronize
         $this->operationInterfaceFactory = $operationInterfaceFactory;
         $this->batchSize = $batchSize;
         $this->isAsyncLegacyAlignment = $isAsyncLegacyAlignment;
-        $this->setDataToDestination = $setDataToDestination;
+        $this->synchronizeInventoryData = $synchronizeInventoryData;
     }
 
     /**
@@ -127,7 +136,7 @@ class Synchronize
      */
     private function executeSync(string $direction, array $items): void
     {
-        $this->setDataToDestination->execute($direction, $items);
+        $this->synchronizeInventoryData->execute($direction, $items);
     }
 
     /**
