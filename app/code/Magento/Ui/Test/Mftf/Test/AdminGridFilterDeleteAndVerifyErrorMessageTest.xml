@@ -22,7 +22,10 @@
             <magentoCLI command="config:set system/backup/functionality_enabled 1" stepKey="setEnableBackupToYes"/>
             <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="NewRootCategory" stepKey="rootCategory"/>
-            <createData entity="defaultSimpleProduct" stepKey="createProduct"/>
+            <createData entity="defaultSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="rootCategory" />
+            </createData>
+
             <!--Create website-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
                 <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
@@ -41,9 +44,9 @@
             </actionGroup>
         </before>
         <after>
+            <magentoCLI command="config:set system/backup/functionality_enabled 0" stepKey="setEnableBackupToNo"/>
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
-            <magentoCLI command="config:set system/backup/functionality_enabled 0" stepKey="setEnableBackupToNo"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -55,8 +58,7 @@
         </actionGroup>
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowOfCreatedSimpleProduct"/>
         <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
-        <actionGroup ref="AddCategoryAndWebsiteToProductActionGroup" stepKey="updateSimpleProductAddingCategoryAndWebsiteCreated">
-            <argument name="category" value="$$rootCategory.name$$"/>
+        <actionGroup ref="AddWebsiteToProductActionGroup" stepKey="updateSimpleProductAddingWebsiteCreated">
             <argument name="website" value="{{customWebsite.name}}"/>
         </actionGroup>
 
@@ -72,9 +74,8 @@
         </actionGroup>
 
         <!--Go to grid page and verify AssertErrorMessage-->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPageLoad"/>
-        <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonFromAdminCategoryModalSection"/>
-        <see selector="{{AdminCategoryMessagesSection.errorMessage}}" userInput="Something went wrong with processing the default view and we have restored the filter to its original state." stepKey="seeAssertErrorMessage"/>
+        <actionGroup ref="AssertErrorMessageAfterDeletingWebsiteActionGroup" stepKey="verifyErrorMessage">
+            <argument name="errorMessage" value="Something went wrong with processing the default view and we have restored the filter to its original state."/>
+        </actionGroup>
     </test>
 </tests>
