@@ -15,7 +15,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     /**
      * Api URL
      */
-    const API_URL = 'http://chart.apis.google.com/chart';
+    const API_URL = 'https://image-charts.com/chart';
 
     /**
      * All series
@@ -76,6 +76,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     /**
      * Google chart api data encoding
      *
+     * @deprecated since the Google Image Charts API not accessible from March 14, 2019
      * @var string
      */
     protected $_encoding = 'e';
@@ -187,11 +188,12 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     {
         $params = [
             'cht' => 'lc',
-            'chf' => 'bg,s,ffffff',
-            'chco' => 'ef672f',
             'chls' => '7',
-            'chxs' => '0,676056,15,0,l,676056|1,676056,15,0,l,676056',
-            'chm' => 'h,f2ebde,0,0:1:.1,1,-1',
+            'chf'  => 'bg,s,f4f4f4|c,lg,90,ffffff,0.1,ededed,0',
+            'chm'  => 'B,f4d4b2,0,0,0',
+            'chco' => 'db4814',
+            'chxs' => '0,0,11|1,0,11',
+            'chma' => '15,15,15,15'
         ];
 
         $this->_allSeries = $this->getRowsData($this->_dataRows);
@@ -279,20 +281,11 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         $this->_axisLabels['x'] = $dates;
         $this->_allSeries = $datas;
 
-        //Google encoding values
-        if ($this->_encoding == "s") {
-            // simple encoding
-            $params['chd'] = "s:";
-            $dataDelimiter = "";
-            $dataSetdelimiter = ",";
-            $dataMissing = "_";
-        } else {
-            // extended encoding
-            $params['chd'] = "e:";
-            $dataDelimiter = "";
-            $dataSetdelimiter = ",";
-            $dataMissing = "__";
-        }
+        // Image-Charts Awesome data format values
+        $params['chd'] = "a:";
+        $dataDelimiter = ",";
+        $dataSetdelimiter = "|";
+        $dataMissing = "_";
 
         // process each string in the array, and find the max length
         $localmaxvalue = [0];
@@ -306,7 +299,6 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         $minvalue = min($localminvalue);
 
         // default values
-        $yrange = 0;
         $yLabels = [];
         $miny = 0;
         $maxy = 0;
@@ -321,7 +313,6 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                 $maxy = ceil($maxvalue + 1);
                 $yLabels = range($miny, $maxy, 1);
             }
-            $yrange = $maxy;
             $yorigin = 0;
         }
 
@@ -329,44 +320,13 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         foreach ($this->getAllSeries() as $index => $serie) {
             $thisdataarray = $serie;
-            if ($this->_encoding == "s") {
-                // SIMPLE ENCODING
-                for ($j = 0; $j < sizeof($thisdataarray); $j++) {
-                    $currentvalue = $thisdataarray[$j];
-                    if (is_numeric($currentvalue)) {
-                        $ylocation = round(
-                            (strlen($this->_simpleEncoding) - 1) * ($yorigin + $currentvalue) / $yrange
-                        );
-                        $chartdata[] = substr($this->_simpleEncoding, $ylocation, 1) . $dataDelimiter;
-                    } else {
-                        $chartdata[] = $dataMissing . $dataDelimiter;
-                    }
-                }
-            } else {
-                // EXTENDED ENCODING
-                for ($j = 0; $j < sizeof($thisdataarray); $j++) {
-                    $currentvalue = $thisdataarray[$j];
-                    if (is_numeric($currentvalue)) {
-                        if ($yrange) {
-                            $ylocation = 4095 * ($yorigin + $currentvalue) / $yrange;
-                        } else {
-                            $ylocation = 0;
-                        }
-                        $firstchar = floor($ylocation / 64);
-                        $secondchar = $ylocation % 64;
-                        $mappedchar = substr(
-                            $this->_extendedEncoding,
-                            $firstchar,
-                            1
-                        ) . substr(
-                            $this->_extendedEncoding,
-                            $secondchar,
-                            1
-                        );
-                        $chartdata[] = $mappedchar . $dataDelimiter;
-                    } else {
-                        $chartdata[] = $dataMissing . $dataDelimiter;
-                    }
+            for ($j = 0; $j < sizeof($thisdataarray); $j++) {
+                $currentvalue = $thisdataarray[$j];
+                if (is_numeric($currentvalue)) {
+                    $ylocation = $yorigin + $currentvalue;
+                    $chartdata[] = $ylocation . $dataDelimiter;
+                } else {
+                    $chartdata[] = $dataMissing . $dataDelimiter;
                 }
             }
             $chartdata[] = $dataSetdelimiter;
@@ -540,6 +500,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     }
 
     /**
+     * Sets data helper
+     *
      * @param \Magento\Backend\Helper\Dashboard\AbstractDashboard $dataHelper
      * @return void
      */
