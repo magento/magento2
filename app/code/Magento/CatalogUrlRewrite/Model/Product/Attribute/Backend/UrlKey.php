@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Model\Product\Attribute\Backend;
 
-use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Product\IsUniqueUrlKey;
 
 class UrlKey extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
@@ -24,7 +23,7 @@ class UrlKey extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @param  Product $object
+     * @param \Magento\Framework\DataObject $object
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
