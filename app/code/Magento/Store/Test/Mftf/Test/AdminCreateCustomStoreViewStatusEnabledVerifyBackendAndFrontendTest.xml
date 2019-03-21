@@ -40,8 +40,7 @@
             </actionGroup>
 
             <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
-            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage">
-            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
 
             <!--Search store view(from above step) in grid and verify AssertStoreInGrid-->
             <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchStoreViewInGrid">
@@ -57,16 +56,15 @@
             </actionGroup>
 
             <!--Go to store configuration page and verify AssertStoreBackend-->
-            <amOnPage url="{{AdminConfigPage.url}}" stepKey="goToStoreConfigurationPage"/>
-            <waitForPageLoad stepKey="waitForSystemStoreConfigurationPageLoad" />
-            <click selector="{{AdminConfigSection.defaultConfigButton}}" stepKey="clickDefaultConfigButton"/>
-            <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{storeViewData.name}}" stepKey="seeAssertStoreViewInDefaultConfigDropdown"/>
+            <actionGroup ref="AssertStoreConfigurationBackendActionGroup" stepKey="verifyValuesOnStoreBackend">
+                <argument name="website" value="{{_defaultWebsite.name}}"/>
+                <argument name="customStore" value="{{customStore.name}}"/>
+                <argument name="storeView1" value="{{storeViewData.name}}"/>
+            </actionGroup>
 
             <!--Go to storefront and verify AssertStoreFrontend-->
-            <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
-            <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
-            <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButton"/>
-            <waitForPageLoad stepKey="waitForSwitchStoreButtonLoad"/>
-            <seeElement selector="{{StorefrontFooterSection.storeLink(customStore.name)}}"  stepKey="seeCustomStoreInStoreLink"/>
+            <actionGroup ref="AssertStorefrontStoreVisibleInFooterActionGroup" stepKey="verifyValuesOnStoreFrontend">
+                <argument name="customStore" value="{{customStore.name}}"/>
+            </actionGroup>
         </test>
 </tests>

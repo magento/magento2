@@ -12,7 +12,7 @@
         <arguments>
             <argument name="storeGroupName" type="string"/>
             <argument name="storeView" type="string"/>
-            <argument name="storeViewStatus"/>
+            <argument name="storeViewStatus" type="string"/>
         </arguments>
         <amOnPage  url="{{AdminSystemStoreViewPage.url}}" stepKey="amOnAdminSystemStoreViewPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>

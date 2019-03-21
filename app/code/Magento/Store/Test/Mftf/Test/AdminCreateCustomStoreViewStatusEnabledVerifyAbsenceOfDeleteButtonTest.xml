@@ -40,8 +40,7 @@
             </actionGroup>
 
             <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
-            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage">
-            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
 
             <!--Search store view(from above step) in grid-->
             <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchStoreViewInGrid">

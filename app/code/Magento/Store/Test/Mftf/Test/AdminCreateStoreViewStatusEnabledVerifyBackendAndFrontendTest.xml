@@ -34,20 +34,16 @@
             </actionGroup>
 
             <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
-            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage">
-            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
 
             <!--Go to store configuration page and verify AssertStoreBackend-->
-            <amOnPage url="{{AdminConfigPage.url}}" stepKey="goToConfigStoreConfigurationPage"/>
-            <waitForPageLoad stepKey="waitForSystemStoreConfigurationPageLoad" />
-            <click selector="{{AdminConfigSection.defaultConfigButton}}" stepKey="clickDefaultConfigButton"/>
-            <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{storeViewData.name}}" stepKey="seeAssertStoreViewInDefaultConfigDropdown"/>
+            <actionGroup ref="AssertStoreConfigurationBackendActionGroup" stepKey="verifyValuesOnStoreBackend">
+                <argument name="storeView1" value="{{storeViewData.name}}"/>
+            </actionGroup>
 
             <!--Go to storefront and verify AssertStoreFrontend-->
-            <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
-            <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
-            <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="selectStoreSwitcher"/>
-            <waitForPageLoad stepKey="waitForFirstStoreView"/>
-            <see selector="{{StorefrontHeaderSection.storeViewDropdown}}" userInput="{{storeViewData.name}}" stepKey="seeAssertStoreViewOnStorefront"/>
+            <actionGroup ref="AssertStorefrontStoreVisibleInHeaderActionGroup" stepKey="verifyValuesOnStoreFrontend">
+                <argument name="store" value="{{storeViewData.name}}"/>
+            </actionGroup>
         </test>
 </tests>

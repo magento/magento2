@@ -42,7 +42,7 @@
             <actionGroup ref="StoreViewDisabledErrorSaveMessageActionGroup" stepKey="createStoreViewAssertStoreDisabledErrorSaveMessage">
                 <argument name="storeGroupName" value="{{customStore.name}}"/>
                 <argument name="storeView" value="storeViewDataDisabled"/>
-                <argument name="storeViewStatus" value="storeViewDataDisabled.is_active"/>
+                <argument name="storeViewStatus" value="{{storeViewDataDisabled.is_active}}"/>
             </actionGroup>
         </test>
 </tests>

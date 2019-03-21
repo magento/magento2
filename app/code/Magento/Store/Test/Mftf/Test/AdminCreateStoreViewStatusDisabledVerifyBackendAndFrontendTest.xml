@@ -35,18 +35,16 @@
             </actionGroup>
 
             <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
-            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage">
-            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
 
             <!--Go to store configuration page and verify AssertStoreBackend-->
-            <amOnPage url="{{AdminConfigPage.url}}" stepKey="goToConfigStoreConfigurationPage"/>
-            <waitForPageLoad stepKey="waitForSystemStoreConfigurationPageLoad"/>
-            <click selector="{{AdminConfigSection.defaultConfigButton}}" stepKey="clickDefaultConfigButton"/>
-            <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{storeViewDataDisabled.name}}" stepKey="seeAssertStoreViewInDefaultConfigDropdown"/>
+            <actionGroup ref="AssertStoreConfigurationBackendActionGroup" stepKey="verifyValuesOnStoreBackend">
+                <argument name="storeView1" value="{{storeViewDataDisabled.name}}"/>
+            </actionGroup>
 
             <!--Go to storefront and verify AssertStoreNotOnFrontend-->
-            <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
-            <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
-            <dontSee selector="{{StorefrontHeaderSection.storeViewDropdown}}" userInput="{{storeViewDataDisabled.name}}" stepKey="AssertStoreNotOnFrontend"/>
+            <actionGroup ref="AssertStorefrontStoreNotVisibleInFooterActionGroup" stepKey="verifyValuesNotOnStorefront">
+                <argument name="store" value="{{storeViewDataDisabled.name}"/>
+            </actionGroup>
         </test>
 </tests>
