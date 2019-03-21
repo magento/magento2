@@ -92,7 +92,8 @@ class AdaptUrlRewritesToVisibilityAttribute
                 } catch (UrlAlreadyExistsException $e) {
                     throw new UrlAlreadyExistsException(
                         __(
-                            'Can not change the visibility of the product with SKU equals "%1". URL key "%2" for specified store already exists.',
+                            'Can not change the visibility of the product with SKU equals "%1". '
+                            . 'URL key "%2" for specified store already exists.',
                             $product->getSku(),
                             $product->getUrlKey()
                         ),
