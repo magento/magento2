@@ -9,12 +9,8 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddress;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Quote\Model\Quote\Address;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * Creates a quote address based on given context, customer address ID and customer address
@@ -55,11 +51,8 @@ class CreateQuoteAddressByCustomerAddress
      * @param ContextInterface $context
      * @param int|string|null $customerAddressId
      * @param array|null $customerAddress
+     *
      * @return Address
-     * @throws GraphQlAuthenticationException
-     * @throws GraphQlAuthorizationException
-     * @throws GraphQlInputException
-     * @throws GraphQlNoSuchEntityException
      */
     public function execute(
         ContextInterface $context,
