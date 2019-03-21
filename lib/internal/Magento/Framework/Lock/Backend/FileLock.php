@@ -16,7 +16,7 @@ use Magento\Framework\Phrase;
 /**
  * LockManager using the file system for locks
  */
-class File implements LockManagerInterface
+class FileLock implements LockManagerInterface
 {
     /**
      * The file driver instance

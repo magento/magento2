@@ -14,7 +14,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Lock\Backend\Database as DatabaseLock;
 use Magento\Framework\Lock\Backend\Zookeeper as ZookeeperLock;
 use Magento\Framework\Lock\Backend\Cache as CacheLock;
-use Magento\Framework\Lock\Backend\File as FileLock;
+use Magento\Framework\Lock\Backend\FileLock;
 
 /**
  * The factory to create object that implements LockManagerInterface
