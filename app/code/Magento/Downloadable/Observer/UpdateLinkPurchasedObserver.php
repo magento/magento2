@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Class UpdateLinkPurchasedObserver
+ * Assign Downloadable links to customer created after issuing guest order.
  */
 class UpdateLinkPurchasedObserver implements ObserverInterface
 {
@@ -17,17 +19,17 @@ class UpdateLinkPurchasedObserver implements ObserverInterface
      * Core store config
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\CollectionFactory
      */
-    protected $_purchasedFactory;
+    private $purchasedFactory;
 
     /**
      * @var \Magento\Framework\DataObject\Copy
      */
-    protected $_objectCopyService;
+    private $objectCopyService;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -39,9 +41,9 @@ class UpdateLinkPurchasedObserver implements ObserverInterface
         \Magento\Downloadable\Model\ResourceModel\Link\Purchased\CollectionFactory $purchasedFactory,
         \Magento\Framework\DataObject\Copy $objectCopyService
     ) {
-        $this->_scopeConfig = $scopeConfig;
-        $this->_purchasedFactory = $purchasedFactory;
-        $this->_objectCopyService = $objectCopyService;
+        $this->scopeConfig = $scopeConfig;
+        $this->purchasedFactory = $purchasedFactory;
+        $this->objectCopyService = $objectCopyService;
     }
 
     /**
@@ -58,13 +60,13 @@ class UpdateLinkPurchasedObserver implements ObserverInterface
             return $this;
         }
 
-        $purchasedLinks = $this->_createPurchasedCollection()->addFieldToFilter(
+        $purchasedLinks = $this->purchasedFactory->create()->addFieldToFilter(
             'order_id',
             ['eq' => $order->getId()]
         );
 
         foreach ($purchasedLinks as $linkPurchased) {
-            $this->_objectCopyService->copyFieldsetToTarget(
+            $this->objectCopyService->copyFieldsetToTarget(
                 \downloadable_sales_copy_order::class,
                 'to_downloadable',
                 $order,
@@ -74,13 +76,5 @@ class UpdateLinkPurchasedObserver implements ObserverInterface
         }
 
         return $this;
-    }
-
-    /**
-     * @return \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Collection
-     */
-    protected function _createPurchasedCollection()
-    {
-        return $this->_purchasedFactory->create();
     }
 }
