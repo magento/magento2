@@ -6,10 +6,10 @@
 
 namespace Magento\Setup\Model\ConfigOptionsList;
 
-use Magento\Framework\Setup\ConfigOptionsListInterface;
-use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Validator\RedisConnectionValidator;
@@ -68,7 +68,8 @@ class PageCache implements ConfigOptionsListInterface
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA => self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB => self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB,
     ];
 
     /**
@@ -234,7 +235,7 @@ class PageCache implements ConfigOptionsListInterface
                 self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
                 $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE)
             );
-        
+
         $config['password'] = isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD])
             ? $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD]
             : $deploymentConfig->get(
