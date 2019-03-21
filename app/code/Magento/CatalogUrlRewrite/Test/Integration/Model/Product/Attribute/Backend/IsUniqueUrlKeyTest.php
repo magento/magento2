@@ -3,7 +3,6 @@
 namespace Magento\Catalog\Test\Integration\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Exception\LocalizedException;
 use PHPUnit\Framework\TestCase;
@@ -11,13 +10,13 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as CollectionProduct;
 use Magento\Framework\Registry;
 
+/**
+ * Class IsUniqueUrlKeyTest
+ * @package Magento\Catalog\Test\Integration\Model\Product\Attribute\Backend
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IsUniqueUrlKeyTest extends TestCase
 {
-    /**
-     * @var ObjectManagerInterface $objectManager
-     */
-    private $objectManager;
-
     /**
      * @var ProductRepositoryInterface $productRepository
      */
@@ -40,11 +39,10 @@ class IsUniqueUrlKeyTest extends TestCase
 
     public function setUp()
     {
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        $this->productCollection = $this->objectManager->get(CollectionProduct::class);
-        $this->productResource = $this->objectManager->get(ProductResource::class);
-        $this->registry = $this->objectManager->get(Registry::class);
+        $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+        $this->productCollection = Bootstrap::getObjectManager()->get(CollectionProduct::class);
+        $this->productResource = Bootstrap::getObjectManager()->get(ProductResource::class);
+        $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
     }
 
     /**
@@ -57,7 +55,7 @@ class IsUniqueUrlKeyTest extends TestCase
     public function testShouldRaiseExceptionUrlKeyIsAlreadytaken()
     {
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
+        $product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
         $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
             ->setAttributeSetId(4)
             ->setWebsiteIds([1])
@@ -73,7 +71,7 @@ class IsUniqueUrlKeyTest extends TestCase
         $this->productRepository->save($product);
 
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
+        $product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
         $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
             ->setAttributeSetId(4)
             ->setWebsiteIds([1])
