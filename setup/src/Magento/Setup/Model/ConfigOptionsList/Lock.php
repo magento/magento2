@@ -237,7 +237,7 @@ class Lock implements ConfigOptionsListInterface
         $path = $options[self::INPUT_KEY_LOCK_FILE_PATH]
             ?? $deploymentConfig->get(
                 self::CONFIG_PATH_LOCK_FILE_PATH,
-                $this->getDefaultValue(self::INPUT_KEY_LOCK_ZOOKEEPER_PATH)
+                $this->getDefaultValue(self::INPUT_KEY_LOCK_FILE_PATH)
             );
 
         if (!$path) {
