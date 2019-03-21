@@ -97,7 +97,7 @@ class Zookeeper implements LockManagerInterface
         }
 
         $this->host = $host;
-        $this->path = preg_replace('#\/*$#', '', $path) ?: '/';
+        $this->path = rtrim($path, '/') . '/';
     }
 
     /**
@@ -171,7 +171,7 @@ class Zookeeper implements LockManagerInterface
      */
     private function getFullPathToLock(string $name): string
     {
-        return $this->path . '/' . $name . '/' . $this->lockName;
+        return $this->path . $name . '/' . $this->lockName;
     }
 
     /**

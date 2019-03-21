@@ -59,7 +59,7 @@ class File implements LockManagerInterface
         }
 
         $this->fileDriver = $fileDriver;
-        $this->path = preg_replace('#\/*$#', '', $path) ?: '/';
+        $this->path = rtrim($path, '/') . '/';
 
         try {
             if (!$this->fileDriver->isExists($this->path)) {
@@ -159,7 +159,7 @@ class File implements LockManagerInterface
      */
     private function getLockPath(string $name): string
     {
-        return $this->path . '/' . $name;
+        return $this->path . $name;
     }
 
     /**
