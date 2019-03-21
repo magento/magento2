@@ -80,7 +80,7 @@ class AddTrack extends Action implements HttpPostActionInterface
      *
      * @return ResultInterface
      */
-    public function execute(): ResultInterface
+    public function execute()
     {
         try {
             $carrier = $this->getRequest()->getPost('carrier');
