@@ -78,7 +78,6 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(7, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[7]);
         $this->assertEquals('page-cache-id-prefix', $options[7]->getName());
-
     }
 
     /**
