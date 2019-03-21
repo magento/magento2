@@ -15,6 +15,8 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Store\Api\StoreWebsiteRelationInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 
 /**
  * Observer to assign the products to website.
@@ -72,15 +74,19 @@ class ProductToWebsiteChangeObserver implements ObserverInterface
      * Generate urls for UrlRewrite and save it in storage
      *
      * @param \Magento\Framework\Event\Observer $observer
+     * @throws NoSuchEntityException
+     * @throws UrlAlreadyExistsException
      * @return void
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         foreach ($observer->getEvent()->getProducts() as $productId) {
+            $storeId = $this->request->getParam('store_id', Store::DEFAULT_STORE_ID);
+
             $product = $this->productRepository->getById(
                 $productId,
                 false,
-                $this->request->getParam('store_id', Store::DEFAULT_STORE_ID)
+                $storeId
             );
 
             if (!empty($this->productUrlRewriteGenerator->generate($product))) {
@@ -95,6 +101,7 @@ class ProductToWebsiteChangeObserver implements ObserverInterface
                         }
                     }
                 }
+              
                 if ($product->getVisibility() != Visibility::VISIBILITY_NOT_VISIBLE) {
                     $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
                 }
