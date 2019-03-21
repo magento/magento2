@@ -30,5 +30,6 @@
         <element name="pageCacheCheckbox" type="checkbox" selector="input[value='full_page']"/>
         <element name="webServicesConfigCheckbox" type="checkbox" selector="input[value='config_webservice']"/>
         <element name="translationsCheckbox" type="checkbox" selector="input[value='translate']"/>
+        <element name="additionalCacheButton" type="button" selector="//*[@id='container']//button[contains(., '{{cacheType}}')]" parameterized="true" />
     </section>
 </sections>
