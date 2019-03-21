@@ -52,11 +52,11 @@ define([
                 this.variablesContent = '<ul class="insert-variable">';
                 variables.each(function (variableGroup) {
                     if (variableGroup.label && variableGroup.value) {
-                        this.variablesContent += '<li><b>' + variableGroup.label + '</b></li>';
+                        this.variablesContent += '<li><b>' + variableGroup.label.escapeHTML() + '</b></li>';
                         variableGroup.value.each(function (variable) {
                             if (variable.value && variable.label) {
                                 this.variablesContent += '<li>' +
-                                    this.prepareVariableRow(variable.value, variable.label) + '</li>';
+                                    this.prepareVariableRow(variable.value.escapeHTML(), variable.label.escapeHTML()) + '</li>';
                             }
                         }.bind(this));
                     }
@@ -75,7 +75,7 @@ define([
         openDialogWindow: function (variablesContent) {
             var windowId = this.dialogWindowId;
 
-            jQuery('<div id="' + windowId + '">' + Variables.variablesContent + '</div>').modal({
+            jQuery('<div id="' + windowId + '">' + variablesContent + '</div>').modal({
                 title: $t('Insert Variable...'),
                 type: 'slide',
                 buttons: [],
@@ -87,8 +87,6 @@ define([
             });
 
             jQuery('#' + windowId).modal('openModal');
-
-            variablesContent.evalScripts.bind(variablesContent).defer();
         },
 
         /**
