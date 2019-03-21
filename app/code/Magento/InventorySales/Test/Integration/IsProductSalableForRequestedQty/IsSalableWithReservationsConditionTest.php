@@ -230,4 +230,45 @@ class IsSalableWithReservationsConditionTest extends TestCase
         ]);
         $this->cleanupReservations->execute();
     }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @magentoDbIsolation disabled
+     */
+    public function testProductIsSalableWithMinQtyAndReservationArePresent()
+    {
+        $sku = 'SKU-1';
+        $stockId = 10;
+
+        $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+        $stockItemConfiguration->setUseConfigMinQty(false);
+        $stockItemConfiguration->setUseConfigMinSaleQty(false);
+        $stockItemConfiguration->setIsQtyDecimal(true);
+        $stockItemConfiguration->setMinSaleQty(-1.0);
+        $stockItemConfiguration->setMinQty(-1.0);
+        $stockItemConfiguration->setUseConfigBackorders(false);
+        $stockItemConfiguration->setBackorders(StockItemConfigurationInterface::BACKORDERS_YES_NONOTIFY);
+        $this->saveStockItemConfiguration->execute($sku, $stockId, $stockItemConfiguration);
+
+        $this->appendReservations->execute([
+            $this->reservationBuilder->setStockId($stockId)->setSku($sku )->setQuantity(-9.33)->build(),
+        ]);
+
+        self::assertEquals(
+            true,
+            $this->isProductSalableForRequestedQty->execute($sku, $stockId, 0.17)->isSalable()
+        );
+
+        $this->appendReservations->execute([
+            $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(9.33)->build(),
+        ]);
+
+        $this->cleanupReservations->execute();
+    }
 }

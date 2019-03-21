@@ -10,7 +10,7 @@ namespace Magento\InventoryLegacySynchronization\Plugin;
 use Magento\Framework\App\ObjectManager;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Magento\InventoryCatalog\Model\LegacySynchronization\Synchronize;
+use Magento\InventoryLegacySynchronization\Model\Synchronize;
 use Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization\SetDataToLegacyCatalogInventory;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
@@ -70,6 +70,7 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
      * @param SourceItemInterface[] $sourceItems
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterExecute(SourceItemsSaveInterface $subject, $result, array $sourceItems): void
     {
