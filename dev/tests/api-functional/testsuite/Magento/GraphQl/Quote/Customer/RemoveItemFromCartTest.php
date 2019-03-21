@@ -81,14 +81,13 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     public function testRemoveItemFromNonExistentCart()
     {
         $query = $this->prepareMutationQuery('non_existent_masked_id', 1);
-
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
-    public function testRemoveNotExistentItem()
+    public function testRemoveNonExistentItem()
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
@@ -130,7 +129,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
      */
     public function testRemoveItemFromGuestCart()
@@ -181,6 +180,50 @@ class RemoveItemFromCartTest extends GraphQlAbstract
 
         $query = $this->prepareMutationQuery($anotherCustomerQuoteMaskedId, $anotherCustomerQuoteItemId);
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @param string $input
+     * @param string $message
+     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
+     */
+    public function testUpdateWithMissedItemRequiredParameters(string $input, string $message)
+    {
+        $query = <<<QUERY
+mutation {
+  removeItemFromCart(
+    input: {
+      {$input}
+    }
+  ) {
+    cart {
+      items {
+        qty
+      }
+    }
+  }
+}
+QUERY;
+        $this->expectExceptionMessage($message);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderUpdateWithMissedRequiredParameters(): array
+    {
+        return [
+            'missed_cart_id' => [
+                'cart_item_id: 1',
+                'Required parameter "cart_id" is missing.'
+            ],
+            'missed_cart_item_id' => [
+                'cart_id: "test"',
+                'Required parameter "cart_item_id" is missing.'
+            ],
+        ];
     }
 
     /**

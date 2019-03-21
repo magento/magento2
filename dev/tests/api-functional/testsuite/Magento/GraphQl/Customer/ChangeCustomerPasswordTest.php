@@ -77,7 +77,6 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
      */
     public function testChangeWeakPassword()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/190');
         $customerEmail = 'customer@example.com';
         $oldCustomerPassword = 'password';
         $newCustomerPassword = 'weakpass';
@@ -94,7 +93,7 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The password doesn't match this account. Verify the password and try again.
+     * @expectedExceptionMessage Invalid login or password.
      */
     public function testChangePasswordIfPasswordIsInvalid()
     {

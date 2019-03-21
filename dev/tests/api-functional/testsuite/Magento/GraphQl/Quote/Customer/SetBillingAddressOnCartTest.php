@@ -90,6 +90,7 @@ mutation {
           code
           label
         }
+        address_type
       }
     }
   }
@@ -147,6 +148,7 @@ mutation {
           code
           label
         }
+        address_type
       }
       shipping_addresses {
         firstname
@@ -160,6 +162,7 @@ mutation {
           code
           label
         }
+        address_type
       }
     }
   }
@@ -174,7 +177,7 @@ QUERY;
         self::assertArrayHasKey('shipping_addresses', $cartResponse);
         $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertNewAddressFields($billingAddressResponse);
-        $this->assertNewAddressFields($shippingAddressResponse);
+        $this->assertNewAddressFields($shippingAddressResponse, 'SHIPPING');
     }
 
     /**
@@ -373,7 +376,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The current user cannot use address with ID "1"
+     * @expectedExceptionMessage Current customer does not have permission to address with ID "1"
      */
     public function testSetBillingAddressIfCustomerIsNotOwnerOfAddress()
     {
@@ -401,11 +404,32 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testSetBillingAddressOnNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = <<<QUERY
+{
+  cart(cart_id: "$maskedQuoteId") {
+    items {
+      id
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
      * Verify the all the whitelisted fields for a New Address Object
      *
-     * @param array $billingAddressResponse
+     * @param array $addressResponse
+     * @param string $addressType
      */
-    private function assertNewAddressFields(array $billingAddressResponse): void
+    private function assertNewAddressFields(array $addressResponse, string $addressType = 'BILLING'): void
     {
         $assertionMap = [
             ['response_field' => 'firstname', 'expected_value' => 'test firstname'],
@@ -416,9 +440,10 @@ QUERY;
             ['response_field' => 'postcode', 'expected_value' => '887766'],
             ['response_field' => 'telephone', 'expected_value' => '88776655'],
             ['response_field' => 'country', 'expected_value' => ['code' => 'US', 'label' => 'US']],
+            ['response_field' => 'address_type', 'expected_value' => $addressType]
         ];
 
-        $this->assertResponseFields($billingAddressResponse, $assertionMap);
+        $this->assertResponseFields($addressResponse, $assertionMap);
     }
 
     /**
