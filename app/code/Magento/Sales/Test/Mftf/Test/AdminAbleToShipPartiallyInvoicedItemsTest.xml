@@ -116,7 +116,7 @@
         <!--Submit refund-->
         <scrollTo selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="scrollToItemsToRefund"/>
         <seeInField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" after="scrollToItemsToRefund" stepKey="checkQtyOfItemsToRefund"/>
-        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOfflineEnabled}}" stepKey="waitForSubmitRefundOfflineEnabled"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="waitForSubmitRefundOfflineEnabled"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="submitRefundOffline"/>
         <!--Verify Credit Memo created successfully-->
         <waitForElementVisible
