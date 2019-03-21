@@ -15,4 +15,13 @@
         <data key="total">495.00</data>
         <data key="shippingMethod">Flat Rate - Fixed</data>
     </entity>
+    <entity name="simpleOrderQty2" type="Quote">
+        <data key="price">560.00</data>
+        <data key="qty">2</data>
+        <data key="subtotal">1,120.00</data>
+        <data key="shipping">10.00</data>
+        <data key="total">1,130.00</data>
+        <data key="shippingMethod">Flat Rate - Fixed</data>
+        <data key="currency">$</data>
+    </entity>
 </entities>
