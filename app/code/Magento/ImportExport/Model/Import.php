@@ -195,6 +195,7 @@ class Import extends AbstractModel
      * @param History $importHistoryModel
      * @param DateTime $localeDate
      * @param array $data
+     * @param Random|null $random
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
