@@ -62,8 +62,7 @@
             <argument name="storeDropdown" value="{{customStore.name}}"/>
         </actionGroup>
         <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
-        <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage">
-        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
 
         <!--Search moved store view(from above step) in grid and verify AssertStoreInGrid-->
         <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchMovedStoreViewInGrid">
@@ -79,22 +78,18 @@
         </actionGroup>
 
         <!--Go to store configuration page and verify AssertStoreBackend-->
-        <amOnPage url="{{AdminConfigPage.url}}" stepKey="goToConfigStoreConfigurationPage"/>
-        <waitForPageLoad stepKey="waitForSystemStoreConfigurationPageLoad"/>
-        <click selector="{{AdminConfigSection.defaultConfigButton}}" stepKey="clickDefaultConfigButton"/>
-        <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{_defaultWebsite.name}}" stepKey="seeAssertWebsiteInDefaultConfigDropdown"/>
-        <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{customStore.name}}" stepKey="seeAssertSecondStoreInDefaultConfigDropdown"/>
-        <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{storeViewData1.name}}" stepKey="seeAssertFirstStoreViewInDefaultConfigDropdown"/>
-        <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{storeViewData2.name}}" stepKey="seeAssertSecondStoreViewInDefaultConfigDropdown"/>
+        <actionGroup ref="AssertStoreConfigurationBackendActionGroup" stepKey="verifyValuesOnStoreBackend">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+            <argument name="customStore" value="{{customStore.name}}"/>
+            <argument name="storeView1" value="{{storeViewData1.name}}"/>
+            <argument name="storeView2" value="{{storeViewData2.name}}"/>
+        </actionGroup>
 
         <!--Go to storefront and verify AssertStoreFrontend-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
-        <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButton"/>
-        <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}"  stepKey="clickStoreLinkCustomStore"/>
-        <waitForPageLoad stepKey="waitForCustomStoreToLoad"/>
-        <see selector="{{StorefrontHeaderSection.storeViewName}}" userInput="{{storeViewData1.name}}" stepKey="seeAssertFirstStoreViewOnStorefront"/>
-        <click selector="{{StorefrontHeaderSection.storeViewName}}" stepKey="clickStoreViewName"/>
-        <see selector="{{StorefrontHeaderSection.storeViewDropdown}}" userInput="{{storeViewData2.name}}" stepKey="seeAssertSecondStoreViewOnStorefront"/>
+        <actionGroup ref="AssertStoreFrontendActionGroup" stepKey="verifyValuesOnStoreFrontend">
+            <argument name="customStore" value="{{customStore.name}}"/>
+            <argument name="storeView1" value="{{storeViewData1.name}}"/>
+            <argument name="storeView2" value="{{storeViewData2.name}}"/>
+        </actionGroup>
     </test>
 </tests>
