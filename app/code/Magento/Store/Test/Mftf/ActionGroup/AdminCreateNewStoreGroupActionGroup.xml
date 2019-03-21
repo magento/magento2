@@ -52,7 +52,7 @@
         <fillField userInput="{{storeGroupName}}" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="fillSearchStoreGroupField"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
         <waitForPageLoad stepKey="waitForStoreToLoad"/>
-        <see selector="{{AdminStoresGridSection.firstRow('1')}}" userInput="{{storeGroupName}}" stepKey="seeAssertStoreGroupInGridMessage"/>
+        <see selector="{{AdminStoresGridSection.nthRow('1')}}" userInput="{{storeGroupName}}" stepKey="seeAssertStoreGroupInGridMessage"/>
     </actionGroup>
     <actionGroup name="AssertStoreGroupForm">
         <arguments>
@@ -63,8 +63,6 @@
         </arguments>
         <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
         <waitForPageLoad stepKey="waitTillAdminSystemStoreGroupPage"/>
-        <grabFromCurrentUrl regex="~(\d+)/~" stepKey="grabStoreGroupIdFromCurrentUrl"/>
-        <seeInCurrentUrl url="system_store/editGroup/group_id/{$grabStoreGroupIdFromCurrentUrl}" stepKey="seeStoreGroupId"/>
         <seeInField selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{website}}" stepKey="seeAssertWebsite"/>
         <seeInField selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" userInput="{{storeGroupName}}" stepKey="seeAssertStoreGroupName"/>
         <seeInField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{storeGroupCode}}" stepKey="seeAssertStoreGroupCode"/>
