@@ -160,7 +160,8 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
             $productIds[] = $this->productRepository->get($sku)->getId();
         }
         $this->expectException(UrlAlreadyExistsException::class);
-        $this->expectExceptionMessage('Can not change the visibility of the product with SKU equals "product2". URL key "product-1" for specified store already exists.');
+        $this->expectExceptionMessage('Can not change the visibility of the product with SKU equals "product2". '
+            . 'URL key "product-1" for specified store already exists.');
 
         $this->eventManager->dispatch(
             'catalog_product_attribute_update_before',
