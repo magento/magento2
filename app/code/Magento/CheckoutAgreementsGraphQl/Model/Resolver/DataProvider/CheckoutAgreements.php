@@ -9,9 +9,7 @@ namespace Magento\CheckoutAgreementsGraphQl\Model\Resolver\DataProvider;
 
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
 use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
-use Magento\Cms\Api\Data\PageInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Checkout Agreements data provider
