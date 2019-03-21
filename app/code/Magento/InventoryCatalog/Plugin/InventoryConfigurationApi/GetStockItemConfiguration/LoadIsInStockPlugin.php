@@ -42,7 +42,7 @@ class LoadIsInStockPlugin
         StockItemConfigurationInterface $result,
         string $sku,
         int $stockId
-    ) : StockItemConfigurationInterface {
+    ): StockItemConfigurationInterface {
         $legacyStockItem = $this->getLegacyStockItem->execute($sku);
         $extensionAttributes = $result->getExtensionAttributes();
         $extensionAttributes->setIsInStock((bool)(int)$legacyStockItem->getIsInStock());

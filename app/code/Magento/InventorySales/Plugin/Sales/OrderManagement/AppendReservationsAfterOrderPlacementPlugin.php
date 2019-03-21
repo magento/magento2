@@ -116,7 +116,7 @@ class AppendReservationsAfterOrderPlacementPlugin
      * @return OrderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterPlace(OrderManagementInterface $subject, OrderInterface $order) : OrderInterface
+    public function afterPlace(OrderManagementInterface $subject, OrderInterface $order): OrderInterface
     {
         $itemsById = $itemsBySku = $itemsToSell = [];
         foreach ($order->getItems() as $item) {

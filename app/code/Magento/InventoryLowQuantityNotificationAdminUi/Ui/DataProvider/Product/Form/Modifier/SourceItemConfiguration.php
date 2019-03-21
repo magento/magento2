@@ -161,7 +161,7 @@ class SourceItemConfiguration extends AbstractModifier
     /**
      * @return float
      */
-    private function getNotifyQtyConfigValue() : float
+    private function getNotifyQtyConfigValue(): float
     {
         return (float)$this->scopeConfig->getValue('cataloginventory/item_options/notify_stock_qty');
     }
