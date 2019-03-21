@@ -25,8 +25,6 @@ class Config implements ClientOptionsInterface
      */
     const ENGINE_NAME = 'elasticsearch';
 
-    private const ENGINE_NAME_5 = 'elasticsearch5';
-
     /**
      * Elasticsearch Entity type
      */
@@ -64,23 +62,31 @@ class Config implements ClientOptionsInterface
     private $engineResolver;
 
     /**
-     * Constructor
+     * Available Elasticsearch engines.
      *
+     * @var array
+     */
+    private $engineList;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param ClientResolver|null $clientResolver
      * @param EngineResolverInterface|null $engineResolver
      * @param string|null $prefix
+     * @param array $engineList
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         ClientResolver $clientResolver = null,
         EngineResolverInterface $engineResolver = null,
-        $prefix = null
+        $prefix = null,
+        $engineList = []
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->clientResolver = $clientResolver ?: ObjectManager::getInstance()->get(ClientResolver::class);
         $this->engineResolver = $engineResolver ?: ObjectManager::getInstance()->get(EngineResolverInterface::class);
         $this->prefix = $prefix ?: $this->clientResolver->getCurrentEngine();
+        $this->engineList = $engineList;
     }
 
     /**
@@ -100,7 +106,15 @@ class Config implements ClientOptionsInterface
             'timeout' => $this->getElasticsearchConfigData('server_timeout') ? : self::ELASTICSEARCH_DEFAULT_TIMEOUT,
         ];
         $options = array_merge($defaultOptions, $options);
-        return $options;
+        $allowedOptions = array_merge(array_keys($defaultOptions), ['engine']);
+
+        return array_filter(
+            $options,
+            function (string $key) use ($allowedOptions) {
+                return in_array($key, $allowedOptions);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 
     /**
@@ -138,7 +152,7 @@ class Config implements ClientOptionsInterface
      */
     public function isElasticsearchEnabled()
     {
-        return in_array($this->engineResolver->getCurrentSearchEngine(), [self::ENGINE_NAME, self::ENGINE_NAME_5]);
+        return in_array($this->engineResolver->getCurrentSearchEngine(), $this->engineList);
     }
 
     /**
