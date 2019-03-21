@@ -41,7 +41,7 @@ class UpdateUrlKeyProductAttributePatch implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
@@ -58,7 +58,7 @@ class UpdateUrlKeyProductAttributePatch implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -68,7 +68,7 @@ class UpdateUrlKeyProductAttributePatch implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
