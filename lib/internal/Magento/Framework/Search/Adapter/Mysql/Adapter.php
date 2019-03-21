@@ -142,7 +142,7 @@ class Adapter implements AdapterInterface
         $parentSelect->columns('COUNT(*)');
         $totalRecords = $this->getConnection()->fetchOne($parentSelect);
 
-        return intval($totalRecords);
+        return (int)$totalRecords;
     }
 
     /**
