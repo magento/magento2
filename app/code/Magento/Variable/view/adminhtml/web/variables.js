@@ -53,7 +53,7 @@ define([
                 this.variablesContent = '<ul class="insert-variable">';
                 variables.each(function (variableGroup) {
                     if (variableGroup.label && variableGroup.value) {
-                        this.variablesContent += '<li><b>' + variableGroup.label + '</b></li>';
+                        this.variablesContent += '<li><b>' + variableGroup.label.escapeHTML() + '</b></li>';
                         variableGroup.value.each(function (variable) {
                             if (variable.value && variable.label) {
                                 this.variablesContent += '<li>' +
