@@ -181,7 +181,7 @@ define([
          * @returns {Paging} Chainable.
          */
         goFirst: function () {
-            if (typeof this.filters !== 'undefined') {
+            if (!_.isUndefined(this.filters)) {
                 this.current = 1;
             }
 
@@ -233,7 +233,7 @@ define([
         updateCursor: function () {
             var cursor  = this.current - 1,
                 size    = this.pageSize,
-                oldSize = typeof this.previousSize === 'undefined' ? this.pageSize : this.previousSize,
+                oldSize = _.isUndefined(this.previousSize) ? this.pageSize : this.previousSize,
                 delta   = cursor * (oldSize  - size) / size;
 
             delta = size > oldSize ?
