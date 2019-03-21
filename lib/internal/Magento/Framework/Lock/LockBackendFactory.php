@@ -14,6 +14,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Lock\Backend\Database as DatabaseLock;
 use Magento\Framework\Lock\Backend\Zookeeper as ZookeeperLock;
 use Magento\Framework\Lock\Backend\Cache as CacheLock;
+use Magento\Framework\Lock\Backend\File as FileLock;
 
 /**
  * The factory to create object that implements LockManagerInterface
@@ -56,6 +57,13 @@ class LockBackendFactory
     const LOCK_CACHE = 'cache';
 
     /**
+     * File lock provider name
+     *
+     * @const string
+     */
+    const LOCK_FILE = 'file';
+
+    /**
      * The list of lock providers with mapping on classes
      *
      * @var array
@@ -64,6 +72,7 @@ class LockBackendFactory
         self::LOCK_DB => DatabaseLock::class,
         self::LOCK_ZOOKEEPER => ZookeeperLock::class,
         self::LOCK_CACHE => CacheLock::class,
+        self::LOCK_FILE => FileLock::class,
     ];
 
     /**

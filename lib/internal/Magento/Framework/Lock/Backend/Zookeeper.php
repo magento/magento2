@@ -54,7 +54,7 @@ class Zookeeper implements LockManagerInterface
     /**
      * How many microseconds to wait before recheck connections or nodes
      *
-     * @var float
+     * @var int
      */
     private $sleepCycle = 100000;
 

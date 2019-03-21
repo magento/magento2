@@ -50,6 +50,13 @@ class Lock implements ConfigOptionsListInterface
     const INPUT_KEY_LOCK_ZOOKEEPER_PATH = 'lock-zookeeper-path';
 
     /**
+     * The name of an option to set File path
+     *
+     * @const string
+     */
+    const INPUT_KEY_LOCK_FILE_PATH = 'lock-file-path';
+
+    /**
      * The configuration path to save lock provider
      *
      * @const string
@@ -78,6 +85,13 @@ class Lock implements ConfigOptionsListInterface
     const CONFIG_PATH_LOCK_ZOOKEEPER_PATH = 'lock/config/path';
 
     /**
+     * The configuration path to save locks directory path
+     *
+     * @const string
+     */
+    const CONFIG_PATH_LOCK_FILE_PATH = 'lock/config/path';
+
+    /**
      * The list of lock providers
      *
      * @var array
@@ -86,6 +100,7 @@ class Lock implements ConfigOptionsListInterface
         LockBackendFactory::LOCK_DB,
         LockBackendFactory::LOCK_ZOOKEEPER,
         LockBackendFactory::LOCK_CACHE,
+        LockBackendFactory::LOCK_FILE,
     ];
 
     /**
@@ -105,6 +120,10 @@ class Lock implements ConfigOptionsListInterface
         ],
         LockBackendFactory::LOCK_CACHE => [
             self::INPUT_KEY_LOCK_PROVIDER => self::CONFIG_PATH_LOCK_PROVIDER,
+        ],
+        LockBackendFactory::LOCK_FILE => [
+            self::INPUT_KEY_LOCK_PROVIDER => self::CONFIG_PATH_LOCK_PROVIDER,
+            self::INPUT_KEY_LOCK_FILE_PATH => self::CONFIG_PATH_LOCK_FILE_PATH,
         ],
     ];
 
@@ -151,6 +170,12 @@ class Lock implements ConfigOptionsListInterface
                 self::CONFIG_PATH_LOCK_ZOOKEEPER_PATH,
                 'The path where Zookeeper will save locks. The default path is: ' . ZookeeperLock::DEFAULT_PATH
             ),
+            new TextConfigOption(
+                self::INPUT_KEY_LOCK_FILE_PATH,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_LOCK_FILE_PATH,
+                'The path where file locks will be saved.'
+            ),
         ];
     }
 
@@ -184,12 +209,39 @@ class Lock implements ConfigOptionsListInterface
             case LockBackendFactory::LOCK_ZOOKEEPER:
                 $errors = $this->validateZookeeperConfig($options, $deploymentConfig);
                 break;
+            case LockBackendFactory::LOCK_FILE:
+                $errors = $this->validateFileConfig($options, $deploymentConfig);
+                break;
             case LockBackendFactory::LOCK_CACHE:
             case LockBackendFactory::LOCK_DB:
                 $errors = [];
                 break;
             default:
                 $errors[] = 'The lock provider ' . $lockProvider . ' does not exist.';
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Validates File locks configuration
+     *
+     * @param array $options
+     * @param DeploymentConfig $deploymentConfig
+     * @return array
+     */
+    private function validateFileConfig(array $options, DeploymentConfig $deploymentConfig): array
+    {
+        $errors = [];
+
+        $path = $options[self::INPUT_KEY_LOCK_FILE_PATH]
+            ?? $deploymentConfig->get(
+                self::CONFIG_PATH_LOCK_FILE_PATH,
+                $this->getDefaultValue(self::INPUT_KEY_LOCK_ZOOKEEPER_PATH)
+            );
+
+        if (!$path) {
+            $errors[] = 'The path needs to be a non-empty string.';
         }
 
         return $errors;

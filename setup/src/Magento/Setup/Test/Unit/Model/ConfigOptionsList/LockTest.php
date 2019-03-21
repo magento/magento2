@@ -44,7 +44,7 @@ class LockTest extends TestCase
     public function testGetOptions()
     {
         $options = $this->lockConfigOptionsList->getOptions();
-        $this->assertSame(4, count($options));
+        $this->assertSame(5, count($options));
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -61,6 +61,10 @@ class LockTest extends TestCase
         $this->assertArrayHasKey(3, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[3]);
         $this->assertEquals(LockConfigOptionsList::INPUT_KEY_LOCK_ZOOKEEPER_PATH, $options[3]->getName());
+
+        $this->assertArrayHasKey(4, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[4]);
+        $this->assertEquals(LockConfigOptionsList::INPUT_KEY_LOCK_FILE_PATH, $options[4]->getName());
     }
 
     /**
@@ -150,6 +154,20 @@ class LockTest extends TestCase
                     ],
                 ],
             ],
+            'Check specific file lock options' => [
+                'options' => [
+                    LockConfigOptionsList::INPUT_KEY_LOCK_PROVIDER => LockBackendFactory::LOCK_FILE,
+                    LockConfigOptionsList::INPUT_KEY_LOCK_FILE_PATH => '/my/path'
+                ],
+                'expectedResult' => [
+                    'lock' => [
+                        'provider' => LockBackendFactory::LOCK_FILE,
+                        'config' => [
+                            'path' => '/my/path',
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -199,6 +217,15 @@ class LockTest extends TestCase
                         'Zookeeper path needs to be a non-empty string.',
                         'Zookeeper host is should be set.',
                     ],
+            ],
+            'Empty path for File lock' => [
+                'options' => [
+                    LockConfigOptionsList::INPUT_KEY_LOCK_PROVIDER => LockBackendFactory::LOCK_FILE,
+                    LockConfigOptionsList::INPUT_KEY_LOCK_FILE_PATH => '',
+                ],
+                'expectedResult' => [
+                    'The path needs to be a non-empty string.',
+                ],
             ],
         ];
     }

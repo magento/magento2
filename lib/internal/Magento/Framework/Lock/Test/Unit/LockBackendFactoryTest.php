@@ -10,6 +10,7 @@ namespace Magento\Framework\Lock\Test\Unit;
 use Magento\Framework\Lock\Backend\Database as DatabaseLock;
 use Magento\Framework\Lock\Backend\Zookeeper as ZookeeperLock;
 use Magento\Framework\Lock\Backend\Cache as CacheLock;
+use Magento\Framework\Lock\Backend\File as FileLock;
 use Magento\Framework\Lock\LockBackendFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Lock\LockManagerInterface;
@@ -94,6 +95,11 @@ class LockBackendFactoryTest extends TestCase
                 'lockProvider' => LockBackendFactory::LOCK_CACHE,
                 'lockProviderClass' => CacheLock::class,
                 'config' => [],
+            ],
+            'file' => [
+                'lockProvider' => LockBackendFactory::LOCK_FILE,
+                'lockProviderClass' => FileLock::class,
+                'config' => ['path' => '/my/path'],
             ],
         ];
 
