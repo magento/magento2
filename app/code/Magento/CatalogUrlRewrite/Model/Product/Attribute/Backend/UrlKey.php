@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Product;
@@ -24,7 +26,6 @@ class UrlKey extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * @param  Product $object
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validate($object)

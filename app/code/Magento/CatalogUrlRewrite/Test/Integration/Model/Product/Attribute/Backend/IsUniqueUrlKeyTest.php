@@ -1,8 +1,12 @@
 <?php
 
+
+
 namespace Magento\Catalog\Test\Integration\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Exception\LocalizedException;
 use PHPUnit\Framework\TestCase;
@@ -56,6 +60,9 @@ class IsUniqueUrlKeyTest extends TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+        /** @var StoreManager $store */
+        $store = Bootstrap::getObjectManager()->create(StoreManager::class);
+        $store->setCurrentStore(Store::ADMIN_CODE);
         $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
             ->setAttributeSetId(4)
             ->setWebsiteIds([1])
