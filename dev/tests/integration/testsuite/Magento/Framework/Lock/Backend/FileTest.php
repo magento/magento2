@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Lock\Backend;
 
 /**
- * \Magento\Framework\Lock\Backend\Database test case
+ * \Magento\Framework\Lock\Backend\File test case
  */
 class FileTest extends \PHPUnit\Framework\TestCase
 {
