@@ -22,6 +22,7 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
      *
+     * @magentoAppArea frontend
      * @return void
      */
     public function testAfterRemoveItem(): void

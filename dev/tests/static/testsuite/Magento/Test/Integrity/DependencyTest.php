@@ -16,6 +16,7 @@ use Magento\TestFramework\Dependency\DiRule;
 use Magento\TestFramework\Dependency\LayoutRule;
 use Magento\TestFramework\Dependency\PhpRule;
 use Magento\TestFramework\Dependency\ReportsConfigRule;
+use Magento\TestFramework\Dependency\AnalyticsConfigRule;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 
 /**
@@ -77,6 +78,17 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @var array
      */
     protected static $_listRoutesXml = [];
+
+    /**
+     * List of analytics.xml
+     *
+     * Format: array(
+     *  '{Module_Name}' => '{Filename}'
+     * )
+     *
+     * @var array
+     */
+    protected static $_listAnalyticsXml = [];
 
     /**
      * List of routers
@@ -176,6 +188,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         self::_prepareListConfigXml();
         self::_prepareListDbSchemaXml();
         self::_prepareListRoutesXml();
+        self::_prepareListAnalyticsXml();
 
         self::_prepareMapRouters();
         self::_prepareMapLayoutBlocks();
@@ -240,6 +253,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             ),
             new DiRule(new VirtualTypeMapper()),
             new ReportsConfigRule($dbRuleTables),
+            new AnalyticsConfigRule(),
         ];
     }
 
@@ -567,6 +581,20 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
                 self::$_listRoutesXml[$module][] = $file;
+            }
+        }
+    }
+
+    /**
+     * Prepare list of analytics.xml files
+     */
+    protected static function _prepareListAnalyticsXml()
+    {
+        $files = Files::init()->getDbSchemaFiles('analytics.xml', [], false);
+        foreach ($files as $file) {
+            if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
+                $module = $matches['namespace'] . '\\' . $matches['module'];
+                self::$_listAnalyticsXml[$module] = $file;
             }
         }
     }

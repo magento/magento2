@@ -81,7 +81,12 @@ class RewriteUrl implements StoreSwitcherInterface
             $existingRewrite = $this->urlFinder->findOneByData([
                 UrlRewrite::REQUEST_PATH => $urlPath
             ]);
-            if ($existingRewrite) {
+            $currentRewrite = $this->urlFinder->findOneByData([
+                UrlRewrite::REQUEST_PATH => $urlPath,
+                UrlRewrite::STORE_ID => $targetStore->getId(),
+            ]);
+
+            if ($existingRewrite && !$currentRewrite) {
                 /** @var \Magento\Framework\App\Response\Http $response */
                 $targetUrl = $targetStore->getBaseUrl();
             }

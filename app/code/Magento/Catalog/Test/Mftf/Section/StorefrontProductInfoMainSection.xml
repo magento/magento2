@@ -13,7 +13,8 @@
         <element name="productName" type="text" selector=".base"/>
         <element name="productSku" type="text" selector=".product.attribute.sku>.value"/>
         <element name="productPriceLabel" type="text" selector=".price-label"/>
-        <element name="productPrice" type="text" selector="div.price-box.price-final_price"/>
+        <element name="price" type="text" selector=".product-info-main [data-price-type='finalPrice']"/>
+        <element name="productPrice" type="text" selector=".price-final_price"/>
         <element name="qty" type="input" selector="#qty"/>
         <element name="specialPrice" type="text" selector=".special-price"/>
         <element name="specialPriceAmount" type="text" selector=".special-price span.price"/>
@@ -73,6 +74,11 @@
         <element name="productTierPriceByForTextLabel" type="text" selector="//ul[contains(@class, 'prices-tier')]//li[{{var1}}][contains(text(),'Buy {{var2}} for')]" parameterized="true"/>
         <element name="productTierPriceAmount" type="text" selector="//ul[contains(@class, 'prices-tier')]//li[{{var1}}]//span[contains(text(), '{{var2}}')]" parameterized="true"/>
         <element name="productTierPriceSavePercentageAmount" type="text" selector="//ul[contains(@class, 'prices-tier')]//li[{{var1}}]//span[contains(@class, 'percent')][contains(text(), '{{var2}}')]" parameterized="true"/>
+
+        <!-- Special price selectors -->
+        <element name="productSpecialPrice" type="text" selector="//span[@data-price-type='finalPrice']/span"/>
+        <element name="specialProductText" type="text" selector="//span[text()='Regular Price']"/>
+        <element name="oldProductPrice" type="text" selector="//span[@data-price-type='oldPrice']/span"/>
 
         <!-- Customizable Option selectors -->
         <element name="allCustomOptionLabels" type="text" selector="#product-options-wrapper label"/>
