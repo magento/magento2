@@ -6,11 +6,13 @@
 namespace Magento\Checkout\Test\Unit\Controller\Cart;
 
 use Magento\Checkout\Controller\Cart\Index;
+use Magento\Framework\Data\Form\FormKey\Validator;
 
 /**
  * Test for \Magento\Checkout\Controller\Cart\CouponPost
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CouponPostTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,6 +85,11 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $redirectFactory;
+
+    /**
+     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $formKeyValidatorMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -166,6 +173,8 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->quoteRepository = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
         $this->shippingAddress = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $this->formKeyValidatorMock = $this->getMock(Validator::class, [], [], '', false);
+        $this->formKeyValidatorMock->expects($this->once())->method('validate')->willReturn(true);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -176,7 +185,8 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
                 'checkoutSession' => $this->checkoutSession,
                 'cart' => $this->cart,
                 'couponFactory' => $this->couponFactory,
-                'quoteRepository' => $this->quoteRepository
+                'quoteRepository' => $this->quoteRepository,
+                'formKeyValidator' => $this->formKeyValidatorMock,
             ]
         );
     }
