@@ -31,4 +31,8 @@
             <argument name="batchSize" xsi:type="number">100</argument>
         </arguments>
     </type>
+    <type name="Magento\InventoryCatalog\Model\ResourceModel\BulkInventoryTransfer">
+        <plugin sortOrder="1" name="magentoInventoryLegacySynchronizationBulkInventoryTransfer"
+                type="Magento\InventoryLegacySynchronization\SetDataToLegacyAtBulkTransfer"/>
+    </type>
 </config>
