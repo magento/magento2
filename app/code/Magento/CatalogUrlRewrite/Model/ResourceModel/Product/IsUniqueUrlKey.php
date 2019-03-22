@@ -1,7 +1,9 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 declare(strict_types=1);
-
 namespace Magento\CatalogUrlRewrite\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -27,6 +29,7 @@ class IsUniqueUrlKey
      * @var \Magento\Eav\Model\Config
      */
     private $eavConfig;
+
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
@@ -72,7 +75,7 @@ class IsUniqueUrlKey
                 "store_id = $storeId"
             );
         $result = $this->connection->fetchOne($qry);
-        if(is_bool($result)){
+        if (is_bool($result)) {
             return $this->checkUrlKeyExistDefaultStore($urlKeyAttributeId, $urlKeyValue);
         }
         return (bool)$result;

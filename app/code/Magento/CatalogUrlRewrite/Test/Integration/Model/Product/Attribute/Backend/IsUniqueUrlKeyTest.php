@@ -1,7 +1,9 @@
 <?php
-
-
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 namespace Magento\Catalog\Test\Integration\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -11,13 +13,11 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Exception\LocalizedException;
 use PHPUnit\Framework\TestCase;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as CollectionProduct;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\Registry;
 
 /**
  * Class IsUniqueUrlKeyTest
- * @package Magento\Catalog\Test\Integration\Model\Product\Attribute\Backend
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IsUniqueUrlKeyTest extends TestCase
 {
@@ -27,9 +27,9 @@ class IsUniqueUrlKeyTest extends TestCase
     private $productRepository;
 
     /**
-     * @var CollectionProduct $productCollection
+     * @var ProductCollectionFactory $productCollectionFactory
      */
-    private $productCollection;
+    private $productCollectionFactory;
 
     /**
      * @var ProductResource $productResource
@@ -44,7 +44,7 @@ class IsUniqueUrlKeyTest extends TestCase
     public function setUp()
     {
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-        $this->productCollection = Bootstrap::getObjectManager()->get(CollectionProduct::class);
+        $this->productCollectionFactory = Bootstrap::getObjectManager()->get(ProductCollectionFactory::class);
         $this->productResource = Bootstrap::getObjectManager()->get(ProductResource::class);
         $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
     }
@@ -102,7 +102,7 @@ class IsUniqueUrlKeyTest extends TestCase
     {
         $this->registry->register('isSecureArea', true);
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $prodCollection */
-        $prodCollection = $this->productCollection->create();
+        $prodCollection = $this->productCollectionFactory->create();
         foreach ($prodCollection as $product) {
             $this->productResource->delete($product);
         }

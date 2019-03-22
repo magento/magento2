@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Setup\Patch\Data;
 
 use Magento\Catalog\Setup\CategorySetup;
@@ -13,7 +13,6 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 /**
  * Class UpdateProductAttributes
- * @package Magento\Catalog\Setup\Patch
  */
 class UpdateUrlKeyProductAttributePatch implements DataPatchInterface
 {
@@ -42,7 +41,6 @@ class UpdateUrlKeyProductAttributePatch implements DataPatchInterface
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
     {
