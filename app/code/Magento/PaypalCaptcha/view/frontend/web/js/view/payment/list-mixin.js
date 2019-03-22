@@ -3,10 +3,16 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
+define([
+    'jquery',
+    'Magento_Captcha/js/model/captchaList'
+], function ($, captchaList) {
     'use strict';
 
     var mixin = {
+
+        formId: 'co-payment-form',
+
         /**
          * Sets custom template for Payflow Pro
          *
@@ -17,11 +23,25 @@ define([], function () {
 
             var component = this._super(payment);
 
-            if (payment.method === 'payflowpro') {
+            if (component.component === 'Magento_Paypal/js/view/payment/method-renderer/payflowpro-method') {
                 component.template = 'Magento_PaypalCaptcha/payment/payflowpro-form';
+                $(window).off('clearTimeout')
+                    .on('clearTimeout', this.clearTimeout.bind(this));
             }
 
             return component;
+        },
+
+        /**
+         * Overrides default window.clearTimeout() to catch errors from iframe and reload Captcha.
+         */
+        clearTimeout: function () {
+            var captcha = captchaList.getCaptchaByFormId(this.formId);
+
+            if (captcha !== null) {
+                captcha.refresh();
+            }
+            clearTimeout();
         }
     };
 
