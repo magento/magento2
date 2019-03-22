@@ -8,7 +8,8 @@ define([
     'Magento_Checkout/js/model/quote',
     'Magento_Catalog/js/price-utils',
     'Magento_Checkout/js/model/totals',
-    'Magento_Checkout/js/model/step-navigator'
+    'Magento_Checkout/js/model/step-navigator',
+    'Magento_Checkout/js/view/shipping'
 ], function (Component, quote, priceUtils, totals, stepNavigator) {
     'use strict';
 

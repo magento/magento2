@@ -8,7 +8,8 @@ define([
     'uiComponent',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/step-navigator',
-    'Magento_Checkout/js/model/sidebar'
+    'Magento_Checkout/js/model/sidebar',
+    'Magento_Checkout/js/view/shipping'
 ], function ($, Component, quote, stepNavigator, sidebarModel) {
     'use strict';
 
