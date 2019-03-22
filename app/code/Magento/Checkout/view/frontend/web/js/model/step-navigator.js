@@ -36,7 +36,7 @@ define([
                 return false;
             }
 
-            isRequestedStepVisible = steps.sort(this.sortItems).some(function (element) {
+            isRequestedStepVisible = steps().sort(this.sortItems).some(function (element) {
                 return (element.code == hashString || element.alias == hashString) && element.isVisible(); //eslint-disable-line
             });
 
