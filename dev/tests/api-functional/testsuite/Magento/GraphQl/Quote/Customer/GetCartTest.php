@@ -135,7 +135,7 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_not_default_store.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_customer_not_default_store.php
      */
     public function testGetCartWithNotDefaultStore()
     {
@@ -170,7 +170,7 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_not_default_store.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_customer_not_default_store.php
      *
      * @expectedException \Exception
      * @expectedExceptionMessage Store code not_existing_store does not exist

@@ -116,11 +116,11 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_not_default_store.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_guest_not_default_store.php
      */
     public function testGetCartWithNotDefaultStore()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1_not_default_store');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1_not_default_store_guest');
         $query = $this->getCartQuery($maskedQuoteId);
 
         $headerMap = ['Store' => 'fixture_second_store'];
@@ -148,14 +148,14 @@ class GetCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_not_default_store.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_guest_not_default_store.php
      *
      * @expectedException \Exception
      * @expectedExceptionMessage Store code not_existing_store does not exist
      */
     public function testGetCartWithNotExistingStore()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1_not_default_store');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1_not_default_store_guest');
 
         $headerMap['Store'] = 'not_existing_store';
         $query = $this->getCartQuery($maskedQuoteId);
