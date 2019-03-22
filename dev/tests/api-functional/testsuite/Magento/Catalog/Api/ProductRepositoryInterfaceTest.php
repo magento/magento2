@@ -1561,40 +1561,95 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * Test saving product with custom attribute of multiselect type
      *
      * 1. Create multi-select attribute
-     * 2. Create product and set 2 options out of 3 to multi-select attribute
-     * 3. Verify that 2 options are selected
-     * 4. Unselect all options
-     * 5. Verify that non options are selected
+     * 2. Create product
+     * 3. Set 2 options out of 3 to multi-select attribute in string format
+     * 4. Verify that 2 options are selected
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiselect_attribute.php
      */
-    public function testUpdateMultiselectAttributes()
+    public function testUpdateMultiselectAttributesWithStringValue()
     {
         $multiselectAttributeCode = 'multiselect_attribute';
         $multiselectOptions = $this->getAttributeOptions($multiselectAttributeCode);
-        $option1 = $multiselectOptions[1]['value'];
-        $option2 = $multiselectOptions[2]['value'];
+        $option1Value = $multiselectOptions[1]['value'];
+        $option2Value = $multiselectOptions[2]['value'];
 
         $productData = $this->getSimpleProductData();
+
+        $multiselectValue = "{$option1Value},{$option2Value}";
         $productData['custom_attributes'] = [
-            ['attribute_code' => $multiselectAttributeCode, 'value' => "{$option1},{$option2}"]
+            ['attribute_code' => $multiselectAttributeCode, 'value' => $multiselectValue]
         ];
         $this->saveProduct($productData, 'all');
 
+        $expectedMultiselectValue = "{$option1Value},{$option2Value}";
         $this->assertMultiselectValue(
             $productData[ProductInterface::SKU],
             $multiselectAttributeCode,
-            "{$option1},{$option2}"
+            $expectedMultiselectValue
         );
+    }
 
+    /**
+     * Test saving product with custom attribute of multiselect type
+     *
+     * 1. Create multi-select attribute
+     * 2. Create product
+     * 3. Set 2 options out of 3 to multi-select attribute in array format
+     * 4. Verify that 2 options are selected
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiselect_attribute.php
+     */
+    public function testUpdateMultiselectAttributesWithArrayValue()
+    {
+        $multiselectAttributeCode = 'multiselect_attribute';
+        $multiselectOptions = $this->getAttributeOptions($multiselectAttributeCode);
+        $option1Value = $multiselectOptions[1]['value'];
+        $option2Value = $multiselectOptions[2]['value'];
+
+        $productData = $this->getSimpleProductData();
+
+        $multiselectValue = ["{$option1Value}", "{$option2Value}"];
         $productData['custom_attributes'] = [
-            ['attribute_code' => $multiselectAttributeCode, 'value' => ""]
+            ['attribute_code' => $multiselectAttributeCode, 'value' => $multiselectValue]
         ];
         $this->saveProduct($productData, 'all');
+
+        $expectedMultiselectValue = "{$option1Value},{$option2Value}";
         $this->assertMultiselectValue(
             $productData[ProductInterface::SKU],
             $multiselectAttributeCode,
-            ""
+            $expectedMultiselectValue
+        );
+    }
+
+    /**
+     * Test saving product with custom attribute of multiselect type
+     *
+     * 1. Create multi-select attribute
+     * 2. Create product
+     * 3. Unselect all options
+     * 4. Verify that non options are selected
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiselect_attribute.php
+     */
+    public function testUpdateMultiselectAttributesWithEmptyValue()
+    {
+        $multiselectAttributeCode = 'multiselect_attribute';
+
+        $productData = $this->getSimpleProductData();
+
+        $multiselectValue = "";
+        $productData['custom_attributes'] = [
+            ['attribute_code' => $multiselectAttributeCode, 'value' => $multiselectValue]
+        ];
+        $this->saveProduct($productData, 'all');
+
+        $expectedMultiselectValue = "";
+        $this->assertMultiselectValue(
+            $productData[ProductInterface::SKU],
+            $multiselectAttributeCode,
+            $expectedMultiselectValue
         );
     }
 

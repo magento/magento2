@@ -50,6 +50,11 @@ class SimpleType implements CustomAttributeTypeLocatorInterface
         } catch (NoSuchEntityException $exception) {
             return TypeProcessor::NORMALIZED_ANY_TYPE;
         }
+
+        if ($attribute->getFrontendInput() === 'multiselect') {
+            return TypeProcessor::NORMALIZED_ANY_TYPE;
+        }
+
         $backendType = $attribute->getBackendType();
         $backendTypeMap = [
             'static' => TypeProcessor::NORMALIZED_ANY_TYPE,
