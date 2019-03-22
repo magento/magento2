@@ -15,6 +15,8 @@ use Magento\Sitemap\Model\SitemapFactory;
 
 /**
  * Save sitemap controller.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
