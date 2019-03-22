@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Quote\Model\Quote;
+use phpDocumentor\Reflection\Types\Mixed_;
 
 /**
  * Add simple product to cart
@@ -140,7 +141,9 @@ class AddSimpleProductToCart
 
         $customizableOptionsData = [];
         foreach ($customizableOptions as $customizableOption) {
-            $customizableOptionsData[$customizableOption['id']] = $customizableOption['value'];
+            $customizableOptionsData[$customizableOption['id']] = $this->convertCustomOptions(
+                $customizableOption['value']
+            );
         }
         return $customizableOptionsData;
     }
@@ -160,5 +163,18 @@ class AddSimpleProductToCart
                 'options' => $customOptions,
             ],
         ]);
+    }
+
+    /**
+     * @param string $value
+     * @return string|array
+     */
+    private function convertCustomOptions(string $value)
+    {
+        if (substr($value, 0, 1) === "[" ||
+            substr($value, strlen($value) - 1, 1) === "]") {
+            return explode(',', substr($value, 1, -1));
+        }
+        return $value;
     }
 }
