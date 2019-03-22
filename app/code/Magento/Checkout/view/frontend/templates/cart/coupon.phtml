@@ -28,6 +28,7 @@
                     </div>
                 </div>
                 <div class="actions-toolbar">
+                    <?php echo $block->getBlockHtml('formkey')?>
                     <?php if (!strlen($block->getCouponCode())): ?>
                     <div class="primary">
                         <button class="action apply primary" type="button" value="<?php /* @escapeNotVerified */ echo __('Apply Discount') ?>">
