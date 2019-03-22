@@ -6,6 +6,8 @@
 
 namespace Magento\Config\Controller\Adminhtml\System;
 
+use Magento\Config\Controller\Adminhtml\System\Config\Save;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Request\Http as HttpRequest;
 
@@ -65,6 +67,38 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         );
         $this->assertEquals($newHost, $url['host'], 'A new host in the url expected, but there is old one');
         $this->resetBaseUrl($defaultHost);
+    }
+
+    /**
+     * Test saving undeclared configs.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testSavingUndeclared()
+    {
+        $request = $this->getRequest();
+        $request->setPostValue([
+            'groups' => [
+                'non_existing' => [
+                    'fields' => [
+                        'non_existing_field' => [
+                            'value' => 'some_value'
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        $request->setParam('section', 'web');
+        $request->setMethod(HttpRequest::METHOD_POST);
+        /** @var Save $controller */
+        $controller = Bootstrap::getObjectManager()->create(Save::class);
+        $controller->execute();
+
+        $this->assertSessionMessages($this->equalTo(['You saved the configuration.']));
+        /** @var ScopeConfigInterface $scopeConfig */
+        $scopeConfig = Bootstrap::getObjectManager()->get(ScopeConfigInterface::class);
+        $this->assertNull($scopeConfig->getValue('web/non_existing/non_existing_field'));
     }
 
     /**
