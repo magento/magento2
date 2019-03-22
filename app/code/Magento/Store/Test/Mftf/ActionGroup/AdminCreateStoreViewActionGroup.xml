@@ -26,7 +26,7 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal" />
         <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarningAboutTakingALongTimeToComplete" />
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmModal" />
-        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForPageReolad"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForPageReload"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the store view." stepKey="seeSavedMessage" />
     </actionGroup>
 
