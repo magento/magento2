@@ -302,4 +302,18 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveProductMessage"/>
     </actionGroup>
+    <actionGroup name="FillCategoryNameAndUrlKeyAndSave">
+        <arguments>
+            <argument name="categoryName" type="string"/>
+            <argument name="categoryUrlKey" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{categoryName}}" stepKey="enterCategoryName"/>
+        <scrollTo selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="scrollToSearchEngineOptimization"/>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSEO"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{categoryUrlKey}}" stepKey="enterURLKey"/>
+        <scrollToTopOfPage stepKey="scrollToTheTopOfPage"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+    </actionGroup>
 </actionGroups>
