@@ -15,5 +15,6 @@
         <element name="selectFirstRow" type="button" selector="//button[@class='action-select']"/>
         <element name="deleteBtn" type="button" selector="//*[text()='Delete']"/>
         <element name="clearAllBtn" type="button" selector="//button[text()='Clear all']"/>
+        <element name="editButtonByCustomerGroupCode" type="button" selector="//tr[.//td[count(//th[./*[.='Group']]/preceding-sibling::th) + 1][./*[.='{{code}}']]]//a[contains(@href, '/edit/')]" parameterized="true" />
     </section>
 </sections>
