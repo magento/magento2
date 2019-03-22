@@ -36,28 +36,13 @@ class BulkSourceUnassign implements BulkSourceUnassignInterface
     private $sourceIndexer;
 
     /**
-     * @var LegacyIndexer
-     */
-    private $legacyIndexer;
-
-    /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
-
-    /**
-     * @var GetProductIdsBySkus
-     */
-    private $getProductIdsBySkus;
-
-    /**
      * MassProductSourceAssign constructor.
      * @param BulkSourceUnassignValidatorInterface $unassignValidator
      * @param BulkSourceUnassignResource $bulkSourceUnassign
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param GetProductIdsBySkus $getProductIdsBySkus
+     * @param DefaultSourceProviderInterface $defaultSourceProvider @deprecated
+     * @param GetProductIdsBySkus $getProductIdsBySkus @deprecated
      * @param SourceIndexer $sourceIndexer
-     * @param LegacyIndexer $legacyIndexer
+     * @param LegacyIndexer $legacyIndexer @deprecated
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
@@ -71,25 +56,14 @@ class BulkSourceUnassign implements BulkSourceUnassignInterface
         $this->unassignValidator = $unassignValidator;
         $this->bulkSourceUnassign = $bulkSourceUnassign;
         $this->sourceIndexer = $sourceIndexer;
-        $this->legacyIndexer = $legacyIndexer;
-        $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->getProductIdsBySkus = $getProductIdsBySkus;
-    }
-
-    /**
-     * Reindex legacy stock (for default source)
-     * @param array $skus
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function reindexLegacy(array $skus): void
-    {
-        $productIds = array_values($this->getProductIdsBySkus->execute($skus));
-        $this->legacyIndexer->executeList($productIds);
     }
 
     /**
      * @inheritdoc
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param array $skus
+     * @param array $sourceCodes
+     * @return int
+     * @throws ValidationException
      */
     public function execute(array $skus, array $sourceCodes): int
     {
@@ -101,10 +75,6 @@ class BulkSourceUnassign implements BulkSourceUnassignInterface
         $res = $this->bulkSourceUnassign->execute($skus, $sourceCodes);
 
         $this->sourceIndexer->executeList($sourceCodes);
-        if (in_array($this->defaultSourceProvider->getCode(), $sourceCodes, true)) {
-            $this->reindexLegacy($skus);
-        }
-
         return $res;
     }
 }

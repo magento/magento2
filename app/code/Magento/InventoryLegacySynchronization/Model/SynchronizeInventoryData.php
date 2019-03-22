@@ -48,7 +48,7 @@ class SynchronizeInventoryData
     {
         if ($destination === Synchronize::MSI_TO_LEGACY) {
             $this->setDataToLegacyInventory->execute($items);
-        } else {
+        } elseif ($destination === Synchronize::LEGACY_TO_MSI) {
             $this->setDataToSourceItem->execute($items);
         }
     }

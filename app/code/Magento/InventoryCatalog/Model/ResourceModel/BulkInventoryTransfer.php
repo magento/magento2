@@ -10,7 +10,6 @@ namespace Magento\InventoryCatalog\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 
@@ -38,27 +37,19 @@ class BulkInventoryTransfer
     private $isSourceItemManagementAllowedForProductType;
 
     /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
-
-    /**
      * @param ResourceConnection $resourceConnection
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         GetProductTypesBySkusInterface $getProductTypesBySkus,
-        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
-        DefaultSourceProviderInterface $defaultSourceProvider
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->getProductTypesBySkus = $getProductTypesBySkus;
         $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
-        $this->defaultSourceProvider = $defaultSourceProvider;
     }
 
     /**

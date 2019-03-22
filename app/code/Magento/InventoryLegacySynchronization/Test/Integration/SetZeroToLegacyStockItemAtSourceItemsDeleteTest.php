@@ -19,7 +19,7 @@ use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 
-class SetToZeroLegacyStockItemAtSourceItemsDeleteTest extends TestCase
+class SetZeroToLegacyStockItemAtSourceItemsDeleteTest extends TestCase
 {
     /**
      * @var ProductRepositoryInterface

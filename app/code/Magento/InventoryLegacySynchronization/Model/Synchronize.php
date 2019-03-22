@@ -24,14 +24,14 @@ class Synchronize
     private const TOPIC_NAME = 'inventory.legacy_synchronization.set_data';
 
     /**
-     * Define synchronization from MSI source items to legacy catalog inventory
+     * Synchronization from MSI source items to legacy catalog inventory
      */
-    public const MSI_TO_LEGACY = 'msi-to-legacy';
+    public const MSI_TO_LEGACY = 'synchronize-msi-to-legacy';
 
     /**
-     * Define synchronization from legacy catalog inventory to MSI source items
+     * Synchronization from legacy catalog inventory to MSI source items
      */
-    public const LEGACY_TO_MSI = 'legacy-to-msi';
+    public const LEGACY_TO_MSI = 'synchronize-legacy-to-msi';
 
     /**
      * @var BulkManagementInterface
@@ -96,12 +96,12 @@ class Synchronize
     }
 
     /**
-     * @param string $direction
+     * @param string $destination
      * @param array $items
      */
-    private function executeAsync(string $direction, array $items): void
+    private function executeAsync(string $destination, array $items): void
     {
-        $operations = [];
+        $asyncOperations = [];
 
         $bulkUuid = $this->identityService->generateId();
 
@@ -113,7 +113,7 @@ class Synchronize
                     'topic_name' => self::TOPIC_NAME,
                     'serialized_data' => $this->serializer->serialize(
                         [
-                            'direction' => $direction,
+                            'destination' => $destination,
                             'items' => $chunk
                         ]
                     ),
@@ -121,36 +121,36 @@ class Synchronize
                 ]
             ];
 
-            /** @var \Magento\AsynchronousOperations\Api\Data\OperationInterface $operation */
-            $operation = $this->operationInterfaceFactory->create($data);
-            $operations[] = $operation;
+            /** @var \Magento\AsynchronousOperations\Api\Data\OperationInterface $asyncOperation */
+            $asyncOperation = $this->operationInterfaceFactory->create($data);
+            $asyncOperations[] = $asyncOperation;
         }
 
-        $this->bulkManagement->scheduleBulk($bulkUuid, $operations, __('Synchronize legacy stock'));
+        $this->bulkManagement->scheduleBulk($bulkUuid, $asyncOperations, __('Synchronize legacy stock'));
     }
 
     /**
-     * @param string $direction
+     * @param string $destination
      * @param array $items
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function executeSync(string $direction, array $items): void
+    private function executeSync(string $destination, array $items): void
     {
-        $this->synchronizeInventoryData->execute($direction, $items);
+        $this->synchronizeInventoryData->execute($destination, $items);
     }
 
     /**
-     * @param string $direction
+     * @param string $destination
      * @param array $items
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(string $direction, array $items): void
+    public function execute(string $destination, array $items): void
     {
         if ($this->isAsyncLegacyAlignment->execute()) {
-            $this->executeAsync($direction, $items);
+            $this->executeAsync($destination, $items);
         } else {
-            $this->executeSync($direction, $items);
+            $this->executeSync($destination, $items);
         }
     }
 }
