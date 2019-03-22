@@ -8,7 +8,7 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="StorefrontReviewOrderItemsSection">
+    <section name="StorefrontPaypalReviewOrderItemsSection">
         <element name="placeOrder" type="button" selector="#review-button" timeout="30"/>
         <element name="orderSummaryTotal" type="text" selector="tr.grand.totals span.price"/>
     </section>
