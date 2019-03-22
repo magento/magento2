@@ -51,7 +51,7 @@
         <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="openCreatedStoreGroupInGrid">
             <argument name="storeGroupName" value="{{staticStoreGroup.name}}"/>
         </actionGroup>
-        <click selector="{{AdminStoresGridSection.firstRow('1')}}" stepKey="clickFirstRow"/>
+        <click selector="{{AdminStoresGridSection.firstRow}}" stepKey="clickFirstRow"/>
         <waitForPageLoad stepKey="AdminSystemStoreGroupPageToOpen"/>
         <!--Update created Store group as per requirement and accept alert message-->
         <actionGroup ref="EditCustomStoreGroupAcceptWarningMessageActionGroup" stepKey="updateCustomStoreGroup">
