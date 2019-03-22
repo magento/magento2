@@ -90,10 +90,11 @@ class FormatTest extends \PHPUnit\Framework\TestCase
      */
     public function getPriceFormatDataProvider(): array
     {
+        $swissGroupSymbol = INTL_ICU_VERSION >= 59.1 ? '’' : '\'';
         return [
             ['en_US', 'USD', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
             ['de_DE', 'EUR', ['decimalSymbol' => ',', 'groupSymbol' => '.']],
-            ['de_CH', 'CHF', ['decimalSymbol' => '.', 'groupSymbol' => '\'']],
+            ['de_CH', 'CHF', ['decimalSymbol' => '.', 'groupSymbol' => $swissGroupSymbol]],
             ['uk_UA', 'UAH', ['decimalSymbol' => ',', 'groupSymbol' => ' ']]
         ];
     }
