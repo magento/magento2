@@ -8,7 +8,7 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="PaypalReviewOrderPage" url="/braintree/paypal/review" area="storefront" module="Magento_Braintree">
+    <page name="StorefrontPaypalReviewOrderPage" url="/braintree/paypal/review" area="storefront" module="Magento_Braintree">
         <section name="StorefrontPaypalReviewOrderShippingSection"/>
         <section name="StorefrontPaypalReviewOrderItemsSection"/>
     </page>
