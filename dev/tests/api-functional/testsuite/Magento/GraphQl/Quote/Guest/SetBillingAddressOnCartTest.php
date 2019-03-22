@@ -174,7 +174,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
-    public function testSettBillingAddressToCustomerCart()
+    public function testSetBillingAddressToCustomerCart()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
 
@@ -237,6 +237,25 @@ mutation {
       billing_address {
         city
       }
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testSetBillingAddressOnNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = <<<QUERY
+{
+  cart(cart_id: "$maskedQuoteId") {
+    items {
+      id
     }
   }
 }

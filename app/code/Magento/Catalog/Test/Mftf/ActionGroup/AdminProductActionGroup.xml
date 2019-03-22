@@ -15,9 +15,17 @@
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
         <waitForElementVisible selector="{{AdminProductGridActionSection.addTypeProduct(product.type_id)}}" stepKey="waitForAddProductDropdown" time="30"/>
         <click selector="{{AdminProductGridActionSection.addTypeProduct(product.type_id)}}" stepKey="clickAddProductType"/>
-        <waitForPageLoad stepKey="waitForCreateProductPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForCreateProductPageLoad"/>
         <seeInCurrentUrl url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, product.type_id)}}" stepKey="seeNewProductUrl"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeNewProductTitle"/>
+    </actionGroup>
+    
+    <!--Navigate to create product page directly via ID-->
+    <actionGroup name="goToProductPageViaID">
+        <arguments>
+            <argument name="productId" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="goToProduct"/>
     </actionGroup>
 
     <!-- Fill main fields in create product form using a product entity -->
@@ -96,6 +104,9 @@
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
 
+    <actionGroup name="toggleProductEnabled">
+        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="toggleEnabled"/>
+    </actionGroup>
     <!-- Save product but do not expect a success message -->
     <actionGroup name="SaveProductFormNoSuccessCheck" extends="saveProductForm">
         <remove keyForRemoval="seeSaveConfirmation"/>
@@ -204,12 +215,14 @@
         <arguments>
             <argument name="website" type="string"/>
         </arguments>
-        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ScrollToWebsites"/>
-        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ClickTpOpenProductInWebsite"/>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToWebsites"/>
+        <conditionalClick selector="{{ProductInWebsitesSection.sectionHeader}}" dependentSelector="{{ProductInWebsitesSection.website(website)}}" visible="false" stepKey="clickToOpenProductInWebsite"/>
         <waitForPageLoad stepKey="waitForPageOpened"/>
-        <click selector="{{ProductInWebsitesSection.website(website)}}" stepKey="SelectWebsite"/>
+        <click selector="{{ProductInWebsitesSection.website(website)}}" stepKey="selectWebsite"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
-        <waitForPageLoad time='60' stepKey="waitForPageOpened1"/>
+        <waitForPageLoad time='60' stepKey="waitForProducrSaved"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSaveSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveSuccessMessage"/>
     </actionGroup>
 
     <actionGroup name="ProductSetAdvancedPricing">
