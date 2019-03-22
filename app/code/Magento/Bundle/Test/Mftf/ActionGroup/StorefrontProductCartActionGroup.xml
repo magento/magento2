@@ -38,4 +38,24 @@
         <waitForElementVisible selector="{{StorefrontMinicartSection.productCount}}" stepKey="waitProductCount"/>
         <see userInput="You added {{productName}} to your shopping cart." selector="{{StorefrontMessagesSection.success}}" stepKey="seeSuccessMessage"/>
     </actionGroup>
+
+    <!-- Add Bundle Product to Cart from product Page-->
+    <actionGroup name="StorefrontAddBundleProductFromProductToCartActionGroup">
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomizeAndAddToCart"/>
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddBundleProductToCart"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.productCount}}" stepKey="waitProductCount"/>
+        <see userInput="You added {{productName}} to your shopping cart." selector="{{StorefrontMessagesSection.success}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <!-- Add Bundled Product to Cart with selected multiselect option-->
+    <actionGroup name="StorefrontAddBundleProductFromProductToCartWithMultiOption" extends="StorefrontAddBundleProductFromProductToCartActionGroup">
+        <arguments>
+            <argument name="optionName" type="string"/>
+            <argument name="value" type="string"/>
+        </arguments>
+        <selectOption selector="{{StorefrontBundledSection.multiselectOptionFourProducts(optionName)}}" userInput="{{value}}" stepKey="selectValue" before="clickAddBundleProductToCart"/>
+    </actionGroup>
 </actionGroups>
