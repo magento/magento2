@@ -35,6 +35,10 @@ class UpdateLegacyStockItemsData
      */
     public function execute(array $legacyItemsData): void
     {
+        if (empty($legacyItemsData)) {
+            return;
+        }
+
         $tableName = $this->resourceConnection->getTableName('cataloginventory_stock_item');
 
         $connection = $this->resourceConnection->getConnection();

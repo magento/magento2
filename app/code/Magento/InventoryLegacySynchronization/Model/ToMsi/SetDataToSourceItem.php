@@ -98,6 +98,11 @@ class SetDataToSourceItem
 
         foreach ($legacyItemsData as $legacyItemData) {
             $productId = (int) $legacyItemData[StockItemInterface::PRODUCT_ID];
+
+            if (!isset($productSkusById[$productId], $legacyStockItemsByProductsIds[$productId])) {
+                continue;
+            }
+
             $productSku = $productSkusById[$productId];
 
             /** @var StockItemInterface $legacyStockItem */
@@ -111,14 +116,16 @@ class SetDataToSourceItem
             ];
         }
 
-        $this->updateSourceItemsData->execute($sourceItemsData);
+        if (!empty($sourceItemsData)) {
+            $this->updateSourceItemsData->execute($sourceItemsData);
 
-        $sourceItemsToReindex = $this->getDefaultSourceItemsBySkus->execute(array_values($productSkusById));
-        $sourceItemsIdsToReindex = [];
-        foreach ($sourceItemsToReindex as $sourceItemToReindex) {
-            $sourceItemsIdsToReindex[] = (int) $sourceItemToReindex->getId();
+            $sourceItemsToReindex = $this->getDefaultSourceItemsBySkus->execute(array_values($productSkusById));
+            $sourceItemsIdsToReindex = [];
+            foreach ($sourceItemsToReindex as $sourceItemToReindex) {
+                $sourceItemsIdsToReindex[] = (int)$sourceItemToReindex->getId();
+            }
+
+            $this->sourceItemIndexer->executeList($sourceItemsIdsToReindex);
         }
-
-        $this->sourceItemIndexer->executeList($sourceItemsIdsToReindex);
     }
 }

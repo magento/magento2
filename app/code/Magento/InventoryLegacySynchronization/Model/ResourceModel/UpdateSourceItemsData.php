@@ -35,6 +35,10 @@ class UpdateSourceItemsData
      */
     public function execute(array $sourceItemsData): void
     {
+        if (empty($sourceItemsData)) {
+            return;
+        }
+
         $tableName = $this->resourceConnection->getTableName('inventory_source_item');
 
         $connection = $this->resourceConnection->getConnection();

@@ -32,32 +32,17 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
     private $bulkInventoryTransfer;
 
     /**
-     * @var GetProductIdsBySkusInterface
-     */
-    private $getProductIdsBySkus;
-
-    /**
      * @var LegacyIndexer
      */
     private $legacyIndexer;
 
     /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
-
-    /**
-     * @var SourceIndexer
-     */
-    private $sourceIndexer;
-
-    /**
      * MassProductSourceAssign constructor.
      * @param BulkInventoryTransferValidatorInterface $inventoryTransferValidator
      * @param BulkInventoryTransferResource $bulkInventoryTransfer
-     * @param SourceIndexer $sourceIndexer
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
+     * @param SourceIndexer $sourceIndexer @deprecated
+     * @param DefaultSourceProviderInterface $defaultSourceProvider @deprecated
+     * @param GetProductIdsBySkusInterface $getProductIdsBySkus @deprecated
      * @param LegacyIndexer $legacyIndexer
      * @SuppressWarnings(PHPMD.LongVariable)
      */
@@ -71,10 +56,7 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
     ) {
         $this->bulkInventoryTransferValidator = $inventoryTransferValidator;
         $this->bulkInventoryTransfer = $bulkInventoryTransfer;
-        $this->getProductIdsBySkus = $getProductIdsBySkus;
         $this->legacyIndexer = $legacyIndexer;
-        $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->sourceIndexer = $sourceIndexer;
     }
 
     /**
@@ -112,14 +94,6 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
             $destinationSource,
             $unassignFromOrigin
         );
-
-        $this->sourceIndexer->executeList([$originSource, $destinationSource]);
-
-        if (($this->defaultSourceProvider->getCode() === $originSource) ||
-            ($this->defaultSourceProvider->getCode() === $destinationSource)) {
-            $productIds = array_values($this->getProductIdsBySkus->execute($skus));
-            $this->reindexLegacy($productIds);
-        }
 
         return true;
     }
