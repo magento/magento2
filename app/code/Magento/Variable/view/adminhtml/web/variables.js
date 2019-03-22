@@ -112,8 +112,10 @@ window.Variables = {
         var windowId = this.dialogWindowId;
         jQuery('#' + windowId).modal('closeModal');
         var textareaElm = $(this.textareaElementId);
+        
         if (textareaElm) {
             var scrollPos = textareaElm.scrollTop;
+
             if (!isNaN(variable)) {
                 updateElementAtCursor(textareaElm, Variables.variablesValue[variable - 1]);
             } else {
