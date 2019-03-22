@@ -428,6 +428,11 @@
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
     </entity>
+    <entity name="ProductWithTextFieldAndAreaOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionField</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
+    </entity>
     <entity name="ApiVirtualProductWithDescription" type="product">
         <data key="sku" unique="suffix">api-virtual-product</data>
         <data key="type_id">virtual</data>
@@ -931,6 +936,19 @@
         <data key="attributeGroupId">13</data>
         <data key="sortOrder">0</data>
     </entity>
+    <entity name="productAlphabeticalA" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">AAA Product</data>
+    </entity>
+    <entity name="productAlphabeticalB" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">BBB Product</data>
+    </entity>
+    <entity name="productWithSpecialCharacters" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">Product "!@#$%^&amp;*()+:;\|}{][?=~` </data>
+        <data key="nameWithSafeChars" unique="suffix">|}{][?=~` </data>
+    </entity>
+    <entity name="productWith130CharName" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">ProductWith128Chars 1234567891123456789112345678911234567891123456789112345678911234567891123456789112345678 endnums</data>
+    </entity>
     <entity name="simpleProductDefault" type="product">
         <data key="sku" unique="suffix">sku_simple_product_</data>
         <data key="type_id">simple</data>
@@ -947,5 +965,21 @@
         <data key="tax_class_id">2</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="simpleProductWithoutCategory" type="product">
+        <data key="sku" unique="suffix">sku_simple_product_</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">560</data>
+        <data key="urlKey" unique="suffix">simple-product-</data>
+        <data key="status">1</data>
+        <data key="quantity">25</data>
+        <data key="weight">1</data>
+        <data key="product_has_weight">1</data>
+        <data key="is_in_stock">1</data>
+        <data key="tax_class_id">2</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
 </entities>
