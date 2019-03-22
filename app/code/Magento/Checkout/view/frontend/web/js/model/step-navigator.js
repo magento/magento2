@@ -145,7 +145,7 @@ define([
                 }
             });
 
-            return activeItemIndex > requestedItemIndex;
+            return (requestedItemIndex !== -1) ? (activeItemIndex > requestedItemIndex) : false;
         },
 
         /**
