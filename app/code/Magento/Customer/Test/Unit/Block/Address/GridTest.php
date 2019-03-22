@@ -81,7 +81,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
     public function testGetChildHtml()
     {
         $customerId = 1;
-
+        $outputString = 'OutputString';
         /** @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject $block */
         $block = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
             ->setMethods(['setCollection'])
@@ -93,7 +93,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         /** @var \PHPUnit_Framework_MockObject_MockObject */
         $addressCollection = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Address\Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setOrder', 'setCustomerFilter', 'load'])
+            ->setMethods(['setOrder', 'setCustomerFilter', 'load','addFieldToFilter'])
             ->getMock();
 
         $layout->expects($this->atLeastOnce())->method('getChildName')->with('NameInLayout', 'pager')
@@ -108,12 +108,13 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $addressCollection->expects($this->atLeastOnce())->method('setCustomerFilter')->with([$customerId])
             ->willReturnSelf();
+        $addressCollection->expects(static::any())->method('addFieldToFilter')->willReturnSelf();
         $this->addressCollectionFactory->expects($this->atLeastOnce())->method('create')
             ->willReturn($addressCollection);
         $block->expects($this->atLeastOnce())->method('setCollection')->with($addressCollection)->willReturnSelf();
         $this->gridBlock->setNameInLayout('NameInLayout');
         $this->gridBlock->setLayout($layout);
-        $this->assertEquals('OutputString', $this->gridBlock->getChildHtml('pager'));
+        $this->assertEquals($outputString, $this->gridBlock->getChildHtml('pager'));
     }
 
     /**
@@ -137,7 +138,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         /** @var \PHPUnit_Framework_MockObject_MockObject */
         $addressCollection = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Address\Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setOrder', 'setCustomerFilter', 'load', 'getIterator'])
+            ->setMethods(['setOrder', 'setCustomerFilter', 'load', 'getIterator','addFieldToFilter'])
             ->getMock();
         $addressDataModel = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\AddressInterface::class);
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
@@ -157,6 +158,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $addressCollection->expects($this->atLeastOnce())->method('setCustomerFilter')->with([$customerId])
             ->willReturnSelf();
+        $addressCollection->expects(static::any())->method('addFieldToFilter')->willReturnSelf();
         $addressCollection->expects($this->atLeastOnce())->method('getIterator')
             ->willReturn(new \ArrayIterator($collection));
         $this->addressCollectionFactory->expects($this->atLeastOnce())->method('create')
