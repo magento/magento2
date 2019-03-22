@@ -58,6 +58,7 @@ class Date extends AbstractElement
     private function isDate(string $value): bool
     {
         $date = date_parse($value);
+
         return !empty($date['year']) && !empty($date['month']) && !empty($date['day']);
     }
 
@@ -97,7 +98,7 @@ class Date extends AbstractElement
         try {
             if (preg_match('/^[0-9]+$/', $value)) {
                 $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
-            } else if ($this->isDate($value)) {
+            } else if (is_string($value) && $this->isDate($value)) {
                 $this->_value = new \DateTime($value, new \DateTimeZone($this->localeDate->getConfigTimezone()));
             } else {
                 $this->_value = '';
