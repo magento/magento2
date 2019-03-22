@@ -9,7 +9,7 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="MsiCustomer1" type="customer">
-        <data key="group_id">0</data>
+        <data key="group_id">1</data>
         <data key="default_billing">true</data>
         <data key="default_shipping">true</data>
         <data key="email" unique="prefix">jfirst@example.com</data>
