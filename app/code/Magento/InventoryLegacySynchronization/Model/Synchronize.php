@@ -147,6 +147,10 @@ class Synchronize
      */
     public function execute(string $destination, array $items): void
     {
+        if (empty($items)) {
+            return;
+        }
+
         if ($this->isAsyncLegacyAlignment->execute()) {
             $this->executeAsync($destination, $items);
         } else {

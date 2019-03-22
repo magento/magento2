@@ -70,19 +70,25 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
     public function afterExecute(SourceItemsSaveInterface $subject, $result, array $sourceItems): void
     {
         $sourceItemsData = [];
+        $skus = [];
         foreach ($sourceItems as $sourceItem) {
-            if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
+            $skus[] = $sourceItem->getSku();
+        }
+
+        $productTypes = $this->getProductTypeBySku->execute($skus);
+        $defaultSourceCode = $this->defaultSourceProvider->getCode();
+
+        foreach ($sourceItems as $sourceItem) {
+            if ($sourceItem->getSourceCode() !== $defaultSourceCode) {
                 continue;
             }
 
             $sku = $sourceItem->getSku();
-
-            $productTypes = $this->getProductTypeBySku->execute([$sku]);
-            if (isset($productTypes[$sku])) {
-                $typeId = $productTypes[$sku];
-            } else {
+            if (!isset($productTypes[$sku])) {
                 continue;
             }
+
+            $typeId = $productTypes[$sku];
 
             if (false === $this->isSourceItemsAllowedForProductType->execute($typeId)) {
                 continue;
