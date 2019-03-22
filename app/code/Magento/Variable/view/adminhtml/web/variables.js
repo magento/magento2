@@ -130,7 +130,8 @@ define([
                     updateElementAtCursor(textareaElm, Variables.variablesValue[variable - 1]);
                 } else {
                     updateElementAtCursor(textareaElm, variable);
-                }                    textareaElm.focus();
+                }
+                textareaElm.focus();
                 textareaElm.scrollTop = scrollPos;
                 jQuery(textareaElm).change();
                 textareaElm = null;
