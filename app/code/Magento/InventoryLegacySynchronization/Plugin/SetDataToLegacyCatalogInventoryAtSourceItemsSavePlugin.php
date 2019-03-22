@@ -7,11 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLegacySynchronization\Plugin;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryLegacySynchronization\Model\Synchronize;
-use Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization\SetDataToLegacyCatalogInventory;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
@@ -42,10 +40,9 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
     private $synchronize;
 
     /**
-     * @param DefaultSourceProviderInterface $defaultSourceProvider @deprecated
-     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType @deprecated
-     * @param GetProductTypesBySkusInterface $getProductTypeBySku @deprecated
-     * @param SetDataToLegacyCatalogInventory $setDataToLegacyCatalogInventory @deprecated
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param GetProductTypesBySkusInterface $getProductTypeBySku
      * @param Synchronize|null $synchronize
      * @SuppressWarnings(PHPMD.LongVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -54,14 +51,12 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
         DefaultSourceProviderInterface $defaultSourceProvider,
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypeBySku,
-        SetDataToLegacyCatalogInventory $setDataToLegacyCatalogInventory,
-        Synchronize $synchronize = null
+        Synchronize $synchronize
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->getProductTypeBySku = $getProductTypeBySku;
-        $this->synchronize = $synchronize ?:
-            ObjectManager::getInstance()->get(Synchronize::class);
+        $this->synchronize = $synchronize;
     }
 
     /**

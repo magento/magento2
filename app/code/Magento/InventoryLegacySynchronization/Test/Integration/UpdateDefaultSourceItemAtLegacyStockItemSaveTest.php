@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration;
+namespace Magento\InventoryLegacySynchronization\Test\Integration;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\MessageQueue\ConsumerFactory;
@@ -38,7 +38,7 @@ class UpdateDefaultSourceItemAtLegacyStockItemSaveTest extends TestCase
         $this->stockRegistry = Bootstrap::getObjectManager()->create(StockRegistryInterface::class);
         $this->getDefaultSourceItemBySku = Bootstrap::getObjectManager()->get(GetDefaultSourceItemBySku::class);
         $this->consumer = Bootstrap::getObjectManager()->create(ConsumerFactory::class)
-            ->get('legacyCatalogInventorySynchronization', 100);
+            ->get('legacyInventorySynchronization', 100);
     }
 
     /**
@@ -49,7 +49,7 @@ class UpdateDefaultSourceItemAtLegacyStockItemSaveTest extends TestCase
      * @magentoDbIsolation enabled
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testSaveLegacyStockItemAssignedToDefaultSource()
+    public function testSaveLegacyStockItemAssignedToDefaultSource(): void
     {
         $stockItem = $this->stockRegistry->getStockItemBySku('SKU-1');
         $stockItem->setQty(10);
@@ -73,7 +73,7 @@ class UpdateDefaultSourceItemAtLegacyStockItemSaveTest extends TestCase
      * @magentoDbIsolation enabled
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testSaveLegacyStockItemAssignedToDefaultSourceAsynchronously()
+    public function testSaveLegacyStockItemAssignedToDefaultSourceAsynchronously(): void
     {
         $stockItem = $this->stockRegistry->getStockItemBySku('SKU-1');
         $stockItem->setQty(10);
@@ -104,7 +104,7 @@ class UpdateDefaultSourceItemAtLegacyStockItemSaveTest extends TestCase
      * @magentoDbIsolation enabled
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testSaveLegacyStockItemNotAssignedToDefaultSource()
+    public function testSaveLegacyStockItemNotAssignedToDefaultSource(): void
     {
         $stockItem = $this->stockRegistry->getStockItemBySku('SKU-2');
         $stockItem->setQty(10);
@@ -138,7 +138,7 @@ class UpdateDefaultSourceItemAtLegacyStockItemSaveTest extends TestCase
      * @magentoDbIsolation enabled
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testSaveLegacyStockItemWithoutDefaultSourceAssignment()
+    public function testSaveLegacyStockItemWithoutDefaultSourceAssignment(): void
     {
         // SKU-3 is out of stock and not assigned to default source
         $stockItem = $this->stockRegistry->getStockItemBySku('SKU-3');

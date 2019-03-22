@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration;
+namespace Magento\InventoryLegacySynchronization\Test\Integration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -79,7 +79,7 @@ class SetDataToLegacyStockItemAtSourceItemsSaveTest extends TestCase
         $this->defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
 
         $this->consumer = Bootstrap::getObjectManager()->create(ConsumerFactory::class)
-            ->get('legacyCatalogInventorySynchronization', 100);
+            ->get('legacyInventorySynchronization', 100);
     }
 
     /**
@@ -88,7 +88,7 @@ class SetDataToLegacyStockItemAtSourceItemsSaveTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    public function testSetData()
+    public function testShouldSynchronizeLegacyStock(): void
     {
         $productSku = 'SKU-1';
         $product = $this->productRepository->get($productSku);
@@ -133,7 +133,7 @@ class SetDataToLegacyStockItemAtSourceItemsSaveTest extends TestCase
      * @magentoAdminConfigFixture cataloginventory/legacy_stock/async 1
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    public function testSetDataAsynchronously()
+    public function testShouldSynchronizeLegacyStockAsynchronously(): void
     {
         $productSku = 'SKU-1';
         $product = $this->productRepository->get($productSku);

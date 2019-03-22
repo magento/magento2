@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration;
+namespace Magento\InventoryLegacySynchronization\Test\Integration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\StockStatusCriteriaInterface;
@@ -15,12 +15,12 @@ use Magento\CatalogInventory\Model\Stock\Status;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
+use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class SetOutOfStockToLegacyStockStatusAtSourceItemsDeleteTest extends TestCase
+class SetDataToLegacyStockStatusAtSourceItemsSaveTest extends TestCase
 {
     /**
      * @var ProductRepositoryInterface
@@ -48,9 +48,9 @@ class SetOutOfStockToLegacyStockStatusAtSourceItemsDeleteTest extends TestCase
     private $sourceItemRepository;
 
     /**
-     * @var SourceItemsDeleteInterface
+     * @var SourceItemsSaveInterface
      */
-    private $sourceItemsDelete;
+    private $sourceItemsSave;
 
     /**
      * @var DefaultSourceProviderInterface
@@ -69,7 +69,7 @@ class SetOutOfStockToLegacyStockStatusAtSourceItemsDeleteTest extends TestCase
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
 
-        $this->sourceItemsDelete = Bootstrap::getObjectManager()->get(SourceItemsDeleteInterface::class);
+        $this->sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
         $this->defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
     }
 
@@ -78,7 +78,7 @@ class SetOutOfStockToLegacyStockStatusAtSourceItemsDeleteTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
-    public function testSetOutOfStock()
+    public function testShouldSetDataToLegacyOnSourceItemSave(): void
     {
         $productSku = 'SKU-1';
         $product = $this->productRepository->get($productSku);
@@ -103,13 +103,16 @@ class SetOutOfStockToLegacyStockStatusAtSourceItemsDeleteTest extends TestCase
         $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
         self::assertCount(1, $sourceItems);
 
-        $this->sourceItemsDelete->execute($sourceItems);
+        $sourceItem = reset($sourceItems);
+        $sourceItem->setQuantity(20.0);
+        $sourceItem->setStatus(SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->sourceItemsSave->execute($sourceItems);
 
         $legacyStockStatuses = $this->legacyStockStatusRepository->getList($legacyStockStatusCriteria)->getItems();
         self::assertCount(1, $legacyStockStatuses);
 
-        $legacyStockStatus = reset($legacyStockStatuses);
+        $legacyStockStatus = current($legacyStockStatuses);
         self::assertEquals(Status::STATUS_OUT_OF_STOCK, $legacyStockStatus->getStockStatus());
-        self::assertEquals(0, $legacyStockStatus->getQty());
+        self::assertEquals(20, $legacyStockStatus->getQty());
     }
 }

@@ -9,10 +9,9 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <cataloginventory>
-            <bulk_operations>
+            <legacy_stock>
                 <async>0</async>
-                <batch_size>100</batch_size>
-            </bulk_operations>
+            </legacy_stock>
         </cataloginventory>
     </default>
 </config>

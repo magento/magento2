@@ -7,23 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLegacySynchronization\Model\ToLegacy;
 
+use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkus;
 use Magento\InventoryLegacySynchronization\Model\GetLegacyStockItemsByProductIds;
-use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
+use Magento\InventoryLegacySynchronization\Model\ResourceModel\UpdateLegacyStockItemsData;
 
+/**
+ * Copy source item information to legacy stock
+ */
 class SetDataToLegacyInventory
 {
-    /**
-     * @var SetDataToLegacyStockItem
-     */
-    private $setDataToLegacyStockItem;
-
     /**
      * @var GetLegacyStockItemsByProductIds
      */
@@ -42,7 +41,7 @@ class SetDataToLegacyInventory
     /**
      * @var GetProductIdsBySkus
      */
-    private $getProductIdsBySkus;
+    private $productResourceModel;
 
     /**
      * @var DefaultSourceProviderInterface
@@ -50,29 +49,33 @@ class SetDataToLegacyInventory
     private $defaultSourceProvider;
 
     /**
-     * SetDataToLegacyCatalogInventory constructor.
+     * @var UpdateLegacyStockItemsData
+     */
+    private $updateLegacyStockItemsData;
+
+    /**
+     * @param UpdateLegacyStockItemsData $updateLegacyStockItemsData
      * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param SetDataToLegacyStockItem $setDataToLegacyStockItem
      * @param GetLegacyStockItemsByProductIds $getLegacyStockItemsByProductIds
      * @param StockStateProviderInterface $stockStateProvider
      * @param Processor $indexerProcessor
-     * @param GetProductIdsBySkus $getProductIdsBySkus
+     * @param ProductResourceModel $productResourceModel
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
+        UpdateLegacyStockItemsData $updateLegacyStockItemsData,
         DefaultSourceProviderInterface $defaultSourceProvider,
-        SetDataToLegacyStockItem $setDataToLegacyStockItem,
         GetLegacyStockItemsByProductIds $getLegacyStockItemsByProductIds,
         StockStateProviderInterface $stockStateProvider,
         Processor $indexerProcessor,
-        GetProductIdsBySkus $getProductIdsBySkus
+        ProductResourceModel $productResourceModel
     ) {
-        $this->setDataToLegacyStockItem = $setDataToLegacyStockItem;
         $this->getLegacyStockItemsByProductIds = $getLegacyStockItemsByProductIds;
         $this->stockStateProvider = $stockStateProvider;
         $this->indexerProcessor = $indexerProcessor;
-        $this->getProductIdsBySkus = $getProductIdsBySkus;
+        $this->productResourceModel = $productResourceModel;
         $this->defaultSourceProvider = $defaultSourceProvider;
+        $this->updateLegacyStockItemsData = $updateLegacyStockItemsData;
     }
 
     /**
@@ -80,10 +83,17 @@ class SetDataToLegacyInventory
      *
      * @param array $sourceItemsData
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function execute(array $sourceItemsData): void
     {
-        $productIds = [];
+        $productSkus = array_column($sourceItemsData, SourceItemInterface::SKU);
+        $productIdsBySku = $this->productResourceModel->getProductsIdsBySkus($productSkus);
+
+        $legacyStockItemsByProductsIds =
+            $this->getLegacyStockItemsByProductIds->execute(array_values($productIdsBySku));
+
+        $legacyItemsToUpdateData = [];
         foreach ($sourceItemsData as $sourceItemData) {
             $sku = (string) $sourceItemData[SourceItemInterface::SKU];
 
@@ -91,18 +101,17 @@ class SetDataToLegacyInventory
                 throw new LocalizedException(__('Only default source can synchronize legacy stock'));
             }
 
-            try {
-                $productId = (int) current($this->getProductIdsBySkus->execute([$sku]));
-            } catch (NoSuchEntityException $e) {
+            if (!isset($productIdsBySku[$sku])) {
                 continue;
             }
 
-            $legacyStockItems = $this->getLegacyStockItemsByProductIds->execute([$productId]);
-            if (!isset($legacyStockItems[$productId])) {
+            $productId = $productIdsBySku[$sku];
+
+            if (!isset($legacyStockItemsByProductsIds[$productId])) {
                 continue;
             }
 
-            $legacyStockItem = $legacyStockItems[$productId];
+            $legacyStockItem = $legacyStockItemsByProductsIds[$productId];
             $isInStock = (int) $sourceItemData[SourceItemInterface::STATUS];
             $quantity = (float) $sourceItemData[SourceItemInterface::QUANTITY];
 
@@ -115,13 +124,19 @@ class SetDataToLegacyInventory
                 }
             }
 
-            $this->setDataToLegacyStockItem->execute(
-                $sku,
-                $quantity,
-                $isInStock
-            );
+            $legacyItemsToUpdateData[] = [
+                StockItemInterface::QTY => $quantity,
+                StockItemInterface::IS_IN_STOCK => $isInStock,
+                StockItemInterface::PRODUCT_ID => $productId,
+                'stock_id' => 1,
+                'website_id' => 0,
+            ];
 
             $productIds[] = $productId;
+        }
+
+        if (!empty($legacyItemsToUpdateData)) {
+            $this->updateLegacyStockItemsData->execute($legacyItemsToUpdateData);
         }
 
         if (!empty($productIds)) {

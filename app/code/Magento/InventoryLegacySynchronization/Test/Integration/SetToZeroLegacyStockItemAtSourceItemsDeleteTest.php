@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration;
+namespace Magento\InventoryLegacySynchronization\Test\Integration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -77,7 +77,7 @@ class SetToZeroLegacyStockItemAtSourceItemsDeleteTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
-    public function testSetToZero()
+    public function testShouldSetLegacyQuantityToZeroOnSourceItemDelete(): void
     {
         $productSku = 'SKU-1';
         $product = $this->productRepository->get($productSku);
