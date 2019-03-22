@@ -125,6 +125,7 @@ define([
 
             if (textareaElm) {
                 scrollPos = textareaElm.scrollTop;
+
                 if (!isNaN(variable)) {
                     updateElementAtCursor(textareaElm, Variables.variablesValue[variable - 1]);
                 } else {

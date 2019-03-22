@@ -418,6 +418,8 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     }
 
     /**
+     * Get filter factory
+     *
      * @return \Magento\Email\Model\Template\FilterFactory
      */
     protected function getFilterFactory()
