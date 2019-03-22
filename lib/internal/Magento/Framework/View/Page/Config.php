@@ -133,7 +133,7 @@ class Config
     /**
      * @var array
      */
-    protected $additionalMetaAssets = ['msapplication-TileImage'];
+    private $additionalMetaAssets = ['msapplication-TileImage'];
 
     /**
      * @var \Magento\Framework\App\State
