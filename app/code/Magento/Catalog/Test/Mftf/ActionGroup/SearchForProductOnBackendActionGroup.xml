@@ -26,9 +26,4 @@
         <remove keyForRemoval="fillSkuFieldOnFiltersSection"/>
         <fillField userInput="{{productName}}" selector="{{AdminProductFiltersSection.NameInput}}" after="cleanFiltersIfTheySet" stepKey="fillNameFieldOnFiltersSection"/>
     </actionGroup>
-    <actionGroup name="ClearProductsFilterActionGroup">
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad time="30" stepKey="waitForProductsPageToLoad"/>
-        <conditionalClick selector="{{AdminProductFiltersSection.clearFiltersButton}}" dependentSelector="{{AdminProductFiltersSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
-    </actionGroup>
 </actionGroups>
