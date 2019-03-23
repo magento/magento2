@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CaptchaOnContactUsTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="Test creation for send comment using the contact us form with captcha."/>
+            <title value="Captcha contact us form test"/>
+            <description value="Test creation for send comment using the contact us form with captcha."/>
+            <severity value="MAJOR"/>
+            <group value="captcha"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set customer/captcha/forms contact_us" stepKey="enableUserEditCaptcha"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches1"/>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set customer/captcha/forms user_login,user_forgotpassword" stepKey="revertCaptchaConfigurations"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches2"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Open storefront contact us form -->
+        <amOnPage url="/contact/" stepKey="amOnContactUpPage"/>
+        <waitForPageLoad stepKey="waitForContactUpPage"/>
+
+        <!-- Check Captcha items -->
+        <waitForElementVisible selector="{{StorefrontContactUsFormSection.captchaField}}" stepKey="seeCaptchaField1"/>
+        <waitForElementVisible selector="{{StorefrontContactUsFormSection.captchaImg}}" stepKey="seeCaptchaImage1"/>
+        <waitForElementVisible selector="{{StorefrontContactUsFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton1"/>
+
+        <!-- Submit Contact Us form -->
+        <fillField selector="{{StorefrontContactUsFormSection.emailField}}"  userInput="$$customer.email$$" stepKey="fillEmail"/>
+        <fillField selector="{{StorefrontContactUsFormSection.nameField}}"  userInput="$$customer.firstname$$" stepKey="fillName"/>
+        <fillField selector="{{StorefrontContactUsFormSection.commentField}}"  userInput="Lorem ipsum dolor sit amet, ne enim aliquando eam, oblique deserunt no usu." stepKey="fillComment"/>
+        <fillField selector="{{StorefrontContactUsFormSection.captchaField}}" userInput="InvalidCaptcha" stepKey="fillCaptcha" />
+        <click selector="{{StorefrontContactUsFormSection.submitFormButton}}" stepKey="clickSubmitFormButton"/>
+
+        <!-- Check Captcha items after form reload -->
+        <see userInput="Incorrect CAPTCHA" selector="{{StorefrontCustomerMessagesSection.errorMessage}}" stepKey="verifyMessage"/>
+        <waitForElementVisible selector="{{StorefrontContactUsFormSection.captchaField}}" stepKey="seeCaptchaField2"/>
+        <waitForElementVisible selector="{{StorefrontContactUsFormSection.captchaImg}}" stepKey="seeCaptchaImage2"/>
+        <waitForElementVisible selector="{{StorefrontContactUsFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton2"/>
+    </test>
+</tests>
