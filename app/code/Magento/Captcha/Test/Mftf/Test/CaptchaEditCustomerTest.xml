@@ -30,8 +30,8 @@
         <after>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <!-- Revert Captcha forms configurations -->
-            <magentoCLI command="config:set customer/captcha/forms user_login,user_forgotpassword" stepKey="enableUserEditCaptcha"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches1"/>
+            <magentoCLI command="config:set customer/captcha/forms user_login,user_forgotpassword" stepKey="revertCaptchaConfigurations"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches2"/>
         </after>
 
         <!-- Open Customer edit page -->
@@ -64,7 +64,7 @@
         <waitForElementVisible selector="{{StorefrontCustomerEditFormSection.captchaImg}}" stepKey="seeCaptchaImage2"/>
         <waitForElementVisible selector="{{StorefrontCustomerEditFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton2"/>
 
-        <!-- Try to submit for with incorrect captcha -->
+        <!-- Try to submit form with incorrect captcha -->
         <click selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}" stepKey="clickChangeEmailCheckbox4"/>
         <fillField selector="{{StorefrontCustomerAccountInformationSection.currentPassword}}" userInput="incorrectPassword" stepKey="enterWrongPassword4"/>
         <fillField selector="{{StorefrontCustomerEditFormSection.captchaField}}" userInput="wrongCaptcha" stepKey="enterWrongCaptcha"/>
