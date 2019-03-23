@@ -14,6 +14,7 @@
             <data name="customer/data/password" xsi:type="string">123123q#</data>
             <data name="customer/data/password_confirmation" xsi:type="string">123123q#</data>
             <data name="customer/data/website_id/dataset" xsi:type="string">default</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerFailRegisterMessage" />
         </variation>
     </testCase>

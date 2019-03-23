@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateExistingCustomerTest">
+        <annotations>
+            <features value="Customer"/>
+            <title value="Attempt to register customer on storefront with existing email"/>
+            <description value="Attempt to register customer on storefront with existing email"/>
+            <group value="customers"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData stepKey="customer" entity="CustomerEntityOneNotUniqueEmail"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteCustomer" createDataKey="customer" />
+        </after>
+
+        <actionGroup ref="SignUpNewCustomerNoAssertions" stepKey="SignUpNewUser">
+            <argument name="Customer" value="CustomerEntityOneNotUniqueEmail"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCustomerMessagesSection.errorMessage}}" stepKey="waitForErrorMessage" />
+        <see stepKey="seeErrorMessage" userInput="There is already an account with this email address." selector="{{StorefrontCustomerMessagesSection.errorMessage}}"/>
+    </test>
+</tests>
