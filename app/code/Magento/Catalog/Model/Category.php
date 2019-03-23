@@ -667,9 +667,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 $imagePath = \Magento\Framework\UrlInterface::URL_TYPE_MEDIA;
                 $isRelativeUrl = substr($image, 1, strlen($imagePath)) === $imagePath;
 
-                $mediaBaseUrl = $store->getBaseUrl(
-                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-                );
+                $mediaBaseUrl = $store->getBaseUrl($imagePath);
 
                 if ($isRelativeUrl) {
                     $url = $image;
