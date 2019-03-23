@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CaptchaOnStoreFrontRegisterTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="Test creation for customer register with captcha on storefront."/>
+            <title value="Captcha customer registration"/>
+            <description value="Test creation for customer register with captcha on storefront."/>
+            <severity value="MAJOR"/>
+            <group value="captcha"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!--  Enable captcha for customer. -->
+            <magentoCLI command="config:set customer/captcha/forms user_create" stepKey="enableUserRegistrationCaptcha"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches1"/>
+        </before>
+        <after>
+            <!-- Set default configuration. -->
+            <magentoCLI command="config:set customer/captcha/forms user_login,user_forgotpassword" stepKey="revertCaptchaConfigurations"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches2"/>
+        </after>
+
+        <!-- Open Customer registration page -->
+        <amOnPage url="/customer/account/create/" stepKey="goToRegistrationPage"/>
+        <waitForPageLoad stepKey="waitForRegistrationPage"/>
+
+        <!-- Check captcha visibility registration page load -->
+        <waitForElementVisible selector="{{StorefrontCustomerCreateFormSection.captchaField}}" stepKey="seeCaptchaField"/>
+        <waitForElementVisible selector="{{StorefrontCustomerCreateFormSection.captchaImg}}" stepKey="seeCaptchaImage"/>
+        <waitForElementVisible selector="{{StorefrontCustomerCreateFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton"/>
+
+        <!-- Submit form with incorrect captcha -->
+        <fillField  selector="{{StorefrontCustomerCreateFormSection.firstnameField}}" userInput="FirstName"  stepKey="fillFirstName"/>
+        <fillField  selector="{{StorefrontCustomerCreateFormSection.lastnameField}}" userInput="LastName" stepKey="fillLastName" />
+        <fillField  stepKey="fillEmail" userInput="email@example.com" selector="{{StorefrontCustomerCreateFormSection.emailField}}"/>
+        <fillField  stepKey="fillPassword" userInput="123123Qq" selector="{{StorefrontCustomerCreateFormSection.passwordField}}"/>
+        <fillField  stepKey="fillConfirmPassword" userInput="123123Qq" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}"/>
+        <fillField selector="{{StorefrontCustomerCreateFormSection.captchaField}}" userInput="wrongCaptcha" stepKey="enterWrongCaptcha"/>
+        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
+        <see userInput="Incorrect CAPTCHA" selector="{{StorefrontCustomerMessagesSection.errorMessage}}" stepKey="verifyMessage4"/>
+    </test>
+</tests>
