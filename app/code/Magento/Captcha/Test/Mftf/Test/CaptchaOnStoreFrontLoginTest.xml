@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CaptchaOnStoreFrontLoginTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="Check CAPTCHA on Storefront Login Page."/>
+            <title value="Captcha customer login page test"/>
+            <description value="Check CAPTCHA on Storefront Login Page."/>
+            <severity value="MAJOR"/>
+            <group value="captcha"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Open storefront login form -->
+        <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontLoginPage"/>
+
+        <!-- Login with wrong credentials 3 times -->
+        <fillField selector="{{StorefrontCustomerSignInFormSection.emailField}}"  userInput="$$customer.email$$" stepKey="fillEmail1"/>
+        <fillField selector="{{StorefrontCustomerSignInFormSection.passwordField}}" userInput="$$customer.password$$INVALID" stepKey="fillPassword1" />
+        <click selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="clickSignInAccountButton1"/>
+        <see selector="{{StorefrontCustomerLoginMessagesSection.errorMessage}}" userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later." stepKey="seeErrorMessage1" />
+        <dontSee selector="StorefrontCustomerSignInFormSection.captchaField" stepKey="dontSeeCaptchaInputField1"/>
+
+        <fillField selector="{{StorefrontCustomerSignInFormSection.emailField}}"  userInput="$$customer.email$$" stepKey="fillEmail2"/>
+        <fillField selector="{{StorefrontCustomerSignInFormSection.passwordField}}" userInput="$$customer.password$$INVALID" stepKey="fillPassword2" />
+        <click selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="clickSignInAccountButton2"/>
+        <see selector="{{StorefrontCustomerLoginMessagesSection.errorMessage}}" userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later." stepKey="seeErrorMessage2" />
+        <dontSee selector="StorefrontCustomerSignInFormSection.captchaField" stepKey="dontSeeCaptchaInputField2"/>
+
+        <fillField selector="{{StorefrontCustomerSignInFormSection.emailField}}"  userInput="$$customer.email$$" stepKey="fillEmail3"/>
+        <fillField selector="{{StorefrontCustomerSignInFormSection.passwordField}}" userInput="$$customer.password$$INVALID" stepKey="fillPassword3" />
+        <click selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="clickSignInAccountButton3"/>
+        <see selector="{{StorefrontCustomerLoginMessagesSection.errorMessage}}" userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later." stepKey="seeErrorMessage3" />
+
+        <!-- Check captcha visibility on login page  -->
+        <waitForElementVisible selector="{{StorefrontCustomerSignInFormSection.captchaField}}" stepKey="seeCaptchaField"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInFormSection.captchaImg}}" stepKey="seeCaptchaImage"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton"/>
+
+        <!-- Submit form with incorrect captcha -->
+        <fillField selector="{{StorefrontCustomerSignInFormSection.emailField}}"  userInput="$$customer.email$$" stepKey="fillEmail4"/>
+        <fillField selector="{{StorefrontCustomerSignInFormSection.passwordField}}" userInput="$$customer.password$$INVALID" stepKey="fillPassword4" />
+        <fillField selector="{{StorefrontCustomerSignInFormSection.captchaField}}" userInput="InvalidCaptcha" stepKey="fillCaptcha" />
+        <click selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="clickSignInAccountButton4"/>
+        <see userInput="Incorrect CAPTCHA" selector="{{StorefrontCustomerMessagesSection.errorMessage}}" stepKey="verifyMessage4"/>
+    </test>
+</tests>
