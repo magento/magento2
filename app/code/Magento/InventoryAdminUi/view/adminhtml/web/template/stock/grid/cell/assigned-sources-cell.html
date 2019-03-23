@@ -22,7 +22,7 @@
     track: false,
     strict: true">
     <div>
-        <div class="data-tooltip-title" data-bind="i18n: 'Assigned sources:'"></div>
+        <div class="data-tooltip-title" data-bind="i18n: 'Assigned Sources:'"></div>
         <div class="data-tooltip-content">
             <!-- ko foreach: { data: $col.getTooltipData($row()), as: '$assignedSource' } -->
             <div><span data-bind="text: $assignedSource.name"></span>: <span data-bind="text: $assignedSource.sourceCode"></span></div>

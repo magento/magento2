@@ -493,7 +493,7 @@ define([
                 return '';
             }
 
-            $.each(config.options, function () {
+            $.each(config.options, function (index) {
                 var id,
                     type,
                     value,
@@ -501,7 +501,9 @@ define([
                     label,
                     width,
                     height,
-                    attr;
+                    attr,
+                    swatchImageWidth,
+                    swatchImageHeight;
 
                 if (!optionConfig.hasOwnProperty(this.id)) {
                     return '';
@@ -509,7 +511,7 @@ define([
 
                 // Add more button
                 if (moreLimit === countAttributes++) {
-                    html += '<a href="#" class="' + moreClass + '">' + moreText + '</a>';
+                    html += '<a href="#" class="' + moreClass + '"><span>' + moreText + '</span></a>';
                 }
 
                 id = this.id;
@@ -521,6 +523,7 @@ define([
                 label = this.label ? this.label : '';
                 attr =
                     ' id="' + controlId + '-item-' + id + '"' +
+                    ' index="' + index + '"' +
                     ' aria-checked="false"' +
                     ' aria-describedby="' + controlId + '"' +
                     ' tabindex="0"' +
@@ -533,6 +536,9 @@ define([
                     ' role="option"' +
                     ' thumb-width="' + width + '"' +
                     ' thumb-height="' + height + '"';
+
+                swatchImageWidth = _.has(sizeConfig, 'swatchImage') ? sizeConfig.swatchImage.width : 30;
+                swatchImageHeight = _.has(sizeConfig, 'swatchImage') ? sizeConfig.swatchImage.height : 20;
 
                 if (!this.hasOwnProperty('products') || this.products.length <= 0) {
                     attr += ' option-empty="true"';
@@ -552,7 +558,7 @@ define([
                     // Image
                     html += '<div class="' + optionClass + ' image" ' + attr +
                         ' style="background: url(' + value + ') no-repeat center; background-size: initial;width:' +
-                        sizeConfig.swatchImage.width + 'px; height:' + sizeConfig.swatchImage.height + 'px">' + '' +
+                        swatchImageWidth + 'px; height:' + swatchImageHeight + 'px">' + '' +
                         '</div>';
                 } else if (type === 3) {
                     // Clear
@@ -679,9 +685,19 @@ define([
                 if (!images) {
                     images = this.options.mediaGalleryInitial;
                 }
-
-                this.updateBaseImage(images, $main, !this.inProductList);
+                this.updateBaseImage(this._sortImages(images), $main, !this.inProductList);
             }
+        },
+
+        /**
+         * Sorting images array
+         *
+         * @private
+         */
+        _sortImages: function (images) {
+            return _.sortBy(images, function (image) {
+                return image.position;
+            });
         },
 
         /**
@@ -729,6 +745,12 @@ define([
             ) {
                 $widget._UpdatePrice();
             }
+
+            $(document).trigger('updateMsrpPriceBlock',
+                [
+                    parseInt($this.attr('index'), 10) + 1,
+                    $widget.options.jsonConfig.optionPrices
+                ]);
 
             $widget._loadMedia();
             $input.trigger('change');
@@ -968,19 +990,59 @@ define([
          * @private
          */
         _getPrices: function (newPrices, displayPrices) {
-            var $widget = this;
+            var $widget = this,
+                optionPriceDiff = 0,
+                allowedProduct, optionPrices, basePrice, optionFinalPrice;
 
             if (_.isEmpty(newPrices)) {
-                newPrices = $widget.options.jsonConfig.prices;
+                allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
+                optionPrices = this.options.jsonConfig.optionPrices;
+                basePrice = parseFloat(this.options.jsonConfig.prices.basePrice.amount);
+
+                if (!_.isEmpty(allowedProduct)) {
+                    optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+                    optionPriceDiff = optionFinalPrice - basePrice;
+                }
+
+                if (optionPriceDiff !== 0) {
+                    newPrices  = this.options.jsonConfig.optionPrices[allowedProduct];
+                } else {
+                    newPrices = $widget.options.jsonConfig.prices;
+                }
             }
 
             _.each(displayPrices, function (price, code) {
+
                 if (newPrices[code]) {
                     displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
                 }
             });
 
             return displayPrices;
+        },
+
+        /**
+         * Get product with minimum price from selected options.
+         *
+         * @param {Array} allowedProducts
+         * @returns {String}
+         * @private
+         */
+        _getAllowedProductWithMinPrice: function (allowedProducts) {
+            var optionPrices = this.options.jsonConfig.optionPrices,
+                product = {},
+                optionFinalPrice, optionMinPrice;
+
+            _.each(allowedProducts, function (allowedProduct) {
+                optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+
+                if (_.isEmpty(product) || optionFinalPrice < optionMinPrice) {
+                    optionMinPrice = optionFinalPrice;
+                    product = allowedProduct;
+                }
+            }, this);
+
+            return product;
         },
 
         /**
@@ -1029,12 +1091,14 @@ define([
                 mediaCallData.isAjax = true;
                 $widget._XhrKiller();
                 $widget._EnableProductMediaLoader($this);
-                $widget.xhr = $.get(
-                    $widget.options.mediaCallback,
-                    mediaCallData,
-                    mediaSuccessCallback,
-                    'json'
-                ).done(function () {
+                $widget.xhr = $.ajax({
+                    url: $widget.options.mediaCallback,
+                    cache: true,
+                    type: 'GET',
+                    dataType: 'json',
+                    data: mediaCallData,
+                    success: mediaSuccessCallback
+                }).done(function () {
                     $widget._XhrKiller();
                 });
             }
@@ -1172,7 +1236,10 @@ define([
                 }
 
                 imagesToUpdate = this._setImageIndex(imagesToUpdate);
-                gallery.updateData(imagesToUpdate);
+
+                if (!_.isUndefined(gallery)) {
+                    gallery.updateData(imagesToUpdate);
+                }
 
                 if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
@@ -1182,9 +1249,6 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
-
-                gallery.first();
-
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }

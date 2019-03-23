@@ -39,7 +39,7 @@ class GetDefaultValues
      * @param string $sku
      * @return array
      */
-    public function execute(string $sourceCode, string $sku) : array
+    public function execute(string $sourceCode, string $sku): array
     {
         $inventoryNotifyQty = (float)$this->scopeConfig->getValue(self::XML_PATH_NOTIFY_STOCK_QTY);
 

@@ -227,7 +227,7 @@
                 <field name="is_in_stock">
                     <settings>
                         <links>
-                            <link name="value">ns = ${ $.ns }, index = quantity_and_stock_status:value</link>
+                            <link name="linkedValue">${$.provider}:data.product.quantity_and_stock_status.is_in_stock</link>
                         </links>
                     </settings>
                 </field>

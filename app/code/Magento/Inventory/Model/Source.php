@@ -94,10 +94,10 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     /**
      * @inheritdoc
      */
-    public function isEnabled() :?bool
+    public function isEnabled(): ?bool
     {
         return $this->getData(self::ENABLED) === null ?
-            null:
+            null :
             (bool)$this->getData(self::ENABLED);
     }
 
@@ -131,7 +131,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function getLatitude(): ?float
     {
         return $this->getData(self::LATITUDE) === null ?
-            null:
+            null :
             (float)$this->getData(self::LATITUDE);
     }
 
@@ -149,7 +149,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function getLongitude(): ?float
     {
         return $this->getData(self::LONGITUDE) === null ?
-            null:
+            null :
             (float)$this->getData(self::LONGITUDE);
     }
 
@@ -183,7 +183,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function getRegionId(): ?int
     {
         return $this->getData(self::REGION_ID) === null ?
-            null:
+            null :
             (int)$this->getData(self::REGION_ID);
     }
 

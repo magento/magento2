@@ -85,6 +85,7 @@ class CategoryUrlRewriteTest extends Injectable
         $this->catalogCategoryEdit->getFormPageActions()->selectStoreView($storeView->getName());
         $this->catalogCategoryEdit->getEditForm()->fill($categoryUpdates);
         $this->catalogCategoryEdit->getFormPageActions()->save();
+        $this->catalogCategoryEdit->getFormPageActions()->selectStoreView('All Store Views');
         $this->catalogCategoryIndex->getTreeCategories()->assignCategory(
             $parentCategory->getName(),
             $childCategory->getName()

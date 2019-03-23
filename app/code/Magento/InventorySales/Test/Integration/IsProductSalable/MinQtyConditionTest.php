@@ -67,6 +67,7 @@ class MinQtyConditionTest extends TestCase
             ['SKU-3', 10, false],
             ['SKU-3', 20, false],
             ['SKU-3', 30, false],
+            ['SKU-6', 10, true],
         ];
     }
 
@@ -110,6 +111,7 @@ class MinQtyConditionTest extends TestCase
             ['SKU-3', 10, true],
             ['SKU-3', 20, false],
             ['SKU-3', 30, true],
+            ['SKU-6', 10, true],
         ];
     }
 }

@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 

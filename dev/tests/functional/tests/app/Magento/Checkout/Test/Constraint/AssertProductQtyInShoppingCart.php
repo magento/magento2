@@ -7,6 +7,7 @@
 namespace Magento\Checkout\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Checkout\Test\Constraint\Utils\CartPageLoadTrait;
 use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Checkout\Test\Fixture\Cart\Items;
 use Magento\Checkout\Test\Page\CheckoutCart;
@@ -19,6 +20,8 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductQtyInShoppingCart extends AbstractAssertForm
 {
+    use CartPageLoadTrait;
+
     /**
      * Assert that quantity in the shopping cart is equals to expected quantity from data set
      *
@@ -29,6 +32,8 @@ class AssertProductQtyInShoppingCart extends AbstractAssertForm
     public function processAssert(CheckoutCart $checkoutCart, Cart $cart)
     {
         $checkoutCart->open();
+        $this->waitForCartPageLoaded($checkoutCart);
+
         /** @var Items $sourceProducts */
         $sourceProducts = $cart->getDataFieldConfig('items')['source'];
         $products = $sourceProducts->getProducts();

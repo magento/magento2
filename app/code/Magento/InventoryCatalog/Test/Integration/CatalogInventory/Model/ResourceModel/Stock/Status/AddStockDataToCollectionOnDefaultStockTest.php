@@ -53,8 +53,8 @@ class AddStockDataToCollectionOnDefaultStockTest extends TestCase
     public function addStockDataToCollectionDataProvider(): array
     {
         return [
-            [3, true],
-            [5, false],
+            [4, true],
+            [6, false],
         ];
     }
 }

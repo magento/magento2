@@ -90,6 +90,7 @@ class GetProductSalableQtyTest extends TestCase
             ['SKU-3', 10, 0],
             ['SKU-3', 20, 0],
             ['SKU-3', 30, 0],
+            ['SKU-6', 10, 3],
         ];
     }
 

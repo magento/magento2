@@ -36,7 +36,7 @@ class CheckItemsQuantity
      * @return void
      * @throws LocalizedException
      */
-    public function execute(array $items, int $stockId) : void
+    public function execute(array $items, int $stockId): void
     {
         foreach ($items as $sku => $qty) {
             /** @var ProductSalableResultInterface $isSalable */
