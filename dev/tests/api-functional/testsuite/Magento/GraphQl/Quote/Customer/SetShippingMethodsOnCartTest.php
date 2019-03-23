@@ -320,7 +320,6 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
-     * @magentoApiDataFixture Magento/Checkout/_files/enable_all_shipping_methods.php
      * @throws \Exception
      */
     public function testSetShippingMethodToGuestCart()
