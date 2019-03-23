@@ -11,13 +11,16 @@
     <section name="StorefrontCustomerAccountInformationSection">
         <element name="firstName" type="input" selector="#firstname"/>
         <element name="lastName" type="input" selector="#lastname"/>
-        <element name="changeEmail" type="checkbox" selector="#change_email"/>
-        <element name="changePassword" type="checkbox" selector="#change_password"/>
+        <element name="changeEmail" type="checkbox" selector="#change-email"/>
+        <element name="changePassword" type="checkbox" selector="#change-password"/>
         <element name="testAddedAttributeFiled" type="input" selector="//input[contains(@id,'{{var}}')]" parameterized="true"/>
         <element name="saveButton" type="button" selector="#form-validate .action.save.primary" timeout="30"/>
         <element name="currentPassword" type="input" selector="#current-password"/>
         <element name="newPassword" type="input" selector="#password"/>
         <element name="confirmNewPassword" type="input" selector="#password-confirmation"/>
         <element name="confirmNewPasswordError" type="text" selector="#password-confirmation-error"/>
+        <element name="captchaField" type="input" selector="#captcha_user_edit"/>
+        <element name="captchaImg" type="block" selector=".captcha-img"/>
+        <element name="captchaReload" type="block" selector=".captcha-reload"/>
     </section>
 </sections>
