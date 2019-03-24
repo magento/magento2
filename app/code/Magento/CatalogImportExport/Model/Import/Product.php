@@ -2907,7 +2907,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param string $sku
      * @return bool
      */
-    private function isSkuExist($sku)
+    public function isSkuExist($sku)
     {
         $sku = strtolower($sku);
         return isset($this->_oldSku[$sku]);

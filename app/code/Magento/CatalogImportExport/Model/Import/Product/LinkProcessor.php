@@ -219,7 +219,7 @@ class LinkProcessor
      */
     private function isProperLink(string $linkedSku, $sku): bool
     {
-        return ($this->skuProcessor->getNewSku($linkedSku) !== null || $this->isSkuExist($linkedSku))
+        return ($this->skuProcessor->getNewSku($linkedSku) !== null || $this->_entityModel->isSkuExist($linkedSku))
             && strcasecmp($linkedSku, $sku) !== 0;
     }
 
