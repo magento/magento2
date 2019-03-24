@@ -219,6 +219,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     ];
 
     /**
+     * Links attribute name-to-link type ID.
+     * @deprecated kept for BC, use DI to inject to LinkProcessor
+     * @var array
+     */
+    protected $_linkNameToId = [
+        '_related_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED,
+        '_crosssell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL,
+        '_upsell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL,
+    ];
+
+    /**
      * Attributes codes which shows as date
      *
      * @var array
@@ -890,6 +901,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 ->get(ProductRepositoryInterface::class);
         $this->linkProcessor = $linkProcessor ?? ObjectManager::getInstance()
                 ->get(LinkProcessor::class);
+        $this->linkProcessor->addNameToIds($this->_linkNameToId);
     }
 
     /**

@@ -89,6 +89,18 @@ class LinkProcessor
         $this->resource = $this->linkFactory->create();
     }
 
+    /**
+     * Add additional links mappings
+     *
+     * Here for the sole reason of BC in the parent class, use DI instead
+     *
+     * @deprecated
+     */
+    public function addNameToIds($nameToIds)
+    {
+       $this->linkNameToId = array_merge($nameToIds, $this->linkNameToId);
+    }
+
     public function saveLinks($entityModel, $productEntityLinkField)
     {
         $this->entityModel = $entityModel;
