@@ -180,6 +180,10 @@ class LinkProcessor
     }
 
     /**
+     * Check for empty link id, if it is empty the
+     * import file links to a SKU which is skipped for some reason,
+     * which leads to a "NULL" link causing fatal errors.
+     *
      * @param $linkId
      * @param $sku
      * @param $productId
@@ -188,9 +192,7 @@ class LinkProcessor
     private function checkForEmptyLinkId($linkedId, $sku, $productId, string $linkedSku): bool
     {
         if ($linkedId == null) {
-            // Import file links to a SKU which is skipped for some reason,
-            // which leads to a "NULL"
-            // link causing fatal errors.
+
             $this->logger->critical(
                 new \Exception(
                     sprintf(
