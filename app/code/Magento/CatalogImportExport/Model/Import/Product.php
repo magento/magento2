@@ -1260,7 +1260,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveLinks()
     {
-        $this->_linkProcessor->process($this, $this->getProductEntityLinkField());
+        $this->linkProcessor->process($this, $this->getProductEntityLinkField());
         return $this;
     }
 
