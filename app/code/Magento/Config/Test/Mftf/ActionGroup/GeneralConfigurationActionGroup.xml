@@ -20,6 +20,11 @@
         <waitForPageLoad stepKey="waitForConfigPageLoad"/>
     </actionGroup>
 
+    <actionGroup name="NavigateToConfigurationDeveloperPage">
+        <amOnPage url="{{AdminConfigDeveloperPage.url}}" stepKey="navigateToConfigDeveloperPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+    </actionGroup>
+
     <actionGroup name="SelectTopDestinationsCountry">
         <arguments>
             <argument name="countries" type="countryArray"/>

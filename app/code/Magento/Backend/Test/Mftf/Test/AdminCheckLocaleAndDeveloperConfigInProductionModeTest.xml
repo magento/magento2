@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckLocaleAndDeveloperConfigInProductionMode">
+        <annotations>
+            <features value="Backend"/>
+            <title value="Check locale dropdown and developer configuration page are not available in production mode"/>
+            <description value="Check locale dropdown and developer configuration page are not available in production mode"/>
+            <group value="backend"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!--<magentoCLI command="deploy:mode:set production" stepKey="enableDeveloperMode"/>-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!-- Go to the general configuration and make sure the locale dropdown is disabled -->
+        <actionGroup ref="NavigateToConfigurationGeneralPage" stepKey="navigateToGeneralConfigurationPage"/>
+        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSection"/>
+        <seeElement selector="{{LocaleOptionsSection.localeDisabled}}" stepKey="seeEnabledLocaleDropdown"/>
+
+        <!-- Go to the developer configuration and make sure the redirect to the configuration page takes place -->
+        <actionGroup ref="NavigateToConfigurationDeveloperPage" stepKey="goToDeveloperConfigPage"/>
+        <seeInCurrentUrl url="{{AdminConfigPage.url}}index/" stepKey="seeConfigurationIndexUrl"/>
+    </test>
+</tests>
