@@ -21,6 +21,7 @@
         "ext-spl": "*",
         "ext-xsl": "*",
         "ext-bcmath": "*",
+        "ext-intl": "*",
         "lib-libxml": "*",
         "colinmollenhour/php-redis-session-abstract": "~1.4.0",
         "composer/composer": "^1.6",

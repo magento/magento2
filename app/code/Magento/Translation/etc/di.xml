@@ -44,6 +44,7 @@
             <argument name="renderers" xsi:type="array">
                 <item name="translation" xsi:type="object">Magento\Framework\Phrase\Renderer\Translate</item>
                 <item name="placeholder" xsi:type="object">Magento\Framework\Phrase\Renderer\Placeholder</item>
+                <item name="messageFormatter" xsi:type="object">Magento\Framework\Phrase\Renderer\MessageFormatter</item>
                 <item name="inline" xsi:type="object">Magento\Framework\Phrase\Renderer\Inline</item>
             </argument>
         </arguments>
