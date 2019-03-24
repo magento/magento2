@@ -19,49 +19,49 @@ class LinkProcessor
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product
      */
-    protected $_entityModel;
+    private $entityModel;
 
     /**
      * Links attribute name-to-link type ID.
      *
      * @var array
      */
-    protected $_linkNameToId = [];
+    private $linkNameToId = [];
 
     /**
      * @var LinkFactory
      */
-    protected $_linkFactory;
+    private $linkFactory;
 
     /**
      * @var LoggerInterface
      */
-    protected $_logger;
+    private $logger;
 
     /**
      * @var Helper
      */
-    protected $_resourceHelper;
+    private $resourceHelper;
 
     /**
      * @var Data
      */
-    protected $_dataSourceModel;
+    private $dataSourceModel;
 
     /**
      * @var SkuProcessor
      */
-    protected $skuProcessor;
+    private $skuProcessor;
 
     /**
      * @var AdapterInterface
      */
-    protected $_connection;
+    private $connection;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Link
      */
-    protected $_resource;
+    private $resource;
 
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -72,40 +72,40 @@ class LinkProcessor
         SkuProcessor $skuProcessor,
         array $linkNameToId
     ) {
-        $this->_linkFactory = $linkFactory;
-        $this->_logger = $logger;
-        $this->_resourceHelper = $resourceHelper;
-        $this->_dataSourceModel = $importData;
+        $this->linkFactory = $linkFactory;
+        $this->logger = $logger;
+        $this->resourceHelper = $resourceHelper;
+        $this->dataSourceModel = $importData;
         $this->skuProcessor = $skuProcessor;
 
         // Temporary solution: arrays do not seem to support init_parameter,
         // so we have to parse the constant by ourselves
-        $this->_linkNameToId = [];
+        $this->linkNameToId = [];
         foreach($linkNameToId as $key=>$value) {
-            $this->_linkNameToId[$key] = constant($value);
+            $this->linkNameToId[$key] = constant($value);
         }
 
-        $this->_connection = $resourceConnection->getConnection();
-        $this->_resource = $this->_linkFactory->create();
+        $this->connection = $resourceConnection->getConnection();
+        $this->resource = $this->linkFactory->create();
     }
 
     public function saveLinks($entityModel, $productEntityLinkField)
     {
-        $this->_entityModel = $entityModel;
+        $this->entityModel = $entityModel;
         $this->_productEntityLinkField = $productEntityLinkField;
 
-        $mainTable = $this->_resource->getMainTable();
+        $mainTable = $this->resource->getMainTable();
         $positionAttrId = [];
-        $nextLinkId = $this->_resourceHelper->getNextAutoincrement($mainTable);
+        $nextLinkId = $this->resourceHelper->getNextAutoincrement($mainTable);
         $positionAttrId = $this->loadPositionAttributes($positionAttrId);
 
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->dataSourceModel->getNextBunch()) {
             $productIds = [];
             $linkRows = [];
             $positionRows = [];
 
             foreach ($bunch as $rowNum => $rowData) {
-                if ( ! $this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
+                if ( ! $this->entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                     continue;
                 }
 
@@ -114,7 +114,7 @@ class LinkProcessor
                 $productId = $this->skuProcessor->getNewSku($sku)[$this->_productEntityLinkField];
                 $productLinkKeys = $this->fetchExistingLinks($productId);
 
-                foreach ($this->_linkNameToId as $linkName => $linkId) {
+                foreach ($this->linkNameToId as $linkName => $linkId) {
                     $productIds[] = $productId;
 
                     $linkSkus = $this->getLinkSkus($rowData, $linkName);
@@ -173,13 +173,13 @@ class LinkProcessor
      * @param $productId
      * @param string $linkedSku
      */
-    protected function checkForEmptyLinkId($linkedId, $sku, $productId, string $linkedSku): bool
+    private function checkForEmptyLinkId($linkedId, $sku, $productId, string $linkedSku): bool
     {
         if ($linkedId == null) {
             // Import file links to a SKU which is skipped for some reason,
             // which leads to a "NULL"
             // link causing fatal errors.
-            $this->_logger->critical(
+            $this->logger->critical(
                 new \Exception(
                     sprintf(
                         'WARNING: Orphaned link skipped: From SKU %s (ID %d) to SKU %s, Link type id: %d',
@@ -203,7 +203,7 @@ class LinkProcessor
      *
      * @return bool
      */
-    protected function isProperLink(string $linkedSku, $sku): bool
+    private function isProperLink(string $linkedSku, $sku): bool
     {
         return ($this->skuProcessor->getNewSku($linkedSku) !== null || $this->isSkuExist($linkedSku))
             && strcasecmp($linkedSku, $sku) !== 0;
@@ -215,18 +215,18 @@ class LinkProcessor
      *
      * @return array
      */
-    protected function fetchExistingLinks(
+    private function fetchExistingLinks(
         $productId
     ): array {
         $productLinkKeys = [];
-        $select = $this->_connection->select()->from(
-            $this->_resource->getTable('catalog_product_link'),
+        $select = $this->connection->select()->from(
+            $this->resource->getTable('catalog_product_link'),
             ['id' => 'link_id', 'linked_id' => 'linked_product_id', 'link_type_id' => 'link_type_id']
         )->where(
             'product_id = :product_id'
         );
         $bind = [':product_id' => $productId];
-        foreach ($this->_connection->fetchAll($select, $bind) as $linkData) {
+        foreach ($this->connection->fetchAll($select, $bind) as $linkData) {
             $linkKey = "{$productId}-{$linkData['linked_id']}-{$linkData['link_type_id']}";
             $productLinkKeys[$linkKey] = $linkData['id'];
         }
@@ -240,12 +240,12 @@ class LinkProcessor
      *
      * @return array
      */
-    protected function getLinkPositions($rowData, string $linkName): array
+    private function getLinkPositions($rowData, string $linkName): array
     {
         $positionField = $linkName . 'position';
 
         return ! empty($rowData[$positionField])
-            ? explode($this->_entityModel->getMultipleValueSeparator(), $rowData[$positionField])
+            ? explode($this->entityModel->getMultipleValueSeparator(), $rowData[$positionField])
             : [];
     }
 
@@ -255,7 +255,7 @@ class LinkProcessor
      *
      * @return bool|array
      */
-    protected function getLinkSkus($rowData, string $linkName)
+    private function getLinkSkus($rowData, string $linkName)
     {
         $linkField = $linkName . 'sku';
 
@@ -263,7 +263,7 @@ class LinkProcessor
             return false;
         }
 
-        return explode($this->_entityModel->getMultipleValueSeparator(), $rowData[$linkField]);
+        return explode($this->entityModel->getMultipleValueSeparator(), $rowData[$linkField]);
     }
 
     /**
@@ -273,17 +273,17 @@ class LinkProcessor
      *
      * @return array
      */
-    protected function loadPositionAttributes(array $positionAttrId): array
+    private function loadPositionAttributes(array $positionAttrId): array
     {
-        foreach ($this->_linkNameToId as $linkName => $linkId) {
-            $select = $this->_connection->select()->from(
-                $this->_resource->getTable('catalog_product_link_attribute'),
+        foreach ($this->linkNameToId as $linkName => $linkId) {
+            $select = $this->connection->select()->from(
+                $this->resource->getTable('catalog_product_link_attribute'),
                 ['id' => 'product_link_attribute_id']
             )->where(
                 'link_type_id = :link_id AND product_link_attribute_code = :position'
             );
             $bind = [':link_id' => $linkId, ':position' => 'position'];
-            $positionAttrId[$linkId] = $this->_connection->fetchOne($select, $bind);
+            $positionAttrId[$linkId] = $this->connection->fetchOne($select, $bind);
         }
 
         return $positionAttrId;
@@ -292,12 +292,12 @@ class LinkProcessor
     /**
      * @param array $productIds
      */
-    protected function deleteExistingLinks(array $productIds): void
+    private function deleteExistingLinks(array $productIds): void
     {
-        if (Import::BEHAVIOR_APPEND !== $this->_entityModel->getBehavior() && $productIds) {
-            $this->_connection->delete(
-                $this->_resource->getMainTable(),
-                $this->_connection->quoteInto('product_id IN (?)', array_unique($productIds))
+        if (Import::BEHAVIOR_APPEND !== $this->entityModel->getBehavior() && $productIds) {
+            $this->connection->delete(
+                $this->resource->getMainTable(),
+                $this->connection->quoteInto('product_id IN (?)', array_unique($productIds))
             );
         }
     }
@@ -306,15 +306,15 @@ class LinkProcessor
      * @param array $linkRows
      * @param array $positionRows
      */
-    protected function insertNewLinks(array $linkRows, array $positionRows): void
+    private function insertNewLinks(array $linkRows, array $positionRows): void
     {
         if ($linkRows) {
-            $this->_connection->insertOnDuplicate($this->_resource->getMainTable(), $linkRows, ['link_id']);
+            $this->connection->insertOnDuplicate($this->resource->getMainTable(), $linkRows, ['link_id']);
         }
         if ($positionRows) {
             // process linked product positions
-            $this->_connection->insertOnDuplicate(
-                $this->_resource->getAttributeTypeTable('int'),
+            $this->connection->insertOnDuplicate(
+                $this->resource->getAttributeTypeTable('int'),
                 $positionRows,
                 ['value']
             );
@@ -326,13 +326,13 @@ class LinkProcessor
      *
      * @return mixed
      */
-    protected function getLinkedId(string $linkedSku)
+    private function getLinkedId(string $linkedSku)
     {
         $newSku = $this->skuProcessor->getNewSku($linkedSku);
         if ( ! empty($newSku)) {
             $linkedId = $newSku['entity_id'];
         } else {
-            $linkedId = $this->_entityModel->getExistingSku($linkedSku)['entity_id'];
+            $linkedId = $this->entityModel->getExistingSku($linkedSku)['entity_id'];
         }
 
         return $linkedId;
