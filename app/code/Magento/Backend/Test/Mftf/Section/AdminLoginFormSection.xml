@@ -12,5 +12,9 @@
         <element name="username" type="input" selector="#username"/>
         <element name="password" type="input" selector="#login"/>
         <element name="signIn" type="button" selector=".actions .action-primary" timeout="30"/>
+        <element name="captchaField" type="input" selector="#captcha"/>
+        <element name="captchaImg" type="block" selector="#backend_login"/>
+        <element name="captchaReload" type="block" selector="#captcha-reload"/>
+        <element name="error" type="text" selector=".message.message-error.error"/>
     </section>
 </sections>
