@@ -68,7 +68,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $layout = $this->objectManager->get(LayoutInterface::class);
         $this->block = $layout->createBlock(
             Form::class,
-            'order_create_block' . mt_rand(),
+            'order_create_block' . random_int(0, PHP_INT_MAX),
             ['sessionQuote' => $this->session]
         );
         parent::setUp();
