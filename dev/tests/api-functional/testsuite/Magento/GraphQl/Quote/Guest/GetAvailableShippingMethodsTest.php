@@ -124,9 +124,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      * @param string $maskedQuoteId
      * @return string
      */
-    private function getQuery(
-        string $maskedQuoteId
-    ): string
+    private function getQuery(string $maskedQuoteId): string
     {
         return <<<QUERY
 query {
