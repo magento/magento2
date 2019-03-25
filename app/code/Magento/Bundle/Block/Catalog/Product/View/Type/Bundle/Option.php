@@ -7,7 +7,6 @@
 namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Framework\Pricing\Render;
 
 /**
@@ -360,7 +359,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
         /** @var Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
         $priceHtml = $priceRender->render(
-            TierPrice::PRICE_CODE,
+            'tier_price',
             $selection,
             $arguments
         );

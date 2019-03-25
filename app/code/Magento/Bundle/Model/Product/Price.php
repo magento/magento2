@@ -15,6 +15,7 @@ use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
