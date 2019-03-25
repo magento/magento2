@@ -84,4 +84,8 @@ return [
         'replacement' => '',
         'exclude' => []
     ],
+    'mt_rand' => [
+        'replacement' => 'random_int',
+        'exclude' => []
+    ],
 ];

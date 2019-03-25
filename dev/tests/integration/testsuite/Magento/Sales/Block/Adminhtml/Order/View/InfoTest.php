@@ -27,6 +27,8 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $result = $infoBlock->getCustomerAccountData();
         $this->assertEquals([], $result, 'Customer has additional account data.');
+
+        $testStaticTest = mt_rand();
     }
 
     /**
