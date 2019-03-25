@@ -586,55 +586,8 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             '_type' => 'configurable',
             '_product_websites' => 'website_1',
         ];
-        // Checking that variations with duplicate sku are invalid
-        $duplicateSKU = 'configurableskuI22DuplicateVariation';
-        $duplicateProduct = [
-            'sku' => $duplicateSKU,
-            'store_view_code' => null,
-            'attribute_set_code' => 'Default',
-            'product_type' => 'configurable',
-            'name' => 'Configurable Product with duplicate SKUs in variations',
-            'product_websites' => 'website_1',
-            'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
-            'configurable_variations' => 'sku=testconf2-attr2val1-testattr3v1,'
-                . 'testattr2=attr2val1,'
-                . 'testattr3=testattr3v1,'
-                . 'display=1|sku=testconf2-attr2val1-testattr3v1,'
-                . 'testattr2=attr2val1,'
-                . 'testattr3=testattr3v2,'
-                . 'display=0',
-            '_store' => null,
-            '_attribute_set' => 'Default',
-            '_type' => 'configurable',
-            '_product_websites' => 'website_1',
-        ];
-        // Checking that variations with SKUs that are the same when interpreted as number,
-        // but different when interpreted as string are valid
-        $nonDuplicateSKU = 'configurableskuI22NonDuplicateVariation';
-        $nonDuplicateProduct = [
-            'sku' => $nonDuplicateSKU,
-            'store_view_code' => null,
-            'attribute_set_code' => 'Default',
-            'product_type' => 'configurable',
-            'name' => 'Configurable Product with different SKUs in variations',
-            'product_websites' => 'website_1',
-            'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
-            'configurable_variations' => 'sku=1234.10,'
-                . 'testattr2=attr2val1,'
-                . 'testattr3=testattr3v1,'
-                . 'display=1|sku=1234.1,'
-                . 'testattr2=attr2val1,'
-                . 'testattr3=testattr3v2,'
-                . 'display=0',
-            '_store' => null,
-            '_attribute_set' => 'Default',
-            '_type' => 'configurable',
-            '_product_websites' => 'website_1',
-        ];
         $bunch[] = $badProduct;
         $bunch[] = $caseInsensitiveProduct;
-        $bunch[] = $duplicateProduct;
-        $bunch[] = $nonDuplicateProduct;
         // Set _attributes to avoid error in Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType.
         $this->setPropertyValue($this->configurable, '_attributes', [
             $badProduct[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET] => [],
@@ -660,13 +613,39 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             if ($rowData['sku'] === $caseInsensitiveSKU) {
                 $this->assertTrue($result);
             }
-            if ($rowData['sku'] === $duplicateSKU) {
-                $this->assertFalse($result);
-            }
-            if ($rowData['sku'] === $nonDuplicateSKU) {
-                $this->assertTrue($result);
-            }
         }
+    }
+
+    public function testRowValidationForNumericalSkus()
+    {
+        // Set _attributes to avoid error in Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType.
+        $this->setPropertyValue($this->configurable, '_attributes', [
+            'Default' => [],
+        ]);
+        // Avoiding errors about attributes not being super
+        $this->setPropertyValue(
+            $this->configurable,
+            '_superAttributes',
+            [
+                'testattr2' => [
+                    'options' => [
+                        'attr2val1' => 1,
+                        'attr2val2' => 2,
+                    ]
+                ],
+            ]
+        );
+
+        // Checking that variations with duplicate sku are invalid
+        $duplicateProduct = $this->_getNumericalSkuDataDuplicate();
+        $result = $this->configurable->isRowValid($duplicateProduct, 0);
+        $this->assertFalse($result);
+
+        // Checking that variations with SKUs that are the same when interpreted as number,
+        // but different when interpreted as string are valid
+        $nonDuplicateProduct = $this->_getNumericalSkuDataNonDuplicate();
+        $result = $this->configurable->isRowValid($nonDuplicateProduct, 0);
+        $this->assertTrue($result);
     }
 
     /**
@@ -684,5 +663,55 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         $reflectionProperty->setValue($object, $value);
 
         return $object;
+    }
+
+    /**
+     * @return array
+     */
+    protected function _getNumericalSkuDataNonDuplicate(): array
+    {
+        return [
+            'sku' => 'configurableNumericalSkuNonDuplicateVariation',
+            'store_view_code' => null,
+            'attribute_set_code' => 'Default',
+            'product_type' => 'configurable',
+            'name' => 'Configurable Product with different numerical SKUs in variations',
+            'product_websites' => 'website_1',
+            'configurable_variation_labels' => 'testattr2=Select Configuration',
+            'configurable_variations' => 'sku=1234.10,'
+                . 'testattr2=attr2val1,'
+                . 'display=1|sku=1234.1,'
+                . 'testattr2=attr2val2,'
+                . 'display=0',
+            '_store' => null,
+            '_attribute_set' => 'Default',
+            '_type' => 'configurable',
+            '_product_websites' => 'website_1',
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function _getNumericalSkuDataDuplicate(): array
+    {
+        return [
+            'sku' => 'configurableNumericalSkuDuplicateVariation',
+            'store_view_code' => null,
+            'attribute_set_code' => 'Default',
+            'product_type' => 'configurable',
+            'name' => 'Configurable Product with duplicate numerical SKUs in variations',
+            'product_websites' => 'website_1',
+            'configurable_variation_labels' => 'testattr2=Select Configuration',
+            'configurable_variations' => 'sku=1234.1,'
+                . 'testattr2=attr2val1,'
+                . 'display=1|sku=1234.1,'
+                . 'testattr2=attr2val1,'
+                . 'display=0',
+            '_store' => null,
+            '_attribute_set' => 'Default',
+            '_type' => 'configurable',
+            '_product_websites' => 'website_1',
+        ];
     }
 }
