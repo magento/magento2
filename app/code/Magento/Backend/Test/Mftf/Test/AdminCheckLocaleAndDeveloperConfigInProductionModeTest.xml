@@ -17,7 +17,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <!--<magentoCLI command="deploy:mode:set production" stepKey="enableDeveloperMode"/>-->
+            <magentoCLI command="deploy:mode:set production" stepKey="enableDeveloperMode"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
 
