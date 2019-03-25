@@ -587,9 +587,9 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             '_product_websites' => 'website_1',
         ];
         // Checking that variations with duplicate sku are invalid
-        $duplicateVariationSKU = 'configurableskuI22DuplicateVariation';
-        $duplicateVariationProduct = [
-            'sku' => $duplicateVariationSKU,
+        $duplicateSKU = 'configurableskuI22DuplicateVariation';
+        $duplicateProduct = [
+            'sku' => $duplicateSKU,
             'store_view_code' => null,
             'attribute_set_code' => 'Default',
             'product_type' => 'configurable',
@@ -610,9 +610,9 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         ];
         // Checking that variations with SKUs that are the same when interpreted as number,
         // but different when interpreted as string are valid
-        $nonDuplicateVariationSKU = 'configurableskuI22NonDuplicateVariation';
-        $nonDuplicateVariationProduct = [
-            'sku' => $nonDuplicateVariationSKU,
+        $nonDuplicateSKU = 'configurableskuI22NonDuplicateVariation';
+        $nonDuplicateProduct = [
+            'sku' => $nonDuplicateSKU,
             'store_view_code' => null,
             'attribute_set_code' => 'Default',
             'product_type' => 'configurable',
@@ -633,8 +633,8 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         ];
         $bunch[] = $badProduct;
         $bunch[] = $caseInsensitiveProduct;
-        $bunch[] = $duplicateVariationProduct;
-        $bunch[] = $nonDuplicateVariationProduct;
+        $bunch[] = $duplicateProduct;
+        $bunch[] = $nonDuplicateProduct;
         // Set _attributes to avoid error in Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType.
         $this->setPropertyValue($this->configurable, '_attributes', [
             $badProduct[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET] => [],
@@ -660,10 +660,10 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             if ($rowData['sku'] === $caseInsensitiveSKU) {
                 $this->assertTrue($result);
             }
-            if ($rowData['sku'] === $duplicateVariationSKU) {
+            if ($rowData['sku'] === $duplicateSKU) {
                 $this->assertFalse($result);
             }
-            if ($rowData['sku'] === $nonDuplicateVariationSKU) {
+            if ($rowData['sku'] === $nonDuplicateSKU) {
                 $this->assertTrue($result);
             }
         }
