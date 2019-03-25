@@ -7,6 +7,7 @@
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
@@ -17,9 +18,11 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Service\InvoiceService;
 
 /**
+ * Save invoice controller.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Backend\App\Action
+class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -102,6 +105,7 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * Save invoice
+     *
      * We can save only new invoice. Existing invoices are not editable
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -193,12 +197,6 @@ class Save extends \Magento\Backend\App\Action
             }
             $transactionSave->save();
 
-            if (!empty($data['do_shipment'])) {
-                $this->messageManager->addSuccessMessage(__('You created the invoice and shipment.'));
-            } else {
-                $this->messageManager->addSuccessMessage(__('The invoice has been created.'));
-            }
-
             // send invoice/shipment emails
             try {
                 if (!empty($data['send_email'])) {
@@ -217,6 +215,11 @@ class Save extends \Magento\Backend\App\Action
                     $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                     $this->messageManager->addErrorMessage(__('We can\'t send the shipment right now.'));
                 }
+            }
+            if (!empty($data['do_shipment'])) {
+                $this->messageManager->addSuccessMessage(__('You created the invoice and shipment.'));
+            } else {
+                $this->messageManager->addSuccessMessage(__('The invoice has been created.'));
             }
             $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getCommentText(true);
             return $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);

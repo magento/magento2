@@ -25,6 +25,7 @@ define([
             }
         },
         scrollHeight: 0,
+        shoppingCartUrl: window.checkout.shoppingCartUrl,
 
         /**
          * Create sidebar.
@@ -226,7 +227,11 @@ define([
             var productData = this._getProductById(Number(elem.data('cart-item')));
 
             if (!_.isUndefined(productData)) {
-                $(document).trigger('ajax:updateCartItemQty', productData['product_sku']);
+                $(document).trigger('ajax:updateCartItemQty');
+
+                if (window.location.href === this.shoppingCartUrl) {
+                    window.location.reload(false);
+                }
             }
             this._hideItemButton(elem);
         },
@@ -253,7 +258,9 @@ define([
             var productData = this._getProductById(Number(elem.data('cart-item')));
 
             if (!_.isUndefined(productData)) {
-                $(document).trigger('ajax:removeFromCart', productData['product_sku']);
+                $(document).trigger('ajax:removeFromCart', {
+                    productIds: [productData['product_id']]
+                });
             }
         },
 

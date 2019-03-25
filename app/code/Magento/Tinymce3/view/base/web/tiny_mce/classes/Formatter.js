@@ -1856,7 +1856,7 @@
 				}
 			};
 
-			// Applies formatting to the caret postion
+			// Applies formatting to the caret position
 			function applyCaretFormat() {
 				var rng, caretContainer, textNode, offset, bookmark, container, text;
 
@@ -1970,7 +1970,7 @@
 					node.appendChild(dom.doc.createTextNode(invisibleChar));
 					node = node.firstChild;
 
-					// Insert caret container after the formated node
+					// Insert caret container after the formatted node
 					dom.insertAfter(caretContainer, formatNode);
 
 					// Move selection to text node

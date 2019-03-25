@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAddNewCustomerAddressActionGroup">
+        <amOnPage url="customer/address/new/" stepKey="OpenCustomerAddNewAddress"/>
+        <arguments>
+            <argument name="Address"/>
+        </arguments>
+        <fillField  stepKey="fillFirstName" userInput="{{Address.firstname}}" selector="{{StorefrontCustomerAddressFormSection.firstName}}"/>
+        <fillField  stepKey="fillLastName" userInput="{{Address.lastname}}" selector="{{StorefrontCustomerAddressFormSection.lastName}}"/>
+        <fillField  stepKey="fillCompanyName" userInput="{{Address.company}}" selector="{{StorefrontCustomerAddressFormSection.company}}"/>
+        <fillField  stepKey="fillPhoneNumber" userInput="{{Address.telephone}}" selector="{{StorefrontCustomerAddressFormSection.phoneNumber}}"/>
+        <fillField  stepKey="fillStreetAddress" userInput="{{Address.street[0]}}" selector="{{StorefrontCustomerAddressFormSection.streetAddress}}"/>
+        <fillField  stepKey="fillCity" userInput="{{Address.city}}" selector="{{StorefrontCustomerAddressFormSection.city}}"/>
+        <selectOption  stepKey="selectState" userInput="{{Address.state}}" selector="{{StorefrontCustomerAddressFormSection.state}}"/>
+        <fillField  stepKey="fillZip" userInput="{{Address.postcode}}" selector="{{StorefrontCustomerAddressFormSection.zip}}"/>
+        <selectOption  stepKey="selectCountry" userInput="{{Address.country}}" selector="{{StorefrontCustomerAddressFormSection.country}}"/>
+        <click stepKey="saveCustomerAddress" selector="{{StorefrontCustomerAddressFormSection.saveAddress}}"/>
+        <see userInput="You saved the address." stepKey="verifyAddressAdded"/>
+    </actionGroup>
+    <actionGroup name="StorefrontAddCustomerDefaultAddressActionGroup">
+        <amOnPage url="customer/address/new/" stepKey="OpenCustomerAddNewAddress"/>
+        <arguments>
+            <argument name="Address"/>
+        </arguments>
+        <fillField  stepKey="fillFirstName" userInput="{{Address.firstname}}" selector="{{StorefrontCustomerAddressFormSection.firstName}}"/>
+        <fillField  stepKey="fillLastName" userInput="{{Address.lastname}}" selector="{{StorefrontCustomerAddressFormSection.lastName}}"/>
+        <fillField  stepKey="fillCompanyName" userInput="{{Address.company}}" selector="{{StorefrontCustomerAddressFormSection.company}}"/>
+        <fillField  stepKey="fillPhoneNumber" userInput="{{Address.telephone}}" selector="{{StorefrontCustomerAddressFormSection.phoneNumber}}"/>
+        <fillField  stepKey="fillStreetAddress" userInput="{{Address.street[0]}}" selector="{{StorefrontCustomerAddressFormSection.streetAddress}}"/>
+        <fillField  stepKey="fillCity" userInput="{{Address.city}}" selector="{{StorefrontCustomerAddressFormSection.city}}"/>
+        <selectOption  stepKey="selectState" userInput="{{Address.state}}" selector="{{StorefrontCustomerAddressFormSection.state}}"/>
+        <fillField  stepKey="fillZip" userInput="{{Address.postcode}}" selector="{{StorefrontCustomerAddressFormSection.zip}}"/>
+        <selectOption  stepKey="selectCountry" userInput="{{Address.country}}" selector="{{StorefrontCustomerAddressFormSection.country}}"/>
+        <click stepKey="checkUseAsDefaultBillingAddressCheckBox" selector="{{StorefrontCustomerAddressFormSection.useAsDefaultBillingAddressCheckBox}}"/>
+        <click stepKey="checkUseAsDefaultShippingAddressCheckBox" selector="{{StorefrontCustomerAddressFormSection.useAsDefaultShippingAddressCheckBox}}"/>
+        <click stepKey="saveCustomerAddress" selector="{{StorefrontCustomerAddressFormSection.saveAddress}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="You saved the address." stepKey="verifyAddressAdded"/>
+    </actionGroup>
+</actionGroups>

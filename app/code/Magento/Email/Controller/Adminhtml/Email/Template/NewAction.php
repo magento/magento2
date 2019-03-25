@@ -6,7 +6,9 @@
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
-class NewAction extends \Magento\Email\Controller\Adminhtml\Email\Template
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class NewAction extends \Magento\Email\Controller\Adminhtml\Email\Template implements HttpGetActionInterface
 {
     /**
      * New transactional email action

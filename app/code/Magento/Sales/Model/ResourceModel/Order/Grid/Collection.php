@@ -35,4 +35,19 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _initSelect()
+    {
+        parent::_initSelect();
+
+        $tableDescription = $this->getConnection()->describeTable($this->getMainTable());
+        foreach ($tableDescription as $columnInfo) {
+            $this->addFilterToMap($columnInfo['COLUMN_NAME'], 'main_table.' . $columnInfo['COLUMN_NAME']);
+        }
+
+        return $this;
+    }
 }

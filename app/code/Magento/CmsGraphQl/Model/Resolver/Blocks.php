@@ -55,6 +55,8 @@ class Blocks implements ResolverInterface
     }
 
     /**
+     * Get block identifiers
+     *
      * @param array $args
      * @return string[]
      * @throws GraphQlInputException
@@ -69,6 +71,8 @@ class Blocks implements ResolverInterface
     }
 
     /**
+     * Get blocks data
+     *
      * @param array $blockIdentifiers
      * @return array
      * @throws GraphQlNoSuchEntityException
@@ -76,12 +80,12 @@ class Blocks implements ResolverInterface
     private function getBlocksData(array $blockIdentifiers): array
     {
         $blocksData = [];
-        try {
-            foreach ($blockIdentifiers as $blockIdentifier) {
+        foreach ($blockIdentifiers as $blockIdentifier) {
+            try {
                 $blocksData[$blockIdentifier] = $this->blockDataProvider->getData($blockIdentifier);
+            } catch (NoSuchEntityException $e) {
+                $blocksData[$blockIdentifier] = new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
             }
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         }
         return $blocksData;
     }

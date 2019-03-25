@@ -104,61 +104,61 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
             [
                 'options' => [
                     '--magento-init-params' => '',
-                    '--convert_old_scripts' => false,
+                    '--convert-old-scripts' => false,
                 ],
                 'deployMode' => \Magento\Framework\App\State::MODE_PRODUCTION,
                 'expectedString' => 'Please re-run Magento compile command. Use the command "setup:di:compile"'
                     . PHP_EOL,
                 'expectedOptions' => [
                     'keep-generated' => false,
-                    'convert_old_scripts' => false,
-                    'magento-init-params' => '',
+                    'convert-old-scripts' => false,
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
+                    'magento-init-params' => '',
                 ]
             ],
             [
                 'options' => [
                     '--magento-init-params' => '',
-                    '--convert_old_scripts' => false,
+                    '--convert-old-scripts' => false,
                     '--keep-generated' => true,
                 ],
                 'deployMode' => \Magento\Framework\App\State::MODE_PRODUCTION,
                 'expectedString' => '',
                 'expectedOptions' => [
                     'keep-generated' => true,
-                    'convert_old_scripts' => false,
-                    'magento-init-params' => '',
+                    'convert-old-scripts' => false,
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
+                    'magento-init-params' => '',
                 ]
             ],
             [
-                'options' => ['--magento-init-params' => '', '--convert_old_scripts' => false],
+                'options' => ['--magento-init-params' => '', '--convert-old-scripts' => false],
                 'deployMode' => \Magento\Framework\App\State::MODE_DEVELOPER,
                 'expectedString' => '',
                 'expectedOptions' => [
                     'keep-generated' => false,
-                    'convert_old_scripts' => false,
-                    'magento-init-params' => '',
+                    'convert-old-scripts' => false,
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
+                    'magento-init-params' => '',
                 ]
             ],
             [
-                'options' => ['--magento-init-params' => '', '--convert_old_scripts' => false],
+                'options' => ['--magento-init-params' => '', '--convert-old-scripts' => false],
                 'deployMode' => \Magento\Framework\App\State::MODE_DEFAULT,
                 'expectedString' => '',
                 'expectedOptions' => [
                     'keep-generated' => false,
-                    'convert_old_scripts' => false,
-                    'magento-init-params' => '',
+                    'convert-old-scripts' => false,
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
+                    'magento-init-params' => '',
                 ]
             ],
         ];

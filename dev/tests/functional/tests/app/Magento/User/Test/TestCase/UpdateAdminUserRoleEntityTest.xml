@@ -17,7 +17,6 @@
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
         </variation>
         <variation name="UpdateAdminUserRoleEntityTestVariation2">
-            <data name="issue" xsi:type="string">MAGETWO-65658: [FT] User with restricted access can't log in to Admin in UpdateAdminUserEntityTest</data>
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="role/data/resource_access" xsi:type="string">Custom</data>
             <data name="role/data/roles_resources" xsi:type="string">Sales</data>
@@ -30,8 +29,8 @@
             <constraint name="Magento\User\Test\Constraint\AssertRoleSuccessSaveMessage" />
             <constraint name="Magento\User\Test\Constraint\AssertRoleInGrid" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />
-            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
-            <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccess" />
+            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLoginWithError"/>
+            <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccessWithError" />
         </variation>
         <variation name="UpdateAdminUserRoleEntityTestVariation3">
             <data name="user/dataset" xsi:type="string">custom_admin_with_default_role</data>

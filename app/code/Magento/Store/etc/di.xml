@@ -102,9 +102,13 @@
     </type>
     <type name="Magento\Store\Model\StoreResolver">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
             <argument name="runMode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_TYPE</argument>
             <argument name="scopeCode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_CODE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\StoresData">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
     <type name="Magento\Store\App\FrontController\Plugin\DefaultStore">
@@ -232,6 +236,7 @@
     <type name="Magento\Framework\App\ScopeResolverPool">
         <arguments>
             <argument name="scopeResolvers" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Framework\App\ScopeResolver</item>
                 <item name="store" xsi:type="object">Magento\Store\Model\Resolver\Store</item>
                 <item name="stores" xsi:type="object">Magento\Store\Model\Resolver\Store</item>
                 <item name="group" xsi:type="object">Magento\Store\Model\Resolver\Group</item>

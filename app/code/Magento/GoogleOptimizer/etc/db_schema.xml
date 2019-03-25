@@ -16,12 +16,12 @@
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Store id"/>
         <column xsi:type="text" name="experiment_script" nullable="true" comment="Google experiment script"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="code_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="GOOGLEOPTIMIZER_CODE_STORE_ID_STORE_STORE_ID" table="googleoptimizer_code"
+        <constraint xsi:type="foreign" referenceId="GOOGLEOPTIMIZER_CODE_STORE_ID_STORE_STORE_ID" table="googleoptimizer_code"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="GOOGLEOPTIMIZER_CODE_STORE_ID_ENTITY_ID_ENTITY_TYPE">
+        <constraint xsi:type="unique" referenceId="GOOGLEOPTIMIZER_CODE_STORE_ID_ENTITY_ID_ENTITY_TYPE">
             <column name="store_id"/>
             <column name="entity_id"/>
             <column name="entity_type"/>

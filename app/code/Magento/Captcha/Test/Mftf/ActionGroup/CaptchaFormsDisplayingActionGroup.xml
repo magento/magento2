@@ -13,7 +13,7 @@
         <waitForPageLoad stepKey="waitForStoresLoaded"/>
         <click selector="{{CaptchaFormsDisplayingSection.config}}" stepKey="ClickToGoConfiguration"/>
         <waitForPageLoad stepKey="waitForConfigurationsLoaded"/>
-        <scrollTo selector="{{CaptchaFormsDisplayingSection.customer}}" stepKey="ScrollToCustomers"/>
+        <scrollTo selector="{{CaptchaFormsDisplayingSection.customer}}" x="0" y="-80" stepKey="ScrollToCustomers"/>
         <click selector="{{CaptchaFormsDisplayingSection.customer}}" stepKey="ClickToCustomers"/>
         <waitForPageLoad stepKey="waitForCustomerConfigurationsLoaded"/>
         <click selector="{{CaptchaFormsDisplayingSection.customerConfig}}" stepKey="ClickToGoCustomerConfiguration"/>

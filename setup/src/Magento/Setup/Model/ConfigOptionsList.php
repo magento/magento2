@@ -8,6 +8,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
@@ -40,12 +41,18 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private $configOptionsCollection = [];
 
     /**
+     * @var KeyValidator
+     */
+    private $encryptionKeyValidator;
+
+    /**
      * @var array
      */
     private $configOptionsListClasses = [
         \Magento\Setup\Model\ConfigOptionsList\Session::class,
         \Magento\Setup\Model\ConfigOptionsList\Cache::class,
-        \Magento\Setup\Model\ConfigOptionsList\PageCache::class
+        \Magento\Setup\Model\ConfigOptionsList\PageCache::class,
+        \Magento\Setup\Model\ConfigOptionsList\Lock::class,
     ];
 
     /**
@@ -58,19 +65,22 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      *
      * @param ConfigGenerator $configGenerator
      * @param DbValidator $dbValidator
+     * @param KeyValidator|null $encryptionKeyValidator
      * @param DriverOptions|null $driverOptions
      */
     public function __construct(
         ConfigGenerator $configGenerator,
         DbValidator $dbValidator,
+        KeyValidator $encryptionKeyValidator = null,
         DriverOptions $driverOptions = null
     ) {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->configGenerator = $configGenerator;
         $this->dbValidator = $dbValidator;
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         foreach ($this->configOptionsListClasses as $className) {
             $this->configOptionsCollection[] = $objectManager->get($className);
         }
+        $this->encryptionKeyValidator = $encryptionKeyValidator ?: $objectManager->get(KeyValidator::class);
         $this->driverOptions = $driverOptions ?? $objectManager->get(DriverOptions::class);
     }
 
@@ -318,8 +328,9 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         $errors = [];
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY])
-            && !$options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY]) {
-            $errors[] = 'Invalid encryption key';
+            && !$this->encryptionKeyValidator->isValid($options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY])
+        ) {
+            $errors[] = 'Invalid encryption key. Encryption key must be 32 character string without any white space.';
         }
 
         return $errors;

@@ -80,6 +80,7 @@ class SaveTest extends AbstractBackendController
         ];
 
         $this->getRequest()->setPostValue($inputData);
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
             self::equalTo(['You saved the category.']),

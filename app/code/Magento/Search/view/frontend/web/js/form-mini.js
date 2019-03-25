@@ -306,12 +306,13 @@ define([
                             dropdown.append(html);
                         });
 
+                        this._resetResponseList(true);
+
                         this.responseList.indexList = this.autoComplete.html(dropdown)
                             .css(clonePosition)
                             .show()
                             .find(this.options.responseFieldElements + ':visible');
 
-                        this._resetResponseList(false);
                         this.element.removeAttr('aria-activedescendant');
 
                         if (this.responseList.indexList.length) {
@@ -338,6 +339,11 @@ define([
                                     this._resetResponseList(false);
                                 }
                             }.bind(this));
+                    } else {
+                        this._resetResponseList(true);
+                        this.autoComplete.hide();
+                        this._updateAriaHasPopup(false);
+                        this.element.removeAttr('aria-activedescendant');
                     }
                 }, this));
             } else {

@@ -55,11 +55,6 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
     protected $storeRepositoryMock;
 
     /**
-     * @var \Magento\Store\Api\StoreResolverInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeResolverMock;
-
-    /**
      * Set up
      */
     protected function setUp()
@@ -94,18 +89,12 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->storeResolverMock = $this->getMockBuilder(\Magento\Store\Api\StoreResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
         $this->plugin = (new ObjectManager($this))->getObject(
             \Magento\Store\Model\Plugin\StoreCookie::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'storeCookieManager' => $this->storeCookieManagerMock,
-                'storeRepository' => $this->storeRepositoryMock,
-                'storeResolver' => $this->storeResolverMock
+                'storeRepository' => $this->storeRepositoryMock
             ]
         );
     }
