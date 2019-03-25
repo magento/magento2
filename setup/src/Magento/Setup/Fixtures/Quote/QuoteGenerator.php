@@ -179,15 +179,15 @@ class QuoteGenerator
     private function saveQuoteWithQuoteItems($entityId, \Generator $itemIdSequence)
     {
         $productCount = [
-            Type::TYPE_SIMPLE => mt_rand(
+            Type::TYPE_SIMPLE => random_int(
                 $this->config->getSimpleCountFrom(),
                 $this->config->getSimpleCountTo()
             ),
-            Configurable::TYPE_CODE => mt_rand(
+            Configurable::TYPE_CODE => random_int(
                 $this->config->getConfigurableCountFrom(),
                 $this->config->getConfigurableCountTo()
             ),
-            QuoteConfiguration::BIG_CONFIGURABLE_TYPE => mt_rand(
+            QuoteConfiguration::BIG_CONFIGURABLE_TYPE => random_int(
                 $this->config->getBigConfigurableCountFrom(),
                 $this->config->getBigConfigurableCountTo()
             )

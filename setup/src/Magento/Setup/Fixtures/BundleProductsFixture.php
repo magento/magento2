@@ -165,7 +165,7 @@ class BundleProductsFixture extends Fixture
             'meta_title' => $skuClosure,
             'price' => function ($index) use ($priceTypeClosure) {
                 return $priceTypeClosure($index) === LinkInterface::PRICE_TYPE_PERCENT
-                    ? mt_rand(10, 90)
+                    ? random_int(10, 90)
                     : $this->priceProvider->getPrice($index);
             },
             'priceType' => $priceTypeClosure,

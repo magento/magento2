@@ -41,7 +41,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     private function getRandomColor() : string
     {
-        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+        return '#' . str_pad(dechex(random_int(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
     }
 
     /**
