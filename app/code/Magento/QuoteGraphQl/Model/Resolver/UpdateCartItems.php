@@ -111,6 +111,25 @@ class UpdateCartItems implements ResolverInterface
                 $this->cartItemRepository->deleteById((int)$cart->getId(), $itemId);
             } else {
                 $cartItem->setQty($qty);
+
+                if ($cartItem->getHasError()) {
+                    $errors = [];
+                    foreach ($cartItem->getMessage(false) as $message) {
+                        if (!in_array($message, $errors)) {
+                            $errors[] = $message;
+                        }
+                    }
+
+                    if (!empty($errors)) {
+                        throw new GraphQlInputException(
+                            __(
+                                'Could not update the product with SKU %sku: %message',
+                                ['sku' => $cartItem->getSku(), 'message' => __(implode("\n", $errors))]
+                            )
+                        );
+                    }
+                }
+
                 $this->cartItemRepository->save($cartItem);
             }
         }
