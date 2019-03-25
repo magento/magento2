@@ -159,7 +159,7 @@ QUERY;
     {
         return [
             'missed_cart_id' => [
-                'payment_method: {code: "'.Checkmo::PAYMENT_METHOD_CHECKMO_CODE.'"}',
+                'payment_method: {code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"}',
                 'Required parameter "cart_id" is missing.'
             ],
             'missed_payment_method' => [
@@ -167,7 +167,7 @@ QUERY;
                 'Required parameter "code" for "payment_method" is missing.'
             ],
             'missed_payment_method_code' => [
-                'cart_id: "test",payment_method: {code: ""}',
+                'cart_id: "test", payment_method: {code: ""}',
                 'Required parameter "code" for "payment_method" is missing.'
             ],
         ];
