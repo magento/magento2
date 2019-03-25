@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Check MSRP of product-->
+    <actionGroup name="AssertMsrpOfProduct">
+        <arguments>
+            <argument name="msrp" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.msrp}}" stepKey="waitForMsrp"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.msrp}}" stepKey="grabMsrp"/>
+        <assertEquals stepKey="assertMsrp">
+            <expectedResult type="string">${{msrp}}</expectedResult>
+            <actualResult type="variable">grabMsrp</actualResult>
+        </assertEquals>
+        <seeElement selector="{{StorefrontProductInfoMainSection.clickForPriceLink}}" stepKey="seeClickForPriceLink"/>
+    </actionGroup>
+    <!--Check product price when MSRP is not set or is less than price-->
+    <actionGroup name="AssertMsrpFallbackOfProduct" extends="AssertMsrpOfProduct">
+        <remove keyForRemoval="seeClickForPriceLink"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.msrpFallback}}" stepKey="waitForMsrp"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.msrpFallback}}" stepKey="grabMsrp"/>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.clickForPriceLink}}" after="assertMsrp" stepKey="dontSeeClickForPriceLink"/>
+    </actionGroup>
+</actionGroups>
