@@ -173,7 +173,7 @@ class InvokerDefaultTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($notObserver)
         );
         $this->_appStateMock->expects(
-            $this->exactly(2)
+            $this->exactly(1)
         )->method(
             'getMode'
         )->will(
