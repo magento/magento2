@@ -52,7 +52,6 @@
         <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceType('0')}}" userInput="{{option.price_type}}" stepKey="selectPriceType"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.optionFileExtensions('0')}}" userInput="{{option.file_extension}}" stepKey="fillCompatibleExtensions"/>
     </actionGroup>
-
     <actionGroup name="AddProductCustomOptionField">
         <arguments>
             <argument name="option" defaultValue="ProductOptionField"/>
@@ -69,7 +68,6 @@
         <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceType(optionIndex)}}" userInput="{{option.price_type}}" stepKey="selectPriceType"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.optionSku(optionIndex)}}" userInput="{{option.title}}" stepKey="fillSku"/>
     </actionGroup>
-
     <actionGroup name="importProductCustomizableOptions">
         <arguments>
             <argument name="productName" type="string"/>
@@ -84,13 +82,11 @@
         <checkOption selector="{{AdminProductImportOptionsSection.firstRowItemCheckbox}}"  stepKey="checkProductCheckbox"/>
         <click selector="{{AdminProductImportOptionsSection.importButton}}" stepKey="clickImport"/>
     </actionGroup>
-
     <actionGroup name="resetImportOptionFilter">
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
         <click selector="{{AdminProductCustomizableOptionsSection.importOptions}}" stepKey="clickImportOptions"/>
         <click selector="{{AdminProductImportOptionsSection.resetFiltersButton}}" stepKey="clickResetFilterButton"/>
     </actionGroup>
-
     <actionGroup name="checkCustomizableOptionImport">
         <arguments>
             <argument name="option" defaultValue="ProductOptionField"/>
@@ -99,7 +95,6 @@
         <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionTitleInput(optionIndex)}}" stepKey="grabOptionTitle"/>
         <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionPrice(optionIndex)}}" stepKey="grabOptionPrice"/>
         <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionSku(optionIndex)}}" stepKey="grabOptionSku"/>
-
         <assertEquals expected="{{option.title}}" expectedType="string" actual="$grabOptionTitle" stepKey="assertOptionTitle"/>
         <assertEquals expected="{{option.price}}" expectedType="string" actual="$grabOptionPrice" stepKey="assertOptionPrice"/>
         <assertEquals expected="{{option.title}}" expectedType="string" actual="$grabOptionSku" stepKey="assertOptionSku"/>

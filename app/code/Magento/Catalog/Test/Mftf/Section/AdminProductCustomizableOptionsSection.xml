@@ -54,6 +54,6 @@
         <element name="applyFiltersButton" type="button" selector="//button[@data-action='grid-filter-apply']" timeout="30"/>
         <element name="resetFiltersButton" type="button" selector="//button[@data-action='grid-filter-reset']" timeout="30"/>
         <element name="firstRowItemCheckbox" type="input" selector="//input[@data-action='select-row']" timeout="30"/>
-        <element name="importButton" type="button" selector="//button[@class='action-primary']/span[contains(text(), 'Import')]" timeout="30"/>
+        <element name="importButton" type="button" selector="//button[contains(@class, 'action-primary')]/span[contains(text(), 'Import')]" timeout="30"/>
     </section>
 </sections>
