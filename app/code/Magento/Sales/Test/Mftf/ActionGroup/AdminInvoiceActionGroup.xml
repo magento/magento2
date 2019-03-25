@@ -52,6 +52,13 @@
         <waitForPageLoad stepKey="waitForInvoicePageLoad"/>
     </actionGroup>
 
+    <actionGroup name="clearInvoicesGridFilers">
+        <amOnPage url="{{AdminInvoicesPage.url}}" stepKey="goToInvoices"/>
+        <waitForPageLoad stepKey="waitInvoicesGridToLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearFilters" />
+        <waitForPageLoad stepKey="waitInvoicesGrid"/>
+    </actionGroup>
+
     <actionGroup name="goToInvoiceIntoOrder">
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
         <seeInCurrentUrl url="{{AdminInvoiceNewPage.url}}" stepKey="seeOrderInvoiceUrl"/>
