@@ -339,7 +339,7 @@ QUERY;
             'missed_billing_address' => [
                 'cart_id: "cart_id_value"',
                 'Field SetBillingAddressOnCartInput.billing_address of required type BillingAddressInput!'
-                    . 'was not provided.',
+                    . ' was not provided.',
             ],
             'missed_cart_id' => [
                 'billing_address: {}',
