@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAfterJSMinificationTest">
+        <annotations>
+            <features value="Backend"/>
+            <title value="Admin panel should be accessible with JS minification enabled"/>
+            <description value="Admin panel should be accessible with JS minification enabled"/>
+            <group value="backend"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set dev/js/minify_files 1" stepKey="enableJsMinification"/>
+            <magentoCLI command="cache:clean config" stepKey="cleanCache"/>
+        </before>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <see userInput="Dashboard" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeDashboardTitle"/>
+    </test>
+</tests>
