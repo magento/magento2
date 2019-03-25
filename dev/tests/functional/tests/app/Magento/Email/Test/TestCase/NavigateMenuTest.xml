@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest">
         <variation name="NavigateMenuTest29">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">Marketing > Email Templates</data>
             <data name="pageTitle" xsi:type="string">Email Templates</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
