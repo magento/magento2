@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * Price locale format.
+ */
 class Format implements \Magento\Framework\Locale\FormatInterface
 {
     /**
