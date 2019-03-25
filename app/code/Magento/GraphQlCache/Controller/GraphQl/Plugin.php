@@ -11,6 +11,7 @@ use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\GraphQlCache\Model\CacheTags;
+use Magento\Framework\App\State as AppState;
 
 class Plugin
 {
@@ -20,11 +21,18 @@ class Plugin
     private $cacheTags;
 
     /**
-     * @param CacheTags $cacheTags
+     * @var AppState
      */
-    public function __construct(CacheTags $cacheTags)
+    private $state;
+
+    /**
+     * @param CacheTags $cacheTags
+     * @param AppState $state
+     */
+    public function __construct(CacheTags $cacheTags, AppState $state)
     {
         $this->cacheTags = $cacheTags;
+        $this->state = $state;
     }
 
     public function afterDispatch(
@@ -42,6 +50,11 @@ class Plugin
             $response->setHeader('Cache-Control', 'max-age=86400, public, s-maxage=86400', true);
             $response->setHeader('X-Magento-Tags', implode(',', $cacheTags), true);
         }
+
+        if ($request->isGet() && $this->state->getMode() == AppState::MODE_DEVELOPER) {
+            $response->setHeader('X-Magento-Debug', 1);
+        }
+
         return $response;
     }
 }
