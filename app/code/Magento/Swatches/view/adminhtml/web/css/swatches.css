@@ -149,6 +149,22 @@
     width: 50px;
 }
 
+.col-swatch-min-width {
+    min-width: 65px;
+}
+
+[class^=swatch-col],
+[class^=col-]:not(.col-draggable):not(.col-default) {
+    min-width: 150px;
+}
+
+#swatch-visual-options-panel,
+#swatch-text-options-panel,
+#manage-options-panel {
+    overflow: auto;
+    width: 100%;
+}
+
 .swatches-visual-col.unavailable:after {
     position: absolute;
     width: 35px;

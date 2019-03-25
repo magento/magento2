@@ -21,5 +21,6 @@
         <element name="rowActionSelect" type="button" selector="[data-role='grid'] tbody tr .action-select-wrap"/>
         <element name="rowEditAction" type="button" selector="[data-role='grid'] tbody tr .action-select-wrap._active [data-action='item-edit']" timeout="30"/>
         <element name="dataGridEmpty" type="block" selector=".data-grid-tr-no-data td"/>
+        <element name="dataGridWrap" type="block" selector=".admin__data-grid-wrap"/>
     </section>
 </sections>

@@ -22,5 +22,6 @@
         <element name="categoryPageProductImagePlaceholderSmall" type="text" selector=".products-grid img[src*='placeholder/small_image.jpg']"/>
         <element name="categoryPageProductImage" type="text" selector=".products-grid img[src*='/{{var1}}']" parameterized="true"/>
         <element name="categoryPageProductName" type="text" selector=".products.list.items.product-items li:nth-of-type({{line}}) .product-item-link" timeout="30" parameterized="true"/>
+        <element name="categoryEmptyMessage" type="text" selector=".column.main .message.info.empty"/>
     </section>
 </sections>

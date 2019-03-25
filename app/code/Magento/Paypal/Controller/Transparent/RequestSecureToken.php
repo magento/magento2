@@ -11,6 +11,7 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\Session\SessionManager;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Paypal\Model\Payflow\Service\Request\SecureToken;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Quote\Model\Quote;
@@ -39,7 +40,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
     private $secureTokenService;
 
     /**
-     * @var SessionManager
+     * @var SessionManager|SessionManagerInterface
      */
     private $sessionManager;
 
@@ -55,6 +56,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
      * @param SecureToken $secureTokenService
      * @param SessionManager $sessionManager
      * @param Transparent $transparent
+     * @param SessionManagerInterface|null $sessionInterface
      */
     public function __construct(
         Context $context,
@@ -62,12 +64,13 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
         Generic $sessionTransparent,
         SecureToken $secureTokenService,
         SessionManager $sessionManager,
-        Transparent $transparent
+        Transparent $transparent,
+        SessionManagerInterface $sessionInterface = null
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->sessionTransparent = $sessionTransparent;
         $this->secureTokenService = $secureTokenService;
-        $this->sessionManager = $sessionManager;
+        $this->sessionManager = $sessionInterface ?: $sessionManager;
         $this->transparent = $transparent;
         parent::__construct($context);
     }
@@ -82,7 +85,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
         /** @var Quote $quote */
         $quote = $this->sessionManager->getQuote();
 
-        if (!$quote or !$quote instanceof Quote) {
+        if (!$quote || !$quote instanceof Quote || !$this->getRequest()->isPost()) {
             return $this->getErrorResponse();
         }
 
@@ -106,6 +109,8 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Get error response.
+     *
      * @return Json
      */
     private function getErrorResponse()

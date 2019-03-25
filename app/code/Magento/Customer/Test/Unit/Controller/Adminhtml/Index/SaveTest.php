@@ -15,6 +15,8 @@ use Magento\Customer\Model\Metadata\Form;
 use Magento\Framework\Controller\Result\Redirect;
 
 /**
+ * Testing Save Customer use case from admin page.
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @covers \Magento\Customer\Controller\Adminhtml\Index\Save
@@ -275,6 +277,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for Execute method with existent customer.
+     *
      * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -539,6 +543,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $customerEmail = 'customer@email.com';
         $customerMock->expects($this->once())->method('getEmail')->willReturn($customerEmail);
+
+        $customerMock->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([]);
 
         $this->emailNotificationMock->expects($this->once())
             ->method('credentialsChanged')
@@ -878,22 +886,24 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'customer' => [
                 'coolness' => false,
                 'disable_auto_group_change' => 'false',
+                'dob' => '3/12/1996',
             ],
             'subscription' => $subscription,
         ];
         $extractedData = [
             'coolness' => false,
             'disable_auto_group_change' => 'false',
+            'dob' => '1996-03-12',
         ];
 
         /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
         $attributeMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\AttributeMetadataInterface::class
         )->disableOriginalConstructor()->getMock();
-        $attributeMock->expects($this->once())
+        $attributeMock->expects($this->exactly(2))
             ->method('getAttributeCode')
             ->willReturn('coolness');
-        $attributeMock->expects($this->once())
+        $attributeMock->expects($this->exactly(2))
             ->method('getFrontendInput')
             ->willReturn('int');
         $attributes = [$attributeMock];
@@ -904,7 +914,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 [null, null, $postValue],
                 [CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, null, $postValue['customer']],
             ]);
-        $this->requestMock->expects($this->exactly(2))
+        $this->requestMock->expects($this->any())
             ->method('getPost')
             ->willReturnMap(
                 [
@@ -917,12 +927,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $objectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectMock->expects($this->once())
+        $objectMock->expects($this->exactly(2))
             ->method('getData')
             ->with('customer')
             ->willReturn($postValue['customer']);
 
-        $this->objectFactoryMock->expects($this->once())
+        $this->objectFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->with(['data' => $postValue])
             ->willReturn($objectMock);
@@ -930,19 +940,19 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $customerFormMock = $this->getMockBuilder(
             \Magento\Customer\Model\Metadata\Form::class
         )->disableOriginalConstructor()->getMock();
-        $customerFormMock->expects($this->once())
+        $customerFormMock->expects($this->exactly(2))
             ->method('extractData')
             ->with($this->requestMock, 'customer')
             ->willReturn($extractedData);
-        $customerFormMock->expects($this->once())
+        $customerFormMock->expects($this->exactly(2))
             ->method('compactData')
             ->with($extractedData)
             ->willReturn($extractedData);
-        $customerFormMock->expects($this->once())
+        $customerFormMock->expects($this->exactly(2))
             ->method('getAttributes')
             ->willReturn($attributes);
 
-        $this->formFactoryMock->expects($this->once())
+        $this->formFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->with(
                 CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
@@ -990,7 +1000,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->sessionMock->expects($this->once())
             ->method('setCustomerFormData')
-            ->with($postValue);
+            ->with([
+                'customer' => $extractedData,
+                'subscription' => $subscription,
+            ]);
 
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
         $redirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
@@ -1021,22 +1034,24 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'customer' => [
                 'coolness' => false,
                 'disable_auto_group_change' => 'false',
+                'dob' => '3/12/1996',
             ],
             'subscription' => $subscription,
         ];
         $extractedData = [
             'coolness' => false,
             'disable_auto_group_change' => 'false',
+            'dob' => '1996-03-12',
         ];
 
         /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
         $attributeMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\AttributeMetadataInterface::class
         )->disableOriginalConstructor()->getMock();
-        $attributeMock->expects($this->once())
+        $attributeMock->expects($this->exactly(2))
             ->method('getAttributeCode')
             ->willReturn('coolness');
-        $attributeMock->expects($this->once())
+        $attributeMock->expects($this->exactly(2))
             ->method('getFrontendInput')
             ->willReturn('int');
         $attributes = [$attributeMock];
@@ -1047,7 +1062,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 [null, null, $postValue],
                 [CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, null, $postValue['customer']],
             ]);
-        $this->requestMock->expects($this->exactly(2))
+        $this->requestMock->expects($this->any())
             ->method('getPost')
             ->willReturnMap(
                 [
@@ -1060,12 +1075,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $objectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectMock->expects($this->once())
+        $objectMock->expects($this->exactly(2))
             ->method('getData')
             ->with('customer')
             ->willReturn($postValue['customer']);
 
-        $this->objectFactoryMock->expects($this->once())
+        $this->objectFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->with(['data' => $postValue])
             ->willReturn($objectMock);
@@ -1074,19 +1089,19 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $customerFormMock = $this->getMockBuilder(
             \Magento\Customer\Model\Metadata\Form::class
         )->disableOriginalConstructor()->getMock();
-        $customerFormMock->expects($this->once())
+        $customerFormMock->expects($this->exactly(2))
             ->method('extractData')
             ->with($this->requestMock, 'customer')
             ->willReturn($extractedData);
-        $customerFormMock->expects($this->once())
+        $customerFormMock->expects($this->exactly(2))
             ->method('compactData')
             ->with($extractedData)
             ->willReturn($extractedData);
-        $customerFormMock->expects($this->once())
+        $customerFormMock->expects($this->exactly(2))
             ->method('getAttributes')
             ->willReturn($attributes);
 
-        $this->formFactoryMock->expects($this->once())
+        $this->formFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->with(
                 CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
@@ -1133,7 +1148,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->sessionMock->expects($this->once())
             ->method('setCustomerFormData')
-            ->with($postValue);
+            ->with([
+                'customer' => $extractedData,
+                'subscription' => $subscription,
+            ]);
 
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
         $redirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
@@ -1164,22 +1182,24 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'customer' => [
                 'coolness' => false,
                 'disable_auto_group_change' => 'false',
+                'dob' => '3/12/1996',
             ],
             'subscription' => $subscription,
         ];
         $extractedData = [
             'coolness' => false,
             'disable_auto_group_change' => 'false',
+            'dob' => '1996-03-12',
         ];
 
         /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
         $attributeMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\AttributeMetadataInterface::class
         )->disableOriginalConstructor()->getMock();
-        $attributeMock->expects($this->once())
+        $attributeMock->expects($this->exactly(2))
             ->method('getAttributeCode')
             ->willReturn('coolness');
-        $attributeMock->expects($this->once())
+        $attributeMock->expects($this->exactly(2))
             ->method('getFrontendInput')
             ->willReturn('int');
         $attributes = [$attributeMock];
@@ -1190,7 +1210,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 [null, null, $postValue],
                 [CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, null, $postValue['customer']],
             ]);
-        $this->requestMock->expects($this->exactly(2))
+        $this->requestMock->expects($this->any())
             ->method('getPost')
             ->willReturnMap(
                 [
@@ -1203,12 +1223,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $objectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectMock->expects($this->once())
+        $objectMock->expects($this->exactly(2))
             ->method('getData')
             ->with('customer')
             ->willReturn($postValue['customer']);
 
-        $this->objectFactoryMock->expects($this->once())
+        $this->objectFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->with(['data' => $postValue])
             ->willReturn($objectMock);
@@ -1216,19 +1236,19 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $customerFormMock = $this->getMockBuilder(
             \Magento\Customer\Model\Metadata\Form::class
         )->disableOriginalConstructor()->getMock();
-        $customerFormMock->expects($this->once())
+        $customerFormMock->expects($this->exactly(2))
             ->method('extractData')
             ->with($this->requestMock, 'customer')
             ->willReturn($extractedData);
-        $customerFormMock->expects($this->once())
+        $customerFormMock->expects($this->exactly(2))
             ->method('compactData')
             ->with($extractedData)
             ->willReturn($extractedData);
-        $customerFormMock->expects($this->once())
+        $customerFormMock->expects($this->exactly(2))
             ->method('getAttributes')
             ->willReturn($attributes);
 
-        $this->formFactoryMock->expects($this->once())
+        $this->formFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->with(
                 CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
@@ -1277,7 +1297,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->sessionMock->expects($this->once())
             ->method('setCustomerFormData')
-            ->with($postValue);
+            ->with([
+                'customer' => $extractedData,
+                'subscription' => $subscription,
+            ]);
 
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
         $redirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)

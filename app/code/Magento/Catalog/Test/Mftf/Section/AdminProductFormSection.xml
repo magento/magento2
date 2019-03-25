@@ -40,6 +40,8 @@
         <element name="attributeSetDropDown" type="select" selector="div[data-index='attribute_set_id'] .action-select.admin__action-multiselect"/>
         <element name="requiredNameIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
         <element name="requiredSkuIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=sku]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
+        <element name="customAttributeDropdownField" type="select" selector="select[name='product[{{attributeCode}}]']" parameterized="true"/>
+        <element name="customAttributeInputField" type="select" selector="input[name='product[{{attributeCode}}]']" parameterized="true"/>
     </section>
     <section name="ProductInWebsitesSection">
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
@@ -180,6 +182,7 @@
         <element name="applySinglePriceToAllSkus" type="radio" selector=".admin__field-label[for='apply-single-price-radio']"/>
         <element name="singlePrice" type="input" selector="#apply-single-price-input"/>
         <element name="attributeByName" type="input" selector="//label[text()='{{var}}']/preceding-sibling::input" parameterized="true"/>
+        <element name="checkboxByName" type="input" selector="//div[text()='{{var}}']//ancestor::tr//input" parameterized="true"/>
     </section>
     <section name="AdminNewAttributePanel">
         <element name="saveAttribute" type="button" selector="#save" timeout="30"/>
@@ -188,5 +191,6 @@
     </section>
     <section name="AdminChooseAffectedAttributeSetPopup">
         <element name="confirm" type="button" selector="button[data-index='confirm_button']" timeout="30"/>
+        <element name="closePopUp" type="button" selector=".modal-popup._show [data-role='closeBtn']" timeout="30"/>
     </section>
 </sections>
