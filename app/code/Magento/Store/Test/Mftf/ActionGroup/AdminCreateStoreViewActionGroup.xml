@@ -31,7 +31,7 @@
     </actionGroup>
 
     <actionGroup name="AdminCreateStoreViewWithoutCheckActionGroup" extends="AdminCreateStoreViewActionGroup">
-        <remove keyForRemoval="waitForPageReolad"/>
+        <remove keyForRemoval="waitForPageReload"/>
         <remove keyForRemoval="seeSavedMessage"/>
     </actionGroup>
 
