@@ -5,11 +5,9 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminCmsBlockEditPage" url="/cms/block/edit/block_id/{{blockId}}/" area="admin" module="Magento_Cms" parameterized="true">
-        <section name="AdminCmsBlockContentSection" />
-        <section name="AdminMediaGallerySection" />
+    <page name="StorefrontCustomerAddressNewPage" url="/customer/address/new" area="storefront" module="Magento_Customer">
+        <section name="StorefrontCustomerAddressEditFormSection"/>
     </page>
 </pages>
