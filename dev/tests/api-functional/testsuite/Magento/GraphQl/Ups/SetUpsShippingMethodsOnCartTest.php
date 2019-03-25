@@ -83,8 +83,8 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
         $addressesInformation = $response['setShippingMethodsOnCart']['cart']['shipping_addresses'];
         $expectedResult = [
             'carrier_code' => self::CARRIER_CODE,
-            'method_code'  => self::CARRIER_METHOD_CODE_GROUND,
-            'label'        => 'United Parcel Service - Ground',
+            'method_code' => self::CARRIER_METHOD_CODE_GROUND,
+            'label' => 'United Parcel Service - Ground',
         ];
         self::assertEquals($addressesInformation[0]['selected_shipping_method'], $expectedResult);
     }
