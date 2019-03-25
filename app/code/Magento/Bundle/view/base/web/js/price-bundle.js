@@ -229,6 +229,7 @@ define([
 
                 _.each(optionTierPricesElements, function (tierPriceElement) {
                     var selectionId = $(tierPriceElement).data('selection-id') + '';
+
                     if (selectionId === optionValue) {
                         $(tierPriceElement).show();
                     } else {
