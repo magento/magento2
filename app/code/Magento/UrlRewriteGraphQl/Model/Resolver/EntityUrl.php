@@ -76,6 +76,7 @@ class EntityUrl implements ResolverInterface
             $result = [
                 'id' => $urlRewrite->getEntityId(),
                 'canonical_url' => $urlRewrite->getTargetPath(),
+                'relative_url' => $urlRewrite->getTargetPath(),
                 'type' => $this->sanitizeType($urlRewrite->getEntityType())
             ];
         }
