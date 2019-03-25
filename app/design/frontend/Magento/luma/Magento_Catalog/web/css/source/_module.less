@@ -397,6 +397,7 @@
 
     .box-tocart {
         &:extend(.abs-box-tocart all);
+        
         .field.qty {
         }
 
@@ -536,6 +537,15 @@
                     position: absolute;
                     right: 0;
                     top: 0;
+                }
+            }
+        }
+
+        .block-compare {
+            .action {
+                &.delete {
+                    &:extend(.abs-remove-button-for-blocks all);
+                    right: initial;
                 }
             }
         }
