@@ -13,7 +13,7 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext as CatalogSearchFulltextIndexer
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
+use Magento\Elasticsearch6\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Indexer\Model\Indexer;
@@ -87,7 +87,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @return void
      */
@@ -106,7 +106,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @return void
      */
@@ -131,7 +131,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @return void
      */
@@ -170,7 +170,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @magentoAppArea adminhtml
      * @return void
@@ -192,7 +192,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation enabled
      * @magentoAppArea adminhtml
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @magentoDataFixture Magento/Elasticsearch/_files/configurable_products.php
      * @return void
