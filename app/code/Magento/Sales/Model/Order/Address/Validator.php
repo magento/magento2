@@ -63,6 +63,7 @@ class Validator
     }
 
     /**
+     * Validate address.
      *
      * @param \Magento\Sales\Model\Order\Address $address
      * @return array
