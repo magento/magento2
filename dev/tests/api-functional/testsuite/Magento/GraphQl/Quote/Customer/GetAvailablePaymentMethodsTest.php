@@ -54,7 +54,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      */
-    public function testGetCartWithPaymentMethods()
+    public function testGetAvailablePaymentMethods()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
         $query = $this->getQuery($maskedQuoteId);
@@ -74,7 +74,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
      */
-    public function testGetPaymentMethodsFromGuestCart()
+    public function testGetAvailablePaymentMethodsFromGuestCart()
     {
         $guestQuoteMaskedId = $this->getMaskedQuoteIdByReservedOrderId(
             'test_order_with_virtual_product_without_address'
@@ -91,7 +91,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      */
-    public function testGetPaymentMethodsFromAnotherCustomerCart()
+    public function testGetAvailablePaymentMethodsFromAnotherCustomerCart()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
         $query = $this->getQuery($maskedQuoteId);
@@ -106,7 +106,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      * @magentoApiDataFixture Magento/Payment/_files/disable_all_active_payment_methods.php
      */
-    public function testGetPaymentMethodsIfPaymentsAreNotSet()
+    public function testGetAvailablePaymentMethodsIfAllPaymentsAreDisabled()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
         $query = $this->getQuery($maskedQuoteId);
@@ -120,7 +120,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      * @expectedException \Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
-    public function testGetPaymentMethodsOfNonExistentCart()
+    public function testGetAvailablePaymentMethodsOfNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
         $query = $this->getQuery($maskedQuoteId);

@@ -46,9 +46,9 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteResource = $objectManager->create(QuoteResource::class);
+        $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->quoteIdToMaskedId = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
     }
 
     /**
@@ -59,7 +59,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     public function testGetAvailableShippingMethods()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_1');
-        $response = $this->graphQlQuery($this->getAvailableShippingMethodsQuery($maskedQuoteId), [], '', $this->getHeaderMap());
+        $response = $this->graphQlQuery($this->getQuery($maskedQuoteId), [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('cart', $response);
         self::assertArrayHasKey('shipping_addresses', $response['cart']);
@@ -98,7 +98,12 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
 
-        $this->graphQlQuery($this->getAvailableShippingMethodsQuery($maskedQuoteId), [], '', $this->getHeaderMap('customer2@search.example.com'));
+        $this->graphQlQuery(
+            $this->getQuery($maskedQuoteId),
+            [],
+            '',
+            $this->getHeaderMap('customer2@search.example.com')
+        );
     }
 
     /**
@@ -107,10 +112,10 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @magentoApiDataFixture Magento/OfflineShipping/_files/disable_offline_shipping_methods.php
      */
-    public function testGetAvailableShippingMethodsIfShippingsAreNotSet()
+    public function testGetAvailableShippingMethodsIfAllShippingsAreDisabled()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_1');
-        $response = $this->graphQlQuery($this->getAvailableShippingMethodsQuery($maskedQuoteId), [], '', $this->getHeaderMap());
+        $response = $this->graphQlQuery($this->getQuery($maskedQuoteId), [], '', $this->getHeaderMap());
 
         self::assertEquals(0, count($response['cart']['shipping_addresses'][0]['available_shipping_methods']));
     }
@@ -125,7 +130,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     public function testGetAvailableShippingMethodsOfNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
-        $query = $this->getAvailableShippingMethodsQuery($maskedQuoteId);
+        $query = $this->getQuery($maskedQuoteId);
 
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
@@ -134,7 +139,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      * @param string $maskedQuoteId
      * @return string
      */
-    private function getAvailableShippingMethodsQuery(
+    private function getQuery(
         string $maskedQuoteId
     ): string
     {
