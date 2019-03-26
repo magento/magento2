@@ -13,7 +13,8 @@ use Magento\Customer\Model\ResourceModel\Address\DeleteRelation;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * Class Address
+ * Customer Address resource model.
+ *
  * @package Magento\Customer\Model\ResourceModel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -31,8 +32,8 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
-     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
-     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite,
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param array $data
@@ -90,7 +91,7 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * Validate customer address entity
+     * Validate customer address entity.
      *
      * @param \Magento\Framework\DataObject $address
      * @return void
@@ -98,6 +99,9 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     protected function _validate($address)
     {
+        if ($address->getDataByKey('should_ignore_validation')) {
+            return;
+        };
         $validator = $this->_validatorFactory->createValidator('customer_address', 'save');
 
         if (!$validator->isValid($address)) {

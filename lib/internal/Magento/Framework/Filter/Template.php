@@ -64,7 +64,14 @@ class Template implements \Zend_Filter_Interface
         'load',
         'save',
         'getcollection',
-        'getresource'
+        'getresource',
+        'getconfig',
+        'getresource',
+        'setvariables',
+        'settemplateprocessor',
+        'gettemplateprocessor',
+        'vardirective',
+        'delete',
     ];
 
     /**
@@ -242,7 +249,7 @@ class Template implements \Zend_Filter_Interface
     {
         // Processing of {template config_path=... [...]} statement
         $templateParameters = $this->getParameters($construction[2]);
-        if (!isset($templateParameters['config_path']) or !$this->getTemplateProcessor()) {
+        if (!isset($templateParameters['config_path']) || !$this->getTemplateProcessor()) {
             // Not specified template or not set include processor
             $replacedValue = '{Error in template processing}';
         } else {

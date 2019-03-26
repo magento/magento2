@@ -14,9 +14,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-95524"/>
             <group value="sales"/>
-            <skip>
-                <issueId value="MAGETWO-97664"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -119,7 +116,7 @@
         <!--Submit refund-->
         <scrollTo selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="scrollToItemsToRefund"/>
         <seeInField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" after="scrollToItemsToRefund" stepKey="checkQtyOfItemsToRefund"/>
-        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOfflineEnabled}}" stepKey="waitForSubmitRefundOfflineEnabled"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="waitForSubmitRefundOfflineEnabled"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="submitRefundOffline"/>
         <!--Verify Credit Memo created successfully-->
         <waitForElementVisible
