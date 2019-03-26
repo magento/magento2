@@ -48,7 +48,7 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function generateEntity()
     {
@@ -100,6 +100,8 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
     }
 
     /**
+     * Get address template.
+     *
      * @param int $customerId
      * @return Address
      */

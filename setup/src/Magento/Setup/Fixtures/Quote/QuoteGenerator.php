@@ -85,8 +85,8 @@ class QuoteGenerator
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\ConfigurableProduct\Api\OptionRepositoryInterface $optionRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\ConfigurableProduct\Api\OptionRepositoryInterface $optionRepository
      * @param \Magento\ConfigurableProduct\Api\LinkManagementInterface $linkManagement
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param QuoteConfiguration $config
@@ -578,7 +578,7 @@ class QuoteGenerator
      * DB connection (if setup). Additionally filters out quote-related queries, if appropriate flag is set.
      *
      * @param string $table
-     * @param array ...$replacements
+     * @param array $replacements
      * @return void
      */
     protected function query($table, ... $replacements)
@@ -774,6 +774,7 @@ class QuoteGenerator
 
     /**
      * Get real table name for db table, validated by db adapter.
+     *
      * In case prefix or other features mutating default table names are used.
      *
      * @param string $tableName

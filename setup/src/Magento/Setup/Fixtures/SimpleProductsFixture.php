@@ -132,7 +132,7 @@ class SimpleProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -140,7 +140,7 @@ class SimpleProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {
@@ -150,7 +150,8 @@ class SimpleProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD)
      */
     public function execute()
@@ -220,8 +221,8 @@ class SimpleProductsFixture extends Fixture
             'sku' => function ($productId) {
                 return sprintf($this->getSkuPattern(), $productId);
             },
-            'price' => function ($index, $entityNumber) {
-                return $this->priceProvider->getPrice($entityNumber);
+            'price' => function () {
+                return $this->priceProvider->getPrice();
             },
             'url_key' => function ($productId) {
                 return sprintf('simple-product-%s', $productId);

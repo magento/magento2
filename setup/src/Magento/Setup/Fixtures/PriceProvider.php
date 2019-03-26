@@ -14,10 +14,9 @@ class PriceProvider
     /**
      * Get random price for product
      *
-     * @param int $productIndex
      * @return float
      */
-    public function getPrice($productIndex)
+    public function getPrice()
     {
         switch (random_int(0, 3)) {
             case 0:
