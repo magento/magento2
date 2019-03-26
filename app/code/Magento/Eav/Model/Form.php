@@ -286,7 +286,8 @@ abstract class Form
     }
 
     /**
-     * Return entity type instance
+     * Return entity type instance.
+     *
      * Return EAV entity type if entity type is not defined
      *
      * @return \Magento\Eav\Model\Entity\Type
