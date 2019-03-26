@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserLoginWithStoreCodeInUrlTest">
+        <annotations>
+            <features value="Backend"/>
+            <title value="Admin panel should be accessible with Add Store Code to URL setting enabled"/>
+            <description value="Admin panel should be accessible with Add Store Code to URL setting enabled"/>
+            <group value="backend"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set web/url/use_store 1" stepKey="addStoreCodeToUrl"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set web/url/use_store 0" stepKey="addStoreCodeToUrlDisable"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <see userInput="Dashboard" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeDashboardTitle"/>
+    </test>
+</tests>
