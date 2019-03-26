@@ -40,6 +40,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
             'resource' => $this->resourceMock,
             'translitFilter' => $translitFilter,
             'context' => $contextMock,
+            'reservedSystemNames' => ['configurable'],
         ];
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -67,6 +68,8 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['General Group', 'general-group'],
+            ['configurable', md5('configurable')],
+            ['configurAble', md5('configurable')],
             ['///', md5('///')],
         ];
     }
