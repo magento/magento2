@@ -14,7 +14,7 @@ class CurrencyConverterApi extends AbstractImport
     /**
      * @var string
      */
-    const CURRENCY_CONVERTER_URL = 'http://free.currencyconverterapi.com/api/v3/convert?q={{CURRENCY_FROM}}_{{CURRENCY_TO}}'
+    const CURRENCY_CONVERTER_URL = 'https://free.currencyconverterapi.com/api/v6/convert?q={{CURRENCY_FROM}}_{{CURRENCY_TO}}'
     .'&compact=ultra&apiKey={{ACCESS_KEY}}'; //@codingStandardsIgnoreLine
 
     /**
