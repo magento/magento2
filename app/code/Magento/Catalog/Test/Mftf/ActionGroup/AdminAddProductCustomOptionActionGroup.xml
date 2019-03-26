@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Add custom option, title and type -->
+    <actionGroup name="AdminAddProductCustomOptionActionGroup">
+        <arguments>
+            <argument name="customOptionTitle" type="string"/>
+            <argument name="customOptionType" type="string"/>
+        </arguments>
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToCustomizableOptionsSection"/>
+        <waitForPageLoad stepKey="waitForScrolling"/>
+        <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
+        <waitForPageLoad stepKey="waitForAddProductPageLoad"/>
+        <fillField stepKey="fillInOptionTitle" selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{customOptionTitle}}"/>
+        <click stepKey="clickOptionTypeParent" selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}"/>
+        <waitForPageLoad stepKey="waitForDropdownOpen"/>
+        <click stepKey="clickOptionType" selector="{{AdminProductCustomizableOptionsSection.optionType(customOptionType)}}"/>
+    </actionGroup>
+</actionGroups>
