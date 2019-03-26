@@ -80,12 +80,15 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
         );
         $objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
             ->setCurrentScope('global');
-        $diConfig->setInterceptionConfig(
-            $objectManager->get(\Magento\Framework\Interception\Config\Config::class)
-        );
+
+        $interceptorConfig = $objectManager->get(\Magento\Framework\Interception\Config\Config::class);
+        $diConfig->setInterceptionConfig($interceptorConfig);
+
         /** Reset the shared instances once interception config is set so classes can be intercepted if necessary */
         $sharedInstances = $originalSharedInstances;
         $sharedInstances[\Magento\Framework\ObjectManager\ConfigLoaderInterface::class] = $objectManager
             ->get(\Magento\Framework\App\ObjectManager\ConfigLoader::class);
+
+        $sharedInstances[\Magento\Framework\Interception\ExtendableConfigInterface::class] = $interceptorConfig;
     }
 }

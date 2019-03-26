@@ -12,7 +12,7 @@ use Magento\Framework\Serialize\SerializerInterface;
  *
  * Responsible for providing list of plugins configured for instance
  */
-class Config implements \Magento\Framework\Interception\ConfigInterface
+class Config implements \Magento\Framework\Interception\ExtendableConfigInterface
 {
     /**
      * Type configuration
@@ -140,12 +140,13 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * Process interception inheritance
      *
      * @param string $type
+     * @param bool $force
      * @return bool
      */
-    protected function _inheritInterception($type)
+    protected function _inheritInterception($type, $force = false)
     {
         $type = ltrim($type, '\\');
-        if (!isset($this->_intercepted[$type])) {
+        if (!isset($this->_intercepted[$type]) || $force) {
             $realType = $this->_omConfig->getOriginalInstanceType($type);
             if ($type !== $realType) {
                 if ($this->_inheritInterception($realType)) {
@@ -216,6 +217,28 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         }
         foreach ($classDefinitions as $class) {
             $this->hasPlugins($class);
+        }
+    }
+
+    /**
+     * Regenerates interception config using latest DI configuration
+     *
+     * @param array $classDefinitions
+     * @param string $areaCode
+     * @return void
+     */
+    public function extend(array $classDefinitions, string $areaCode)
+    {
+        $cacheId = $this->_cacheId . '_' . $areaCode;
+        $intercepted = $this->cacheManager->load($cacheId);
+        if ($intercepted !== null) {
+            $this->_intercepted = $intercepted;
+        } else {
+            foreach ($classDefinitions as $class => $config) {
+                $this->_inheritInterception($class, true);
+            }
+
+            $this->cacheManager->save($cacheId, $this->_intercepted);
         }
     }
 }

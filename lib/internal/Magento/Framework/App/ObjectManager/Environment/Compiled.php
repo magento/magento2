@@ -109,9 +109,9 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
         );
         $objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
             ->setCurrentScope('global');
-        $diConfig->setInterceptionConfig(
-            $objectManager->get(\Magento\Framework\Interception\Config\Config::class)
-        );
+        $interceptorConfig = $objectManager->get(\Magento\Framework\Interception\Config\Config::class);
+        $diConfig->setInterceptionConfig($interceptorConfig);
+
         $sharedInstances[\Magento\Framework\Interception\PluginList\PluginList::class] = $objectManager->create(
             \Magento\Framework\Interception\PluginListInterface::class,
             ['cache' => $objectManager->get(\Magento\Framework\App\Interception\Cache\CompiledConfig::class)]
@@ -119,5 +119,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
         $objectManager
             ->get(\Magento\Framework\App\Cache\Manager::class)
             ->setEnabled([CompiledConfig::TYPE_IDENTIFIER], true);
+
+        $sharedInstances[\Magento\Framework\Interception\ExtendableConfigInterface::class] = $interceptorConfig;
     }
 }

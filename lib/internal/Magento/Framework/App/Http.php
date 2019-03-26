@@ -129,7 +129,15 @@ class Http implements \Magento\Framework\AppInterface
     {
         $areaCode = $this->_areaList->getCodeByFrontName($this->_request->getFrontName());
         $this->_state->setAreaCode($areaCode);
-        $this->_objectManager->configure($this->_configLoader->load($areaCode));
+
+        $frontendConfig = $this->_configLoader->load($areaCode);
+        $this->_objectManager->configure($frontendConfig);
+        /** @var  \Magento\Framework\Interception\ExtendableConfigInterface $interceptionConfig */
+        $interceptionConfig = $this->_objectManager->get(\Magento\Framework\Interception\ExtendableConfigInterface::class);
+        if ($interceptionConfig) {
+            $interceptionConfig->extend($frontendConfig, $areaCode);
+        }
+
         /** @var \Magento\Framework\App\FrontControllerInterface $frontController */
         $frontController = $this->_objectManager->get(\Magento\Framework\App\FrontControllerInterface::class);
         $result = $frontController->dispatch($this->_request);
