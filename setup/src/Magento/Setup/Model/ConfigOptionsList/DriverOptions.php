@@ -26,7 +26,9 @@ class DriverOptions
             ConfigOptionsListConstants::KEY_MYSQL_SSL_KEY => ConfigOptionsListConstants::INPUT_KEY_DB_SSL_KEY,
             ConfigOptionsListConstants::KEY_MYSQL_SSL_CERT => ConfigOptionsListConstants::INPUT_KEY_DB_SSL_CERT,
             ConfigOptionsListConstants::KEY_MYSQL_SSL_CA => ConfigOptionsListConstants::INPUT_KEY_DB_SSL_CA,
-            ConfigOptionsListConstants::KEY_MYSQL_SSL_VERIFY => ConfigOptionsListConstants::INPUT_KEY_DB_SSL_VERIFY
+        ];
+        $booleanDriverOptionKeys = [
+            ConfigOptionsListConstants::KEY_MYSQL_SSL_VERIFY => ConfigOptionsListConstants::INPUT_KEY_DB_SSL_VERIFY,
         ];
         $driverOptions = [];
         foreach ($driverOptionKeys as $configKey => $driverOptionKey) {
@@ -34,6 +36,10 @@ class DriverOptions
                 $driverOptions[$configKey] = $options[$driverOptionKey];
             }
         }
+        foreach ($booleanDriverOptionKeys as $configKey => $driverOptionKey) {
+            $driverOptions[$configKey] = $this->getBooleanValue($options, $driverOptionKey);
+        }
+
         return $driverOptions;
     }
 
@@ -47,5 +53,19 @@ class DriverOptions
     private function optionExists(array $options, string $driverOptionKey): bool
     {
         return $options[$driverOptionKey] === false || !empty($options[$driverOptionKey]);
+    }
+
+    /**
+     * Transforms checkbox flag value into boolean.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#value
+     *
+     * @param array $options
+     * @param string $driverOptionKey
+     * @return bool
+     */
+    private function getBooleanValue(array $options, string $driverOptionKey): bool
+    {
+        return isset($options[$driverOptionKey]) ? (bool)$options[$driverOptionKey] : false;
     }
 }
