@@ -17,7 +17,7 @@ class Select extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Opti
     /**
      * @var string
      */
-    protected $_template = 'product/composite/fieldset/options/type/select.phtml';
+    protected $_template = 'Magento_Bundle::product/composite/fieldset/options/type/select.phtml';
 
     /**
      * @param  string $elementId

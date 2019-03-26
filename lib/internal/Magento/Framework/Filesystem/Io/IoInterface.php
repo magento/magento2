@@ -5,10 +5,9 @@
  */
 namespace Magento\Framework\Filesystem\Io;
 
-use Magento\Framework\Filesystem\DriverInterface;
-
 /**
  * Input/output client interface
+ * @api
  */
 interface IoInterface
 {

@@ -34,6 +34,9 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
      */
     protected $orderSenderMock;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\Manager::class);
@@ -44,6 +47,9 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
         $this->emailSender = new EmailSender($this->messageManagerMock, $this->loggerMock, $this->orderSenderMock);
     }
 
+    /**
+     * testSendSuccess
+     */
     public function testSendSuccess()
     {
         $this->orderSenderMock->expects($this->once())
@@ -51,13 +57,16 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->emailSender->send($this->orderMock));
     }
 
+    /**
+     * testSendFailure
+     */
     public function testSendFailure()
     {
         $this->orderSenderMock->expects($this->once())
             ->method('send')
             ->willThrowException(new \Magento\Framework\Exception\MailException(__('test message')));
         $this->messageManagerMock->expects($this->once())
-            ->method('addWarning');
+            ->method('addWarningMessage');
         $this->loggerMock->expects($this->once())
             ->method('critical');
 

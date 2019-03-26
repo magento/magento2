@@ -7,6 +7,12 @@ namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 
+/**
+ * MySQL search aggregation metrics builder.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class Metrics
 {
     /**

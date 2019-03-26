@@ -19,6 +19,9 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Order($this->_orderMock);
     }
 
+    /**
+     * @return array
+     */
     public function gettersDataProvider()
     {
         return [

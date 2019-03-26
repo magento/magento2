@@ -5,13 +5,19 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Api\OrderManagementInterface;
 
-class MassUnhold extends AbstractMassAction
+/**
+ * Class MassUnhold, change status for select orders
+ *
+ * @package Magento\Sales\Controller\Adminhtml\Order
+ */
+class MassUnhold extends AbstractMassAction implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -24,6 +30,8 @@ class MassUnhold extends AbstractMassAction
     private $orderManagement;
 
     /**
+     * Class constructor
+     *
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
@@ -64,15 +72,15 @@ class MassUnhold extends AbstractMassAction
         $countNonUnHoldOrder = $collection->count() - $countUnHoldOrder;
 
         if ($countNonUnHoldOrder && $countUnHoldOrder) {
-            $this->messageManager->addError(
+            $this->messageManager->addErrorMessage(
                 __('%1 order(s) were not released from on hold status.', $countNonUnHoldOrder)
             );
         } elseif ($countNonUnHoldOrder) {
-            $this->messageManager->addError(__('No order(s) were released from on hold status.'));
+            $this->messageManager->addErrorMessage(__('No order(s) were released from on hold status.'));
         }
 
         if ($countUnHoldOrder) {
-            $this->messageManager->addSuccess(
+            $this->messageManager->addSuccessMessage(
                 __('%1 order(s) have been released from on hold status.', $countUnHoldOrder)
             );
         }

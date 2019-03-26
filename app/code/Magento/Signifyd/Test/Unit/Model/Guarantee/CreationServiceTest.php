@@ -203,6 +203,11 @@ class CreationServiceTest extends TestCase
         );
     }
 
+    /**
+     * @param $orderId
+     * @param array $caseData
+     * @return MockObject
+     */
     private function withCaseEntityExistsForOrderId($orderId, array $caseData = [])
     {
         $this->createGuaranteeAbility->expects(self::once())
@@ -226,6 +231,9 @@ class CreationServiceTest extends TestCase
         return $dummyCaseEntity;
     }
 
+    /**
+     * @param $failureMessage
+     */
     private function withGatewayFailure($failureMessage)
     {
         $this->gateway
@@ -233,6 +241,9 @@ class CreationServiceTest extends TestCase
             ->willThrowException(new GatewayException($failureMessage));
     }
 
+    /**
+     * @param $gatewayResult
+     */
     private function withGatewaySuccess($gatewayResult)
     {
         $this->gateway

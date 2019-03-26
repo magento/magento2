@@ -257,6 +257,28 @@ class Processor
         /**
          * Define server http host
          */
+        $host = $this->resolveHostName();
+
+        $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== 'off')
+            || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && ($_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+        $url = ($isSecure ? 'https://' : 'http://') . $host;
+
+        $port = explode(':', $host);
+        if (isset($port[1]) && !in_array($port[1], [80, 443])
+            && !preg_match('/.*?\:[0-9]+$/', $url)
+        ) {
+            $url .= ':' . $port[1];
+        }
+        return  $url;
+    }
+
+    /**
+     * Resolve hostname
+     *
+     * @return string
+     */
+    private function resolveHostName() : string
+    {
         if (!empty($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
         } elseif (!empty($_SERVER['SERVER_NAME'])) {
@@ -264,16 +286,7 @@ class Processor
         } else {
             $host = 'localhost';
         }
-
-        $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off');
-        $url = ($isSecure ? 'https://' : 'http://') . $host;
-
-        if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], [80, 443])
-            && !preg_match('/.*?\:[0-9]+$/', $url)
-        ) {
-            $url .= ':' . $_SERVER['SERVER_PORT'];
-        }
-        return  $url;
+        return $host;
     }
 
     /**
@@ -379,6 +392,8 @@ class Processor
     }
 
     /**
+     * Render page
+     *
      * @param string $template
      * @return string
      */
@@ -463,7 +478,7 @@ class Processor
     public function saveReport($reportData)
     {
         $this->reportData = $reportData;
-        $this->reportId   = abs(intval(microtime(true) * random_int(100, 1000)));
+        $this->reportId   = abs((int)(microtime(true) * random_int(100, 1000)));
         $this->_reportFile = $this->_reportDir . '/' . $this->reportId;
         $this->_setReportData($reportData);
 

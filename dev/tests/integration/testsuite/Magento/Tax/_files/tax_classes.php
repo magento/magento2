@@ -38,6 +38,15 @@ $productTaxClass2 = $objectManager->create(
     \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT
 )->save();
 
+// Tax class created but not used in the rule to ensure that unused tax classes are handled properly
+$productTaxClass3 = $objectManager->create(
+    \Magento\Tax\Model\ClassModel::class
+)->setClassName(
+    'ProductTaxClass3'
+)->setClassType(
+    \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT
+)->save();
+
 $taxRate = [
     'tax_country_id' => 'US',
     'tax_region_id' => '12',

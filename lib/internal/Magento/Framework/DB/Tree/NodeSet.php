@@ -8,6 +8,7 @@ namespace Magento\Framework\DB\Tree;
 /**
  * TODO implements iterators
  *
+ * @deprecated Not used anymore.
  */
 class NodeSet implements \Iterator, \Countable
 {
@@ -33,6 +34,8 @@ class NodeSet implements \Iterator, \Countable
 
     /**
      * Constructor
+     *
+     * @deprecated
      */
     public function __construct()
     {
@@ -45,6 +48,8 @@ class NodeSet implements \Iterator, \Countable
     /**
      * @param Node $node
      * @return int
+     *
+     * @deprecated
      */
     public function addNode(Node $node)
     {
@@ -55,6 +60,8 @@ class NodeSet implements \Iterator, \Countable
 
     /**
      * @return int
+     *
+     * @deprecated
      */
     public function count()
     {
@@ -63,6 +70,8 @@ class NodeSet implements \Iterator, \Countable
 
     /**
      * @return bool
+     *
+     * @deprecated
      */
     public function valid()
     {
@@ -71,6 +80,8 @@ class NodeSet implements \Iterator, \Countable
 
     /**
      * @return false|int
+     *
+     * @deprecated
      */
     public function next()
     {
@@ -83,6 +94,8 @@ class NodeSet implements \Iterator, \Countable
 
     /**
      * @return int
+     *
+     * @deprecated
      */
     public function key()
     {
@@ -91,6 +104,8 @@ class NodeSet implements \Iterator, \Countable
 
     /**
      * @return Node
+     *
+     * @deprecated
      */
     public function current()
     {
@@ -99,6 +114,8 @@ class NodeSet implements \Iterator, \Countable
 
     /**
      * @return void
+     *
+     * @deprecated
      */
     public function rewind()
     {

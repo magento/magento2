@@ -38,6 +38,9 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->request->getRequestedServices());
     }
 
+    /**
+     * @return array
+     */
     public function providerTestGetRequestedServicesSuccess()
     {
         $testModuleA = 'testModule1AllSoapAndRestV1';

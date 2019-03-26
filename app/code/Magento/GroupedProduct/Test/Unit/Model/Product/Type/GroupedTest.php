@@ -611,9 +611,9 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
     public function testFlushAssociatedProductsCache()
     {
-        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['unsData']);
+        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['unsetData']);
         $productMock->expects($this->once())
-            ->method('unsData')
+            ->method('unsetData')
             ->with('_cache_instance_associated_products')
             ->willReturnSelf();
         $this->assertEquals($productMock, $this->_model->flushAssociatedProductsCache($productMock));

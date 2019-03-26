@@ -11,6 +11,16 @@ class Child extends \Magento\Test\Di\Aggregate\AggregateParent
 
     public $secondOptionalScalar;
 
+    /**
+     * Child constructor.
+     * @param \Magento\Test\Di\DiInterface $interface
+     * @param \Magento\Test\Di\DiParent $parent
+     * @param \Magento\Test\Di\Child $child
+     * @param $scalar
+     * @param $secondScalar
+     * @param int $optionalScalar
+     * @param string $secondOptionalScalar
+     */
     public function __construct(
         \Magento\Test\Di\DiInterface $interface,
         \Magento\Test\Di\DiParent $parent,

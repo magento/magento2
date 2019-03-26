@@ -58,22 +58,38 @@ class EavAttributeCondition implements CustomConditionInterface
         $conditionValue = $this->mapConditionValue($conditionType, $filter->getValue());
 
         // NOTE: store scope was ignored intentionally to perform search across all stores
-        $attributeSelect = $this->resourceConnection->getConnection()
-            ->select()
-            ->from(
-                [$tableAlias => $attribute->getBackendTable()],
-                $tableAlias . '.' . $attribute->getEntityIdField()
-            )->where(
-                $this->resourceConnection->getConnection()->prepareSqlCondition(
-                    $tableAlias . '.' . $attribute->getIdFieldName(),
-                    ['eq' => $attribute->getAttributeId()]
-                )
-            )->where(
-                $this->resourceConnection->getConnection()->prepareSqlCondition(
-                    $tableAlias . '.value',
-                    [$conditionType => $conditionValue]
-                )
-            );
+        if ($conditionType == 'is_null') {
+            $entityResourceModel = $attribute->getEntity();
+            $attributeSelect = $this->resourceConnection->getConnection()
+                ->select()
+                ->from(
+                    [Collection::MAIN_TABLE_ALIAS => $entityResourceModel->getEntityTable()],
+                    Collection::MAIN_TABLE_ALIAS . '.' . $entityResourceModel->getEntityIdField()
+                )->joinLeft(
+                    [$tableAlias => $attribute->getBackendTable()],
+                    $tableAlias . '.' . $attribute->getEntityIdField() . '=' . Collection::MAIN_TABLE_ALIAS .
+                    '.' . $entityResourceModel->getEntityIdField() . ' AND ' . $tableAlias . '.' .
+                    $attribute->getIdFieldName() . '=' . $attribute->getAttributeId(),
+                    ''
+                )->where($tableAlias . '.value is null');
+        } else {
+            $attributeSelect = $this->resourceConnection->getConnection()
+                ->select()
+                ->from(
+                    [$tableAlias => $attribute->getBackendTable()],
+                    $tableAlias . '.' . $attribute->getEntityIdField()
+                )->where(
+                    $this->resourceConnection->getConnection()->prepareSqlCondition(
+                        $tableAlias . '.' . $attribute->getIdFieldName(),
+                        ['eq' => $attribute->getAttributeId()]
+                    )
+                )->where(
+                    $this->resourceConnection->getConnection()->prepareSqlCondition(
+                        $tableAlias . '.value',
+                        [$conditionType => $conditionValue]
+                    )
+                );
+        }
 
         return $this->resourceConnection
             ->getConnection()
@@ -86,6 +102,8 @@ class EavAttributeCondition implements CustomConditionInterface
     }
 
     /**
+     * Get attribute entity by its code
+     *
      * @param string $field
      * @return Attribute
      * @throws \Magento\Framework\Exception\LocalizedException

@@ -38,7 +38,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['isReadonly', 'isDuplicable'])
+            ->setMethods(['isReadonly', 'isDuplicable', 'isComposite'])
             ->getMockForAbstractClass();
 
         $this->registryMock->expects(static::any())

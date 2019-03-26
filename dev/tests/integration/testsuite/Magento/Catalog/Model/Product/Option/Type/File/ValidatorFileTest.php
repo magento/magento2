@@ -6,6 +6,8 @@
 
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
+use Magento\Framework\Math\Random;
+
 /**
  * @magentoDataFixture Magento/Catalog/_files/validate_image.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -48,11 +50,18 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
         $fileSize = $this->objectManager->create(\Magento\Framework\File\Size::class);
         $this->maxFileSize = $fileSize->getMaxFileSize();
         $this->maxFileSizeInMb = $fileSize->getMaxFileSizeInMb();
+        $random = $this->getMockBuilder(Random::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $random->expects($this->any())
+            ->method('getRandomString')
+            ->willReturn('RandomString');
 
         $this->model = $this->objectManager->create(
-            \Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile::class,
+            ValidatorFile::class,
             [
-                'httpFactory' => $this->httpFactoryMock
+                'httpFactory' => $this->httpFactoryMock,
+                'random' => $random,
             ]
         );
     }
@@ -350,8 +359,8 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
         return [
             'type' => 'image/jpeg',
             'title' => 'test.jpg',
-            'quote_path' => 'custom_options/quote/t/e/a071b9ffc8fda6df1652c05a4c61bf8a.jpg',
-            'order_path' => 'custom_options/order/t/e/a071b9ffc8fda6df1652c05a4c61bf8a.jpg',
+            'quote_path' => 'custom_options/quote/t/e/RandomString',
+            'order_path' => 'custom_options/order/t/e/RandomString',
             'size' => '3046',
             'width' => 136,
             'height' => 131,

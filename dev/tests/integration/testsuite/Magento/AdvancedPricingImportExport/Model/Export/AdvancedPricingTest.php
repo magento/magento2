@@ -7,7 +7,7 @@ namespace Magento\AdvancedPricingImportExport\Model\Export;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
+class AdvancedPricingTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
      * @var \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing
@@ -24,6 +24,19 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      */
     protected $fileSystem;
 
+    public static function setUpBeforeClass()
+    {
+        $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
+    }
+
     protected function setUp()
     {
         parent::setUp();
@@ -37,7 +50,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
@@ -49,6 +62,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         $index = 0;
         $ids = [];
         $origPricingData = [];
+        $skus = ['simple'];
         while (isset($skus[$index])) {
             $ids[$index] = $productRepository->get($skus[$index])->getId();
             $origPricingData[$index] = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
@@ -94,7 +108,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/price/scope 1
      * @magentoDataFixture Magento/AdvancedPricingImportExport/_files/product_with_second_website.php

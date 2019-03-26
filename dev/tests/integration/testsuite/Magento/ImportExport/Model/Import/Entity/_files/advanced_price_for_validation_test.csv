@@ -1,0 +1,3 @@
+sku,tier_price_website,tier_price_customer_group,tier_price_qty,tier_price,tier_price_value_type
+SimpleProduct,All Websites [USD],ALL GROUPS,100,50,Fixed
+SimpleProduct,All Websites [USD],ALL GROUPS,33,55,Fixed

@@ -392,6 +392,9 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         ];
     }
 
+    /**
+     * @return array
+     */
     protected function _getSuperAttributes()
     {
         return [

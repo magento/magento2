@@ -11,7 +11,7 @@ $orderIds = $block->getOrderIds();
 <div class="multicheckout results">
     <p class="block-content">
         <?php if (!empty($orderIds)) : ?>
-        <?= $block->escapeHtml(__('Not all items were included.')); ?>
+            <?= $block->escapeHtml(__('Not all items were included.')); ?>
         <?php endif; ?>
         <?= $block->escapeHtml(__('For details, see')); ?>
         <a href="#failed"><?= $block->escapeHtml(__('Failed to Order')); ?></a>
@@ -32,7 +32,7 @@ $orderIds = $block->getOrderIds();
                     <?php $shippingAddress = $block->getOrderShippingAddress($orderId); ?>
                     <div class="shipping-item">
                         <?php if ($shippingAddress) : ?>
-                        <span class="shipping-label"><?= $block->escapeHtml('Ship to:'); ?></span>
+                        <span class="shipping-label"><?= $block->escapeHtml(__('Ship to:')); ?></span>
                         <span class="shipping-address">
                             <?= $block->escapeHtml($block->formatOrderShippingAddress($shippingAddress)); ?>
                         </span>
@@ -65,7 +65,7 @@ $orderIds = $block->getOrderIds();
                     <dl class="shipping-item">
                         <dt class="shipping-block">
                             <?php if ($block->isShippingAddress($address)) : ?>
-                            <span class="shipping-label"><?= $block->escapeHtml('Ship to:'); ?></span>
+                            <span class="shipping-label"><?= $block->escapeHtml(__('Ship to:')); ?></span>
                             <span class="shipping-address">
                                 <?= $block->escapeHtml($block->formatQuoteShippingAddress($address)); ?>
                             </span>
@@ -76,7 +76,7 @@ $orderIds = $block->getOrderIds();
                             <?php endif; ?>
                         </dt>
                         <dd class="error-block">
-                            <span class="error-label"><?= $block->escapeHtml('Error:'); ?></span>
+                            <span class="error-label"><?= $block->escapeHtml(__('Error:')); ?></span>
                             <span class="error-description">
                                 <?= /* @noEscape */ $block->getAddressError($address); ?>
                             </span>

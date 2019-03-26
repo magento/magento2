@@ -34,7 +34,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
      class="gallery"
      data-mage-init='{"openVideoModal":{}}'
      data-parent-component="<?= $block->escapeHtml($block->getData('config/parentComponent')) ?>"
-     data-images="<?= $block->escapeHtml($block->getImagesJson()) ?>"
+     data-images="<?= $block->escapeHtmlAttr($block->getImagesJson()) ?>"
      data-types="<?= $block->escapeHtml(
          $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
      ) ?>"
@@ -140,30 +140,37 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                      alt="<%- data.label %>"/>
 
                 <div class="actions">
-                    <button type="button"
-                            class="action-remove"
-                            data-role="delete-button"
-                            title="<% if (data.media_type == 'external-video') {%>
+                    <div class="tooltip">
+                        <span class="delete-tooltiptext">
+                            <?= $block->escapeHtml(
+                                __('Delete image in all store views')
+                            ); ?>
+                        </span>
+                        <button type="button"
+                                class="action-remove"
+                                data-role="delete-button"
+                                title="<% if (data.media_type == 'external-video') {%>
+                                <?= $block->escapeHtml(
+                                    __('Delete video')
+                                ); ?>
+                            <%} else {%>
+                                <?= $block->escapeHtml(
+                                    __('Delete image')
+                                ); ?>
+                            <%}%>">
+                        <span>
+                            <% if (data.media_type == 'external-video') { %>
                             <?= $block->escapeHtml(
                                 __('Delete video')
                             ); ?>
-                        <%} else {%>
+                            <% } else {%>
                             <?= $block->escapeHtml(
                                 __('Delete image')
                             ); ?>
-                        <%}%>">
-                    <span>
-                        <% if (data.media_type == 'external-video') { %>
-                        <?= $block->escapeHtml(
-                            __('Delete video')
-                        ); ?>
-                        <% } else {%>
-                        <?= $block->escapeHtml(
-                            __('Delete image')
-                        ); ?>
-                        <%} %>
-                    </span>
-                    </button>
+                            <%} %>
+                        </span>
+                        </button>
+                    </div>
                     <div class="draggable-handle"></div>
                 </div>
                 <div class="image-fade"><span><?= $block->escapeHtml(

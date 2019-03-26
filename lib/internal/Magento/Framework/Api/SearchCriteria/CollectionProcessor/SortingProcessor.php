@@ -59,7 +59,7 @@ class SortingProcessor implements CollectionProcessorInterface
      */
     private function getFieldMapping($field)
     {
-        return isset($this->fieldMapping[$field]) ? $this->fieldMapping[$field] : $field;
+        return $this->fieldMapping[$field] ?? $field;
     }
 
     /**

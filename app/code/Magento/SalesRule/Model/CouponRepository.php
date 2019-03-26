@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Model;
 
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Api\SortOrder;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Collection;
 
 /**
@@ -197,13 +196,13 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
+     * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @deprecated 100.2.0
      * @return void
      */
     protected function addFilterGroupToCollection(
-        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
+        FilterGroup $filterGroup,
         Collection $collection
     ) {
         $fields = [];

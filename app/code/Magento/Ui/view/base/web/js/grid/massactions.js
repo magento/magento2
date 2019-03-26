@@ -95,7 +95,7 @@ define([
         },
 
         /**
-         * Adds new action. If action with a specfied identifier
+         * Adds new action. If action with a specified identifier
          * already exists, than the original one will be overrided.
          *
          * @param {Object} action - Action object.
@@ -153,6 +153,11 @@ define([
             var itemsType = data.excludeMode ? 'excluded' : 'selected',
                 selections = {};
 
+            if (itemsType === 'excluded' && data.selected && data.selected.length) {
+                itemsType = 'selected';
+                data[itemsType] = _.difference(data.selected, data.excluded);
+            }
+
             selections[itemsType] = data[itemsType];
 
             if (!selections[itemsType].length) {
@@ -175,11 +180,14 @@ define([
          *      invoked if action is confirmed.
          */
         _confirm: function (action, callback) {
-            var confirmData = action.confirm;
+            var confirmData = action.confirm,
+                data = this.getSelections(),
+                total = data.total ? data.total : 0,
+                confirmMessage = confirmData.message + ' (' + total + ' record' + (total > 1 ? 's' : '') + ')';
 
             confirm({
                 title: confirmData.title,
-                content: confirmData.message,
+                content: confirmMessage,
                 actions: {
                     confirm: callback
                 }

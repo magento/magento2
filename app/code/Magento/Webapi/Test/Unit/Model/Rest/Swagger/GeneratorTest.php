@@ -295,6 +295,9 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(json_encode($result), json_encode($actual));
     }
 
+    /**
+     * @return array
+     */
     public function getObjectSchemaDataProvider()
     {
         return [
@@ -354,6 +357,9 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(json_encode($expected), json_encode($actual));
     }
 
+    /**
+     * @return array
+     */
     public function generateDefinitionDataProvider()
     {
         return [

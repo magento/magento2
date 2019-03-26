@@ -97,6 +97,9 @@ class StoreManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedStores, $this->model->getStores($withDefault, $codeKey));
     }
 
+    /**
+     * @return array
+     */
     public function getStoresDataProvider()
     {
         $defaultStoreMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)

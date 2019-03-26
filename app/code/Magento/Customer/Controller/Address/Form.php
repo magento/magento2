@@ -6,7 +6,9 @@
  */
 namespace Magento\Customer\Controller\Address;
 
-class Form extends \Magento\Customer\Controller\Address
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Form extends \Magento\Customer\Controller\Address implements HttpGetActionInterface
 {
     /**
      * Address book form
