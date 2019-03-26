@@ -52,6 +52,8 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 
     const DEFAULT_FILE_TYPE = 'application/octet-stream';
 
+    const DEFAULT_TMP_DIR = 'pub/media/import';
+
     /**
      * Image factory.
      *
@@ -154,16 +156,13 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
             $this->setAllowRenameFiles(false);
         }
 
-        if ($this->getTmpDir()) {
-            $filePath = $this->getTmpDir() . '/';
-        } else {
-            $filePath = '';
-        }
+        $filePath = $this->getTmpDir() ? ($this->getTmpDir() . '/') : '';
 
         if (preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {
             $url = str_replace($matches[0], '', $fileName);
             $driver = $matches[0] === $this->httpScheme ? DriverPool::HTTP : DriverPool::HTTPS;
             $read = $this->_readFactory->create($url, $driver);
+            $filePath = self::DEFAULT_TMP_DIR . '/';
 
             //only use filename (for URI with query parameters)
             $parsedUrlPath = parse_url($url, PHP_URL_PATH);

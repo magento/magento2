@@ -102,12 +102,15 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testMoveFileUrl($fileUrl, $expectedHost, $expectedFileName, $checkAllowedExtension)
     {
+        $defaultTmpDir = 'pub/media/import';
         $destDir = 'var/dest/dir';
-        $expectedRelativeFilePath = $expectedFileName;
+        $expectedRelativeFilePath = $defaultTmpDir . '/' . $expectedFileName;
+
         $this->directoryMock->expects($this->once())->method('isWritable')->with($destDir)->willReturn(true);
         $this->directoryMock->expects($this->any())->method('getRelativePath')->with($expectedRelativeFilePath);
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($destDir)
             ->willReturn($destDir . '/' . $expectedFileName);
+
         // Check writeFile() method invoking.
         $this->directoryMock->expects($this->any())->method('writeFile')->will($this->returnValue($expectedFileName));
 
@@ -116,20 +119,21 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['readAll'])
             ->getMock();
+
         // Check readAll() method invoking.
         $readMock->expects($this->once())->method('readAll')->will($this->returnValue(null));
 
         // Check create() method invoking with expected argument.
-        $this->readFactory->expects($this->once())
-                        ->method('create')
-                        ->will($this->returnValue($readMock))->with($expectedHost);
+        $this->readFactory->expects($this->once())->method('create')
+            ->will($this->returnValue($readMock))->with($expectedHost);
+
         //Check invoking of getTmpDir(), _setUploadFile(), save() methods.
         $this->uploader->expects($this->any())->method('getTmpDir')->will($this->returnValue(''));
         $this->uploader->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
-        $this->uploader->expects($this->once())->method('save')->with($destDir . '/' . $expectedFileName)
+        $this->uploader->expects($this->once())->method('save')
+            ->with($destDir . '/' . $expectedFileName)
             ->willReturn(['name' => $expectedFileName, 'path' => 'absPath']);
-        $this->uploader->expects($this->exactly($checkAllowedExtension))
-            ->method('checkAllowedExtension')
+        $this->uploader->expects($this->exactly($checkAllowedExtension))->method('checkAllowedExtension')
             ->willReturn(true);
 
         $this->uploader->setDestDir($destDir);
