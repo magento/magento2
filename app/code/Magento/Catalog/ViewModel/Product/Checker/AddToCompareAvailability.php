@@ -37,8 +37,7 @@ class AddToCompareAvailability implements ArgumentInterface
      */
     public function isAvailableForCompare(ProductInterface $product): bool
     {
-        return $this->isInStock($product) ||
-            !$this->isInStock($product) && $this->stockConfiguration->isShowOutOfStock();
+        return $this->isInStock($product) || $this->stockConfiguration->isShowOutOfStock();
     }
 
     /**
@@ -54,8 +53,6 @@ class AddToCompareAvailability implements ArgumentInterface
             return $product->isSalable();
         }
 
-        return isset($quantityAndStockStatus['is_in_stock'])
-            ? $quantityAndStockStatus['is_in_stock']
-            : false;
+        return isset($quantityAndStockStatus['is_in_stock']) && $quantityAndStockStatus['is_in_stock'];
     }
 }
