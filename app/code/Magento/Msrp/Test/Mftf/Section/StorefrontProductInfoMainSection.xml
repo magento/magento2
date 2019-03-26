@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontProductInfoMainSection">
+        <element name="msrp" type="text" selector=".price-final_price .map-old-price .price-msrp_price .price-wrapper"/>
+        <element name="msrpFallback" type="text" selector=".price-final_price .map-fallback-price .price-msrp_price .price-wrapper"/>
+        <element name="clickForPriceLink" type="button" selector="//a[@class='action map-show-info' and contains(text(),'Click for price')]"/>
+    </section>
+</sections>
