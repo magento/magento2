@@ -26,7 +26,7 @@ class DescriptionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->block = $objectManager->create(View\Description::class, [
+        $this->block = $objectManager->create(Description::class, [
             'data' => [
                 'template' => 'Magento_Catalog::product/view/attribute.phtml'
             ]
