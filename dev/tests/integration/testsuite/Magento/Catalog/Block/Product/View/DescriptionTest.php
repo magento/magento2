@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Block\Product;
+namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
