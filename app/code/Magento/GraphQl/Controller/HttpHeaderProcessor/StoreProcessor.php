@@ -35,8 +35,11 @@ class StoreProcessor implements HttpHeaderProcessorInterface
     /**
      * Handle the value of the store and set the scope
      *
-     * {@inheritDoc}
+     * @param string $headerValue
+     * @param HttpRequestInterface $request
+     * @return void
      * @throws GraphQlInputException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processHeaderValue(string $headerValue, HttpRequestInterface $request) : void
     {

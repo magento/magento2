@@ -11,7 +11,6 @@ use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -108,36 +107,29 @@ class GraphQl implements FrontControllerInterface
         $statusCode = 200;
         try {
             /** @var Http $request */
-            $this->requestProcessor->processHeaders($request);
-            if ($request->isPost()) {
-                $data = $this->jsonSerializer->unserialize($request->getContent());
-            } else {
-                $data = $request->getParams();
-                $data['variables'] = isset($data['variables']) ?
-                    $this->jsonSerializer->unserialize($data['variables']) : null;
-            }
+            if ($this->isHttpVerbValid($request)) {
+                $this->requestProcessor->processHeaders($request);
+                $data = $this->getDataFromRequest($request);
+                $query = isset($data['query']) ? $data['query'] : '';
+                $variables = isset($data['variables']) ? $data['variables'] : null;
 
-            $query = isset($data['query']) ? $data['query'] : '';
-            $variables = isset($data['variables']) ? $data['variables'] : null;
+                // We must extract queried field names to avoid instantiation of unnecessary fields in webonyx schema
+                // Temporal coupling is required for performance optimization
+                $this->queryFields->setQuery($query, $variables);
+                $schema = $this->schemaGenerator->generate();
 
-            // The easiest way to determine mutations without additional parsing
-            if ($request->isSafeMethod() && strpos(trim($query), 'mutation') === 0) {
-                throw new LocalizedException(
-                    __('Mutation requests allowed only for POST requests')
+                $result = $this->queryProcessor->process(
+                    $schema,
+                    $query,
+                    $this->resolverContext,
+                    isset($data['variables']) ? $data['variables'] : []
                 );
+            } else {
+                $result['errors'] = [
+                    __('Mutation requests allowed only for POST requests')
+                ];
+                $statusCode = ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS;
             }
-
-            // We have to extract queried field names to avoid instantiation of non necessary fields in webonyx schema
-            // Temporal coupling is required for performance optimization
-            $this->queryFields->setQuery($query, $variables);
-            $schema = $this->schemaGenerator->generate();
-
-            $result = $this->queryProcessor->process(
-                $schema,
-                $query,
-                $this->resolverContext,
-                isset($data['variables']) ? $data['variables'] : []
-            );
         } catch (\Exception $error) {
             $result['errors'] = isset($result) && isset($result['errors']) ? $result['errors'] : [];
             $result['errors'][] = $this->graphQlError->create($error);
@@ -148,5 +140,42 @@ class GraphQl implements FrontControllerInterface
             'application/json'
         )->setHttpResponseCode($statusCode);
         return $this->response;
+    }
+
+    /**
+     * Get data from request body or query string
+     *
+     * @param Http $request
+     * @return array
+     */
+    private function getDataFromRequest(Http $request) : array
+    {
+        if ($request->isPost()) {
+            $data = $this->jsonSerializer->unserialize($request->getContent());
+        } else {
+            $data = $request->getParams();
+            $data['variables'] = isset($data['variables']) ?
+                $this->jsonSerializer->unserialize($data['variables']) : null;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Check if request is using correct verb for query or mutation
+     *
+     * @param Http $request
+     * @return boolean
+     */
+    private function isHttpVerbValid(Http $request)
+    {
+        $requestData = $this->getDataFromRequest($request);
+        $query = $requestData['query'] ?? '';
+
+        // The easiest way to determine mutations without additional parsing
+        if ($request->isSafeMethod() && strpos(trim($query), 'mutation') === 0) {
+            return false;
+        }
+        return true;
     }
 }
