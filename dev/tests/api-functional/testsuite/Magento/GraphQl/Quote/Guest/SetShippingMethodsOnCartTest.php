@@ -112,6 +112,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @dataProvider dataProviderWithMissedRequiredParameters
+     * @param int $addressId
+     * @param string $message
      * @expectedException \Exception
      */
     public function testShippingMethodWithSimpleProductWithoutAddress(int $addressId, string $message)
