@@ -115,17 +115,18 @@ class GraphQl implements FrontControllerInterface
                 $data = $request->getParams();
                 $data['variables'] = isset($data['variables']) ?
                     $this->jsonSerializer->unserialize($data['variables']) : null;
-
-                // The easiest way to determine mutations without additional parsing
-                if (strpos(trim($data['query']), 'mutation') === 0) {
-                    throw new LocalizedException(
-                        __('Mutation requests allowed only for POST requests')
-                    );
-                }
             }
 
             $query = isset($data['query']) ? $data['query'] : '';
             $variables = isset($data['variables']) ? $data['variables'] : null;
+
+            // The easiest way to determine mutations without additional parsing
+            if ($request->isSafeMethod() && strpos(trim($query), 'mutation') === 0) {
+                throw new LocalizedException(
+                    __('Mutation requests allowed only for POST requests')
+                );
+            }
+
             // We have to extract queried field names to avoid instantiation of non necessary fields in webonyx schema
             // Temporal coupling is required for performance optimization
             $this->queryFields->setQuery($query, $variables);
