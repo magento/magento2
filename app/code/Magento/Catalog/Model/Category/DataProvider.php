@@ -299,6 +299,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                     if (($fieldSet === 'design' || $fieldSet === 'schedule_design_update') && !$canEditDesign) {
                         $config['required'] = 1;
                         $config['disabled'] = 1;
+                        $config['serviceDisabled'] = true;
                     }
 
                     $result[$fieldSet]['children'][$field]['arguments']['data']['config'] = $config;

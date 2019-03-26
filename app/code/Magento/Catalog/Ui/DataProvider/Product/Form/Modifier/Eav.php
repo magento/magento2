@@ -753,6 +753,7 @@ class Eav extends AbstractModifier
                         'disabled' => true,
                         'validation' => ['required' => false],
                         'required' => false,
+                        'serviceDisabled' => true,
                     ]
                 );
             }
