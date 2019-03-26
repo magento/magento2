@@ -1,12 +1,14 @@
 <?php
 /**
- * Application area list
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\AreaList;
 
+/**
+ * Proxy for area list.
+ */
 class Proxy extends \Magento\Framework\App\AreaList implements
     \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
@@ -56,10 +58,17 @@ class Proxy extends \Magento\Framework\App\AreaList implements
     }
 
     /**
+     * Remove links to other objects.
+     *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         return ['_subject', '_isShared'];
     }
 
@@ -67,9 +76,14 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      * Retrieve ObjectManager from global scope
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     }
 

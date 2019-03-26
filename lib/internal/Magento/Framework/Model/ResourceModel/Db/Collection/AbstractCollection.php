@@ -606,9 +606,14 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * @inheritdoc
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         return array_diff(
             parent::__sleep(),
             ['_resource', '_eventManager']
@@ -618,9 +623,14 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * @inheritdoc
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_eventManager = $objectManager->get(\Magento\Framework\Event\ManagerInterface::class);

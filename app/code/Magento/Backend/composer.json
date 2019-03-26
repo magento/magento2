@@ -22,6 +22,7 @@
       "magento/module-store": "*",
       "magento/module-translation": "*",
       "magento/module-ui": "*",
+      "magento/module-authorization": "*",
       "magento/module-user": "*"
     },
     "suggest": {
