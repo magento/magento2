@@ -63,7 +63,7 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Ups/_files/enable_ups_shipping_method.php
+     * @magentoApiDataFixture Magento/Usps/_files/enable_usps_shipping_method.php
      */
     public function testSetUpsShippingMethod()
     {
@@ -72,7 +72,7 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
         $shippingAddressId = (int)$quote->getShippingAddress()->getId();
 
-        $query = $this->getAddUpsShippingMethodQuery(
+        $query = $this->getAddUspsShippingMethodQuery(
             $maskedQuoteId,
             $shippingAddressId,
             self::CARRIER_CODE,
@@ -83,8 +83,8 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
         $addressesInformation = $response['setShippingMethodsOnCart']['cart']['shipping_addresses'];
         $expectedResult = [
             'carrier_code' => self::CARRIER_CODE,
-            'method_code'  => self::CARRIER_METHOD_CODE_GROUND,
-            'label'        => '',
+            'method_code' => self::CARRIER_METHOD_CODE_GROUND,
+            'label' => 'United States Postal Service - USPS Retail Ground',
         ];
         self::assertEquals($addressesInformation[0]['selected_shipping_method'], $expectedResult);
     }
@@ -98,7 +98,7 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $methodCode
      * @return string
      */
-    private function getAddUpsShippingMethodQuery(
+    private function getAddUspsShippingMethodQuery(
         string $maskedQuoteId,
         int $shippingAddressId,
         string $carrierCode,
