@@ -62,6 +62,22 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Please enter a number greater than 0 in this field.
+     */
+    public function testAddSimpleProductToCartWithNegativeQty()
+    {
+        $sku = 'simple';
+        $qty = -2;
+        $maskedQuoteId = $this->getMaskedQuoteId();
+
+        $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
     public function testAddSimpleProductToCartWithDecimalQty()
     {
