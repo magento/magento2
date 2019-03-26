@@ -1330,7 +1330,7 @@ regionResponse.each { region -&gt;
   
       <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="SetUp - Get CMS pages" enabled="true"/>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - Get CMS blocks" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - Get CMS pages" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="searchCriteria[current_page]" elementType="HTTPArgument">
@@ -1389,73 +1389,6 @@ for (var i in data.items) {
  }
 
 props.put("cms_pages", cmsPages);
-</stringProp>
-          </JSR223PostProcessor>
-          <hashTree/>
-        </hashTree>
-    </hashTree>
-  
-      <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="SetUp - Get CMS blocks" enabled="true"/>
-      <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - Get CMS blocks" enabled="true">
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="searchCriteria[current_page]" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">1</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">searchCriteria[current_page]</stringProp>
-              </elementProp>
-              <elementProp name="searchCriteria[page_size]" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">20</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">searchCriteria[page_size]</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain"/>
-          <stringProp name="HTTPSampler.port"/>
-          <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
-          <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
-          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
-          <stringProp name="HTTPSampler.contentEncoding"/>
-          <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/cmsBlock/search</stringProp>
-          <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <boolProp name="HTTPSampler.monitor">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"/>
-          <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/get_cms_blocks.jmx</stringProp>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion" testname="Assert results are present" enabled="true">
-            <stringProp name="JSON_PATH">$.total_count</stringProp>
-            <stringProp name="EXPECTED_VALUE">0</stringProp>
-            <boolProp name="JSONVALIDATION">true</boolProp>
-            <boolProp name="EXPECT_NULL">false</boolProp>
-            <boolProp name="INVERT">true</boolProp>
-            <boolProp name="ISREGEX">false</boolProp>
-          </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
-          <hashTree/>
-          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="PostProcessor" enabled="true">
-            <stringProp name="scriptLanguage">javascript</stringProp>
-            <stringProp name="parameters"/>
-            <stringProp name="filename"/>
-            <stringProp name="cacheKey"/>
-            <stringProp name="script">var data = JSON.parse(prev.getResponseDataAsString());
-
-var cmsBlocks = [];
-
-for (var i in data.items) {
-    cmsBlocks.push({"id": data.items[i].id, "identifier": data.items[i].identifier});
- }
-
-props.put("cms_blocks", cmsBlocks);
 </stringProp>
           </JSR223PostProcessor>
           <hashTree/>
@@ -2265,9 +2198,6 @@ if (props.get("category_names_list") == null) {
 }
 if (props.get("cms_pages") == null) {
     return stopTestOnError("Cannot find cms pages. Test stopped.");
-}
-if (props.get("cms_blocks") == null) {
-    return stopTestOnError("Cannot find cms blocks. Test stopped.");
 }
 </stringProp>
       <stringProp name="BeanShellSampler.filename"/>
@@ -40391,126 +40321,6 @@ vars.putObject("category", categories[number]);
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  </hashTree>
-
-  
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get Cms Block by identifier" enabled="true">
-      <intProp name="ThroughputController.style">1</intProp>
-      <boolProp name="ThroughputController.perThread">false</boolProp>
-      <intProp name="ThroughputController.maxThroughput">1</intProp>
-      <stringProp name="ThroughputController.percentThroughput">${graphqlGetCmsBlockByIdentifierPercentage}</stringProp>
-    <stringProp name="TestPlan.comments">mpaf/tool/fragments/_system/scenario_controller_tmpl.jmx</stringProp></ThroughputController>
-    <hashTree>
-        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Set Test Label" enabled="true">
-            <stringProp name="script">
-var testLabel = "${testLabel}" ? " (${testLabel})" : "";
-if (testLabel
-    &amp;&amp; sampler.getClass().getName() == 'org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy'
-) {
-    if (sampler.getName().indexOf(testLabel) == -1) {
-       sampler.setName(sampler.getName() + testLabel);
-    }
-} else if (sampler.getName().indexOf("SetUp - ") == -1) {
-    sampler.setName("SetUp - " + sampler.getName());
-}
-            </stringProp>
-            <stringProp name="scriptLanguage">javascript</stringProp>
-        <stringProp name="TestPlan.comments">mpaf/tool/fragments/_system/setup_label.jmx</stringProp></JSR223PreProcessor>
-        <hashTree/>
-        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
-            <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Get Cms Block by identifier");
-            </stringProp>
-            <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
-        </BeanShellSampler>
-        <hashTree/>
-    
-    <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-      <collectionProp name="HeaderManager.headers">
-        <elementProp name="" elementType="Header">
-          <stringProp name="Header.name">Content-Type</stringProp>
-          <stringProp name="Header.value">application/json</stringProp>
-        </elementProp>
-        <elementProp name="" elementType="Header">
-          <stringProp name="Header.name">Accept</stringProp>
-          <stringProp name="Header.value">*/*</stringProp>
-        </elementProp>
-      </collectionProp>
-    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/header_manager_before_token.jmx</stringProp></HeaderManager>
-    <hashTree/>
-  
-      <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Init Random Generator" enabled="true">
-        <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/common/init_random_generator_setup.jmx</stringProp>
-        <stringProp name="BeanShellSampler.query">
-import java.util.Random;
-
-Random random = new Random();
-if (${seedForRandom} &gt; 0) {
-    random.setSeed(${seedForRandom} + ${__threadNum});
-}
-
-vars.putObject("randomIntGenerator", random);
-        </stringProp>
-        <stringProp name="BeanShellSampler.filename"/>
-        <stringProp name="BeanShellSampler.parameters"/>
-        <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
-      </BeanShellSampler>
-      <hashTree/>
-    
-    <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="SetUp - Prepare CMS Block" enabled="true">
-      <stringProp name="scriptLanguage">javascript</stringProp>
-      <stringProp name="parameters"/>
-      <stringProp name="filename"/>
-      <stringProp name="cacheKey"/>
-      <stringProp name="script">random = vars.getObject("randomIntGenerator");
-
-var cmsBlocks = props.get("cms_blocks");
-var number = random.nextInt(cmsBlocks.length);
-
-vars.put("cms_block_identifier", cmsBlocks[number].identifier);
-        </stringProp>
-    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/prepare_cms_block.jmx</stringProp></JSR223Sampler>
-    <hashTree/>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Cms Block by identifier" enabled="true">
-      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">
-            {"query":"query cmsBlocks($identifiers: [String]!) {\n    cmsBlocks(identifiers: $identifiers) {\n        items {\n            content\n            identifier\n        }\n    }\n}","variables":{"identifiers":"${cms_block_identifier}"},"operationName":"cmsBlocks"}
-            </stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
-      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
-      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
-      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
-      <stringProp name="HTTPSampler.method">POST</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/get_get_cms_block_by_identifier.jmx</stringProp></HTTPSamplerProxy>
-    <hashTree>
-      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion" testname="jp@gc - JSON Path Assertion" enabled="true">
-        <stringProp name="JSON_PATH">$.data.cmsBlocks.items[0].identifier</stringProp>
-        <stringProp name="EXPECTED_VALUE">${cms_block_identifier}</stringProp>
-        <boolProp name="JSONVALIDATION">true</boolProp>
-        <boolProp name="EXPECT_NULL">false</boolProp>
-        <boolProp name="INVERT">false</boolProp>
-        <boolProp name="ISREGEX">false</boolProp>
-      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
       <hashTree/>
     </hashTree>
   </hashTree>
