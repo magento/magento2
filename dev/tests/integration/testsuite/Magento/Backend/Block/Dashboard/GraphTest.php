@@ -27,6 +27,6 @@ class GraphTest extends \PHPUnit\Framework\TestCase
 
     public function testGetChartUrl()
     {
-        $this->assertStringStartsWith('http://chart.apis.google.com/chart', $this->_block->getChartUrl());
+        $this->assertStringStartsWith('https://image-charts.com/chart', $this->_block->getChartUrl());
     }
 }
