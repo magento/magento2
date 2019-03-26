@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Block\Product;
+namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
