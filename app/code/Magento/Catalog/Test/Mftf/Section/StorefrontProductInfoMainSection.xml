@@ -13,7 +13,8 @@
         <element name="productName" type="text" selector=".base"/>
         <element name="productSku" type="text" selector=".product.attribute.sku>.value"/>
         <element name="productPriceLabel" type="text" selector=".price-label"/>
-        <element name="productPrice" type="text" selector="div.price-box.price-final_price"/>
+        <element name="price" type="text" selector=".product-info-main [data-price-type='finalPrice']"/>
+        <element name="productPrice" type="text" selector=".price-final_price"/>
         <element name="qty" type="input" selector="#qty"/>
         <element name="specialPrice" type="text" selector=".special-price"/>
         <element name="specialPriceAmount" type="text" selector=".special-price span.price"/>
@@ -31,6 +32,8 @@
         <element name="productOptionSelect" type="select" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{var1}}')]/../div[@class='control']//select" parameterized="true"/>
         <element name="asLowAs" type="input" selector="span[class='price-wrapper '] "/>
         <element name="specialPriceValue" type="text" selector="//span[@class='special-price']//span[@class='price']"/>
+        <element name="mapPrice" type="text" selector="//div[@class='price-box price-final_price']//span[contains(@class, 'price-msrp_price')]"/>
+        <element name="clickForPriceLink" type="text" selector="//div[@class='price-box price-final_price']//a[contains(text(), 'Click for price')]"/>
 
         <!-- The parameter is the nth custom option that you want to get -->
         <element name="nthCustomOption" type="block" selector="//*[@id='product-options-wrapper']/*[@class='fieldset']/*[contains(@class, 'field')][{{customOptionNum}}]" parameterized="true" />
@@ -71,6 +74,11 @@
         <element name="productTierPriceByForTextLabel" type="text" selector="//ul[contains(@class, 'prices-tier')]//li[{{var1}}][contains(text(),'Buy {{var2}} for')]" parameterized="true"/>
         <element name="productTierPriceAmount" type="text" selector="//ul[contains(@class, 'prices-tier')]//li[{{var1}}]//span[contains(text(), '{{var2}}')]" parameterized="true"/>
         <element name="productTierPriceSavePercentageAmount" type="text" selector="//ul[contains(@class, 'prices-tier')]//li[{{var1}}]//span[contains(@class, 'percent')][contains(text(), '{{var2}}')]" parameterized="true"/>
+
+        <!-- Special price selectors -->
+        <element name="productSpecialPrice" type="text" selector="//span[@data-price-type='finalPrice']/span"/>
+        <element name="specialProductText" type="text" selector="//span[text()='Regular Price']"/>
+        <element name="oldProductPrice" type="text" selector="//span[@data-price-type='oldPrice']/span"/>
 
         <!-- Customizable Option selectors -->
         <element name="allCustomOptionLabels" type="text" selector="#product-options-wrapper label"/>
