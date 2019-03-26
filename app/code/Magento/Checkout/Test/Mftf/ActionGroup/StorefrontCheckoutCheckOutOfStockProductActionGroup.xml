@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontCheckoutCheckOutOfStockProductActionGroup">
         <arguments>
-            <argument name="product"/>
+            <argument name="product" type="entity"/>
         </arguments>
         <see selector="{{CheckoutCartMessageSection.errorMessage}}" userInput="1 product requires your attention." stepKey="seeErrorMessage"/>
         <see selector="{{CheckoutCartProductSection.productName}}" userInput="{{product.name}}" stepKey="seeProductName"/>
