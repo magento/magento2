@@ -24,6 +24,11 @@ class CreateCustomerTest extends GraphQlAbstract
      */
     private $customerRepository;
 
+    /**
+     * @var null|string
+     */
+    private $customerRandomEmail = null;
+
     protected function setUp()
     {
         parent::setUp();
@@ -40,7 +45,7 @@ class CreateCustomerTest extends GraphQlAbstract
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';
         $currentPassword = 'test123#';
-        $newEmail = 'customer_created' . rand(1, 2000000) . '@example.com';
+        $this->customerRandomEmail = 'customer_created' . rand(1, 2000000) . '@example.com';
 
         $query = <<<QUERY
 mutation {
@@ -48,7 +53,7 @@ mutation {
         input: {
             firstname: "{$newFirstname}"
             lastname: "{$newLastname}"
-            email: "{$newEmail}"
+            email: "{$this->customerRandomEmail}"
             password: "{$currentPassword}"
           	is_subscribed: true
         }
@@ -67,7 +72,7 @@ QUERY;
 
         $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
         $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
-        $this->assertEquals($newEmail, $response['createCustomer']['customer']['email']);
+        $this->assertEquals($this->customerRandomEmail, $response['createCustomer']['customer']['email']);
         $this->assertEquals(true, $response['createCustomer']['customer']['is_subscribed']);
     }
 
@@ -78,7 +83,7 @@ QUERY;
     {
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';
-        $newEmail = 'customer_created' . rand(1, 2000000) . '@example.com';
+        $this->customerRandomEmail = 'customer_created' . rand(1, 2000000) . '@example.com';
 
         $query = <<<QUERY
 mutation {
@@ -86,7 +91,7 @@ mutation {
         input: {
             firstname: "{$newFirstname}"
             lastname: "{$newLastname}"
-            email: "{$newEmail}"
+            email: "{$this->customerRandomEmail}"
           	is_subscribed: true
         }
     ) {
@@ -104,7 +109,7 @@ QUERY;
 
         $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
         $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
-        $this->assertEquals($newEmail, $response['createCustomer']['customer']['email']);
+        $this->assertEquals($this->customerRandomEmail, $response['createCustomer']['customer']['email']);
         $this->assertEquals(true, $response['createCustomer']['customer']['is_subscribed']);
     }
 
@@ -240,16 +245,17 @@ QUERY;
 
     public function tearDown()
     {
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', true);
-        $customersCollection = Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Customer::class);
-        foreach ($customersCollection as $customer) {
-            $this->customerRepository->deleteById($customer->getId());
+        if ($this->customerRandomEmail !== null) {
+            $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', true);
+            $customer = $this->customerRepository->get($this->customerRandomEmail);
+            if (isset($customer) && $customer->getId()) {
+                $this->customerRepository->delete($customer);
+            }
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', false);
         }
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', false);
         parent::tearDown();
     }
 }
