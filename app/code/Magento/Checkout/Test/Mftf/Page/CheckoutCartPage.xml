@@ -12,5 +12,6 @@
         <section name="CheckoutCartProductSection"/>
         <section name="CheckoutCartSummarySection"/>
         <section name="CheckoutCartCrossSellSection"/>
+        <section name="CheckoutCartMessageSection"/>
     </page>
 </pages>
