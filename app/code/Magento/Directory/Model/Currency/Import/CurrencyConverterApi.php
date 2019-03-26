@@ -168,18 +168,18 @@ class CurrencyConverterApi extends AbstractImport
     /**
      * Validates rates response.
      * @param array $response
-     * @param string $baseCurrency
+     * @param string $currencyFrom
      * @param string $currenciesTo
      * @return bool
      */
-    private function validateResponse(array $response, string $baseCurrency, string $currenciesTo): bool
+    private function validateResponse(array $response, string $currencyFrom, string $currenciesTo): bool
     {
         if (isset($response['error'])) {
             $this->_messages[] = $response['error'];
 
             return false;
         }
-        if (!isset($response[$baseCurrency.'_'.$currenciesTo])) {
+        if (empty($response[$currencyFrom.'_'.$currenciesTo])) {
             $this->_messages[] = __('We can\'t retrieve a rate for %1.', $currenciesTo);
 
             return false;
