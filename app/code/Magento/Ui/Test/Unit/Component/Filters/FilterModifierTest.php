@@ -66,7 +66,8 @@ class FilterModifierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @assertException \Magento\Framework\Exception\LocalizedException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Condition type "not_allowed" is not allowed
      */
     public function testApplyFilterModifierWithNotAllowedCondition()
     {
@@ -78,7 +79,7 @@ class FilterModifierTest extends \PHPUnit\Framework\TestCase
                 ]
             ]);
         $this->dataProvider->expects($this->never())->method('addFilter');
-        $this->unit->applyFilterModifier($this->dataProvider, 'test');
+        $this->unit->applyFilterModifier($this->dataProvider, 'filter');
     }
 
     /**

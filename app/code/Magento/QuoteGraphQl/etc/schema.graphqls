@@ -2,5 +2,5 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    createEmptyCart: String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart\\CreateEmptyCart") @doc(description:"Creates empty shopping cart for guest or logged in user")
+    createEmptyCart: String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CreateEmptyCart") @doc(description:"Creates empty shopping cart for guest or logged in user")
 }

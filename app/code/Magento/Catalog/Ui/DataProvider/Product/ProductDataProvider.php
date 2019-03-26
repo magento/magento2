@@ -128,6 +128,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * @inheritdoc
+     * @since 103.0.0
      */
     public function getMeta()
     {

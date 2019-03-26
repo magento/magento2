@@ -237,8 +237,30 @@
         </arguments>
         <amOnPage url="{{AdminCategoryPage.page}}" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(Category.Name)}}" stepKey="navigateToCreatedCategory" />
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandAll"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(Category.Name)}}" stepKey="navigateToCreatedCategory" />
         <waitForLoadingMaskToDisappear stepKey="waitForSpinner" />
+    </actionGroup>
+
+    <actionGroup name="ChangeSeoUrlKey">
+        <arguments>
+            <argument name="value" type="string"/>
+        </arguments>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{value}}" stepKey="enterURLKey"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="ChangeSeoUrlKeyForSubCategory">
+        <arguments>
+            <argument name="value" type="string"/>
+        </arguments>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection"/>
+        <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyDefaultValueCheckbox}}" stepKey="uncheckDefaultValue"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{value}}" stepKey="enterURLKey"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/>
     </actionGroup>
 </actionGroups>

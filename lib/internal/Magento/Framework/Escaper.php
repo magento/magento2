@@ -78,6 +78,7 @@ class Escaper
                         throw new \Exception($errorString, $errorNumber);
                     }
                 );
+                $data = $this->prepareUnescapedCharacters($data);
                 $string = mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
                 try {
                     $domDocument->loadHTML(
@@ -104,6 +105,19 @@ class Escaper
             $result = $data;
         }
         return $result;
+    }
+
+    /**
+     * Used to replace characters, that mb_convert_encoding will not process
+     *
+     * @param string $data
+     * @return string|null
+     */
+    private function prepareUnescapedCharacters(string $data): ?string
+    {
+        $patterns = ['/\&/u'];
+        $replacements = ['&amp;'];
+        return \preg_replace($patterns, $replacements, $data);
     }
 
     /**

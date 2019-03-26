@@ -381,6 +381,10 @@ class Cart extends DataObject implements CartInterface
             }
 
             try {
+                $this->_eventManager->dispatch(
+                    'checkout_cart_product_add_before',
+                    ['info' => $requestInfo, 'product' => $product]
+                );
                 $result = $this->getQuote()->addProduct($product, $request);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->_checkoutSession->setUseNotice(false);
@@ -616,6 +620,8 @@ class Cart extends DataObject implements CartInterface
     }
 
     /**
+     * Get product ids.
+     *
      * @return int[]
      */
     public function getProductIds()

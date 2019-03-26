@@ -240,4 +240,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Developer\Model\TemplateEngine\Plugin\DebugHints">
+        <arguments>
+            <argument name="debugHintsPath" xsi:type="string">dev/debug/template_hints_storefront</argument>
+            <argument name="debugHintsWithParam" xsi:type="string">dev/debug/template_hints_storefront_show_with_parameter</argument>
+            <argument name="debugHintsParameter" xsi:type="string">dev/debug/template_hints_parameter_value</argument>
+        </arguments>
+    </type>
 </config>

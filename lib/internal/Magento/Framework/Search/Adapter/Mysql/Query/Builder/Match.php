@@ -18,12 +18,15 @@ use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
  * MySQL search query match.
  *
  * @api
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  * @since 100.0.2
  */
 class Match implements QueryInterface
 {
+    /**
+     * @var string
+     */
     const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^';
 
     const MINIMAL_CHARACTER_LENGTH = 3;
@@ -118,7 +121,7 @@ class Match implements QueryInterface
     }
 
     /**
-     * Prepare query.
+     * Prepare query value for build function.
      *
      * @param string $queryValue
      * @param string $conditionType

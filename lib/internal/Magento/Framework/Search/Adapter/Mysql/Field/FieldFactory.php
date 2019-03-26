@@ -10,7 +10,7 @@ namespace Magento\Framework\Search\Adapter\Mysql\Field;
  * MySQL search field factory.
  *
  * @api
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  * @since 100.0.2
  */

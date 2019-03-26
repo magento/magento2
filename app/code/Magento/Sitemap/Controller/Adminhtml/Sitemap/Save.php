@@ -6,10 +6,14 @@
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller;
 
-class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
+/**
+ * Controller class Save. Represents requests flow logic for save action
+ */
+class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap implements HttpPostActionInterface
 {
     /**
      * Validate path for generation

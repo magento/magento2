@@ -17,7 +17,7 @@ use Magento\Framework\Search\RequestInterface;
 /**
  * MySQL search aggregation builder.
  *
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  * @api
  * @since 100.0.2

@@ -79,6 +79,7 @@ class Filesystem
      *
      * @return \Magento\Framework\Filesystem\Directory\ReadInterface
      *
+     * @since 102.0.0
      */
     public function getDirectoryReadByPath($path, $driverCode = DriverPool::FILE)
     {

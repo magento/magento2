@@ -59,7 +59,7 @@ class Load extends \Magento\Framework\App\Action\Action implements HttpGetAction
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Json
+     * @inheritdoc
      */
     public function execute()
     {
@@ -71,11 +71,11 @@ class Load extends \Magento\Framework\App\Action\Action implements HttpGetAction
             $sectionNames = $this->getRequest()->getParam('sections');
             $sectionNames = $sectionNames ? array_unique(\explode(',', $sectionNames)) : null;
 
-            $updateSectionId = $this->getRequest()->getParam('update_section_id');
-            if ('false' === $updateSectionId) {
-                $updateSectionId = false;
+            $forceNewSectionTimestamp = $this->getRequest()->getParam('force_new_section_timestamp');
+            if ('false' === $forceNewSectionTimestamp) {
+                $forceNewSectionTimestamp = false;
             }
-            $response = $this->sectionPool->getSectionsData($sectionNames, (bool)$updateSectionId);
+            $response = $this->sectionPool->getSectionsData($sectionNames, (bool)$forceNewSectionTimestamp);
         } catch (\Exception $e) {
             $resultJson->setStatusHeader(
                 \Zend\Http\Response::STATUS_CODE_400,

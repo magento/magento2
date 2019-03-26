@@ -105,7 +105,7 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
             [
                 'breadcrumbs' => [
                     'categoryUrlSuffix' => $this->escaper->escapeHtml($this->getCategoryUrlSuffix()),
-                    'userCategoryPathInUrl' => (int)$this->isCategoryUsedInProductUrl(),
+                    'useCategoryPathInUrl' => (int)$this->isCategoryUsedInProductUrl(),
                     'product' => $this->escaper->escapeHtml($this->getProductName())
                 ]
             ],
@@ -117,7 +117,7 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
      * Returns breadcrumb json.
      *
      * @return string
-     * @deprecated in favor of new method with name {suffix}Html{postfix}()
+     * @deprecated 103.0.0 in favor of new method with name {suffix}Html{postfix}()
      */
     public function getJsonConfiguration()
     {

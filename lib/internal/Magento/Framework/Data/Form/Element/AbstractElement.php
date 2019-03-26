@@ -171,7 +171,11 @@ abstract class AbstractElement extends AbstractForm
      */
     public function getHtmlId()
     {
-        return $this->getForm()->getHtmlIdPrefix() . $this->getData('html_id') . $this->getForm()->getHtmlIdSuffix();
+        return $this->_escaper->escapeHtml(
+            $this->getForm()->getHtmlIdPrefix() .
+            $this->getData('html_id') .
+            $this->getForm()->getHtmlIdSuffix()
+        );
     }
 
     /**
@@ -181,7 +185,7 @@ abstract class AbstractElement extends AbstractForm
      */
     public function getName()
     {
-        $name = $this->getData('name');
+        $name = $this->_escaper->escapeHtml($this->getData('name'));
         if ($suffix = $this->getForm()->getFieldNameSuffix()) {
             $name = $this->getForm()->addSuffixToName($name, $suffix);
         }
@@ -202,6 +206,8 @@ abstract class AbstractElement extends AbstractForm
     }
 
     /**
+     * Set form.
+     *
      * @param AbstractForm $form
      * @return $this
      */
@@ -239,6 +245,7 @@ abstract class AbstractElement extends AbstractForm
             'onchange',
             'disabled',
             'readonly',
+            'autocomplete',
             'tabindex',
             'placeholder',
             'data-form-part',
@@ -327,6 +334,8 @@ abstract class AbstractElement extends AbstractForm
     }
 
     /**
+     * Get Ui Id.
+     *
      * @param null|string $suffix
      * @return string
      */
@@ -335,7 +344,7 @@ abstract class AbstractElement extends AbstractForm
         if ($this->_renderer instanceof \Magento\Framework\View\Element\AbstractBlock) {
             return $this->_renderer->getUiId($this->getType(), $this->getName(), $suffix);
         } else {
-            return ' data-ui-id="form-element-' . $this->getName() . ($suffix ?: '') . '"';
+            return ' data-ui-id="form-element-' . $this->_escaper->escapeHtml($this->getName()) . ($suffix ?: '') . '"';
         }
     }
 

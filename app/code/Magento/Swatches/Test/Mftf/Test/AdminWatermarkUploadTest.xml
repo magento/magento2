@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminWatermarkUploadTest">
+        <waitForElement selector="{{AdminDesignConfigSection.imageUploadInputByFieldsetName('Swatch Image')}}" stepKey="waitForInputVisible4" after="waitForPreviewImage3"/>
+        <attachFile selector="{{AdminDesignConfigSection.imageUploadInputByFieldsetName('Swatch Image')}}" userInput="adobe-small.jpg" stepKey="attachFile4" after="waitForInputVisible4"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.imageUploadPreviewByFieldsetName('Swatch Image')}}" stepKey="waitForPreviewImage4" after="attachFile4"/>
+    </test>
+</tests>

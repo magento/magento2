@@ -16,6 +16,9 @@
         "magento/module-ui": "101.1.*",
         "magento/module-url-rewrite": "101.1.*"
     },
+    "suggest": {
+        "magento/module-webapi": "100.3.*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
@@ -29,5 +32,5 @@
             "Magento\\CatalogUrlRewrite\\": ""
         }
     },
-    "version": "100.3.0"
+    "version": "100.3.1"
 }

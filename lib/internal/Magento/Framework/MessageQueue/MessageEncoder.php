@@ -219,7 +219,7 @@ class MessageEncoder
      *
      * @return CommunicationConfig
      *
-     * @deprecated 100.2.0
+     * @deprecated 102.0.1
      */
     private function getCommunicationConfig()
     {

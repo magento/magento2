@@ -26,6 +26,7 @@ abstract class AbstractResource
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 102.0.0
      */
     protected $_logger;
 
@@ -263,7 +264,7 @@ abstract class AbstractResource
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated
+     * @deprecated 101.0.1
      */
     private function getLogger()
     {

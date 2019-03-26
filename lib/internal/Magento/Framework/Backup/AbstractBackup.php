@@ -312,6 +312,7 @@ abstract class AbstractBackup implements BackupInterface, SourceFileInterface
      * Check if keep files of backup
      *
      * @return bool
+     * @since 102.0.0
      */
     public function keepSourceFile()
     {
@@ -323,6 +324,7 @@ abstract class AbstractBackup implements BackupInterface, SourceFileInterface
      *
      * @param bool $keepSourceFile
      * @return $this
+     * @since 102.0.0
      */
     public function setKeepSourceFile(bool $keepSourceFile)
     {

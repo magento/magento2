@@ -72,7 +72,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
-     * @deprecated There must be no dependencies on specific adapter in generic search implementation
+     * @deprecated 101.0.0 There must be no dependencies on specific adapter in generic search implementation
      */
     private $temporaryStorageFactory;
 

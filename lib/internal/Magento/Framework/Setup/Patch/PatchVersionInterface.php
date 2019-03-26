@@ -8,7 +8,7 @@ namespace Magento\Framework\Setup\Patch;
 /**
  * For backward compatibility with versioned style module installation. Deprecated since creation.
  *
- * @deprecated
+ * @deprecated 102.0.0
  */
 interface PatchVersionInterface
 {
@@ -20,7 +20,7 @@ interface PatchVersionInterface
      *
      *
      * @return string
-     * @deprecated since appearance, required for backward compatibility
+     * @deprecated 102.0.0 since appearance, required for backward compatibility
      */
     public static function getVersion();
 }

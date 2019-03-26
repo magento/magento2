@@ -13,6 +13,7 @@ use Magento\Ui\Model;
  * ActiveEditor block
  *
  * @api
+ * @since 101.1.0
  */
 class ActiveEditor extends \Magento\Framework\View\Element\Template
 {
@@ -50,6 +51,7 @@ class ActiveEditor extends \Magento\Framework\View\Element\Template
      * Get active wysiwyg adapter path
      *
      * @return string
+     * @since 101.1.0
      */
     public function getWysiwygAdapterPath()
     {

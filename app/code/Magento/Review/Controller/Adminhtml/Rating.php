@@ -41,7 +41,7 @@ abstract class Rating extends Action
     }
 
     /**
-     * @deprecated Misspelled method
+     * @deprecated 100.3.0 Misspelled method
      * @see initEntityId
      */
     protected function initEnityId()

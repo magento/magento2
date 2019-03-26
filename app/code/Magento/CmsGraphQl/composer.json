@@ -8,6 +8,10 @@
         "magento/module-cms": "103.0.*",
         "magento/module-widget": "101.1.*"
     },
+    "suggest": {
+        "magento/module-graph-ql": "100.3.*",
+        "magento/module-store-graph-ql": "100.3.*"
+    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -20,5 +24,5 @@
             "Magento\\CmsGraphQl\\": ""
         }
     },
-    "version": "100.3.0"
+    "version": "100.3.1"
 }

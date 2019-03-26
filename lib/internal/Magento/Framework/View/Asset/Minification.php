@@ -65,7 +65,7 @@ class Minification
         if (!isset($this->configCache[self::XML_PATH_MINIFICATION_ENABLED][$contentType])) {
             $this->configCache[self::XML_PATH_MINIFICATION_ENABLED][$contentType] =
                 $this->appState->getMode() != State::MODE_DEVELOPER &&
-                (bool)$this->scopeConfig->isSetFlag(
+                $this->scopeConfig->isSetFlag(
                     sprintf(self::XML_PATH_MINIFICATION_ENABLED, $contentType),
                     $this->scope
                 );
@@ -113,6 +113,8 @@ class Minification
     }
 
     /**
+     * Is Minified Filename
+     *
      * @param string $filename
      * @return bool
      */
@@ -122,6 +124,8 @@ class Minification
     }
 
     /**
+     * Is Excluded
+     *
      * @param string $filename
      * @return boolean
      */
@@ -136,6 +140,8 @@ class Minification
     }
 
     /**
+     * Get Excludes
+     *
      * @param string $contentType
      * @return string[]
      */

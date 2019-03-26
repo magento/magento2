@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateTaxRuleWithFixedZipUtahTest">
+        <annotations>
+            <stories value="Update tax rule"/>
+            <title value="Update tax rule, fixed zip Utah"/>
+            <description value="Test log in to Update tax rule and Update tax rule with fixed zip Utah"/>
+            <testCaseId value="MC-5821"/>
+            <severity value="CRITICAL"/>
+            <group value="tax"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <createData entity="defaultTaxRule" stepKey="initialTaxRule"/>
+            <createData entity="TaxRateWithFixedZipUtah" stepKey="taxRateWithFixedZipUtah"/>
+            <createData entity="customerTaxClass" stepKey="createCustomerTaxClass"/>
+            <createData entity="productTaxClass" stepKey="createProductTaxClass"/>
+            <getData entity="customerTaxClass" stepKey="customerTaxClass">
+                <requiredEntity createDataKey="createCustomerTaxClass"/>
+            </getData>
+            <getData entity="productTaxClass" stepKey="productTaxClass">
+                <requiredEntity createDataKey="createProductTaxClass"/>
+            </getData>
+            <createData entity="ApiSimplePrice100Qty100v2" stepKey="simpleProduct"/>
+            <createData entity="Simple_US_Utah_Customer" stepKey="customer" />
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteTaxRule" createDataKey="initialTaxRule" />
+            <deleteData stepKey="deleteTaxRate" createDataKey="taxRateWithFixedZipUtah" />
+            <deleteData stepKey="deleteCustomerTaxClass" createDataKey="createCustomerTaxClass"/>
+            <deleteData stepKey="deleteProductTaxClass" createDataKey="createProductTaxClass"/>
+            <deleteData stepKey="deleteSimpleProduct" createDataKey="simpleProduct" />
+            <deleteData stepKey="deleteCustomer" createDataKey="customer" />
+        </after>
+
+        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>
+        <waitForPageLoad stepKey="waitForTaxRuleIndex1"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters1"/>
+        <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="$$initialTaxRule.code$$" stepKey="fillTaxCodeSearch"/>
+        <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch1"/>
+        <click selector="{{AdminTaxRuleGridSection.nthRow('1')}}" stepKey="clickFirstRow1"/>
+
+        <!-- Update tax rule with fixed zip Utah -->
+        <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode1"/>
+        <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$taxRateWithFixedZipUtah.code$$" stepKey="fillTaxRateSearch"/>
+        <wait stepKey="waitForSearch" time="5" />
+        <click selector="{{AdminTaxRuleFormSection.taxRateOption($$taxRateWithFixedZipUtah.code$$)}}" stepKey="clickSelectNeededItem"/>
+        <click selector="{{AdminTaxRuleFormSection.additionalSettings}}" stepKey="clickAdditionalSettings"/>
+        <scrollTo selector="{{AdminTaxRuleFormSection.additionalSettings}}" x="0" y="-80" stepKey="scrollToAdvancedSettings"/>
+        <wait stepKey="waitForAdditionalSettings" time="5" />
+        <conditionalClick selector="{{AdminTaxRuleFormSection.customerTaxClassOption(retailCustomerTaxClass.class_name)}}" dependentSelector="{{AdminTaxRuleFormSection.customerTaxClassSelected(retailCustomerTaxClass.class_name)}}" visible="false" stepKey="checkRetailCustomerTaxClass" />
+        <conditionalClick selector="{{AdminTaxRuleFormSection.productTaxClassOption(taxableGoodsTaxClass.class_name)}}" dependentSelector="{{AdminTaxRuleFormSection.productTaxClassSelected(taxableGoodsTaxClass.class_name)}}" visible="false" stepKey="checkTaxableGoodsTaxClass" />
+        <click selector="{{AdminTaxRuleFormSection.productTaxClassOption($$productTaxClass.class_name$$)}}" stepKey="clickSelectProductTaxClass"/>
+        <click selector="{{AdminTaxRuleFormSection.save}}" stepKey="clickSaveTaxRule"/>
+        <waitForPageLoad stepKey="waitForTaxRuleSaved" />
+        <!-- Verify we see success message -->
+        <see selector="{{AdminTaxRuleGridSection.successMessage}}" userInput="You saved the tax rule." stepKey="seeAssertTaxRuleSuccessMessage"/>
+
+        <!-- Verify we see updated tax rule with fixed zip Utah(from the above step) on the tax rule grid page -->
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
+        <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode2"/>
+        <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch2"/>
+        <waitForPageLoad stepKey="waitForTaxRuleSearch"/>
+        <click selector="{{AdminTaxRuleGridSection.nthRow('1')}}" stepKey="clickFirstRow2"/>
+
+        <!-- Verify we see updated tax rule with fixed zip Utah on the tax rule form page -->
+        <seeInField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="seeInTaxRuleCode"/>
+        <seeElement selector="{{AdminTaxRuleFormSection.taxRateSelected($$taxRateWithFixedZipUtah.code$$)}}" stepKey="seeTaxRateSelected"/>
+        <click selector="{{AdminTaxRuleFormSection.additionalSettings}}" stepKey="clickAdditionalSettings1"/>
+        <scrollTo selector="{{AdminTaxRuleFormSection.additionalSettings}}" x="0" y="-80" stepKey="scrollToAdvancedSettings1"/>
+        <seeElement selector="{{AdminTaxRuleFormSection.productTaxClassSelected($$productTaxClass.class_name$$)}}" stepKey="seeProductTaxClass"/>
+
+        <!-- Verify if tax rule is applied on the store front product page -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$customer$$" />
+        </actionGroup>
+        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="goProductPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$simpleProduct$$" />
+            <argument name="productCount" value="1" />
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart" />
+        <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
+            <argument name="address" value="US_Address_Utah" />
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductPageSection.orderTotal}}" x="0" y="-80" stepKey="scrollToOrderTotal"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.shipping}}" time="30" stepKey="waitForShipping"/>
+        <see selector="{{StorefrontProductPageSection.shipping}}" userInput="$5.00" stepKey="seeShipping"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.tax}}" time="30" stepKey="waitForTax"/>
+        <see selector="{{StorefrontProductPageSection.tax}}" userInput="$20.00" stepKey="seeAssertTaxAmount" />
+        <waitForElementVisible selector="{{StorefrontProductPageSection.orderTotal}}" time="30" stepKey="waitForOrderTotal"/>
+        <see selector="{{StorefrontProductPageSection.orderTotal}}" userInput="$125.00" stepKey="seeAssertGrandTotal"/>
+    </test>
+</tests>

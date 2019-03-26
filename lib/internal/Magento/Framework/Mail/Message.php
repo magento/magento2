@@ -8,6 +8,9 @@ namespace Magento\Framework\Mail;
 use Zend\Mime\Mime;
 use Zend\Mime\Part;
 
+/**
+ * Class Message for email transportation
+ */
 class Message implements MailMessageInterface
 {
     /**
@@ -34,9 +37,9 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
-     * @deprecated
+     * @deprecated 102.0.0
      * @see \Magento\Framework\Mail\Message::setBodyText
      * @see \Magento\Framework\Mail\Message::setBodyHtml
      */
@@ -47,9 +50,9 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
-     * @deprecated
+     * @deprecated 102.0.0
      * @see \Magento\Framework\Mail\Message::setBodyText
      * @see \Magento\Framework\Mail\Message::setBodyHtml
      */
@@ -63,7 +66,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSubject($subject)
     {
@@ -72,7 +75,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSubject()
     {
@@ -80,7 +83,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBody()
     {
@@ -88,16 +91,29 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @deprecated 102.0.1 This function is missing the from name. The
+     * setFromAddress() function sets both from address and from name.
+     * @see setFromAddress()
      */
     public function setFrom($fromAddress)
     {
-        $this->zendMessage->setFrom($fromAddress);
+        $this->setFromAddress($fromAddress, null);
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     */
+    public function setFromAddress($fromAddress, $fromName = null)
+    {
+        $this->zendMessage->setFrom($fromAddress, $fromName);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function addTo($toAddress)
     {
@@ -106,7 +122,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addCc($ccAddress)
     {
@@ -115,7 +131,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addBcc($bccAddress)
     {
@@ -124,7 +140,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setReplyTo($replyToAddress)
     {
@@ -133,7 +149,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRawMessage()
     {
@@ -157,7 +173,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBodyHtml($html)
     {
@@ -166,7 +182,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBodyText($text)
     {

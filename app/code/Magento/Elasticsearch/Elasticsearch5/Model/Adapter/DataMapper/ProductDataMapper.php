@@ -22,7 +22,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldN
 /**
  * Don't use this product data mapper class.
  *
- * @deprecated 100.2.0
+ * @deprecated 100.2.2
  * @see \Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface
  */
 class ProductDataMapper implements DataMapperInterface

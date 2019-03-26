@@ -12,7 +12,7 @@ namespace Magento\Framework;
  * It's usage should be avoid. Use service classes or data providers instead.
  *
  * @api
- * @deprecated
+ * @deprecated 102.0.0
  * @since 100.0.2
  */
 class Registry
@@ -30,7 +30,7 @@ class Registry
      * @param string $key
      * @return mixed
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function registry($key)
     {
@@ -49,7 +49,7 @@ class Registry
      * @return void
      * @throws \RuntimeException
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function register($key, $value, $graceful = false)
     {
@@ -68,7 +68,7 @@ class Registry
      * @param string $key
      * @return void
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function unregister($key)
     {

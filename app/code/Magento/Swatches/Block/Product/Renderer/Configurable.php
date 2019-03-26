@@ -488,6 +488,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Get Swatch image size config data.
      *
      * @return string
+     * @since 100.2.5
      */
     public function getJsonSwatchSizeConfig()
     {

@@ -90,7 +90,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      * Find order addresses by criteria.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Sales\Api\Data\OrderAddressInterface[]
+     * @return \Magento\Sales\Model\ResourceModel\Order\Address\Collection
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {

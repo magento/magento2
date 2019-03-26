@@ -8,7 +8,7 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
 /**
  * Class UploadJs
- * @deprecated
+ * @deprecated 101.0.0
  */
 class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {

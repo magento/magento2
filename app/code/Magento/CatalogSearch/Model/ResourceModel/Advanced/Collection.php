@@ -21,6 +21,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
  *
  * This collection should be refactored to not have dependencies on MySQL-specific implementation.
  *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -40,7 +41,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
-     * @deprecated There must be no dependencies on specific adapter in generic search implementation
+     * @deprecated 101.0.0 There must be no dependencies on specific adapter in generic search implementation
      */
     private $temporaryStorageFactory;
 
@@ -296,7 +297,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Get fielter builder.
+     * Get filter builder.
      *
      * @return FilterBuilder
      */

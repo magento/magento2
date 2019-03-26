@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Create order account form
@@ -132,15 +133,7 @@ class Account extends AbstractForm
         $this->_addAttributesToForm($attributes, $fieldset);
 
         $this->_form->addFieldNameSuffix('order[account]');
-
-        $formValues = $this->getFormValues();
-        foreach ($attributes as $code => $attribute) {
-            $defaultValue = $attribute->getDefaultValue();
-            if (isset($defaultValue) && !isset($formValues[$code])) {
-                $formValues[$code] = $defaultValue;
-            }
-        }
-        $this->_form->setValues($formValues);
+        $this->_form->setValues($this->extractValuesFromAttributes($attributes));
 
         return $this;
     }
@@ -192,5 +185,24 @@ class Account extends AbstractForm
         }
 
         return $data;
+    }
+
+    /**
+     * Extract the form values from attributes.
+     *
+     * @param array $attributes
+     * @return array
+     */
+    private function extractValuesFromAttributes(array $attributes): array
+    {
+        $formValues = $this->getFormValues();
+        foreach ($attributes as $code => $attribute) {
+            $defaultValue = $attribute->getDefaultValue();
+            if (isset($defaultValue) && !isset($formValues[$code])) {
+                $formValues[$code] = $defaultValue;
+            }
+        }
+
+        return $formValues;
     }
 }

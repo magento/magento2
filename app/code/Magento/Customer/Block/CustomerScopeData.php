@@ -67,6 +67,7 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
      * @param array $configuration
      * @return bool|string
      * @throws \InvalidArgumentException
+     * @since 102.0.0
      */
     public function encodeConfiguration(array $configuration)
     {

@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
 /**
  * CatalogSearch Fulltext Index Engine resource model
  *
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class Engine implements EngineInterface
@@ -110,7 +110,9 @@ class Engine implements EngineInterface
             && in_array($attribute->getFrontendInput(), ['text', 'textarea'])
         ) {
             $result = $value;
-        } elseif ($this->isTermFilterableAttribute($attribute)) {
+        } elseif ($this->isTermFilterableAttribute($attribute)
+            || ($attribute->getIsSearchable() && in_array($attribute->getFrontendInput(), ['select', 'multiselect']))
+        ) {
             $result = '';
         }
 
@@ -119,6 +121,7 @@ class Engine implements EngineInterface
 
     /**
      * Prepare index array as a string glued by separator
+     *
      * Support 2 level array gluing
      *
      * @param array $index

@@ -196,7 +196,7 @@ class ErrorProcessor
      * Log information about exception to exception log.
      *
      * @param \Exception $exception
-     * @return string $reportId
+     * @return string
      */
     protected function _critical(\Exception $exception)
     {
@@ -318,7 +318,7 @@ class ErrorProcessor
     protected function _saveFatalErrorReport($reportData)
     {
         $this->directoryWrite->create('report/api');
-        $reportId = abs(intval(microtime(true) * random_int(100, 1000)));
+        $reportId = abs((int)(microtime(true) * random_int(100, 1000)));
         $this->directoryWrite->writeFile('report/api/' . $reportId, $this->serializer->serialize($reportData));
         return $reportId;
     }

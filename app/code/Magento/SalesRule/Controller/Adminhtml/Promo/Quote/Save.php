@@ -6,8 +6,41 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+
+/**
+ * SalesRule save controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpPostActionInterface
 {
+    /**
+     * @var TimezoneInterface
+     */
+    private $timezone;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param TimezoneInterface $timezone
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        TimezoneInterface $timezone = null
+    ) {
+        parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter);
+        $this->timezone =  $timezone ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            TimezoneInterface::class
+        );
+    }
+
     /**
      * Promo quote save action
      *
@@ -26,6 +59,9 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                     ['request' => $this->getRequest()]
                 );
                 $data = $this->getRequest()->getPostValue();
+                if (empty($data['from_date'])) {
+                    $data['from_date'] = $this->timezone->formatDate();
+                }
 
                 $filterValues = ['from_date' => $this->_dateFilter];
                 if ($this->getRequest()->getParam('to_date')) {

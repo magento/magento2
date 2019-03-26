@@ -12,7 +12,6 @@ use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Class Http
- *
  */
 class Http extends File
 {
@@ -35,6 +34,11 @@ class Http extends File
         $headers = array_change_key_case(get_headers($this->getScheme() . $path, 1), CASE_LOWER);
 
         $status = $headers[0];
+
+        /* Handling 302 redirection */
+        if (strpos($status, '302 Found') !== false && isset($headers[1])) {
+            $status = $headers[1];
+        }
 
         if (strpos($status, '200 OK') === false) {
             $result = false;

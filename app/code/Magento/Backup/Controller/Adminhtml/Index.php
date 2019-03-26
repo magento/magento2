@@ -5,6 +5,7 @@
  */
 namespace Magento\Backup\Controller\Adminhtml;
 
+use Magento\Backend\App\Action;
 use Magento\Backup\Helper\Data as Helper;
 use Magento\Framework\App\ObjectManager;
 
@@ -16,14 +17,14 @@ use Magento\Framework\App\ObjectManager;
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
-abstract class Index extends \Magento\Backend\App\Action
+abstract class Index extends Action
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::backup';
+    const ADMIN_RESOURCE = 'Magento_Backup::backup';
 
     /**
      * Core registry
@@ -86,6 +87,7 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @inheritDoc
+     * @since 100.2.6
      */
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {

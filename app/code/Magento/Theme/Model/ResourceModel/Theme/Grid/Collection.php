@@ -7,7 +7,7 @@ namespace Magento\Theme\Model\ResourceModel\Theme\Grid;
 
 /**
  * Theme grid collection
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\Theme\Ui\Component\Theme\DataProvider\SearchResult
  */
 class Collection extends \Magento\Theme\Model\ResourceModel\Theme\Collection

@@ -9,7 +9,7 @@ namespace Magento\Framework\Search\Adapter\Mysql;
  * Class for generating sql condition for calculating store manager
  *
  * @api
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  * @since 100.0.2
  */

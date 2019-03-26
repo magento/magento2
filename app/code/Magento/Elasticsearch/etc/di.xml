@@ -13,6 +13,14 @@
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter" />
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter" />
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\CompositeFieldProvider" />
+    <type name="Magento\Elasticsearch\Model\Config">
+        <arguments>
+            <argument name="engineList" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">elasticsearch</item>
+                <item name="elasticsearch5" xsi:type="string">elasticsearch5</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver">
         <arguments>
             <argument name="fieldMappers" xsi:type="array">
@@ -68,7 +76,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapperProxy">
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapperProxy">
         <arguments>
             <argument name="productFieldMappers" xsi:type="array">
                 <item name="elasticsearch" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\ProductFieldMapper</item>
@@ -287,7 +295,7 @@
             <argument name="fieldNameResolver" xsi:type="object">elasticsearch5FieldNameResolver</argument>
         </arguments>
     </type>
-    <type name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
+    <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
         <arguments>
             <argument name="items" xsi:type="array">
                 <item name="notEav" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute</item>
@@ -317,7 +325,7 @@
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>
     </virtualType>
-    <type name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\CompositeResolver">
+    <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\CompositeResolver">
         <arguments>
             <argument name="items" xsi:type="array">
                 <item name="integer" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\IntegerType</item>
@@ -327,7 +335,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\CompositeResolver">
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\CompositeResolver">
         <arguments>
             <argument name="items" xsi:type="array">
                 <item name="keyword" xsi:type="object">\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\KeywordType</item>
@@ -368,12 +376,12 @@
             <argument name="indexTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter</argument>
         </arguments>
     </virtualType>
-    <type name="\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\KeywordType">
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\KeywordType">
         <arguments>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>
     </type>
-    <type name="\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\IntegerType">
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\IntegerType">
         <arguments>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>
@@ -393,13 +401,13 @@
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>
     </virtualType>
-    <type name="\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper">
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper">
         <arguments>
             <argument name="fieldProvider" xsi:type="object">elasticsearch5FieldProvider</argument>
             <argument name="fieldNameResolver" xsi:type="object">elasticsearch5FieldNameResolver</argument>
         </arguments>
     </type>
-    <type name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\ProductFieldMapper">
+    <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\ProductFieldMapper">
         <arguments>
             <argument name="attributeAdapterProvider" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider</argument>
             <argument name="fieldProvider" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface</argument>
@@ -416,7 +424,7 @@
     <type name="Magento\Search\Model\Search\PageSizeProvider">
         <arguments>
             <argument name="pageSizeBySearchEngine" xsi:type="array">
-                <item name="elasticsearch" xsi:type="number">2147483647</item>
+                <item name="elasticsearch" xsi:type="number">10000</item>
                 <item name="elasticsearch5" xsi:type="number">2147483647</item>
             </argument>
         </arguments>

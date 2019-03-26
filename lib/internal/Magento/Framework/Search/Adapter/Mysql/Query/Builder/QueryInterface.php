@@ -10,7 +10,7 @@ use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 /**
  * MySQL search query builder.
  *
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  */
 interface QueryInterface

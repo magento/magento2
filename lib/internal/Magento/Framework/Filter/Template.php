@@ -9,7 +9,12 @@
  */
 namespace Magento\Framework\Filter;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\AbstractModel;
+
 /**
+ * Template filter
+ *
  * @api
  * @since 100.0.2
  */
@@ -61,6 +66,18 @@ class Template implements \Zend_Filter_Interface
      * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
+
+    /**
+     * @var string[]
+     */
+    private $restrictedMethods = [
+        'addafterfiltercallback',
+        'getresourcecollection',
+        'load',
+        'save',
+        'getcollection',
+        'getresource'
+    ];
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -229,8 +246,9 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * Adds a callback to run after main filtering has happened. Callback must accept a single argument and return
-     * a string of the processed value.
+     * Adds a callback to run after main filtering has happened.
+     *
+     * Callback must accept a single argument and return a string of the processed value.
      *
      * @param callable $afterFilterCallback
      * @return $this
@@ -258,6 +276,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Get var directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -289,7 +309,7 @@ class Template implements \Zend_Filter_Interface
     {
         // Processing of {template config_path=... [...]} statement
         $templateParameters = $this->getParameters($construction[2]);
-        if (!isset($templateParameters['config_path']) or !$this->getTemplateProcessor()) {
+        if (!isset($templateParameters['config_path']) || !$this->getTemplateProcessor()) {
             // Not specified template or not set include processor
             $replacedValue = '{Error in template processing}';
         } else {
@@ -303,6 +323,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Get depend directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -321,6 +343,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * If directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -360,6 +384,46 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Validate method call initiated in a template.
+     *
+     * Deny calls for methods that may disrupt template processing.
+     *
+     * @param object $object
+     * @param string $method
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    private function validateVariableMethodCall($object, string $method): void
+    {
+        if ($object === $this) {
+            if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
+                throw new \InvalidArgumentException("Method $method cannot be called from template.");
+            }
+        }
+    }
+
+    /**
+     * Check allowed methods for data objects.
+     *
+     * Deny calls for methods that may disrupt template processing.
+     *
+     * @param object $object
+     * @param string $method
+     * @return bool
+     * @throws \InvalidArgumentException
+     */
+    private function isAllowedDataObjectMethod($object, string $method): bool
+    {
+        if ($object instanceof AbstractExtensibleModel || $object instanceof AbstractModel) {
+            if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
+                throw new \InvalidArgumentException("Method $method cannot be called from template.");
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Return variable value for var construction
      *
      * @param string $value raw parameters
@@ -375,7 +439,7 @@ class Template implements \Zend_Filter_Interface
         $stackVars = $tokenizer->tokenize();
         $result = $default;
         $last = 0;
-        for ($i = 0; $i < count($stackVars); $i++) {
+        for ($i = 0, $count = count($stackVars); $i < $count; $i++) {
             if ($i == 0 && isset($this->templateVars[$stackVars[$i]['name']])) {
                 // Getting of template value
                 $stackVars[$i]['variable'] = & $this->templateVars[$stackVars[$i]['name']];
@@ -397,21 +461,27 @@ class Template implements \Zend_Filter_Interface
                             || substr($stackVars[$i]['name'], 0, 3) == 'get'
                     ) {
                         $stackVars[$i]['args'] = $this->getStackArgs($stackVars[$i]['args']);
-                        $stackVars[$i]['variable'] = call_user_func_array(
-                            [$stackVars[$i - 1]['variable'], $stackVars[$i]['name']],
-                            $stackVars[$i]['args']
-                        );
+
+                        if ($this->isAllowedDataObjectMethod($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])) {
+                            $stackVars[$i]['variable'] = call_user_func_array(
+                                [$stackVars[$i - 1]['variable'], $stackVars[$i]['name']],
+                                $stackVars[$i]['args']
+                            );
+                        }
                     }
                 }
                 $last = $i;
-            } elseif (isset($stackVars[$i - 1]['variable']) && $stackVars[$i]['type'] == 'method') {
+            } elseif (isset($stackVars[$i - 1]['variable'])
+                && is_object($stackVars[$i - 1]['variable'])
+                && $stackVars[$i]['type'] == 'method'
+            ) {
                 // Calling object methods
-                if (method_exists($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])) {
-                    $stackVars[$i]['args'] = $this->getStackArgs($stackVars[$i]['args']);
-                    $stackVars[$i]['variable'] = call_user_func_array(
-                        [$stackVars[$i - 1]['variable'], $stackVars[$i]['name']],
-                        $stackVars[$i]['args']
-                    );
+                $object = $stackVars[$i - 1]['variable'];
+                $method = $stackVars[$i]['name'];
+                if (method_exists($object, $method)) {
+                    $args = $this->getStackArgs($stackVars[$i]['args']);
+                    $this->validateVariableMethodCall($object, $method);
+                    $stackVars[$i]['variable'] = call_user_func_array([$object, $method], $args);
                 }
                 $last = $i;
             }

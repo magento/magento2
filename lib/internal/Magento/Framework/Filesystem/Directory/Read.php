@@ -67,6 +67,7 @@ class Read implements ReadInterface
      * @throws ValidatorException
      *
      * @return void
+     * @since 101.0.7
      */
     protected function validatePath(
         ?string $path,
