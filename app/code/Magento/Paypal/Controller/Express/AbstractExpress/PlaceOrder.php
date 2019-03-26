@@ -106,7 +106,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
                     ->setLastRealOrderId($order->getIncrementId())
                     ->setLastOrderStatus($order->getStatus());
             }
-
             if ($order->hasInvoices() > 0 && $order->getStatus() == 'processing') {
                 $invoice = $order->getPayment()->getCreatedInvoice();
                 $this->invoiceSender->send($invoice);
