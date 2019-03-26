@@ -11,7 +11,7 @@
         "magento/module-store": "*",
         "magento/module-customer": "*",
         "magento/module-customer-graph-ql": "*",
-        "magento/module-sales" : "*"
+        "magento/module-sales": "*"
     },
     "suggest": {
         "magento/module-graph-ql": "*"
