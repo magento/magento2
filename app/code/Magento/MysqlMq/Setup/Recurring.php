@@ -8,7 +8,7 @@ namespace Magento\MysqlMq\Setup;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
+use Magento\Framework\MessageQueue\Topology\ConfigInterface as MessageQueueConfig;
 
 /**
  * Class Recurring
@@ -35,10 +35,9 @@ class Recurring implements InstallSchemaInterface
     {
         $setup->startSetup();
 
-        $binds = $this->messageQueueConfig->getBinds();
         $queues = [];
-        foreach ($binds as $bind) {
-            $queues[] = $bind[MessageQueueConfig::BIND_QUEUE];
+        foreach ($this->messageQueueConfig->getQueues() as $queue) {
+          $queues[] = $queue->getName();
         }
         $connection = $setup->getConnection();
         $existingQueues = $connection->fetchCol($connection->select()->from($setup->getTable('queue'), 'name'));
