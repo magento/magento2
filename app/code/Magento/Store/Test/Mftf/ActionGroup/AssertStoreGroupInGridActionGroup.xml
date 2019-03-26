@@ -18,6 +18,6 @@
         <fillField userInput="{{storeGroupName}}" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="fillSearchStoreGroupField"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
         <waitForPageLoad stepKey="waitForStoreToLoad"/>
-        <see selector="{{AdminStoresGridSection.firstRow('1')}}" userInput="{{storeGroupName}}" stepKey="seeAssertStoreGroupInGridMessage"/>
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{storeGroupName}}" stepKey="seeAssertStoreGroupInGridMessage"/>
     </actionGroup>
 </actionGroups>

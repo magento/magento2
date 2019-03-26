@@ -80,6 +80,9 @@
         <!-- Export created below products -->
         <actionGroup ref="exportAllProducts" stepKey="exportCreatedProducts"/>
 
+        <!-- Run cron -->
+        <magentoCLI command="cron:run" stepKey="runCron3"/>
+
         <!-- Download product -->
         <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
             <argument name="rowIndex" value="0"/>

@@ -146,6 +146,24 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_payment_saved.php
+     */
+    public function testReSetPayment()
+    {
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1_with_payment');
+        $this->unAssignCustomerFromQuote('test_order_1_with_payment');
+        $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
+        $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
+        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
+        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @param string $methodCode
      * @return string
