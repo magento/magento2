@@ -202,7 +202,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
                 if (is_array($skipped) && in_array($widget['type'], $skipped)) {
                     continue;
                 }
-                $result[] = $widget['name']->getText();
+                $result[$widget['type']] = $widget['name']->getText();
             }
         }
 
