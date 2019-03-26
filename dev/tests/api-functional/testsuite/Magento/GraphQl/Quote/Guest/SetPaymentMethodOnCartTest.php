@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\OfflinePayments\Model\Checkmo;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
@@ -19,6 +20,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class SetPaymentMethodOnCartTest extends GraphQlAbstract
 {
+    /**
+     * @var GetMaskedQuoteIdByReservedOrderId
+     */
+    private $getMaskedQuoteIdByReservedOrderId;
+
     /**
      * @var QuoteResource
      */
@@ -40,6 +46,7 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
@@ -51,7 +58,7 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     public function testSetPaymentWithVirtualProduct()
     {
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_virtual_product');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_with_virtual_product');
         $this->unAssignCustomerFromQuote('test_order_with_virtual_product');
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
@@ -69,7 +76,7 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     public function testSetPaymentWithSimpleProduct()
     {
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $this->unAssignCustomerFromQuote('test_order_1');
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
@@ -89,7 +96,9 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     public function testSetPaymentWithSimpleProductWithoutAddress()
     {
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute(
+            'test_order_with_simple_product_without_address'
+        );
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
         $this->graphQlQuery($query);
@@ -103,7 +112,7 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     public function testSetNonExistingPaymentMethod()
     {
         $methodCode = 'noway';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $this->unAssignCustomerFromQuote('test_order_1');
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
@@ -116,7 +125,7 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     public function testSetPaymentMethodToCustomerCart()
     {
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
 
@@ -151,7 +160,7 @@ QUERY;
     public function testReSetPayment()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1_with_payment');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_with_payment');
         $this->unAssignCustomerFromQuote('test_order_1_with_payment');
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
         $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
@@ -193,29 +202,17 @@ QUERY;
     }
 
     /**
-     * @param string $reversedQuoteId
+     * @param string $reversedOrderId
      * @param int $customerId
      * @return string
      */
     private function unAssignCustomerFromQuote(
-        string $reversedQuoteId
+        string $reversedOrderId
     ): string {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
         $quote->setCustomerId(0);
         $this->quoteResource->save($quote);
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
-    }
-
-    /**
-     * @param string $reversedQuoteId
-     * @return string
-     */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
-
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 }
