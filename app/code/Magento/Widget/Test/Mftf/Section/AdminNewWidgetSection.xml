@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewWidgetSection">
         <element name="widgetType" type="select" selector="#code"/>
         <element name="widgetDesignTheme" type="select" selector="#theme_id"/>
@@ -17,9 +17,12 @@
         <element name="addLayoutUpdate" type="button" selector=".action-default.scalable.action-add"/>
         <element name="selectDisplayOn" type="select" selector="#widget_instance[0][page_group]"/>
         <element name="selectContainer" type="select" selector="#all_pages_0>table>tbody>tr>td:nth-child(1)>div>div>select"/>
+        <element name="selectTemplate" type="select" selector=".widget-layout-updates .block_template_container .select"/>
         <element name="widgetOptions" type="select" selector="#widget_instace_tabs_properties_section"/>
         <element name="addNewCondition" type="select" selector=".rule-param.rule-param-new-child"/>
         <element name="selectCondition" type="input" selector="#conditions__1__new_child"/>
+        <element name="ruleParameterEdit" type="select" selector="#conditions__1__children>li:nth-child(1)>span:nth-child(3)>a"/>
+        <element name="ruleParameterEditSelect" type="select" selector="#conditions__1__children>li:nth-child(1)>span:nth-child(3)>span>select"/>
         <element name="ruleParameter" type="select" selector="#conditions__1__children>li:nth-child(1)>span:nth-child(4)>a"/>
         <element name="setRuleParameter" type="input" selector="#conditions__1--1__value"/>
         <element name="applyParameter" type="button" selector=".rule-param-apply"/>
@@ -31,5 +34,8 @@
         <element name="widgetTypeDropDown" type="select" selector="#select_widget_type"/>
         <element name="conditionOperator" type="text" selector="//*[@id='conditions__1--1__attribute']/following-sibling::span[1]"/>
         <element name="conditionOperatorSelect" type="select" selector="#conditions__1--{{arg1}}__operator" parameterized="true"/>
+        <element name="displayMode" type="select" selector="select[id*='display_mode']"/>
+        <element name="restrictTypes" type="select" selector="select[id*='types']"/>
+        <element name="widgetSelectBlock" type="button" selector=".action-default.scalable.btn-chooser"/>
     </section>
 </sections>

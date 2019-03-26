@@ -9,7 +9,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="OpenEditCustomerFromAdminActionGroup" extends="clearFiltersAdminDataGrid">
         <arguments>
-            <argument name="customer"/>
+            <argument name="customer" defaultValue="CustomerEntityOne"/>
         </arguments>
         <amOnPage url="{{AdminCustomerPage.url}}" before="waitForPageLoad" stepKey="navigateToCustomers"/>
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilter"/>
@@ -17,6 +17,6 @@
         <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
         <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEdit"/>
-        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <waitForPageLoad stepKey="waitForPageLoad" />
     </actionGroup>
 </actionGroups>

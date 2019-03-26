@@ -1298,12 +1298,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Retrieve shipping method
      *
      * @param bool $asObject return carrier code and shipping method data as object
-     * @return string|\Magento\Framework\DataObject
+     * @return string|null|\Magento\Framework\DataObject
      */
     public function getShippingMethod($asObject = false)
     {
         $shippingMethod = parent::getShippingMethod();
-        if (!$asObject) {
+        if (!$asObject || !$shippingMethod) {
             return $shippingMethod;
         } else {
             list($carrierCode, $method) = explode('_', $shippingMethod, 2);
@@ -1400,7 +1400,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Get random items collection with or without related children
+     * Get random items collection with or without related children.
      *
      * @param int $limit
      * @param bool $nonChildrenOnly
@@ -1408,7 +1408,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     protected function _getItemsRandomCollection($limit, $nonChildrenOnly = false)
     {
-        $collection = $this->_orderItemCollectionFactory->create()->setOrderFilter($this)->setRandomOrder();
+        $collection = $this->_orderItemCollectionFactory->create()
+            ->setOrderFilter($this)
+            ->setRandomOrder()
+            ->setPageSize($limit);
 
         if ($nonChildrenOnly) {
             $collection->filterByParent();
@@ -1422,9 +1425,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $products
         )->setVisibility(
             $this->_productVisibility->getVisibleInSiteIds()
-        )->addPriceData()->setPageSize(
-            $limit
-        )->load();
+        )->addPriceData()->load();
 
         foreach ($collection as $item) {
             $product = $productsCollection->getItemById($item->getProductId());

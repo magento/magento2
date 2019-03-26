@@ -29,6 +29,17 @@ class DeploymentConfig
     private $config;
 
     /**
+     * Ignore values in the config nested array, paths are separated by single slash "/".
+     *
+     * Example: compiled_config is not set in default mode, and once set it can't be unset
+     *
+     * @var array
+     */
+    private $ignoreValues = [
+        'cache_types/compiled_config',
+    ];
+
+    /**
      * Memorizes the initial value of configuration reader and the configuration value
      *
      * Assumption: this is done once right before executing very first test suite.
@@ -57,7 +68,7 @@ class DeploymentConfig
      */
     public function endTest(\PHPUnit\Framework\TestCase $test)
     {
-        $config = $this->reader->load();
+        $config = $this->filterIgnoredConfigValues($this->reader->load());
         if ($this->config != $config) {
             $error = "\n\nERROR: deployment configuration is corrupted. The application state is no longer valid.\n"
                 . 'Further tests may fail.'
@@ -65,5 +76,29 @@ class DeploymentConfig
                 . $test->toString() . "\n";
             $test->fail($error);
         }
+    }
+
+    /**
+     * Filter ignored config values which are not set by default and appear when tests would change state.
+     *
+     * Example: compiled_config is not set in default mode, and once set it can't be unset
+     *
+     * @param array $config
+     * @param string $path
+     * @return array
+     */
+    private function filterIgnoredConfigValues(array $config, string $path = '')
+    {
+        foreach ($config as $configKeyName => $configValue) {
+            $newPath = !empty($path) ?  $path . '/' . $configKeyName : $configKeyName;
+            if (is_array($configValue)) {
+                $config[$configKeyName] = $this->filterIgnoredConfigValues($configValue, $newPath);
+            } else {
+                if (array_key_exists($newPath, array_flip($this->ignoreValues))) {
+                    unset($config[$configKeyName]);
+                }
+            }
+        }
+        return $config;
     }
 }

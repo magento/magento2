@@ -8,7 +8,8 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminCmsBlockEditPage" url="/cms/block/edit/id/{{var1}}" area="admin" module="Magento_Cms" parameterized="true">
+    <page name="AdminCmsBlockEditPage" url="/cms/block/edit/block_id/{{blockId}}/" area="admin" module="Magento_Cms" parameterized="true">
         <section name="AdminCmsBlockContentSection" />
+        <section name="AdminMediaGallerySection" />
     </page>
 </pages>

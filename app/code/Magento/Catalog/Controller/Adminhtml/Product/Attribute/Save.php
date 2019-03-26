@@ -118,6 +118,7 @@ class Save extends Attribute
 
     /**
      * @inheritdoc
+     * @throws NotFoundException
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)

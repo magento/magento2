@@ -527,7 +527,6 @@
 
             & > .admin__field-label {
                 #mix-grid .column(@field-label-grid__column, @field-grid__columns);
-                background: @color-white;
                 cursor: pointer;
                 left: 0;
                 position: absolute;
@@ -643,8 +642,8 @@
         &.admin__field {
             > .admin__field-control {
                 &:extend(.abs-field-size-small all);
-                float: left;
                 position: relative;
+                display: inline-block;
             }
         }
 

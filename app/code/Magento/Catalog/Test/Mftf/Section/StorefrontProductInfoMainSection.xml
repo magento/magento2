@@ -14,6 +14,7 @@
         <element name="productSku" type="text" selector=".product.attribute.sku>.value"/>
         <element name="productPrice" type="text" selector=".price"/>
         <element name="specialPrice" type="text" selector=".special-price"/>
+        <element name="specialPriceValue" type="text" selector=".special-price .price"/>
         <element name="qty" type="input" selector="#qty"/>
         <element name="productStockStatus" type="text" selector=".stock[title=Availability]>span"/>
         <element name="productDescription" type="text" selector="#description .value"/>

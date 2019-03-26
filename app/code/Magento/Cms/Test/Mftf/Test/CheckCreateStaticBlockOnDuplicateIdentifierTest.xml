@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckCreateStaticBlockOnDuplicateIdentifierTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Create CMS Block"/>
+            <title value="Check static blocks: ID should be unique per Store View"/>
+            <description value="Check static blocks: ID should be unique per Store View"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13912"/>
+            <useCaseId value="MAGETWO-86215"/>
+            <group value="cms"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
+                <argument name="newWebsiteName" value="{{SecondWebsite.name}}"/>
+                <argument name="websiteCode" value="{{SecondWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStoreGroup">
+                <argument name="website" value="{{SecondWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+                <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="storeGroup" value="SecondStoreGroupUnique"/>
+                <argument name="customStore" value="SecondStoreUnique"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCmsBlockActionGroup" stepKey="deleteCMSBlockActionGroup"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{SecondWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="NavigateToCreateCmsBlockActionGroup" stepKey="navigateToCreateCmsBlock"/>
+        <actionGroup ref="FillCmsBlockForm" stepKey="fillCmsBlockForm"/>
+        <actionGroup ref="SaveCmsBlockActionGroup" stepKey="saveCmsBlock"/>
+        <actionGroup ref="NavigateToCreateCmsBlockActionGroup" stepKey="navigateToCreateDuplicateCmsBlock"/>
+        <actionGroup ref="FillCmsBlockForm" stepKey="fillDuplicateCmsBlockForm">
+            <argument name="store" value="[{{_defaultStore.name}},{{SecondStoreUnique.name}}]"/>
+        </actionGroup>
+        <actionGroup ref="SaveCmsBlockWithErrorActionGroup" stepKey="assertErrorMessageOnSave"/>
+    </test>
+</tests>

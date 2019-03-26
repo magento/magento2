@@ -8,12 +8,14 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Backend\App\Action;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\AddressRegistry;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
- * Customer inline edit action
+ * Customer inline edit action.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -62,12 +64,18 @@ class InlineEdit extends \Magento\Backend\App\Action
     private $emailNotification;
 
     /**
+     * @var AddressRegistry
+     */
+    private $addressRegistry;
+
+    /**
      * @param Action\Context $context
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Psr\Log\LoggerInterface $logger
+     * @param AddressRegistry|null $addressRegistry
      */
     public function __construct(
         Action\Context $context,
@@ -75,13 +83,15 @@ class InlineEdit extends \Magento\Backend\App\Action
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        AddressRegistry $addressRegistry = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->customerMapper = $customerMapper;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->logger = $logger;
+        $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
         parent::__construct($context);
     }
 
@@ -106,8 +116,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      * Inline edit action execute
      *
      * @return \Magento\Framework\Controller\Result\Json
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute()
     {
@@ -115,7 +123,7 @@ class InlineEdit extends \Magento\Backend\App\Action
         $resultJson = $this->resultJsonFactory->create();
 
         $postItems = $this->getRequest()->getParam('items', []);
-        if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
+        if (!($this->getRequest()->getParam('isAjax') && $this->getRequest()->isPost() && count($postItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
                 'error' => true,
@@ -210,7 +218,7 @@ class InlineEdit extends \Magento\Backend\App\Action
     }
 
     /**
-     * Save customer with error catching
+     * Save customer with error catching.
      *
      * @param CustomerInterface $customer
      * @return void
@@ -218,6 +226,8 @@ class InlineEdit extends \Magento\Backend\App\Action
     protected function saveCustomer(CustomerInterface $customer)
     {
         try {
+            // No need to validate customer address during inline edit action
+            $this->disableAddressValidation($customer);
             $this->customerRepository->save($customer);
         } catch (\Magento\Framework\Exception\InputException $e) {
             $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
@@ -302,5 +312,19 @@ class InlineEdit extends \Magento\Backend\App\Action
     protected function getErrorWithCustomerId($errorText)
     {
         return '[Customer ID: ' . $this->getCustomer()->getId() . '] ' . __($errorText);
+    }
+
+    /**
+     * Disable Customer Address Validation.
+     *
+     * @param CustomerInterface $customer
+     * @return void
+     */
+    private function disableAddressValidation(CustomerInterface $customer)
+    {
+        foreach ($customer->getAddresses() as $address) {
+            $addressModel = $this->addressRegistry->retrieve($address->getId());
+            $addressModel->setShouldIgnoreValidation(true);
+        }
     }
 }

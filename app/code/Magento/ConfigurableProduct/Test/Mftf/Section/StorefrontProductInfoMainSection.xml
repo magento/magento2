@@ -14,5 +14,6 @@
         <element name="stockIndication" type="block" selector=".stock" />
         <element name="productAttributeOptionsSelectButton" type="select" selector="#product-options-wrapper .super-attribute-select"/>
         <element name="optionByAttributeId" type="input" selector="#attribute{{var1}}" parameterized="true"/>
+        <element name="productPriceBox" type="block" selector=".price-box"/>
     </section>
 </sections>
