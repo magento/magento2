@@ -20,6 +20,10 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @var \Magento\Checkout\Api\AgreementsValidatorInterface
      */
     protected $agreementsValidator;
+    /**
+     * @var Magento\Sales\Model\Order\Email\Sender\InvoiceSender
+     */
+    protected $invoiceSender;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -30,7 +34,8 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @param \Magento\Framework\Session\Generic $paypalSession
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
+     * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator,
+     * @param \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -41,7 +46,8 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
         \Magento\Framework\Session\Generic $paypalSession,
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Customer\Model\Url $customerUrl,
-        \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
+        \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator,
+        \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender
     ) {
         $this->agreementsValidator = $agreementValidator;
         parent::__construct(
@@ -54,6 +60,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             $urlHelper,
             $customerUrl
         );
+        $this->invoiceSender = $invoiceSender;
     }
 
     /**
@@ -98,6 +105,11 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
                 $this->_getCheckoutSession()->setLastOrderId($order->getId())
                     ->setLastRealOrderId($order->getIncrementId())
                     ->setLastOrderStatus($order->getStatus());
+            }
+
+            if ($order->hasInvoices() > 0 && $order->getStatus() == 'processing') {
+                $invoice = $order->getPayment()->getCreatedInvoice();
+                $this->invoiceSender->send($invoice);
             }
 
             $this->_eventManager->dispatch(
