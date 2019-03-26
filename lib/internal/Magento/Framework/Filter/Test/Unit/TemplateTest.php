@@ -438,6 +438,7 @@ TEMPLATE;
             ['getCollection'],
             ['getResource'],
             ['getConfig'],
+            ['delete'],
         ];
     }
 }
