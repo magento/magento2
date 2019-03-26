@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote;
 
+use Magento\Quote\Model\QuoteFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
@@ -17,13 +17,13 @@ use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 class AddVirtualProductToCartTest extends GraphQlAbstract
 {
     /**
+     * @var QuoteFactory
+     */
+    private $quoteFactory;
+    /**
      * @var QuoteResource
      */
     private $quoteResource;
-    /**
-     * @var Quote
-     */
-    private $quote;
 
     /**
      * @var QuoteIdToMaskedQuoteIdInterface
@@ -42,7 +42,7 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quote = $objectManager->create(Quote::class);
+        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->productCustomOptionsRepository = $objectManager->get(ProductCustomOptionRepositoryInterface::class);
     }
@@ -64,13 +64,7 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
         /* Generate customizable options fragment for GraphQl request */
         $queryCustomizableOptions = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($customOptionsValues));
 
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->getMaskedQuoteId();
 
         $query = <<<QUERY
 mutation {  
@@ -130,13 +124,7 @@ QUERY;
         $sku = 'virtual';
         $qty = 1;
 
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->getMaskedQuoteId();
 
         $query = <<<QUERY
 mutation {  
@@ -205,5 +193,16 @@ QUERY;
         }
 
         return $customOptionsValues;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMaskedQuoteId() : string
+    {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
+
+        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 }

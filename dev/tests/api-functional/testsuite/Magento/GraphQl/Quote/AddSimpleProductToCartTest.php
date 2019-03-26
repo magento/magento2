@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote;
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
-use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class AddSimpleProductToCartTest extends GraphQlAbstract
 {
@@ -65,13 +65,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         /* Generate customizable options fragment for GraphQl request */
         $queryCustomizableOptions = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($customOptionsValues));
 
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->getMaskedQuoteId();
 
         $query = <<<QUERY
 mutation {  
@@ -157,7 +151,7 @@ QUERY;
     /**
      * @return string
      */
-    public function getMaskedQuoteId() : string
+    private function getMaskedQuoteId() : string
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
@@ -251,13 +245,7 @@ QUERY;
         $sku = 'simple';
         $qty = 1;
 
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->getMaskedQuoteId();
 
         $query = <<<QUERY
 mutation {  
