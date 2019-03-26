@@ -60,6 +60,25 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddSimpleProductToCartWithDecimalQty()
+    {
+        $sku = 'simple';
+        $qty = 0.5;
+        $maskedQuoteId = $this->getMaskedQuoteId();
+
+        $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
+
+        $this->expectExceptionMessage(
+            "Could not add the product with SKU {$sku} to the shopping cart: The fewest you may purchase is 1."
+        );
+
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * @return string
      */
     public function getMaskedQuoteId() : string
@@ -76,7 +95,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
      * @param int $qty
      * @return string
      */
-    public function getAddSimpleProductQuery(string $maskedQuoteId, string $sku, int $qty): string
+    public function getAddSimpleProductQuery(string $maskedQuoteId, string $sku, float $qty): string
     {
         return <<<QUERY
 mutation {  
