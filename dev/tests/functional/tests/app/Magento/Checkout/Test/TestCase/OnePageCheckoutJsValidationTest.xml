@@ -12,6 +12,7 @@
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertShippingAddressJsValidationMessagesIsAbsent" />
         </variation>
     </testCase>
