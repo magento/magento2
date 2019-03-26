@@ -361,7 +361,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
                 return $this->getView()->getUpdated();
             }
         }
-        return $this->getState()->getUpdated();
+        return $this->getState()->getUpdated() ?: '';
     }
 
     /**

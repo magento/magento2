@@ -249,17 +249,14 @@ class Data
         $this->addFilterByParent($productCollection, $parentId);
 
         $configurableAttributes = $this->getAttributesFromConfigurable($parentProduct);
-        $allAttributesArray = [];
+
+        $resultAttributesToFilter = [];
         foreach ($configurableAttributes as $attribute) {
-            if (!empty($attribute['default_value'])) {
-                $allAttributesArray[$attribute['attribute_code']] = $attribute['default_value'];
+            $attributeCode = $attribute->getData('attribute_code');
+            if (array_key_exists($attributeCode, $attributes)) {
+                $resultAttributesToFilter[$attributeCode] = $attributes[$attributeCode];
             }
         }
-
-        $resultAttributesToFilter = array_merge(
-            $attributes,
-            array_diff_key($allAttributesArray, $attributes)
-        );
 
         $this->addFilterByAttributes($productCollection, $resultAttributesToFilter);
 

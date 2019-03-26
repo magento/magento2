@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CustomerPrefixOptions" type="customer_name_address_options">
+        <requiredEntity type="prefix_options">PrefixOptions</requiredEntity>
+    </entity>
+    <entity name="PrefixOptions" type="prefix_options">
+        <data key="value">Mr;Mrs;Ms;Dr</data>
+    </entity>
+
+    <entity name="DefaultCustomerPrefixOptions" type="customer_name_address_options">
+        <requiredEntity type="prefix_options">DefaultPrefixOptions</requiredEntity>
+    </entity>
+    <entity name="DefaultPrefixOptions" type="prefix_options">
+        <data key="value"></data>
+    </entity>
+
+    <entity name="CustomerSuffixOptions" type="customer_name_address_options">
+        <requiredEntity type="suffix_options">SuffixOptions</requiredEntity>
+    </entity>
+    <entity name="SuffixOptions" type="suffix_options">
+        <data key="value">Jr;Sr</data>
+    </entity>
+
+    <entity name="DefaultCustomerSuffixOptions" type="customer_name_address_options">
+        <requiredEntity type="suffix_options">DefaultSuffixOptions</requiredEntity>
+    </entity>
+    <entity name="DefaultSuffixOptions" type="suffix_options">
+        <data key="value"></data>
+    </entity>
+</entities>

@@ -61,6 +61,21 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $variationPricesMock;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    private $layerResolverMock;
+
+    /** @var ObjectManagerHelper */
+    private $objectManagerHelper;
+
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $storeManagerMock;
+
+    /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    private $customerSessionMock;
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->arrayUtils = $this->createMock(\Magento\Framework\Stdlib\ArrayUtils::class);
@@ -82,9 +97,35 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->variationPricesMock = $this->createMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
         );
+        $this->layerResolverMock = $this->createMock(\Magento\Catalog\Model\Layer\Resolver::class);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->configurable = $objectManagerHelper->getObject(
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+            ->setMethods(['getStore'])
+            ->getMockForAbstractClass();
+        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCustomerGroupId'])
+            ->getMock();
+
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->prepareObjectManager([
+            [
+                \Magento\Framework\Locale\Format::class,
+                $this->createMock(\Magento\Framework\Locale\Format::class),
+            ],
+            [
+                \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class,
+                $this->createMock(
+                    \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
+                ),
+            ],
+            [
+                \Magento\Customer\Model\Session::class,
+                $this->customerSessionMock,
+            ],
+        ]);
+
+        $this->configurable = $this->objectManagerHelper->getObject(
             \Magento\Swatches\Block\Product\Renderer\Listing\Configurable::class,
             [
                 'scopeConfig' => $this->scopeConfig,
@@ -100,8 +141,14 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                 'priceCurrency' => $this->priceCurrency,
                 'configurableAttributeData' => $this->configurableAttributeData,
                 'data' => [],
-                'variationPrices' => $this->variationPricesMock
+                'variationPrices' => $this->variationPricesMock,
+                'layerResolver' => $this->layerResolverMock,
             ]
+        );
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->configurable,
+            '_storeManager',
+            $this->storeManagerMock
         );
     }
 
@@ -234,5 +281,55 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $this->jsonEncoder->expects($this->once())->method('encode')->with($expectedPrices);
         $this->configurable->getPricesJson();
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+            ->setMethods(['getInstance'])
+            ->getMockForAbstractClass();
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
+    }
+
+    /**
+     * Test receiving cache key info.
+     */
+    public function testGetCacheKeyInfo()
+    {
+        $expected = [
+                0 => 'BLOCK_TPL',
+                1 => 'default',
+                2 => null,
+                'base_url' => null,
+                'template' => null,
+                3 => 'USD',
+                4 => null,
+                5 => 'STORE_1_CAT_25_CUSTGROUP_0_color_53',
+            ];
+        $stateKey = 'STORE_1_CAT_25_CUSTGROUP_0_color_53';
+
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMockForAbstractClass();
+        $storeMock->expects($this->any())->method('getCode')->willReturn('default');
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
+        $currency = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->priceCurrency->expects($this->once())->method('getCurrency')->willReturn($currency);
+        $currency->expects($this->once())->method('getCode')->willReturn('USD');
+        $layer = $this->createMock(\Magento\Catalog\Model\Layer::class);
+        $this->layerResolverMock->expects($this->once())->method('get')->willReturn($layer);
+        $layer->expects($this->once())->method('getStateKey')->willReturn($stateKey);
+
+        $this->assertEquals($this->configurable->getCacheKeyInfo(), $expected);
     }
 }
