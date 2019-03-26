@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Block\Adminhtml;
 
+use Magento\Sales\Model\Order;
+
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**
@@ -67,12 +69,16 @@ class Totals extends \Magento\Sales\Block\Order\Totals
         if (!$this->getSource()->getIsVirtual() && ((double)$this->getSource()->getShippingAmount() ||
             $this->getSource()->getShippingDescription())
         ) {
+            $shippingLabel = __('Shipping & Handling');
+            if ($this->isHasFreeShipping($this->getSource()) && $this->getSource()->getDiscountDescription()) {
+                $shippingLabel .= sprintf(' (%s)', $this->getSource()->getDiscountDescription());
+            }
             $this->_totals['shipping'] = new \Magento\Framework\DataObject(
                 [
                     'code' => 'shipping',
                     'value' => $this->getSource()->getShippingAmount(),
                     'base_value' => $this->getSource()->getBaseShippingAmount(),
-                    'label' => __('Shipping & Handling'),
+                    'label' => $shippingLabel,
                 ]
             );
         }
@@ -108,5 +114,24 @@ class Totals extends \Magento\Sales\Block\Order\Totals
         );
 
         return $this;
+    }
+
+    /**
+     * Availability of free shipping in at least one order item
+     *
+     * @param Order $order
+     * @return bool
+     */
+    private function isHasFreeShipping(Order $order): bool
+    {
+        $isActive = false;
+        foreach ($order->getItems() as $orderItem) {
+            if ($orderItem->getFreeShipping() === '1') {
+                $isActive = true;
+                break;
+            }
+        }
+
+        return $isActive;
     }
 }
