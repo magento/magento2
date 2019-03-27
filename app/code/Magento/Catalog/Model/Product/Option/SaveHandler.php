@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface as OptionRepository;
@@ -58,7 +60,7 @@ class SaveHandler implements ExtensionInterface
             }
         }
         if ($options) {
-            $this->processOptionsSaving($options, $entity->dataHasChangedFor('sku'), $entity->getSku());
+            $this->processOptionsSaving($options, (bool)$entity->dataHasChangedFor('sku'), (string)$entity->getSku());
         }
 
         return $entity;
@@ -71,7 +73,7 @@ class SaveHandler implements ExtensionInterface
      * @param bool $hasChangedSku
      * @param string $newSku
      */
-    private function processOptionsSaving($options, $hasChangedSku, $newSku)
+    private function processOptionsSaving(array $options, bool $hasChangedSku, string $newSku)
     {
         foreach ($options as $option) {
             if ($hasChangedSku && $option->hasData('product_sku')) {
