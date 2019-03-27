@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ChangeStoreInStoreViewActionGroup">
+        <arguments>
+            <argument name="storeDropdown" type="string"/>
+        </arguments>
+        <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickStoreViewFirstRowInGrid"/>
+        <waitForPageLoad stepKey="waitForAdminSystemStoreViewPageLoad"/>
+        <selectOption selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="{{storeDropdown}}" stepKey="selectStoreGrpDropdown"/>
+        <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveButton"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal"/>
+        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarningAboutTakingALongTimeToComplete"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmModal"/>
+    </actionGroup>
+</actionGroups>

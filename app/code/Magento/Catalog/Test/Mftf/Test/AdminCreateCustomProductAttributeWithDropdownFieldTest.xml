@@ -69,7 +69,7 @@
         <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.defaultStoreView('0')}}" stepKey="waitForDefaultStoreViewToVisible"/>
         <fillField selector="{{AdminCreateNewProductAttributeSection.defaultStoreView('0')}}" userInput="{{ProductAttributeOption8.label}}" stepKey="fillDefaultStoreView"/>
         <fillField selector="{{AdminCreateNewProductAttributeSection.adminOption('0')}}" userInput="{{ProductAttributeOption8.value}}" stepKey="fillAdminField"/>
-        <click selector="{{AdminCreateNewProductAttributeSection.defaultRadioButton('1')}}" stepKey="clickDefaultRadioButton"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.defaultRadioButton('1')}}" stepKey="selectRadioButton"/>
         <click selector="{{AdminCreateNewProductAttributeSection.advancedAttributeProperties}}" stepKey="clickOnAdvancedAttributeProperties"/>
         <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.attributeCode}}" stepKey="waitForAttributeCodeToVisible"/>
         <scrollTo selector="{{AdminCreateNewProductAttributeSection.attributeCode}}" stepKey="scrollToAttributeCode"/>
