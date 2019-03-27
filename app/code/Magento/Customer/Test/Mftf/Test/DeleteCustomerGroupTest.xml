@@ -68,5 +68,13 @@
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
             <argument name="groupName" value="{{GeneralCustomerGroup.code}}"/>
         </actionGroup>
+
+        <!--Go to New Product page, add check custom customer group values-->
+        <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" stepKey="waitForSelectCustomerGroupNameAttribute2"/>
+        <dontSee selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" userInput="{{CustomerGroupChange.code}}" stepKey="seeProductTierPriceCustomerGroupInput"/>
     </test>
 </tests>
