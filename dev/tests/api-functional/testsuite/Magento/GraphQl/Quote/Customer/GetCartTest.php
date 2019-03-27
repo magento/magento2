@@ -63,7 +63,7 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
-     * @security
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      */
@@ -79,7 +79,7 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
-     * @security
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      */

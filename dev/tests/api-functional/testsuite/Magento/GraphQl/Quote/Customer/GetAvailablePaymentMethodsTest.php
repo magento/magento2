@@ -59,7 +59,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     }
 
     /**
-     * @security
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -78,7 +78,7 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     }
 
     /**
-     * @security
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php

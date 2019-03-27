@@ -322,7 +322,7 @@ QUERY;
     }
 
     /**
-     * @security
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
@@ -359,7 +359,7 @@ QUERY;
     }
 
     /**
-     * @security
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
@@ -394,7 +394,7 @@ QUERY;
     }
 
     /**
-     * @security
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
