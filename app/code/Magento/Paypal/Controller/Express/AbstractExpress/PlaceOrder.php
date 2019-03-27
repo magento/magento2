@@ -61,6 +61,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             $urlHelper,
             $customerUrl
         );
+        
         $this->agreementsValidator = $agreementValidator;
         $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(
             \Magento\Sales\Api\PaymentFailuresInterface::class
@@ -109,8 +110,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
                 $this->_getCheckoutSession()->setLastOrderId($order->getId())
                     ->setLastRealOrderId($order->getIncrementId())
                     ->setLastOrderStatus($order->getStatus());
-            }
-            
+            }            
             $this->_eventManager->dispatch(
                 'paypal_express_place_order_success',
                 [
