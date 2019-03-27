@@ -76,6 +76,7 @@ class SenderBuilder
         }
 
         $transport = $this->transportBuilder->getTransport();
+        $transport->setIdentityContainerStore($this->identityContainer->getStore());
         $transport->sendMessage();
     }
 
