@@ -51,7 +51,6 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex im
      *
      * @return \Magento\Framework\Controller\Result\Forward
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {

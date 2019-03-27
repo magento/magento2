@@ -125,6 +125,8 @@ class Queue
     }
 
     /**
+     * Adds deployment package.
+     *
      * @param Package $package
      * @param Package[] $dependencies
      * @return bool true on success
@@ -140,6 +142,8 @@ class Queue
     }
 
     /**
+     * Returns packages array.
+     *
      * @return Package[]
      */
     public function getPackages()
@@ -162,6 +166,7 @@ class Queue
                 $this->assertAndExecute($name, $packages, $packageJob);
             }
             $this->logger->info('.');
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             sleep(3);
             foreach ($this->inProgress as $name => $package) {
                 if ($this->isDeployed($package)) {
@@ -209,6 +214,8 @@ class Queue
     }
 
     /**
+     * Executes deployment package.
+     *
      * @param Package $package
      * @param string $name
      * @param array $packages
@@ -244,6 +251,7 @@ class Queue
                 }
             }
             $this->logger->info('.');
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             sleep(5);
         }
         if ($this->isCanBeParalleled()) {
@@ -253,6 +261,8 @@ class Queue
     }
 
     /**
+     * Checks if can be parallel.
+     *
      * @return bool
      */
     private function isCanBeParalleled()
@@ -261,9 +271,11 @@ class Queue
     }
 
     /**
+     * Executes the process.
+     *
      * @param Package $package
      * @return bool true on success for main process and exit for child process
-     * @SuppressWarnings(PHPMD.ExitExpression)
+     * @throws \RuntimeException
      */
     private function execute(Package $package)
     {
@@ -291,6 +303,7 @@ class Queue
         );
 
         if ($this->isCanBeParalleled()) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $pid = pcntl_fork();
             if ($pid === -1) {
                 throw new \RuntimeException('Unable to fork a new process');
@@ -305,6 +318,7 @@ class Queue
             // process child process
             $this->inProgress = [];
             $this->deployPackageService->deploy($package, $this->options, true);
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit(0);
         } else {
             $this->deployPackageService->deploy($package, $this->options);
@@ -313,6 +327,8 @@ class Queue
     }
 
     /**
+     * Checks if package is deployed.
+     *
      * @param Package $package
      * @return bool
      */
@@ -320,11 +336,13 @@ class Queue
     {
         if ($this->isCanBeParalleled()) {
             if ($package->getState() === null) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $pid = pcntl_waitpid($this->getPid($package), $status, WNOHANG);
                 if ($pid === $this->getPid($package)) {
                     $package->setState(Package::STATE_COMPLETED);
 
                     unset($this->inProgress[$package->getPath()]);
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     return pcntl_wexitstatus($status) === 0;
                 }
                 return false;
@@ -334,17 +352,19 @@ class Queue
     }
 
     /**
+     * Returns process ID or null if not found.
+     *
      * @param Package $package
      * @return int|null
      */
     private function getPid(Package $package)
     {
-        return isset($this->processIds[$package->getPath()])
-            ? $this->processIds[$package->getPath()]
-            : null;
+        return isset($this->processIds[$package->getPath()]) ?? null;
     }
 
     /**
+     * Checks timeout.
+     *
      * @return bool
      */
     private function checkTimeout()
@@ -357,11 +377,13 @@ class Queue
      *
      * Protect against zombie process
      *
+     * @throws \RuntimeException
      * @return void
      */
     public function __destruct()
     {
         foreach ($this->inProgress as $package) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             if (pcntl_waitpid($this->getPid($package), $status) === -1) {
                 throw new \RuntimeException(
                     'Error while waiting for package deployed: ' . $this->getPid($package) . '; Status: ' . $status

@@ -11,6 +11,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * Error processor
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * phpcs:ignoreFile
  */
 class Processor
 {
@@ -501,7 +502,6 @@ class Processor
      *
      * @param int $reportId
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function loadReport($reportId)
     {

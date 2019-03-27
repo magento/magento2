@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +9,9 @@ use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Downloadable\Model\Link\Purchased\Item as PurchasedLink;
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class Link
+ */
 class Link extends \Magento\Downloadable\Controller\Download
 {
     /**
@@ -29,7 +31,6 @@ class Link extends \Magento\Downloadable\Controller\Download
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
@@ -117,6 +118,7 @@ class Link extends \Magento\Downloadable\Controller\Download
                     $linkPurchasedItem->setStatus(PurchasedLink::LINK_STATUS_EXPIRED);
                 }
                 $linkPurchasedItem->save();
+                // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
                 exit(0);
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while getting the requested content.'));

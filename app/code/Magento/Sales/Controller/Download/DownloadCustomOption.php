@@ -121,10 +121,10 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
      * Ends execution process
      *
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function endExecute()
     {
+        // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
         exit(0);
     }
 }

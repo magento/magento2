@@ -15,6 +15,7 @@ use Magento\Framework\Phrase;
  * Magento Library
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:ignoreFile
  *
  * @deprecated Not used anymore.
  */
@@ -300,7 +301,6 @@ class Tree
      * @param string|int $nodeId
      * @param array $data
      * @return false|string
-     * @SuppressWarnings(PHPMD.ExitExpression)
      *
      * @deprecated Not used anymore.
      */
@@ -477,7 +477,6 @@ class Tree
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.ExitExpression)
      *
      * @deprecated Not used anymore.
      */
@@ -814,7 +813,6 @@ class Tree
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @SuppressWarnings(PHPMD.ExitExpression)
      *
      * @deprecated Not used anymore.
      */
@@ -1041,7 +1039,6 @@ class Tree
      * @param int $startLevel
      * @param int $endLevel
      * @return NodeSet
-     * @SuppressWarnings(PHPMD.ExitExpression)
      *
      * @deprecated Not used anymore.
      */

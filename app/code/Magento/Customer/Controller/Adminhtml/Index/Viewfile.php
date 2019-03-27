@@ -17,6 +17,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObjectFactory;
 
 /**
+ * Class Viewfile
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
@@ -127,8 +128,6 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @return \Magento\Framework\Controller\ResultInterface|void
      * @throws NotFoundException
-     *
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
@@ -146,6 +145,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         }
 
         if ($plain) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $extension = pathinfo($path, PATHINFO_EXTENSION);
             switch (strtolower($extension)) {
                 case 'gif':
@@ -175,6 +175,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $resultRaw->setContents($directory->readFile($fileName));
             return $resultRaw;
         } else {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $name = pathinfo($path, PATHINFO_BASENAME);
             $this->_fileFactory->create(
                 $name,

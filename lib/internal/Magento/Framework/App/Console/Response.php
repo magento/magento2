@@ -6,7 +6,7 @@
 namespace Magento\Framework\App\Console;
 
 /**
- * @SuppressWarnings(PHPMD.ExitExpression)
+ * Class Response
  */
 class Response implements \Magento\Framework\App\ResponseInterface
 {
@@ -53,9 +53,11 @@ class Response implements \Magento\Framework\App\ResponseInterface
     public function sendResponse()
     {
         if (!empty($this->body)) {
+            // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
             echo $this->body;
         }
         if ($this->terminateOnSend) {
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit($this->code);
         }
         return $this->code;

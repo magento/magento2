@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,13 +8,15 @@ namespace Magento\Downloadable\Controller\Download;
 use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class Sample
+ */
 class Sample extends \Magento\Downloadable\Controller\Download
 {
     /**
      * Download sample action
      *
      * @return ResponseInterface
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
@@ -36,6 +37,7 @@ class Sample extends \Magento\Downloadable\Controller\Download
             }
             try {
                 $this->_processDownload($resource, $resourceType);
+                // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
                 exit(0);
             } catch (\Exception $e) {
                 $this->messageManager->addError(

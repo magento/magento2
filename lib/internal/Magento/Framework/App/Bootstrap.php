@@ -244,7 +244,10 @@ class Bootstrap
      * Runs an application
      *
      * @param \Magento\Framework\AppInterface $application
+     * @throws \Exception
      * @return void
+     *
+     * phpcs:disable Magento2.Exceptions
      */
     public function run(AppInterface $application)
     {
@@ -267,13 +270,15 @@ class Bootstrap
         } catch (\Exception $e) {
             $this->terminate($e);
         }
-    }
+    } // phpcs:enable
 
     /**
      * Asserts maintenance mode
      *
      * @return void
      * @throws \Exception
+     *
+     * phpcs:disable Magento2.Exceptions
      */
     protected function assertMaintenance()
     {
@@ -299,7 +304,7 @@ class Bootstrap
             $this->errorCode = self::ERR_MAINTENANCE;
             throw new \Exception('Unable to proceed: the maintenance mode must be enabled first. ');
         }
-    }
+    } // phpcs:enable
 
     /**
      * Asserts whether application is installed
@@ -316,10 +321,12 @@ class Bootstrap
         $isInstalled = $this->isInstalled();
         if (!$isInstalled && $isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Error: Application is not installed yet. ');
         }
         if ($isInstalled && !$isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Error: Application is already installed. ');
         }
     }
@@ -412,12 +419,13 @@ class Bootstrap
      * Display an exception and terminate program execution
      *
      * @param \Exception $e
+     * @throws \DomainException
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function terminate(\Exception $e)
     {
         if ($this->isDeveloperMode()) {
+            // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
             echo $e;
         } else {
             $message = "An error has happened during application run. See exception log for details.\n";
@@ -429,8 +437,10 @@ class Bootstrap
             } catch (\Exception $e) {
                 $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
             }
+            // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
             echo $message;
         }
+        // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
         exit(1);
     }
 }

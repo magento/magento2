@@ -73,7 +73,6 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
      * Instantiate IPN model and pass IPN request to it
      *
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
@@ -95,6 +94,7 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
             $this->_logger->critical($e);
             $this->getResponse()->setStatusHeader(503, '1.1', 'Service Unavailable')->sendResponse();
             /** @todo eliminate usage of exit statement */
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit;
         } catch (\Exception $e) {
             $this->_logger->critical($e);

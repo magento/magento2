@@ -42,7 +42,6 @@ class UnsecureFunctionsUsageTest extends \PHPUnit\Framework\TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::loadData(self::$phpUnsecureFunctions, 'unsecure_php_functions*.php');
         self::loadData(self::$jsUnsecureFunctions, 'unsecure_js_functions*.php');
     }
 

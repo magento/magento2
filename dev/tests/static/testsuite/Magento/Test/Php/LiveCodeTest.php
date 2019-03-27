@@ -77,7 +77,8 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $changedFilesBaseDir = '',
         $baseFilesFolder = '',
         $whitelistFile = '/_files/whitelist/common.txt'
-    ) {
+    )
+    {
         $changedFiles = self::getChangedFilesList($changedFilesBaseDir);
         if (empty($changedFiles)) {
             return [];
@@ -116,8 +117,10 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             'changed_files*',
             function () {
                 // if no list files, probably, this is the dev environment
+                // phpcs:disable Generic.PHP.NoSilencedErrors,Magento2.Security.InsecureFunction
                 @exec('git diff --name-only', $changedFiles);
                 @exec('git diff --cached --name-only', $addedFiles);
+                // phpcs:enable
                 $changedFiles = array_unique(array_merge($changedFiles, $addedFiles));
                 return $changedFiles;
             }
@@ -137,6 +140,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             'changed_files*.added.*',
             function () {
                 // if no list files, probably, this is the dev environment
+                // phpcs:ignore Generic.PHP.NoSilencedErrors,Magento2.Security.InsecureFunction
                 @exec('git diff --cached --name-only', $addedFiles);
                 return $addedFiles;
             }
@@ -158,7 +162,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $globFilesListPattern = ($listsBaseDir ?: self::getChangedFilesBaseDir())
             . '/_files/' . $listFilePattern;
         $listFiles = glob($globFilesListPattern);
-        if (count($listFiles)) {
+        if (!empty($listFiles)) {
             foreach ($listFiles as $listFile) {
                 $filesDefinedInList = array_merge(
                     $filesDefinedInList,
