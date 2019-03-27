@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -155,12 +156,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected $dateTime;
 
     /**
-     * Model cache tag for clear cache in after save and after delete
+     * @inheritdoc
      *
-     * @var string
      * @since 100.2.0
      */
-    protected $_cacheTag = true;
+    protected $_cacheTag = [Value::CACHE_TAG];
 
     /**
      * Last mode min timestamp value

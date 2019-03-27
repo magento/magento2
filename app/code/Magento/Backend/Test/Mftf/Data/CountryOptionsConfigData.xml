@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="DefaultAllowCountriesConfig" type="allow_countries_config">
+        <requiredEntity type="allow_countries_config_default">DefaultAllowCountries</requiredEntity>
+    </entity>
+    <entity name="DefaultAllowCountries" type="allow_countries_config_default">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="SetAllowCountriesConfigUS" type="allow_countries_config">
+        <data key="value">US</data>
+    </entity>
+</entities>
