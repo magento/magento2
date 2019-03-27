@@ -56,12 +56,15 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testRemoveItemFromCart()
     {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
+        $this->quoteResource->load($quote, 'test_quote', 'reserved_order_id');
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
         $itemId = (int)$quote->getItemByProduct($this->productRepository->get('simple'))->getId();
 
@@ -85,12 +88,15 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testRemoveNonExistentItem()
     {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
+        $this->quoteResource->load($quote, 'test_quote', 'reserved_order_id');
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
         $notExistentItemId = 999;
 
@@ -101,13 +107,16 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
      */
     public function testRemoveItemIfItemIsNotBelongToCart()
     {
         $firstQuote = $this->quoteFactory->create();
-        $this->quoteResource->load($firstQuote, 'test_order_1', 'reserved_order_id');
+        $this->quoteResource->load($firstQuote, 'test_quote', 'reserved_order_id');
         $firstQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$firstQuote->getId());
 
         $secondQuote = $this->quoteFactory->create();
@@ -130,14 +139,16 @@ class RemoveItemFromCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_virtual_product.php
      */
     public function testRemoveItemFromGuestCart()
     {
         $guestQuote = $this->quoteFactory->create();
         $this->quoteResource->load(
             $guestQuote,
-            'test_order_with_virtual_product_without_address',
+            'test_quote',
             'reserved_order_id'
         );
         $guestQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$guestQuote->getId());
@@ -154,8 +165,11 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
      */
     public function testRemoveItemFromAnotherCustomerCart()
