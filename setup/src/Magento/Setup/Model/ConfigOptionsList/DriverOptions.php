@@ -37,7 +37,7 @@ class DriverOptions
             }
         }
         foreach ($booleanDriverOptionKeys as $configKey => $driverOptionKey) {
-            $driverOptions[$configKey] = $this->getBooleanValue($options, $driverOptionKey);
+            $driverOptions[$configKey] = $this->booleanValue($options, $driverOptionKey);
         }
 
         return $driverOptions;
@@ -52,7 +52,8 @@ class DriverOptions
      */
     private function optionExists(array $options, string $driverOptionKey): bool
     {
-        return $options[$driverOptionKey] === false || !empty($options[$driverOptionKey]);
+        return isset($options[$driverOptionKey])
+            && ($options[$driverOptionKey] === false || !empty($options[$driverOptionKey]));
     }
 
     /**
@@ -64,8 +65,8 @@ class DriverOptions
      * @param string $driverOptionKey
      * @return bool
      */
-    private function getBooleanValue(array $options, string $driverOptionKey): bool
+    private function booleanValue(array $options, string $driverOptionKey): bool
     {
-        return isset($options[$driverOptionKey]) ? (bool)$options[$driverOptionKey] : false;
+        return isset($options[$driverOptionKey]) && (bool)$options[$driverOptionKey];
     }
 }
