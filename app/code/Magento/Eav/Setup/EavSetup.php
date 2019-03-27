@@ -11,6 +11,7 @@ use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Eav\Model\Validator\Attribute\Code;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
