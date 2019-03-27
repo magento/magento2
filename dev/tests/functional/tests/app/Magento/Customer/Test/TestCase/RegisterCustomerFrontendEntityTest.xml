@@ -20,6 +20,7 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerLogout" />
         </variation>
         <variation name="RegisterCustomerFrontendEntityTestVariation2" summary="Register new customer with subscribing">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="customer/data/firstname" xsi:type="string">john</data>
             <data name="customer/data/lastname" xsi:type="string">doe</data>
             <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
@@ -32,7 +33,7 @@
             <constraint name="Magento\Newsletter\Test\Constraint\AssertCustomerIsSubscribedToNewsletter" />
         </variation>
         <variation name="RegisterCustomerFrontendEntityTestVariation3" summary="Register Customer" ticketId="MAGETWO-12394">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, mftf_migrated:yes</data>
             <data name="customer/data/firstname" xsi:type="string">john</data>
             <data name="customer/data/lastname" xsi:type="string">doe</data>
             <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>

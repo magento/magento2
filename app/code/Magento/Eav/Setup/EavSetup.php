@@ -11,12 +11,12 @@ use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Eav\Model\Validator\Attribute\Code;
 use Magento\Framework\App\CacheInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
+ * Base eav setup class.
+ *
  * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -112,7 +112,8 @@ class EavSetup
     }
 
     /**
-     * Gets setup model
+     * Gets setup model.
+     *
      * @deprecated
      * @return ModuleDataSetupInterface
      */
@@ -579,6 +580,8 @@ class EavSetup
     }
 
     /**
+     * Convert group name to attribute group code.
+     *
      * @param string $groupName
      * @return string
      * @since 100.1.0
@@ -1048,7 +1051,7 @@ class EavSetup
                 return $this;
             }
         }
-      
+
         $attributeId = $this->getAttributeId($entityTypeId, $id);
         if (false === $attributeId) {
             throw new LocalizedException(__('Attribute with ID: "%1" does not exist', $id));
