@@ -59,7 +59,6 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
 
         self::assertArrayHasKey('setPaymentMethodOnCart', $response);
         self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
-        self::assertEquals($maskedQuoteId, $response['setPaymentMethodOnCart']['cart']['cart_id']);
         self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
         self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
     }
@@ -78,7 +77,6 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
 
         self::assertArrayHasKey('setPaymentMethodOnCart', $response);
         self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
-        self::assertEquals($maskedQuoteId, $response['setPaymentMethodOnCart']['cart']['cart_id']);
         self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
         self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
     }
@@ -129,8 +127,90 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * Generates query for setting the specified shipping method on cart
-     *
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @param string $input
+     * @param string $message
+     * @dataProvider dataProviderSetPaymentMethodWithoutRequiredParameters
+     */
+    public function testSetPaymentMethodWithoutRequiredParameters(string $input, string $message)
+    {
+        $query = <<<QUERY
+mutation {
+  setPaymentMethodOnCart(
+    input: {
+      {$input}
+    }
+  ) {
+    cart {
+      items {
+        qty
+      }
+    }
+  }
+}
+QUERY;
+        $this->expectExceptionMessage($message);
+        $this->graphQlQuery($query);
+    }
+    /**
+     * @return array
+     */
+    public function dataProviderSetPaymentMethodWithoutRequiredParameters(): array
+    {
+        return [
+            'missed_cart_id' => [
+                'payment_method: {code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"}',
+                'Required parameter "cart_id" is missing.'
+            ],
+            'missed_payment_method' => [
+                'cart_id: "test"',
+                'Required parameter "code" for "payment_method" is missing.'
+            ],
+            'missed_payment_method_code' => [
+                'cart_id: "test", payment_method: {code: ""}',
+                'Required parameter "code" for "payment_method" is missing.'
+            ],
+        ];
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testSetPaymentOnNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = <<<QUERY
+{
+  cart(cart_id: "$maskedQuoteId") {
+    items {
+      id
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_payment_saved.php
+     */
+    public function testReSetPayment()
+    {
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1_with_payment');
+        $this->unAssignCustomerFromQuote('test_order_1_with_payment');
+        $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
+        $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode);
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
+        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
+        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @param string $methodCode
      * @return string
@@ -150,7 +230,6 @@ mutation {
       }) {
     
     cart {
-      cart_id,
       selected_payment_method {
         code
       }
