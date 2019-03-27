@@ -137,7 +137,9 @@
             <createData entity="CustomCustomerGroup" stepKey="customerGroup"/>
 
             <!-- Create Customer -->
-            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+            <createData entity="SimpleUsCustomerWithNewCustomerGroup" stepKey="createCustomer">
+                <requiredEntity createDataKey="customerGroup" />
+            </createData>
 
             <!-- Login as Admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
@@ -172,18 +174,6 @@
             <!-- Admin log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-
-        <!-- Go to the Customer page and find created customer -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="findCreatedCustomerByEmail">
-            <argument name="email" value="$$createCustomer.email$$"/>
-        </actionGroup>
-        <actionGroup ref="AdminSelectAllCustomers" stepKey="selectCustomer"/>
-
-        <!-- Change customer group to created below -->
-        <actionGroup ref="SetCustomerGroupForSelectedCustomersViaGrid" stepKey="setCustomerGroup">
-            <argument name="groupName" value="$$customerGroup.code$$"/>
-        </actionGroup>
-
         <!-- Create price rule -->
         <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createPriceRule">
             <argument name="catalogRule" value="CatalogRuleToFixed"/>
