@@ -14,3 +14,5 @@ $objectManager = Bootstrap::getObjectManager();
 $configWriter = $objectManager->create(WriterInterface::class);
 
 $configWriter->delete('carriers/usps/active');
+$configWriter->delete('carriers/usps/userid');
+$configWriter->delete('carriers/usps/password');
