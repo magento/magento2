@@ -211,7 +211,7 @@ define([
             jsonSwatchConfig: {},
 
             // selector of parental block of prices and swatches (need to know where to seek for price block)
-            selectorProduct: '.product-info-main',
+            selectorProduct: '.--product-info-main',
 
             // selector of price wrapper (need to know where set price)
             selectorProductPrice: '[data-role=priceBox]',
