@@ -9,6 +9,8 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class AfterCustomUrlChangedObserver
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AfterCustomUrlChangedObserver implements ObserverInterface
 {

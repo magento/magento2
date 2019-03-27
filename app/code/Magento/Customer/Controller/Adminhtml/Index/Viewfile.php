@@ -18,7 +18,9 @@ use Magento\Framework\DataObjectFactory;
 
 /**
  * Class Viewfile
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
 {

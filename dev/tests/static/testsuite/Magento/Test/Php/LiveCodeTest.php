@@ -77,8 +77,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $changedFilesBaseDir = '',
         $baseFilesFolder = '',
         $whitelistFile = '/_files/whitelist/common.txt'
-    )
-    {
+    ) {
         $changedFiles = self::getChangedFilesList($changedFilesBaseDir);
         if (empty($changedFiles)) {
             return [];

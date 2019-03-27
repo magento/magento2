@@ -11,6 +11,8 @@ use Magento\Framework\App\ResponseInterface;
 
 /**
  * Class Link
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 class Link extends \Magento\Downloadable\Controller\Download
 {

@@ -16,6 +16,8 @@ use Magento\Sales\Model\OrderFactory;
 
 /**
  * Unified IPN controller for all supported PayPal methods
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {

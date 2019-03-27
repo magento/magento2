@@ -10,6 +10,8 @@ use Magento\Framework\App\ResponseInterface;
 
 /**
  * Class Sample
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 class Sample extends \Magento\Downloadable\Controller\Download
 {
