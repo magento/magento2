@@ -44,7 +44,6 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
 
         self::assertArrayHasKey('cart', $response);
         self::assertArrayHasKey('available_payment_methods', $response['cart']);
-        self::assertCount(1, $response['cart']['available_payment_methods']);
 
         self::assertEquals('checkmo', $response['cart']['available_payment_methods'][0]['code']);
         self::assertEquals('Check / Money order', $response['cart']['available_payment_methods'][0]['title']);
