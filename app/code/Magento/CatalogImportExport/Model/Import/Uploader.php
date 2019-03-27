@@ -32,6 +32,13 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     protected $_tmpDir = '';
 
     /**
+     * Download directory for url-based resources.
+     *
+     * @var string
+     */
+    private $_downloadDir;
+
+    /**
      * Destination directory.
      *
      * @var string
@@ -122,6 +129,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         if ($filePath !== null) {
             $this->_setUploadFile($filePath);
         }
+        $this->_downloadDir = DirectoryList::getDefaultConfig()[DirectoryList::TMP][DirectoryList::PATH];
     }
 
     /**
@@ -160,7 +168,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
             $url = str_replace($matches[0], '', $fileName);
             $driver = $matches[0] === $this->httpScheme ? DriverPool::HTTP : DriverPool::HTTPS;
             $read = $this->_readFactory->create($url, $driver);
-            $filePath = DirectoryList::getDefaultConfig()[DirectoryList::TMP][DirectoryList::PATH] . '/';
+            $filePath = $this->_downloadDir . '/';
 
             //only use filename (for URI with query parameters)
             $parsedUrlPath = parse_url($url, PHP_URL_PATH);
