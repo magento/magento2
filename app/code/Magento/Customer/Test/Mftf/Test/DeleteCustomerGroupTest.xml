@@ -19,7 +19,6 @@
 
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -72,9 +71,30 @@
         <!--Go to New Product page, add check custom customer group values-->
         <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" stepKey="waitForSelectCustomerGroupNameAttribute2"/>
-        <dontSee selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" userInput="{{CustomerGroupChange.code}}" stepKey="seeProductTierPriceCustomerGroupInput"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}"
+                        stepKey="waitForCustomerGroupPriceAddButton"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}"
+               stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}"
+                        stepKey="waitForSelectCustomerGroupNameAttribute2"/>
+        <dontSee selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}"
+                 userInput="{{CustomerGroupChange.code}}"
+                 stepKey="seeProductTierPriceCustomerGroupInput"/>
+
+        <!--Go to Catalog price rule page, add check custom customer group values-->
+        <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+        <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>
+        <dontSee selector="{{AdminNewCatalogPriceRule.customerGroups}}"
+                 userInput="{{CustomerGroupChange.code}}"
+                 stepKey="dontSeeCatalogPriceRuleCustomerGroups"/>
+
+        <!--Go to Cart price rule page, add check custom customer group values-->
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <dontSee selector="{{AdminCartPriceRulesFormSection.customerGroups}}"
+                 userInput="{{CustomerGroupChange.code}}"
+                 stepKey="dontSeeCartPriceRuleCustomerGroups"/>
     </test>
 </tests>
