@@ -32,18 +32,16 @@
             <!-- ko if: !percent -->
                 <th class="mark" scope="row" colspan="1" data-bind="text: title"></th>
             <!-- /ko -->
-            <!-- ko if: $index() == 0 -->
-                <td class="amount" rowspan="1">
-                    <!-- ko if: $parents[1].isCalculated() -->
-                    <span class="price"
-                          data-bind="text: $parents[1].formatPrice($parents[0].amount), attr: {'data-th': title, 'rowspan': $parents[0].rates.length }"></span>
-                    <!-- /ko -->
-                    <!-- ko ifnot: $parents[1].isCalculated() -->
-                    <span class="not-calculated"
-                          data-bind="text: $parents[1].formatPrice($parents[0].amount), attr: {'data-th': title, 'rowspan': $parents[0].rates.length }"></span>
-                    <!-- /ko -->
-                </td>
-            <!-- /ko -->
+            <td class="amount" rowspan="1">
+                <!-- ko if: $parents[1].isCalculated() -->
+                <span class="price"
+                      data-bind="text: $parents[1].getTaxAmount($parents[0], percent), attr: {'data-th': title, 'rowspan': $parents[0].rates.length }"></span>
+                <!-- /ko -->
+                <!-- ko ifnot: $parents[1].isCalculated() -->
+                <span class="not-calculated"
+                      data-bind="text: $parents[1].getTaxAmount($parents[0], percent), attr: {'data-th': title, 'rowspan': $parents[0].rates.length }"></span>
+                <!-- /ko -->
+            </td>
         </tr>
         <!-- /ko -->
     <!-- /ko -->
