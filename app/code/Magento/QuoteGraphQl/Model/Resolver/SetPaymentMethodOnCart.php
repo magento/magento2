@@ -60,12 +60,12 @@ class SetPaymentMethodOnCart implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
-            throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
+            throw new GraphQlInputException(__('Required parameter "cart_id" is missing.'));
         }
         $maskedCartId = $args['input']['cart_id'];
 
         if (!isset($args['input']['payment_method']['code']) || empty($args['input']['payment_method']['code'])) {
-            throw new GraphQlInputException(__('Required parameter "payment_method" is missing'));
+            throw new GraphQlInputException(__('Required parameter "code" for "payment_method" is missing.'));
         }
         $paymentMethodCode = $args['input']['payment_method']['code'];
 
