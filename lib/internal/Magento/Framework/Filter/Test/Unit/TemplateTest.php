@@ -258,6 +258,7 @@ EXPECTED_RESULT;
             ['setTemplateProcessor'],
             ['getTemplateProcessor'],
             ['varDirective'],
+            ['delete'],
         ];
     }
 
