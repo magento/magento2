@@ -19,7 +19,7 @@
         <div class="nested options-list">
             <?php if ($block->showSingle()): ?>
                 <?= /* @escapeNotVerified */ $block->getSelectionQtyTitlePrice($_selections[0]) ?>
-                <?= /* @escapeNotVerified */ $block->renderTierPriceString($_selections[0]) ?>
+                <?= /* @escapeNotVerified */ $block->getTierPriceRenderer()->renderTierPrice($_selections[0]) ?>
                 <input type="hidden"
                        class="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>  product bundle option"
                        name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
@@ -40,7 +40,7 @@
                                for="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>">
                             <span><?= /* @escapeNotVerified */ $block->getSelectionQtyTitlePrice($_selection) ?></span>
                             <br/>
-                            <?= /* @escapeNotVerified */ $block->renderTierPriceString($_selection) ?>
+                            <?= /* @escapeNotVerified */ $block->getTierPriceRenderer()->renderTierPrice($_selection) ?>
                         </label>
                     </div>
                 <?php endforeach; ?>

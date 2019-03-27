@@ -7,7 +7,6 @@
 namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
 
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Pricing\Render;
 
 /**
  * Bundle option renderer
@@ -338,30 +337,6 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
             [
                 'include_container' => $includeContainer
             ]
-        );
-
-        return $priceHtml;
-    }
-
-    /**
-     * Format tier price string
-     *
-     * @param Product $selection
-     * @param array $arguments
-     * @return string
-     */
-    public function renderTierPriceString(Product $selection, array $arguments = []): string
-    {
-        if (!array_key_exists('zone', $arguments)) {
-            $arguments['zone'] = Render::ZONE_ITEM_OPTION;
-        }
-
-        /** @var Render $priceRender */
-        $priceRender = $this->getLayout()->getBlock('product.price.render.default');
-        $priceHtml = $priceRender->render(
-            'tier_price',
-            $selection,
-            $arguments
         );
 
         return $priceHtml;
