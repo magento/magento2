@@ -54,7 +54,7 @@ class ParamsOverriderTest extends \PHPUnit\Framework\TestCase
             'force false, value present' => [
                 ['Name1' => 'valueIn'],
                 ['Name1' => ['force' => false, 'value' => 'valueOverride']],
-                ['Name1' => 'valueIn'],
+                ['Name1' => 'valueOverride'],
                 1,
                 UserContextInterface::USER_TYPE_INTEGRATION,
             ],
