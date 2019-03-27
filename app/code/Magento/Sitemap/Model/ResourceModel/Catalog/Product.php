@@ -389,6 +389,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _loadProductImages($product, $storeId)
     {
+        $this->_storeManager->setCurrentStore($storeId);
         /** @var $helper \Magento\Sitemap\Helper\Data */
         $helper = $this->_sitemapData;
         $imageIncludePolicy = $helper->getProductImageIncludePolicy($storeId);

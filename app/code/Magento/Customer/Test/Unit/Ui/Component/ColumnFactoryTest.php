@@ -90,6 +90,7 @@ class ColumnFactoryTest extends \PHPUnit\Framework\TestCase
                         ]
                     ],
                     'component' => 'Magento_Ui/js/grid/columns/column',
+                    '__disableTmpl' => 'true'
                 ],
             ],
             'context' => $this->context,
