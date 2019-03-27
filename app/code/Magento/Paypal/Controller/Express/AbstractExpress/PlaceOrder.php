@@ -20,10 +20,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @var \Magento\Checkout\Api\AgreementsValidatorInterface
      */
     protected $agreementsValidator;
-    /**
-     * @var Magento\Sales\Model\Order\Email\Sender\InvoiceSender
-     */
-    protected $invoiceSender;
 
     /**
      * @var \Magento\Sales\Api\PaymentFailuresInterface
@@ -65,7 +61,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             $urlHelper,
             $customerUrl
         );
-        $this->invoiceSender = $invoiceSender;
         $this->agreementsValidator = $agreementValidator;
         $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(
             \Magento\Sales\Api\PaymentFailuresInterface::class
@@ -115,12 +110,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
                     ->setLastRealOrderId($order->getIncrementId())
                     ->setLastOrderStatus($order->getStatus());
             }
-
-            if ($order->hasInvoices() > 0 && $order->getStatus() == 'processing') {
-                $invoice = $order->getPayment()->getCreatedInvoice();
-                $this->invoiceSender->send($invoice);
-            }
-
+            
             $this->_eventManager->dispatch(
                 'paypal_express_place_order_success',
                 [
