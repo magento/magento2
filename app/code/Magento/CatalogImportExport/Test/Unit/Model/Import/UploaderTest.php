@@ -102,9 +102,9 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testMoveFileUrl($fileUrl, $expectedHost, $expectedFileName, $checkAllowedExtension)
     {
-        $defaultTmpDir = 'pub/media/import';
         $destDir = 'var/dest/dir';
-        $expectedRelativeFilePath = $defaultTmpDir . '/' . $expectedFileName;
+        $expectedTmpDir = 'var/tmp';
+        $expectedRelativeFilePath = $expectedTmpDir . '/' . $expectedFileName;
 
         $this->directoryMock->expects($this->once())->method('isWritable')->with($destDir)->willReturn(true);
         $this->directoryMock->expects($this->any())->method('getRelativePath')->with($expectedRelativeFilePath);
