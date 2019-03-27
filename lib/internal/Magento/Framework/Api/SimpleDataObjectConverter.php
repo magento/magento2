@@ -58,7 +58,7 @@ class SimpleDataObjectConverter
             if (is_array($fieldValue) && !$this->_isSimpleSequentialArray($fieldValue)) {
                 $fieldValue = $this->convertKeysToCamelCase($fieldValue);
             }
-            $fieldName = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName))));
+            $fieldName = lcfirst(str_replace('_', '', ucwords($fieldName, '_')));
             $response[$fieldName] = $fieldValue;
         }
         return $response;
@@ -148,7 +148,7 @@ class SimpleDataObjectConverter
      */
     public static function snakeCaseToUpperCamelCase($input)
     {
-        return str_replace(' ', '', ucwords(str_replace('_', ' ', $input)));
+        return str_replace('_', '', ucwords($input, '_'));
     }
 
     /**
