@@ -9,6 +9,7 @@ namespace Magento\Paypal\Controller\Express\AbstractExpress;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
+use Magento\Sales\Model\Order;
 
 /**
  * Class PlaceOrder
@@ -20,6 +21,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @var \Magento\Checkout\Api\AgreementsValidatorInterface
      */
     protected $agreementsValidator;
+
     /**
      * @var Magento\Sales\Model\Order\Email\Sender\InvoiceSender
      */
@@ -34,7 +36,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @param \Magento\Framework\Session\Generic $paypalSession
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator,
+     * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
      * @param \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender
      */
     public function __construct(
@@ -47,7 +49,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator,
-        \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender
+        \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender = null
     ) {
         $this->agreementsValidator = $agreementValidator;
         parent::__construct(
@@ -60,7 +62,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             $urlHelper,
             $customerUrl
         );
-        $this->invoiceSender = $invoiceSender;
+        $this->invoiceSender = $invoiceSender?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Sales\Model\Order\Email\Sender\InvoiceSender::class);
     }
 
     /**
@@ -106,7 +108,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
                     ->setLastRealOrderId($order->getIncrementId())
                     ->setLastOrderStatus($order->getStatus());
             }
-            if ($order->hasInvoices() > 0 && $order->getStatus() == 'processing') {
+            if ($order->hasInvoices() && $order->getStatus() === Order::STATE_PROCESSING) {
                 $invoice = $order->getPayment()->getCreatedInvoice();
                 $this->invoiceSender->send($invoice);
             }
