@@ -38,48 +38,56 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
-    public function testGetCartWithPaymentMethods()
+    public function testGetAvailablePaymentMethods()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_item_with_items');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('available_payment_methods', $response['cart']);
+        self::assertCount(1, $response['cart']['available_payment_methods']);
+
         self::assertEquals('checkmo', $response['cart']['available_payment_methods'][0]['code']);
         self::assertEquals('Check / Money order', $response['cart']['available_payment_methods'][0]['title']);
-        self::assertGreaterThan(
-            0,
-            count($response['cart']['available_payment_methods']),
-            'There are no available payment methods for customer cart!'
-        );
     }
 
     /**
+     * @security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
-    public function testGetPaymentMethodsFromGuestCart()
+    public function testGetAvailablePaymentMethodsFromGuestCart()
     {
-        $guestQuoteMaskedId = $this->getMaskedQuoteIdByReservedOrderId->execute(
-            'test_order_with_virtual_product_without_address'
-        );
-        $query = $this->getQuery($guestQuoteMaskedId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
-            "The current user cannot perform operations on cart \"$guestQuoteMaskedId\""
+            "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
+     * @security
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
-    public function testGetPaymentMethodsFromAnotherCustomerCart()
+    public function testGetAvailablePaymentMethodsFromAnotherCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_item_with_items');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
@@ -89,24 +97,31 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
-     * @magentoApiDataFixture Magento/Payment/_files/disable_all_active_payment_methods.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/disable_all_active_payment_methods.php
      */
-    public function testGetPaymentMethodsIfPaymentsAreNotSet()
+    public function testGetAvailablePaymentMethodsIfPaymentsAreNotPresent()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_item_with_items');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
-        self::assertEquals(0, count($response['cart']['available_payment_methods']));
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('available_payment_methods', $response['cart']);
+        self::assertEmpty($response['cart']['available_payment_methods']);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
      * @expectedException \Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
-    public function testGetPaymentMethodsOfNonExistentCart()
+    public function testGetAvailablePaymentMethodsOfNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
         $query = $this->getQuery($maskedQuoteId);
@@ -118,9 +133,8 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      * @param string $maskedQuoteId
      * @return string
      */
-    private function getQuery(
-        string $maskedQuoteId
-    ): string {
+    private function getQuery(string $maskedQuoteId): string
+    {
         return <<<QUERY
 {
   cart(cart_id: "$maskedQuoteId") {

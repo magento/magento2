@@ -9,9 +9,6 @@ namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -26,21 +23,6 @@ class GetCartTest extends GraphQlAbstract
     private $getMaskedQuoteIdByReservedOrderId;
 
     /**
-     * @var QuoteResource
-     */
-    private $quoteResource;
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
-
-    /**
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
@@ -49,19 +31,21 @@ class GetCartTest extends GraphQlAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_virtual_product.php
      */
     public function testGetCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_item_with_items');
-        $query = $this->getCartQuery($maskedQuoteId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
 
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
@@ -70,24 +54,23 @@ class GetCartTest extends GraphQlAbstract
         self::assertCount(2, $response['cart']['items']);
 
         self::assertNotEmpty($response['cart']['items'][0]['id']);
-        self::assertEquals($response['cart']['items'][0]['qty'], 2);
-        self::assertEquals($response['cart']['items'][0]['product']['sku'], 'simple');
+        self::assertEquals(2, $response['cart']['items'][0]['qty']);
+        self::assertEquals('simple', $response['cart']['items'][0]['product']['sku']);
 
         self::assertNotEmpty($response['cart']['items'][1]['id']);
-        self::assertEquals($response['cart']['items'][1]['qty'], 1);
-        self::assertEquals($response['cart']['items'][1]['product']['sku'], 'simple_one');
+        self::assertEquals(2, $response['cart']['items'][1]['qty']);
+        self::assertEquals('virtual-product', $response['cart']['items'][1]['product']['sku']);
     }
 
     /**
+     * @security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      */
     public function testGetGuestCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute(
-            'test_order_with_simple_product_without_address'
-        );
-        $query = $this->getCartQuery($maskedQuoteId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"{$maskedQuoteId}\""
@@ -96,13 +79,14 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
+     * @security
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      */
     public function testGetAnotherCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_item_with_items');
-        $query = $this->getCartQuery($maskedQuoteId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
 
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"{$maskedQuoteId}\""
@@ -112,33 +96,30 @@ class GetCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
      * @expectedException \Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testGetNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
-        $query = $this->getCartQuery($maskedQuoteId);
+        $query = $this->getQuery($maskedQuoteId);
 
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/make_cart_inactive.php
+     *
      * @expectedException \Exception
      * @expectedExceptionMessage Current user does not have an active cart.
      */
     public function testGetInactiveCart()
     {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
-        $quote->setCustomerId(1);
-        $quote->setIsActive(false);
-        $this->quoteResource->save($quote);
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
-
-        $query = $this->getCartQuery($maskedQuoteId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
 
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
@@ -147,12 +128,11 @@ class GetCartTest extends GraphQlAbstract
      * @param string $maskedQuoteId
      * @return string
      */
-    private function getCartQuery(
-        string $maskedQuoteId
-    ) : string {
+    private function getQuery(string $maskedQuoteId): string
+    {
         return <<<QUERY
 {
-  cart(cart_id: "$maskedQuoteId") {
+  cart(cart_id: "{$maskedQuoteId}") {
     items {
       id
       qty

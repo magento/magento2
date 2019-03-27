@@ -7,15 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
-use Magento\Multishipping\Helper\Data;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\TestFramework\ObjectManager;
 
 /**
  * Test for set shipping addresses on cart mutation
@@ -27,38 +21,20 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    /**
-     * @var QuoteResource
-     */
-    private $quoteResource;
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testSetNewShippingAddress()
+    public function testSetNewShippingAddressOnCartWithSimpleProduct()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute(
-            'test_order_with_simple_product_without_address'
-        );
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
 mutation {
@@ -112,15 +88,16 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_virtual_product.php
+     *
      * @expectedException \Exception
      * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
      */
-    public function testSetNewShippingAddressOnQuoteWithVirtualProducts()
+    public function testSetNewShippingAddressOnCartWithVirtualProduct()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute(
-            'test_order_with_virtual_product_without_address'
-        );
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
 mutation {
@@ -157,15 +134,17 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @security
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     *
      * @expectedException \Exception
      * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testSetShippingAddressFromAddressBook()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute(
-            'test_order_with_simple_product_without_address'
-        );
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
 mutation {
@@ -191,13 +170,17 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     *
      * @expectedException \Exception
      */
     public function testSetShippingAddressToCustomerCart()
     {
-        $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 1);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
 mutation {
@@ -222,12 +205,14 @@ QUERY;
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
-
         $this->graphQlQuery($query);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     *
      * @dataProvider dataProviderUpdateWithMissedRequiredParameters
      * @param string $input
      * @param string $message
@@ -235,9 +220,7 @@ QUERY;
      */
     public function testSetNewShippingAddressWithMissedRequiredParameters(string $input, string $message)
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute(
-            'test_order_with_simple_product_without_address'
-        );
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
 mutation {
@@ -266,7 +249,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderUpdateWithMissedRequiredParameters()
+    public function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
             'shipping_addresses' => [
@@ -281,15 +264,16 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     *
      * @expectedException \Exception
      * @expectedExceptionMessage You cannot specify multiple shipping addresses.
      */
     public function testSetMultipleNewShippingAddresses()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute(
-            'test_order_with_simple_product_without_address'
-        );
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
 mutation {
@@ -359,21 +343,5 @@ QUERY;
         ];
 
         $this->assertResponseFields($shippingAddressResponse, $assertionMap);
-    }
-
-    /**
-     * @param string $reversedOrderId
-     * @param int $customerId
-     * @return string
-     */
-    private function assignQuoteToCustomer(
-        string $reversedOrderId = 'test_order_with_simple_product_without_address',
-        int $customerId = 1
-    ): string {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
-        $quote->setCustomerId($customerId);
-        $this->quoteResource->save($quote);
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 }
