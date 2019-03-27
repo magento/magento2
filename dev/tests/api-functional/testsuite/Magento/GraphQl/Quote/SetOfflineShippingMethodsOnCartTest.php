@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\OfflineShipping;
+namespace Magento\GraphQl\Quote;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\QuoteFactory;
@@ -53,7 +53,7 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/OfflineShipping/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
      * @magentoApiDataFixture Magento/OfflineShipping/_files/tablerates_weight.php
      *
      * @param string $carrierCode
@@ -103,7 +103,7 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/OfflineShipping/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
      */
     public function testSetShippingMethodTwiceInOneRequest()
     {
