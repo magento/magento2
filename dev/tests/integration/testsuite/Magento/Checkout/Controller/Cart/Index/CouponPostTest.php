@@ -66,7 +66,7 @@ class CouponPostTest extends \Magento\TestFramework\TestCase\AbstractController
         );
 
         $this->assertSessionMessages(
-            $this->equalTo(['You used coupon code "' . $couponCode . '".']),
+            $this->equalTo(['You used coupon code &quot;' . $couponCode . '&quot;.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
