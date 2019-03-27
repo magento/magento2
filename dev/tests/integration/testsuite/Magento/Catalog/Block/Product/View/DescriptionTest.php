@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 class DescriptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var View\Description
+     * @var Description
      */
     private $block;
 
