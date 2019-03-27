@@ -28,12 +28,17 @@
             <createData entity="ApiSimpleProduct" stepKey="createProductTwo">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <createData entity="productAttributeWithCodeContainer" stepKey="createAttributeWithCodeContainer"/>
+            <createData entity="AddToDefaultSet" stepKey="createAttributeWithCodeContainerAddToAttributeSet">
+                <requiredEntity createDataKey="createAttributeWithCodeContainer"/>
+            </createData>
         </before>
         <after>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createAttributeWithCodeContainer" stepKey="deleteAttributeWithCodeContainer"/>
         </after>
 
         <!-- Search and select products -->
@@ -50,6 +55,10 @@
         <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
         <seeInCurrentUrl stepKey="seeInUrl" url="catalog/product_action_attribute/edit/"/>
         <click selector="{{AdminEditProductAttributesSection.ChangeAttributeNameToggle}}" stepKey="toggleToChangeName"/>
+        <seeElement stepKey="seeDisabled" selector="{{AdminEditProductAttributesSection.AttributeContainerDisabled}}"/>
+        <click selector="{{AdminEditProductAttributesSection.ChangeAttributeContainerToggle}}" stepKey="toggleToEnableContainerAttribute"/>
+        <seeElement stepKey="seeEnabled" selector="{{AdminEditProductAttributesSection.AttributeContainer}}"/>
+        <click selector="{{AdminEditProductAttributesSection.ChangeAttributeContainerToggle}}" stepKey="toggleToDisableContainerAttribute"/>
         <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
         <see stepKey="seeError" selector="{{AdminEditProductAttributesSection.NameError}}" userInput="This is a required field"/>
     </test>
