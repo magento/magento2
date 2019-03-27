@@ -703,8 +703,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $testTemplateVariables = '{"var data.name":"Sender Name","var data.email":"Sender Email"}';
         $this->model->setOrigTemplateVariables($testTemplateVariables);
         $variablesOptionArray = $this->model->getVariablesOptionArray(true);
-        $this->assertEquals('Template Variables', $variablesOptionArray['label']->getText());
-        $this->assertEquals($this->model->getVariablesOptionArray(), $variablesOptionArray['value']);
+        $this->assertEquals('Template Variables', $variablesOptionArray[0]['label']->getText());
+        $this->assertEquals($this->model->getVariablesOptionArray(), $variablesOptionArray[0]['value']);
     }
 
     /**
