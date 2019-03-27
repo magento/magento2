@@ -52,11 +52,11 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 
     /**
      * @param Context $context
-     * @param StringLength $stringValidator
-     * @param AvailablePath $pathValidator
-     * @param \Magento\Sitemap\Helper\Data $sitemapHelper
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param SitemapFactory $sitemapFactory
+     * @param StringLength|null $stringValidator
+     * @param AvailablePath|null $pathValidator
+     * @param \Magento\Sitemap\Helper\Data|null $sitemapHelper
+     * @param \Magento\Framework\Filesystem|null $filesystem
+     * @param SitemapFactory|null $sitemapFactory
      */
     public function __construct(
         Context $context,
