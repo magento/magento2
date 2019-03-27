@@ -35,39 +35,45 @@
         </after>
 
         <!-- Open Customer edit page -->
-        <amOnPage url="/customer/account/edit/" stepKey="goToEditPage"/>
+        <amOnPage url="{{StorefrontCustomerEditPage.url}}" stepKey="goToCustomerEditPage"/>
         <waitForPageLoad stepKey="waitForEditPage"/>
 
         <!-- Update email with incorrect password 3 times. -->
-        <click selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}" stepKey="clickChangeEmailCheckbox1"/>
-        <fillField selector="{{StorefrontCustomerAccountInformationSection.currentPassword}}" userInput="incorrectPassword" stepKey="enterWrongPassword1"/>
-        <click selector="{{StorefrontCustomerAccountInformationSection.saveButton}}" stepKey="saveChange1"/>
-        <see userInput="The password doesn't match this account. Verify the password and try again." selector="{{StorefrontCustomerMessagesSection.errorMessage}}" stepKey="verifyMessage1"/>
+        <actionGroup ref="StorefrontCustomerChangeEmailActionGroup" stepKey="changeEmailFirstAttempt">
+            <argument name="email" value="$$customer.email$$" />
+            <argument name="password" value="{{Colorado_US_Customer.password}}" />
+            <argument name="message" value="The password doesn't match this account. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
 
-        <click selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}" stepKey="clickChangeEmailCheckbox2"/>
-        <fillField selector="{{StorefrontCustomerAccountInformationSection.currentPassword}}" userInput="incorrectPassword" stepKey="enterWrongPassword2"/>
-        <click selector="{{StorefrontCustomerAccountInformationSection.saveButton}}" stepKey="saveChange2"/>
-        <see userInput="The password doesn't match this account. Verify the password and try again." selector="{{StorefrontCustomerMessagesSection.errorMessage}}" stepKey="verifyMessage2"/>
+        <actionGroup ref="StorefrontCustomerChangeEmailActionGroup" stepKey="changeEmailSecondAttempt">
+            <argument name="email" value="$$customer.email$$" />
+            <argument name="password" value="{{Colorado_US_Customer.password}}" />
+            <argument name="message" value="The password doesn't match this account. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
 
-        <click selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}" stepKey="clickChangeEmailCheckbox3"/>
-        <fillField selector="{{StorefrontCustomerAccountInformationSection.currentPassword}}" userInput="incorrectPassword" stepKey="enterWrongPassword3"/>
-        <click selector="{{StorefrontCustomerAccountInformationSection.saveButton}}" stepKey="saveChange3"/>
-        <see userInput="The password doesn't match this account. Verify the password and try again." selector="{{StorefrontCustomerMessagesSection.errorMessage}}" stepKey="verifyMessage3"/>
+        <actionGroup ref="StorefrontCustomerChangeEmailActionGroup" stepKey="changeEmailThirdAttempt">
+            <argument name="email" value="$$customer.email$$" />
+            <argument name="password" value="{{Colorado_US_Customer.password}}" />
+            <argument name="message" value="The password doesn't match this account. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
 
         <!-- Check captcha visibility after incorrect password submit form -->
-        <waitForElementVisible selector="{{StorefrontCustomerEditFormSection.captchaField}}" stepKey="seeCaptchaField"/>
-        <waitForElementVisible selector="{{StorefrontCustomerEditFormSection.captchaImg}}" stepKey="seeCaptchaImage"/>
-        <waitForElementVisible selector="{{StorefrontCustomerEditFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton"/>
+        <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaField}}" stepKey="seeCaptchaField"/>
+        <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaImg}}" stepKey="seeCaptchaImage"/>
+        <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaReload}}" stepKey="seeCaptchaReloadButton"/>
         <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <waitForElementVisible selector="{{StorefrontCustomerEditFormSection.captchaField}}" stepKey="seeCaptchaField2"/>
-        <waitForElementVisible selector="{{StorefrontCustomerEditFormSection.captchaImg}}" stepKey="seeCaptchaImage2"/>
-        <waitForElementVisible selector="{{StorefrontCustomerEditFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton2"/>
+        <waitForPageLoad stepKey="waitForPageReloaded" />
+        <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaField}}" stepKey="seeCaptchaFieldAfterPageReload"/>
+        <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaImg}}" stepKey="seeCaptchaImageAfterPageReload"/>
+        <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaReload}}" stepKey="seeCaptchaReloadButtonAfterPageReload"/>
 
         <!-- Try to submit form with incorrect captcha -->
         <click selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}" stepKey="clickChangeEmailCheckbox4"/>
         <fillField selector="{{StorefrontCustomerAccountInformationSection.currentPassword}}" userInput="incorrectPassword" stepKey="enterWrongPassword4"/>
-        <fillField selector="{{StorefrontCustomerEditFormSection.captchaField}}" userInput="wrongCaptcha" stepKey="enterWrongCaptcha"/>
+        <fillField selector="{{StorefrontCustomerAccountInformationSection.captchaField}}" userInput="wrongCaptcha" stepKey="enterWrongCaptcha"/>
         <click selector="{{StorefrontCustomerAccountInformationSection.saveButton}}" stepKey="saveChange4"/>
         <see userInput="Incorrect CAPTCHA" selector="{{StorefrontCustomerMessagesSection.errorMessage}}" stepKey="verifyMessage4"/>
     </test>
