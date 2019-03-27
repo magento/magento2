@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Implementation of the @magentoDataFixtureBeforeTransaction DocBlock annotation
- */
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use PHPUnit\Framework\Exception;
 
+/**
+ * Implementation of the @magentoDataFixtureBeforeTransaction DocBlock annotation
+ */
 class DataFixtureBeforeTransaction
 {
     /**
@@ -139,6 +139,8 @@ class DataFixtureBeforeTransaction
     }
 
     /**
+     * Get annotations for test.
+     *
      * @param \PHPUnit\Framework\TestCase $test
      * @return array
      */
