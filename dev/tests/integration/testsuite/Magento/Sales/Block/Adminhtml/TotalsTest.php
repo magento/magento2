@@ -48,6 +48,10 @@ class TotalsTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
 
         $shippingTotal = $this->_block->getTotal('shipping');
         $this->assertNotFalse($shippingTotal, 'Shipping method is absent on the total\'s block.');
-        $this->assertContains('1234567890', $shippingTotal->getLabel(), 'Coupon code is absent in the shipping method label name.');
+        $this->assertContains(
+            '1234567890',
+            $shippingTotal->getLabel(),
+            'Coupon code is absent in the shipping method label name.'
+        );
     }
 }

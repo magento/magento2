@@ -7,6 +7,11 @@ namespace Magento\Sales\Block\Adminhtml;
 
 use Magento\Sales\Model\Order;
 
+/**
+ * Adminhtml sales totals block
+ *
+ * @package Magento\Sales\Block\Adminhtml
+ */
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**
