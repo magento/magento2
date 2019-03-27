@@ -9,7 +9,6 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Paypal\Model\Config;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -134,7 +133,7 @@ abstract class AbstractConfig implements ConfigInterface
      * Returns payment configuration value
      *
      * @param string $key
-     * @param null $storeId
+     * @param null|int $storeId
      * @return null|string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -224,7 +223,18 @@ abstract class AbstractConfig implements ConfigInterface
      */
     public function shouldUseUnilateralPayments()
     {
-        return $this->getValue('business_account') && !$this->isWppApiAvailabe();
+        return $this->getValue('business_account') && !$this->isWppApiAvailable();
+    }
+
+    /**
+     * Check whether WPP API credentials are available for this method
+     *
+     * @deprecated
+     * @return bool
+     */
+    public function isWppApiAvailabe()
+    {
+        return $this->isWppApiAvailable();
     }
 
     /**
@@ -232,7 +242,7 @@ abstract class AbstractConfig implements ConfigInterface
      *
      * @return bool
      */
-    public function isWppApiAvailabe()
+    public function isWppApiAvailable()
     {
         return $this->getValue('api_username')
         && $this->getValue('api_password')
@@ -243,7 +253,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Check whether method available for checkout or not
      *
-     * @param null $methodCode
+     * @param null|string $methodCode
      *
      * @return bool
      */
@@ -282,11 +292,15 @@ abstract class AbstractConfig implements ConfigInterface
                 break;
             case Config::METHOD_WPS_BML:
             case Config::METHOD_WPP_BML:
-                $isEnabled = $this->_scopeConfig->isSetFlag(
-                    'payment/' . Config::METHOD_WPS_BML .'/active',
+                $disabledFunding = $this->_scopeConfig->getValue(
+                    'payment/paypal_express/disable_funding_options',
                     ScopeInterface::SCOPE_STORE,
                     $this->_storeId
-                )
+                );
+                $isExpressCreditEnabled = $disabledFunding
+                    ? strpos($disabledFunding, 'CREDIT') === false
+                    : true;
+                $isEnabled = $isExpressCreditEnabled
                 || $this->_scopeConfig->isSetFlag(
                     'payment/' . Config::METHOD_WPP_BML .'/active',
                     ScopeInterface::SCOPE_STORE,

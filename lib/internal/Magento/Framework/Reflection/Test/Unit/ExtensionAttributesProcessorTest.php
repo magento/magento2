@@ -154,6 +154,9 @@ class ExtensionAttributesProcessorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function buildOutputDataArrayWithPermissionProvider()
     {
         return [

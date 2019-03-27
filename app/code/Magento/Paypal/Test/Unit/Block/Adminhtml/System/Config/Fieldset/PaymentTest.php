@@ -85,6 +85,9 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->assertContains($expected, $html);
     }
 
+    /**
+     * @return array
+     */
     public function isPaymentEnabledDataProvider()
     {
         return [

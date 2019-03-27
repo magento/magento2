@@ -79,7 +79,7 @@ tinymce.html.Styles = function(settings, schema) {
 			function compress(prefix, suffix) {
 				var top, right, bottom, left;
 
-				// Get values and check it it needs compressing
+				// Get values and check it needs compressing
 				top = styles[prefix + '-top' + suffix];
 				if (!top)
 					return;

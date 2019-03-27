@@ -77,7 +77,8 @@ class CartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getAllVisibleItems',
                 'getBaseCurrencyCode',
                 'getQuoteCurrencyCode',
-                'getItemsQty'
+                'getItemsQty',
+                'collectTotals'
             ]);
         $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
         $this->addressMock = $this->createPartialMock(
@@ -163,6 +164,9 @@ class CartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($totalsMock, $this->model->get($cartId));
     }
 
+    /**
+     * @return array
+     */
     public function getDataProvider()
     {
         return [

@@ -6,14 +6,15 @@
 
 namespace Magento\CatalogSearch\Setup\Patch\Data;
 
+use Magento\Framework\App\State;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
 /**
- * Class SetInitialSearchWeightForAttributes
- * @package Magento\CatalogSearch\Setup\Patch
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVersionInterface
 {
@@ -28,16 +29,24 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
     private $attributeRepository;
 
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
      * SetInitialSearchWeightForAttributes constructor.
      * @param IndexerInterfaceFactory $indexerFactory
      * @param ProductAttributeRepositoryInterface $attributeRepository
+     * @param State $state
      */
     public function __construct(
         IndexerInterfaceFactory $indexerFactory,
-        ProductAttributeRepositoryInterface $attributeRepository
+        ProductAttributeRepositoryInterface $attributeRepository,
+        State $state
     ) {
         $this->indexerFactory = $indexerFactory;
         $this->attributeRepository = $attributeRepository;
+        $this->state = $state;
     }
 
     /**
@@ -47,6 +56,13 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
     {
         $this->setWeight('sku', 6);
         $this->setWeight('name', 5);
+        $indexer = $this->indexerFactory->create()->load('catalogsearch_fulltext');
+        $this->state->emulateAreaCode(
+            \Magento\Framework\App\Area::AREA_CRONTAB,
+            function () use ($indexer) {
+                $indexer->reindexAll();
+            }
+        );
     }
 
     /**
@@ -76,8 +92,9 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
     /**
      * Set attribute search weight.
      *
-     * @param $attributeCode
-     * @param $weight
+     * @param string $attributeCode
+     * @param int $weight
+     * @return void
      */
     private function setWeight($attributeCode, $weight)
     {

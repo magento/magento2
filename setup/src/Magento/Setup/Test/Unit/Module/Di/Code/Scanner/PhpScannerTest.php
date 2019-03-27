@@ -69,7 +69,7 @@ class PhpScannerTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertEquals(
-            ['\Magento\Eav\Api\Data\AttributeExtensionInterface'],
+            ['\\' . \Magento\Eav\Api\Data\AttributeExtensionInterface::class],
             $this->_model->collectEntities($this->_testFiles)
         );
     }

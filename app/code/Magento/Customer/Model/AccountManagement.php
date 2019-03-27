@@ -18,8 +18,10 @@ use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Customer\Model\Metadata\Validator;
+use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 use Magento\Eav\Model\Validator\Attribute\Backend;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -41,16 +43,16 @@ use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Registry;
+use Magento\Framework\Session\SaveHandlerInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
-use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Framework\Session\SaveHandlerInterface;
-use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 
 /**
  * Handle various customer account actions
@@ -58,6 +60,7 @@ use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AccountManagement implements AccountManagementInterface
 {
@@ -327,6 +330,16 @@ class AccountManagement implements AccountManagementInterface
     private $accountConfirmation;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var AddressRegistry
+     */
+    private $addressRegistry;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -356,7 +369,10 @@ class AccountManagement implements AccountManagementInterface
      * @param SessionManagerInterface|null $sessionManager
      * @param SaveHandlerInterface|null $saveHandler
      * @param CollectionFactory|null $visitorCollectionFactory
+     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
+     * @param AddressRegistry|null $addressRegistry
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         CustomerFactory $customerFactory,
@@ -387,7 +403,9 @@ class AccountManagement implements AccountManagementInterface
         AccountConfirmation $accountConfirmation = null,
         SessionManagerInterface $sessionManager = null,
         SaveHandlerInterface $saveHandler = null,
-        CollectionFactory $visitorCollectionFactory = null
+        CollectionFactory $visitorCollectionFactory = null,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        AddressRegistry $addressRegistry = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -423,6 +441,10 @@ class AccountManagement implements AccountManagementInterface
             ?: ObjectManager::getInstance()->get(SaveHandlerInterface::class);
         $this->visitorCollectionFactory = $visitorCollectionFactory
             ?: ObjectManager::getInstance()->get(CollectionFactory::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder
+            ?: ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
+        $this->addressRegistry = $addressRegistry
+            ?: ObjectManager::getInstance()->get(AddressRegistry::class);
     }
 
     /**
@@ -442,7 +464,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resendConfirmation($email, $websiteId = null, $redirectUrl = '')
     {
@@ -465,7 +487,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function activate($email, $confirmationKey)
     {
@@ -474,7 +496,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function activateById($customerId, $confirmationKey)
     {
@@ -503,6 +525,8 @@ class AccountManagement implements AccountManagementInterface
         }
 
         $customer->setConfirmation(null);
+        // No need to validate customer and customer address while activating customer
+        $this->setIgnoreValidationFlag($customer);
         $this->customerRepository->save($customer);
         $this->getEmailNotification()->newAccount(
             $customer,
@@ -514,7 +538,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function authenticate($username, $password)
     {
@@ -549,7 +573,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken)
     {
@@ -558,7 +582,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function initiatePasswordReset($email, $template, $websiteId = null)
     {
@@ -567,6 +591,9 @@ class AccountManagement implements AccountManagementInterface
         }
         // load customer by email
         $customer = $this->customerRepository->get($email, $websiteId);
+
+        // No need to validate customer address while saving customer reset password token
+        $this->disableAddressValidation($customer);
 
         $newPasswordToken = $this->mathRandom->getUniqueHash();
         $this->changeResetPasswordLinkToken($customer, $newPasswordToken);
@@ -592,6 +619,43 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * Match a customer by their RP token.
+     *
+     * @param string $rpToken
+     * @throws ExpiredException
+     * @throws NoSuchEntityException
+     *
+     * @return CustomerInterface
+     * @throws LocalizedException
+     */
+    private function matchCustomerByRpToken(string $rpToken): CustomerInterface
+    {
+        $this->searchCriteriaBuilder->addFilter(
+            'rp_token',
+            $rpToken
+        );
+        $this->searchCriteriaBuilder->setPageSize(1);
+        $found = $this->customerRepository->getList(
+            $this->searchCriteriaBuilder->create()
+        );
+        if ($found->getTotalCount() > 1) {
+            //Failed to generated unique RP token
+            throw new ExpiredException(
+                new Phrase('Reset password token expired.')
+            );
+        }
+        if ($found->getTotalCount() === 0) {
+            //Customer with such token not found.
+            throw NoSuchEntityException::singleField(
+                'rp_token',
+                $rpToken
+            );
+        }
+        //Unique customer found.
+        return $found->getItems()[0];
+    }
+
+    /**
      * Handle not supported template
      *
      * @param string $template
@@ -611,21 +675,35 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resetPassword($email, $resetToken, $newPassword)
     {
-        $customer = $this->customerRepository->get($email);
+        if (!$email) {
+            $customer = $this->matchCustomerByRpToken($resetToken);
+            $email = $customer->getEmail();
+        } else {
+            $customer = $this->customerRepository->get($email);
+        }
+
+        // No need to validate customer and customer address while saving customer reset password token
+        $this->disableAddressValidation($customer);
+        $this->setIgnoreValidationFlag($customer);
+
         //Validate Token and new password strength
         $this->validateResetPasswordToken($customer->getId(), $resetToken);
+        $this->credentialsValidator->checkPasswordDifferentFromEmail(
+            $email,
+            $newPassword
+        );
         $this->checkPasswordStrength($newPassword);
         //Update secure data
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
-        $this->sessionManager->destroy();
         $this->destroyCustomerSessions($customer->getId());
+        $this->sessionManager->destroy();
         $this->customerRepository->save($customer);
 
         return true;
@@ -719,7 +797,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfirmationStatus($customerId)
     {
@@ -735,7 +813,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
@@ -757,7 +835,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -780,6 +858,7 @@ class AccountManagement implements AccountManagementInterface
             if ($customer->getWebsiteId()) {
                 $storeId = $this->storeManager->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
             } else {
+                $this->storeManager->setCurrentStore(null);
                 $storeId = $this->storeManager->getStore()->getId();
             }
             $customer->setStoreId($storeId);
@@ -793,6 +872,11 @@ class AccountManagement implements AccountManagementInterface
 
         // Update 'created_in' value with actual store name
         if ($customer->getId() === null) {
+            $websiteId = $customer->getWebsiteId();
+            if ($websiteId && !$this->isCustomerInStore($websiteId, $customer->getStoreId())) {
+                throw new LocalizedException(__('The store view is not in the associated website.'));
+            }
+
             $storeName = $this->storeManager->getStore($customer->getStoreId())->getName();
             $customer->setCreatedIn($storeName);
         }
@@ -835,7 +919,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultBillingAddress($customerId)
     {
@@ -844,7 +928,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultShippingAddress($customerId)
     {
@@ -858,6 +942,8 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerInterface $customer
      * @param string $redirectUrl
      * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     protected function sendEmailConfirmation(CustomerInterface $customer, $redirectUrl)
     {
@@ -873,11 +959,13 @@ class AccountManagement implements AccountManagementInterface
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
+        } catch (\UnexpectedValueException $e) {
+            $this->logger->error($e);
         }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function changePassword($email, $currentPassword, $newPassword)
     {
@@ -890,7 +978,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function changePasswordById($customerId, $currentPassword, $newPassword)
     {
@@ -910,7 +998,10 @@ class AccountManagement implements AccountManagementInterface
      * @param string $newPassword
      * @return bool true on success
      * @throws InputException
+     * @throws InputMismatchException
      * @throws InvalidEmailOrPasswordException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      * @throws UserLockedException
      */
     private function changePasswordForCustomer($customer, $currentPassword, $newPassword)
@@ -930,6 +1021,7 @@ class AccountManagement implements AccountManagementInterface
         $this->checkPasswordStrength($newPassword);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->destroyCustomerSessions($customer->getId());
+        $this->disableAddressValidation($customer);
         $this->customerRepository->save($customer);
 
         return true;
@@ -947,6 +1039,8 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * Get EAV validator
+     *
      * @return Backend
      */
     private function getEavValidator()
@@ -958,7 +1052,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate(CustomerInterface $customer)
     {
@@ -983,7 +1077,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isEmailAvailable($customerEmail, $websiteId = null)
     {
@@ -999,7 +1093,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function isCustomerInStore($customerWebsiteId, $storeId)
     {
@@ -1025,10 +1119,11 @@ class AccountManagement implements AccountManagementInterface
      * @throws \Magento\Framework\Exception\State\ExpiredException If token is expired
      * @throws \Magento\Framework\Exception\InputException If token or customer id is invalid
      * @throws \Magento\Framework\Exception\NoSuchEntityException If customer doesn't exist
+     * @throws LocalizedException
      */
     private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
-        if (empty($customerId) || $customerId < 0) {
+        if ($customerId !== null && $customerId <= 0) {
             throw new InputException(
                 __(
                     'Invalid value of "%value" provided for the %fieldName field.',
@@ -1036,21 +1131,24 @@ class AccountManagement implements AccountManagementInterface
                 )
             );
         }
+
+        if ($customerId === null) {
+            //Looking for the customer.
+            $customerId = $this->matchCustomerByRpToken($resetPasswordLinkToken)
+                ->getId();
+        }
         if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
             throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
         }
-
         $customerSecureData = $this->customerRegistry->retrieveSecureData($customerId);
         $rpToken = $customerSecureData->getRpToken();
         $rpTokenCreatedAt = $customerSecureData->getRpTokenCreatedAt();
-
         if (!Security::compareStrings($rpToken, $resetPasswordLinkToken)) {
             throw new InputMismatchException(__('The password token is mismatched. Reset and try again.'));
         } elseif ($this->isResetPasswordLinkTokenExpired($rpToken, $rpTokenCreatedAt)) {
             throw new ExpiredException(__('The password token is expired. Reset and try again.'));
         }
-
         return true;
     }
 
@@ -1119,6 +1217,8 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return $this
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      * @deprecated 100.1.0
      */
     protected function sendPasswordResetNotificationEmail($customer)
@@ -1133,6 +1233,7 @@ class AccountManagement implements AccountManagementInterface
      * @param int|string|null $defaultStoreId
      * @return int
      * @deprecated 100.1.0
+     * @throws LocalizedException
      */
     protected function getWebsiteStoreId($customer, $defaultStoreId = null)
     {
@@ -1145,6 +1246,8 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * Get template types
+     *
      * @return array
      * @deprecated 100.1.0
      */
@@ -1178,6 +1281,7 @@ class AccountManagement implements AccountManagementInterface
      * @param int|null $storeId
      * @param string $email
      * @return $this
+     * @throws MailException
      * @deprecated 100.1.0
      */
     protected function sendEmailTemplate(
@@ -1293,6 +1397,9 @@ class AccountManagement implements AccountManagementInterface
      * @param string $passwordLinkToken
      * @return bool
      * @throws InputException
+     * @throws InputMismatchException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function changeResetPasswordLinkToken($customer, $passwordLinkToken)
     {
@@ -1310,6 +1417,7 @@ class AccountManagement implements AccountManagementInterface
             $customerSecure->setRpTokenCreatedAt(
                 $this->dateTimeFactory->create()->format(DateTime::DATETIME_PHP_FORMAT)
             );
+            $this->setIgnoreValidationFlag($customer);
             $this->customerRepository->save($customer);
         }
         return true;
@@ -1320,6 +1428,8 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return $this
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      * @deprecated 100.1.0
      */
     public function sendPasswordReminderEmail($customer)
@@ -1347,6 +1457,8 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return $this
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      * @deprecated 100.1.0
      */
     public function sendPasswordResetConfirmationEmail($customer)
@@ -1391,6 +1503,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return Data\CustomerSecure
+     * @throws NoSuchEntityException
      * @deprecated 100.1.0
      */
     protected function getFullCustomerObject($customer)
@@ -1416,6 +1529,20 @@ class AccountManagement implements AccountManagementInterface
     public function getPasswordHash($password)
     {
         return $this->encryptor->getHash($password);
+    }
+
+    /**
+     * Disable Customer Address Validation
+     *
+     * @param CustomerInterface $customer
+     * @throws NoSuchEntityException
+     */
+    private function disableAddressValidation($customer)
+    {
+        foreach ($customer->getAddresses() as $address) {
+            $addressModel = $this->addressRegistry->retrieve($address->getId());
+            $addressModel->setShouldIgnoreValidation(true);
+        }
     }
 
     /**
@@ -1460,9 +1587,18 @@ class AccountManagement implements AccountManagementInterface
         /** @var \Magento\Customer\Model\Visitor $visitor */
         foreach ($visitorCollection->getItems() as $visitor) {
             $sessionId = $visitor->getSessionId();
-            $this->sessionManager->start();
             $this->saveHandler->destroy($sessionId);
-            $this->sessionManager->writeClose();
         }
+    }
+
+    /**
+     * Set ignore_validation_flag for reset password flow to skip unnecessary address and customer validation
+     *
+     * @param Customer $customer
+     * @return void
+     */
+    private function setIgnoreValidationFlag($customer)
+    {
+        $customer->setData('ignore_validation_flag', true);
     }
 }

@@ -92,6 +92,9 @@ class ResponseHandlerTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function errorsProvider()
     {
         return [

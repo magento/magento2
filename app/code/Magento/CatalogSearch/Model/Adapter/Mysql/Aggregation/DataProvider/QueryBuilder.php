@@ -8,18 +8,32 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider;
 
 use Magento\CatalogInventory\Model\Configuration as CatalogInventoryConfiguration;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
- *  Attribute query builder
+ * Attribute query builder
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QueryBuilder
 {
+    /**
+     * @var DimensionFactory
+     */
+    private $dimensionFactory;
+
     /**
      * @var Resource
      */
@@ -36,18 +50,30 @@ class QueryBuilder
     private $inventoryConfig;
 
     /**
+     * @var IndexScopeResolverInterface
+     */
+    private $priceTableResolver;
+
+    /**
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param CatalogInventoryConfiguration $inventoryConfig
+     * @param IndexScopeResolverInterface $priceTableResolver
+     * @param DimensionFactory|null $dimensionFactory
      */
     public function __construct(
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-        CatalogInventoryConfiguration $inventoryConfig
+        CatalogInventoryConfiguration $inventoryConfig,
+        IndexScopeResolverInterface $priceTableResolver = null,
+        DimensionFactory $dimensionFactory = null
     ) {
         $this->resource = $resource;
         $this->scopeResolver = $scopeResolver;
         $this->inventoryConfig = $inventoryConfig;
+        $this->priceTableResolver = $priceTableResolver
+            ?: ObjectManager::getInstance()->get(IndexScopeResolverInterface::class);
+        $this->dimensionFactory = $dimensionFactory ?: ObjectManager::getInstance()->get(DimensionFactory::class);
     }
 
     /**
@@ -99,12 +125,25 @@ class QueryBuilder
         if (!$store instanceof \Magento\Store\Model\Store) {
             throw new \RuntimeException('Illegal scope resolved');
         }
+        $websiteId = $store->getWebsiteId();
 
-        $table = $this->resource->getTableName('catalog_product_index_price');
-        $select->from(['main_table' => $table], null)
+        $tableName = $this->priceTableResolver->resolve(
+            'catalog_product_index_price',
+            [
+                $this->dimensionFactory->create(
+                    WebsiteDimensionProvider::DIMENSION_NAME,
+                    (string)$websiteId
+                ),
+                $this->dimensionFactory->create(
+                    CustomerGroupDimensionProvider::DIMENSION_NAME,
+                    (string)$customerGroupId
+                ),
+            ]
+        );
+        $select->from(['main_table' => $tableName], null)
             ->columns([BucketInterface::FIELD_VALUE => 'main_table.min_price'])
             ->where('main_table.customer_group_id = ?', $customerGroupId)
-            ->where('main_table.website_id = ?', $store->getWebsiteId());
+            ->where('main_table.website_id = ?', $websiteId);
 
         return $select;
     }

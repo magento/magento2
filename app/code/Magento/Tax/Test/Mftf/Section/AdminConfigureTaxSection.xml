@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminConfigureTaxSection">
+        <!-- on page /admin/admin/system_config/edit/section/tax/ -->
+        <element name="salesTax" type="button" selector="//a[contains(@class, 'admin__page-nav-link item-nav')]/span[text()='Tax']"/>
+        <element name="taxClasses" type="block" selector="#tax_classes-head" timeout="30"/>
+        <element name="taxShippingClassSystem" type="checkbox" selector="#tax_classes_shipping_tax_class_inherit"/>
+        <element name="taxClassShipping" type="select" selector="#tax_classes_shipping_tax_class"/>
+        <element name="taxClassProduct" type="select" selector="#tax_classes_default_product_tax_class"/>
+        <element name="taxClassCustomer" type="select" selector="#tax_classes_default_customer_tax_class"/>
+
+        <element name="taxCalculationSettings" type="block" selector="#tax_calculation-head" timeout="30"/>
+        <element name="taxCalculationSettingsOpened" type="block" selector="#tax_calculation-head.open" timeout="30"/>
+        <element name="taxCalculationAlgorithm" type="select" selector="#tax_calculation_algorithm"/>
+        <element name="taxCalculationAlgorithmDisabled" type="select" selector="#tax_calculation_algorithm[disabled='disabled']"/>
+        <element name="taxCalculationAlgorithmInherit" type="checkbox" selector="#tax_calculation_algorithm_inherit"/>
+        <element name="taxCalculationBased" type="select" selector="#tax_calculation_based_on"/>
+        <element name="taxCalculationBasedDisabled" type="select" selector="#tax_calculation_based_on[disabled='disabled']"/>
+        <element name="taxCalculationBasedInherit" type="checkbox" selector="#tax_calculation_based_on_inherit"/>
+        <element name="taxCalculationPrices" type="select" selector="#tax_calculation_price_includes_tax"/>
+        <element name="taxCalculationPricesDisabled" type="select" selector="#tax_calculation_price_includes_tax[disabled='disabled']"/>
+        <element name="taxCalculationPricesInherit" type="checkbox" selector="#tax_calculation_price_includes_tax_inherit"/>
+        <element name="taxCalculationApplyTaxOn" type="select" selector="#tax_calculation_apply_tax_on"/>
+        <element name="taxCalculationApplyTaxOnInherit" type="checkbox" selector="#tax_calculation_apply_tax_on_inherit"/>
+
+        <element name="defaultDestination" type="block" selector="#tax_defaults-head" timeout="30"/>
+        <element name="systemValueDefaultState" type="checkbox" selector="#row_tax_defaults_region input[type='checkbox']"/>
+        <element name="dropdownDefaultState" type="select" selector="#row_tax_defaults_region select"/>
+        <element name="defaultPostCode" type="checkbox" selector="#tax_defaults_postcode"/>
+        
+        <element name="taxPriceDisplaySettings" type="block" selector="#tax_display-head" timeout="30"/>
+        <element name="taxPriceDisplaySettingsOpened" type="block" selector="#tax_display-head.open" timeout="30"/>
+        <element name="taxDisplayProductPrices" type="select" selector="#tax_display_type"/>
+        <element name="taxDisplayProductPricesDisabled" type="select" selector="#tax_display_type[disabled='disabled']"/>
+        <element name="taxDisplayProductPricesInherit" type="checkbox" selector="#tax_display_type_inherit"/>
+
+        <element name="taxSalesDisplay" type="block" selector=".config.admin__collapsible-block#tax_sales_display" timeout="30"/>
+        <element name="shoppingCartDisplay" type="block" selector="#tax_cart_display-head" timeout="30"/>
+        <element name="systemValueIncludeTaxTotalCart" type="checkbox" selector="#row_tax_cart_display_grandtotal input[type='checkbox']"/>
+        <element name="dropdownIncludeTaxTotalCart" type="checkbox" selector="#row_tax_cart_display_grandtotal select"/>
+        <element name="systemValueDisplayTaxSummaryCart" type="checkbox" selector="#row_tax_cart_display_full_summary input[type='checkbox']"/>
+        <element name="dropdownDisplayTaxSummaryCart" type="checkbox" selector="#row_tax_cart_display_full_summary select"/>
+        <element name="systemValueDisplayZeroTaxCart" type="checkbox" selector="#row_tax_cart_display_zero_tax input[type='checkbox']"/>
+        <element name="dropdownDisplayZeroTaxCart" type="checkbox" selector="#row_tax_cart_display_zero_tax select"/>
+
+        <element name="ordersInvoicesCreditSales" type="block" selector="#tax_sales_display-head" timeout="30"/>
+        <element name="systemValueIncludeTaxTotalSales" type="checkbox" selector="#row_tax_sales_display_grandtotal input[type='checkbox']"/>
+        <element name="dropdownIncludeTaxTotalSales" type="checkbox" selector="#row_tax_sales_display_grandtotal select"/>
+        <element name="systemValueDisplayTaxSummarySales" type="checkbox" selector="#row_tax_sales_display_full_summary input[type='checkbox']"/>
+        <element name="dropdownDisplayTaxSummarySales" type="checkbox" selector="#row_tax_sales_display_full_summary select"/>
+        <element name="systemValueDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax input[type='checkbox']"/>
+        <element name="dropdownDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax select"/>
+        <element name="fixedProductTaxes" type="block" selector="#tax_weee-head" timeout="30"/>
+
+        <element name="taxClassesCondition" type="block" selector="//a[@id='tax_classes-head' and @class='open']" timeout="30"/>
+        <element name="useSystemValue" type="checkbox" selector="#tax_classes_default_product_tax_class_inherit"/>
+        <element name="productTaxClass" type="select" selector="#tax_classes_default_product_tax_class"/>
+        <element name="save" type="button" selector="#save"/>
+    </section>
+</sections>

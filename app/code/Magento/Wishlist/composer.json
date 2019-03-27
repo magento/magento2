@@ -15,6 +15,7 @@
         "magento/module-rss": "*",
         "magento/module-sales": "*",
         "magento/module-store": "*",
+        "magento/module-theme": "*",
         "magento/module-ui": "*"
     },
     "suggest": {

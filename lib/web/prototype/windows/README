@@ -133,7 +133,7 @@ See samples/index.html for more details and go on my web page : http://prototype
             - Add Windows.focusedWindow and  Windows.closeAll
             - Add name to iframe in case of url window
             - Clean up code, use _ for private function (just name convention)
-            - Add Dialog.info function, usefull for for submit or notice info (in Rails)
+            - Add Dialog.info function, usefull for submit or notice info (in Rails)
             - Add minimize and maximize buttons
             - Add alert_lite.css without any images
             - Debug

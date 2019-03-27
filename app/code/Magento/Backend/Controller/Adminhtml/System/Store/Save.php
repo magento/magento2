@@ -6,12 +6,14 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
 /**
  * Class Save
  *
  * Save controller for system entities such as: Store, StoreGroup, Website
  */
-class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
+class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpPostActionInterface
 {
     /**
      * Process Website model save
@@ -32,7 +34,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
         }
 
         $websiteModel->save();
-        $this->messageManager->addSuccess(__('You saved the website.'));
+        $this->messageManager->addSuccessMessage(__('You saved the website.'));
 
         return $postData;
     }
@@ -46,7 +48,6 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
      */
     private function processStoreSave($postData)
     {
-        $eventName = 'store_edit';
         /** @var \Magento\Store\Model\Store $storeModel */
         $storeModel = $this->_objectManager->create(\Magento\Store\Model\Store::class);
         $postData['store']['name'] = $this->filterManager->removeTags($postData['store']['name']);
@@ -56,7 +57,6 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
         $storeModel->setData($postData['store']);
         if ($postData['store']['store_id'] == '') {
             $storeModel->setId(null);
-            $eventName = 'store_add';
         }
         $groupModel = $this->_objectManager->create(
             \Magento\Store\Model\Group::class
@@ -70,9 +70,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
             );
         }
         $storeModel->save();
-        $this->_objectManager->get(\Magento\Store\Model\StoreManager::class)->reinitStores();
-        $this->_eventManager->dispatch($eventName, ['store' => $storeModel]);
-        $this->messageManager->addSuccess(__('You saved the store view.'));
+        $this->messageManager->addSuccessMessage(__('You saved the store view.'));
 
         return $postData;
     }
@@ -102,8 +100,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
             );
         }
         $groupModel->save();
-        $this->_eventManager->dispatch('store_group_save', ['group' => $groupModel]);
-        $this->messageManager->addSuccess(__('You saved the store.'));
+        $this->messageManager->addSuccessMessage(__('You saved the store.'));
 
         return $postData;
     }
@@ -139,10 +136,10 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                 $redirectResult->setPath('adminhtml/*/');
                 return $redirectResult;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_getSession()->setPostData($postData);
             } catch (\Exception $e) {
-                $this->messageManager->addException(
+                $this->messageManager->addExceptionMessage(
                     $e,
                     __('Something went wrong while saving. Please review the error log.')
                 );

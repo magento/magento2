@@ -146,6 +146,9 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->plugin->aroundDispatch($subject, $proceed, $request));
     }
 
+    /**
+     * @return array
+     */
     public function processNotLoggedInUserDataProvider()
     {
         return [

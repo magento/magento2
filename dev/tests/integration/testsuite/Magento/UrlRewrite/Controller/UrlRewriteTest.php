@@ -42,6 +42,9 @@ class UrlRewriteTest extends AbstractController
         );
     }
 
+    /**
+     * @return array
+     */
     public function requestDataProvider()
     {
         return [
@@ -68,12 +71,6 @@ class UrlRewriteTest extends AbstractController
             'Use Case #6: Rewrite: page-similar/ --(301)--> page-b; Request: page-similar/ --(301)--> page-b' => [
                 'request' => '/page-similar/',
                 'redirect' => '/page-b',
-            ],
-            'Use Case #7: Rewrite during stores switching' => [
-                'request' => '/page-c-on-2nd-store'
-                    . '?___store=default&___from_store=fixture_second_store',
-                'redirect' => '/page-c-on-1st-store',
-                'expectedCode' => 302
             ],
         ];
     }

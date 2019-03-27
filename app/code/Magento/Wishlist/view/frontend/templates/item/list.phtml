@@ -19,7 +19,7 @@ $columns = $block->getColumns();
             <li data-row="product-item" class="product-item" id="item_<?= $block->escapeHtmlAttr($item->getId()) ?>">
                 <div class="product-item-info" data-container="product-grid">
                     <?php foreach ($columns as $column): ?>
-                        <?php $column->setItem($item); echo $column->toHtml($item);?>
+                        <?= $column->setItem($item)->toHtml();?>
                     <?php endforeach; ?>
                 </div>
             </li>

@@ -1000,15 +1000,13 @@ fieldset[disabled] .pager .action-next {
 }
 @font-face {
   font-family: 'icons-blank-theme';
-  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.eot');
-  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.eot?#iefix') format('embedded-opentype'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff2') format('woff2'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff') format('woff'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.ttf') format('truetype'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.svg#icons-blank-theme') format('svg');
+  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff2') format('woff2'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'icons-blank-theme';
-  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.eot');
-  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.eot?#iefix') format('embedded-opentype'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff2') format('woff2'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff') format('woff'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.ttf') format('truetype');
+  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff2') format('woff2'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }

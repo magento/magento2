@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EndToEndB2CAdminTest">
+        <!--Create Downloadable Product-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitProductPageDownloadable" after="seeSimpleProductInGrid"/>
+        <waitForPageLoad stepKey="waitForProductPageLoadDownloadable" after="visitProductPageDownloadable"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateDownloadableProduct" after="waitForProductPageLoadDownloadable">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainDownloadableProductForm" stepKey="fillMainProductFormDownloadable" after="goToCreateDownloadableProduct">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <click selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="openDownloadableSection" after="fillMainProductFormDownloadable"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable" after="openDownloadableSection"/>
+        <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillDownloadableLinkTitle" after="checkIsDownloadable"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkLinksPurchasedSeparately" after="fillDownloadableLinkTitle"/>
+        <fillField userInput="{{downloadableData.sample_title}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="fillDownloadableSampleTitle" after="checkLinksPurchasedSeparately"/>
+
+        <!--  Link 1 -->
+        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableLinkWithMaxDownloads" after="fillDownloadableSampleTitle">
+            <argument name="link" value="downloadableLinkWithMaxDownloads"/>
+        </actionGroup>
+
+        <!--  Link 2 -->
+        <actionGroup ref="addDownloadableProductLink" stepKey="addDownloadableLink" after="addDownloadableLinkWithMaxDownloads">
+            <argument name="link" value="downloadableLink"/>
+        </actionGroup>
+
+        <!--  Sample 1 -->
+        <actionGroup ref="addDownloadableSampleFile" stepKey="addDownloadSampleFile" after="addDownloadableLink">
+            <argument name="sample" value="downloadableSampleFile"/>
+        </actionGroup>
+
+        <!--  Sample 2 -->
+        <actionGroup ref="addDownloadableSampleUrl" stepKey="addDownloadableSampleUrl" after="addDownloadSampleFile">
+            <argument name="sample" value="downloadableSampleUrl"/>
+        </actionGroup>
+
+        <!--Save Product-->
+        <actionGroup ref="saveProductForm" stepKey="saveDownloadableProduct" after="addDownloadableSampleUrl"/>
+        <actionGroup ref="viewProductInAdminGrid" stepKey="viewDownloadableProductInGrid" after="saveDownloadableProduct">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
+        <comment userInput="Clean up downloadable product" stepKey="cleanUpDownloadableProduct" after="deleteSimpleProduct"/>
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteDownloadableProduct" after="cleanUpDownloadableProduct">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+    </test>
+</tests>

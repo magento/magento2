@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEditCustomerInformationSection">
+        <element name="orders" type="button" selector="#tab_orders_content" timeout="30"/>
+        <element name="addresses" type="button" selector="//a[@id='tab_address']" timeout="30"/>
+        <element name="newsLetter" type="button" selector="//a[@class='admin__page-nav-link' and @id='tab_newsletter_content']" timeout="30"/>
+        <element name="group" type="text" selector="//th[text()='Customer Group:']/../td"/>
+        <element name="customerTitle" type="text" selector="h1.page-title"/>
+    </section>
+</sections>

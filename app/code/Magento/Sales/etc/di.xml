@@ -65,6 +65,7 @@
     <preference for="Magento\Sales\Api\OrderRepositoryInterface" type="Magento\Sales\Model\OrderRepository"/>
     <preference for="Magento\Sales\Api\OrderManagementInterface" type="Magento\Sales\Model\Service\OrderService"/>
     <preference for="Magento\Sales\Api\OrderStatusHistoryRepositoryInterface" type="Magento\Sales\Model\Order\Status\HistoryRepository"/>
+    <preference for="Magento\Sales\Api\PaymentFailuresInterface" type="Magento\Sales\Model\Service\PaymentFailuresService" />
     <preference for="Magento\Sales\Api\ShipmentCommentRepositoryInterface" type="Magento\Sales\Model\Order\Shipment\CommentRepository"/>
     <preference for="Magento\Sales\Api\ShipmentItemRepositoryInterface" type="Magento\Sales\Model\Order\Shipment\ItemRepository"/>
     <preference for="Magento\Sales\Api\ShipmentRepositoryInterface" type="Magento\Sales\Model\Order\ShipmentRepository"/>
@@ -119,6 +120,7 @@
         <arguments>
             <argument name="providers" xsi:type="array">
                 <item name="default" xsi:type="string">Magento\Sales\Model\ResourceModel\Provider\UpdatedIdListProvider</item>
+                <item name="updated_at" xsi:type="string">Magento\Sales\Model\ResourceModel\Provider\UpdatedAtListProvider</item>
             </argument>
         </arguments>
     </type>
@@ -322,6 +324,7 @@
             <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\OrderSender</argument>
             <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order</argument>
             <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Collection</argument>
+            <argument name="identityContainer" xsi:type="object" shared="false">Magento\Sales\Model\Order\Email\Container\OrderIdentity</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesOrderInvoiceSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
@@ -329,6 +332,7 @@
             <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\InvoiceSender</argument>
             <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice</argument>
             <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Invoice\Collection</argument>
+            <argument name="identityContainer" xsi:type="object" shared="false">Magento\Sales\Model\Order\Email\Container\InvoiceIdentity</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesOrderShipmentSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
@@ -336,6 +340,7 @@
             <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\ShipmentSender</argument>
             <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Shipment</argument>
             <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Shipment\Collection</argument>
+            <argument name="identityContainer" xsi:type="object" shared="false">Magento\Sales\Model\Order\Email\Container\ShipmentIdentity</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesOrderCreditmemoSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
@@ -343,48 +348,49 @@
             <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\CreditmemoSender</argument>
             <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo</argument>
             <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection</argument>
+            <argument name="identityContainer" xsi:type="object" shared="false">Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="SalesOrderSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderSendEmails</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesOrderInvoiceSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderInvoiceSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderInvoiceSendEmails</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesOrderShipmentSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderShipmentSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderShipmentSendEmails</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesOrderCreditmemoSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderCreditmemoSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderCreditmemoSendEmails</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="SalesOrderSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderSendEmails</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesInvoiceSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderInvoiceSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderInvoiceSendEmails</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesShipmentSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderShipmentSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderShipmentSendEmails</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesCreditmemoSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderCreditmemoSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderCreditmemoSendEmails</argument>
         </arguments>
     </virtualType>
     <type name="Magento\SalesSequence\Model\EntityPool">
@@ -739,6 +745,10 @@
     <virtualType name="ShippingAddressAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
             <argument name="columns" xsi:type="array">
+                <item name="company" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">company</item>
+                </item>
                 <item name="street" xsi:type="array">
                     <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
                     <item name="columnName" xsi:type="string">street</item>
@@ -762,6 +772,10 @@
     <virtualType name="BillingAddressAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
             <argument name="columns" xsi:type="array">
+                <item name="company" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">company</item>
+                </item>
                 <item name="street" xsi:type="array">
                     <item name="tableAlias" xsi:type="string">sales_billing_address</item>
                     <item name="columnName" xsi:type="string">street</item>
@@ -974,6 +988,13 @@
     <type name="Magento\Sales\Model\ResourceModel\Order\Handler\Address">
         <plugin name="addressUpdate" type="Magento\Sales\Model\Order\Invoice\Plugin\AddressUpdate"/>
     </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="encyption_payment_data_update" xsi:type="object">Magento\Sales\Console\Command\EncryptionPaymentDataUpdateCommand</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">
@@ -989,6 +1010,14 @@
             <argument name="environment" xsi:type="array">
                 <item name="customer/create_account/email_domain" xsi:type="string">1</item>
             </argument>
+        </arguments>
+    </type>
+    <preference
+            for="Magento\Sales\Api\OrderCustomerDelegateInterface"
+            type="Magento\Sales\Model\Order\OrderCustomerDelegate" />
+    <type name="Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker">
+        <arguments>
+            <argument name="productAvailabilityChecks" xsi:type="array" />
         </arguments>
     </type>
 </config>

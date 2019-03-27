@@ -13,7 +13,10 @@
 <form action="<?= /* @escapeNotVerified */ $block->getUrl('checkout/cart/updatePost') ?>"
           method="post"
           id="form-validate"
-          data-mage-init='{"validation":{}}'
+          data-mage-init='{"Magento_Checkout/js/action/update-shopping-cart":
+              {"validationURL" : "/checkout/cart/updateItemQty",
+              "updateCartActionContainer": "#update_cart_action_container"}
+          }'
           class="form form-cart">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="cart table-wrapper<?= $mergedCells == 2 ? ' detailed' : '' ?>">
@@ -22,9 +25,9 @@
         <?php endif ?>
         <table id="shopping-cart-table"
                class="cart items data table"
-               data-mage-init='{"shoppingCart":{"emptyCartButton": "action.clear",
+               data-mage-init='{"shoppingCart":{"emptyCartButton": ".action.clear",
                "updateCartActionContainer": "#update_cart_action_container"}}'>
-            <caption role="heading" aria-level="2" class="table-caption"><?= /* @escapeNotVerified */ __('Shopping Cart Items') ?></caption>
+            <caption class="table-caption"><?= /* @escapeNotVerified */ __('Shopping Cart Items') ?></caption>
             <thead>
                 <tr>
                     <th class="col item" scope="col"><span><?= /* @escapeNotVerified */ __('Item') ?></span></th>

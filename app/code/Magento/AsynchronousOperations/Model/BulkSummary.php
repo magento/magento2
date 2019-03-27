@@ -81,6 +81,22 @@ class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\F
     /**
      * @inheritDoc
      */
+    public function getUserType()
+    {
+        return $this->getData(self::USER_TYPE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setUserType($userType)
+    {
+        return $this->setData(self::USER_TYPE, $userType);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getOperationCount()
     {
         return $this->getData(self::OPERATION_COUNT);

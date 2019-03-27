@@ -10,15 +10,17 @@
         "magento/module-eav": "*",
         "magento/module-search": "*",
         "magento/module-store": "*",
+        "magento/module-catalog-inventory": "*",
         "magento/framework": "*",
-        "elasticsearch/elasticsearch": "~2.0|~5.1"
+        "elasticsearch/elasticsearch": "~2.0|~5.1|~6.1"
     },
     "suggest": {
         "magento/module-config": "*"
     },
     "type": "magento2-module",
     "license": [
-        "proprietary"
+        "OSL-3.0",
+        "AFL-3.0"
     ],
     "autoload": {
         "files": [

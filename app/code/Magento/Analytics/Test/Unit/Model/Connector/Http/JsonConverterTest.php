@@ -25,6 +25,9 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
      */
     private $converter;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -37,9 +40,15 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testConverterContainsHeader()
     {
-        $this->assertEquals(JsonConverter::CONTENT_TYPE_HEADER, $this->converter->getContentTypeHeader());
+        $this->assertEquals(
+            'Content-Type: ' . JsonConverter::CONTENT_MEDIA_TYPE,
+            $this->converter->getContentTypeHeader()
+        );
     }
 
     /**
@@ -55,6 +64,9 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->converter->fromBody('body'));
     }
 
+    /**
+     * @return array
+     */
     public function convertBodyDataProvider()
     {
         return [
@@ -63,6 +75,9 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     *  return void
+     */
     public function testConvertData()
     {
         $this->serializerMock->expects($this->once())

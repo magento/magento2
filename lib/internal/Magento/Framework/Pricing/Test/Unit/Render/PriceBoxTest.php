@@ -122,6 +122,9 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($cssClasses, $priceBox->getData('css_classes'));
     }
 
+    /**
+     * @return array
+     */
     public function toHtmlDataProvider()
     {
         return [
@@ -225,6 +228,9 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedPriceId, $this->model->getPriceId($defaultPrefix, $defaultSuffix));
     }
 
+    /**
+     * @return array
+     */
     public function getPriceIdProvider()
     {
         return [

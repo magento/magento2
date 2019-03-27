@@ -139,7 +139,8 @@ class AdvancedPricing extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -158,7 +159,8 @@ class AdvancedPricing extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -381,11 +383,15 @@ class AdvancedPricing extends AbstractModifier
             );
 
             $advancedPricingButton['arguments']['data']['config'] = [
+                'dataScope' => 'advanced_pricing_button',
                 'displayAsLink' => true,
                 'formElement' => Container::NAME,
                 'componentType' => Container::NAME,
                 'component' => 'Magento_Ui/js/form/components/button',
                 'template' => 'ui/form/components/button/container',
+                'imports' => [
+                    'childError' => $this->scopeName . '.advanced_pricing_modal.advanced-pricing:error',
+                ],
                 'actions' => [
                     [
                         'targetName' => $this->scopeName . '.advanced_pricing_modal',
@@ -432,7 +438,8 @@ class AdvancedPricing extends AbstractModifier
                         'dndConfig' => [
                             'enabled' => false,
                         ],
-                        'disabled' => false,
+                        'disabled' =>
+                            $this->arrayManager->get($tierPricePath . '/arguments/data/config/disabled', $this->meta),
                         'required' => false,
                         'sortOrder' =>
                             $this->arrayManager->get($tierPricePath . '/arguments/data/config/sortOrder', $this->meta),
@@ -500,7 +507,8 @@ class AdvancedPricing extends AbstractModifier
                                         'validation' => [
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
-                                            'validate-digits' => true,
+                                            'validate-digits' => false,
+                                            'validate-number' => true,
                                         ],
                                     ],
                                 ],

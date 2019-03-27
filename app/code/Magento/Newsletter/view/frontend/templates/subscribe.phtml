@@ -22,8 +22,9 @@
                 <label class="label" for="newsletter"><span><?= $block->escapeHtml(__('Sign Up for Our Newsletter:')) ?></span></label>
                 <div class="control">
                     <input name="email" type="email" id="newsletter"
-                                placeholder="<?= $block->escapeHtmlAttr(__('Enter your email address')) ?>"
-                                data-validate="{required:true, 'validate-email':true}"/>
+                           placeholder="<?= $block->escapeHtml(__('Enter your email address')) ?>"
+                           data-mage-init='{"mage/trim-input":{}}'
+                           data-validate="{required:true, 'validate-email':true}"/>
                 </div>
             </div>
             <div class="actions">
