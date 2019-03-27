@@ -47,6 +47,8 @@ class GetMaskedQuoteIdByReservedOrderId
     }
 
     /**
+     * Get masked quote id by reserved order id
+     *
      * @param string $reversedOrderId
      * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
