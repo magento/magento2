@@ -13,6 +13,7 @@ define([
     'mage/translate',
     'prototype'
 ], function (jQuery) {
+    'use strict';
 
     var VarienRulesForm = new Class.create();
 
@@ -299,14 +300,14 @@ define([
         },
 
         changeVisibilityForValueRuleParam: function(elem) {
-            let parsedElementId = elem.id.split('__');
-            if (parsedElementId[2] != 'operator') {
+            var parsedElementId = elem.id.split('__');
+            if (parsedElementId[2] !== 'operator') {
                 return false;
             }
 
-            let valueElement = jQuery('#' + parsedElementId[0] + '__' + parsedElementId[1] + '__value');
+            var valueElement = jQuery('#' + parsedElementId[0] + '__' + parsedElementId[1] + '__value');
 
-            if(elem.value == '<=>') {
+            if(elem.value === '<=>') {
                 valueElement.closest('.rule-param').hide();
             } else {
                 valueElement.closest('.rule-param').show();
