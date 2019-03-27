@@ -17,7 +17,7 @@ interface PreprocessorInterface
      * @param mixed $attribute
      * @return bool
      */
-    public function shouldBeProcessed($key, $attribute);
+    public function shouldBeProcessed(string $key, $attribute): bool;
 
     /**
      * Process attribute object according to type rules
@@ -25,12 +25,12 @@ interface PreprocessorInterface
      * @param string $key
      * @param mixed $attribute
      */
-    public function process($key, &$attribute);
+    public function process(string $key, &$attribute);
 
     /**
      * Get list of affected attributes for the current preprocessor
      *
      * @return array
      */
-    public function getAffectedAttributes();
+    public function getAffectedAttributes(): array;
 }

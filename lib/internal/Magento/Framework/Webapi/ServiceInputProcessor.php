@@ -349,7 +349,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      *
      * @return array
      */
-    private function getAttributesPreprocessorsMap()
+    private function getAttributesPreprocessorsMap(): array
     {
         if (!$this->attributesPreprocessorsMap) {
             foreach ($this->customAttributePreprocessors as $attributePreprocessor) {
@@ -368,7 +368,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $key
      * @param mixed $customAttribute
      */
-    private function runCustomAttributePreprocessors($key, &$customAttribute)
+    private function runCustomAttributePreprocessors(string $key, &$customAttribute)
     {
         $preprocessorsMap = $this->getAttributesPreprocessorsMap();
         if ($key && is_array($customAttribute) && array_key_exists($key, $preprocessorsMap)) {
