@@ -202,7 +202,7 @@ class Save extends AbstractConfig
      * @return array Filtered groups.
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function filterPaths(string $prefix, array $groups, array $systemXmlConfig)
+    private function filterPaths($prefix, array $groups, array $systemXmlConfig)
     {
         $flippedXmlConfig = array_flip($systemXmlConfig);
         $filtered = [];
