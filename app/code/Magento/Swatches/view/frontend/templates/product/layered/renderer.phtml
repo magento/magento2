@@ -17,7 +17,7 @@
             <a href="<?= /* @escapeNotVerified */ $label['link'] ?>"
                aria-label="<?= /* @escapeNotVerified */ $label['label'] ?>"
                class="swatch-option-link-layered">
-                <?php if (isset($swatchData['swatches'][$option]['type'])) { ?>
+                <?php if (isset($swatchData['swatches'][$option]['type'])): ?>
                     <?php switch ($swatchData['swatches'][$option]['type']) {
                         case '3':
                             ?>
@@ -32,10 +32,8 @@
                             <?php    break;
                         case '2':
                             ?>
-                            <?php $swatchThumbPath = $block->getSwatchPath('swatch_thumb',
-                            $swatchData['swatches'][$option]['value']); ?>
-                            <?php $swatchImagePath = $block->getSwatchPath('swatch_image',
-                            $swatchData['swatches'][$option]['value']); ?>
+                            <?php $swatchThumbPath = $block->getSwatchPath('swatch_thumb', $swatchData['swatches'][$option]['value']); ?>
+                            <?php $swatchImagePath = $block->getSwatchPath('swatch_image', $swatchData['swatches'][$option]['value']); ?>
                             <div class="swatch-option image <?= /* @escapeNotVerified */ $label['custom_style'] ?>"
                                  tabindex="-1"
                                  option-type="2"
@@ -69,7 +67,7 @@
                                     ><?= /* @escapeNotVerified */ $swatchData['swatches'][$option]['value'] ?></div>
                             <?php    break;
                     } ?>
-                <?php } ?>
+                <?php endif; ?>
             </a>
         <?php endforeach; ?>
     </div>

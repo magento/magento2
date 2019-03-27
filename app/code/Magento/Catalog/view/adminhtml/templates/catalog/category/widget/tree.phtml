@@ -160,7 +160,7 @@ jQuery(function()
         loader:           categoryLoader,
         enableDD:         false,
         containerScroll:  true,
-        rootVisible:      '<?= /* @escapeNotVerified */ $block->getRoot()->getIsVisible() ?>',
+        rootVisible:      false,
         useAjax:          true,
         currentNodeId:    <?= (int) $block->getCategoryId() ?>,
         addNodeTo:        false
@@ -177,7 +177,7 @@ jQuery(function()
         text:        'Psw',
         draggable:   false,
         id:          <?= (int) $block->getRoot()->getId() ?>,
-        expanded:    <?= (int) $block->getIsWasExpanded() ?>,
+        expanded:    true,
         category_id: <?= (int) $block->getCategoryId() ?>
     };
 
