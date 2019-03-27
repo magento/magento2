@@ -34,6 +34,10 @@
                     <label>Password Change</label>
                     <source_model>Magento\User\Model\System\Config\Source\Password</source_model>
                 </field>
+                <field id="allow_to_repeat_previous_passwords" translate="label" sortOrder="130" type="select" showInDefault="1" canRestore="1">
+                    <label>Allow to repeat previous passwords</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
         </section>
     </system>

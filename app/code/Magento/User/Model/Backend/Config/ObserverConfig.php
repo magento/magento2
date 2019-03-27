@@ -80,4 +80,12 @@ class ObserverConfig
     {
         return (int)$this->backendConfig->getValue('admin/security/lockout_failures');
     }
+
+    /**
+     * @return bool
+     */
+    public function isAllowedToRepeatPreviousPasswords(): bool
+    {
+        return (bool)$this->backendConfig->getValue('admin/security/allow_to_repeat_previous_passwords');
+    }
 }

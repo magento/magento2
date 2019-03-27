@@ -526,4 +526,57 @@ class UserTest extends \PHPUnit\Framework\TestCase
             . 'Please wait and try again later.'
         );
     }
+
+    /**
+     * Validate that we can't set the same password again.
+     */
+    public function testValidateSetTheSamePasswordAgain()
+    {
+        $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+        $this->_model->setPassword(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+        $validationResult = $this->_model->validate();
+        $result = reset($validationResult);
+
+        $this->assertEquals(
+            __('Sorry, but this password is being used now. Please create another.'),
+            $result
+        );
+    }
+
+    /**
+     * Validate that we can't set one of the previous passwords.
+     */
+    public function testValidateSetOneOfThePreviousPasswords()
+    {
+        $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+        $this->_model->setPassword('123123q');
+        $this->_model->save();
+
+        $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+        $this->_model->setPassword(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+        $validationResult = $this->_model->validate();
+        $result = reset($validationResult);
+
+        $this->assertEquals(
+            __('Sorry, but this password has already been used. Please create another.'),
+            $result
+        );
+    }
+
+    /**
+     * Validate that we can set one of the previous passwords if allow_to_repeat_previous_passwords == true.
+     *
+     * @magentoConfigFixture admin/security/allow_to_repeat_previous_passwords 1
+     */
+    public function testValidateSetOneOfThePreviousPasswordsWithAllowToRepeatPassword()
+    {
+        $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+        $this->_model->setPassword('123123q');
+        $this->_model->save();
+
+        $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+        $this->_model->setPassword(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+
+        $this->assertTrue($this->_model->validate());
+    }
 }
