@@ -46,6 +46,7 @@ class QueryResponseTest extends \PHPUnit\Framework\TestCase
             [
                 'documents' => $this->documents,
                 'aggregations' => $this->aggregations,
+                'total' => 1
             ]
         );
     }
