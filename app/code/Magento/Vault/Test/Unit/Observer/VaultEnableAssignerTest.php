@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Vault\Test\Unit\Observer;
 
 use Magento\Framework\DataObject;
@@ -13,6 +15,7 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Observer\VaultEnableAssigner;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
 {
@@ -47,8 +50,7 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
         );
         $paymentModel = $this->createMock(InfoInterface::class);
 
-        $paymentModel->expects(static::once())
-            ->method('setAdditionalInformation')
+        $paymentModel->method('setAdditionalInformation')
             ->with(
                 VaultConfigProvider::IS_ACTIVE_CODE,
                 $expectedBool
@@ -77,37 +79,14 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
             ['on', true],
             ['false', false],
             ['0', false],
-            ['off', false]
+            ['off', false],
+            [null, false]
         ];
-    }
-
-    public function testExecuteNever()
-    {
-        $dataObject = new DataObject(
-            [
-                PaymentInterface::KEY_ADDITIONAL_DATA => []
-            ]
-        );
-        $paymentModel = $this->createMock(InfoInterface::class);
-
-        $paymentModel->expects(static::never())
-            ->method('setAdditionalInformation');
-
-        $observer = $this->getPreparedObserverWithMap(
-            [
-                [AbstractDataAssignObserver::DATA_CODE, $dataObject],
-                [AbstractDataAssignObserver::MODEL_CODE, $paymentModel]
-            ]
-        );
-
-        $vaultEnableAssigner = new VaultEnableAssigner();
-
-        $vaultEnableAssigner->execute($observer);
     }
 
     /**
      * @param array $returnMap
-     * @return \PHPUnit_Framework_MockObject_MockObject|Observer
+     * @return MockObject|Observer
      */
     private function getPreparedObserverWithMap(array $returnMap)
     {
@@ -118,10 +97,10 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $observer->expects(static::atLeastOnce())
+        $observer->expects(self::atLeastOnce())
             ->method('getEvent')
             ->willReturn($event);
-        $event->expects(static::atLeastOnce())
+        $event->expects(self::atLeastOnce())
             ->method('getDataByKey')
             ->willReturnMap(
                 $returnMap

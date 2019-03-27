@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Vault\Observer;
 
 use Magento\Framework\Event\Observer;
@@ -10,13 +12,15 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 
+/**
+ * Sets visibility for Vault payment
+ */
 class VaultEnableAssigner extends AbstractDataAssignObserver
 {
     /**
-     * @param Observer $observer
-     * @return void
+     * @inheritdoc
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $data = $this->readDataArgument($observer);
 
@@ -26,12 +30,14 @@ class VaultEnableAssigner extends AbstractDataAssignObserver
             return;
         }
 
+        $payment = $this->readPaymentModelArgument($observer);
+        $isVisible = false;
         if (isset($additionalData[VaultConfigProvider::IS_ACTIVE_CODE])) {
-            $payment = $this->readPaymentModelArgument($observer);
-            $payment->setAdditionalInformation(
-                VaultConfigProvider::IS_ACTIVE_CODE,
-                filter_var($additionalData[VaultConfigProvider::IS_ACTIVE_CODE], FILTER_VALIDATE_BOOLEAN)
+            $isVisible = filter_var(
+                $additionalData[VaultConfigProvider::IS_ACTIVE_CODE],
+                FILTER_VALIDATE_BOOLEAN
             );
         }
+        $payment->setAdditionalInformation(VaultConfigProvider::IS_ACTIVE_CODE, $isVisible);
     }
 }
