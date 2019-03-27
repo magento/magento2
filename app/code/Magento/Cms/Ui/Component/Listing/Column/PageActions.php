@@ -78,7 +78,7 @@ class PageActions extends Column
                         'href' => $this->urlBuilder->getUrl($this->editUrl, ['page_id' => $item['page_id']]),
                         'label' => __('Edit')
                     ];
-                    $title = $this->getEscaper()->escapeHtml($item['title']);
+                    $title = $this->getEscaper()->escapeHtmlAttr($item['title']);
                     $item[$name]['delete'] = [
                         'href' => $this->urlBuilder->getUrl(self::CMS_URL_PATH_DELETE, ['page_id' => $item['page_id']]),
                         'label' => __('Delete'),

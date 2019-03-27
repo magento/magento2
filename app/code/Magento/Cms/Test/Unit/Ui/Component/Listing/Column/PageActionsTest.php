@@ -37,7 +37,7 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
 
         $escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
+            ->setMethods(['escapeHtmlAttr'])
             ->getMock();
         $objectManager->setBackwardCompatibleProperty($model, 'escaper', $escaper);
 
@@ -77,7 +77,7 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
         ];
 
         $escaper->expects(static::once())
-            ->method('escapeHtml')
+            ->method('escapeHtmlAttr')
             ->with($title)
             ->willReturn($title);
         
