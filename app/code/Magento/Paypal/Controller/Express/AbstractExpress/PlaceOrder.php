@@ -21,7 +21,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @var \Magento\Checkout\Api\AgreementsValidatorInterface
      */
     protected $agreementsValidator;
-
     /**
      * @var Magento\Sales\Model\Order\Email\Sender\InvoiceSender
      */
@@ -62,7 +61,9 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             $urlHelper,
             $customerUrl
         );
-        $this->invoiceSender = $invoiceSender?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Sales\Model\Order\Email\Sender\InvoiceSender::class);
+        $this->invoiceSender = $invoiceSender?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Sales\Model\Order\Email\Sender\InvoiceSender::class
+        );
     }
 
     /**

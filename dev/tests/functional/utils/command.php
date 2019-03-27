@@ -3,30 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+include __DIR__ . '/authenticate.php';
+require_once __DIR__ . '/../../../../app/bootstrap.php';
 
-if (isset($_GET['command'])) {
-    $php = PHP_BINARY ?: (PHP_BINDIR ? PHP_BINDIR . '/php' : 'php');
-    $command = urldecode($_GET['command']);
-    exec(escapeCommand($php . ' -f ../../../../bin/magento ' . $command));
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\NullOutput;
+
+if (!empty($_POST['token']) && !empty($_POST['command'])) {
+    if (authenticate(urldecode($_POST['token']))) {
+        $command = urldecode($_POST['command']);
+        $magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
+        $magentoObjectManager = $magentoObjectManagerFactory->create($_SERVER);
+        $cli = $magentoObjectManager->create(\Magento\Framework\Console\Cli::class);
+        $input = new StringInput(escapeshellcmd($command));
+        $input->setInteractive(false);
+        $output = new NullOutput();
+        $cli->doRun($input, $output);
+    } else {
+        echo "Command not unauthorized.";
+    }
 } else {
-    throw new \InvalidArgumentException("Command GET parameter is not set.");
-}
-
-/**
- * Returns escaped command.
- *
- * @param string $command
- * @return string
- */
-function escapeCommand($command)
-{
-    $escapeExceptions = [
-        '> /dev/null &' => '--dev-null-amp--'
-    ];
-
-    $command = escapeshellcmd(
-        str_replace(array_keys($escapeExceptions), array_values($escapeExceptions), $command)
-    );
-
-    return str_replace(array_values($escapeExceptions), array_keys($escapeExceptions), $command);
+    echo "'token' or 'command' parameter is not set.";
 }

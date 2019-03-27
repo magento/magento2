@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Element;
 
+use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Base class for all blocks.
@@ -176,13 +179,22 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $_cache;
 
     /**
+     * @var LockGuardedCacheLoader
+     */
+    private $lockQuery;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param array $data
+     * @param LockGuardedCacheLoader|null $lockQuery
      */
-    public function __construct(\Magento\Framework\View\Element\Context $context, array $data = [])
-    {
+    public function __construct(
+        \Magento\Framework\View\Element\Context $context,
+        array $data = [],
+        LockGuardedCacheLoader $lockQuery = null
+    ) {
         $this->_request = $context->getRequest();
         $this->_layout = $context->getLayout();
         $this->_eventManager = $context->getEventManager();
@@ -204,6 +216,8 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             $this->jsLayout = $data['jsLayout'];
             unset($data['jsLayout']);
         }
+        $this->lockQuery = $lockQuery
+            ?: ObjectManager::getInstance()->get(LockGuardedCacheLoader::class);
         parent::__construct($data);
         $this->_construct();
     }
@@ -658,19 +672,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         }
 
         $html = $this->_loadCache();
-        if ($html === false) {
-            if ($this->hasData('translate_inline')) {
-                $this->inlineTranslation->suspend($this->getData('translate_inline'));
-            }
-
-            $this->_beforeToHtml();
-            $html = $this->_toHtml();
-            $this->_saveCache($html);
-
-            if ($this->hasData('translate_inline')) {
-                $this->inlineTranslation->resume();
-            }
-        }
         $html = $this->_afterToHtml($html);
 
         /** @var \Magento\Framework\DataObject */
@@ -952,7 +953,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function escapeUrl($string)
     {
-        return $this->_escaper->escapeUrl($string);
+        return $this->_escaper->escapeUrl((string)$string);
     }
 
     /**
@@ -1074,7 +1075,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
 
         $cacheLifetime = $this->getData('cache_lifetime');
         if (false === $cacheLifetime || null === $cacheLifetime) {
-            return $cacheLifetime;
+            return null;
         }
 
         return (int)$cacheLifetime;
@@ -1083,23 +1084,54 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Load block html from cache storage
      *
-     * @return string|false
+     * @return string
      */
     protected function _loadCache()
     {
+        $collectAction = function () {
+            if ($this->hasData('translate_inline')) {
+                $this->inlineTranslation->suspend($this->getData('translate_inline'));
+            }
+
+            $this->_beforeToHtml();
+            return $this->_toHtml();
+        };
+
         if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
-            return false;
+            $html = $collectAction();
+            if ($this->hasData('translate_inline')) {
+                $this->inlineTranslation->resume();
+            }
+            return $html;
         }
-        $cacheKey = $this->getCacheKey();
-        $cacheData = $this->_cache->load($cacheKey);
-        if ($cacheData) {
-            $cacheData = str_replace(
-                $this->_getSidPlaceholder($cacheKey),
-                $this->_sidResolver->getSessionIdQueryParam($this->_session) . '=' . $this->_session->getSessionId(),
-                $cacheData
-            );
-        }
-        return $cacheData;
+        $loadAction = function () {
+            $cacheKey = $this->getCacheKey();
+            $cacheData = $this->_cache->load($cacheKey);
+            if ($cacheData) {
+                $cacheData = str_replace(
+                    $this->_getSidPlaceholder($cacheKey),
+                    $this->_sidResolver->getSessionIdQueryParam($this->_session)
+                    . '='
+                    . $this->_session->getSessionId(),
+                    $cacheData
+                );
+            }
+            return $cacheData;
+        };
+
+        $saveAction = function ($data) {
+            $this->_saveCache($data);
+            if ($this->hasData('translate_inline')) {
+                $this->inlineTranslation->resume();
+            }
+        };
+
+        return (string)$this->lockQuery->lockedLoadData(
+            $this->getCacheKey(),
+            $loadAction,
+            $collectAction,
+            $saveAction
+        );
     }
 
     /**
@@ -1156,6 +1188,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
 
     /**
      * Determine if the block scope is private or public.
+     *
      * Returns true if scope is private, false otherwise
      *
      * @return bool

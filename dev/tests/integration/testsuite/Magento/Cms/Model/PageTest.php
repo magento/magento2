@@ -6,6 +6,7 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
@@ -79,13 +80,27 @@ class PageTest extends \PHPUnit\Framework\TestCase
     public function testUpdateTime()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /**
+         * @var $db \Magento\Framework\DB\Adapter\AdapterInterface
+         */
+        $db = $objectManager->get(\Magento\Framework\App\ResourceConnection::class)
+            ->getConnection(ResourceConnection::DEFAULT_CONNECTION);
+
         /** @var \Magento\Cms\Model\Page $page */
         $page = $objectManager->create(\Magento\Cms\Model\Page::class);
         $page->setData(['title' => 'Test', 'stores' => [1]]);
+        $beforeTimestamp = $db->fetchCol('SELECT UNIX_TIMESTAMP()')[0];
         $page->save();
+        $afterTimestamp = $db->fetchCol('SELECT UNIX_TIMESTAMP()')[0];
         $page = $objectManager->get(PageRepositoryInterface::class)->getById($page->getId());
-        $date = $objectManager->get(DateTime::class)->date();
-        $this->assertEquals($date, $page->getUpdateTime());
+        $pageTimestamp = strtotime($page->getUpdateTime());
+
+        /*
+         * These checks prevent a race condition MAGETWO-95534
+         */
+        $this->assertGreaterThanOrEqual($beforeTimestamp, $pageTimestamp);
+        $this->assertLessThanOrEqual($afterTimestamp, $pageTimestamp);
     }
 
     public function generateIdentifierFromTitleDataProvider() : array

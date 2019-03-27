@@ -71,6 +71,11 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 
+    /**
+     * @param $entityTypeCode
+     * @param array $allowedExtensions
+     * @return FileProcessor
+     */
     private function getModel($entityTypeCode, array $allowedExtensions = [])
     {
         $model = new FileProcessor(

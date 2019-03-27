@@ -309,6 +309,10 @@ class Topmenu extends Template implements IdentityInterface
         $classes[] = 'level' . $item->getLevel();
         $classes[] = $item->getPositionClass();
 
+        if ($item->getIsCategory()) {
+            $classes[] = 'category-item';
+        }
+
         if ($item->getIsFirst()) {
             $classes[] = 'first';
         }
@@ -355,19 +359,6 @@ class Topmenu extends Template implements IdentityInterface
     public function getIdentities()
     {
         return $this->identities;
-    }
-
-    /**
-     * Get cache key informative items
-     *
-     * @return array
-     * @since 100.1.0
-     */
-    public function getCacheKeyInfo()
-    {
-        $keyInfo = parent::getCacheKeyInfo();
-        $keyInfo[] = $this->getUrl('*/*/*', ['_current' => true, '_query' => '']);
-        return $keyInfo;
     }
 
     /**

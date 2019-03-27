@@ -3,13 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 
-use Magento\CatalogSearch\Model\Search\RequestGenerator;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
+use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Framework\Data\Collection\Db\SizeResolverInterfaceFactory;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\CatalogSearch\Model\Search\RequestGenerator;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 use Magento\Framework\Search\Response\QueryResponse;
 use Magento\Framework\Search\Request\EmptyRequestDataException;
 use Magento\Framework\Search\Request\NonExistingRequestNameException;
@@ -17,13 +30,17 @@ use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Search\Model\EngineResolver;
 
 /**
  * Fulltext Collection
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * This collection should be refactored to not have dependencies on MySQL-specific implementation.
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -59,17 +76,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $queryText;
 
     /**
-     * @var string|null
-     */
-    private $relevanceOrderDirection = null;
-
-    /**
      * @var string
      */
     private $searchRequestName;
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
+     * @deprecated There must be no dependencies on specific adapter in generic search implementation
      */
     private $temporaryStorageFactory;
 
@@ -97,6 +110,31 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @var \Magento\Framework\Api\FilterBuilder
      */
     private $filterBuilder;
+
+    /**
+     * @var SearchCriteriaResolverFactory
+     */
+    private $searchCriteriaResolverFactory;
+
+    /**
+     * @var SearchResultApplierFactory
+     */
+    private $searchResultApplierFactory;
+
+    /**
+     * @var TotalRecordsResolverFactory
+     */
+    private $totalRecordsResolverFactory;
+
+    /**
+     * @var EngineResolverInterface
+     */
+    private $engineResolver;
+
+    /**
+     * @var array
+     */
+    private $searchOrders;
 
     /**
      * Collection constructor
@@ -129,8 +167,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param SearchResultFactory|null $searchResultFactory
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
-     *
+     * @param TableMaintainer|null $tableMaintainer
+     * @param PriceTableResolver|null $priceTableResolver
+     * @param DimensionFactory|null $dimensionFactory
+     * @param ResourceModelPoolInterface|null $resourceModelPool
+     * @param \Magento\Search\Api\SearchInterface|null $search
+     * @param \Magento\Framework\Api\Search\SearchCriteriaBuilder|null $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\FilterBuilder|null $filterBuilder
+     * @param SearchCriteriaResolverFactory|null $searchCriteriaResolverFactory
+     * @param SearchResultApplierFactory|null $searchResultApplierFactory
+     * @param TotalRecordsResolverFactory|null $totalRecordsResolverFactory
+     * @param EngineResolverInterface|null $engineResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -160,7 +209,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $searchRequestName = 'catalog_view_container',
         SearchResultFactory $searchResultFactory = null,
         ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null
+        MetadataPool $metadataPool = null,
+        TableMaintainer $tableMaintainer = null,
+        PriceTableResolver $priceTableResolver = null,
+        DimensionFactory $dimensionFactory = null,
+        ResourceModelPoolInterface $resourceModelPool = null,
+        \Magento\Search\Api\SearchInterface $search = null,
+        \Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder = null,
+        SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
+        SearchResultApplierFactory $searchResultApplierFactory = null,
+        TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
+        EngineResolverInterface $engineResolver = null
     ) {
         $this->queryFactory = $catalogSearchData;
         if ($searchResultFactory === null) {
@@ -189,15 +249,34 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $groupManagement,
             $connection,
             $productLimitationFactory,
-            $metadataPool
+            $metadataPool,
+            $tableMaintainer,
+            $priceTableResolver,
+            $dimensionFactory,
+            $resourceModelPool
         );
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
         $this->temporaryStorageFactory = $temporaryStorageFactory;
         $this->searchRequestName = $searchRequestName;
+        $this->search = $search ?: ObjectManager::getInstance()->get(\Magento\Search\Api\SearchInterface::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\Search\SearchCriteriaBuilder::class);
+        $this->filterBuilder = $filterBuilder ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\FilterBuilder::class);
+        $this->searchCriteriaResolverFactory = $searchCriteriaResolverFactory ?: ObjectManager::getInstance()
+            ->get(SearchCriteriaResolverFactory::class);
+        $this->searchResultApplierFactory = $searchResultApplierFactory ?: ObjectManager::getInstance()
+            ->get(SearchResultApplierFactory::class);
+        $this->totalRecordsResolverFactory = $totalRecordsResolverFactory ?: ObjectManager::getInstance()
+            ->get(TotalRecordsResolverFactory::class);
+        $this->engineResolver = $engineResolver ?: ObjectManager::getInstance()
+            ->get(EngineResolverInterface::class);
     }
 
     /**
+     * Get search.
+     *
      * @deprecated 100.1.0
      * @return \Magento\Search\Api\SearchInterface
      */
@@ -210,6 +289,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Test search.
+     *
      * @deprecated 100.1.0
      * @param \Magento\Search\Api\SearchInterface $object
      * @return void
@@ -221,6 +302,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Set search criteria builder.
+     *
      * @deprecated 100.1.0
      * @return \Magento\Framework\Api\Search\SearchCriteriaBuilder
      */
@@ -234,6 +317,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Set search criteria builder.
+     *
      * @deprecated 100.1.0
      * @param \Magento\Framework\Api\Search\SearchCriteriaBuilder $object
      * @return void
@@ -245,6 +330,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get filter builder.
+     *
      * @deprecated 100.1.0
      * @return \Magento\Framework\Api\FilterBuilder
      */
@@ -257,6 +344,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Set filter builder.
+     *
      * @deprecated 100.1.0
      * @param \Magento\Framework\Api\FilterBuilder $object
      * @return void
@@ -271,7 +360,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Apply attribute filter to facet collection
      *
      * @param string $field
-     * @param null $condition
+     * @param mixed|null $condition
      * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
@@ -316,32 +405,32 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @inheritdoc
      */
+    public function setOrder($attribute, $dir = Select::SQL_DESC)
+    {
+        $this->setSearchOrder($attribute, $dir);
+        if ($this->isCurrentEngineMysql()) {
+            parent::setOrder($attribute, $dir);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function _renderFiltersBefore()
     {
-        $this->getSearchCriteriaBuilder();
-        $this->getFilterBuilder();
-        $this->getSearch();
-
-        if ($this->queryText) {
-            $this->filterBuilder->setField('search_term');
-            $this->filterBuilder->setValue($this->queryText);
-            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+        if ($this->isLoaded()) {
+            return;
         }
 
-        $priceRangeCalculation = $this->_scopeConfig->getValue(
-            \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory::XML_PATH_RANGE_CALCULATION,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        if ($priceRangeCalculation) {
-            $this->filterBuilder->setField('price_dynamic_algorithm');
-            $this->filterBuilder->setValue($priceRangeCalculation);
-            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
-        }
+        $this->prepareSearchTermFilter();
+        $this->preparePriceAggregation();
 
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $searchCriteria->setRequestName($this->searchRequestName);
+        $searchCriteria = $this->getSearchCriteriaResolver()->resolve();
         try {
             $this->searchResult = $this->getSearch()->search($searchCriteria);
+            $this->_totalRecords = $this->getTotalRecordsResolver($this->searchResult)->resolve();
         } catch (EmptyRequestDataException $e) {
             /** @var \Magento\Framework\Api\Search\SearchResultInterface $searchResult */
             $this->searchResult = $this->searchResultFactory->create()->setItems([]);
@@ -350,23 +439,79 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             throw new LocalizedException(__('An error occurred. For details, see the error log.'));
         }
 
-        $temporaryStorage = $this->temporaryStorageFactory->create();
-        $table = $temporaryStorage->storeApiDocuments($this->searchResult->getItems());
+        $this->getSearchResultApplier($this->searchResult)->apply();
+        parent::_renderFiltersBefore();
+    }
 
-        $this->getSelect()->joinInner(
-            [
-                'search_result' => $table->getName(),
-            ],
-            'e.entity_id = search_result.' . TemporaryStorage::FIELD_ENTITY_ID,
-            []
-        );
+    /**
+     * Set sort order for search query.
+     *
+     * @param string $field
+     * @param string $direction
+     * @return void
+     */
+    private function setSearchOrder($field, $direction)
+    {
+        $field = (string)$this->_getMappedField($field);
+        $direction = strtoupper($direction) == self::SORT_ORDER_ASC ? self::SORT_ORDER_ASC : self::SORT_ORDER_DESC;
 
-        if ($this->relevanceOrderDirection) {
-            $this->getSelect()->order(
-                'search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->relevanceOrderDirection
-            );
-        }
-        return parent::_renderFiltersBefore();
+        $this->searchOrders[$field] = $direction;
+    }
+
+    /**
+     * Check if current engine is MYSQL.
+     *
+     * @return bool
+     */
+    private function isCurrentEngineMysql()
+    {
+        return $this->engineResolver->getCurrentSearchEngine() === EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE;
+    }
+
+    /**
+     * Get total records resolver.
+     *
+     * @param SearchResultInterface $searchResult
+     * @return TotalRecordsResolverInterface
+     */
+    private function getTotalRecordsResolver(SearchResultInterface $searchResult): TotalRecordsResolverInterface
+    {
+        return $this->totalRecordsResolverFactory->create([
+            'searchResult' => $searchResult,
+        ]);
+    }
+
+    /**
+     * Get search criteria resolver.
+     *
+     * @return SearchCriteriaResolverInterface
+     */
+    private function getSearchCriteriaResolver(): SearchCriteriaResolverInterface
+    {
+        return $this->searchCriteriaResolverFactory->create([
+            'builder' => $this->getSearchCriteriaBuilder(),
+            'collection' => $this,
+            'searchRequestName' => $this->searchRequestName,
+            'currentPage' => $this->_curPage,
+            'size' => $this->getPageSize(),
+            'orders' => $this->searchOrders,
+        ]);
+    }
+
+    /**
+     * Get search result applier.
+     *
+     * @param SearchResultInterface $searchResult
+     * @return SearchResultApplierInterface
+     */
+    private function getSearchResultApplier(SearchResultInterface $searchResult): SearchResultApplierInterface
+    {
+        return $this->searchResultApplierFactory->create([
+            'collection' => $this,
+            'searchResult' => $searchResult,
+            /** This variable sets by serOrder method, but doesn't have a getter method. */
+            'orders' => $this->_orders,
+        ]);
     }
 
     /**
@@ -384,30 +529,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Render filters.
+     *
      * @return $this
      */
     protected function _renderFilters()
     {
         $this->_filters = [];
         return parent::_renderFilters();
-    }
-
-    /**
-     * Set Order field
-     *
-     * @param string $attribute
-     * @param string $dir
-     * @return $this
-     */
-    public function setOrder($attribute, $dir = Select::SQL_DESC)
-    {
-        if ($attribute === 'relevance') {
-            $this->relevanceOrderDirection = $dir;
-        } else {
-            parent::setOrder($attribute, $dir);
-        }
-
-        return $this;
     }
 
     /**
@@ -456,7 +585,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
     {
         $this->addFieldToFilter('category_ids', $category->getId());
-        return parent::addCategoryFilter($category);
+        /**
+         * This changes need in backward compatible reasons for support dynamic improved algorithm
+         * for price aggregation process.
+         */
+        if ($this->isCurrentEngineMysql()) {
+            parent::addCategoryFilter($category);
+        } else {
+            $this->_productLimitationPrice();
+        }
+
+        return $this;
     }
 
     /**
@@ -468,6 +607,46 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setVisibility($visibility)
     {
         $this->addFieldToFilter('visibility', $visibility);
-        return parent::setVisibility($visibility);
+        /**
+         * This changes need in backward compatible reasons for support dynamic improved algorithm
+         * for price aggregation process.
+         */
+        if ($this->isCurrentEngineMysql()) {
+            parent::setVisibility($visibility);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Prepare search term filter for text query.
+     *
+     * @return void
+     */
+    private function prepareSearchTermFilter(): void
+    {
+        if ($this->queryText) {
+            $this->filterBuilder->setField('search_term');
+            $this->filterBuilder->setValue($this->queryText);
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+        }
+    }
+
+    /**
+     * Prepare price aggregation algorithm.
+     *
+     * @return void
+     */
+    private function preparePriceAggregation(): void
+    {
+        $priceRangeCalculation = $this->_scopeConfig->getValue(
+            \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory::XML_PATH_RANGE_CALCULATION,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        if ($priceRangeCalculation) {
+            $this->filterBuilder->setField('price_dynamic_algorithm');
+            $this->filterBuilder->setValue($priceRangeCalculation);
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+        }
     }
 }

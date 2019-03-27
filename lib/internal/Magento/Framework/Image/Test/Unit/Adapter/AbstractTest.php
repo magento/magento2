@@ -109,6 +109,9 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
+    /**
+     * @return array
+     */
     public function prepareDestinationDataProvider()
     {
         return [

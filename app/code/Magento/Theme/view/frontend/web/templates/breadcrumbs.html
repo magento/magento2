@@ -10,9 +10,9 @@
         <% if (crumb.link) { %>
         <a href="<%= crumb.link %>" title="<%- crumb.title %>"><%- crumb.label %></a>
         <% } else if (crumb.last) { %>
-        <strong><%- crumb.label %></strong>
+        <strong><%= crumb.label %></strong>
         <% } else { %>
-        <%- crumb.label %>
+        <%= crumb.label %>
         <% } %>
     </li>
 <% }); %>

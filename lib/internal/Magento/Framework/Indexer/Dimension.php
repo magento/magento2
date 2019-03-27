@@ -15,6 +15,16 @@ namespace Magento\Framework\Indexer;
 class Dimension
 {
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $value;
+
+    /**
      * @param string $name
      * @param string $value
      */

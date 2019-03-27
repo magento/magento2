@@ -15,7 +15,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                >
                     <argument name="wps_express">wps_express</argument>
                 </predicate>
             </event>
@@ -39,16 +39,16 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                >
                     <argument name="payments_pro_hosted_solution_with_express_checkout">payments_pro_hosted_solution_with_express_checkout</argument>
-                    <argument name="express_checkout_us">express_checkout_us</argument>
+                    <argument name="express_checkout_gb">express_checkout_gb</argument>
                 </predicate>
             </event>
         </events>
         <relation target="payments_pro_hosted_solution_with_express_checkout">
             <rule type="disable" event="activate-rule"/>
         </relation>
-        <relation target="express_checkout_us">
+        <relation target="express_checkout_gb">
             <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
@@ -56,19 +56,19 @@
             <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="conflict" event=":load">
                 <argument name="payments_pro_hosted_solution_with_express_checkout">payments_pro_hosted_solution_with_express_checkout</argument>
-                <argument name="express_checkout_us">express_checkout_us</argument>
+                <argument name="express_checkout_gb">express_checkout_gb</argument>
             </rule>
         </relation>
     </payment>
     <!-- Express Checkout -->
-    <payment id="express_checkout_us">
+    <payment id="express_checkout_gb">
         <events selector="[data-enable='payment']">
             <event value="0" name="deactivate-rule"/>
             <event value="1" name="activate-rule">
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                >
                     <argument name="wps_express">wps_express</argument>
                 </predicate>
             </event>
@@ -95,6 +95,7 @@
             <rule type="conflict" event=":load">
                 <argument name="wps_express">wps_express</argument>
             </rule>
+            <rule type="removeCreditOptionConditional" event=":load"/>
         </relation>
     </payment>
 </rules>

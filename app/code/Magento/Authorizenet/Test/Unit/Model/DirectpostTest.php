@@ -5,6 +5,7 @@
  */
 namespace Magento\Authorizenet\Test\Unit\Model;
 
+use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Framework\Simplexml\Element;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Authorizenet\Model\Directpost;
@@ -74,6 +75,14 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
      */
     protected $requestFactory;
 
+    /**
+     * @var PaymentFailuresInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $paymentFailures;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
@@ -104,6 +113,12 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getTransactionDetails'])
             ->getMock();
 
+        $this->paymentFailures = $this->getMockBuilder(
+            PaymentFailuresInterface::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->requestFactory = $this->getRequestFactoryMock();
         $httpClientFactoryMock = $this->getHttpClientFactoryMock();
 
@@ -117,7 +132,8 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
                 'responseFactory' => $this->responseFactoryMock,
                 'transactionRepository' => $this->transactionRepositoryMock,
                 'transactionService' => $this->transactionServiceMock,
-                'httpClientFactory' => $httpClientFactoryMock
+                'httpClientFactory' => $httpClientFactoryMock,
+                'paymentFailures' => $this->paymentFailures,
             ]
         );
     }
@@ -313,12 +329,16 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param bool $responseCode
+     * Checks response failures behaviour.
+     *
+     * @param int $responseCode
+     * @param int $failuresHandlerCalls
+     * @return void
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider checkResponseCodeFailureDataProvider
      */
-    public function testCheckResponseCodeFailure($responseCode)
+    public function testCheckResponseCodeFailure(int $responseCode, int $failuresHandlerCalls): void
     {
         $reasonText = 'reason text';
 
@@ -333,18 +353,35 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->with($reasonText)
             ->willReturn(__('Gateway error: %1', $reasonText));
 
+        $orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $orderMock->expects($this->exactly($failuresHandlerCalls))
+            ->method('getQuoteId')
+            ->willReturn(1);
+
+        $this->paymentFailures->expects($this->exactly($failuresHandlerCalls))
+            ->method('handle')
+            ->with(1);
+
+        $reflection = new \ReflectionClass($this->directpost);
+        $order = $reflection->getProperty('order');
+        $order->setAccessible(true);
+        $order->setValue($this->directpost, $orderMock);
+
         $this->directpost->checkResponseCode();
     }
 
     /**
      * @return array
      */
-    public function checkResponseCodeFailureDataProvider()
+    public function checkResponseCodeFailureDataProvider(): array
     {
         return [
-            ['responseCode' => Directpost::RESPONSE_CODE_DECLINED],
-            ['responseCode' => Directpost::RESPONSE_CODE_ERROR],
-            ['responseCode' => 999999]
+            ['responseCode' => Directpost::RESPONSE_CODE_DECLINED, 1],
+            ['responseCode' => Directpost::RESPONSE_CODE_ERROR, 1],
+            ['responseCode' => 999999, 0],
         ];
     }
 

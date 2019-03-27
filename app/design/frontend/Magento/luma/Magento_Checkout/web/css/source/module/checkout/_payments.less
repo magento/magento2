@@ -46,6 +46,11 @@
                     .lib-css(border-top, @checkout-payment-method-title__border);
                 }
             }
+            form {
+                &.form-purchase-order {
+                    margin-bottom: 15px;
+                }
+            }
         }
 
         .payment-method-content {
@@ -58,6 +63,13 @@
                     }
                 }
             }
+            /**
+             * @codingStandardsIgnoreStart
+             */
+            #po_number {
+                margin-bottom: 20px;
+            }
+            //  @codingStandardsIgnoreEnd
         }
 
         .payment-method-title {
@@ -107,7 +119,8 @@
             margin: 0 0 @indent__base;
 
             .primary {
-                .action-update {
+                .action-update {                    
+                    margin-bottom: 20px;
                     margin-right: 0;
                 }
             }

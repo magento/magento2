@@ -6,7 +6,9 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-class Index extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpGetActionInterface
 {
     /**
      * Index action

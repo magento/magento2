@@ -5,10 +5,15 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
+
 /**
  * Base class for Collection tests.
  *
  * Contains helper methods to get commonly used mocks used for collection tests.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  **/
 class BaseCollection extends \PHPUnit\Framework\TestCase
 {
@@ -39,19 +44,17 @@ class BaseCollection extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Get mock for UniversalFactory so Collection can be used.
+     * Get mock for ResourceModelPool so Collection can be used.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|ResourceModelPoolInterface
      */
-    protected function getUniversalFactory()
+    protected function getResourceModelPool()
     {
         $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->disableOriginalConstructor()
             ->setMethods(['select'])
             ->getMockForAbstractClass();
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
         $connection->expects($this->any())->method('select')->willReturn($select);
 
         $entity = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
@@ -71,14 +74,14 @@ class BaseCollection extends \PHPUnit\Framework\TestCase
             ->method('getEntityTable')
             ->willReturn('table');
 
-        $universalFactory = $this->getMockBuilder(\Magento\Framework\Validator\UniversalFactory::class)
-            ->setMethods(['create'])
+        $resourceModelPool = $this->getMockBuilder(ResourceModelPoolInterface::class)
+            ->setMethods(['get'])
             ->disableOriginalConstructor()
             ->getMock();
-        $universalFactory->expects($this->once())
-            ->method('create')
+        $resourceModelPool->expects($this->once())
+            ->method('get')
             ->willReturn($entity);
 
-        return $universalFactory;
+        return $resourceModelPool;
     }
 }

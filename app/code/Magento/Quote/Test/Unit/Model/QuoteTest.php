@@ -639,6 +639,9 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals((bool)$expected, (bool)$result);
     }
 
+    /**
+     * @return array
+     */
     public static function dataProviderGetAddress()
     {
         return [
@@ -680,6 +683,9 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals((bool)$expected, (bool)$result);
     }
 
+    /**
+     * @return array
+     */
     public static function dataProviderGetAddressByCustomer()
     {
         return [
@@ -726,6 +732,9 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, (bool)$result);
     }
 
+    /**
+     * @return array
+     */
     public static function dataProviderShippingAddress()
     {
         return [
@@ -966,6 +975,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
         $this->scopeConfig->expects($this->any())
@@ -992,6 +1002,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
         $this->scopeConfig->expects($this->any())

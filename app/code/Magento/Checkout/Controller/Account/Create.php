@@ -9,6 +9,10 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * @deprecated
+ * @see DelegateCreate
+ */
 class Create extends \Magento\Framework\App\Action\Action
 {
     /**

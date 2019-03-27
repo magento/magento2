@@ -150,11 +150,11 @@ class Shipment extends AbstractPdf
                 $this->_drawItem($item, $page, $order);
                 $page = end($pdf->pages);
             }
+            if ($shipment->getStoreId()) {
+                $this->_localeResolver->revert();
+            }
         }
         $this->_afterGetPdf();
-        if ($shipment->getStoreId()) {
-            $this->_localeResolver->revert();
-        }
         return $pdf;
     }
 

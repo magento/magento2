@@ -6,6 +6,11 @@
 
 namespace Magento\Framework\Interception\Code\Generator;
 
+/**
+ * Class Interceptor
+ ˚*
+ * @package Magento\Framework\Interception\Code\Generator
+ */
 class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**
@@ -14,6 +19,8 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
     const ENTITY_TYPE = 'interceptor';
 
     /**
+     * Returns default result class name
+     *
      * @param string $modelClassName
      * @return string
      */
@@ -102,10 +109,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             $parameters[] = $this->_getMethodParameterInfo($parameter);
         }
 
-        $returnType = $method->getReturnType();
-        $returnTypeValue = $returnType
-            ? ($returnType->allowsNull() ? '?' : '') .$returnType->getName()
-            : null;
+        $returnTypeValue = $this->getReturnTypeValue($method->getReturnType());
         $methodInfo = [
             'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
             'parameters' => $parameters,
@@ -137,6 +141,8 @@ METHOD_BODY
     }
 
     /**
+     * Return parameters list
+     *
      * @param array $parameters
      * @return string
      */
@@ -175,14 +181,16 @@ METHOD_BODY
         } else {
             $this->_classGenerator->setExtendedClass($typeName);
         }
-        $this->_classGenerator->addTrait('\\'. \Magento\Framework\Interception\Interceptor::class);
-        $interfaces[] =  '\\'. \Magento\Framework\Interception\InterceptorInterface::class;
+        $this->_classGenerator->addTrait('\\' . \Magento\Framework\Interception\Interceptor::class);
+        $interfaces[] = '\\' . \Magento\Framework\Interception\InterceptorInterface::class;
         $this->_classGenerator->setImplementedInterfaces($interfaces);
         return parent::_generateCode();
     }
 
     /**
-     * {@inheritdoc}
+     * Validates data
+     *
+     * @return bool
      */
     protected function _validateData()
     {
@@ -204,5 +212,23 @@ METHOD_BODY
             }
         }
         return $result;
+    }
+
+    /**
+     * Returns return type
+     *
+     * @param mixed $returnType
+     * @return null|string
+     */
+    private function getReturnTypeValue($returnType): ?string
+    {
+        $returnTypeValue = null;
+        if ($returnType) {
+            $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
+            $returnTypeValue .= ($returnType->getName() === 'self')
+                ? $this->getSourceClassName()
+                : $returnType->getName();
+        }
+        return $returnTypeValue;
     }
 }

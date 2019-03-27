@@ -5,11 +5,49 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
 
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\MessageQueue\PublisherConsumerController;
+
 /**
  * @magentoAppArea adminhtml
  */
 class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
+    /** @var PublisherConsumerController */
+    private $publisherConsumerController;
+    private $consumers = ['product_action_attribute.update'];
+
+    protected function setUp()
+    {
+        $this->publisherConsumerController = Bootstrap::getObjectManager()->create(PublisherConsumerController::class, [
+            'consumers' => $this->consumers,
+            'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
+            'maxMessages' => null,
+            'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
+        ]);
+
+        try {
+            $this->publisherConsumerController->startConsumers();
+        } catch (\Magento\TestFramework\MessageQueue\EnvironmentPreconditionException $e) {
+            $this->markTestSkipped($e->getMessage());
+        } catch (\Magento\TestFramework\MessageQueue\PreconditionFailedException $e) {
+            $this->fail(
+                $e->getMessage()
+            );
+        }
+
+        parent::setUp();
+    }
+
+    protected function tearDown()
+    {
+        $this->publisherConsumerController->stopConsumers();
+        parent::tearDown();
+    }
+
     /**
      * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save::execute
      *
@@ -18,11 +56,12 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testSaveActionRedirectsSuccessfully()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
         /** @var $session \Magento\Backend\Model\Session */
         $session = $objectManager->get(\Magento\Backend\Model\Session::class);
         $session->setProductIds([1]);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/catalog/product_action_attribute/save/store/0');
 
@@ -56,28 +95,44 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testSaveActionChangeVisibility($attributes)
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\ProductRepository::class
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var ProductRepository $repository */
+        $repository = Bootstrap::getObjectManager()->create(
+            ProductRepository::class
         );
         $product = $repository->get('simple');
         $product->setOrigData();
-        $product->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
+        $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
         $product->save();
 
         /** @var $session \Magento\Backend\Model\Session */
         $session = $objectManager->get(\Magento\Backend\Model\Session::class);
         $session->setProductIds([$product->getId()]);
         $this->getRequest()->setParam('attributes', $attributes);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/catalog/product_action_attribute/save/store/0');
+
         /** @var \Magento\Catalog\Model\Category $category */
-        $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $categoryFactory = Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\CategoryFactory::class
         );
         /** @var \Magento\Catalog\Block\Product\ListProduct $listProduct */
-        $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $listProduct = Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Block\Product\ListProduct::class
+        );
+
+        $this->publisherConsumerController->waitForAsynchronousResult(
+            function () use ($repository) {
+                sleep(3);
+                return $repository->get(
+                    'simple',
+                    false,
+                    null,
+                    true
+                )->getVisibility() != Visibility::VISIBILITY_NOT_VISIBLE;
+            },
+            []
         );
 
         $category = $categoryFactory->create()->load(2);
@@ -89,6 +144,8 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     }
 
     /**
+     * @param array $attributes Request parameter.
+     *
      * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Validate::execute
      *
      * @dataProvider validateActionDataProvider
@@ -99,7 +156,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testValidateActionWithMassUpdate($attributes)
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
         /** @var $session \Magento\Backend\Model\Session */
         $session = $objectManager->get(\Magento\Backend\Model\Session::class);
@@ -150,8 +207,8 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     public function saveActionVisibilityAttrDataProvider()
     {
         return [
-            ['arguments' => ['visibility' => \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH]],
-            ['arguments' => ['visibility' => \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG]]
+            ['arguments' => ['visibility' => Visibility::VISIBILITY_BOTH]],
+            ['arguments' => ['visibility' => Visibility::VISIBILITY_IN_CATALOG]]
         ];
     }
 }

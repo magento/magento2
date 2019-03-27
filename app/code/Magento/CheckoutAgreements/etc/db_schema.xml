@@ -20,7 +20,7 @@
                 default="0" comment="Is Html"/>
         <column xsi:type="smallint" name="mode" padding="6" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Applied mode"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="agreement_id"/>
         </constraint>
     </table>
@@ -29,14 +29,14 @@
                 comment="Agreement Id"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Store Id"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="agreement_id"/>
             <column name="store_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="CHKT_AGRT_STORE_AGRT_ID_CHKT_AGRT_AGRT_ID" table="checkout_agreement_store"
+        <constraint xsi:type="foreign" referenceId="CHKT_AGRT_STORE_AGRT_ID_CHKT_AGRT_AGRT_ID" table="checkout_agreement_store"
                     column="agreement_id" referenceTable="checkout_agreement" referenceColumn="agreement_id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CHECKOUT_AGREEMENT_STORE_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="CHECKOUT_AGREEMENT_STORE_STORE_ID_STORE_STORE_ID"
                     table="checkout_agreement_store" column="store_id" referenceTable="store" referenceColumn="store_id"
                     onDelete="CASCADE"/>
     </table>

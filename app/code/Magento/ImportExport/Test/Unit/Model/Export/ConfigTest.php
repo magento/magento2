@@ -65,6 +65,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->model->getEntities('entities'));
     }
 
+    /**
+     * @return array
+     */
     public function getEntitiesDataProvider()
     {
         return [
@@ -100,6 +103,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->getEntityTypes($entity));
     }
 
+    /**
+     * @return array
+     */
     public function getEntityTypesDataProvider()
     {
         return [
@@ -154,6 +160,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->model->getFileFormats('fileFormats'));
     }
 
+    /**
+     * @return array
+     */
     public function getFileFormatsDataProvider()
     {
         return [

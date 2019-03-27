@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="testDataTierPrice" type="data">
+        <data key="goldenPrice1">$676.50</data>
+        <data key="goldenPrice2">$615.00</data>
+    </entity>
+    <entity name="customStoreTierPrice" type="data">
+        <data key="name">secondStore</data>
+        <data key="code">second_store</data>
+    </entity>
+    <entity name="customStoreView" type="data">
+        <data key="name">secondStoreView</data>
+        <data key="code">second_store_view</data>
+    </entity>
+    <entity name="tierPriceOnVirtualProduct" type="data">
+        <data key="website">All Websites [USD]</data>
+        <data key="customer_group">ALL GROUPS</data>
+        <data key="price">90.00</data>
+        <data key="qty">2</data>
+    </entity>
+    <entity name="tierPriceOnGeneralGroup" type="data">
+        <data key="website">All Websites [USD]</data>
+        <data key="customer_group">General</data>
+        <data key="price">80.00</data>
+        <data key="qty">2</data>
+    </entity>
+    <entity name="tierPriceOnDefault" type="data">
+        <data key="website_0">All Websites [USD]</data>
+        <data key="customer_group_0">ALL GROUPS</data>
+        <data key="price_0">15.00</data>
+        <data key="qty_0">3</data>
+        <data key="website_1">All Websites [USD]</data>
+        <data key="customer_group_1">ALL GROUPS</data>
+        <data key="price_1">24.00</data>
+        <data key="qty_1">15</data>
+    </entity>
+    <entity name="tierPriceHighCostSimpleProduct" type="data">
+        <data key="website">All Websites [USD]</data>
+        <data key="customer_group">ALL GROUPS</data>
+        <data key="price">500,000.00</data>
+        <data key="qty">1</data>
+    </entity>
+    <entity name="tierProductPrice" type="catalogTierPrice">
+        <data key="price">90.00</data>
+        <data key="price_type">fixed</data>
+        <data key="website_id">0</data>
+        <data key="customer_group">ALL GROUPS</data>
+        <data key="quantity">2</data>
+        <var key="sku" entityType="product2" entityKey="sku" />
+    </entity>
+</entities>

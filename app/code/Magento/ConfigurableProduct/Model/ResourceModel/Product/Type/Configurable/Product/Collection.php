@@ -41,6 +41,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * Init select
+     *
      * @return $this|\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
      */
     protected function _initSelect()
@@ -73,9 +74,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @return $this
      */
-    protected function _beforeLoad()
+    protected function _renderFilters()
     {
-        parent::_beforeLoad();
+        parent::_renderFilters();
         $metadata = $this->getProductEntityMetadata();
         $parentIds = [];
         foreach ($this->products as $product) {
@@ -88,8 +89,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Retrieve is flat enabled flag
-     * Return always false if magento run admin
+     * Retrieve is flat enabled flag. Return always false if magento run admin
      *
      * @return bool
      */

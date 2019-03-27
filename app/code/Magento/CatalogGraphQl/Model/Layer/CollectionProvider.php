@@ -29,6 +29,10 @@ class CollectionProvider implements \Magento\Catalog\Model\Layer\ItemCollectionP
      */
     private $collectionProcessor;
 
+    /**
+     * @param \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
+     */
     public function __construct(
         \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory

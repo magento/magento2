@@ -24,6 +24,9 @@ class DomTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($resultFile, $converterDom->convert($dom));
     }
 
+    /**
+     * @return array
+     */
     public function convertDataProvider()
     {
         return [

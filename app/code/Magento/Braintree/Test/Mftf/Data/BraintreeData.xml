@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SampleBraintreeConfig" type="braintree_config_state">
+        <requiredEntity type="title">SampleTitle</requiredEntity>
+        <requiredEntity type="payment_action">SamplePaymentAction</requiredEntity>
+        <requiredEntity type="environment">SampleEnvironment</requiredEntity>
+        <requiredEntity type="merchant_id">SampleMerchantId</requiredEntity>
+        <requiredEntity type="public_key">SamplePublicKey</requiredEntity>
+        <requiredEntity type="private_key">SamplePrivateKey</requiredEntity>
+    </entity>
+    <entity name="SampleTitle" type="title">
+        <data key="value">Sample Braintree Config</data>
+    </entity>
+    <entity name="SamplePaymentAction" type="payment_action">
+        <data key="value">authorize</data>
+    </entity>
+    <entity name="SampleEnvironment" type="environment">
+        <data key="value">sandbox</data>
+    </entity>
+    <entity name="SampleMerchantId" type="merchant_id">
+        <data key="value">someMerchantId</data>
+    </entity>
+    <entity name="SamplePublicKey" type="public_key">
+        <data key="value">somePublicKey</data>
+    </entity>
+    <entity name="SamplePrivateKey" type="private_key">
+        <data key="value">somePrivateKey</data>
+    </entity>
+
+    <entity name="BraintreeConfig" type="braintree_config_state">
+        <requiredEntity type="title">BraintreeTitle</requiredEntity>
+        <requiredEntity type="payment_action">PaymentAction</requiredEntity>
+        <requiredEntity type="environment">Environment</requiredEntity>
+        <requiredEntity type="merchant_id">MerchantId</requiredEntity>
+        <requiredEntity type="public_key">PublicKey</requiredEntity>
+        <requiredEntity type="private_key">PrivateKey</requiredEntity>
+        <requiredEntity type="active">Status</requiredEntity>
+    </entity>
+    <entity name="BraintreeTitle" type="title">
+        <data key="value">Credit Card (Braintree)</data>
+    </entity>
+    <entity name="PaymentAction" type="payment_action">
+        <data key="value">authorize</data>
+    </entity>
+    <entity name="Environment" type="environment">
+        <data key="value">sandbox</data>
+    </entity>
+    <entity name="MerchantId" type="merchant_id">
+        <data key="value">d4pdjhxgjfrsmzbf</data>
+    </entity>
+    <entity name="PublicKey" type="public_key">
+        <data key="value">m7q4wmh43xrgyrst</data>
+    </entity>
+    <entity name="PrivateKey" type="private_key">
+        <data key="value">67de364080b1b4e2492d7a3de413a572</data>
+    </entity>
+
+    <!-- default configuration used to restore Magento config -->
+    <entity name="DefaultBraintreeConfig" type="braintree_config_state">
+        <requiredEntity type="title">DefaultTitle</requiredEntity>
+        <requiredEntity type="payment_action">DefaultPaymentAction</requiredEntity>
+        <requiredEntity type="environment">DefaultEnvironment</requiredEntity>
+        <requiredEntity type="merchant_id">DefaultMerchantId</requiredEntity>
+        <requiredEntity type="public_key">DefaultPublicKey</requiredEntity>
+        <requiredEntity type="private_key">DefaultPrivateKey</requiredEntity>
+    </entity>
+    <entity name="DefaultTitle" type="title">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPaymentAction" type="payment_action">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultEnvironment" type="environment">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultMerchantId" type="merchant_id">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPublicKey" type="public_key">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPrivateKey" type="private_key">
+        <data key="value"/>
+    </entity>
+
+    <entity name="CustomBraintreeConfigurationData" type="custom_braintree_config_state">
+        <requiredEntity type="braintree_cc_vault_active">BraintreeValuteActive</requiredEntity>
+        <requiredEntity type="active">EnableSolution</requiredEntity>
+    </entity>
+    <entity name="BraintreeValuteActive" type="braintree_cc_vault_active">
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnableSolution" type="active">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="RollBackCustomBraintreeConfigurationData" type="custom_braintree_config_state">
+        <requiredEntity type="braintree_cc_vault_active">DefaultBraintreeValuteActive</requiredEntity>
+        <requiredEntity type="active">DefaultEnableSolution</requiredEntity>
+    </entity>
+    <entity name="DefaultBraintreeValuteActive" type="braintree_cc_vault_active">
+        <data key="value">0</data>
+    </entity>
+    <entity name="DefaultEnableSolution" type="active">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="testData" type="data">
+        <data key="websiteName" unique="suffix">Website</data>
+        <data key="websiteCode" unique="suffix">new_website</data>
+        <data key="name" unique="suffix">Store</data>
+        <data key="storeCode" unique="suffix">new_store</data>
+        <data key="block" unique="suffix">Block</data>
+    </entity>
+
+    <entity name="role" type="data">
+        <data key="name" unique="suffix">Role</data>
+    </entity>
+    <entity name="NewAdmin" type="user">
+        <data key="username" unique="suffix">admin</data>
+        <data key="firstName">John</data>
+        <data key="lastName">Smith</data>
+        <data key="password">admin123</data>
+        <data key="email" unique="prefix">mail@mail.com</data>
+    </entity>
+
+    <entity name="PaymentAndShippingInfo" type="data">
+        <data key="cardNumber">5105105105105100</data>
+        <data key="month">12</data>
+        <data key="year">20</data>
+        <data key="cvv">113</data>
+    </entity>
+
+    <entity name="BraintreeConfigurationData" type="data">
+        <data key="title">Credit Card (Braintree)</data>
+        <data key="merchantID">d4pdjhxgjfrsmzbf</data>
+        <data key="publicKey">m7q4wmh43xrgyrst</data>
+        <data key="privateKey">67de364080b1b4e2492d7a3de413a572</data>
+        <data key="merchantAccountID">Magneto</data>
+        <data key="titleForPayPalThroughBraintree">PayPal (Braintree)</data>
+    </entity>
+
+</entities>

@@ -5,8 +5,6 @@
  */
 namespace Magento\CatalogUrlRewrite\Model;
 
-use Magento\Store\Model\Store;
-
 class ProductUrlPathGenerator
 {
     const XML_PATH_PRODUCT_URL_SUFFIX = 'catalog/seo/product_url_suffix';
@@ -120,11 +118,12 @@ class ProductUrlPathGenerator
      * Generate product url key based on url_key entered by merchant or product name
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return string
+     * @return string|null
      */
     public function getUrlKey($product)
     {
-        return $product->getUrlKey() === false ? false : $this->prepareProductUrlKey($product);
+        $generatedProductUrlKey = $this->prepareProductUrlKey($product);
+        return ($product->getUrlKey() === false || empty($generatedProductUrlKey)) ? null : $generatedProductUrlKey;
     }
 
     /**
