@@ -17,7 +17,7 @@ class Processor
     const MAGE_ERRORS_LOCAL_XML = 'local.xml';
     const MAGE_ERRORS_DESIGN_XML = 'design.xml';
     const DEFAULT_SKIN = 'default';
-    const ERROR_DIR = 'pub/errors';
+    const ERROR_DIR = 'errors';
 
     /**
      * Page title
@@ -615,7 +615,7 @@ class Processor
     protected function _setReportUrl()
     {
         if ($this->reportId && $this->_config && isset($this->_config->skin)) {
-            $this->reportUrl = "{$this->getBaseUrl(true)}pub/errors/report.php?"
+            $this->reportUrl = $this->getBaseUrl(true) . self::ERROR_DIR . '/report.php?'
                 . http_build_query(['id' => $this->reportId, 'skin' => $this->_config->skin]);
         }
     }
