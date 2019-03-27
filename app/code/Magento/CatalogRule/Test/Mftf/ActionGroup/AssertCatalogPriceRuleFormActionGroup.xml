@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertCatalogPriceRuleFormActionGroup">
+        <arguments>
+            <argument name="catalogRule" defaultValue="inactiveCatalogRule"  />
+            <argument name="status"  type="string" defaultValue=""/>
+            <argument name="websites" type="string"/>
+            <argument name="customerGroup" type="string"/>
+        </arguments>
+        <seeInField stepKey="fillName" selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"/>
+        <seeInField stepKey="fillDescription" selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}"/>
+        <seeOptionIsSelected selector="{{AdminNewCatalogPriceRule.status}}" userInput="{{status}}" stepKey="selectStatus"/>
+        <see stepKey="seeWebSite" selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{websites}}"/>
+        <seeOptionIsSelected selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="{{customerGroup}}" stepKey="selectCustomerGroup"/>
+        <scrollTo selector="{{AdminNewCatalogPriceRule.actionsTab}}" stepKey="scrollToActionTab"/>
+        <click stepKey="openActionDropdown" selector="{{AdminNewCatalogPriceRule.actionsTab}}"/>
+        <seeInField stepKey="discountType" selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{catalogRule.simple_action}}"/>
+        <seeInField stepKey="fillDiscountValue" selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+    </actionGroup>
+</actionGroups>
