@@ -17,7 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-15542"/>
             <group value="review"/>
-            <group value="configuration"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="customer"/>
@@ -31,7 +30,6 @@
         </before>
         <after>
             <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
-            <magentoCLI command="config:set web/secure/base_url {{_ENV.MAGENTO_BASE_URL}}" stepKey="setSecureBaseURL"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
         </after>
