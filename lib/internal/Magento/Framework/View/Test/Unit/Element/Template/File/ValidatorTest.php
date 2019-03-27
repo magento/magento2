@@ -20,21 +20,21 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      *
      * @var \Magento\Framework\View\Element\Template\File\Validator
      */
-    private $_validator;
+    private $validator;
 
     /**
      * Mock for view file system
      *
      * @var \Magento\Framework\FileSystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $_fileSystemMock;
+    private $fileSystemMock;
 
     /**
      * Mock for scope config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $_scopeConfigMock;
+    private $scopeConfigMock;
 
     /**
      * Mock for root directory reader
@@ -62,12 +62,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->_fileSystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->fileSystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->rootDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $this->compiledDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
 
-        $this->_fileSystemMock->expects($this->any())
+        $this->fileSystemMock->expects($this->any())
             ->method('getDirectoryRead')
             ->will($this->returnValueMap(
                 [
@@ -91,10 +91,18 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             );
-        $this->_validator = new \Magento\Framework\View\Element\Template\File\Validator(
-            $this->_fileSystemMock,
-            $this->_scopeConfigMock,
-            $this->componentRegistrar
+
+        $fileDriverMock = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
+        $fileDriverMock->expects($this->any())
+            ->method('getRealPath')
+            ->willReturnArgument(0);
+
+        $this->validator = new \Magento\Framework\View\Element\Template\File\Validator(
+            $this->fileSystemMock,
+            $this->scopeConfigMock,
+            $this->componentRegistrar,
+            null,
+            $fileDriverMock
         );
     }
 
@@ -103,23 +111,22 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $file
      * @param bool $expectedResult
-     *
-     * @dataProvider testIsValidDataProvider
-     *
      * @return void
+     *
+     * @dataProvider isValidDataProvider
      */
     public function testIsValid($file, $expectedResult)
     {
         $this->rootDirectoryMock->expects($this->any())->method('isFile')->will($this->returnValue(true));
-        $this->assertEquals($expectedResult, $this->_validator->isValid($file));
+        $this->assertEquals($expectedResult, $this->validator->isValid($file));
     }
 
     /**
      * Data provider for testIsValid
      *
-     * @return []
+     * @return array
      */
-    public function testIsValidDataProvider()
+    public function isValidDataProvider()
     {
         return [
             'empty' => ['', false],

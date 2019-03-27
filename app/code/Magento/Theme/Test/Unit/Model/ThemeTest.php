@@ -481,6 +481,9 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_model->toArray());
     }
 
+    /**
+     * @return array
+     */
     public function toArrayDataProvider()
     {
         $parentTheme = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
@@ -555,6 +558,9 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_model->getData());
     }
 
+    /**
+     * @return array
+     */
     public function populateFromArrayDataProvider()
     {
         return [

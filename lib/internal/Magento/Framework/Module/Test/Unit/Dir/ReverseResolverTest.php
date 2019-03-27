@@ -54,6 +54,9 @@ class ReverseResolverTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedResult, $this->_model->getModuleName($path));
     }
 
+    /**
+     * @return array
+     */
     public function getModuleNameDataProvider()
     {
         return [

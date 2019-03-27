@@ -6,11 +6,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="formkey"/>
-    <update handle="adminhtml_system_design_theme_block"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Theme\Block\Adminhtml\System\Design\Theme" name="design_theme"/>
+            <uiComponent name="design_theme_listing"/>
         </referenceContainer>
     </body>
 </page>

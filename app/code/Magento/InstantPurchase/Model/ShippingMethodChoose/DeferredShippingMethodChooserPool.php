@@ -39,7 +39,7 @@ class DeferredShippingMethodChooserPool
     {
         if (!isset($this->choosers[$type])) {
             throw new \InvalidArgumentException(sprintf(
-                'Deferred shipping method chooser is not registered.',
+                'Deferred shipping method %s is not registered.',
                 $type
             ));
         }

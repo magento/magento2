@@ -6,10 +6,12 @@
 
 namespace Magento\Eav\Model\Entity\Collection;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
  * Entity/Attribute/Model - collection abstract
@@ -125,9 +127,15 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected $_resourceHelper;
 
     /**
+     * @deprecated To instantiate resource models, use $resourceModelPool instead
+     *
      * @var \Magento\Framework\Validator\UniversalFactory
      */
     protected $_universalFactory;
+    /**
+     * @var ResourceModelPoolInterface
+     */
+    private $resourceModelPool;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -140,6 +148,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param mixed $connection
+     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -152,8 +161,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\Validator\UniversalFactory $universalFactory = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ResourceModelPoolInterface $resourceModelPool = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_eavConfig = $eavConfig;
@@ -161,6 +171,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $this->_eavEntityFactory = $eavEntityFactory;
         $this->_resourceHelper = $resourceHelper;
         $this->_universalFactory = $universalFactory;
+        if ($resourceModelPool === null) {
+            $resourceModelPool = ObjectManager::getInstance()->get(
+                ResourceModelPoolInterface::class
+            );
+        }
+        $this->resourceModelPool = $resourceModelPool;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $connection);
         $this->_construct();
         $this->setConnection($this->getEntity()->getConnection());
@@ -227,7 +243,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected function _init($model, $entityModel)
     {
         $this->setItemObjectClass($model);
-        $entity = $this->_universalFactory->create($entityModel);
+        $entity = $this->resourceModelPool->get($entityModel);
         $this->setEntity($entity);
 
         return $this;
@@ -379,6 +395,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
         if (!empty($conditionSql)) {
             $this->getSelect()->where($conditionSql, null, \Magento\Framework\DB\Select::TYPE_CONDITION);
+            $this->invalidateSize();
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Invalid attribute identifier for filter (%1)', get_class($attribute))
@@ -398,7 +415,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     public function addFieldToFilter($attribute, $condition = null)
     {
-        return $this->addAttributeToFilter($attribute, $condition);
+        return $this->addAttributeToFilter($attribute, $condition, 'left');
     }
 
     /**
@@ -652,7 +669,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $bind attribute of the main entity to link with joined $filter
      * @param string $filter primary key for the joined entity (entity_id default)
      * @param string $joinType inner|left
-     * @param null $storeId
+     * @param int|null $storeId
      * @return $this
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -946,8 +963,8 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Clone and reset collection
      *
-     * @param null $limit
-     * @param null $offset
+     * @param int|null $limit
+     * @param int|null $offset
      * @return Select
      */
     protected function _getAllIdsSelect($limit = null, $offset = null)
@@ -1242,7 +1259,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
         if ($entity->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE && $entity->getTypeId()) {
             $select->where(
-                'entity_type_id =?',
+                't_d.entity_type_id =?',
                 $entity->getTypeId()
             );
         }
@@ -1619,6 +1636,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
     /**
      * Clear collection
+     *
      * @return $this
      */
     public function clear()
@@ -1629,6 +1647,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
     /**
      * Remove all items from collection
+     *
      * @return $this
      */
     public function removeAllItems()
@@ -1652,6 +1671,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     }
 
     /**
+     * Returns main table.
      * Returns main table name - extracted from "module/table" style and
      * validated by db adapter
      *
@@ -1698,5 +1718,17 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     public function removeAllFieldsFromSelect()
     {
         return $this->removeAttributeToSelect();
+    }
+
+    /**
+     * Invalidates "Total Records Count".
+     * Invalidates saved "Total Records Count" attribute with last counting,
+     * so a next calling of method getSize() will query new total records count.
+     *
+     * @return void
+     */
+    private function invalidateSize(): void
+    {
+        $this->_totalRecords = null;
     }
 }

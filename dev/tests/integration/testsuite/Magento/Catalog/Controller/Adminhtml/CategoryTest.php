@@ -5,11 +5,36 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Store\Model\Store;
+use Magento\Catalog\Model\ResourceModel\Product;
+
 /**
  * @magentoAppArea adminhtml
  */
 class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product
+     */
+    protected $productResource;
+
+    /**
+     * @inheritDoc
+     *
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        /** @var Product $productResource */
+        $this->productResource = Bootstrap::getObjectManager()->get(
+            Product::class
+        );
+    }
+
     /**
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDbIsolation enabled
@@ -27,6 +52,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $store->load('fixturestore', 'code');
         $storeId = $store->getId();
 
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($inputData);
         $this->getRequest()->setParam('store', $storeId);
         $this->getRequest()->setParam('id', 2);
@@ -75,6 +101,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      */
     public function testSaveActionFromProductCreationPage($postData)
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
 
         $this->dispatch('backend/catalog/category/save');
@@ -123,6 +150,9 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         return [[$postData], [$postData + ['return_session_messages_only' => 1]]];
     }
 
+    /**
+     * Test SuggestCategories finds any categories.
+     */
     public function testSuggestCategoriesActionDefaultCategoryFound()
     {
         $this->getRequest()->setParam('label_part', 'Default');
@@ -133,6 +163,9 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         );
     }
 
+    /**
+     * Test SuggestCategories properly processes search by label.
+     */
     public function testSuggestCategoriesActionNoSuggestions()
     {
         $this->getRequest()->setParam('label_part', strrev('Default'));
@@ -322,8 +355,12 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         ];
     }
 
+    /**
+     * Test validation.
+     */
     public function testSaveActionCategoryWithDangerRequest()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'general' => [
@@ -374,7 +411,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         }
         $this->getRequest()
             ->setPostValue('id', $grandChildId)
-            ->setPostValue('pid', $parentId);
+            ->setPostValue('pid', $parentId)
+            ->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/category/move');
         $jsonResponse = json_decode($this->getResponse()->getBody());
         $this->assertNotNull($jsonResponse);
@@ -388,9 +426,133 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     {
         return [
             [400, 401, 'first_url_key', 402, 'second_url_key', false],
-            [400, 401, 'duplicated_url_key', 402, 'duplicated_url_key', true],
+            [400, 401, 'duplicated_url_key', 402, 'duplicated_url_key', false],
             [0, 401, 'first_url_key', 402, 'second_url_key', true],
             [400, 401, 'first_url_key', 0, 'second_url_key', true],
         ];
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/products_in_different_stores.php
+     * @magentoDbIsolation disabled
+     * @dataProvider saveActionWithDifferentWebsitesDataProvider
+     *
+     * @param array $postData
+     */
+    public function testSaveCategoryWithProductPosition(array $postData)
+    {
+        /** @var $store \Magento\Store\Model\Store */
+        $store = Bootstrap::getObjectManager()->create(Store::class);
+        $store->load('fixturestore', 'code');
+        $storeId = $store->getId();
+        $oldCategoryProductsCount = $this->getCategoryProductsCount();
+        $this->getRequest()->setParam('store', $storeId);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setParam('id', 96377);
+        $this->getRequest()->setPostValue($postData);
+        $this->dispatch('backend/catalog/category/save');
+        $newCategoryProductsCount = $this->getCategoryProductsCount();
+        $this->assertEquals(
+            $oldCategoryProductsCount,
+            $newCategoryProductsCount,
+            'After changing product position number of records from catalog_category_product has changed'
+        );
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array
+     */
+    public function saveActionWithDifferentWebsitesDataProvider()
+    {
+        return [
+            'default_values' => [
+                [
+                    'store_id' => '1',
+                    'entity_id' => '96377',
+                    'attribute_set_id' => '4',
+                    'parent_id' => '2',
+                    'created_at' => '2018-11-29 08:28:37',
+                    'updated_at' => '2018-11-29 08:57:43',
+                    'path' => '1/2/96377',
+                    'level' => '2',
+                    'children_count' => '0',
+                    'row_id' => '96377',
+                    'name' => 'Category 1',
+                    'display_mode' => 'PRODUCTS',
+                    'url_key' => 'category-1',
+                    'url_path' => 'category-1',
+                    'automatic_sorting' => '0',
+                    'is_active' => '1',
+                    'is_anchor' => '1',
+                    'include_in_menu' => '1',
+                    'custom_use_parent_settings' => '0',
+                    'custom_apply_to_products' => '0',
+                    'path_ids' => [
+                        0 => '1',
+                        1 => '2',
+                        2 => '96377'
+                    ],
+                    'use_config' => [
+                        'available_sort_by' => 'true',
+                        'default_sort_by' => 'true',
+                        'filter_price_range' => 'true'
+                    ],
+                    'id' => '',
+                    'parent' => '0',
+                    'use_default' => [
+                        'name' => '1',
+                        'url_key' => '1',
+                        'meta_title' => '1',
+                        'is_active' => '1',
+                        'include_in_menu' => '1',
+                        'custom_use_parent_settings' => '1',
+                        'custom_apply_to_products' => '1',
+                        'description' => '1',
+                        'landing_page' => '1',
+                        'display_mode' => '1',
+                        'custom_design' => '1',
+                        'page_layout' => '1',
+                        'meta_keywords' => '1',
+                        'meta_description' => '1',
+                        'custom_layout_update' => '1',
+                        'image' => '1'
+                    ],
+                    'filter_price_range' => false,
+                    'meta_title' => false,
+                    'url_key_create_redirect' => 'category-1',
+                    'description' => false,
+                    'landing_page' => false,
+                    'default_sort_by' => 'position',
+                    'available_sort_by' => false,
+                    'custom_design' => false,
+                    'page_layout' => false,
+                    'meta_keywords' => false,
+                    'meta_description' => false,
+                    'custom_layout_update' => false,
+                    'position_cache_key' => '5c069248346ac',
+                    'is_smart_category' => '0',
+                    'smart_category_rules' => false,
+                    'sort_order' => '0',
+                    'vm_category_products' => '{"1":1,"3":0}'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Get items count from catalog_category_product
+     *
+     * @return int
+     */
+    private function getCategoryProductsCount(): int
+    {
+        $oldCategoryProducts = $this->productResource->getConnection()->select()->from(
+            $this->productResource->getTable('catalog_category_product'),
+            'product_id'
+        );
+        return count(
+            $this->productResource->getConnection()->fetchAll($oldCategoryProducts)
+        );
     }
 }

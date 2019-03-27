@@ -2528,6 +2528,7 @@ return [
     ['_isAttributeValueEmpty', 'Magento\Catalog\Model\ResourceModel\AbstractResource'],
     ['var_dump', ''],
     ['each', ''],
+    ['strval', ''],
     ['create_function', ''],
     ['configure', 'Magento\Framework\MessageQueue\BatchConsumer'],
     [

@@ -57,7 +57,7 @@ define([
             }
 
             discountSegments = this.totals()['total_segments'].filter(function (segment) {
-                return segment.code === 'discount';
+                return segment.code.indexOf('discount') !== -1;
             });
 
             return discountSegments.length ? discountSegments[0].title : null;

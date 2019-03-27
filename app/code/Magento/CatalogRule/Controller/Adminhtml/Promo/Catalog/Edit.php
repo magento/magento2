@@ -6,7 +6,9 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
-class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog implements HttpGetActionInterface
 {
     /**
      * @return void
@@ -24,7 +26,7 @@ class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
             try {
                 $model = $ruleRepository->get($id);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
-                $this->messageManager->addError(__('This rule no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This rule no longer exists.'));
                 $this->_redirect('catalog_rule/*');
                 return;
             }

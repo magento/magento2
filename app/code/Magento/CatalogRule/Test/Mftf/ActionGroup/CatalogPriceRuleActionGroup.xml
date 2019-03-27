@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- action group to create a new catalog price rule giving a catalogRule entity -->
+    <actionGroup name="newCatalogPriceRuleByUI">
+        <arguments>
+            <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>
+        </arguments>
+        <!-- Go to the admin Catalog rule grid and add a new one -->
+        <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+        <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>
+
+        <!-- Fill the form according the attributes of the entity -->
+        <fillField stepKey="fillName" selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"/>
+        <fillField stepKey="fillDescription" selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}"/>
+        <selectOption stepKey="selectSite" selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{catalogRule.website_ids[0]}}"/>
+        <click stepKey="clickFromCalender" selector="{{AdminNewCatalogPriceRule.fromDateButton}}"/>
+        <click stepKey="clickFromToday" selector="{{AdminNewCatalogPriceRule.todayDate}}"/>
+        <click stepKey="clickToCalender" selector="{{AdminNewCatalogPriceRule.toDateButton}}"/>
+        <click stepKey="clickToToday" selector="{{AdminNewCatalogPriceRule.todayDate}}"/>
+        <click stepKey="openActionDropdown" selector="{{AdminNewCatalogPriceRule.actionsTab}}"/>
+        <selectOption stepKey="discountType" selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{catalogRule.simple_action}}"/>
+        <fillField stepKey="fillDiscountValue" selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}"/>
+        <selectOption stepKey="discardSubsequentRules" selector="{{AdminNewCatalogPriceRuleActions.disregardRules}}" userInput="Yes"/>
+
+        <!-- Scroll to top and either save or save and apply after the action group -->
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForPageLoad stepKey="waitForApplied"/>
+    </actionGroup>
+
+
+    <actionGroup name="createCatalogPriceRule">
+        <arguments>
+            <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>
+        </arguments>
+
+        <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"  stepKey="fillName" />
+        <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}" stepKey="fillDescription" />
+        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="{{catalogRule.website_ids}}" stepKey="selectSite" />
+        <click stepKey="openActionDropdown" selector="{{AdminNewCatalogPriceRule.actionsTab}}"/>
+        <fillField stepKey="fillDiscountValue" selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}"/>
+
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForPageLoad stepKey="waitForApplied"/>
+    </actionGroup>
+
+    <actionGroup name="CreateCatalogPriceRuleConditionWithAttribute">
+        <arguments>
+            <argument name="attributeName" type="string"/>
+            <argument name="targetValue" type="string"/>
+            <argument name="targetSelectValue" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="openConditionsTab"/>
+        <waitForPageLoad stepKey="waitForConditionTabOpened"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="addNewCondition"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" userInput="{{attributeName}}" stepKey="selectTypeCondition"/>
+        <waitForElement selector="{{AdminNewCatalogPriceRuleConditions.targetEllipsisValue('1', targetValue)}}" stepKey="waitForIsTarget"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.targetEllipsisValue('1', 'is')}}" stepKey="clickOnIs"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.targetSelect('1')}}" userInput="{{targetSelectValue}}" stepKey="selectTargetCondition"/>
+        <click selector="{{AdminNewCatalogPriceRule.fromDateButton}}" stepKey="clickFromCalender"/>
+        <click selector="{{AdminNewCatalogPriceRule.todayDate}}" stepKey="clickFromToday"/>
+    </actionGroup>
+
+    <!-- Apply all of the saved catalog price rules -->
+    <actionGroup name="applyCatalogPriceRules">
+        <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+        <click stepKey="applyRules" selector="{{AdminCatalogPriceRuleGrid.applyRules}}"/>
+        <see stepKey="assertSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="Updated rules applied."/>
+    </actionGroup>
+
+    <!--Add Catalog Rule Condition With product SKU-->
+    <actionGroup name="newCatalogPriceRuleByUIWithConditionIsSKU" extends="newCatalogPriceRuleByUI">
+        <arguments>
+            <argument name="productSku"/>
+        </arguments>
+        <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" after="discardSubsequentRules" stepKey="openConditionsTab"/>
+        <waitForPageLoad after="openConditionsTab" stepKey="waitForConditionTabOpened"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" after="waitForConditionTabOpened" stepKey="addNewCondition"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" userInput="Magento\CatalogRule\Model\Rule\Condition\Product|sku" after="addNewCondition" stepKey="selectTypeCondition"/>
+        <waitForPageLoad after="selectTypeCondition" stepKey="waitForConditionChosed"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.targetEllipsis('1')}}" after="waitForConditionChosed" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleConditions.targetInput('1', '1')}}" userInput="{{productSku}}" after="clickEllipsis" stepKey="fillProductSku"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.applyButton('1', '1')}}" after="fillProductSku" stepKey="clickApply"/>
+    </actionGroup>
+
+    <!--Add Catalog Rule Condition With Category-->
+    <actionGroup name="newCatalogPriceRuleByUIWithConditionIsCategory" extends="newCatalogPriceRuleByUI">
+        <arguments>
+            <argument name="categoryId"/>
+        </arguments>
+        <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" after="discardSubsequentRules" stepKey="openConditionsTab"/>
+        <waitForPageLoad after="openConditionsTab" stepKey="waitForConditionTabOpened"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" after="waitForConditionTabOpened" stepKey="addNewCondition"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" userInput="Magento\CatalogRule\Model\Rule\Condition\Product|category_ids" after="addNewCondition" stepKey="selectTypeCondition"/>
+        <waitForPageLoad after="selectTypeCondition" stepKey="waitForConditionChosed"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.targetEllipsis('1')}}" after="waitForConditionChosed" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleConditions.targetInput('1', '1')}}" userInput="{{categoryId}}" after="clickEllipsis" stepKey="fillCategoryId"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.applyButton('1', '1')}}" after="fillCategoryId" stepKey="clickApply"/>
+    </actionGroup>
+
+    <actionGroup name="selectGeneralCustomerGroupActionGroup">
+        <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="General" stepKey="selectCustomerGroup"/>
+    </actionGroup>
+
+    <actionGroup name="selectNotLoggedInCustomerGroupActionGroup">
+        <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
+    </actionGroup>
+</actionGroups>

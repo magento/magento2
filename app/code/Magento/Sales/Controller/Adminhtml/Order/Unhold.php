@@ -23,7 +23,7 @@ class Unhold extends \Magento\Sales\Controller\Adminhtml\Order
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         if (!$this->isValidPostRequest()) {
-            $this->messageManager->addError(__('Can\'t unhold order.'));
+            $this->messageManager->addErrorMessage(__('Can\'t unhold order.'));
             return $resultRedirect->setPath('sales/*/');
         }
         $order = $this->_initOrder();
@@ -32,12 +32,12 @@ class Unhold extends \Magento\Sales\Controller\Adminhtml\Order
                 if (!$order->canUnhold()) {
                     throw new \Magento\Framework\Exception\LocalizedException(__('Can\'t unhold order.'));
                 }
-                $this->orderManagement->unhold($order->getEntityId());
-                $this->messageManager->addSuccess(__('You released the order from holding status.'));
+                $this->orderManagement->unHold($order->getEntityId());
+                $this->messageManager->addSuccessMessage(__('You released the order from holding status.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('The order was not on hold.'));
+                $this->messageManager->addErrorMessage(__('The order was not on hold.'));
             }
             $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getId()]);
             return $resultRedirect;

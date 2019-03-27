@@ -16,12 +16,11 @@ use Magento\ConfigurableProductGraphQl\Model\Options\Collection as OptionCollect
 use Magento\ConfigurableProductGraphQl\Model\Variant\Collection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class ConfigurableVariant implements ResolverInterface
 {
@@ -72,11 +71,9 @@ class ConfigurableVariant implements ResolverInterface
     }
 
     /**
-     * Fetch and format configurable variants.
-     *
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         if ($value['type_id'] !== Type::TYPE_CODE || !isset($value[$linkField])) {
@@ -86,7 +83,7 @@ class ConfigurableVariant implements ResolverInterface
             return $this->valueFactory->create($result);
         }
 
-        $this->variantCollection->addParentId((int)$value[$linkField]);
+        $this->variantCollection->addParentProduct($value['model']);
         $fields = $this->getProductFields($info);
         $matchedFields = $this->attributeCollection->getRequestAttributes($fields);
         $this->variantCollection->addEavAttributes($matchedFields);

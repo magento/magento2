@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateBundleLink" dataType="bundle_link" type="create" auth="adminOauth" url="/V1/bundle-products/{sku}/links/{return}" method="POST">
+        <contentType>application/json</contentType>
+        <object dataType="bundle_link" key="linkedProduct">
+            <field key="sku">string</field>
+            <field key="option_id">integer</field>
+            <field key="qty">integer</field>
+            <field key="position">integer</field>
+            <field key="is_default">boolean</field>
+            <field key="price">number</field>
+            <field key="price_type">integer</field>
+            <field key="can_change_quantity">integer</field>
+        </object>
+    </operation>
+</operations>

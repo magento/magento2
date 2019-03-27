@@ -10,6 +10,8 @@ use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Mview\View\SubscriptionFactory;
 
 /**
+ * Mview
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class View extends \Magento\Framework\DataObject implements ViewInterface
@@ -283,7 +285,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
                 for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
                     // Don't go past the current version for atomicy.
                     $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
-                    $ids = $this->getChangelog()->getList($vsFrom, $versionTo);
+                    $ids = array_map('intval', $this->getChangelog()->getList($vsFrom, $versionTo));
 
                     // We run the actual indexer in batches.
                     // Chunked AFTER loading to avoid duplicates in separate chunks.

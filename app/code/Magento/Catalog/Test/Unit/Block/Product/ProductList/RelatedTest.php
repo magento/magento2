@@ -72,6 +72,9 @@ class RelatedTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function canItemsAddToCartDataProvider()
     {
         return [

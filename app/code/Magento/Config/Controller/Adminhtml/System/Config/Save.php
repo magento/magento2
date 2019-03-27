@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
 
 /**
@@ -13,7 +14,7 @@ use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends AbstractConfig
+class Save extends AbstractConfig implements HttpPostActionInterface
 {
     /**
      * Backend Config Model Factory

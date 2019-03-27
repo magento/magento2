@@ -31,6 +31,9 @@ class ScheduledTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $html);
     }
 
+    /**
+     * @return array
+     */
     public function typeProvider()
     {
         return [

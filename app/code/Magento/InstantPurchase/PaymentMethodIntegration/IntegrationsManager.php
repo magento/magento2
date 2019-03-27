@@ -146,7 +146,7 @@ class IntegrationsManager
      *    </instant_purchase>
      *
      * @param VaultPaymentInterface $paymentMethod
-     * @param $storeId
+     * @param int|string|null|\Magento\Store\Model\Store $storeId
      * @return bool
      */
     private function isIntegrationAvailable(VaultPaymentInterface $paymentMethod, $storeId): bool

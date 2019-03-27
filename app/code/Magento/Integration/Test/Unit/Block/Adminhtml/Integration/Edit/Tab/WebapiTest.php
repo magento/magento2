@@ -83,6 +83,9 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $this->webapiBlock->canShowTab());
     }
 
+    /**
+     * @return array
+     */
     public function canShowTabProvider()
     {
         return [
@@ -127,6 +130,9 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $this->webapiBlock->isEverythingAllowed());
     }
 
+    /**
+     * @return array
+     */
     public function isEverythingAllowedProvider()
     {
         return [

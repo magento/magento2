@@ -191,7 +191,7 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Admin is a required field in the each row
+     * @expectedExceptionMessage Admin is a required field in each row
      */
     public function testBeforeSaveWithFailedValidation()
     {
@@ -310,6 +310,9 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
         $this->eavAttribute->beforeBeforeSave($this->attribute);
     }
 
+    /**
+     * @return array
+     */
     public function visualSwatchProvider()
     {
         return [

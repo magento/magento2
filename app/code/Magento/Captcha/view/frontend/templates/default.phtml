@@ -14,7 +14,7 @@ $captcha = $block->getCaptchaModel();
 <div class="field captcha required" role="<?= $block->escapeHtmlAttr($block->getFormId()) ?>">
     <label for="captcha_<?= $block->escapeHtmlAttr($block->getFormId()) ?>" class="label"><span><?= $block->escapeHtml(__('Please type the letters and numbers below')) ?></span></label>
     <div class="control captcha">
-        <input name="<?= $block->escapeHtmlAttr(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE) ?>[<?= $block->escapeHtmlAttr($block->getFormId()) ?>]" type="text" class="input-text required-entry" data-validate="{required:true}" id="captcha_<?= $block->escapeHtmlAttr($block->getFormId()) ?>" />
+        <input name="<?= $block->escapeHtmlAttr(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE) ?>[<?= $block->escapeHtmlAttr($block->getFormId()) ?>]" type="text" class="input-text required-entry" data-validate="{required:true}" id="captcha_<?= $block->escapeHtmlAttr($block->getFormId()) ?>" autocomplete="off"/>
         <div class="nested">
             <div class="field captcha no-label"
                  data-captcha="<?= $block->escapeHtmlAttr($block->getFormId()) ?>"

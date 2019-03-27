@@ -41,6 +41,9 @@ class SenderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $this->model->getValue());
     }
 
+    /**
+     * @return array
+     */
     public function beforeSaveDataProvider()
     {
         return [
