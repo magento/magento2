@@ -492,6 +492,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     {
         $this->_setIsLoaded(false);
         $this->_items = [];
+        $this->_totalRecords = null;
         return $this;
     }
 
