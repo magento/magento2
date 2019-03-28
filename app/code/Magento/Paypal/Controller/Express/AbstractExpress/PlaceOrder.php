@@ -44,6 +44,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
      * @param \Magento\Sales\Api\PaymentFailuresInterface|null $paymentFailures
      * @param \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -70,10 +71,10 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
         );
 
         $this->agreementsValidator = $agreementValidator;
-        $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(
+        $this->paymentFailures = $paymentFailures ?: $this->_objectManager->get(
             \Magento\Sales\Api\PaymentFailuresInterface::class
         );
-        $this->invoiceSender = $invoiceSender?: $this->_objectManager->get(
+        $this->invoiceSender = $invoiceSender ?: $this->_objectManager->get(
             \Magento\Sales\Model\Order\Email\Sender\InvoiceSender::class
         );
     }
@@ -121,6 +122,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
                     ->setLastRealOrderId($order->getIncrementId())
                     ->setLastOrderStatus($order->getStatus());
             }
+
             if ($order->hasInvoices() && $order->getStatus() === Order::STATE_PROCESSING) {
                 $invoice = $order->getPayment()->getCreatedInvoice();
                 $this->invoiceSender->send($invoice);
