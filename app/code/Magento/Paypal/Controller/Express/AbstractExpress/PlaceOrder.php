@@ -21,10 +21,16 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @var \Magento\Checkout\Api\AgreementsValidatorInterface
      */
     protected $agreementsValidator;
+
+    /**
+     * @var \Magento\Sales\Api\PaymentFailuresInterface
+     */
+    private $paymentFailures;
+
     /**
      * @var Magento\Sales\Model\Order\Email\Sender\InvoiceSender
      */
-    protected $invoiceSender;
+    private $invoiceSender;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -36,6 +42,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
+     * @param \Magento\Sales\Api\PaymentFailuresInterface|null $paymentFailures
      * @param \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender
      */
     public function __construct(
@@ -48,9 +55,9 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator,
+        \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures = null,
         \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender = null
     ) {
-        $this->agreementsValidator = $agreementValidator;
         parent::__construct(
             $context,
             $customerSession,
@@ -61,7 +68,12 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             $urlHelper,
             $customerUrl
         );
-        $this->invoiceSender = $invoiceSender?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+
+        $this->agreementsValidator = $agreementValidator;
+        $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(
+            \Magento\Sales\Api\PaymentFailuresInterface::class
+        );
+        $this->invoiceSender = $invoiceSender?: $this->_objectManager->get(
             \Magento\Sales\Model\Order\Email\Sender\InvoiceSender::class
         );
     }
@@ -162,6 +174,8 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      */
     protected function _processPaypalApiError($exception)
     {
+        $this->paymentFailures->handle((int)$this->_getCheckoutSession()->getQuoteId(), $exception->getMessage());
+
         switch ($exception->getCode()) {
             case ApiProcessableException::API_MAX_PAYMENT_ATTEMPTS_EXCEEDED:
             case ApiProcessableException::API_TRANSACTION_EXPIRED:
