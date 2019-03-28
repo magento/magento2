@@ -125,6 +125,11 @@ class Customer extends AbstractCustomer
     protected $_resourceHelper;
 
     /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
+    protected $_indexerRegistry;
+
+    /**
      * {@inheritdoc}
      */
     protected $masterAttributeCode = 'email';
@@ -195,6 +200,7 @@ class Customer extends AbstractCustomer
         \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory,
         \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         array $data = []
     ) {
         $this->_resourceHelper = $resourceHelper;
@@ -249,6 +255,7 @@ class Customer extends AbstractCustomer
         $this->_initStores(true)->_initAttributes();
 
         $this->_customerModel = $customerFactory->create();
+        $this->_indexerRegistry = $indexerRegistry;
         /** @var $customerResource \Magento\Customer\Model\ResourceModel\Customer */
         $customerResource = $this->_customerModel->getResource();
         $this->_entityTable = $customerResource->getEntityTable();
@@ -539,6 +546,17 @@ class Customer extends AbstractCustomer
             if ($entitiesToDelete) {
                 $this->_deleteCustomerEntities($entitiesToDelete);
             }
+
+            /**
+             * Reindex customer grid index
+             */
+            if ($entitiesToCreate || $entitiesToUpdate || $entitiesToDelete) {
+                $this->reindexCustomers(array_merge(
+                    array_column($entitiesToCreate, 'entity_id'),
+                    array_column($entitiesToUpdate, 'entity_id'),
+                    $entitiesToDelete
+                ));
+            }
         }
 
         return true;
@@ -657,5 +675,19 @@ class Customer extends AbstractCustomer
                 $this->customerFields
             )
         );
+    }
+
+    /**
+     * Initiate customer reindex by customer ids
+     *
+     * @param array $customerIdsToReindex
+     * @return void
+     */
+    private function reindexCustomers($customerIdsToReindex = [])
+    {
+        $indexer = $this->_indexerRegistry->get('customer_grid');
+        if (is_array($customerIdsToReindex) && count($customerIdsToReindex) > 0) {
+            $indexer->reindexList($customerIdsToReindex);
+        }
     }
 }
