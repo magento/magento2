@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
@@ -19,6 +20,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class SetBillingAddressOnCartTest extends GraphQlAbstract
 {
+    /**
+     * @var GetMaskedQuoteIdByReservedOrderId
+     */
+    private $getMaskedQuoteIdByReservedOrderId;
+
     /**
      * @var QuoteResource
      */
@@ -42,6 +48,7 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
@@ -49,12 +56,14 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testSetNewBillingAddress()
     {
-        $maskedQuoteId = $this->assignQuoteToCustomer();
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
 mutation {
@@ -90,6 +99,7 @@ mutation {
           code
           label
         }
+        address_type
       }
     }
   }
@@ -105,12 +115,14 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testSetNewBillingAddressWithUseForShippingParameter()
     {
-        $maskedQuoteId = $this->assignQuoteToCustomer();
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
 mutation {
@@ -147,6 +159,7 @@ mutation {
           code
           label
         }
+        address_type
       }
       shipping_addresses {
         firstname
@@ -160,6 +173,7 @@ mutation {
           code
           label
         }
+        address_type
       }
     }
   }
@@ -174,17 +188,19 @@ QUERY;
         self::assertArrayHasKey('shipping_addresses', $cartResponse);
         $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertNewAddressFields($billingAddressResponse);
-        $this->assertNewAddressFields($shippingAddressResponse);
+        $this->assertNewAddressFields($shippingAddressResponse, 'SHIPPING');
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testSetBillingAddressFromAddressBook()
     {
-        $maskedQuoteId = $this->assignQuoteToCustomer();
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
 mutation {
@@ -224,14 +240,17 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     *
      * @expectedException \Exception
      * @expectedExceptionMessage Could not find a address with ID "100"
      */
     public function testSetNotExistedBillingAddressFromAddressBook()
     {
-        $maskedQuoteId = $this->assignQuoteToCustomer();
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
 mutation {
@@ -255,13 +274,15 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testSetNewBillingAddressAndFromAddressBookAtSameTime()
     {
-        $maskedQuoteId = $this->assignQuoteToCustomer();
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
 mutation {
@@ -301,13 +322,16 @@ QUERY;
     }
 
     /**
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testSetBillingAddressToGuestCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_simple_product_without_address');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
 mutation {
@@ -335,6 +359,7 @@ QUERY;
     }
 
     /**
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
@@ -369,11 +394,13 @@ QUERY;
     }
 
     /**
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     *
      * @expectedException \Exception
-     * @expectedExceptionMessage The current user cannot use address with ID "1"
+     * @expectedExceptionMessage Current customer does not have permission to address with ID "1"
      */
     public function testSetBillingAddressIfCustomerIsNotOwnerOfAddress()
     {
@@ -401,11 +428,86 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testSetBillingAddressOnNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = <<<QUERY
+{
+  cart(cart_id: "$maskedQuoteId") {
+    items {
+      id
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     *
+     * @dataProvider dataProviderSetWithoutRequiredParameters
+     * @param string $input
+     * @param string $message
+     * @throws \Exception
+     */
+    public function testSetBillingAddressWithoutRequiredParameters(string $input, string $message)
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      {$input}
+    }
+  ) {
+    cart {
+        billing_address {
+            city
+          }
+    }
+  }
+}
+QUERY;
+
+        $this->expectExceptionMessage($message);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderSetWithoutRequiredParameters(): array
+    {
+        return [
+            'missed_billing_address' => [
+                'cart_id: "cart_id_value"',
+                'Field SetBillingAddressOnCartInput.billing_address of required type BillingAddressInput!'
+                . ' was not provided.',
+            ],
+            'missed_cart_id' => [
+                'billing_address: {}',
+                'Required parameter "cart_id" is missing'
+            ]
+        ];
+    }
+
+    /**
      * Verify the all the whitelisted fields for a New Address Object
      *
-     * @param array $billingAddressResponse
+     * @param array $addressResponse
+     * @param string $addressType
      */
-    private function assertNewAddressFields(array $billingAddressResponse): void
+    private function assertNewAddressFields(array $addressResponse, string $addressType = 'BILLING'): void
     {
         $assertionMap = [
             ['response_field' => 'firstname', 'expected_value' => 'test firstname'],
@@ -416,9 +518,10 @@ QUERY;
             ['response_field' => 'postcode', 'expected_value' => '887766'],
             ['response_field' => 'telephone', 'expected_value' => '88776655'],
             ['response_field' => 'country', 'expected_value' => ['code' => 'US', 'label' => 'US']],
+            ['response_field' => 'address_type', 'expected_value' => $addressType]
         ];
 
-        $this->assertResponseFields($billingAddressResponse, $assertionMap);
+        $this->assertResponseFields($addressResponse, $assertionMap);
     }
 
     /**
@@ -455,28 +558,16 @@ QUERY;
     }
 
     /**
-     * @param string $reversedQuoteId
-     * @return string
-     */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
-    }
-
-    /**
-     * @param string $reversedQuoteId
+     * @param string $reversedOrderId
      * @param int $customerId
      * @return string
      */
     private function assignQuoteToCustomer(
-        string $reversedQuoteId = 'test_order_with_simple_product_without_address',
+        string $reversedOrderId = 'test_order_with_simple_product_without_address',
         int $customerId = 1
     ): string {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
         $quote->setCustomerId($customerId);
         $this->quoteResource->save($quote);
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());

@@ -31,7 +31,7 @@
             </getData>
 
             <!-- Create the child that will be a part of the configurable product -->
-            <createData entity="SimpleOutOfStockProduct" stepKey="createSimpleProduct">
+            <createData entity="ApiSimpleOutOfStock" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption"/>
             </createData>
@@ -99,8 +99,8 @@
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
-        <!-- Assert configurable attributes block is absent on product page -->
-        <dontSeeElement selector="{{AdminProductFormConfigurationsSection.createdConfigurationsBlock}}" stepKey="dontSeeCreatedConfigurations"/>
+        <!-- Assert configurable attributes block is present on product page -->
+        <seeElement selector="{{AdminProductFormConfigurationsSection.createdConfigurationsBlock}}" stepKey="seeCreatedConfigurations"/>
 
         <!-- Display out of stock product -->
         <actionGroup ref="displayOutOfStockProduct" stepKey="displayOutOfStockProduct"/>
