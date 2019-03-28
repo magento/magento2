@@ -9,8 +9,6 @@ use Magento\Sales\Model\Order;
 
 /**
  * Adminhtml sales totals block
- *
- * @package Magento\Sales\Block\Adminhtml
  */
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
@@ -75,7 +73,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
             $this->getSource()->getShippingDescription())
         ) {
             $shippingLabel = __('Shipping & Handling');
-            if ($this->isHasFreeShipping($this->getOrder()) && $this->getSource()->getDiscountDescription()) {
+            if ($this->isFreeShipping($this->getOrder()) && $this->getSource()->getDiscountDescription()) {
                 $shippingLabel .= sprintf(' (%s)', $this->getSource()->getDiscountDescription());
             }
             $this->_totals['shipping'] = new \Magento\Framework\DataObject(
@@ -127,16 +125,16 @@ class Totals extends \Magento\Sales\Block\Order\Totals
      * @param Order $order
      * @return bool
      */
-    private function isHasFreeShipping(Order $order): bool
+    private function isFreeShipping(Order $order): bool
     {
-        $isActive = false;
+        $isFreeShipping = false;
         foreach ($order->getItems() as $orderItem) {
-            if ($orderItem->getFreeShipping() === '1') {
-                $isActive = true;
+            if ($orderItem->getFreeShipping() == '1') {
+                $isFreeShipping = true;
                 break;
             }
         }
 
-        return $isActive;
+        return $isFreeShipping;
     }
 }

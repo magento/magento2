@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Block\Adminhtml;
 
 use Magento\Framework\View\LayoutInterface;
@@ -15,10 +17,10 @@ use Magento\Sales\Model\OrderFactory;
 class TotalsTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /** @var LayoutInterface */
-    protected $_layout;
+    private $layout;
 
     /** @var Totals */
-    protected $_block;
+    private $block;
 
     /** @var OrderFactory */
     private $orderFactory;
@@ -29,8 +31,8 @@ class TotalsTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     protected function setUp()
     {
         parent::setUp();
-        $this->_layout = $this->_objectManager->get(LayoutInterface::class);
-        $this->_block = $this->_layout->createBlock(Totals::class, 'totals_block');
+        $this->layout = $this->_objectManager->get(LayoutInterface::class);
+        $this->block = $this->layout->createBlock(Totals::class, 'totals_block');
         $this->orderFactory = $this->_objectManager->get(OrderFactory::class);
     }
 
@@ -43,10 +45,10 @@ class TotalsTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $order = $this->orderFactory->create();
         $order->loadByIncrementId('100000001');
 
-        $this->_block->setOrder($order);
-        $this->_block->toHtml();
+        $this->block->setOrder($order);
+        $this->block->toHtml();
 
-        $shippingTotal = $this->_block->getTotal('shipping');
+        $shippingTotal = $this->block->getTotal('shipping');
         $this->assertNotFalse($shippingTotal, 'Shipping method is absent on the total\'s block.');
         $this->assertContains(
             '1234567890',
