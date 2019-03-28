@@ -29,7 +29,6 @@
         </before>
         <after>
             <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
-            <magentoCLI command="config:set web/secure/base_url {{_ENV.MAGENTO_BASE_URL}}" stepKey="setSecureBaseURL"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
         <executeJS function="return window.location.host" stepKey="hostname"/>
