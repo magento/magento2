@@ -44,6 +44,11 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     protected $directoryMock;
 
     /**
+     * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $random;
+
+    /**
      * @var \Magento\CatalogImportExport\Model\Import\Uploader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $uploader;
@@ -84,6 +89,11 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
                         ->method('getDirectoryWrite')
                         ->will($this->returnValue($this->directoryMock));
 
+        $this->random = $this->getMockBuilder(\Magento\Framework\Math\Random::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getRandomString'])
+            ->getMock();
+
         $this->uploader = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
             ->setConstructorArgs([
                 $this->coreFileStorageDb,
@@ -92,6 +102,8 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
                 $this->validator,
                 $this->filesystem,
                 $this->readFactory,
+                null,
+                $this->random
             ])
             ->setMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
             ->getMock();
@@ -99,20 +111,29 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider moveFileUrlDataProvider
+     * @param $fileUrl
+     * @param $expectedHost
+     * @param $expectedFileName
+     * @param $checkAllowedExtension
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testMoveFileUrl($fileUrl, $expectedHost, $expectedFileName, $checkAllowedExtension)
     {
+        $tmpDir = 'var/tmp';
         $destDir = 'var/dest/dir';
-        $expectedTmpDir = 'var/tmp';
-        $expectedRelativeFilePath = $expectedTmpDir . '/' . $expectedFileName;
 
-        $this->directoryMock->expects($this->once())->method('isWritable')->with($destDir)->willReturn(true);
-        $this->directoryMock->expects($this->any())->method('getRelativePath')->with($expectedRelativeFilePath);
-        $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($destDir)
-            ->willReturn($destDir . '/' . $expectedFileName);
+        // Expected invocation to validate file extension
+        $this->uploader->expects($this->exactly($checkAllowedExtension))->method('checkAllowedExtension')
+            ->willReturn(true);
 
-        // Check writeFile() method invoking.
-        $this->directoryMock->expects($this->any())->method('writeFile')->will($this->returnValue($expectedFileName));
+        // Expected invocation to generate random string for file name postfix
+        $this->random->expects($this->once())->method('getRandomString')
+            ->with(16)
+            ->willReturn('38GcEmPFKXXR8NMj');
+
+        // Expected invocation to build the temp file path with the correct directory and filename
+        $this->directoryMock->expects($this->any())->method('getRelativePath')
+            ->with($tmpDir . '/' . $expectedFileName);
 
         // Create adjusted reader which does not validate path.
         $readMock = $this->getMockBuilder(\Magento\Framework\Filesystem\File\Read::class)
@@ -120,24 +141,36 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['readAll'])
             ->getMock();
 
-        // Check readAll() method invoking.
-        $readMock->expects($this->once())->method('readAll')->will($this->returnValue(null));
-
-        // Check create() method invoking with expected argument.
+        // Expected invocations to create reader and read contents from url
         $this->readFactory->expects($this->once())->method('create')
-            ->will($this->returnValue($readMock))->with($expectedHost);
+            ->with($expectedHost)
+            ->will($this->returnValue($readMock));
+        $readMock->expects($this->once())->method('readAll')
+            ->will($this->returnValue(null));
 
-        //Check invoking of getTmpDir(), _setUploadFile(), save() methods.
-        $this->uploader->expects($this->any())->method('getTmpDir')->will($this->returnValue(''));
-        $this->uploader->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
+        // Expected invocation to write the temp file
+        $this->directoryMock->expects($this->any())->method('writeFile')
+            ->will($this->returnValue($expectedFileName));
+
+        // Expected invocations to move the temp file to the destination directory
+        $this->directoryMock->expects($this->once())->method('isWritable')
+            ->with($destDir)
+            ->willReturn(true);
+        $this->directoryMock->expects($this->once())->method('getAbsolutePath')
+            ->with($destDir)
+            ->willReturn($destDir . '/' . $expectedFileName);
+        $this->uploader->expects($this->once())->method('_setUploadFile')
+            ->willReturnSelf();
         $this->uploader->expects($this->once())->method('save')
             ->with($destDir . '/' . $expectedFileName)
             ->willReturn(['name' => $expectedFileName, 'path' => 'absPath']);
-        $this->uploader->expects($this->exactly($checkAllowedExtension))->method('checkAllowedExtension')
-            ->willReturn(true);
+
+        // Do not use configured temp directory
+        $this->uploader->expects($this->never())->method('getTmpDir');
 
         $this->uploader->setDestDir($destDir);
         $result = $this->uploader->move($fileUrl);
+
         $this->assertEquals(['name' => $expectedFileName], $result);
         $this->assertArrayNotHasKey('path', $result);
     }
@@ -227,42 +260,66 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     public function moveFileUrlDataProvider()
     {
         return [
-            [
-                '$fileUrl' => 'http://test_uploader_file',
+            'https_no_file_ext' => [
+                '$fileUrl' => 'https://test_uploader_file',
                 '$expectedHost' => 'test_uploader_file',
-                '$expectedFileName' => 'test_uploader_file',
+                '$expectedFileName' => 'test_uploader_file_38GcEmPFKXXR8NMj',
                 '$checkAllowedExtension' => 0
             ],
-            [
-                '$fileUrl' => 'https://!:^&`;file',
-                '$expectedHost' => '!:^&`;file',
-                '$expectedFileName' => 'file',
+            'https_invalid_chars' => [
+                '$fileUrl' => 'https://www.google.com/!:^&`;image.jpg',
+                '$expectedHost' => 'www.google.com/!:^&`;image.jpg',
+                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                '$checkAllowedExtension' => 1
+            ],
+            'https_invalid_chars_no_file_ext' => [
+                '$fileUrl' => 'https://!:^&`;image',
+                '$expectedHost' => '!:^&`;image',
+                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj',
                 '$checkAllowedExtension' => 0
             ],
-            [
+            'http_jpg' => [
+                '$fileUrl' => 'http://www.google.com/image.jpg',
+                '$expectedHost' => 'www.google.com/image.jpg',
+                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                '$checkAllowedExtension' => 1
+            ],
+            'https_jpg' => [
                 '$fileUrl' => 'https://www.google.com/image.jpg',
                 '$expectedHost' => 'www.google.com/image.jpg',
-                '$expectedFileName' => 'image.jpg',
+                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
                 '$checkAllowedExtension' => 1
             ],
-            [
+            'https_jpeg' => [
+                '$fileUrl' => 'https://www.google.com/image.jpeg',
+                '$expectedHost' => 'www.google.com/image.jpeg',
+                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpeg',
+                '$checkAllowedExtension' => 1
+            ],
+            'https_png' => [
+                '$fileUrl' => 'https://www.google.com/image.png',
+                '$expectedHost' => 'www.google.com/image.png',
+                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.png',
+                '$checkAllowedExtension' => 1
+            ],
+            'https_gif' => [
+                '$fileUrl' => 'https://www.google.com/image.gif',
+                '$expectedHost' => 'www.google.com/image.gif',
+                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.gif',
+                '$checkAllowedExtension' => 1
+            ],
+            'https_one_query_param' => [
                 '$fileUrl' => 'https://www.google.com/image.jpg?param=1',
                 '$expectedHost' => 'www.google.com/image.jpg?param=1',
-                '$expectedFileName' => 'image.jpg',
+                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
                 '$checkAllowedExtension' => 1
             ],
-            [
+            'https_two_query_params' => [
                 '$fileUrl' => 'https://www.google.com/image.jpg?param=1&param=2',
                 '$expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
-                '$expectedFileName' => 'image.jpg',
+                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
                 '$checkAllowedExtension' => 1
-            ],
-            [
-                '$fileUrl' => 'http://www.google.com/image.jpg?param=1&param=2',
-                '$expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
-                '$expectedFileName' => 'image.jpg',
-                '$checkAllowedExtension' => 1
-            ],
+            ]
         ];
     }
 }
