@@ -8,20 +8,23 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontVerifySecureURLRedirectVault">
+    <test name="StorefrontVerifySecureURLRedirectDownloadable">
         <annotations>
-            <features value="Vault"/>
+            <features value="Downloadable"/>
             <stories value="Storefront Secure URLs"/>
-            <title value="Verify Secure URLs For Storefront Vault Pages"/>
-            <description value="Verify that the Secure URL configuration applies to the Vault pages on the Storefront"/>
+            <title value="Verify Secure URLs For Storefront Downloadable Pages"/>
+            <description value="Verify that the Secure URL configuration applies to the Downloadable pages on the Storefront"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-15562"/>
-            <group value="vault"/>
+            <testCaseId value="MC-15616"/>
+            <group value="downloadable"/>
             <group value="configuration"/>
             <group value="secure_storefront_url"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <createData entity="Default_Company" stepKey="company">
+                <requiredEntity createDataKey="customer"/>
+            </createData>
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signThirdSimpleUsCustomer">
                 <argument name="Customer" value="$$customer$$"/>
             </actionGroup>
@@ -34,10 +37,13 @@
             <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
             <magentoCLI command="config:set web/secure/base_url {{_ENV.MAGENTO_BASE_URL}}" stepKey="setSecureBaseURL"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="company" stepKey="deleteCompany"/>
+            <deleteData createDataKey="customer" stepKey="deleteCompanyAdmin"/>
         </after>
         <executeJS function="return window.location.host" stepKey="hostname"/>
-        <amOnUrl url="http://{$hostname}/vault" stepKey="goToUnsecureVaultURL"/>
-        <seeCurrentUrlEquals url="https://{$hostname}/vault" stepKey="seeSecureVaultURL"/>
+        <amOnUrl url="http://{$hostname}/downloadable/customer" stepKey="goToUnsecureDownloadableCustomerURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/downloadable/customer" stepKey="seeSecureDownloadableCustomerURL"/>
+        <amOnUrl url="http://{$hostname}/downloadable/download" stepKey="goToUnsecureDownloadableDownloadURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/downloadable/download" stepKey="seeSecureDownloadableDownloadURL"/>
     </test>
 </tests>

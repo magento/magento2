@@ -18,21 +18,24 @@
             <testCaseId value="MC-15531"/>
             <group value="checkout"/>
             <group value="configuration"/>
+            <group value="secure_storefront_url"/>
         </annotations>
         <before>
             <amOnPage url="/" stepKey="goToHomePage"/>
-            <executeJS function="return window.location.host" stepKey="baseURL"/>
-            <magentoCLI command="config:set web/secure/base_url https://{$baseURL}/" stepKey="setSecureBaseURL"/>
+            <executeJS function="return window.location.host" stepKey="hostname"/>
+            <magentoCLI command="config:set web/secure/base_url https://{$hostname}/" stepKey="setSecureBaseURL"/>
             <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
+            <magentoCLI command="config:set web/secure/base_url {{_ENV.MAGENTO_BASE_URL}}" stepKey="setSecureBaseURL"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
-        <!-- Go to Unsecure URL -->
-        <amOnPage url="/checkout" stepKey="goToCheckoutPage"/>
-        <!-- Verify Secure URL Redirect -->
-        <seeInCurrentUrl url="https://" stepKey="seeSecureURL"/>
+        <executeJS function="return window.location.host" stepKey="hostname"/>
+        <amOnUrl url="http://{$hostname}/checkout" stepKey="goToUnsecureCheckoutURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/checkout" stepKey="seeSecureCheckoutURL"/>
+        <amOnUrl url="http://{$hostname}/checkout/sidebar" stepKey="goToUnsecureCheckoutSidebarURL"/>
+        <seeCurrentUrlEquals url="http://{$hostname}/checkout/sidebar" stepKey="seeUnsecureCheckoutSidebarURL"/>
     </test>
 </tests>
