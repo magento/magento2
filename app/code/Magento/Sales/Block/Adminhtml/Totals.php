@@ -75,7 +75,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
             $this->getSource()->getShippingDescription())
         ) {
             $shippingLabel = __('Shipping & Handling');
-            if ($this->isHasFreeShipping($this->getSource()) && $this->getSource()->getDiscountDescription()) {
+            if ($this->isHasFreeShipping($this->getOrder()) && $this->getSource()->getDiscountDescription()) {
                 $shippingLabel .= sprintf(' (%s)', $this->getSource()->getDiscountDescription());
             }
             $this->_totals['shipping'] = new \Magento\Framework\DataObject(
