@@ -275,6 +275,7 @@ define([
 
             if (!isBillingAddressInitialized &&
                 shippingAddress &&
+                shippingAddress.isDefaultBilling() &&
                 shippingAddress.canUseForBilling() &&
                 (shippingAddress.isDefaultShipping() || !quote.isVirtual())
             ) {
