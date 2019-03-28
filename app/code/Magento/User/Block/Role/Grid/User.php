@@ -36,7 +36,6 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected $_jsonDecoder;
 
-
     /**
      * @var \Magento\User\Model\ResourceModel\Role\User\CollectionFactory
      */
