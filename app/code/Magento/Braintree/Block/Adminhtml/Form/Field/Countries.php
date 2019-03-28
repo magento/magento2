@@ -44,15 +44,4 @@ class Countries extends Select
         }
         return parent::_toHtml();
     }
-
-    /**
-     * Sets name for input element
-     *
-     * @param string $value
-     * @return $this
-     */
-    public function setInputName($value)
-    {
-        return $this->setName($value);
-    }
 }
