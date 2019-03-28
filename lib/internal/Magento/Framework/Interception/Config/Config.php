@@ -234,7 +234,7 @@ class Config implements \Magento\Framework\Interception\ExtendableConfigInterfac
         if ($intercepted !== null) {
             $this->_intercepted = $intercepted;
         } else {
-            foreach ($classDefinitions as $class => $config) {
+            foreach ($classDefinitions as $class => $classDefinition) {
                 $this->_inheritInterception($class, true);
             }
 
