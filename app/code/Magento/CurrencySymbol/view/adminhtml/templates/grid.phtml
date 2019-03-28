@@ -31,7 +31,7 @@ $escapeHelper = $this->helper(\Magento\Framework\EscapeHelper::class);
                 <div class="admin__field admin__field-option">
                     <input id="custom_currency_symbol_inherit<?php echo $escapeHelper->escapeHtmlAttr($code); ?>"
                            class="admin__control-checkbox" type="checkbox"
-                           onclick="toggleUseDefault(<?php echo '\'' . $escapeHelper->escapeHtmlAttr($block->escapeQuote($code, true)) . '\',\'' . $block->escapeQuote($data['parentSymbol'], true) . '\''; ?>)"
+                           onclick="toggleUseDefault(<?php /* @noEscape */ echo '\'' . $escapeHelper->escapeHtmlAttr($block->escapeQuote($code, true)) . '\',\'' . $block->escapeQuote($data['parentSymbol'], true) . '\''; ?>)"
                             <?php echo $data['inherited'] ? ' checked="checked"' : ''; ?>
                            value="1"
                            name="inherit_custom_currency_symbol[<?php echo $escapeHelper->escapeHtmlAttr($code); ?>]">
