@@ -62,13 +62,17 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/FedEx/_files/enable_fedex_shipping_method.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/Fedex/_files/enable_fedex_shipping_method.php
      */
     public function testSetFedExShippingMethod()
     {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
+        $this->quoteResource->load($quote, 'test_quote', 'reserved_order_id');
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
         $shippingAddressId = (int)$quote->getShippingAddress()->getId();
 
