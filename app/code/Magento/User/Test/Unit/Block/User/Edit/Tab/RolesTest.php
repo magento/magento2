@@ -7,13 +7,13 @@
 namespace Magento\User\Test\Unit\Block\User\Edit\Tab;
 
 /**
- * Class UserTest to cover Magento\User\Block\Role\Grid\User
+ * Class RolesTest to cover \Magento\User\Block\User\Edit\Tab\Roles
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RolesTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\User\Block\Role\Grid\User */
+    /** @var \Magento\User\Block\User\Edit\Tab\Roles */
     protected $model;
 
     /** @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
@@ -68,13 +68,8 @@ class RolesTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->roleFactoryMock = $this->getMockBuilder(\Magento\Authorization\Model\RoleFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-
         $this->userRolesFactoryMock = $this
-            ->getMockBuilder(\Magento\User\Model\ResourceModel\Role\User\CollectionFactory::class)
+            ->getMockBuilder(\Magento\Authorization\Model\ResourceModel\Role\CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -106,9 +101,8 @@ class RolesTest extends \PHPUnit\Framework\TestCase
                 'backendHelper' => $this->backendHelperMock,
                 'jsonEncoder' => $this->jsonEncoderMock,
                 'jsonDecoder' => $this->jsonDecoderMock,
-                'coreRegistry' => $this->registryMock,
-                'roleFactory' => $this->roleFactoryMock,
                 'userRolesFactory' => $this->userRolesFactoryMock,
+                'coreRegistry' => $this->registryMock,
                 'request' => $this->requestInterfaceMock,
                 'urlBuilder' => $this->urlInterfaceMock,
                 'layout' => $this->layoutMock,
@@ -123,6 +117,6 @@ class RolesTest extends \PHPUnit\Framework\TestCase
         $paramValue = 'not_JSON';
         $this->requestInterfaceMock->expects($this->once())->method('getParam')->with($param)->willReturn($paramValue);
         $this->jsonDecoderMock->expects($this->once())->method('decode')->with($paramValue)->willReturn(null);
-        $this->assertEquals('{}', $this->model->getUsers(true));
+        $this->assertEquals('{}', $this->model->getSelectedRoles(true));
     }
 }
