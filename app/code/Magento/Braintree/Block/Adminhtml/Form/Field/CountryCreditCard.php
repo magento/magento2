@@ -6,7 +6,6 @@
 namespace Magento\Braintree\Block\Adminhtml\Form\Field;
 
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
-use Magento\Framework\DataObject;
 
 /**
  * Class CountryCreditCard
@@ -32,9 +31,7 @@ class CountryCreditCard extends AbstractFieldArray
     {
         if (!$this->countryRenderer) {
             $this->countryRenderer = $this->getLayout()->createBlock(
-                Countries::class,
-                '',
-                ['data' => ['is_render_to_js_template' => true]]
+                Countries::class
             );
         }
         return $this->countryRenderer;
@@ -49,9 +46,7 @@ class CountryCreditCard extends AbstractFieldArray
     {
         if (!$this->ccTypesRenderer) {
             $this->ccTypesRenderer = $this->getLayout()->createBlock(
-                CcTypes::class,
-                '',
-                ['data' => ['is_render_to_js_template' => true]]
+                CcTypes::class
             );
         }
         return $this->ccTypesRenderer;
@@ -81,26 +76,4 @@ class CountryCreditCard extends AbstractFieldArray
         $this->_addButtonLabel = __('Add Rule');
     }
 
-    /**
-     * Prepare existing row data object
-     *
-     * @param DataObject $row
-     * @return void
-     */
-    protected function _prepareArrayRow(DataObject $row)
-    {
-        $country = $row->getCountryId();
-        $options = [];
-        if ($country) {
-            $options['option_' . $this->getCountryRenderer()->calcOptionHash($country)]
-                = 'selected="selected"';
-
-            $ccTypes = $row->getCcTypes();
-            foreach ($ccTypes as $cardType) {
-                $options['option_' . $this->getCcTypesRenderer()->calcOptionHash($cardType)]
-                    = 'selected="selected"';
-            }
-        }
-        $row->setData('option_extra_attrs', $options);
-    }
 }
