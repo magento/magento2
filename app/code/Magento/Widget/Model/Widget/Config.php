@@ -120,6 +120,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 
     /**
      * Return url to error image
+     *
      * @return string
      */
     public function getErrorImageUrl()
@@ -129,6 +130,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 
     /**
      * Return url to wysiwyg plugin
+     *
      * @return string
      */
     public function getWysiwygJsPluginSrc()
@@ -189,6 +191,8 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
     }
 
     /**
+     * Get available widgets.
+     *
      * @param \Magento\Framework\DataObject $config Editor element config
      * @return array
      */
