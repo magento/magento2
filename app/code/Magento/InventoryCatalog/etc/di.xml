@@ -103,6 +103,13 @@
                 type="Magento\InventoryCatalog\Model\BulkSourceUnassign"/>
     <preference for="Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface"
                 type="Magento\InventoryCatalog\Model\BulkInventoryTransfer"/>
+    <preference for="Magento\InventoryCatalogApi\Api\BulkPartialInventoryTransferInterface"
+                type="Magento\InventoryCatalog\Model\BulkPartialInventoryTransfer"/>
+    <preference for="Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferInterface"
+                type="Magento\InventoryCatalog\Model\PartialInventoryTransfer"/>
+    <preference for="Magento\InventoryCatalogApi\Model\PartialInventoryTransferValidatorInterface"
+                type="Magento\InventoryCatalog\Model\Source\Validator\PartialTransferValidator"/>
+
     <type name="\Magento\InventoryCatalogApi\Model\BulkSourceAssignValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">

@@ -25,4 +25,10 @@
             <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
+    <route url="/V1/inventory/bulk-partial-source-transfer" method="POST">
+        <service class="Magento\InventoryCatalogApi\Api\BulkPartialInventoryTransferInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Catalog::products"/>
+        </resources>
+    </route>
 </routes>
