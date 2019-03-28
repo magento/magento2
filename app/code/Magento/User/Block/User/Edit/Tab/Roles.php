@@ -31,15 +31,9 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_jsonEncoder;
 
     /**
-     * @var \Magento\Framework\Json\DecoderInterface
-     */
-    protected $_jsonDecoder;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
      * @param \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory $userRolesFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
@@ -48,13 +42,11 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\Json\DecoderInterface $jsonDecoder,
         \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory $userRolesFactory,
         \Magento\Framework\Registry $coreRegistry,
         array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
-        $this->_jsonDecoder = $jsonDecoder;
         $this->_userRolesFactory = $userRolesFactory;
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context, $backendHelper, $data);
@@ -150,8 +142,8 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $userRoles = $this->getRequest()->getParam('user_roles');
         if ($userRoles && $json) {
-            $result = $this->_jsonDecoder->decode($userRoles);
-            return $result ? $result : '{}';
+            $result = json_decode($userRoles);
+            return $result ? $this->_jsonEncoder->encode($result) : '{}';
         }
         /* @var $user \Magento\User\Model\User */
         $user = $this->_coreRegistry->registry('permissions_user');
