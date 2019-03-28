@@ -22,6 +22,9 @@ class UserTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $jsonEncoderMock;
 
+    /** @var \Magento\Framework\Json\DecoderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $jsonDecoderMock;
+
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registryMock;
 
@@ -51,6 +54,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->jsonEncoderMock = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $this->jsonDecoderMock = $this->getMockBuilder(\Magento\Framework\Json\DecoderInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -97,6 +105,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
             [
                 'backendHelper' => $this->backendHelperMock,
                 'jsonEncoder' => $this->jsonEncoderMock,
+                'jsonDecoder' => $this->jsonDecoderMock,
                 'coreRegistry' => $this->registryMock,
                 'roleFactory' => $this->roleFactoryMock,
                 'userRolesFactory' => $this->userRolesFactoryMock,
@@ -238,5 +247,14 @@ class UserTest extends \PHPUnit\Framework\TestCase
         )->willReturnSelf();
 
         $this->model->toHtml();
+    }
+
+    public function testGetUsersIncorrectInRoleUser()
+    {
+        $param = 'in_role_user';
+        $paramValue = 'not_JSON';
+        $this->requestInterfaceMock->expects($this->once())->method('getParam')->with($param)->willReturn($paramValue);
+        $this->jsonDecoderMock->expects($this->once())->method('decode')->with($paramValue)->willReturn(null);
+        $this->assertEquals('{}', $this->model->getUsers(true));
     }
 }

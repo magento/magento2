@@ -35,6 +35,11 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_jsonEncoder;
 
     /**
+     * @var \Magento\Framework\Json\DecoderInterface
+     */
+    protected $_jsonDecoder;
+
+    /**
      * @var \Magento\User\Model\ResourceModel\Role\User\CollectionFactory
      */
     protected $_userRolesFactory;
@@ -49,6 +54,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\User\Model\ResourceModel\Role\User\CollectionFactory $userRolesFactory
@@ -58,6 +64,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Json\DecoderInterface $jsonDecoder,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\User\Model\ResourceModel\Role\User\CollectionFactory $userRolesFactory,
@@ -65,6 +72,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     ) {
         parent::__construct($context, $backendHelper, $data);
         $this->_jsonEncoder = $jsonEncoder;
+        $this->_jsonDecoder = $jsonDecoder;
         $this->_coreRegistry = $coreRegistry;
         $this->_roleFactory = $roleFactory;
         $this->_userRolesFactory = $userRolesFactory;
@@ -191,8 +199,10 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getUsers($json = false)
     {
-        if ($this->getRequest()->getParam('in_role_user') != "") {
-            return $this->getRequest()->getParam('in_role_user');
+        $inRoleUser = $this->getRequest()->getParam('in_role_user');
+        if ($inRoleUser && $json) {
+            $result = $this->_jsonDecoder->decode($inRoleUser);
+            return $result ? $result : '{}';
         }
         $roleId = $this->getRequest()->getParam(
             'rid'
