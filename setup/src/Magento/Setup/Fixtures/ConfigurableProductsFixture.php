@@ -196,7 +196,7 @@ class ConfigurableProductsFixture extends Fixture
 
     /**
      * @inheritdoc
-     * 
+     *
      * @SuppressWarnings(PHPMD)
      */
     public function execute()
