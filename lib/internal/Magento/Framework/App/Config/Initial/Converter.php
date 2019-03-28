@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\App\Config\Initial;
 
+/**
+ * Class Converter
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
