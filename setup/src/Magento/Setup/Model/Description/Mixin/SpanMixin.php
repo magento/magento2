@@ -48,7 +48,7 @@ class SpanMixin implements DescriptionMixinInterface
 
         return $this->wordWrapper->wrapWords(
             $text,
-            $this->randomWordSelector->getRandomWords($rawText, mt_rand(5, 8)),
+            $this->randomWordSelector->getRandomWords($rawText, random_int(5, 8)),
             '<span>%s</span>'
         );
     }

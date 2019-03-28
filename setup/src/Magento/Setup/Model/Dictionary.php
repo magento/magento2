@@ -40,7 +40,7 @@ class Dictionary
             $this->readDictionary();
         }
 
-        $randIndex = mt_rand(0, count($this->dictionary) - 1);
+        $randIndex = random_int(0, count($this->dictionary) - 1);
         return trim($this->dictionary[$randIndex]);
     }
 

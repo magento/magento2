@@ -8,7 +8,7 @@
  * @var \Magento\Braintree\Block\Paypal\Button $block
  */
 
-$id = $block->getContainerId() . mt_rand();
+$id = $block->getContainerId() . random_int(0, PHP_INT_MAX);
 
 $config = [
     'Magento_Braintree/js/paypal/button' => [

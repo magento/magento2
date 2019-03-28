@@ -63,7 +63,7 @@ class DescriptionGenerator
      */
     private function generateRawDescription()
     {
-        $paragraphsCount = mt_rand(
+        $paragraphsCount = random_int(
             $this->descriptionConfig['paragraphs']['count-min'],
             $this->descriptionConfig['paragraphs']['count-max']
         );
