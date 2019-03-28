@@ -196,7 +196,7 @@
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <waitForElement stepKey="waitForPlaceOrderButton2" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
-        <see stepKey="seeBillingAddressIsCorrect2" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{UK_Not_Default_Address.street[0]}}" />
+        <see stepKey="seeBillingAddressIsCorrect2" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_NY.street[0]}}" />
         <click stepKey="clickPlaceOrderButton2" selector="{{CheckoutPaymentSection.placeOrder}}" />
         <waitForPageLoad stepKey="waitForOrderSuccessPage2"/>
         <see stepKey="seeSuccessMessage2" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
@@ -216,6 +216,7 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCLI stepKey="setShowBillingAddressOnCheckout" command="config:set checkout/options/display_billing_address_on 1" />
             <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 1" />
             <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry GB" />
             <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
@@ -226,6 +227,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 0" />
             <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry ''" />
+            <magentoCLI stepKey="setShowBillingAddressOnCheckout" command="config:set checkout/options/display_billing_address_on 0" />
         </after>
         <!-- Login as Customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
@@ -253,12 +255,15 @@
         <dontsee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->
-        <click selector="{{CheckoutHeaderSection.shippingMethodStep}}" stepKey="goToShipping" />
-        <click selector="{{CheckoutShippingSection.newAddressButton}}" stepKey="fillNewAddress" />
-        <actionGroup ref="LoggedInUserCheckoutAddNewShippingSectionWithoutRegionActionGroup" stepKey="customerCheckoutFillingShippingSectionUK">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="UK_Not_Default_Address" />
+        <click selector="{{StorefrontCheckoutPaymentMethodSection.billingAddressSameAsShippingShared}}" stepKey="UncheckCheckCheckBox"/>
+        <click selector="{{CheckoutShippingSection.addressDropdown}}" stepKey="clickOnAddressDropDown"/>
+        <click selector="{{CheckoutPaymentSection.addressOptionByName('New Address')}}" stepKey="clickOnNewAddress"/>
+        <waitForPageLoad stepKey="waitNewAddressBillingForm"/>
+        <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="changeAddress">
+            <argument name="Address" value="updateCustomerUKAddress"/>
+            <argument name="classPrefix" value="[aria-hidden=false]"/>
         </actionGroup>
+        <click selector="{{CheckoutPaymentSection.addressAction('Update')}}" stepKey="clickUpdateBillingAddressButton" />
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="customerSelectCheckMoneyOrderPayment" />
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceorder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />

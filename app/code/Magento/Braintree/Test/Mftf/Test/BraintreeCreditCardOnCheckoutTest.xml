@@ -87,6 +87,7 @@
         <waitForPageLoad stepKey="waitForPageLoad10"/>
         <click selector="{{BraintreeConfigurationPaymentSection.paymentMethod}}" stepKey="SelectBraintreePaymentMethod1"/>
         <waitForPageLoad stepKey="waitForPageLoad11"/>
+        <click selector="{{CheckoutPaymentSection.shippingAndBillingAddressSame}}" stepKey="CheckCheckBox"/>
         <click selector="{{CheckoutPaymentSection.shippingAndBillingAddressSame}}" stepKey="UncheckCheckBox"/>
 
         <click selector="{{CheckoutShippingSection.updateAddress}}" stepKey="clickToUpdate"/>

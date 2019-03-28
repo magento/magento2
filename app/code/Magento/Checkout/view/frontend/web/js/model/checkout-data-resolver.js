@@ -243,15 +243,12 @@ define([
                 return;
             }
 
-            if (quote.isVirtual()) {
-                isBillingAddressInitialized = addressList.some(function (addrs) {
+            if (quote.isVirtual() || !quote.billingAddress()) {
+                addressList.some(function (addrs) {
                     if (addrs.isDefaultBilling()) {
                         selectBillingAddress(addrs);
-
-                        return true;
+                        isBillingAddressInitialized = true;
                     }
-
-                    return false;
                 });
             }
 
