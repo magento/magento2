@@ -135,7 +135,7 @@
         </assertEquals>
 
         <!--Verify customer see customizable options are Required -->
-        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(simpleProductCustomizableOption.title)}}" stepKey="verifyFistCustomOptionIsRequired"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(simpleProductCustomizableOption.title)}}" stepKey="verifyFirstCustomOptionIsRequired"/>
 
         <!--Verify customer see customizable option titles and prices -->
         <grabAttributeFrom userInput="for" selector="{{StorefrontProductInfoMainSection.customOptionLabel(simpleProductCustomizableOption.title)}}" stepKey="simpleOptionId"/>
