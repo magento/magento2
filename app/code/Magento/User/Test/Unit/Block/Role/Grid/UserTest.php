@@ -21,9 +21,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $jsonEncoderMock;
 
-    /** @var \Magento\Framework\Json\DecoderInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $jsonDecoderMock;
-
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registryMock;
 
@@ -53,11 +50,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->jsonEncoderMock = $this->getMockBuilder('Magento\Framework\Json\EncoderInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->jsonDecoderMock = $this->getMockBuilder('Magento\Framework\Json\DecoderInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -104,7 +96,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
             [
                 'backendHelper' => $this->backendHelperMock,
                 'jsonEncoder' => $this->jsonEncoderMock,
-                'jsonDecoder' => $this->jsonDecoderMock,
                 'coreRegistry' => $this->registryMock,
                 'roleFactory' => $this->roleFactoryMock,
                 'userRolesFactory' => $this->userRolesFactoryMock,
@@ -248,12 +239,20 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->model->toHtml();
     }
 
+    public function testGetUsersCorrectInRoleUser()
+    {
+        $param = 'in_role_user';
+        $paramValue = '{"a":"role1","1":"role2","2":"role3"}';
+        $this->requestInterfaceMock->expects($this->once())->method('getParam')->with($param)->willReturn($paramValue);
+        $this->jsonEncoderMock->expects($this->once())->method('encode')->willReturn($paramValue);
+        $this->assertEquals($paramValue, $this->model->getUsers(true));
+    }
+
     public function testGetUsersIncorrectInRoleUser()
     {
         $param = 'in_role_user';
         $paramValue = 'not_JSON';
         $this->requestInterfaceMock->expects($this->once())->method('getParam')->with($param)->willReturn($paramValue);
-        $this->jsonDecoderMock->expects($this->once())->method('decode')->with($paramValue)->willReturn(null);
         $this->assertEquals('{}', $this->model->getUsers(true));
     }
 }
