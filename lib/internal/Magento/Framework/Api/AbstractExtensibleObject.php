@@ -12,6 +12,8 @@ use \Magento\Framework\Api\AttributeValueFactory;
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
+ * @deprecated
+ * @see \Magento\Framework\Model\AbstractExtensibleModel
  */
 abstract class AbstractExtensibleObject extends AbstractSimpleObject implements CustomAttributesDataInterface
 {

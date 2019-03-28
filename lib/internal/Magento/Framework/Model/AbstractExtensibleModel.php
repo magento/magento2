@@ -15,6 +15,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * This class defines basic data structure of how custom attributes are stored in an ExtensibleModel.
  * Implementations may choose to process custom attributes as their persistence requires them to.
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
  */
 abstract class AbstractExtensibleModel extends AbstractModel implements
     \Magento\Framework\Api\CustomAttributesDataInterface
