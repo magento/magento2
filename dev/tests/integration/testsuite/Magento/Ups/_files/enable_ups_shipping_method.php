@@ -14,9 +14,7 @@ $objectManager = Bootstrap::getObjectManager();
 /** @var Writer $configWriter */
 $configWriter = $objectManager->get(WriterInterface::class);
 
-$configWriter->save('carriers/flatrate/active', 1);
-$configWriter->save('carriers/tablerate/active', 1);
-$configWriter->save('carriers/freeshipping/active', 1);
+$configWriter->save('carriers/ups/active', 1);
 
 $scopeConfig = $objectManager->get(ScopeConfigInterface::class);
 $scopeConfig->clean();
