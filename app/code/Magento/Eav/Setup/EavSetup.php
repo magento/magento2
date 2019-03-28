@@ -799,6 +799,7 @@ class EavSetup
      * @param array $attr
      * @return $this
      * @throws LocalizedException
+     * @throws \Zend_Validate_Exception
      */
     public function addAttribute($entityTypeId, $code, array $attr)
     {
@@ -809,12 +810,7 @@ class EavSetup
             $this->attributeMapper->map($attr, $entityTypeId)
         );
 
-        $attributeCode = isset($data['attribute_code']) ? $data['attribute_code'] : '';
-        if (!$this->attributeCodeValidator->isValid($attributeCode)) {
-            $errorMessage = implode("\n", $this->attributeCodeValidator->getMessages());
-
-            throw new LocalizedException(__($errorMessage));
-        }
+        $this->validateAttributeCode($data);
 
         $sortOrder = isset($attr['sort_order']) ? $attr['sort_order'] : null;
         $attributeId = $this->getAttribute($entityTypeId, $code, 'attribute_id');
@@ -1534,5 +1530,22 @@ class EavSetup
         }
 
         return $this;
+    }
+
+    /**
+     * Validate attribute code.
+     *
+     * @param array $data
+     * @throws LocalizedException
+     * @throws \Zend_Validate_Exception
+     */
+    private function validateAttributeCode(array $data): void
+    {
+        $attributeCode = $data['attribute_code'] ?? '';
+        if (!$this->attributeCodeValidator->isValid($attributeCode)) {
+            $errorMessage = implode('\n', $this->attributeCodeValidator->getMessages());
+
+            throw new LocalizedException(__($errorMessage));
+        }
     }
 }
