@@ -28,6 +28,7 @@
         <element name="priceFilterTo" type="input" selector="input.admin__control-text[name='price[to]']"/>
         <element name="typeFilter" type="select" selector="select.admin__control-select[name='type_id']"/>
         <element name="statusFilter" type="select" selector="select.admin__control-select[name='status']"/>
+        <element name="firstRowBySku" type="button" selector="//div[text()='{{var}}']/ancestor::tr" parameterized="true" timeout="30"/>
         <element name="newFromDateFilter" type="input" selector="input.admin__control-text[name='news_from_date[from]']"/>
         <element name="keywordSearch" type="input" selector="input#fulltext"/>
         <element name="keywordSearchButton" type="button" selector=".data-grid-search-control-wrap button.action-submit" timeout="30"/>

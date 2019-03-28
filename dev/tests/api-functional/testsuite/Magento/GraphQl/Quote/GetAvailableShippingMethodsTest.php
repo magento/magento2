@@ -63,7 +63,6 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
         $query = <<<QUERY
 query {
   cart (cart_id: "{$maskedQuoteId}") {
-    cart_id
     shipping_addresses {
         available_shipping_methods {
           amount
@@ -87,7 +86,6 @@ QUERY;
             $this->getCustomerAuthHeaders('customer@example.com', 'password')
         );
         self::assertArrayHasKey('cart', $response);
-        self::assertEquals($maskedQuoteId, $response['cart']['cart_id']);
         self::assertArrayHasKey('shipping_addresses', $response['cart']);
         self::assertCount(1, $response['cart']['shipping_addresses']);
         self::assertArrayHasKey('available_shipping_methods', $response['cart']['shipping_addresses'][0]);
