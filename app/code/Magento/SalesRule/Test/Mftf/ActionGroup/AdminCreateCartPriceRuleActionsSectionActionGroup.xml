@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCartPriceRuleActionsSectionActionGroup">
+        <arguments>
+            <argument name="ruleName"/>
+        </arguments>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{ruleName.simple_action}}" stepKey="selectActionType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{ruleName.discount_amount}}" stepKey="fillDiscountAmount"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountStep}}" userInput="{{ruleName.discount_step}}" stepKey="fillDiscountStep"/>
+        <click selector="{{AdminCartPriceRulesFormSection.applyToShippingAmount}}" stepKey="clickApplyToShipping"/>
+        <click selector="{{AdminCartPriceRulesFormSection.discardSubsequentRules}}" stepKey="clickDiscardSubsequentRules"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="{{ruleName.simple_free_shipping}}" stepKey="selectForMatchingItemsOnly"/>
+    </actionGroup>
+</actionGroups>
