@@ -222,6 +222,8 @@
         "magento/module-media-storage": "*",
         "magento/module-message-queue": "*",
         "magento/module-msrp": "*",
+        "magento/module-msrp-configurable-product": "*",
+        "magento/module-msrp-grouped-product": "*",
         "magento/module-multishipping": "*",
         "magento/module-mysql-mq": "*",
         "magento/module-new-relic-reporting": "*",
