@@ -685,8 +685,8 @@ class Customer extends AbstractCustomer
      */
     private function reindexCustomers($customerIdsToReindex = [])
     {
-        $indexer = $this->_indexerRegistry->get('customer_grid');
         if (is_array($customerIdsToReindex) && count($customerIdsToReindex) > 0) {
+            $indexer = $this->_indexerRegistry->get('customer_grid');
             $indexer->reindexList($customerIdsToReindex);
         }
     }
