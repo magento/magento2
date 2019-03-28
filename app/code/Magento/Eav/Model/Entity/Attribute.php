@@ -106,8 +106,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param AttributeCodeValidator|null $attributeCodeValidator
      * @param array $data
+     * @param AttributeCodeValidator|null $attributeCodeValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
      */

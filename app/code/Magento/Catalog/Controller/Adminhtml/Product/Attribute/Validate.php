@@ -7,13 +7,13 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Catalog\Controller\Adminhtml\Product\Attribute as AttributeAction;
 use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
-use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Catalog\Controller\Adminhtml\Product\Attribute as AttributeAction;
+use Magento\Framework\Serialize\Serializer\FormData;
 
 /**
  * Product attribute validate controller.
@@ -80,7 +80,8 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         $this->formDataSerializer = $formDataSerializer ?: ObjectManager::getInstance()
             ->get(FormData::class);
         $this->attributeCodeValidator = $attributeCodeValidator ?: ObjectManager::getInstance()->get(
-            AttributeCodeValidator::class);
+            AttributeCodeValidator::class
+        );
     }
 
     /**
