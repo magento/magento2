@@ -47,6 +47,89 @@ class AddProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The product's required option(s) weren't entered. Make sure the options are entered and try again.
+     */
+    public function testAddProductWithoutRequiredCustomOPtions()
+    {
+        $sku = 'simple_with_custom_options';
+        $qty = 1;
+
+        $maskedQuoteId = $this->getMaskedQuoteId();
+        $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddProductWithRequiredCustomOPtions()
+    {
+        $sku = 'simple_with_custom_options';
+        $qty = 1;
+        $productCustomOptions = Bootstrap::getObjectManager()
+                            ->get(\Magento\Catalog\Api\ProductCustomOptionRepositoryInterface::class)
+                            ->getList($sku);
+        $customizableOptions = '';
+        foreach ($productCustomOptions as $option) {
+            $value = $option->getValues() ?
+                '[' . key($option->getValues()) . ']' :
+                'Test';
+            $customizableOptions .= ' {
+            id: ' . $option->getId() . '
+            value: "' . $value . '"
+          }';
+        }
+
+        $maskedQuoteId = $this->getMaskedQuoteId();
+        $query = <<<QUERY
+mutation {
+    addSimpleProductsToCart(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+      cartItems: {
+        data: {
+          qty: {$qty}
+          sku: "{$sku}"
+        }
+        customizable_options: [
+            {$customizableOptions}
+        ]
+      }
+    }
+  )
+{
+    cart {
+      items {
+        product {
+          sku
+        }
+        ... on SimpleCartItem {
+          customizable_options {
+            id
+            is_required
+            sort_order
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
+
+        self::assertEquals($sku, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
+        self::assertEquals(
+            1,
+            $response['addSimpleProductsToCart']['cart']['items'][0]['customizable_options'][0]['is_required']
+        );
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @magentoConfigFixture default cataloginventory/item_options/max_sale_qty 5

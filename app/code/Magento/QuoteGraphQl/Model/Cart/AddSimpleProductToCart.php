@@ -15,7 +15,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Quote\Model\Quote;
-use phpDocumentor\Reflection\Types\Mixed_;
 
 /**
  * Add simple product to cart
