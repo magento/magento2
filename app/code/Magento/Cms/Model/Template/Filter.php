@@ -34,6 +34,7 @@ class Filter extends \Magento\Email\Model\Template\Filter
      *
      * @param string[] $construction
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function mediaDirective($construction)
     {

@@ -27,6 +27,9 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      */
     protected $filter;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
@@ -70,6 +73,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      *
      * @covers \Magento\Cms\Model\Template\Filter::mediaDirective
      * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Image path must be absolute
      *
      * @return void
      */
