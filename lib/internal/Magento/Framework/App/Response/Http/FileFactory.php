@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Response\Http;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Class FileFactory
+ * Class FileFactory serves to declare file content in response for download.
  */
 class FileFactory
 {

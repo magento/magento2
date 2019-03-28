@@ -8,8 +8,6 @@ namespace Magento\Framework\Code\GeneratorTest;
 use Zend\Code\Generator\DocBlockGenerator;
 
 /**
- * Class ParentClassWithNamespace
- *
  * phpcs:ignoreFile
  */
 class ParentClassWithNamespace

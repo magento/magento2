@@ -8,7 +8,7 @@ namespace Magento\Config\Observer\Config\Backend\Admin;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
- * Class AfterCustomUrlChangedObserver
+ * Class AfterCustomUrlChangedObserver redirects to new custom admin URL.
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */

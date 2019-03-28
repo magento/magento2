@@ -8,8 +8,6 @@ namespace Magento\Framework\Code\Test\Unit\Generator\TestAsset;
 use Zend\Code\Generator\ClassGenerator;
 
 /**
- * Class SourceClass
- *
  * phpcs:ignoreFile
  */
 class SourceClass extends ParentClass

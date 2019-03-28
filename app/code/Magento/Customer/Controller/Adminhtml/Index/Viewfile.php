@@ -17,7 +17,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObjectFactory;
 
 /**
- * Class Viewfile
+ * Class Viewfile serves to show file or image by file/image name provided in request parameters.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.AllPurposeAction)

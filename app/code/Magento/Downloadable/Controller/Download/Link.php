@@ -10,7 +10,7 @@ use Magento\Downloadable\Model\Link\Purchased\Item as PurchasedLink;
 use Magento\Framework\App\ResponseInterface;
 
 /**
- * Class Link
+ * Class Link executes download link action.
  *
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  */

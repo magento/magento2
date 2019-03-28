@@ -6,7 +6,7 @@
 namespace Magento\Framework\App\Console;
 
 /**
- * Class Response
+ * HTTP response implementation.
  */
 class Response implements \Magento\Framework\App\ResponseInterface
 {

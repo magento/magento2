@@ -9,7 +9,7 @@ use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Framework\App\ResponseInterface;
 
 /**
- * Class Sample
+ * Class Sample executes download sample action.
  *
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
