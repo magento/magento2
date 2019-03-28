@@ -56,9 +56,10 @@
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitFormReload"/>
         <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByIndex(rowIndex)}}"/>
-        <click stepKey="clickOnDownload" selector="{{AdminExportAttributeSection.delete(rowIndex)}}" after="clickSelectBtn"/>
+        <click stepKey="clickOnDelete" selector="{{AdminExportAttributeSection.delete(rowIndex)}}" after="clickSelectBtn"/>
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
-        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForExportDataDeleted" />
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
     </actionGroup>
 </actionGroups>
