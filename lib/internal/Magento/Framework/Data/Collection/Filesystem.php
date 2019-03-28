@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Collection;
 
 use Magento\Framework\Data\Collection;
@@ -686,13 +688,13 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * Callback method for 'like' fancy filter.
      *
      * @param string $field
-     * @param mixed $filterValue
+     * @param string $filterValue
      * @param array $row
      * @return bool
      * @see addFieldToFilter()
      * @see addCallbackFilter()
      */
-    public function filterCallbackLike($field, $filterValue, $row)
+    public function filterCallbackLike(string $field, string $filterValue, array $row) : bool
     {
         $filterValue = trim(stripslashes($filterValue), '\'');
         $filterValue = trim($filterValue, '%');

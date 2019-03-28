@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App;
 
@@ -244,10 +245,9 @@ class Bootstrap
      * Runs an application
      *
      * @param \Magento\Framework\AppInterface $application
-     * @throws \Exception
      * @return void
      *
-     * phpcs:disable Magento2.Exceptions
+     * phpcs:disable Magento2.Exceptions,Squiz.Commenting.FunctionCommentThrowTag
      */
     public function run(AppInterface $application)
     {
@@ -419,13 +419,14 @@ class Bootstrap
      * Display an exception and terminate program execution
      *
      * @param \Exception $e
-     * @throws \DomainException
      * @return void
+     *
+     * phpcs:disable Magento2.Security.LanguageConstruct, Squiz.Commenting.FunctionCommentThrowTag
      */
     protected function terminate(\Exception $e)
     {
+
         if ($this->isDeveloperMode()) {
-            // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
             echo $e;
         } else {
             $message = "An error has happened during application run. See exception log for details.\n";
@@ -437,10 +438,9 @@ class Bootstrap
             } catch (\Exception $e) {
                 $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
             }
-            // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
             echo $message;
         }
-        // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
         exit(1);
     }
+    // phpcs:enable
 }
