@@ -40,7 +40,16 @@ return [
     'md5' => [
         'replacement' => '',
         'exclude' => [
-            ['type' => 'library', 'name' => 'magento/framework', 'path' => 'App/Utility/Files.php'],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'App/Utility/Files.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Support',
+                'path' => 'Console/Command/AbstractBackupDumpCommand.php'
+            ],
         ],
     ],
     'srand' => [
@@ -49,6 +58,10 @@ return [
     ],
     'mt_srand' => [
         'replacement' => '',
+        'exclude' => []
+    ],
+    'mt_rand' => [
+        'replacement' => 'random_int',
         'exclude' => []
     ],
 ];

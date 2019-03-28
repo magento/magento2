@@ -79,7 +79,7 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
      */
     private function getProductTemplate($attributeSet)
     {
-        $productRandomizerNumber = crc32(mt_rand(1, PHP_INT_MAX));
+        $productRandomizerNumber = crc32(random_int(1, PHP_INT_MAX));
         $product = $this->productFactory->create([
             'data' => [
                 'attribute_set_id' => $attributeSet,

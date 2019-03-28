@@ -95,7 +95,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $model->create();
         $this->assertEquals(0, $model->getVersion());
         $changelogName = $this->resource->getTableName($model->getName());
-        $this->connection->insert($changelogName, [$model->getColumnName() => mt_rand(1, 200)]);
+        $this->connection->insert($changelogName, [$model->getColumnName() => random_int(1, 200)]);
         $this->assertEquals($this->connection->lastInsertId($changelogName, 'version_id'), $model->getVersion());
         $model->drop();
     }

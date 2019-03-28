@@ -99,7 +99,8 @@ class BundleProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function execute()
@@ -126,8 +127,8 @@ class BundleProductsFixture extends Fixture
         $fixtureMap = [
             'name' => $variationSkuClosure,
             'sku' => $variationSkuClosure,
-            'price' => function ($index, $entityNumber) {
-                return $this->priceProvider->getPrice($entityNumber);
+            'price' => function () {
+                return $this->priceProvider->getPrice();
             },
             'website_ids' => function ($index, $entityNumber) use ($variationCount) {
                 $configurableIndex = $this->getBundleProductIndex($entityNumber, $variationCount);
@@ -165,8 +166,8 @@ class BundleProductsFixture extends Fixture
             'meta_title' => $skuClosure,
             'price' => function ($index) use ($priceTypeClosure) {
                 return $priceTypeClosure($index) === LinkInterface::PRICE_TYPE_PERCENT
-                    ? mt_rand(10, 90)
-                    : $this->priceProvider->getPrice($index);
+                    ? random_int(10, 90)
+                    : $this->priceProvider->getPrice();
             },
             'priceType' => $priceTypeClosure,
             'website_ids' => function ($index, $entityNumber) {
@@ -242,7 +243,7 @@ class BundleProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -250,7 +251,7 @@ class BundleProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {
