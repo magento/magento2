@@ -118,7 +118,11 @@ class ConfigOptionsListConstants
     const KEY_MYSQL_SSL_KEY = \PDO::MYSQL_ATTR_SSL_KEY;
     const KEY_MYSQL_SSL_CERT = \PDO::MYSQL_ATTR_SSL_CERT;
     const KEY_MYSQL_SSL_CA = \PDO::MYSQL_ATTR_SSL_CA;
-    const KEY_MYSQL_SSL_VERIFY = \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT;
+    /**
+     * Constant \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT cannot be used as it was introduced in PHP 7.1.4
+     * and Magento 2 is currently supporting PHP 7.1.3.
+     */
+    const KEY_MYSQL_SSL_VERIFY = 1014;
     /**#@-*/
 
     /**
