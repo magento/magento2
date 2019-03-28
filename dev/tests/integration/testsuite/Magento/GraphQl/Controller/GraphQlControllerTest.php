@@ -217,7 +217,6 @@ QUERY;
             'operationName' => null
         ];
 
-
         /** @var Http $request */
         $request = $this->objectManager->get(Http::class);
         $request->setPathInfo('/graphql');
