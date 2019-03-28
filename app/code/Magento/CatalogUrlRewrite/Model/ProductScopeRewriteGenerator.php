@@ -175,11 +175,9 @@ class ProductScopeRewriteGenerator
             $this->canonicalUrlRewriteGenerator->generate($storeId, $product)
         );
 
-        if ($this->isCategoryProductRewritesEnabled($storeId)) {
-            $mergeDataProvider->merge(
-                $this->categoriesUrlRewriteGenerator->generate($storeId, $product, $productCategories)
-            );
-        }
+        $mergeDataProvider->merge(
+            $this->categoriesUrlRewriteGenerator->generate($storeId, $product, $productCategories)
+        );
 
         $mergeDataProvider->merge(
             $this->currentUrlRewritesRegenerator->generate(
@@ -190,19 +188,18 @@ class ProductScopeRewriteGenerator
             )
         );
 
-        if ($this->isCategoryProductRewritesEnabled($storeId)) {
-            $mergeDataProvider->merge(
-                $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
-            );
-            $mergeDataProvider->merge(
-                $this->currentUrlRewritesRegenerator->generateAnchor(
-                    $storeId,
-                    $product,
-                    $productCategories,
-                    $rootCategoryId
-                )
-            );
-        }
+        $mergeDataProvider->merge(
+            $url = $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
+        );
+        $mergeDataProvider->merge(
+            $url = $this->currentUrlRewritesRegenerator->generateAnchor(
+                $storeId,
+                $product,
+                $productCategories,
+                $rootCategoryId
+            )
+        );
+
         return $mergeDataProvider->getData();
     }
 
