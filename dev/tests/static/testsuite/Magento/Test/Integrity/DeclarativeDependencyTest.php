@@ -85,7 +85,7 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
                 foreach ($undeclaredDependency as $name => $modules) {
                     $modules = array_unique($modules);
                     if ($this->filterBlacklistedDependencies($foundModuleName, $modules)) {
-                        $result[] = $this->getErrorMessage($name) . "\n" . implode("\t\n", $modules);
+                        $result[] = $this->getErrorMessage($name) . "\n" . implode("\t\n", $modules) . "\n";
                     }
                 }
                 if (count($result)) {
@@ -144,12 +144,12 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
         $entityType = $decodedId['entityType'];
         if ($entityType === DeclarativeSchemaDependencyProvider::SCHEMA_ENTITY_TABLE) {
             $message = sprintf(
-                'Table %s has undeclared dependency on one of the next modules.',
+                'Table %s has undeclared dependency on one of the following modules:',
                 $decodedId['tableName']
             );
         } else {
             $message = sprintf(
-                '%s %s from %s table has undeclared dependency on one of the next modules.',
+                '%s %s from %s table has undeclared dependency on one of the following modules:',
                 ucfirst($entityType),
                 $decodedId['entityName'],
                 $decodedId['tableName']
