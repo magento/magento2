@@ -363,8 +363,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 return [$errorMessage];
             }
 
-            $errorMessage = __('Sorry, but this password has already been used. Please create another.');
             if ($this->observerConfig->isAllowedToRepeatPreviousPasswords() === false) {
+                $errorMessage = __('Sorry, but this password has already been used. Please create another.');
                 // Check whether password was used before
                 foreach ($this->getResource()->getOldPasswords($this) as $oldPasswordHash) {
                     if ($this->_encryptor->isValidHash($password, $oldPasswordHash)) {

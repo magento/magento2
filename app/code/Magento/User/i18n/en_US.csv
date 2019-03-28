@@ -75,6 +75,7 @@ Permissions,Permissions
 Recommended,Recommended
 Forced,Forced
 "Sorry, but this password has already been used. Please create another.","Sorry, but this password has already been used. Please create another."
+"Sorry, but this password is being used now. Please create another.","Sorry, but this password is being used now. Please create another."
 email,email
 password,password
 username,username
