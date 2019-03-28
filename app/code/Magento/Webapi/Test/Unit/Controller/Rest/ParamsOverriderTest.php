@@ -7,6 +7,7 @@
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
 use \Magento\Authorization\Model\UserContextInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test Magento\Webapi\Controller\Rest\ParamsOverrider
@@ -36,10 +37,31 @@ class ParamsOverriderTest extends \PHPUnit\Framework\TestCase
             ['userContext' => $userContextMock]
         );
 
+        /** @var MockObject $objectConverter */
+        $objectConverter = $this->getMockBuilder(SimpleDataObjectConverter::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['convertKeysToCamelCase'])
+            ->getMock();
+        $objectConverter->expects($this->any())
+            ->method('convertKeysToCamelCase')
+            ->willReturnCallback(
+                function (array $array) {
+                    $converted = [];
+                    foreach ($array as $key => $value) {
+                        $converted[mb_strtolower($key)] = $value;
+                    }
+
+                    return $converted;
+                }
+            );
+
         /** @var \Magento\Webapi\Controller\Rest\ParamsOverrider $paramsOverrider */
         $paramsOverrider = $objectManager->getObject(
-            \Magento\Webapi\Controller\Rest\ParamsOverrider::class,
-            ['paramOverriders' => ['%customer_id%' => $paramOverriderCustomerId ]]
+            'Magento\Webapi\Controller\Rest\ParamsOverrider',
+            [
+                'paramOverriders' => ['%customer_id%' => $paramOverriderCustomerId ],
+                'dataObjectConverter' => $objectConverter
+            ]
         );
 
         $this->assertEquals($expectedOverriddenParams, $paramsOverrider->override($requestData, $parameters));
@@ -54,7 +76,7 @@ class ParamsOverriderTest extends \PHPUnit\Framework\TestCase
             'force false, value present' => [
                 ['Name1' => 'valueIn'],
                 ['Name1' => ['force' => false, 'value' => 'valueOverride']],
-                ['Name1' => 'valueOverride'],
+                ['Name1' => 'valueIn'],
                 1,
                 UserContextInterface::USER_TYPE_INTEGRATION,
             ],
