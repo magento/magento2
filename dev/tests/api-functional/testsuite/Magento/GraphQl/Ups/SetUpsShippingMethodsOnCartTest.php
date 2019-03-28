@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\OfflineShipping;
+namespace Magento\GraphQl\Ups;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\QuoteFactory;
@@ -15,10 +15,20 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for setting offline shipping methods on cart
+ * Test for setting "UPS" shipping method on cart
  */
-class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
+class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
 {
+    /**
+     * Defines carrier code for "UPS" shipping method
+     */
+    const CARRIER_CODE = 'ups';
+
+    /**
+     * Defines method code for the "Ground" UPS shipping
+     */
+    const CARRIER_METHOD_CODE_GROUND = 'GND';
+
     /**
      * @var QuoteFactory
      */
@@ -53,102 +63,30 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/OfflineShipping/_files/enable_offline_shipping_methods.php
-     * @magentoApiDataFixture Magento/OfflineShipping/_files/tablerates_weight.php
-     *
-     * @param string $carrierCode
-     * @param string $methodCode
-     * @param float $amount
-     * @param string $label
-     * @dataProvider offlineShippingMethodDataProvider
+     * @magentoApiDataFixture Magento/Ups/_files/enable_ups_shipping_method.php
      */
-    public function testSetOfflineShippingMethod(string $carrierCode, string $methodCode, float $amount, string $label)
+    public function testSetUpsShippingMethod()
     {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load(
-            $quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
+        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
         $shippingAddressId = (int)$quote->getShippingAddress()->getId();
 
-        $query = $this->getQuery(
+        $query = $this->getAddUpsShippingMethodQuery(
             $maskedQuoteId,
             $shippingAddressId,
-            $carrierCode,
-            $methodCode
+            self::CARRIER_CODE,
+            self::CARRIER_METHOD_CODE_GROUND
         );
 
         $response = $this->sendRequestWithToken($query);
-
         $addressesInformation = $response['setShippingMethodsOnCart']['cart']['shipping_addresses'];
-        self::assertEquals($addressesInformation[0]['selected_shipping_method']['carrier_code'], $carrierCode);
-        self::assertEquals($addressesInformation[0]['selected_shipping_method']['method_code'], $methodCode);
-        self::assertEquals($addressesInformation[0]['selected_shipping_method']['amount'], $amount);
-        self::assertEquals($addressesInformation[0]['selected_shipping_method']['label'], $label);
-    }
-
-    /**
-     * @return array
-     */
-    public function offlineShippingMethodDataProvider()
-    {
-        return [
-            'flatrate_flatrate' => ['flatrate', 'flatrate', 10, 'Flat Rate - Fixed'],
-            'tablerate_bestway' => ['tablerate', 'bestway', 10, 'Best Way - Table Rate'],
-            'freeshipping_freeshipping' => ['freeshipping', 'freeshipping', 0, 'Free Shipping - Free'],
+        $expectedResult = [
+            'carrier_code' => self::CARRIER_CODE,
+            'method_code' => self::CARRIER_METHOD_CODE_GROUND,
+            'label' => 'United Parcel Service - Ground',
         ];
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/OfflineShipping/_files/enable_offline_shipping_methods.php
-     */
-    public function testSetShippingMethodTwiceInOneRequest()
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load(
-            $quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-        $shippingAddress = $quote->getShippingAddress();
-        $shippingAddressId = $shippingAddress->getId();
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
-
-        $query = <<<QUERY
-mutation {
-  setShippingMethodsOnCart(input: {
-    cart_id: "$maskedQuoteId"
-    shipping_methods: [
-      {
-        cart_address_id: $shippingAddressId
-        carrier_code: "flatrate"
-        method_code: "flatrate"
-      }
-      {
-        cart_address_id: $shippingAddressId
-        carrier_code: "freeshipping"
-        method_code: "freeshipping"
-      }
-    ]
-  }) {
-    cart {
-      shipping_addresses {
-        selected_shipping_method {
-          carrier_code
-          method_code
-          label
-          amount
-        }
-      }
-    } 
-  }
-}
-QUERY;
-        self::expectExceptionMessage('You cannot specify multiple shipping methods.');
-        $this->sendRequestWithToken($query);
+        self::assertEquals($addressesInformation[0]['selected_shipping_method'], $expectedResult);
     }
 
     /**
@@ -160,7 +98,7 @@ QUERY;
      * @param string $methodCode
      * @return string
      */
-    private function getQuery(
+    private function getAddUpsShippingMethodQuery(
         string $maskedQuoteId,
         int $shippingAddressId,
         string $carrierCode,
@@ -184,7 +122,6 @@ mutation {
           carrier_code
           method_code
           label
-          amount
         }
       }
     } 
