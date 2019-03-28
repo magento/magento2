@@ -7,6 +7,7 @@
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
 use \Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
