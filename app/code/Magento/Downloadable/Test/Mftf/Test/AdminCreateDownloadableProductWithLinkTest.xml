@@ -52,16 +52,16 @@
         </actionGroup>
 
         <!-- Add downloadable product to category -->
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory" after="fillDownloadableProductForm"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
 
         <!-- Fill downloadable link information before the creation link -->
         <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
 
         <!-- Links can be purchased separately -->
-        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately" after="addDownloadableLinkInformation"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately"/>
 
         <!-- Add downloadable link -->
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableProductLink" after="checkOptionPurchaseSeparately">
+        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableProductLink">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
 
@@ -80,16 +80,15 @@
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 
+        <!-- Assert product price in storefront product page -->
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{DownloadableProduct.price}}" stepKey="assertProductPrice"/>
+
         <!-- Select product link in storefront product page-->
         <scrollTo selector="{{StorefrontDownloadableProductSection.downloadableLinkBlock}}" stepKey="scrollToLinks"/>
         <click selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(downloadableLinkWithMaxDownloads.title)}}" stepKey="selectProductLink"/>
 
-        <!-- Assert product price in storefront product page-->
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="grabProductsPrice"/>
-        <assertEquals expected='$51.99' expectedType="string" actual="$grabProductsPrice" message="ExpectedPrice" stepKey="assertProductPrice"/>
-
         <!-- Add product with selected link to the cart -->
-        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart" after="assertProductPrice">
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="DownloadableProduct"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
@@ -97,6 +96,6 @@
         <!-- Assert product price in cart -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="openShoppingCartPage"/>
         <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
-        <assertEquals expected='$51.99' expectedType="string" actual="$grabProductsPrice" message="ExpectedPrice" stepKey="assertProductPriceInCart"/>
+        <see selector="{{CheckoutCartProductSection.ProductPriceByName(DownloadableProduct.name)}}" userInput="$51.99" stepKey="assertProductPriceInCart"/>
     </test>
 </tests>

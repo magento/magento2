@@ -52,16 +52,16 @@
         </actionGroup>
 
         <!-- Add downloadable product to category -->
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory" after="fillDownloadableProductForm"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
 
         <!-- Fill downloadable link information before the creation link -->
         <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
 
         <!-- Links can be purchased separately -->
-        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately" after="addDownloadableLinkInformation"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately"/>
 
         <!-- Add first downloadable link -->
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addFirstDownloadableProductLink" after="checkOptionPurchaseSeparately">
+        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addFirstDownloadableProductLink">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
 
@@ -89,7 +89,7 @@
 
         <!-- Assert downloadable links in product form -->
         <scrollTo selector="{{AdminProductDownloadableSection.sectionLinkGrid}}" stepKey="scrollToLinks"/>
-        <seeElement selector="{{AdminProductDownloadableSection.addLinkTitleInput('0')}}" stepKey="seeFirstLinkTitle"/>
-        <seeElement selector="{{AdminProductDownloadableSection.addLinkTitleInput('1')}}" stepKey="seeSecondLinkTitle"/>
+        <seeInField selector="{{AdminProductDownloadableSection.addLinkTitleInput('0')}}" userInput="{{downloadableLinkWithMaxDownloads.title}}" stepKey="seeFirstLinkTitle"/>
+        <seeInField selector="{{AdminProductDownloadableSection.addLinkTitleInput('1')}}" userInput="{{downloadableLink.title}}" stepKey="seeSecondLinkTitle"/>
     </test>
 </tests>

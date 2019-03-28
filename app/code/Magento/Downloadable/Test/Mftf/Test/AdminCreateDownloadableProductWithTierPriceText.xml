@@ -31,10 +31,6 @@
         <remove keyForRemoval="assertGroupPrice"/>
 
         <!-- Assert tier price in storefront product page -->
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.tierPriceText}}" stepKey="tierPriceText" after="AssertProductInStorefrontProductPage"/>
-        <assertEquals stepKey="assertTierPriceTextOnProductPage">
-            <expectedResult type="string">Buy {{tierProductPrice.quantity}} for ${{tierProductPrice.price}} each and save 27%</expectedResult>
-            <actualResult type="variable">tierPriceText</actualResult>
-        </assertEquals>
+        <see selector="{{StorefrontProductInfoMainSection.tierPriceText}}" userInput="Buy {{tierProductPrice.quantity}} for ${{tierProductPrice.price}} each and save 27%" stepKey="assertTierPriceText"/>
     </test>
 </tests>

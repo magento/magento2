@@ -18,6 +18,7 @@
             <testCaseId value="MC-14514"/>
             <group value="Downloadable"/>
             <group value="mtf_migrated"/>
+            <group value="mary"/>
         </annotations>
         <before>
             <!-- Create category -->
@@ -58,16 +59,16 @@
         </actionGroup>
 
         <!-- Add downloadable product to category -->
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory" after="fillDownloadableProductForm"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
 
         <!-- Fill downloadable link information before the creation link -->
         <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
 
         <!-- Links can be purchased separately -->
-        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately" after="addDownloadableLinkInformation"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately"/>
 
         <!-- Add first downloadable link -->
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addFirstDownloadableProductLink" after="checkOptionPurchaseSeparately">
+        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addFirstDownloadableProductLink">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
 
@@ -99,8 +100,7 @@
         </actionGroup>
 
         <!-- Assert group price in storefront product page -->
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="grabGroupPrice"/>
-        <assertEquals expected='${{simpleGroupPrice.price}}' expectedType="string" actual="$grabGroupPrice" stepKey="assertGroupPrice"/>
+        <see selector="{{StorefrontProductInfoMainSection.updatedPrice}}" userInput="$90.00" stepKey="assertGroupPrice"/>
 
         <!-- See product link in storefront product page -->
         <scrollTo selector="{{StorefrontDownloadableProductSection.downloadableLinkBlock}}" stepKey="scrollToLinksInStorefront"/>

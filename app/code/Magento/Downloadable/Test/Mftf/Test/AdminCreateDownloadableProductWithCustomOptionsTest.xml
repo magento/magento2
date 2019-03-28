@@ -52,7 +52,7 @@
         </actionGroup>
 
         <!-- Add downloadable product to category -->
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory" after="fillDownloadableProductForm"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
 
         <!-- Open custom option panel -->
         <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptions"/>
@@ -60,14 +60,14 @@
 
         <!-- Create a first custom option with 2 values -->
         <actionGroup ref="AdminCreateCustomDropDownOptionsActionGroup" stepKey="createFirstCustomOption">
-            <argument name="customOptionName" value="ProductOptionDropDown.title"/>
+            <argument name="customOptionName" value="{{ProductOptionDropDown.title}}"/>
             <argument name="firstOption" value="ProductOptionValueDropdown1"/>
             <argument name="secondOption" value="ProductOptionValueDropdown2"/>
         </actionGroup>
 
         <!-- Create a second custom option with 2 values -->
         <actionGroup ref="AdminCreateCustomDropDownOptionsActionGroup" stepKey="createSecondCustomOption">
-            <argument name="customOptionName" value="ProductOptionDropDownWithLongValuesTitle.title"/>
+            <argument name="customOptionName" value="{{ProductOptionDropDownWithLongValuesTitle.title}}"/>
             <argument name="firstOption" value="ProductOptionValueDropdown1"/>
             <argument name="secondOption" value="ProductOptionValueDropdown2"/>
         </actionGroup>
@@ -76,10 +76,10 @@
         <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
 
         <!-- Links can be purchased separately -->
-        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately" after="addDownloadableLinkInformation"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately"/>
 
         <!-- Add downloadable link -->
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableProductLink" after="checkOptionPurchaseSeparately">
+        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableProductLink">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
 
@@ -101,6 +101,7 @@
         </actionGroup>
 
         <!-- Assert product custom options on product page -->
+        <scrollTo selector="{{StorefrontDownloadableProductSection.downloadableLinkBlock}}" stepKey="scrollToLinksInStorefront"/>
         <seeElement stepKey="seeFirstOptionName" selector="{{StorefrontProductInfoMainSection.customOptionLabel(ProductOptionDropDown.title)}}"/>
         <seeElement stepKey="seeSecondOptionName" selector="{{StorefrontProductInfoMainSection.customOptionLabel(ProductOptionDropDownWithLongValuesTitle.title)}}"/>
 

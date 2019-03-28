@@ -30,7 +30,6 @@
         <remove keyForRemoval="assertGroupPrice"/>
 
         <!-- Assert special price in storefront product page -->
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceValue}}" stepKey="grabSpecialPrice" after="AssertProductInStorefrontProductPage"/>
-        <assertEquals expected='${{specialProductPrice.price}}' expectedType="string" actual="$grabSpecialPrice" stepKey="assertSpecialPrice"/>
+        <see selector="{{StorefrontProductInfoMainSection.specialPriceValue}}" userInput="$99.99" stepKey="assertSpecialPrice"/>
     </test>
 </tests>
