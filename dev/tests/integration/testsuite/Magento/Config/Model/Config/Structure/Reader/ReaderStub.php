@@ -3,14 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Paypal\Model\Config\Structure\Reader;
+declare(strict_types=1);
+
+namespace Magento\Config\Model\Config\Structure\Reader;
+
+use Magento\Config\Model\Config\Structure\Reader;
 
 /**
- * Class ReaderStub
+ * Class ReaderStub used for testing protected Reader::_readFiles() method.
  */
-class ReaderStub extends \Magento\Config\Model\Config\Structure\Reader
+class ReaderStub extends Reader
 {
     /**
+     * Wrapper for protected Reader::_readFiles() method.
+     *
      * @param array $fileList
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
