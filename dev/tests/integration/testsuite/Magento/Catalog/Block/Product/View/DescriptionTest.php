@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 class DescriptionTest extends TestCase
 {
     /**
-     * @var View\Description
+     * @var Description
      */
     private $block;
 
