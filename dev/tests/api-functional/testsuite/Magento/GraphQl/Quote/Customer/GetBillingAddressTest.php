@@ -52,11 +52,15 @@ class GetBillingAddressTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
     public function testGetCartWithBillingAddress()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_quote');
         $query = $this->getGetBillingAddressQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
@@ -87,11 +91,13 @@ class GetBillingAddressTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testGetBillingAddressFromAnotherCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_item_with_items');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_quote');
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
@@ -104,11 +110,14 @@ class GetBillingAddressTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/GiftMessage/_files/quote_with_customer_and_message.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testGetBillingAddressIfBillingAddressIsNotSet()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('message_order_21');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_quote');
         $query = $this->getGetBillingAddressQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
