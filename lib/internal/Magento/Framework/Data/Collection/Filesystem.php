@@ -688,14 +688,17 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * Callback method for 'like' fancy filter.
      *
      * @param string $field
-     * @param string $filterValue
+     * @param mixed $filterValue
      * @param array $row
      * @return bool
      * @see addFieldToFilter()
      * @see addCallbackFilter()
      */
-    public function filterCallbackLike(string $field, string $filterValue, array $row) : bool
+    public function filterCallbackLike($field, $filterValue, $row)
     {
+        // Forced to do this in order to keep backward compatibility for @api class.
+        // Strict typing must be added to this method next major release.
+        $filterValue = (string)$filterValue;
         $filterValue = trim(stripslashes($filterValue), '\'');
         $filterValue = trim($filterValue, '%');
         $filterValueRegex = '(.*?)' . preg_quote($filterValue, '/') . '(.*?)';
