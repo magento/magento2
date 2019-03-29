@@ -46,7 +46,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $random;
+    private $random;
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Uploader|\PHPUnit_Framework_MockObject_MockObject
