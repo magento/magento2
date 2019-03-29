@@ -221,7 +221,7 @@ class Session extends \Magento\Framework\Session\SessionManager
                     $customerId = $this->_customer
                         ? $this->_customer->getId()
                         : $this->_customerSession->getCustomerId();
-                    if ($quote->getData('customer_id') && $quote->getData('customer_id') !== $customerId) {
+                    if ($quote->getData('customer_id') && (int)$quote->getData('customer_id') !== (int)$customerId) {
                         $quote = $this->quoteFactory->create();
                         throw new \Magento\Framework\Exception\NoSuchEntityException();
                     }
