@@ -16,7 +16,7 @@ The Magento 2 development team will review all issues and contributions submitte
 4. PRs which include bug fixes must be accompanied with a step-by-step description of how to reproduce the bug.
 3. PRs which include new logic or new features must be submitted along with:
 * Unit/integration test coverage
-* Proposed [documentation](http://devdocs.magento.com) updates. Documentation contributions can be submitted via the [devdocs GitHub](https://github.com/magento/devdocs).
+* Proposed [documentation](https://devdocs.magento.com) updates. Documentation contributions can be submitted via the [devdocs GitHub](https://github.com/magento/devdocs).
 4. For larger features or changes, please [open an issue](https://github.com/magento/magento2/issues) to discuss the proposed changes prior to development. This may prevent duplicate or unnecessary effort and allow other contributors to provide input.
 5. All automated tests must pass (all builds on [Travis CI](https://travis-ci.org/magento/magento2) must be green).
 
@@ -27,7 +27,7 @@ If you are a new GitHub user, we recommend that you create your own [free github
 1. Search current [listed issues](https://github.com/magento/magento2/issues) (open or closed) for similar proposals of intended contribution before starting work on a new contribution.
 2. Review the [Contributor License Agreement](https://magento.com/legaldocuments/mca) if this is your first time contributing.
 3. Create and test your work.
-4. Fork the Magento 2 repository according to the [Fork A Repository instructions](http://devdocs.magento.com/guides/v2.2/contributor-guide/contributing.html#fork) and when you are ready to send us a pull request – follow the [Create A Pull Request instructions](http://devdocs.magento.com/guides/v2.2/contributor-guide/contributing.html#pull_request).
+4. Fork the Magento 2 repository according to the [Fork A Repository instructions](https://devdocs.magento.com/guides/v2.2/contributor-guide/contributing.html#fork) and when you are ready to send us a pull request – follow the [Create A Pull Request instructions](https://devdocs.magento.com/guides/v2.2/contributor-guide/contributing.html#pull_request).
 5. Once your contribution is received the Magento 2 development team will review the contribution and collaborate with you as needed.
 
 ## Code of Conduct

@@ -15,5 +15,6 @@
         <element name="configureProductQtyField" type="input" selector="//*[@id='super-product-table']/tbody/tr[{{arg}}]/td[5]/input[1]" parameterized="true"/>
         <element name="addProductToOrder" type="input" selector="//*[@title='Add Products to Order']"/>
         <element name="itemsOrderedSummaryText" type="textarea" selector="//table[@class='data-table admin__table-primary order-tables']/tfoot/tr"/>
+        <element name="configureSelectAttribute" type="select" selector="select[id*=attribute]"/>
     </section>
 </sections>

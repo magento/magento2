@@ -9,11 +9,12 @@ declare(strict_types=1);
 namespace Magento\AsynchronousOperations\Model;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Registry;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\MessageQueue\MessageLockException;
 use Magento\Framework\MessageQueue\ConnectionLostException;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Framework\MessageQueue\CallbackInvoker;
+use Magento\Framework\MessageQueue\CallbackInvokerInterface;
 use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
@@ -29,7 +30,7 @@ use Magento\Framework\MessageQueue\ConsumerInterface;
 class MassConsumer implements ConsumerInterface
 {
     /**
-     * @var \Magento\Framework\MessageQueue\CallbackInvoker
+     * @var CallbackInvokerInterface
      */
     private $invoker;
 
@@ -59,22 +60,29 @@ class MassConsumer implements ConsumerInterface
     private $operationProcessor;
 
     /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
      * Initialize dependencies.
      *
-     * @param CallbackInvoker $invoker
+     * @param CallbackInvokerInterface $invoker
      * @param ResourceConnection $resource
      * @param MessageController $messageController
      * @param ConsumerConfigurationInterface $configuration
      * @param OperationProcessorFactory $operationProcessorFactory
      * @param LoggerInterface $logger
+     * @param Registry $registry
      */
     public function __construct(
-        CallbackInvoker $invoker,
+        CallbackInvokerInterface $invoker,
         ResourceConnection $resource,
         MessageController $messageController,
         ConsumerConfigurationInterface $configuration,
         OperationProcessorFactory $operationProcessorFactory,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Registry $registry = null
     ) {
         $this->invoker = $invoker;
         $this->resource = $resource;
@@ -84,13 +92,17 @@ class MassConsumer implements ConsumerInterface
             'configuration' => $configuration
         ]);
         $this->logger = $logger;
+        $this->registry = $registry ?? \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Registry::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process($maxNumberOfMessages = null)
     {
+        $this->registry->register('isSecureArea', true, true);
+
         $queue = $this->configuration->getQueue();
 
         if (!isset($maxNumberOfMessages)) {
@@ -98,6 +110,8 @@ class MassConsumer implements ConsumerInterface
         } else {
             $this->invoker->invoke($queue, $maxNumberOfMessages, $this->getTransactionCallback($queue));
         }
+
+        $this->registry->unregister('isSecureArea');
     }
 
     /**
