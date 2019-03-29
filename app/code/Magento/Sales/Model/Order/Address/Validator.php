@@ -49,8 +49,8 @@ class Validator
 
     /**
      * @param DirectoryHelper $directoryHelper
-     * @param CountryFactory  $countryFactory
-     * @param EavConfig       $eavConfig
+     * @param CountryFactory $countryFactory
+     * @param EavConfig $eavConfig
      */
     public function __construct(
         DirectoryHelper $directoryHelper,
@@ -61,6 +61,17 @@ class Validator
         $this->countryFactory = $countryFactory;
         $this->eavConfig = $eavConfig ?: ObjectManager::getInstance()
             ->get(EavConfig::class);
+    }
+
+    /**
+     * Validate address.
+     *
+     * @param \Magento\Sales\Model\Order\Address $address
+     * @return array
+     */
+    public function validate(Address $address)
+    {
+        $warnings = [];
 
         if ($this->isTelephoneRequired()) {
             $this->required['telephone'] = 'Phone Number';
@@ -73,16 +84,7 @@ class Validator
         if ($this->isFaxRequired()) {
             $this->required['fax'] = 'Fax';
         }
-    }
 
-    /**
-     *
-     * @param \Magento\Sales\Model\Order\Address $address
-     * @return array
-     */
-    public function validate(Address $address)
-    {
-        $warnings = [];
         foreach ($this->required as $code => $label) {
             if (!$address->hasData($code)) {
                 $warnings[] = sprintf('"%s" is required. Enter and try again.', $label);
@@ -195,7 +197,10 @@ class Validator
     }
 
     /**
+     * Check whether telephone is required for address.
+     *
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function isTelephoneRequired()
     {
@@ -203,7 +208,10 @@ class Validator
     }
 
     /**
+     * Check whether company is required for address.
+     *
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function isCompanyRequired()
     {
@@ -211,7 +219,10 @@ class Validator
     }
 
     /**
+     * Check whether telephone is required for address.
+     *
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function isFaxRequired()
     {
