@@ -194,32 +194,6 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Gets role ID
-     *
-     * @return string
-     */
-    public function getRoleId()
-    {
-        $roleId = $this->getRequest()->getParam('rid');
-        if ($roleId <= 0) {
-            $roleId = $this->_coreRegistry->registry('RID');
-        }
-        return $roleId;
-    }
-
-    /**
-     * Gets JSON string
-     *
-     * @param string $input
-     * @return string
-     */
-    public function getJSONString($input)
-    {
-        $output = json_decode($input);
-        return $output ? $this->_jsonEncoder->encode($output) : '{}';
-    }
-
-    /**
      * Gets users
      *
      * @param bool $json
@@ -288,4 +262,31 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
 
         return false;
     }
+
+    /**
+     * Gets role ID
+     *
+     * @return string
+     */
+    private function getRoleId()
+    {
+        $roleId = $this->getRequest()->getParam('rid');
+        if ($roleId <= 0) {
+            $roleId = $this->_coreRegistry->registry('RID');
+        }
+        return $roleId;
+    }
+
+    /**
+     * Gets JSON string
+     *
+     * @param string $input
+     * @return string
+     */
+    private function getJSONString($input)
+    {
+        $output = json_decode($input);
+        return $output ? $this->_jsonEncoder->encode($output) : '{}';
+    }
+
 }
