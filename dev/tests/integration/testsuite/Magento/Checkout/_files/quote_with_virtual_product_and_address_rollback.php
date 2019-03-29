@@ -16,4 +16,4 @@ $quoteIdMask->delete($quote->getId());
 
 require __DIR__ . '/../../Customer/_files/customer_rollback.php';
 require __DIR__ . '/../../Customer/_files/customer_address_rollback.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_virtual_rollback.php';
+require __DIR__ . '/../../Catalog/_files/product_virtual_rollback.php';

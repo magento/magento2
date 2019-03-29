@@ -13,7 +13,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 try {
     $product = $productRepository->get('simple', false, null, true);
