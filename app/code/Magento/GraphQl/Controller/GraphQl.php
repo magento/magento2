@@ -12,6 +12,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
+use Magento\Framework\GraphQl\Exception\GraphQlRequestException;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
@@ -23,6 +24,7 @@ use Magento\Framework\GraphQl\Query\Fields as QueryFields;
  * Front controller for web API GraphQL area.
  *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GraphQl implements FrontControllerInterface
 {
@@ -125,8 +127,9 @@ class GraphQl implements FrontControllerInterface
                     isset($data['variables']) ? $data['variables'] : []
                 );
             } else {
+                $errorMessage = __('Mutation requests allowed only for POST requests');
                 $result['errors'] = [
-                    __('Mutation requests allowed only for POST requests')
+                    $this->graphQlError->create(new GraphQlRequestException($errorMessage))
                 ];
                 $statusCode = ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS;
             }

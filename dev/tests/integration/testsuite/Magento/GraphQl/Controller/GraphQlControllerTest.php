@@ -177,7 +177,8 @@ MUTATION;
         $response = $this->graphql->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $this->assertArrayHasKey('errors', $output);
-        $this->assertEquals('Mutation requests allowed only for POST requests', $output['errors'][0]);
+        $errorMessage = $output['errors'][0]['message'];
+        $this->assertEquals('Mutation requests allowed only for POST requests', $errorMessage);
     }
 
     /** Test request is dispatched and response generated when using GET request with parameterized query string
@@ -191,19 +192,17 @@ MUTATION;
 
         /** @var ProductInterface $product */
         $product = $productRepository->get('simple1');
-        $query1 =  <<<'QUERY'
-                
- query GetProducts($filterInput:ProductFilterInput){
- products(
-  filter:$filterInput
-){
-  items{
-   id
-   name
-   sku
-  }  
-}
- 
+        $query = <<<QUERY
+query GetProducts(\$filterInput:ProductFilterInput){
+    products(
+        filter:\$filterInput
+    ){
+        items{
+            id
+            name
+            sku
+        }  
+    }
 }
 QUERY;
         $variables = [
@@ -211,17 +210,17 @@ QUERY;
                 'sku' =>['eq' => 'simple1']
             ]
         ];
-        $postData = [
-            'query'         => $query1,
+        $queryParams = [
+            'query'         => $query,
             'variables'     => json_encode($variables),
-            'operationName' => null
+            'operationName' => 'GetProducts'
         ];
 
         /** @var Http $request */
         $request = $this->objectManager->get(Http::class);
         $request->setPathInfo('/graphql');
         $request->setMethod('GET');
-        $request->setParams($postData);
+        $request->setParams($queryParams);
         $response = $this->graphql->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
