@@ -27,6 +27,7 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterRemoveItem()
     {
+        $this->login(1);
         /** @var Quote $quote */
         $quote = Bootstrap::getObjectManager()->create(Quote::class);
         $quote->load('test_order_with_virtual_product', 'reserved_order_id');
@@ -68,5 +69,12 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($quoteBillingAddressUpdated->getRegion());
         $this->assertEmpty($quoteBillingAddressUpdated->getPostcode());
         $this->assertEmpty($quoteBillingAddressUpdated->getCity());
+    }
+    private function login(int $customerId)
+    {
+        /** @var \Magento\Customer\Model\Session $session */
+        $session = Bootstrap::getObjectManager()
+            ->get(\Magento\Customer\Model\Session::class);
+        $session->loginById($customerId);
     }
 }
