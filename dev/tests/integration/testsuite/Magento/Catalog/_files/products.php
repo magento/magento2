@@ -15,7 +15,6 @@ $product
     ->setName('Simple Product')
     ->setSku('simple')
     ->setPrice(10)
-    ->setWeight(1)
     ->setMetaTitle('meta title')
     ->setMetaKeyword('meta keyword')
     ->setMetaDescription('meta description')
