@@ -137,6 +137,14 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
     public function getChildren();
 
     /**
+     * Set category children
+     *
+     * @param string $children
+     * @return $this
+     */
+    public function setChildren($children);
+
+    /**
      * @return string|null
      */
     public function getCreatedAt();

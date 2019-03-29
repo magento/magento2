@@ -799,6 +799,48 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+     * @param string $children
+     * @return CategoryInterface|string
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function setChildren($children)
+    {
+        $newChildCategoryIds = [];
+        $oldChildCategoryIds = [];
+        $afterId = null;
+        if ($children) {
+            $newChildCategoryIds = explode(',', $children);
+        }
+
+        $oldChildCategoryIds = $this->_getResource()->getImmediateChildren($this, $active = true);
+        if (!empty($oldChildCategoryIds)) {
+            $lastId = array_pop($oldChildCategoryIds);
+            $afterId = ($afterId === null || $afterId > $lastId) ? $lastId : $afterId;
+        }
+        $deleteCategoriesIds = array_diff($oldChildCategoryIds, $newChildCategoryIds);
+        $insertNewCategoriesIds = array_diff($newChildCategoryIds, $oldChildCategoryIds);
+
+        if (!empty($deleteCategoriesIds)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __(
+                    'We can\'t remove a child category from Category.'
+                )
+            );
+        }
+
+        /**
+         * During new Category ,it will not work
+         */
+        if (!empty($insertNewCategoriesIds) && $this->getId()) {
+            foreach ($insertNewCategoriesIds as $newChildId) {
+                $children = $this->categoryRepository->get($newChildId, $this->getStoreId());
+                $children->move($this->getId(), $afterId);
+            }
+        }
+        return $this->getChildren();
+    }
+    /**
      * Retrieve Stores where isset category Path
      *
      * Return comma separated string

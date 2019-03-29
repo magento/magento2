@@ -1132,4 +1132,37 @@ class Category extends AbstractResource
         }
         return $this->aggregateCount;
     }
+    public function getImmediateChildren($category,$active = false)
+    {
+
+        $linkField = $this->getLinkField();
+        $attributeId = $this->getIsActiveAttributeId();
+        $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
+        $connection = $this->getConnection();
+        $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
+        $bind = [
+            'attribute_id' => $attributeId,
+            'store_id' => $category->getStoreId(),
+            'scope' => 1,
+            'parent_id' => $category->getId(),
+        ];
+        $select = $this->getConnection()->select()->from(
+            ['m' => $this->getEntityTable()],
+            'entity_id'
+        )->joinLeft(
+            ['d' => $backendTable],
+            "d.attribute_id = :attribute_id AND d.store_id = 0 AND d.{$linkField} = m.{$linkField}",
+            []
+        )->joinLeft(
+            ['c' => $backendTable],
+            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.{$linkField} = m.{$linkField}",
+            []
+        )->where(
+            $checkSql . ' = :scope'
+        )->where(
+            $connection->quoteIdentifier('parent_id') . ' = :parent_id'
+        );
+
+        return $connection->fetchCol($select, $bind);
+    }
 }
