@@ -32,7 +32,10 @@ foreach ($customersToRemove as $customerEmail) {
         $customer = $customerRepository->get($customerEmail);
         $customerRepository->delete($customer);
     } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
-        // not found
+        /**
+         * Tests which are wrapped with MySQL transaction clear all data by transaction rollback.
+         */
+        continue;
     }
 
     /* Unlock account if it was locked for tokens retrieval */
