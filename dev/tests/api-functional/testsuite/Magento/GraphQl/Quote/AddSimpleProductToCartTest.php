@@ -60,6 +60,22 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Please enter a number greater than 0 in this field.
+     */
+    public function testAddSimpleProductToCartWithNegativeQty()
+    {
+        $sku = 'simple';
+        $qty = -2;
+        $maskedQuoteId = $this->getMaskedQuoteId();
+
+        $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * @return string
      */
     public function getMaskedQuoteId() : string
@@ -104,5 +120,44 @@ mutation {
   }
 }
 QUERY;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "wrong_cart_hash"
+     */
+    public function testAddProductWithWrongCartHash()
+    {
+        $sku = 'simple';
+        $qty = 1;
+
+        $maskedQuoteId = 'wrong_cart_hash';
+
+        $query = <<<QUERY
+mutation {  
+  addSimpleProductsToCart(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+      cartItems: [
+        {
+          data: {
+            qty: $qty
+            sku: "$sku"
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      items {
+        qty
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlQuery($query);
     }
 }
