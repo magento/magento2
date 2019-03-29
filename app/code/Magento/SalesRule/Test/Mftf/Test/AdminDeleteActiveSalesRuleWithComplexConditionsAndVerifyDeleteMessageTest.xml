@@ -25,14 +25,25 @@
                 <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
             </actionGroup>
             <!--Fill values for Condition Section-->
-            <actionGroup ref="AdminCreateCartPriceRuleConditionsSectionActionGroup" stepKey="createActiveCartPriceRuleConditionsSection">
+            <actionGroup ref="AdminCreateCartPriceRuleConditionsSectionSubtotalActionGroup" stepKey="createActiveCartPriceRuleConditionsSubtotalSection">
                 <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
                 <argument name="condition1" value="Subtotal"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateCartPriceRuleConditionsSectionShippingCountryActionGroup" stepKey="createActiveCartPriceRuleConditionsShippingCountrySection">
+                <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
                 <argument name="condition2" value="Shipping Country"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateCartPriceRuleConditionsSectionShippingPostcodeActionGroup" stepKey="createActiveCartPriceRuleConditionsShippingPostcodeSection">
+                <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
                 <argument name="condition3" value="Shipping Postcode"/>
             </actionGroup>
             <!--Fill values for Action Section-->
-            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
+                <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionShippingAmountActionGroup" stepKey="createActiveCartPriceRuleShippingAmountActionsSection"/>
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionSubsequentRulesActionGroup" stepKey="createActiveCartPriceRuleDiscardSubsequentRulesActionsSection"/>
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup" stepKey="createActiveCartPriceRuleFreeShippingActionsSection">
                 <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
             </actionGroup>
             <!--Fill values for Labels Section-->

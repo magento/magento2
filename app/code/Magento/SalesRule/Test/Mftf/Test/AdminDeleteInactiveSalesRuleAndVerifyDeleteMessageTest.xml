@@ -25,6 +25,7 @@
             <!--Create inactive cart price rule-->
             <actionGroup ref="AdminInactiveCartPriceRuleActionGroup" stepKey="createInactiveCartPriceRule">
                 <argument name="ruleName" value="InactiveSalesRule"/>
+                <argument name="custGrp" value="NOT LOGGED IN"/>
             </actionGroup>
         </before>
         <after>
@@ -43,7 +44,7 @@
         </actionGroup>
 
         <!--Verify customer don't see updated virtual product link on category page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct1PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$initialSimpleProduct$$"/>
         </actionGroup>
 

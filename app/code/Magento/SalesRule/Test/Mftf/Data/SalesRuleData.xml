@@ -223,6 +223,7 @@
         <data key="shippingPostcode">123456789a</data>
         <data key="simple_action">Percent of product price discount</data>
         <data key="discount_amount">50</data>
+        <data key="maximumQtyDiscount">0</data>
         <data key="discount_step">0</data>
         <data key="apply_to_shipping">Yes</data>
         <data key="stop_rules_processing">Yes</data>

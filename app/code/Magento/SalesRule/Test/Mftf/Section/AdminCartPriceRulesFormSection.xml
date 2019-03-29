@@ -66,6 +66,7 @@
         <element name="applyDiscountToShipping" type="checkbox" selector="input[name='apply_to_shipping']"/>
         <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
+        <element name="maximumQtyDiscount" type="input" selector="input[name='discount_qty']"/>
         <element name="discountStep" type="input" selector="input[name='discount_step']"/>
         <element name="applyToShippingAmount" type="checkbox" selector="//div[@class='admin__actions-switch']/input[@name='apply_to_shipping']/../label"/>
         <element name="discardSubsequentRules" type="checkbox" selector="//div[@class='admin__actions-switch']/input[@name='stop_rules_processing']/../label"/>

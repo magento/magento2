@@ -7,16 +7,26 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCreateCartPriceRuleActionsSectionActionGroup">
+    <actionGroup name="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup">
         <arguments>
-            <argument name="ruleName"/>
+            <argument name="ruleName" type="entity"/>
         </arguments>
-        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeader}}" visible="true" stepKey="clickToExpandActions"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{ruleName.simple_action}}" stepKey="selectActionType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{ruleName.discount_amount}}" stepKey="fillDiscountAmount"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.maximumQtyDiscount}}" userInput="{{ruleName.maximumQtyDiscount}}" stepKey="fillMaximumQtyDiscount"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.discountStep}}" userInput="{{ruleName.discount_step}}" stepKey="fillDiscountStep"/>
+    </actionGroup>
+    <actionGroup name="AdminCreateCartPriceRuleActionsSectionShippingAmountActionGroup">
         <click selector="{{AdminCartPriceRulesFormSection.applyToShippingAmount}}" stepKey="clickApplyToShipping"/>
-        <click selector="{{AdminCartPriceRulesFormSection.discardSubsequentRules}}" stepKey="clickDiscardSubsequentRules"/>
+    </actionGroup>
+    <actionGroup name="AdminCreateCartPriceRuleActionsSectionSubsequentRulesActionGroup">
+        <click selector="{{AdminCartPriceRulesFormSection.discardSubsequentRules}}" stepKey="clickApplyToShipping"/>
+    </actionGroup>
+    <actionGroup name="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup">
+        <arguments>
+            <argument name="ruleName" type="entity"/>
+        </arguments>
         <selectOption selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="{{ruleName.simple_free_shipping}}" stepKey="selectForMatchingItemsOnly"/>
     </actionGroup>
 </actionGroups>
