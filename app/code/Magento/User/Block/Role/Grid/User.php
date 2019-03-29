@@ -81,6 +81,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Adds column filter to collection
+     *
      * @param Column $column
      * @return $this
      */
@@ -105,6 +107,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepares collection
+     *
      * @return $this
      */
     protected function _prepareCollection()
@@ -117,6 +121,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepares columns
+     *
      * @return $this
      */
     protected function _prepareColumns()
@@ -173,6 +179,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Gets grid url
+     *
      * @return string
      */
     public function getGridUrl()
@@ -182,6 +190,34 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Gets role ID
+     *
+     * @return string
+     */
+    public function getRoleId()
+    {
+        $roleId = $this->getRequest()->getParam('rid');
+        if ($roleId <= 0) {
+            $roleId = $this->_coreRegistry->registry('RID');
+        }
+        return $roleId;
+    }
+
+    /**
+     * Gets JSON string
+     *
+     * @param string $input
+     * @return string
+     */
+    public function getJSONString($input)
+    {
+        $output = json_decode($input);
+        return $output ? $this->_jsonEncoder->encode($output) : '{}';
+    }
+
+    /**
+     * Gets users
+     *
      * @param bool $json
      * @return string|array
      */
@@ -190,15 +226,11 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         $inRoleUser = $this->getRequest()->getParam('in_role_user');
         if ($inRoleUser) {
             if ($json) {
-                $result = json_decode($inRoleUser);
-                return $result ? $this->_jsonEncoder->encode($result) : '{}';
+                return $this->getJSONString($inRoleUser);
             }
             return $this->escapeJs($this->escapeHtml($inRoleUser));
         }
-        $roleId = $this->getRequest()->getParam('rid');
-        if ($roleId <= 0) {
-            $roleId = $this->_coreRegistry->registry('RID');
-        }
+        $roleId = $this->getRoleId();
         $users = $this->getUsersFormData();
         if (false === $users) {
             $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
@@ -206,20 +238,17 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         if (sizeof($users) > 0) {
             if ($json) {
                 $jsonUsers = [];
-                foreach ($users as $usrid) {
-                    $jsonUsers[$usrid] = 0;
+                foreach ($users as $userid) {
+                    $jsonUsers[$userid] = 0;
                 }
                 return $this->_jsonEncoder->encode((object)$jsonUsers);
-            } else {
-                return array_values($users);
             }
-        } else {
-            if ($json) {
-                return '{}';
-            } else {
-                return [];
-            }
+            return array_values($users);
         }
+        if ($json) {
+            return '{}';
+        }
+        return [];
     }
 
     /**
