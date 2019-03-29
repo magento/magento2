@@ -10,6 +10,7 @@
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Handler which works with magentoConfigFixture annotations
@@ -46,7 +47,7 @@ class ConfigFixture
      * @param string|bool|null $scopeCode
      * @return string
      */
-    protected function _getConfigValue($configPath, $scopeCode = null)
+    protected function _getConfigValue($configPath, $scopeCode = null, $scopeType = ScopeInterface::SCOPE_STORE)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $result = null;
@@ -55,7 +56,7 @@ class ConfigFixture
             $scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
             $result = $scopeConfig->getValue(
                 $configPath,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $scopeType,
                 $scopeCode
             );
         }
@@ -67,12 +68,12 @@ class ConfigFixture
      *
      * @param string $configPath
      * @param string $value
-     * @param string|bool|null $storeCode
+     * @param string|bool|null $scopeCode
      */
-    protected function _setConfigValue($configPath, $value, $storeCode = false)
+    protected function _setConfigValue($configPath, $value, $scopeCode = false, $scopeType = ScopeInterface::SCOPE_STORE)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        if ($storeCode === false) {
+        if ($scopeCode === false) {
             if (strpos($configPath, 'default/') === 0) {
                 $configPath = substr($configPath, 8);
                 $objectManager->get(
@@ -89,8 +90,8 @@ class ConfigFixture
             )->setValue(
                 $configPath,
                 $value,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeCode
+                $scopeType,
+                $scopeCode
             );
         }
     }
@@ -119,11 +120,18 @@ class ConfigFixture
             } else {
                 /* Global config value */
                 list($configPath, $requiredValue) = preg_split('/\s+/', $configPathAndValue, 2);
-
-                $originalValue = $this->_getConfigValue($configPath);
+                if (preg_match('/^websites\/(.+?)\/(.+)/', $configPath, $matches)) {
+                    list(, $scopeCode, $configPath) = $matches;
+                    $scopeType = ScopeInterface::SCOPE_WEBSITE;
+                } else {
+                    $scopeCode = false;
+                    $scopeType = ScopeInterface::SCOPE_STORE;
+                }
+                $originalValue = $this->_getConfigValue($configPath, $scopeCode, $scopeType);
                 $this->_globalConfigValues[$configPath] = $originalValue;
 
-                $this->_setConfigValue($configPath, $requiredValue);
+
+                $this->_setConfigValue($configPath, $requiredValue, $scopeCode, $scopeType);
             }
         }
     }
