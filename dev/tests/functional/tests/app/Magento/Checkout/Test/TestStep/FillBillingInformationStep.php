@@ -171,7 +171,7 @@ class FillBillingInformationStep implements TestStepInterface
     private function getDefaultBillingAddress()
     {
         $addresses = $this->customer->hasData('address')
-            ? $this->customer->getDataFieldConfig('address')['source']->getAddress()
+            ? $this->customer->getDataFieldConfig('address')['source']->getAddresses()
             : [];
         $defaultAddress = null;
         foreach ($addresses as $address) {
