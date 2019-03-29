@@ -28,7 +28,7 @@ $fedexKey = $mutableScopeConfig->getValue('carriers/fedex/key', 'store');
 $fedexPassword = $mutableScopeConfig->getValue('carriers/fedex/password', 'store');
 $fedexEndpointUrl = $mutableScopeConfig->getValue('carriers/fedex/production_webservices_url', 'store');
 
-$configWriter->save('carriers/usps/active', 1);
+$configWriter->save('carriers/fedex/active', 1);
 $configWriter->save('carriers/fedex/account', $fedexAccount);
 $configWriter->save('carriers/fedex/meter_number', $fedexMeterNumber);
 $configWriter->save('carriers/fedex/key', $fedexKey);
