@@ -11,7 +11,7 @@
     <entity name="AdminUserData" type="admin">
         <data key="email" unique="prefix">John.Doe@example.com</data>
         <data key="firstname">John</data>
-        <data key="username">lockuser</data>
+        <data key="username" unique="prefix">lockuser</data>
         <data key="lastname">Doe</data>
         <data key="password">pwdTest123!</data>
     </entity>

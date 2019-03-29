@@ -33,20 +33,68 @@
 
         <!-- Perform add new admin user 6 specified number of times.
         "The password entered for the current user is invalid. Verify the password and try again." appears after each attempt.-->
-        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserAttempt1">
+        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserFirstAttempt">
+            <argument name="adminUser" value="{{AdminUserData.username}}" />
+            <argument name="adminFirstname" value="{{AdminUserData.firstname}}" />
+            <argument name="adminLastname" value="{{AdminUserData.lastname}}" />
+            <argument name="adminEmail" value="{{AdminUserData.email}}" />
+            <argument name="adminPassword" value="{{AdminUserData.password}}" />
+            <argument name="adminPasswordConfirmation" value="{{AdminUserData.password}}" />
+            <argument name="currentAdminPassword" value="{{AdminUserData.password}}INVALID" />
+            <argument name="adminUserRole" value="{{AdminNewUserSection.administratorRole('1')}}" />
         </actionGroup>
         <waitForPageLoad stepKey="waitForSaveResultLoad"/>
         <see selector="{{AdminMessagesSection.error}}" userInput="The password entered for the current user is invalid. Verify the password and try again."
              stepKey="seeInvalidPasswordError"/>
-        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserAttempt2">
+        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserSecondAttempt">
+            <argument name="adminUser" value="{{AdminUserData.username}}" />
+            <argument name="adminFirstname" value="{{AdminUserData.firstname}}" />
+            <argument name="adminLastname" value="{{AdminUserData.lastname}}" />
+            <argument name="adminEmail" value="{{AdminUserData.email}}" />
+            <argument name="adminPassword" value="{{AdminUserData.password}}" />
+            <argument name="adminPasswordConfirmation" value="{{AdminUserData.password}}" />
+            <argument name="currentAdminPassword" value="{{AdminUserData.password}}INVALID" />
+            <argument name="adminUserRole" value="{{AdminNewUserSection.administratorRole('1')}}" />
         </actionGroup>
-        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserAttempt3">
+        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserThirdAttempt">
+            <argument name="adminUser" value="{{AdminUserData.username}}" />
+            <argument name="adminFirstname" value="{{AdminUserData.firstname}}" />
+            <argument name="adminLastname" value="{{AdminUserData.lastname}}" />
+            <argument name="adminEmail" value="{{AdminUserData.email}}" />
+            <argument name="adminPassword" value="{{AdminUserData.password}}" />
+            <argument name="adminPasswordConfirmation" value="{{AdminUserData.password}}" />
+            <argument name="currentAdminPassword" value="{{AdminUserData.password}}INVALID" />
+            <argument name="adminUserRole" value="{{AdminNewUserSection.administratorRole('1')}}" />
         </actionGroup>
-        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserAttempt4">
+        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserFourthAttempt">
+            <argument name="adminUser" value="{{AdminUserData.username}}" />
+            <argument name="adminFirstname" value="{{AdminUserData.firstname}}" />
+            <argument name="adminLastname" value="{{AdminUserData.lastname}}" />
+            <argument name="adminEmail" value="{{AdminUserData.email}}" />
+            <argument name="adminPassword" value="{{AdminUserData.password}}" />
+            <argument name="adminPasswordConfirmation" value="{{AdminUserData.password}}" />
+            <argument name="currentAdminPassword" value="{{AdminUserData.password}}INVALID" />
+            <argument name="adminUserRole" value="{{AdminNewUserSection.administratorRole('1')}}" />
         </actionGroup>
-        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserAttempt5">
+        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserFifthAttempt">
+            <argument name="adminUser" value="{{AdminUserData.username}}" />
+            <argument name="adminFirstname" value="{{AdminUserData.firstname}}" />
+            <argument name="adminLastname" value="{{AdminUserData.lastname}}" />
+            <argument name="adminEmail" value="{{AdminUserData.email}}" />
+            <argument name="adminPassword" value="{{AdminUserData.password}}" />
+            <argument name="adminPasswordConfirmation" value="{{AdminUserData.password}}" />
+            <argument name="currentAdminPassword" value="{{AdminUserData.password}}INVALID" />
+            <argument name="adminUserRole" value="{{AdminNewUserSection.administratorRole('1')}}" />
         </actionGroup>
-        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserAttempt6">
+        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserSixthAttempt">
+            <argument name="adminUser" value="{{AdminUserData.username}}" />
+            <argument name="adminFirstname" value="{{AdminUserData.firstname}}" />
+            <argument name="adminLastname" value="{{AdminUserData.lastname}}" />
+            <argument name="adminEmail" value="{{AdminUserData.email}}" />
+            <argument name="adminPassword" value="{{AdminUserData.password}}" />
+            <argument name="adminPasswordConfirmation" value="{{AdminUserData.password}}" />
+            <argument name="currentAdminPassword" value="{{AdminUserData.password}}INVALID" />
+            <argument name="adminUserRole" value="{{AdminNewUserSection.administratorRole('1')}}" />
         </actionGroup>
 
         <!-- Check Error that account has been locked -->
@@ -57,6 +105,6 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsLockedAdmin"/>
         <waitForPageLoad stepKey="waitForError"/>
         <see selector="{{AdminLoginFormSection.error}}" userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later"
-             stepKey="seeLockUserError2"/>
+             stepKey="seeLoginUserError"/>
     </test>
 </tests>
