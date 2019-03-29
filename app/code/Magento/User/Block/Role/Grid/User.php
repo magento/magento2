@@ -192,18 +192,17 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     public function getUsers($json = false)
     {
         $inRoleUser = $this->getRequest()->getParam('in_role_user');
-        if ($inRoleUser && $json) {
-            $result = json_decode($inRoleUser);
-            return $result ? $this->_jsonEncoder->encode($result) : '{}';
+        if ($inRoleUser) {
+            if ($json) {
+                $result = json_decode($inRoleUser);
+                return $result ? $this->_jsonEncoder->encode($result) : '{}';
+            }
+            return $this->escapeJs($this->escapeHtml($inRoleUser));
         }
-        $roleId = $this->getRequest()->getParam(
-            'rid'
-        ) > 0 ? $this->getRequest()->getParam(
-            'rid'
-        ) : $this->_coreRegistry->registry(
-            'RID'
-        );
-
+        $roleId = $this->getRequest()->getParam('rid');
+        if ($roleId <= 0) {
+            $roleId = $this->_coreRegistry->registry('RID');
+        }
         $users = $this->getUsersFormData();
         if (false === $users) {
             $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
