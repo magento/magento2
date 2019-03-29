@@ -19,6 +19,7 @@ use Magento\Framework\AuthorizationInterface;
  * Is responsible for providing ui components information on store front.
  *
  * @SuppressWarnings(PHPMD.AllPurposeAction)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Render extends \Magento\Framework\App\Action\Action
 {
