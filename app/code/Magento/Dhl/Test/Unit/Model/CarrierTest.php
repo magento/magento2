@@ -718,7 +718,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Data provider for testGetGatewayURL
-     * 
+     *
      * @return array
      */
     public function getGatewayURLProvider()
