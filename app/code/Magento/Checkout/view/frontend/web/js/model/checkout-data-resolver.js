@@ -244,11 +244,14 @@ define([
             }
 
             if (quote.isVirtual() || !quote.billingAddress()) {
-                addressList.some(function (addrs) {
+                isBillingAddressInitialized = addressList.some(function (addrs) {
                     if (addrs.isDefaultBilling()) {
                         selectBillingAddress(addrs);
-                        isBillingAddressInitialized = true;
+
+                        return true;
                     }
+
+                    return false;
                 });
             }
 
