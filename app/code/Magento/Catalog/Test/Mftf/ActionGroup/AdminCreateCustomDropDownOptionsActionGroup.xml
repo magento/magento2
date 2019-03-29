@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCustomDropDownOptionsActionGroup">
+        <!-- ActionGroup will add a single custom option to a product
+             You must already be on the product creation page -->
+        <arguments>
+            <argument name="customOptionName" type="string"/>
+            <argument name="firstOption" type="entity"/>
+            <argument name="secondOption" type="entity"/>
+        </arguments>
+        <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
+        <waitForPageLoad stepKey="waitForAddProductPageLoad"/>
+        <!-- Fill in the option and select the type of drop down -->
+        <fillField stepKey="fillInOptionTitle" selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{customOptionName}}"/>
+        <click stepKey="clickOptionTypeParent" selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}"/>
+        <waitForPageLoad stepKey="waitForDropdownOpen"/>
+        <click stepKey="clickOptionType" selector="{{AdminProductCustomizableOptionsSection.optionType('Drop-down')}}"/>
+        <!-- Add option based on the parameter -->
+        <click stepKey="clickAddFirstValue" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
+        <fillField stepKey="fillInFirstOptionValueTitle" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{firstOption.title}}"/>
+        <fillField stepKey="fillInFirstOptionValuePrice" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{firstOption.price}}"/>
+        <click stepKey="clickAddSecondValue" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
+        <fillField stepKey="fillInSecondOptionValueTitle" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{secondOption.title}}"/>
+        <fillField stepKey="fillInSecondOptionValuePrice" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{secondOption.price}}"/>
+    </actionGroup>
+</actionGroups>
