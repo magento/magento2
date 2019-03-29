@@ -22,6 +22,7 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
      * @magentoAppArea frontend
+     * @magentoAppIsolation enabled
      *
      * @return void
      */
@@ -70,6 +71,7 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($quoteBillingAddressUpdated->getPostcode());
         $this->assertEmpty($quoteBillingAddressUpdated->getCity());
     }
+
     private function login(int $customerId)
     {
         /** @var \Magento\Customer\Model\Session $session */
