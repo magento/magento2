@@ -10,7 +10,7 @@
     <test name="StorefrontAddBundleDynamicProductToShoppingCartWithDisableMiniCartSidebarTest">
         <annotations>
             <stories value="Shopping Cart"/>
-            <title value="AddBundleDynamicProductToShoppingCartWithDisableMiniCartSidebar"/>
+            <title value="Create Grouped product and verify mini cart action with disabled and enable Mini Cart Sidebar"/>
             <description value="Create Grouped product and verify mini cart action with disabled and enable Mini Cart Sidebar"/>
             <testCaseId value="MC-14719"/>
             <severity value="CRITICAL"/>

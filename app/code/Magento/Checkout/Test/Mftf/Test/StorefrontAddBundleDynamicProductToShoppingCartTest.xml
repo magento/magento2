@@ -10,7 +10,7 @@
     <test name="StorefrontAddBundleDynamicProductToShoppingCartTest">
         <annotations>
             <stories value="Shopping Cart"/>
-            <title value="AddBundleDynamicProductToShoppingCart"/>
+            <title value="Add bundle dynamic product to the cart"/>
             <description value="Add bundle dynamic product to the cart"/>
             <testCaseId value="MC-14715"/>
             <severity value="CRITICAL"/>

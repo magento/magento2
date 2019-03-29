@@ -10,7 +10,7 @@
     <test name="StorefrontAddOneBundleMultiSelectOptionToTheShoppingCartTest">
         <annotations>
             <stories value="Shopping Cart"/>
-            <title value="AddOneBundleMultiSelectOptionToTheShoppingCart"/>
+            <title value="Select one multi select option of a bundle product and add to the shopping cart"/>
             <description value="Select one multi select option of a bundle product and add to the shopping cart "/>
             <testCaseId value="MC-14727"/>
             <severity value="CRITICAL"/>

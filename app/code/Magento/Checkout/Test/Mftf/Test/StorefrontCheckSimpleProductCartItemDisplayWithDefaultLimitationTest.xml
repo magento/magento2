@@ -10,7 +10,7 @@
     <test name="StorefrontCheckSimpleProductCartItemDisplayWithDefaultLimitationTest">
         <annotations>
             <stories value="Shopping Cart"/>
-            <title value="CheckSimpleProductCartItemDisplayWithDefaultLimitation"/>
+            <title value="Add 10 SimpleProducts to the cart and check cart display with default display limit"/>
             <description value="Add 10 SimpleProducts to the cart and check cart display with default display limit"/>
             <testCaseId value="MC-14723"/>
             <severity value="CRITICAL"/>

@@ -10,7 +10,7 @@
     <test name="StorefrontAddDownloadableProductToShoppingCartTest">
         <annotations>
             <stories value="Shopping Cart"/>
-            <title value="AddDownloadableProductToShoppingCart"/>
+            <title value="Create Downloadable product with two links and add to the shopping cart"/>
             <description value="Create Downloadable product with two links and add to the shopping cart"/>
             <testCaseId value="MC-14717"/>
             <severity value="CRITICAL"/>

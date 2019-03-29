@@ -10,8 +10,8 @@
     <test name="StoreFrontAddProductWithAllTypesOfCustomOptionToTheShoppingCartWithoutAnySelectedOptionTest">
         <annotations>
             <stories value="Shopping Cart"/>
-            <title value="AddProductWithAllTypesOfCustomOptionToTheShoppingCartWithoutAnySelectedOption"/>
-            <description value="Add simple product with all types of custom options to cart without selecting any options "/>
+            <title value="Add simple product with all types of custom options to cart without selecting any options"/>
+            <description value="Add simple product with all types of custom options to cart without selecting any options"/>
             <testCaseId value="MC-14725"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>

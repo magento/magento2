@@ -8,12 +8,12 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontMiniCartItemsActionGroup">
-    <arguments>
-        <argument name="productName" type="string"/>
-        <argument name="productPrice" type="string"/>
-        <argument name="cartSubtotal" type="string"/>
-        <argument name="qty" type="string"/>
-    </arguments>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productPrice" type="string"/>
+            <argument name="cartSubtotal" type="string"/>
+            <argument name="qty" type="string"/>
+        </arguments>
         <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{productName}}"  stepKey="seeProductNameInMiniCart"/>
         <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{productPrice}}" stepKey="seeProductPriceInMiniCart"/>
         <seeElement selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="seeCheckOutButtonInMiniCart"/>

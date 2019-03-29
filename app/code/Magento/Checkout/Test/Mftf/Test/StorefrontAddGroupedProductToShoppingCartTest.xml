@@ -10,8 +10,8 @@
     <test name="StorefrontAddGroupedProductToShoppingCartTest">
         <annotations>
             <stories value="Shopping Cart"/>
-            <title value="AddGroupedProductToShoppingCartTest"/>
-            <description value="Create grouped product with three simple product and Add grouped product to the cart "/>
+            <title value="Create grouped product with three simple product and Add grouped product to the cart"/>
+            <description value="Create grouped product with three simple product and Add grouped product to the cart"/>
             <testCaseId value="MC-14718"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>

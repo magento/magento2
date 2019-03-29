@@ -8,10 +8,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontElementVisibleActionGroup">
-    <arguments>
-        <argument name="selector" type="string"/>
-        <argument name="userInput" type="string"/>
-    </arguments>
+        <arguments>
+            <argument name="selector" type="string"/>
+            <argument name="userInput" type="string"/>
+        </arguments>
         <see selector="{{selector}}" userInput="{{userInput}}" stepKey="assertElement"/>
     </actionGroup>
 </actionGroups>

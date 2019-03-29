@@ -10,7 +10,7 @@
     <test name="StorefrontAddProductWithAllTypesOfCustomOptionToTheShoppingCartTest">
         <annotations>
             <stories value="Shopping Cart"/>
-            <title value="AddSimpleProductsWithAllTypesOfCustomOptionsToTheShoppingCart"/>
+            <title value="Create a simple products with all types of oprtions and add it to the cart"/>
             <description value="Create a simple products with all types of oprtions and add it to the cart"/>
             <testCaseId value="MC-14726"/>
             <severity value="CRITICAL"/>

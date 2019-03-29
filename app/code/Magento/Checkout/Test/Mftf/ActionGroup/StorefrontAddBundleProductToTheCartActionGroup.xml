@@ -9,8 +9,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAddBundleProductToTheCartActionGroup">
         <arguments>
-        <argument name="productName" type="string"/>
-        <argument name="quantity" type="string"/>
+            <argument name="productName" type="string"/>
+            <argument name="quantity" type="string"/>
         </arguments>
         <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickOnCustomizeAndAddToCartButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

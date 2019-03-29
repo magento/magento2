@@ -10,7 +10,7 @@
     <test name="StorefrontCheckVirtualProductCountDisplayWithCustomDisplayConfigurationTest">
         <annotations>
             <stories value="Shopping Cart"/>
-            <title value="CheckVirtualProductCountDisplayWithCustomDisplayConfiguration"/>
+            <title value="Verify virtual products count in mini cart and summary block with custom display configuration"/>
             <description value="Verify virtual products count in mini cart and summary block with custom display configuration"/>
             <testCaseId value="MC-14724"/>
             <severity value="CRITICAL"/>
