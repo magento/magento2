@@ -214,7 +214,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         }
 
         $tmpFileName = str_replace(".$fileExtension", '', $fileName);
-
         $tmpFileName .= '_' . $this->random->getRandomString(16);
         $tmpFileName .= $fileExtension ? ".$fileExtension" : '';
         $tmpFilePath = $this->_directory->getRelativePath($this->downloadDir . '/' . $tmpFileName);
