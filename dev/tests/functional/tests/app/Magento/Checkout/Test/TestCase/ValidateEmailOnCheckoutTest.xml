@@ -10,17 +10,20 @@
         <variation name="ValidateEmailOnCheckoutTestVariation1">
             <data name="customer/data/email" xsi:type="string">johndoe</data>
             <data name="customer/data/firstname" xsi:type="string">John</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertEmailErrorValidationMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertEmailToolTips" />
         </variation>
         <variation name="ValidateEmailOnCheckoutTestVariation2">
             <data name="customer/data/email" xsi:type="string">johndoe#example.com</data>
             <data name="customer/data/firstname" xsi:type="string">John</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertEmailErrorValidationMessage" />
         </variation>
         <variation name="ValidateEmailOnCheckoutTestVariation3">
             <data name="customer/data/email" xsi:type="string">johndoe@example.c</data>
             <data name="customer/data/firstname" xsi:type="string">John</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertEmailErrorValidationMessage" />
         </variation>
     </testCase>
