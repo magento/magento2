@@ -19,6 +19,9 @@
             <group value="customer"/>
             <group value="create"/>
         </annotations>
+        <before>
+            <magentoCLI command="indexer:reindex customer_grid" stepKey="reindexCustomerGrid"/>
+        </before>
         <after>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>

@@ -110,7 +110,7 @@ tinymce.html.Writer = function(settings) {
 		 *
 		 * @method text
 		 * @param {String} text String to write out.
-		 * @param {Boolean} raw Optional raw state if true the contents wont get encoded.
+		 * @param {Boolean} raw Optional raw state if true the contents won't get encoded.
 		 */
 		text: function(text, raw) {
 			if (text.length > 0)

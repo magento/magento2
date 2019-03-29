@@ -19,4 +19,8 @@
         <data key="store_type">website</data>
         <data key="website_id">null</data>
     </entity>
+    <entity name="secondCustomWebsite" extends="customWebsite">
+        <data key="name" unique="suffix">Custom Website</data>
+        <data key="code" unique="suffix">custom_website</data>
+    </entity>
 </entities>
