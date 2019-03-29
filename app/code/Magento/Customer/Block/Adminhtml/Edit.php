@@ -115,12 +115,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         if ($customerId) {
             $url = $this->getUrl('customer/customer/invalidateToken', ['customer_id' => $customerId]);
-            $deleteConfirmMsg = __("Are you sure you want to revoke the customer\'s tokens?");
+            $deleteConfirmMsg = __("Are you sure you want to revoke the customer's tokens?");
             $this->buttonList->add(
                 'invalidate_token',
                 [
                     'label' => __('Force Sign-In'),
-                    'onclick' => 'deleteConfirm(\'' . $deleteConfirmMsg . '\', \'' . $url . '\')',
+                    'onclick' => 'deleteConfirm(\'' . $deleteConfirmMsg . '\', \'' . $url . '\', {data: {}})',
                     'class' => 'invalidate-token'
                 ],
                 10

@@ -42,14 +42,20 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
      */
     private $resultRedirectFactory;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->sidebarMock = $this->getMock('Magento\Checkout\Model\Sidebar', [], [], '', false);
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $this->jsonHelperMock = $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
+        $this->sidebarMock = $this->getMock(\Magento\Checkout\Model\Sidebar::class, [], [], '', false);
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->jsonHelperMock = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->setMethods(['isPost'])
+            ->getMockForAbstractClass();
+        $this->requestMock->expects($this->any())->method('isPost')->willReturn(true);
         $this->responseMock = $this->getMockForAbstractClass(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             [],
             '',
             false,
@@ -57,7 +63,14 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
             true,
             ['representJson']
         );
-        $this->resultPageFactoryMock = $this->getMock('Magento\Framework\View\Result\PageFactory', [], [], '', false);
+        $this->requestMock->expects($this->any())->method('isPost')->willReturn(true);
+        $this->resultPageFactoryMock = $this->getMock(
+            \Magento\Framework\View\Result\PageFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->resultRedirectFactory = $this->getMock(
             \Magento\Framework\Controller\Result\RedirectFactory::class,
             ['create'],
@@ -68,7 +81,7 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->removeItem = $this->objectManagerHelper->getObject(
-            'Magento\Checkout\Controller\Sidebar\RemoveItem',
+            \Magento\Checkout\Controller\Sidebar\RemoveItem::class,
             [
                 'sidebar' => $this->sidebarMock,
                 'logger' => $this->loggerMock,
@@ -76,12 +89,21 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
                 'request' => $this->requestMock,
                 'response' => $this->responseMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
-                'resultRedirectFactory' => $this->resultRedirectFactory
-
+                'resultRedirectFactory' => $this->resultRedirectFactory,
             ]
         );
-        $formKeyValidatorMock = $this->getMock('Magento\Framework\Data\Form\FormKey\Validator', [], [], '', false);
-        $this->setPropertyValue($this->removeItem, 'formKeyValidator', $formKeyValidatorMock);
+        $formKeyValidatorMock = $this->getMock(
+            \Magento\Framework\Data\Form\FormKey\Validator::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->removeItem,
+            'formKeyValidator',
+            $formKeyValidatorMock
+        );
     }
 
     public function testExecute()

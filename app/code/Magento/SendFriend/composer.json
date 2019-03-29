@@ -7,10 +7,12 @@
         "magento/module-catalog": "101.0.*",
         "magento/module-customer": "100.1.*",
         "magento/module-theme": "100.1.*",
-        "magento/framework": "100.1.*"
+        "magento/framework": "100.1.*",
+        "magento/module-captcha": "100.1.*",
+        "magento/module-authorization": "100.1.*"
     },
     "type": "magento2-module",
-    "version": "100.1.5",
+    "version": "100.1.6",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

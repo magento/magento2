@@ -1,4 +1,6 @@
 # All explanations you could find in .htaccess.sample file
+## Specifies option, to use methods arguments in backtrace or not
+SetEnv MAGE_DEBUG_SHOW_ARGS 1
 DirectoryIndex index.php
 <IfModule mod_php5.c>
     php_value memory_limit 756M
@@ -111,6 +113,10 @@ DirectoryIndex index.php
        deny from all
     </Files>
     <Files magento_umask>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files .user.ini>
         order allow,deny
         deny from all
     </Files>
