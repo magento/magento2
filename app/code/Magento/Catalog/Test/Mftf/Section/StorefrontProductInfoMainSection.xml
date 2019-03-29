@@ -86,5 +86,21 @@
         <element name="customSelectOptions" type="select" selector="#{{selectId}} option" parameterized="true"/>
         <element name="requiredCustomInput" type="text" selector="//div[contains(.,'{{customOptionTitle}}') and contains(@class, 'required') and .//input[@aria-required='true']]" parameterized="true"/>
         <element name="requiredCustomSelect" type="select" selector="//div[contains(.,'{{customOptionTitle}}') and contains(@class, 'required') and .//select[@aria-required='true']]" parameterized="true"/>
+        <element name="requiredCustomField" type="text" selector="//div[@class='field required']/label/span[contains(.,'{{optionTitle}}')]//../../div/div[contains(.,'This is a required field.')]" parameterized="true"/>
+        <element name="requiredCustomFile" type="text" selector="//div[@class='field file required']/label/span[contains(.,'{{OptionFileTitle}}')]//../../div/div[contains(.,'This is a required field.')]" parameterized="true"/>
+        <element name="requiredCustomTextArea" type="text" selector="//div[@class='field textarea required']/label/span[contains(.,'{{OptionAreaTitle}}')]//../../div/div[contains(.,'This is a required field.')]" parameterized="true"/>
+        <element name="requiredCustomDate" type="text" selector="//div[@class='field date required']//span[text()='{{OptionDateTitle}}']//../../div/div[contains(.,'This is a required field.')]" parameterized="true"/>
+        <element name="customOptionField" type="input" selector="//input[contains(@class,'input-text product-custom-option')]"/>
+        <element name="customOptionTextArea" type="textarea" selector="//textarea[contains(@class,'product-custom-option')]"/>
+        <element name="customOptionDropDown" type="select" selector="//select[contains(@class,' required product-custom-option admin__control-select')]/option[contains(.,'{{option}}')]" parameterized="true"/>
+        <element name="customRadioOption" type="checkbox" selector="//div/input[@type='radio']/../label/span"/>
+        <element name="customOptionCheckBox" type="checkbox" selector="//div/input[@type='checkbox']/../label/span[contains(.,'{{option}}')]" parameterized="true"/>
+        <element name="customMultiSelectOption" type="select" selector="//select[contains(@class,'multiselect admin__control-multiselect required product-custom-option')]/option[contains(.,'{{option'}})]" parameterized="true"/>
+        <element name="customOptionMonth" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='month']" parameterized="true"/>
+        <element name="customOptionDay" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='day']" parameterized="true"/>
+        <element name="customOptionYear" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='year']" parameterized="true"/>
+        <element name="customOptionHour" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='hour']" parameterized="true"/>
+        <element name="customOptionMinute" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='minute']" parameterized="true"/>
+        <element name="customOptionDayPart" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='day_part']" parameterized="true"/>
     </section>
 </sections>
