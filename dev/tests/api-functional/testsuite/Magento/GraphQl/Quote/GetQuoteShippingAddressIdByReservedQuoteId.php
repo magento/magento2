@@ -7,15 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\QuoteFactory;
 
 /**
- * Get masked quote id by reserved order id
+ * Get quote shipping address id by reserved order id
  */
-class GetMaskedQuoteIdByReservedOrderId
+class GetQuoteShippingAddressIdByReservedQuoteId
 {
     /**
      * @var QuoteFactory
@@ -28,37 +26,28 @@ class GetMaskedQuoteIdByReservedOrderId
     private $quoteResource;
 
     /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
-
-    /**
      * @param QuoteFactory $quoteFactory
      * @param QuoteResource $quoteResource
-     * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedId
      */
     public function __construct(
         QuoteFactory $quoteFactory,
-        QuoteResource $quoteResource,
-        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedId
+        QuoteResource $quoteResource
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->quoteResource = $quoteResource;
-        $this->quoteIdToMaskedId = $quoteIdToMaskedId;
     }
 
     /**
-     * Get masked quote id by reserved order id
+     * Get quote shipping address id by reserved order id
      *
      * @param string $reversedOrderId
-     * @return string
-     * @throws NoSuchEntityException
+     * @return int
      */
-    public function execute(string $reversedOrderId): string
+    public function execute(string $reversedOrderId): int
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
 
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
+        return (int)$quote->getShippingAddress()->getId();
     }
 }
