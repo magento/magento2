@@ -100,7 +100,7 @@ class CouponTest extends GraphQlAbstract
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
 
         self::expectExceptionMessage(
-            str_replace('$cartId', $cartId, 'The "$cartId" Cart doesn\'t contain products.')
+            'The "' . $cartId . '" Cart doesn\'t contain products.'
         );
         $this->graphQlQuery($query);
     }
