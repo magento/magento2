@@ -22,7 +22,7 @@
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="customer"/>
-            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signThirdSimpleUsCustomer">
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
                 <argument name="Customer" value="$$customer$$"/>
             </actionGroup>
             <executeJS function="return window.location.host" stepKey="hostname"/>
