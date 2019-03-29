@@ -256,8 +256,7 @@
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->
         <uncheckOption selector="{{StorefrontCheckoutPaymentMethodSection.billingAddressSameAsShippingShared}}" stepKey="uncheckBillingAddressSameAsShippingCheckCheckBox"/>
-        <click selector="{{CheckoutShippingSection.addressDropdown}}" stepKey="clickOnAddressDropDown"/>
-        <selectOption selector="{{CheckoutPaymentSection.billingAddressSelect}}" userInput="New Address" stepKey="clickOnNewAddress"/>
+        <selectOption selector="{{CheckoutPaymentSection.billingAddressSelectShared}}" userInput="New Address" stepKey="clickOnNewAddress"/>
         <waitForPageLoad stepKey="waitNewAddressBillingForm"/>
         <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="changeAddress">
             <argument name="Address" value="updateCustomerUKAddress"/>

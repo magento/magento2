@@ -87,7 +87,6 @@
         <waitForPageLoad stepKey="waitForPageLoad10"/>
         <click selector="{{BraintreeConfigurationPaymentSection.paymentMethod}}" stepKey="SelectBraintreePaymentMethod1"/>
         <waitForPageLoad stepKey="waitForPageLoad11"/>
-        <waitForPageLoad stepKey="waitForPageLoad12"/>
         <!--Place order-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="PlaceOrder1"/>
         <waitForPageLoad stepKey="waitForPageLoad13"/>
