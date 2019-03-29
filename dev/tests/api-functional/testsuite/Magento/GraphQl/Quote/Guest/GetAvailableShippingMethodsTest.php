@@ -7,9 +7,7 @@ declare(strict_types = 1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -19,19 +17,9 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class GetAvailableShippingMethodsTest extends GraphQlAbstract
 {
     /**
-     * @var QuoteIdToMaskedQuoteIdInterface
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteIdToMaskedId;
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
-
-    /**
-     * @var QuoteResource
-     */
-    private $quoteResource;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
      * @inheritdoc
@@ -39,19 +27,20 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
      * Test case: get available shipping methods from current customer quote
      *
-     * @magentoApiDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
     public function testGetAvailableShippingMethods()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('guest_quote');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $response = $this->graphQlQuery($this->getQuery($maskedQuoteId));
 
         self::assertArrayHasKey('cart', $response);
@@ -61,15 +50,15 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
         self::assertCount(1, $response['cart']['shipping_addresses'][0]['available_shipping_methods']);
 
         $expectedAddressData = [
-            'amount' => 5,
-            'base_amount' => 5,
+            'amount' => 10,
+            'base_amount' => 10,
             'carrier_code' => 'flatrate',
             'carrier_title' => 'Flat Rate',
             'error_message' => '',
             'method_code' => 'flatrate',
             'method_title' => 'Fixed',
-            'price_incl_tax' => 5,
-            'price_excl_tax' => 5,
+            'price_incl_tax' => 10,
+            'price_excl_tax' => 10,
         ];
         self::assertEquals(
             $expectedAddressData,
@@ -78,33 +67,38 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     }
 
     /**
-     * Test case: get available shipping methods from customer's quote
-     *
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * _security
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
     public function testGetAvailableShippingMethodsFromCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
-
         $this->graphQlQuery($this->getQuery($maskedQuoteId));
     }
 
     /**
      * Test case: get available shipping methods when all shipping methods are disabled
      *
-     * @magentoApiDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
-     * @magentoApiDataFixture Magento/OfflineShipping/_files/disable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/disable_offline_shipping_methods.php
      */
-    public function testGetAvailableShippingMethodsIfShippingsAreDisabled()
+    public function testGetAvailableShippingMethodsIfShippingMethodsAreNotPresent()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId('guest_quote');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $response = $this->graphQlQuery($this->getQuery($maskedQuoteId));
 
-        self::assertEquals(0, count($response['cart']['shipping_addresses'][0]['available_shipping_methods']));
+        self::assertEmpty($response['cart']['shipping_addresses'][0]['available_shipping_methods']);
     }
 
     /**
@@ -116,8 +110,9 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     public function testGetAvailableShippingMethodsOfNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
+        $query = $this->getQuery($maskedQuoteId);
 
-        $this->graphQlQuery($this->getQuery($maskedQuoteId));
+        $this->graphQlQuery($query);
     }
 
     /**
@@ -145,17 +140,5 @@ query {
   }
 }
 QUERY;
-    }
-
-    /**
-     * @param string $reservedOrderId
-     * @return string
-     */
-    private function getMaskedQuoteIdByReservedOrderId(string $reservedOrderId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 }

@@ -1,12 +1,10 @@
 <?php
 /**
- * Rollback for quote_with_simple_product_saved_rollback.php fixture.
+ * Rollback for quote_with_payment_saved.php fixture.
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-require 'simple_product_rollback.php';
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
