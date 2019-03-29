@@ -141,9 +141,12 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     public function getSelectedRoles($json = false)
     {
         $userRoles = $this->getRequest()->getParam('user_roles');
-        if ($userRoles && $json) {
-            $result = json_decode($userRoles);
-            return $result ? $this->_jsonEncoder->encode($result) : '{}';
+        if ($userRoles) {
+            if ($json) {
+                $result = json_decode($userRoles);
+                return $result ? $this->_jsonEncoder->encode($result) : '{}';
+            }
+            return $this->escapeJs($this->escapeHtml($userRoles));
         }
         /* @var $user \Magento\User\Model\User */
         $user = $this->_coreRegistry->registry('permissions_user');
