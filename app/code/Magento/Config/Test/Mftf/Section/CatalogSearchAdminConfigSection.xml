@@ -11,9 +11,5 @@
         <element name="checkIfCatalogSearchTabExpand" type="button" selector="#catalog_search-head:not(.open)"/>
         <element name="searchEngineDefaultSystemValue" type="checkbox" selector="#catalog_search_engine_inherit"/>
         <element name="searchEngine" type="select" selector="#catalog_search_engine"/>
-        <element name="minQueryLength" type="input" selector="#catalog_search_min_query_length"/>
-        <element name="minQueryLengthInherit" type="checkbox" selector="#catalog_search_min_query_length_inherit"/>
-        <element name="minQueryLengthHint" type="text" selector="#row_catalog_search_min_query_length .value span"/>
-        <element name="maxQueryLengthHint" type="text" selector="#row_catalog_search_max_query_length .value span"/>
     </section>
 </sections>

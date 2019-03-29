@@ -10,13 +10,13 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="MinimalQueryLengthForCatalogSearchTest">
         <annotations>
-            <features value="Catalog"/>
+            <features value="CatalogSearch"/>
             <title value="Minimal query length for catalog search"/>
             <description value="Minimal query length for catalog search"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-6325"/>
             <useCaseId value="MAGETWO-58764"/>
-            <group value="Catalog"/>
+            <group value="CatalogSearch"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -28,9 +28,11 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <createData entity="SetMinQueryLengthToDefault" stepKey="setMinimumQueryLengthToDefault"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="SetMinimalQueryLengthActionGroup" stepKey="setMinQueryLength"/>
+        <comment userInput="go to Storefront and search for product" stepKey="searchProdUsingMinQueryLength"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="s" stepKey="fillAttribute"/>
         <waitForPageLoad stepKey="waitForSearchTextBox"/>
