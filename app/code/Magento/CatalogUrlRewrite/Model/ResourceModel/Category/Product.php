@@ -86,7 +86,27 @@ class Product extends AbstractDb
      */
     public function removeMultipleByProductCategory(array $filter)
     {
-        return $this->getConnection()->deleteFromSelect($this->prepareSelect($filter), self::TABLE_NAME);
+        return $this->getConnection()->deleteFromSelect($this->prepareJoin($filter), self::TABLE_NAME);
+    }
+
+    /**
+     * Prepare select statement for specific filter
+     *
+     * @param array $data
+     * @return \Magento\Framework\DB\Select
+     */
+    private function prepareJoin($data)
+    {
+        $select = $this->getConnection()->select();
+        $select->from(DbStorage::TABLE_NAME);
+        $select->join(
+            self::TABLE_NAME,
+            DbStorage::TABLE_NAME . '.url_rewrite_id = ' . self::TABLE_NAME . '.url_rewrite_id'
+        );
+        foreach ($data as $column => $value) {
+            $select->where(DbStorage::TABLE_NAME . '.' . $column . ' IN (?)', $value);
+        }
+        return $select;
     }
 
     /**
