@@ -59,23 +59,6 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Validates url rewrite redirect
-     * Either returns TRUE (success) or throws error (validation failed)
-     *
-     * @param string $requestPath
-     * @param string $targetPath
-     * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function validateRedirect($requestPath, $targetPath)
-    {
-        if ($requestPath == $targetPath) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Request Path and Target Path must be difference'));
-        }
-        return true;
-    }
-
-    /**
      * Validates suffix for url rewrites to inform user about errors in it
      * Either returns TRUE (success) or throws error (validation failed)
      *
