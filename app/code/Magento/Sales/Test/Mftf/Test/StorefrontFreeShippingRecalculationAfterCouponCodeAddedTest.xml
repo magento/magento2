@@ -29,8 +29,7 @@
             <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer"/>
 
             <!-- Enable Free Shipping and set minimum order amount -->
-            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodSettingConfig"/>
-            <createData entity="MinimumOrderAmount90" stepKey="setMinimumOrderAmount"/>
+            <createData entity="FreeShippingMethodWithMinimumOrderAmount90" stepKey="enableFreeShippingAndSetMinimumOrderAmount"/>
 
             <!-- Create Cart Price Rule -->
             <createData entity="SalesRuleSpecificCouponWithPercentDiscount" stepKey="createCartPriceRule">
@@ -39,20 +38,17 @@
             <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
                 <requiredEntity createDataKey="createCartPriceRule"/>
             </createData>
-
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="CustomerLoginOnStorefront" stepKey="loginToStorefront">
                 <argument name="customer" value="$$createSimpleUsCustomer$$"/>
             </actionGroup>
         </before>
+
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
-            <createData entity="DefaultShippingMethodsConfig" stepKey="setDefaultShippingMethodsConfig"/>
-            <createData entity="DefaultMinimumOrderAmount" stepKey="setDefaultMinimumOrderAmount"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <createData entity="ResetFreeShippingMethodWithMinimumOrderAmount90" stepKey="resetFreeShippingMethodAndMinimumOrderAmount"/>
             <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="logoutFromStorefront"/>
         </after>
 
@@ -70,7 +66,6 @@
         <!-- Back to Shopping Cart page and cancel coupon-->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage"/>
         <actionGroup ref="StorefrontCancelCouponActionGroup" stepKey="cancelCoupon"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
 
         <!-- Proceed to Checkout, select Free Shipping method and apply coupon -->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart1"/>
@@ -84,9 +79,9 @@
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
 
         <!-- Try to Place Order -->
-        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrderNoWait}}" stepKey="waitForPlaceOrderButton"/>
-        <click selector="{{CheckoutPaymentSection.placeOrderNoWait}}" stepKey="clickPlaceOrder"/>
-        <waitForText selector="{{StorefrontMessagesSection.errorMessage}}" userInput="The shipping method is missing. Select the shipping method and try again." time="30" stepKey="seeShippingMethodError"/>
+        <actionGroup ref="AssertStorefrontErrorMessageOnOrderSubmit" stepKey="tryToPlaceOrder">
+            <argument name="errorMessage" value="The shipping method is missing. Select the shipping method and try again."/>
+        </actionGroup>
 
         <!-- Go back to Shipping step and select Shipping method -->
         <amOnPage url="{{CheckoutPage.url}}/#shipping" stepKey="navigateToShippingStep"/>

@@ -10,10 +10,11 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Go to checkout from minicart -->
     <actionGroup name="GoToCheckoutFromMinicartActionGroup">
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElement selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitMiniCartSectionShow" />
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.goToCheckout}}" time="30" stepKey="waitForGoToCheckoutButtonVisible"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="clickGoToCheckoutButton"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
     </actionGroup>
 </actionGroups>

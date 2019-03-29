@@ -7,29 +7,23 @@
 -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="FreeShippingMethodsSettingConfig" type="free_shipping_config_state">
+    <entity name="FreeShippingMethodWithMinimumOrderAmount90" type="free_shipping_config_state">
         <requiredEntity type="active">Active</requiredEntity>
+        <requiredEntity type="free_shipping_subtotal">Price</requiredEntity>
     </entity>
     <entity name="Active" type="active">
         <data key="value">1</data>
-    </entity>
-
-    <entity name="MinimumOrderAmount90" type="free_shipping_config_state">
-        <requiredEntity type="free_shipping_subtotal">Price</requiredEntity>
     </entity>
     <entity name="Price" type="free_shipping_subtotal">
         <data key="value">90</data>
     </entity>
 
-    <entity name="DefaultMinimumOrderAmount" type="free_shipping_config_state">
+    <entity name="ResetFreeShippingMethodWithMinimumOrderAmount90" type="free_shipping_config_state">
         <requiredEntity type="free_shipping_subtotal">DefaultPrice</requiredEntity>
+        <requiredEntity type="active">DefaultActive</requiredEntity>
     </entity>
     <entity name="DefaultPrice" type="free_shipping_subtotal">
         <data key="value">0</data>
-    </entity>
-
-    <entity name="DefaultShippingMethodsConfig" type="free_shipping_config_state">
-        <requiredEntity type="active">DefaultActive</requiredEntity>
     </entity>
     <entity name="DefaultActive" type="active">
         <requiredEntity type="active_inherit">DefaultFreeShipping</requiredEntity>

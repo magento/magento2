@@ -119,4 +119,13 @@
         <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
     </actionGroup>
+
+    <actionGroup name="AssertStorefrontErrorMessageOnOrderSubmit">
+        <arguments>
+            <argument name="errorMessage" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrderNoWait}}" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrderNoWait}}" stepKey="clickPlaceOrder"/>
+        <waitForText selector="{{StorefrontMessagesSection.errorMessage}}" userInput="{{errorMessage}}" time="30" stepKey="seeShippingMethodError"/>
+    </actionGroup>
 </actionGroups>
