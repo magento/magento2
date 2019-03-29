@@ -176,10 +176,9 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
             $url = str_replace($matches[0], '', $fileName);
             $driver = ($matches[0] === $this->httpScheme) ? DriverPool::HTTP : DriverPool::HTTPS;
             $tmpFilePath = $this->downloadFileFromUrl($url, $driver);
-        }
-        else {
+        } else {
             $tmpDir = $this->getTmpDir() ? ($this->getTmpDir() . '/') : '';
-            $tmpFilePath = $this->_directory->getRelativePath( $tmpDir . $fileName);
+            $tmpFilePath = $this->_directory->getRelativePath($tmpDir . $fileName);
         }
 
         $this->_setUploadFile($tmpFilePath);
@@ -215,9 +214,10 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         }
 
         $tmpFileName = str_replace(".$fileExtension", '', $fileName);
+
         $tmpFileName .= '_' . $this->random->getRandomString(16);
         $tmpFileName .= $fileExtension ? ".$fileExtension" : '';
-        $tmpFilePath = $this->_directory->getRelativePath( $this->downloadDir . '/' . $tmpFileName);
+        $tmpFilePath = $this->_directory->getRelativePath($this->downloadDir . '/' . $tmpFileName);
 
         $this->_directory->writeFile(
             $tmpFilePath,
