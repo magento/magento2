@@ -27,7 +27,6 @@
             <argument name="groupPrice" value="tierProductPrice"/>
         </actionGroup>
 
-        <remove keyForRemoval="grabGroupPrice"/>
         <remove keyForRemoval="assertGroupPrice"/>
 
         <!-- Assert tier price in storefront product page -->
