@@ -88,7 +88,7 @@ abstract class AbstractSource implements
     public function getOptionId($value)
     {
         foreach ($this->getAllOptions() as $option) {
-            if (strcasecmp($option['label'], $value) == 0 || $option['value'] == $value) {
+            if ($this->mbStrcasecmp($option['label'], $value) == 0 || $option['value'] == $value) {
                 return $option['value'];
             }
         }
@@ -165,5 +165,23 @@ abstract class AbstractSource implements
     public function toOptionArray()
     {
         return $this->getAllOptions();
+    }
+
+    /**
+     * Multibyte support strcasecmp function version
+     * @param string $str1
+     * @param string $str2
+     * @param null|string $encoding
+     * @return int|\\lt
+     */
+    private function mbStrcasecmp($str1, $str2, $encoding = null)
+    {
+        if (null === $encoding) {
+            $encoding = mb_internal_encoding();
+        }
+        return strcmp(
+            mb_strtoupper($str1, $encoding),
+            mb_strtoupper($str2, $encoding)
+        );
     }
 }
