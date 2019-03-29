@@ -72,13 +72,15 @@ class PriceFieldsProvider implements AdditionalFieldsProviderInterface
      */
     public function getFields(array $productIds, $storeId)
     {
+        $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
+        
         $priceData = $this->dataProvider->getSearchableAttribute('price')
             ? $this->resourceIndex->getPriceIndexData($productIds, $storeId)
             : [];
 
         $fields = [];
         foreach ($productIds as $productId) {
-            $fields[$productId] = $this->getProductPriceData($productId, $storeId, $priceData);
+            $fields[$productId] = $this->getProductPriceData($productId, $websiteId, $priceData);
         }
 
         return $fields;
