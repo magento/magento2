@@ -8,6 +8,8 @@ namespace Magento\User\Block\User\Edit\Tab;
 use Magento\Backend\Block\Widget\Grid\Column;
 
 /**
+ * Roles grid
+ *
  * @api
  * @since 100.0.2
  */
@@ -68,6 +70,8 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Add column filter to collection
+     *
      * @param Column $column
      * @return $this
      */
@@ -92,6 +96,8 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepares collection
+     *
      * @return $this
      */
     protected function _prepareCollection()
@@ -103,6 +109,8 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepares columns
+     *
      * @return $this
      */
     protected function _prepareColumns()
@@ -126,6 +134,8 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get grid url
+     *
      * @return string
      */
     public function getGridUrl()
@@ -135,6 +145,8 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get selected roles
+     *
      * @param bool $json
      * @return array|string
      */
