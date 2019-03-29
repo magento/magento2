@@ -9,7 +9,7 @@
     <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest">
         <variation name="NavigateMenuTest70">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
-            <data name="menuItem" xsi:type="string">Marketing > Reviews</data>
+            <data name="menuItem" xsi:type="string">Marketing > All Reviews</data>
             <data name="pageTitle" xsi:type="string">Reviews</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
