@@ -81,6 +81,31 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Filter collection by specified form.
+     *
+     * @param string $form
+     * @return $this
+     */
+    public function addFormFilter(string $form)
+    {
+        $alias = 'cauif_' . $form;
+
+        if ($this->getFlag($alias)) {
+            return $this;
+        }
+
+        $this->getSelect()->join(
+            ['cauif' => 'checkout_agreement_used_in_forms'],
+            'main_table.agreement_id = cauif.agreement_id',
+            'used_in_forms'
+        )->where('cauif.used_in_forms = "' . $form . '"');
+
+        $this->setFlag($alias, true);
+
+        return $this;
+    }
+
+    /**
      * Make store filter using admin website or not
      *
      * @param bool $value

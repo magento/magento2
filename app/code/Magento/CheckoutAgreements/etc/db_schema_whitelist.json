@@ -24,5 +24,15 @@
             "CHKT_AGRT_STORE_AGRT_ID_CHKT_AGRT_AGRT_ID": true,
             "CHECKOUT_AGREEMENT_STORE_STORE_ID_STORE_STORE_ID": true
         }
+    },
+    "checkout_agreement_used_in_forms": {
+        "column": {
+            "agreement_id": true,
+            "used_in_forms": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CHKT_AGRT_USED_IN_FORMS_AGRT_ID_CHKT_AGRT_AGRT_ID": true
+        }
     }
 }

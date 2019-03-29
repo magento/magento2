@@ -5,6 +5,9 @@
  */
 namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit;
 
+use Magento\CheckoutAgreements\Model\Config\Source\AgreementForms;
+use Magento\Framework\App\ObjectManager;
+
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -18,12 +21,19 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $agreementModeOptions;
 
     /**
+     * @var AgreementForms
+     */
+    private $agreementForms;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions
      * @param array $data
+     * @param AgreementForms $agreementForms
+     *
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -32,11 +42,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions,
-        array $data = []
+        array $data = [],
+        AgreementForms $agreementForms = null
     ) {
         $this->_systemStore = $systemStore;
         $this->agreementModeOptions = $agreementModeOptions;
         parent::__construct($context, $registry, $formFactory, $data);
+
+        $this->agreementForms = $agreementForms ?: ObjectManager::getInstance()->get(AgreementForms::class);
     }
 
     /**
@@ -182,6 +195,18 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'class' => 'validate-css-length'
             ]
         );
+
+        $fieldset->addField(
+            'used_in_forms',
+            'multiselect',
+            [
+                'name' => 'used_in_forms',
+                'label' => __('Forms to Use In'),
+                'title' => __('Forms to Use In'),
+                'required' => true,
+                'values' => $this->agreementForms->toOptionArray(),
+            ]
+        )->setSize(5);
 
         $form->setValues($model->getData());
         $form->setUseContainer(true);

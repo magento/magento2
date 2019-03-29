@@ -40,4 +40,17 @@
                     table="checkout_agreement_store" column="store_id" referenceTable="store" referenceColumn="store_id"
                     onDelete="CASCADE"/>
     </table>
+    <table name="checkout_agreement_used_in_forms" resource="default" engine="innodb" comment="Used in Forms">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Id"/>
+        <column xsi:type="int" name="agreement_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Agreement Id"/>
+        <column xsi:type="varchar" name="used_in_forms" nullable="false" length="30" comment="Used in Forms"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="CHKT_AGRT_USED_IN_FORMS_AGRT_ID_CHKT_AGRT_AGRT_ID" table="checkout_agreement_used_in_forms"
+                    column="agreement_id" referenceTable="checkout_agreement" referenceColumn="agreement_id"
+                    onDelete="CASCADE"/>
+    </table>
 </schema>

@@ -20,6 +20,12 @@
                 </arguments>
                 <container name="form.additional.info" as="form_additional_info"/>
                 <container name="customer.form.register.fields.before" as="form_fields_before" label="Form Fields Before" htmlTag="div" htmlClass="customer-form-before"/>
+                <block class="Magento\CheckoutAgreements\Block\Agreements" name="checkout.register.agreements"
+                       as="agreements" template="Magento_CheckoutAgreements::additional_agreements.phtml">
+                    <arguments>
+                        <argument name="form_name" xsi:type="string">customer_account_create</argument>
+                    </arguments>
+                </block>
             </block>
             <block class="Magento\Cookie\Block\RequireCookie" name="require-cookie" template="Magento_Cookie::require_cookie.phtml">
                 <arguments>

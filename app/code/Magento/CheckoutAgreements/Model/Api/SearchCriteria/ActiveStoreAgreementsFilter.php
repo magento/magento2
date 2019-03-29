@@ -6,6 +6,8 @@
 
 namespace Magento\CheckoutAgreements\Model\Api\SearchCriteria;
 
+use Magento\CheckoutAgreements\Model\Config\Source\AgreementForms;
+
 /**
  * Build search criteria for agreements list.
  */
@@ -57,8 +59,14 @@ class ActiveStoreAgreementsFilter
             ->setConditionType('eq')
             ->setValue(1)
             ->create();
-        $this->searchCriteriaBuilder->addFilters([$storeFilter]);
-        $this->searchCriteriaBuilder->addFilters([$isActiveFilter]);
+        $formFilter = $this->filterBuilder
+            ->setField('form')
+            ->setConditionType('eq')
+            ->setValue(AgreementForms::CHECKOUT_CODE)
+            ->create();
+
+        $this->searchCriteriaBuilder->addFilters([$storeFilter, $isActiveFilter, $formFilter]);
+        
         return $this->searchCriteriaBuilder->create();
     }
 }

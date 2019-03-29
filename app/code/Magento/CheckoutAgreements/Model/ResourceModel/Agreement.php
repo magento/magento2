@@ -83,6 +83,14 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getConnection()->insert($this->getTable('checkout_agreement_store'), $storeArray);
         }
 
+        foreach ((array)$object->getData('used_in_forms') as $form) {
+            $formArray = [
+                'agreement_id' => $object->getId(),
+                'used_in_forms' => $form
+            ];
+            $this->getConnection()->insert($this->getTable('checkout_agreement_used_in_forms'), $formArray);
+        }
+
         return parent::_afterSave($object);
     }
 
@@ -103,6 +111,17 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($stores) {
             $object->setData('stores', $stores);
+        }
+
+        $select = $this->getConnection()
+            ->select()
+            ->from($this->getTable('checkout_agreement_used_in_forms'), ['used_in_forms'])
+            ->where('agreement_id = :agreement_id');
+
+        $forms = $this->getConnection()->fetchCol($select, [':agreement_id' => $object->getId()]);
+
+        if ($forms) {
+            $object->setData('used_in_forms', $forms);
         }
 
         return parent::_afterLoad($object);

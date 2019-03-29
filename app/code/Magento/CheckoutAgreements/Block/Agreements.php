@@ -44,7 +44,8 @@ class Agreements extends \Magento\Framework\View\Element\Template
             if ($this->_scopeConfig->isSetFlag('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE)) {
                 /** @var \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection $agreements */
                 $agreements = $this->_agreementCollectionFactory->create();
-                $agreements->addStoreFilter($this->_storeManager->getStore()->getId());
+                $agreements->addStoreFilter($this->_storeManager->getStore()->getId())
+                    ->addFormFilter($this->getData('form_name'));
                 $agreements->addFieldToFilter('is_active', 1);
             }
             $this->setAgreements($agreements);

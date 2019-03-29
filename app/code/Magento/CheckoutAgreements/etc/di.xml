@@ -41,6 +41,7 @@
         <arguments>
             <argument name="customFilters" xsi:type="array">
                 <item name="store_id" xsi:type="object">Magento\CheckoutAgreements\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\StoreFilter</item>
+                <item name="form" xsi:type="object">Magento\CheckoutAgreements\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\FormFilter</item>
             </argument>
         </arguments>
     </virtualType>
