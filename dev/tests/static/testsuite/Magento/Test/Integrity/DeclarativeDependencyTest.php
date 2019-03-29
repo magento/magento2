@@ -88,7 +88,7 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
                         $result[] = $this->getErrorMessage($name) . "\n" . implode("\t\n", $modules) . "\n";
                     }
                 }
-                if (count($result)) {
+                if (!empty($result)) {
                     $this->fail(
                         'Module ' . $moduleName . ' has undeclared dependencies: ' . "\n" . implode("\t\n", $result)
                     );
@@ -170,6 +170,7 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
     {
         $decodedJson = json_decode(file_get_contents($file), $asArray);
         if (null == $decodedJson) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception("Invalid Json: $file");
         }
 

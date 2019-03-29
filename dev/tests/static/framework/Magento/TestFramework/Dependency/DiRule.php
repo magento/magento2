@@ -77,6 +77,7 @@ class DiRule implements RuleInterface
      */
     public function getDependencyInfo($currentModule, $fileType, $file, &$contents)
     {
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (pathinfo($file, PATHINFO_BASENAME) !== 'di.xml') {
             return [];
         }

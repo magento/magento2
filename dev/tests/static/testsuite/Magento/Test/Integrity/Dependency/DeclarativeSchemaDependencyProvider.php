@@ -174,6 +174,7 @@ class DeclarativeSchemaDependencyProvider
     {
         $decodedJson = json_decode(file_get_contents($file), $asArray);
         if (null == $decodedJson) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception("Invalid Json: $file");
         }
 
@@ -304,10 +305,8 @@ class DeclarativeSchemaDependencyProvider
             case self::SCHEMA_ENTITY_INDEX:
                 return $this->getDeclarativeSchema()
                 [self::SCHEMA_ENTITY_TABLE][$tableName][$entityType][$entityName]['modules'];
-                break;
             case self::SCHEMA_ENTITY_TABLE:
                 return $this->getDeclarativeSchema()[self::SCHEMA_ENTITY_TABLE][$tableName]['modules'];
-                break;
             default:
                 return [];
         }
@@ -593,7 +592,7 @@ class DeclarativeSchemaDependencyProvider
      */
     private function collectDependencies($currentModuleName, $dependencies = [])
     {
-        if (!count($dependencies)) {
+        if (empty($dependencies)) {
             return [];
         }
         foreach ($dependencies as $dependencyName => $dependency) {
