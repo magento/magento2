@@ -131,7 +131,6 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
         $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn("");
         $this->requestInterfaceMock->expects($this->at(1))->method('getParam')->willReturn($roleId);
-        $this->requestInterfaceMock->expects($this->at(2))->method('getParam')->willReturn($roleId);
 
         $this->registryMock->expects($this->once())
             ->method('registry')
@@ -158,7 +157,6 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
         $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn("");
         $this->requestInterfaceMock->expects($this->at(1))->method('getParam')->willReturn($roleId);
-        $this->requestInterfaceMock->expects($this->at(2))->method('getParam')->willReturn($roleId);
 
         $this->registryMock->expects($this->once())
             ->method('registry')
@@ -183,7 +181,6 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
         $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn("");
         $this->requestInterfaceMock->expects($this->at(1))->method('getParam')->willReturn($roleId);
-        $this->requestInterfaceMock->expects($this->at(2))->method('getParam')->willReturn($roleId);
 
         $this->registryMock->expects($this->once())
             ->method('registry')
