@@ -688,6 +688,9 @@ class CommonTaxCollector extends AbstractTotal
     {
         //The price should be base price
         $quoteItem->setPrice($baseItemTaxDetails->getPrice());
+        if ($quoteItem->getCustomPrice() && $this->taxHelper->applyTaxOnCustomPrice()) {
+            $quoteItem->setCustomPrice($baseItemTaxDetails->getPrice());
+        }
         $quoteItem->setConvertedPrice($itemTaxDetails->getPrice());
         $quoteItem->setPriceInclTax($itemTaxDetails->getPriceInclTax());
         $quoteItem->setRowTotal($itemTaxDetails->getRowTotal());

@@ -9,8 +9,12 @@ namespace Magento\Tax\Model\Sales\Total\Quote;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\Calculation;
+use Magento\Quote\Model\Quote\Item\Updater;
+use \Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
+ * Setup utility for quote
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SetupUtil
@@ -666,7 +670,18 @@ class SetupUtil
         $quote = $this->createQuote($quoteData, $customer);
 
         $this->addProductToQuote($quote, $quoteData['items']);
-
+        if (isset($quoteData['update_items'])) {
+            $updater = $this->objectManager->get(Updater::class);
+            $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+            foreach ($quoteData['update_items'] as $sku => $updateItem) {
+                $product = $productRepository->get($sku);
+                $quoteItem = $quote->getItemByProduct($product);
+                $updater->update(
+                    $quoteItem,
+                    $updateItem
+                );
+            }
+        }
         //Set shipping amount
         if (isset($quoteData['shipping_method'])) {
             $quote->getShippingAddress()->setShippingMethod($quoteData['shipping_method']);
