@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 
-
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $simpleProduct = $productRepository->get('simple');
@@ -15,9 +14,10 @@ $simpleProduct = $productRepository->get('simple');
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('bundle')
-    ->setAttributeSetId(4)
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
     ->setPriceType(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC)
+    ->setPriceView(1)
     ->setName('Bundle Product')
     ->setSku('bundle-product')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
@@ -28,7 +28,8 @@ $product->setTypeId('bundle')
             [
                 'title' => 'Bundle Product Items',
                 'default_title' => 'Bundle Product Items',
-                'type' => 'checkbox', 'required' => 1,
+                'type' => 'checkbox',
+                'required' => 1,
                 'delete' => '',
             ],
         ]
@@ -36,4 +37,4 @@ $product->setTypeId('bundle')
     ->setBundleSelectionsData(
         [[['product_id' => $simpleProduct->getId(), 'selection_qty' => 1, 'delete' => '']]]
     );
-$product->save();
+$productRepository->save($product);

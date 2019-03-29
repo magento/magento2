@@ -26,11 +26,14 @@
         <element name="bundleProductName" type="text" selector="//*[@id='maincontent']//span[@itemprop='name']"/>
         <element name="pageNotFound" type="text" selector="//h1[@class='page-title']//span[contains(., 'Whoops, our bad...')]"/>
         <element name="dropDownOptionOneProducts" type="select" selector="//label//span[contains(text(), '{{productName}}')]/../..//div[@class='control']//select" parameterized="true"/>
+        <element name="dropDownOptionTierPrices" type="text" selector="//label//span[contains(text(), '{{optionName}}')]/../..//div[@class='control']//div[@class='option-tier-prices']" parameterized="true"/>
         <element name="productInBundle" type="select" selector="//label//span[contains(text(), '{{productName}}')]" parameterized="true"/>
         <element name="dropDownOptionOneQuantity" type="input" selector="//span[contains(text(), '{{productName}}')]/../..//input" parameterized="true"/>
         <element name="radioButtonOptionTwoProducts" type="checkbox" selector="//label//span[contains(text(), '{{productName}}')]/../..//div[@class='control']//div[@class='field choice'][{{productNumber}}]/input" parameterized="true"/>
         <element name="radioButtonOptionTwoQuantity" type="input" selector="//label//span[contains(text(), '{{productName}}')]/../..//div[@class='control']//div[@class='field qty qty-holder']//input" parameterized="true"/>
+        <element name="radioButtonOptionLabel" type="text" selector="//label//span[contains(text(), '{{optionName}}')]/../..//div[@class='control']//div[@class='field choice']//label[contains(.,'{{productName}}')]" parameterized="true"/>
         <element name="checkboxOptionThreeProducts" type="checkbox" selector="//label//span[contains(text(), '{{productName}}')]/../..//div[@class='control']//div[@class='field choice'][{{productNumber}}]/input" parameterized="true"/>
+        <element name="checkboxOptionLabel" type="text" selector="//label//span[contains(text(), '{{optionName}}')]/../..//div[@class='control']//div[@class='field choice']//label[contains(.,'{{productName}}')]" parameterized="true"/>
         <element name="multiselectOptionFourProducts" type="multiselect" selector="//label//span[contains(text(), '{{productName}}')]/../..//select[@multiple='multiple']" parameterized="true"/>
         <element name="currencyTrigger" type="select" selector="#switcher-currency-trigger" timeout="30"/>
         <element name="currency" type="select" selector="//a[text()='{{arg}}']" parameterized="true"/>

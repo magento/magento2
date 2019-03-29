@@ -1,0 +1,73 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\Bundle\Test\Unit\Block\DataProviders;
+
+use Magento\Bundle\Block\DataProviders\OptionPriceRenderer;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Class to test additional data for bundle options
+ */
+class OptionPriceRendererTest extends TestCase
+{
+    /**
+     * @var LayoutInterface|MockObject
+     */
+    private $layoutMock;
+
+    /**
+     * @var OptionPriceRenderer
+     */
+    private $renderer;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        $objectManager = new ObjectManager($this);
+
+        $this->layoutMock = $this->createMock(
+            LayoutInterface::class
+        );
+
+        $this->renderer = $objectManager->getObject(
+            OptionPriceRenderer::class,
+            ['layout' => $this->layoutMock]
+        );
+    }
+
+    public function testRenderTierPrice()
+    {
+        $tierPriceHtml = 'tier price html';
+        $expectedArguments = ['zone' => Render::ZONE_ITEM_OPTION];
+
+        $productMock = $this->createMock(Product::class);
+        $blockMock = $this->createPartialMock(BlockInterface::class, ['toHtml', 'render']);
+        $blockMock->expects($this->once())
+            ->method('render')
+            ->with('tier_price', $productMock, $expectedArguments)
+        ->willReturn($tierPriceHtml);
+
+        $this->layoutMock->method('getBlock')
+            ->with('product.price.render.default')
+            ->willReturn($blockMock);
+
+        $this->assertEquals(
+            $tierPriceHtml,
+            $this->renderer->renderTierPrice($productMock),
+            'Render Tier price is wrong'
+        );
+    }
+}
