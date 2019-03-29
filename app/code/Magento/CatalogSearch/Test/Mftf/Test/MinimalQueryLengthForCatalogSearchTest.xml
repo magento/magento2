@@ -32,7 +32,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="SetMinimalQueryLengthActionGroup" stepKey="setMinQueryLength"/>
-        <comment userInput="go to Storefront and search for product" stepKey="searchProdUsingMinQueryLength"/>
+        <comment userInput="Go to Storefront and search for product" stepKey="searchProdUsingMinQueryLength"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="s" stepKey="fillAttribute"/>
         <waitForPageLoad stepKey="waitForSearchTextBox"/>
