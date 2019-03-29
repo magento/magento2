@@ -9,6 +9,8 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\AbstractSource;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
  * Customer entity import
@@ -125,7 +127,7 @@ class Customer extends AbstractCustomer
     protected $_resourceHelper;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @var IndexerRegistry
      */
     protected $_indexerRegistry;
 
@@ -184,6 +186,7 @@ class Customer extends AbstractCustomer
      * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory
      * @param \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param IndexerRegistry $indexerRegistry
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -200,7 +203,7 @@ class Customer extends AbstractCustomer
         \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory,
         \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
+        IndexerRegistry $indexerRegistry = null,
         array $data = []
     ) {
         $this->_resourceHelper = $resourceHelper;
@@ -255,7 +258,7 @@ class Customer extends AbstractCustomer
         $this->_initStores(true)->_initAttributes();
 
         $this->_customerModel = $customerFactory->create();
-        $this->_indexerRegistry = $indexerRegistry;
+        $this->_indexerRegistry = $indexerRegistry ?: ObjectManager::getInstance()->get(IndexerRegistry::class);
         /** @var $customerResource \Magento\Customer\Model\ResourceModel\Customer */
         $customerResource = $this->_customerModel->getResource();
         $this->_entityTable = $customerResource->getEntityTable();
