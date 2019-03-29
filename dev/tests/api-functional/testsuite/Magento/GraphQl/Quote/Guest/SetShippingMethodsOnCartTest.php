@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
-use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
@@ -111,34 +110,6 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
-     */
-    public function testReSetShippingMethod()
-    {
-        $maskedQuoteId = $this->unAssignCustomerFromQuoteAndShippingAddress('test_order_1');
-        $methodCode = 'flatrate';
-        $carrierCode = 'flatrate';
-        $quote = $this->getQuoteByReversedQuoteId('test_order_1');
-        $shippingAddress = $quote->getShippingAddress();
-        $shippingAddressId = $shippingAddress->getId();
-        $query = $this->prepareMutationQuery($maskedQuoteId, $methodCode, $carrierCode, $shippingAddressId);
-
-        $response = $this->graphQlQuery($query);
-
-        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
-        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
-        foreach ($response['setShippingMethodsOnCart']['cart']['shipping_addresses'] as $address) {
-            self::assertArrayHasKey('address_id', $address);
-            if ($address['address_id'] == $shippingAddressId) {
-                self::assertArrayHasKey('selected_shipping_method', $address);
-                self::assertEquals($methodCode, $address['selected_shipping_method']['method_code']);
-                self::assertEquals($carrierCode, $address['selected_shipping_method']['carrier_code']);
-            }
-        }
-    }
-
-    /**
      * @param string $maskedQuoteId
      * @param string $shippingMethodCode
      * @param string $shippingCarrierCode
@@ -157,15 +128,16 @@ mutation {
   setShippingMethodsOnCart(input: 
     {
       cart_id: "$maskedQuoteId", 
-      shipping_methods: [{
+      shipping_addresses: [{
         cart_address_id: $shippingAddressId
-        method_code: "$shippingMethodCode"
-        carrier_code: "$shippingCarrierCode"
+        shipping_method: {
+          method_code: "$shippingMethodCode"
+          carrier_code: "$shippingCarrierCode"
+        }
       }]
       }) {
     cart {
       shipping_addresses {
-        address_id
         selected_shipping_method {
           carrier_code
           method_code
@@ -181,48 +153,14 @@ QUERY;
     }
 
     /**
-     * @param string $reversedQuoteId
-     * @param int $customerId
-     * @return string
-     */
-    private function unAssignCustomerFromQuoteAndShippingAddress(
-        string $reversedQuoteId
-    ): string {
-        /** @var Quote $quote */
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
-        $quote->setCustomerId(0);
-
-        $shippingAddress = $quote->getShippingAddress();
-        $shippingAddress->setCustomerId(0);
-        $shippingAddress->setCustomerAddressId(0);
-
-        $this->quoteResource->save($quote);
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
-    }
-
-    /**
-     * @param string $reversedQuoteId
-     * @return Quote
-     */
-    private function getQuoteByReversedQuoteId(string $reversedQuoteId): Quote
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
-
-        return $quote;
-    }
-
-    /**
-     * @param string $reversedQuoteId
+     * @param string $reversedOrderId
      * @return string
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
+    private function getMaskedQuoteIdByReservedOrderId(string $reversedOrderId): string
     {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
 
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
