@@ -9,15 +9,15 @@ namespace Magento\InventoryShippingAdminUi\Ui\DataProvider;
 
 use Magento\Framework\Api\Filter;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Sales\Model\OrderRepository;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Item;
 use Magento\Ui\DataProvider\AbstractDataProvider;
-use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
-use Magento\Framework\App\RequestInterface;
-use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 
 class SourceSelectionDataProvider extends AbstractDataProvider
 {
@@ -27,7 +27,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
     private $request;
 
     /**
-     * @var OrderRepository
+     * @var OrderRepositoryInterface
      */
     private $orderRepository;
 
@@ -61,7 +61,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param RequestInterface $request
-     * @param OrderRepository $orderRepository
+     * @param OrderRepositoryInterface $orderRepository
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      * @param null $getSourcesByStockIdSkuAndQty @deprecated
@@ -78,7 +78,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
         $primaryFieldName,
         $requestFieldName,
         RequestInterface $request,
-        OrderRepository $orderRepository,
+        OrderRepositoryInterface $orderRepository,
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         GetStockItemConfigurationInterface $getStockItemConfiguration,
         $getSourcesByStockIdSkuAndQty,
