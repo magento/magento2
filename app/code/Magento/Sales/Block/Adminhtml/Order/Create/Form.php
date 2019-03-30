@@ -120,7 +120,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     public function getCustomerSelectorDisplay()
     {
         $customerId = $this->getCustomerId();
-        if (!$customerId) {
+        if ($customerId === null) {
             return 'block';
         }
         return 'none';
@@ -135,7 +135,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         $storeId = $this->getStoreId();
         $customerId = $this->getCustomerId();
-        if ($customerId && !$storeId) {
+        if ($customerId !== null && !$storeId) {
             return 'block';
         }
         return 'none';
@@ -150,7 +150,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         $storeId = $this->getStoreId();
         $customerId = $this->getCustomerId();
-        if ($customerId && $storeId) {
+        if ($customerId !== null && $storeId) {
             return 'block';
         }
         return 'none';

@@ -60,7 +60,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('save', 'data_attribute', []);
 
         $this->buttonList->update('save', 'id', 'submit_order_top_button');
-        if (!$customerId || !$storeId) {
+        if ($customerId === null || !$storeId) {
             $this->buttonList->update('save', 'style', 'display:none');
         }
 
@@ -69,7 +69,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
 
         $this->buttonList->update('reset', 'id', 'reset_order_top_button');
 
-        if (!$customerId) {
+        if ($customerId === null) {
             $this->buttonList->update('reset', 'style', 'display:none');
         } else {
             $this->buttonList->update('back', 'style', 'display:none');
