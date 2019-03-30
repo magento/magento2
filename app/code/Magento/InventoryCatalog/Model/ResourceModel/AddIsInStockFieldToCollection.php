@@ -59,7 +59,9 @@ class AddIsInStockFieldToCollection
             $tableName = $this->stockIndexTableProvider->execute($stockId);
 
             $collection->getSelect()->join(
-                ['inventory_in_stock' => $tableName], 'e.sku = inventory_in_stock.sku', []
+                ['inventory_in_stock' => $tableName],
+                'e.sku = inventory_in_stock.sku',
+                []
             )->where('inventory_in_stock.' . IndexStructure::IS_SALABLE . ' = ?', 1);
         }
     }
