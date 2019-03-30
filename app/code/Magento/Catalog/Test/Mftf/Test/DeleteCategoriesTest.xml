@@ -58,19 +58,17 @@
         <!-- Change root category for Main Website Store. -->
         <amOnPage stepKey="s1" url="{{AdminSystemStorePage.url}}"/>
         <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
-        <click stepKey="s2" selector="{{AdminStoresGridSection.resetButton}}"/>
-        <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterResetButton" time="10"/>
-        <fillField stepKey="s4" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"/>
-        <click stepKey="s5" selector="{{AdminStoresGridSection.searchButton}}"/>
-        <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>
-        <click stepKey="s7" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" />
+        <actionGroup ref="filterStoresGridByStore" stepKey="filterStoresGridByStore">
+            <argument name="store" value="Main Website Store"/>
+        </actionGroup>
+        <click stepKey="s7" selector="{{AdminStoresGridSection.storeInFirstRow}}" />
         <waitForPageLoad stepKey="waitForPageAdminStoresGroupEditLoad" />
         <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="{{NewRootCategory.name}}" stepKey="setNewCategoryForStoreGroup"/>
         <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreGroup"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModalSaveStoreGroup"/>
         <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarning"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptModal" />
-        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageAdminStoresGridReload"/>
+        <waitForElementVisible selector="{{AdminStoresGridFilterSection.filters}}" stepKey="waitForPageAdminStoresGridReload"/>
         <see userInput="You saved the store." stepKey="seeSavedMessage"/>
 
         <!-- @TODO: Uncomment commented below code after MQE-903 is fixed -->
