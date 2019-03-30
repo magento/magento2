@@ -31,7 +31,7 @@ class NewAction extends Action implements HttpGetActionInterface
     {
         /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('Magento_InventoryApi::source');
+        $resultPage->setActiveMenu('Magento_InventoryAdminUi::source');
         $resultPage->getConfig()->getTitle()->prepend(__('New Source'));
 
         return $resultPage;
