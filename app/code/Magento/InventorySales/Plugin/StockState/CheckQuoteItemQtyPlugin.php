@@ -123,8 +123,7 @@ class CheckQuoteItemQtyPlugin
         $skus = $this->getSkusByProductIds->execute([$productId]);
         $productSku = $skus[$productId];
 
-        $websiteId = $this->resolveWebsiteId($scopeId);
-        $websiteCode = $this->storeManager->getWebsite($websiteId)->getCode();
+        $websiteCode = $this->resolveWebsiteCode($scopeId);
         $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
         $stockId = $stock->getStockId();
 
@@ -166,23 +165,23 @@ class CheckQuoteItemQtyPlugin
     }
 
     /**
-     * Returns websiteId assigned to store when scopeId is passed
-     * Returns default websiteId if no scopeId is passed
+     * Returns websiteCode for website assigned to store when scopeId is passed
+     * Returns websiteCode from default website if no scopeId is passed
      * @param int $scopeId
      * @return string
      */
-    private function resolveWebsiteId($scopeId = null) {
-        if($scopeId == null) {
-            return $this->storeManager->getWebsite()->getId();
+    private function resolveWebsiteCode($scopeId = null) {
+        if($scopeId === null) {
+            return $this->storeManager->getWebsite()->getCode();
         }
 
         try {
-            return $this->storeManager
-                ->getStore($scopeId)
-                ->getWebsiteId();
+            $websiteId = $this->storeManager->getStore($scopeId)->getWebsiteId();
+
+            return $this->storeManager->getWebsite($websiteId)->getCode();
         }
         catch(NoSuchEntityException $exception) {
-            return $this->storeManager->getWebsite()->getId();
+            return $this->storeManager->getWebsite()->getCode();
         }
     }
 }
