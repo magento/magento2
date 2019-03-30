@@ -233,7 +233,7 @@
                 &,
                 &-layered {
                     .corner {
-                        bottom: -5px;
+                        bottom: 0;
                         height: 8px;
                         left: 40%;
                         position: absolute;
@@ -244,22 +244,23 @@
                             content: '';
                             font-size: 1px;
                             height: 0;
-                            position: relative;
+                            position: absolute;
                             width: 0;
+                            border-color: @color-gray68 transparent transparent transparent;
+                            border-width: 8px 8px 0 8px;
                         }
 
                         &:before {
-                            border-color: @color-gray68 transparent transparent transparent;
-                            border-width: 8px 8.5px 0 8.5px;
                             left: 0;
-                            top: 2px;
+                            top: 8px;
+                            z-index: 1;
+                            border-color: @color-white transparent transparent transparent;
                         }
 
                         &:after {
-                            border-color: @color-white transparent transparent transparent;
-                            border-width: 7px 7.5px 0 7.5px;
-                            left: -15px;
                             top: 1px;
+                            z-index: 0;
+                            top: 9px;
                         }
                     }
 
