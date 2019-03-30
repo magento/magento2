@@ -81,7 +81,7 @@ class ButtonList
      *
      * @param string $buttonId
      * @param string|null $key
-     * @param string $data
+     * @param mixed $data
      * @return void
      */
     public function update($buttonId, $key, $data)
