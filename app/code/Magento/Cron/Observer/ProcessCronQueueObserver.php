@@ -146,6 +146,11 @@ class ProcessCronQueueObserver implements ObserverInterface
     private $statProfiler;
 
     /**
+     * Key and Value Array of Cron Job Names
+     */
+    protected const LIST_CRON_NAME = [];
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Cron\Model\ScheduleFactory $scheduleFactory
      * @param \Magento\Framework\App\CacheInterface $cache
@@ -217,6 +222,11 @@ class ProcessCronQueueObserver implements ObserverInterface
         );
 
         $phpPath = $this->phpExecutableFinder->find() ?: 'php';
+
+        // End previous NewRelic Transaction to track Cron Job Traces
+        if (extension_loaded('newrelic')) {
+            newrelic_end_transaction(true);
+        }
 
         foreach ($jobGroupsRoot as $groupId => $jobsRoot) {
             if (!$this->isGroupInFilter($groupId)) {
@@ -734,6 +744,12 @@ class ProcessCronQueueObserver implements ObserverInterface
 
             try {
                 if ($schedule->tryLockJob()) {
+                    if (extension_loaded('newrelic')) {
+                        //Get Job Name after Name Changes
+                        $jobName = $this->changeCronName($schedule->getJobCode());
+                        newrelic_start_transaction(ini_get('newrelic.appname'));
+                        newrelic_name_transaction($jobName);
+                    }
                     $this->_runJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId);
                 }
             } catch (\Exception $e) {
@@ -741,6 +757,10 @@ class ProcessCronQueueObserver implements ObserverInterface
             }
             if ($schedule->getStatus() === Schedule::STATUS_SUCCESS) {
                 $procesedJobs[$schedule->getJobCode()] = true;
+            }
+
+            if (extension_loaded('newrelic')) {
+                newrelic_end_transaction();
             }
             $schedule->save();
         }
@@ -764,5 +784,21 @@ class ProcessCronQueueObserver implements ObserverInterface
         ) {
             $this->logger->info($schedule->getMessages());
         }
+    }
+
+    /**
+     * Get Cron Name for proper CRON Job Traces Tracking
+     *
+     * @param string $keyCronName
+     *
+     * @return mixed
+     */
+    public static function changeCronName($keyCronName)
+    {
+        $cronNameMagento = self::LIST_CRON_NAME;
+        if (isset($cronNameMagento[$keyCronName])) {
+            return $cronNameMagento[$keyCronName];
+        }
+        return $keyCronName;
     }
 }
