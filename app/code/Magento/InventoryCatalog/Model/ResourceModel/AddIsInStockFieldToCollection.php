@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Framework\App\ObjectManager;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
@@ -29,14 +30,15 @@ class AddIsInStockFieldToCollection
 
     /**
      * @param StockIndexTableNameResolverInterface $stockIndexTableProvider
-     * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param DefaultStockProviderInterface|null $defaultStockProvider
      */
     public function __construct(
         StockIndexTableNameResolverInterface $stockIndexTableProvider,
-        DefaultStockProviderInterface $defaultStockProvider
+        ?DefaultStockProviderInterface $defaultStockProvider = null
     ) {
         $this->stockIndexTableProvider = $stockIndexTableProvider;
-        $this->defaultStockProvider = $defaultStockProvider;
+        $this->defaultStockProvider = $defaultStockProvider ?: ObjectManager::getInstance()
+            ->get(DefaultStockProviderInterface::class);
     }
 
     /**
