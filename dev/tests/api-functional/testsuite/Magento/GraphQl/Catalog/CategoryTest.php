@@ -17,6 +17,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\ObjectManager;
 
+/**
+ * Test loading of category tree
+ */
 class CategoryTest extends GraphQlAbstract
 {
     /**
