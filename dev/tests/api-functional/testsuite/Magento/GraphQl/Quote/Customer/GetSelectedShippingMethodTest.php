@@ -12,6 +12,9 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test for get selected shipping method
+ */
 class GetSelectedShippingMethodTest extends GraphQlAbstract
 {
     /**
