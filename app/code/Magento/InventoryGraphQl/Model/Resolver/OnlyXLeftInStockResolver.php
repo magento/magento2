@@ -99,6 +99,7 @@ class OnlyXLeftInStockResolver implements ResolverInterface
                 return (float)$stockLeft;
             }
         } catch (InputException | LocalizedException $e) {
+            // this is expected behavior because ex. Group product doesn't have own quantity
             return null;
         }
 
