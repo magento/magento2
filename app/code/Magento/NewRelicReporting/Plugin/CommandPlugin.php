@@ -5,7 +5,6 @@
  */
 namespace Magento\NewRelicReporting\Plugin;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
