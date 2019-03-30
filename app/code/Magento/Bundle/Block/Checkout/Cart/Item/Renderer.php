@@ -88,7 +88,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
         $messages = [];
         $quoteItem = $this->getItem();
 
-        // Add basic messages occuring during this page load
+        // Add basic messages occurring during this page load
         $baseMessages = $quoteItem->getMessage(false);
         if ($baseMessages) {
             foreach ($baseMessages as $message) {
