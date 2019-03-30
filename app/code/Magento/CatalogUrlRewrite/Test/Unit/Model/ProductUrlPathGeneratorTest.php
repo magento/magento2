@@ -49,6 +49,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
             'getId',
             'load',
             'setStoreId',
+            'getResource',
         ];
 
         $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $productMethods);
@@ -103,13 +104,15 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param int|bool $productId
      * @param string|bool $productUrlKey
      * @param string|bool $expectedUrlKey
      * @return void
      * @dataProvider getUrlKeyDataProvider
      */
-    public function testGetUrlKey($productUrlKey, $expectedUrlKey): void
+    public function testGetUrlKey($productId, $productUrlKey, $expectedUrlKey): void
     {
+        $this->product->expects($this->any())->method('getId')->will($this->returnValue($productId));
         $this->product->expects($this->any())->method('getUrlKey')->will($this->returnValue($productUrlKey));
         $this->product->expects($this->any())->method('formatUrlKey')->will($this->returnValue($productUrlKey));
         $this->assertSame($expectedUrlKey, $this->productUrlPathGenerator->getUrlKey($this->product));
@@ -121,8 +124,67 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     public function getUrlKeyDataProvider(): array
     {
         return [
-            'URL Key use default' => [false, null],
-            'URL Key empty' => ['product-url', 'product-url'],
+            'URL Key use default' => [1, false, null],
+            'URL Key empty' => [1, 'product-url', 'product-url'],
+        ];
+    }
+
+    /**
+     * @param int|bool $productId
+     * @param string|bool $productName
+     * @param string|bool $productUrlKey
+     * @param string|bool $expectedUrlKey
+     * @return void
+     * @dataProvider getNewProductUrlKeyDataProvider
+     */
+    public function testGetNewProductUrlKey($productId, $productName, $productUrlKey, $expectedUrlKey): void
+    {
+        $this->product->expects($this->once())->method('getId')->will($this->returnValue($productId));
+        $this->product->expects($this->any())->method('getName')->will($this->returnValue($productName));
+        $this->product->expects($this->any())->method('getUrlKey')->will($this->returnValue($productUrlKey));
+        $this->product
+            ->expects($this->any())
+            ->method('formatUrlKey')
+            ->with($this->equalTo($expectedUrlKey))
+            ->will($this->returnValue($expectedUrlKey));
+
+        $attributeEntity = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['checkAttributeUniqueValue'])
+            ->getMock();
+        $returnValues = [false, false, true];
+        $attributeEntity->expects($this->any())
+            ->method('checkAttributeUniqueValue')
+            ->will(
+                $this->returnCallback(function() use (&$returnValues) {
+                    return array_shift($returnValues);
+                })
+            );
+
+        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getEntity'])
+            ->getMock();
+        $attribute->expects($this->any())->method('getEntity')->willReturn($attributeEntity);
+
+        $resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAttribute'])
+            ->getMock();
+        $resource->expects($this->any())->method('getAttribute')->willReturn($attribute);
+
+        $this->product->expects($this->any())->method('getResource')->will($this->returnValue($resource));
+        
+        $this->assertSame($expectedUrlKey, $this->productUrlPathGenerator->getUrlKey($this->product));
+    }
+
+    /**
+     * @return array
+     */
+    public function getNewProductUrlKeyDataProvider() : array
+    {
+        return [
+            'URL Key new product' => [false, 'product-name', '', 'product-name-2'],
         ];
     }
 
