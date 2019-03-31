@@ -529,19 +529,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             );
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            if (!empty($this->addressesToSync)) {
-                foreach ($this->addressesToSync as $addressId) {
-                    $this->addressRepository->deleteById($addressId);
-                }
-            }
-            $this->eventManager->dispatch(
-                'sales_model_service_quote_submit_failure',
-                [
-                    'order'     => $order,
-                    'quote'     => $quote,
-                    'exception' => $e
-                ]
-            );
+            $this->rollbackAddresses($quote, $order, $e);
             throw $e;
         }
         return $order;
@@ -606,6 +594,43 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         }
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
             $shipping->setIsDefaultBilling(true);
+        }
+    }
+
+    /**
+     * Remove related to order and quote addresses and submit exception to further processing.
+     *
+     * @param Quote $quote
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @param \Exception $e
+     * @throws \Exception
+     */
+    private function rollbackAddresses(
+        QuoteEntity $quote,
+        \Magento\Sales\Api\Data\OrderInterface $order,
+        \Exception $e
+    ): void {
+        try {
+            if (!empty($this->addressesToSync)) {
+                foreach ($this->addressesToSync as $addressId) {
+                    $this->addressRepository->deleteById($addressId);
+                }
+            }
+            $this->eventManager->dispatch(
+                'sales_model_service_quote_submit_failure',
+                [
+                    'order' => $order,
+                    'quote' => $quote,
+                    'exception' => $e,
+                ]
+            );
+        } catch (\Exception $consecutiveException) {
+            $message = sprintf(
+                "An exception occurred on 'sales_model_service_quote_submit_failure' event: %s",
+                $consecutiveException->getMessage()
+            );
+
+            throw new \Exception($message, 0, $e);
         }
     }
 }
