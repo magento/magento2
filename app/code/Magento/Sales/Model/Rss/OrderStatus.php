@@ -6,10 +6,10 @@
 namespace Magento\Sales\Model\Rss;
 
 use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
- * Class OrderStatus
- * @package Magento\Sales\Model\Rss
+ * Rss renderer for order statuses.
  */
 class OrderStatus implements DataProviderInterface
 {
@@ -56,6 +56,11 @@ class OrderStatus implements DataProviderInterface
     protected $orderFactory;
 
     /**
+     * @var Signature
+     */
+    private $signature;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\App\RequestInterface $request
@@ -63,6 +68,7 @@ class OrderStatus implements DataProviderInterface
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Signature|null $signature
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -71,7 +77,8 @@ class OrderStatus implements DataProviderInterface
         \Magento\Sales\Model\ResourceModel\Order\Rss\OrderStatusFactory $orderResourceFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        Signature $signature = null
     ) {
         $this->objectManager = $objectManager;
         $this->urlBuilder = $urlBuilder;
@@ -80,6 +87,7 @@ class OrderStatus implements DataProviderInterface
         $this->localeDate = $localeDate;
         $this->orderFactory = $orderFactory;
         $this->config = $scopeConfig;
+        $this->signature = $signature ?: ObjectManager::getInstance()->get(Signature::class);
     }
 
     /**
@@ -96,6 +104,8 @@ class OrderStatus implements DataProviderInterface
     }
 
     /**
+     * Get rss data.
+     *
      * @return array
      */
     public function getRssData()
@@ -108,6 +118,8 @@ class OrderStatus implements DataProviderInterface
     }
 
     /**
+     * Get cache key.
+     *
      * @return string
      */
     public function getCacheKey()
@@ -121,6 +133,8 @@ class OrderStatus implements DataProviderInterface
     }
 
     /**
+     * Get cache lifetime.
+     *
      * @return int
      */
     public function getCacheLifetime()
@@ -129,6 +143,8 @@ class OrderStatus implements DataProviderInterface
     }
 
     /**
+     * Get order.
+     *
      * @return \Magento\Sales\Model\Order
      */
     protected function getOrder()
@@ -137,8 +153,11 @@ class OrderStatus implements DataProviderInterface
             return $this->order;
         }
 
-        $data = null;
-        $json = base64_decode((string)$this->request->getParam('data'));
+        $data = (string)$this->request->getParam('data');
+        if ((string)$this->request->getParam('signature') !== $this->signature->signData($data)) {
+            return null;
+        }
+        $json = base64_decode($data);
         if ($json) {
             $data = json_decode($json, true);
         }
@@ -154,12 +173,25 @@ class OrderStatus implements DataProviderInterface
         $order = $this->orderFactory->create();
         $order->load($data['order_id']);
 
-        if ($order->getIncrementId() !== $data['increment_id'] || $order->getCustomerId() !== $data['customer_id']) {
+        if (!$this->isValidOrderData($order, $data)) {
             $order = null;
         }
         $this->order = $order;
 
         return $this->order;
+    }
+
+    /**
+     * Check if selected order data correspond incoming data.
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @param array $data
+     * @return bool
+     */
+    private function isValidOrderData(\Magento\Sales\Model\Order $order, array $data): bool
+    {
+        return !($order->getIncrementId() !== $data['increment_id']
+            || $order->getCustomerId() !== $data['customer_id']);
     }
 
     /**
@@ -218,6 +250,8 @@ class OrderStatus implements DataProviderInterface
     }
 
     /**
+     * Get feeds.
+     *
      * @return array
      */
     public function getFeeds()
@@ -226,7 +260,7 @@ class OrderStatus implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAuthRequired()
     {
