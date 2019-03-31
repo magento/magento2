@@ -43,7 +43,7 @@ class ProductUrlPathGenerator
     /**
      * @var CategoryUrlPathGenerator
      */
-    protected $categoryUrlPathGenerator;
+    protected $catUrlPathGenerator;
 
     /**
      * @var ProductRepositoryInterface
@@ -53,18 +53,18 @@ class ProductUrlPathGenerator
     /**
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
-     * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
+     * @param CategoryUrlPathGenerator $catUrlPathGenerator
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
-        CategoryUrlPathGenerator $categoryUrlPathGenerator,
+        CategoryUrlPathGenerator $catUrlPathGenerator,
         ProductRepositoryInterface $productRepository
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
-        $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
+        $this->catUrlPathGenerator = $catUrlPathGenerator;
         $this->productRepository = $productRepository;
     }
 
@@ -86,7 +86,7 @@ class ProductUrlPathGenerator
         }
         return $category === null
             ? $path
-            : $this->categoryUrlPathGenerator->getUrlPath($category) . '/' . $path;
+            : $this->catUrlPathGenerator->getUrlPath($category) . '/' . $path;
     }
 
     /**
