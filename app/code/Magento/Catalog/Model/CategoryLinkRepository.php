@@ -38,7 +38,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
      */
     public function save(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink)
     {
-        $category = $this->categoryRepository->get($productLink->getCategoryId());
+        $category = $this->categoryRepository->get($productLink->getCategoryId(), 0);
         $product = $this->productRepository->get($productLink->getSku());
         $productPositions = $category->getProductsPosition();
         $productPositions[$product->getId()] = $productLink->getPosition();
@@ -72,7 +72,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
      */
     public function deleteByIds($categoryId, $sku)
     {
-        $category = $this->categoryRepository->get($categoryId);
+        $category = $this->categoryRepository->get($categoryId, 0);
         $product = $this->productRepository->get($sku);
         $productPositions = $category->getProductsPosition();
 
