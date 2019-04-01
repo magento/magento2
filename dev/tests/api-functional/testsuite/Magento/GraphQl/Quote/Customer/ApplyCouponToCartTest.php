@@ -12,8 +12,10 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\SalesRule\Api\Data\ConditionInterface;
+use Magento\SalesRule\Api\Data\ConditionInterfaceFactory;
+use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\SalesRule\Model\Coupon;
-use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\Spi\CouponResourceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -49,14 +51,19 @@ class ApplyCouponToCartTest extends GraphQlAbstract
     private $coupon;
 
     /**
-     * @var Rule
-     */
-    private $salesRule;
-
-    /**
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
+
+    /**
+     * @var RuleRepositoryInterface
+     */
+    private $ruleRepository;
+
+    /**
+     * @var ConditionInterfaceFactory
+     */
+    private $conditionFactory;
 
     protected function setUp()
     {
@@ -66,8 +73,9 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $this->quoteIdToMaskedId = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
         $this->couponResource = $objectManager->get(CouponResourceInterface::class);
         $this->coupon = $objectManager->create(Coupon::class);
-        $this->salesRule = $objectManager->create(Rule::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->ruleRepository = $objectManager->get(RuleRepositoryInterface::class);
+        $this->conditionFactory = $objectManager->get(ConditionInterfaceFactory::class);
     }
 
     /**
@@ -347,37 +355,32 @@ QUERY;
     {
         $this->coupon->loadByCode($couponCode);
         $ruleId = $this->coupon->getRuleId();
-        $salesRule = $this->salesRule->load($ruleId);
-        $salesRule->getConditions()->loadArray([
-            'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
-            'attribute' => null,
-            'operator' => null,
-            'value' => '1',
-            'is_value_processed' => null,
-            'aggregator' => 'all',
-            'conditions' =>
-                [
-                    [
-                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
-                        'attribute' => null,
-                        'operator' => null,
-                        'value' => '1',
-                        'is_value_processed' => null,
-                        'aggregator' => 'all',
-                        'conditions' =>
-                            [
-                                [
-                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
-                                    'attribute' => 'sku',
-                                    'operator' => '!=',
-                                    'value' => $sku,
-                                    'is_value_processed' => false,
-                                ],
-                            ],
-                    ],
-                ],
-        ]);
-        $this->salesRule->save();
+        $salesRule = $this->ruleRepository->getById($ruleId);
+
+        /** @var ConditionInterface $conditionProductSku */
+        $conditionProductSku = $this->conditionFactory->create();
+        $conditionProductSku->setConditionType(\Magento\SalesRule\Model\Rule\Condition\Product::class);
+        $conditionProductSku->setAttributeName('sku');
+        $conditionProductSku->setValue('1');
+        $conditionProductSku->setOperator('!=');
+        $conditionProductSku->setValue($sku);
+
+        /** @var ConditionInterface $conditionProductFound */
+        $conditionProductFound = $this->conditionFactory->create();
+        $conditionProductFound->setConditionType(\Magento\SalesRule\Model\Rule\Condition\Product\Found::class);
+        $conditionProductFound->setValue('1');
+        $conditionProductFound->setAggregatorType('all');
+        $conditionProductFound->setConditions([$conditionProductSku]);
+
+        /** @var ConditionInterface $conditionCombine */
+        $conditionCombine = $this->conditionFactory->create();
+        $conditionCombine->setConditionType(\Magento\SalesRule\Model\Rule\Condition\Combine::class);
+        $conditionCombine->setValue('1');
+        $conditionCombine->setAggregatorType('all');
+        $conditionCombine->setConditions([$conditionProductFound]);
+
+        $salesRule->setCondition($conditionCombine);
+        $this->ruleRepository->save($salesRule);
     }
 
     /**
