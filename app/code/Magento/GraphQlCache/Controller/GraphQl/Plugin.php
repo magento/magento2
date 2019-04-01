@@ -37,11 +37,11 @@ class Plugin
 
     public function afterDispatch(
         FrontControllerInterface $subject,
-        ResponseInterface $response,
+        /* \Magento\Framework\App\Response\Http */ $response,
         RequestInterface $request
     ) {
         /** @var \Magento\Framework\App\Request\Http $request */
-        /** @var \Magento\Framework\Webapi\Response $response */
+        /** @var \Magento\Framework\App\Response\Http $response */
         $cacheTags = $this->cacheTags->getCacheTags();
         if ($request->isGet() && count($cacheTags)) {
             // assume that response should be cacheable if it contains cache tags

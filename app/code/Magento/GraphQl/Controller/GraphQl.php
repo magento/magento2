@@ -17,8 +17,9 @@ use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Webapi\Response;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\GraphQl\Query\Fields as QueryFields;
+use Magento\Framework\Controller\Result\JsonFactory;
 
 /**
  * Front controller for web API GraphQL area.
@@ -27,11 +28,6 @@ use Magento\Framework\GraphQl\Query\Fields as QueryFields;
  */
 class GraphQl implements FrontControllerInterface
 {
-    /**
-     * @var Response
-     */
-    private $response;
-
     /**
      * @var SchemaGeneratorInterface
      */
@@ -68,7 +64,11 @@ class GraphQl implements FrontControllerInterface
     private $queryFields;
 
     /**
-     * @param Response $response
+     * @var JsonFactory
+     */
+    private $jsonFactory;
+
+    /**
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
      * @param QueryProcessor $queryProcessor
@@ -76,18 +76,18 @@ class GraphQl implements FrontControllerInterface
      * @param \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $resolverContext
      * @param HttpRequestProcessor $requestProcessor
      * @param QueryFields $queryFields
+     * @param JsonFactory $jsonFactory
      */
     public function __construct(
-        Response $response,
         SchemaGeneratorInterface $schemaGenerator,
         SerializerInterface $jsonSerializer,
         QueryProcessor $queryProcessor,
         ExceptionFormatter $graphQlError,
         ContextInterface $resolverContext,
         HttpRequestProcessor $requestProcessor,
-        QueryFields $queryFields
+        QueryFields $queryFields,
+        JsonFactory $jsonFactory
     ) {
-        $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
         $this->jsonSerializer = $jsonSerializer;
         $this->queryProcessor = $queryProcessor;
@@ -95,17 +95,19 @@ class GraphQl implements FrontControllerInterface
         $this->resolverContext = $resolverContext;
         $this->requestProcessor = $requestProcessor;
         $this->queryFields = $queryFields;
+        $this->jsonFactory = $jsonFactory;
     }
+
 
     /**
      * Handle GraphQL request
      *
      * @param RequestInterface $request
-     * @return ResponseInterface
+     * @return ResponseInterface|ResultInterface
      */
-    public function dispatch(RequestInterface $request) : ResponseInterface
+    public function dispatch(RequestInterface $request) /* : ResponseInterface */
     {
-        $statusCode = 200;
+        $jsonResult = $this->jsonFactory->create();
         try {
             /** @var Http $request */
             $this->requestProcessor->processHeaders($request);
@@ -140,12 +142,10 @@ class GraphQl implements FrontControllerInterface
         } catch (\Exception $error) {
             $result['errors'] = isset($result) && isset($result['errors']) ? $result['errors'] : [];
             $result['errors'][] = $this->graphQlError->create($error);
-            $statusCode = ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS;
+            $jsonResult->setHttpResponseCode(ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS);
         }
-        $this->response->setBody($this->jsonSerializer->serialize($result))->setHeader(
-            'Content-Type',
-            'application/json'
-        )->setHttpResponseCode($statusCode);
-        return $this->response;
+
+        $jsonResult->setData($result);
+        return $jsonResult;
     }
 }
