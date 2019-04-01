@@ -70,6 +70,7 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         // draw Product name
         $lines[0] = [
             [
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'text' => $this->string->split(html_entity_decode($item->getName()), 35, true, true),
                 'feed' => 35
             ]
@@ -77,6 +78,7 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
 
         // draw SKU
         $lines[0][] = [
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             'text' => $this->string->split(html_entity_decode($this->getSku($item)), 17),
             'feed' => 290,
             'align' => 'right',
