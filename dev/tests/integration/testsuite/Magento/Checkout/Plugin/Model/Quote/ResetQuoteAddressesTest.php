@@ -55,6 +55,10 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
         $cart = Bootstrap::getObjectManager()->create(Cart::class);
 
         $activeQuote = $cart->getQuote();
+        $activeQuote->getExtensionAttributes()->setShippingAssignments([]);
+        if ($activeQuote->getShippingAddress()) {
+            $activeQuote->removeAddress($activeQuote->getShippingAddress()->getEntityId());
+        }
         $cart->removeItem($activeQuote->getAllVisibleItems()[0]->getId());
         $cart->save();
 
