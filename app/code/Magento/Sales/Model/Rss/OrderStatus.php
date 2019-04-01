@@ -174,7 +174,7 @@ class OrderStatus implements DataProviderInterface
         $order = $this->orderFactory->create();
         $order->load($data['order_id']);
 
-        if (!$this->isValidOrderData($order, $data)) {
+        if (!$this->isOrderSuitable($order, $data)) {
             $order = null;
         }
         $this->order = $order;
@@ -189,10 +189,9 @@ class OrderStatus implements DataProviderInterface
      * @param array $data
      * @return bool
      */
-    private function isValidOrderData(\Magento\Sales\Model\Order $order, array $data): bool
+    private function isOrderSuitable(\Magento\Sales\Model\Order $order, array $data): bool
     {
-        return !($order->getIncrementId() !== $data['increment_id']
-            || $order->getCustomerId() !== $data['customer_id']);
+        return $order->getIncrementId() === $data['increment_id'] && $order->getCustomerId() === $data['customer_id'];
     }
 
     /**
