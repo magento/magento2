@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,6 +10,9 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 
+/**
+ * Configurable product link management.
+ */
 class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementInterface
 {
     /**
@@ -68,7 +70,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getChildren($sku)
     {
@@ -107,7 +109,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addChild($sku, $childSku)
     {
@@ -150,7 +152,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function removeChild($sku, $childSku)
     {
