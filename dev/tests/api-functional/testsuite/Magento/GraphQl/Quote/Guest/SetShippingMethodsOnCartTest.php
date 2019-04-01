@@ -76,6 +76,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
+     * Shipping address for quote will be created automatically BUT with NULL values (considered that address
+     * is not set)
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -343,7 +346,6 @@ QUERY;
 
     /**
      * _security
-     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
