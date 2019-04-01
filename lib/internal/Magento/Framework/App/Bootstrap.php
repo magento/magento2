@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App;
 
@@ -245,6 +246,8 @@ class Bootstrap
      *
      * @param \Magento\Framework\AppInterface $application
      * @return void
+     *
+     * phpcs:disable Magento2.Exceptions,Squiz.Commenting.FunctionCommentThrowTag
      */
     public function run(AppInterface $application)
     {
@@ -267,13 +270,15 @@ class Bootstrap
         } catch (\Exception $e) {
             $this->terminate($e);
         }
-    }
+    } // phpcs:enable
 
     /**
      * Asserts maintenance mode
      *
      * @return void
      * @throws \Exception
+     *
+     * phpcs:disable Magento2.Exceptions
      */
     protected function assertMaintenance()
     {
@@ -299,7 +304,7 @@ class Bootstrap
             $this->errorCode = self::ERR_MAINTENANCE;
             throw new \Exception('Unable to proceed: the maintenance mode must be enabled first. ');
         }
-    }
+    } // phpcs:enable
 
     /**
      * Asserts whether application is installed
@@ -316,10 +321,12 @@ class Bootstrap
         $isInstalled = $this->isInstalled();
         if (!$isInstalled && $isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Error: Application is not installed yet. ');
         }
         if ($isInstalled && !$isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Error: Application is already installed. ');
         }
     }
@@ -413,10 +420,12 @@ class Bootstrap
      *
      * @param \Exception $e
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
+     *
+     * phpcs:disable Magento2.Security.LanguageConstruct, Squiz.Commenting.FunctionCommentThrowTag
      */
     protected function terminate(\Exception $e)
     {
+
         if ($this->isDeveloperMode()) {
             echo $e;
         } else {
@@ -433,4 +442,5 @@ class Bootstrap
         }
         exit(1);
     }
+    // phpcs:enable
 }
