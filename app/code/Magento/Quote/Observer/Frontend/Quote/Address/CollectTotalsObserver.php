@@ -124,7 +124,7 @@ class CollectTotalsObserver implements ObserverInterface
             );
         }
 
-        if ($groupId) {
+        if ($groupId !== null) {
             $address->setPrevQuoteCustomerGroupId($quote->getCustomerGroupId());
             $quote->setCustomerGroupId($groupId);
             $this->customerSession->setCustomerGroupId($groupId);
