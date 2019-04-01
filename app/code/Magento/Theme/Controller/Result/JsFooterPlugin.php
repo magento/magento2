@@ -22,7 +22,7 @@ class JsFooterPlugin
         $script = [];
         if (strpos($content, '</body') > 0) {
             $content = preg_replace('#<!--(?!\s?/?ko).*?-->#s', '', $content);
-            $pattern = '#<script.*?</script>#is';
+            $pattern = '#<script[^>]*+(?<!text/x-magento-template.)>.*?</script>#is';
             $content = preg_replace_callback(
                 $pattern,
                 function ($matchPart) use (&$script) {
