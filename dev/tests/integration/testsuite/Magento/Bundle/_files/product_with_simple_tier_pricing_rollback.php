@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-include __DIR__ . '/../../../Magento/Catalog/_files/product_simple_rollback.php';
+require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_rollback.php';
 
 /** @var \Magento\Framework\Registry $registry */
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);

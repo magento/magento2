@@ -51,23 +51,20 @@ class OptionPriceRendererTest extends TestCase
     /**
      * Test to render Tier price html
      *
-     * @param bool $priceRenderExist
-     * @param string $expectedHtml
-     * @dataProvider renderTierPriceDataProvider
+     * @return void
      */
-    public function testRenderTierPrice(bool $priceRenderExist, string $expectedHtml): void
+    public function testRenderTierPrice(): void
     {
-        $priceRenderer = false;
+        $expectedHtml = 'tier price html';
         $expectedArguments = ['zone' => Render::ZONE_ITEM_OPTION];
+
         $productMock = $this->createMock(Product::class);
 
-        if ($priceRenderExist) {
-            $priceRenderer = $this->createPartialMock(BlockInterface::class, ['toHtml', 'render']);
-            $priceRenderer->expects($this->once())
-                ->method('render')
-                ->with('tier_price', $productMock, $expectedArguments)
-                ->willReturn($expectedHtml);
-        }
+        $priceRenderer = $this->createPartialMock(BlockInterface::class, ['toHtml', 'render']);
+        $priceRenderer->expects($this->once())
+            ->method('render')
+            ->with('tier_price', $productMock, $expectedArguments)
+            ->willReturn($expectedHtml);
 
         $this->layoutMock->method('getBlock')
             ->with('product.price.render.default')
@@ -81,12 +78,22 @@ class OptionPriceRendererTest extends TestCase
     }
 
     /**
-     * Data provider for test to render Tier price
+     * Test to render Tier price html when render block is not exists
      *
-     * @return array
+     * @return void
      */
-    public function renderTierPriceDataProvider(): array
+    public function testRenderTierPriceNotExist(): void
     {
-        return [[true, 'tier price html'], [false, '']];
+        $productMock = $this->createMock(Product::class);
+
+        $this->layoutMock->method('getBlock')
+            ->with('product.price.render.default')
+            ->willReturn(false);
+
+        $this->assertEquals(
+            '',
+            $this->renderer->renderTierPrice($productMock),
+            'Render Tier price is wrong'
+        );
     }
 }
