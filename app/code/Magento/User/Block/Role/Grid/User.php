@@ -288,5 +288,4 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         $output = json_decode($input);
         return $output ? $this->_jsonEncoder->encode($output) : '{}';
     }
-
 }
