@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySecureURLRedirectReview">
+        <annotations>
+            <features value="Review"/>
+            <stories value="Storefront Secure URLs"/>
+            <title value="Verify Secure URLs For Storefront Review Pages"/>
+            <description value="Verify that the Secure URL configuration applies to the Review pages on the Storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-15542"/>
+            <group value="review"/>
+            <group value="configuration"/>
+            <group value="secure_storefront_url"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+                <argument name="Customer" value="$$customer$$"/>
+            </actionGroup>
+            <executeJS function="return window.location.host" stepKey="hostname"/>
+            <magentoCLI command="config:set web/secure/base_url https://{$hostname}/" stepKey="setSecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+        <executeJS function="return window.location.host" stepKey="hostname"/>
+        <amOnUrl url="http://{$hostname}/review/customer" stepKey="goToUnsecureReviewURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/review/customer" stepKey="seeSecureReviewURL"/>
+    </test>
+</tests>
