@@ -11,6 +11,7 @@ use Magento\Framework\Message\Manager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
@@ -19,6 +20,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
 {
     public function testSaveActionWithDangerRequest()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(['product' => ['entity_id' => 15]]);
         $this->dispatch('backend/catalog/product/save');
         $this->assertSessionMessages(
@@ -36,6 +38,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->getRequest()->setPostValue(['back' => 'new']);
         $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get('simple');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/new/'));
         $this->assertSessionMessages(
@@ -52,6 +55,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->getRequest()->setPostValue(['back' => 'duplicate']);
         $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get('simple');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/'));
         $this->assertRedirect(
@@ -161,11 +165,13 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionWithAlreadyExistingUrlKey(array $postData)
     {
         $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save');
         /** @var Manager $messageManager */
         $messageManager = $this->_objectManager->get(Manager::class);
         $messages = $messageManager->getMessages();
         $errors = $messages->getItemsByType('error');
+        $this->assertNotEmpty($errors);
         $message = array_shift($errors);
         $this->assertSame('URL key for specified store already exists.', $message->getText());
         $this->assertRedirect($this->stringContains('/backend/catalog/product/new'));
@@ -233,7 +239,6 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
                             'thumbnail' => '/m/a//magento_image.jpg.tmp',
                             'swatch_image' => '/m/a//magento_image.jpg.tmp',
                         ],
-                    'form_key' => Bootstrap::getObjectManager()->get(FormKey::class)->getFormKey(),
                 ]
             ]
         ];
@@ -251,6 +256,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionTierPrice(array $postData, array $tierPrice)
     {
         $postData['product'] = $this->getProductData($tierPrice);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product/save/id/' . $postData['id']);
         $this->assertSessionMessages(
