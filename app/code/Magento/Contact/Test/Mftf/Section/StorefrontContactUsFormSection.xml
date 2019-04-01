@@ -7,11 +7,8 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontContactUsFormSection">
-        <element name="captchaField" type="input" selector="#captcha_contact_us"/>
-        <element name="captchaImg" type="block" selector=".captcha-img"/>
-        <element name="captchaReload" type="block" selector=".captcha-reload"/>
         <element name="nameField" type="input" selector="#name"/>
         <element name="emailField" type="input" selector="#email"/>
         <element name="commentField" type="textarea" selector="#comment"/>
