@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Filter\Test\Unit;
 
+use Magento\Store\Model\Store;
+
 class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -13,10 +15,16 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      */
     private $templateFilter;
 
+    /**
+     * @var Store
+     */
+    private $store;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->templateFilter = $objectManager->getObject(\Magento\Framework\Filter\Template::class);
+        $this->store = $objectManager->getObject(Store::class);
     }
 
     public function testFilter()
@@ -379,5 +387,56 @@ TEMPLATE;
 
         $dataObject->setAllVisibleItems($visibleItems);
         return $dataObject;
+    }
+
+    /**
+     * Check that if calling a method of an object fails expected result is returned.
+     */
+    public function testInvalidMethodCall()
+    {
+        $this->templateFilter->setVariables(['dateTime' => '\DateTime']);
+        $this->assertEquals(
+            '\DateTime',
+            $this->templateFilter->filter('{{var dateTime.createFromFormat(\'d\',\'1548201468\')}}')
+        );
+    }
+
+    /**
+     * Test adding callbacks when already filtering.
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInappropriateCallbacks()
+    {
+        $this->templateFilter->setVariables(['filter' => $this->templateFilter]);
+        $this->templateFilter->filter('Test {{var filter.addAfterFilterCallback(\'mb_strtolower\')}}');
+    }
+
+    /**
+     * Test adding callbacks when already filtering.
+     *
+     * @expectedException \InvalidArgumentException
+     * @dataProvider disallowedMethods
+     */
+    public function testDisallowedMethods($method)
+    {
+        $this->templateFilter->setVariables(['store' => $this->store]);
+        $this->templateFilter->filter('{{var store.'.$method.'()}}');
+    }
+
+    /**
+     * Data for testDisallowedMethods method
+     *
+     * @return array
+     */
+    public function disallowedMethods()
+    {
+        return [
+            ['getResourceCollection'],
+            ['load'],
+            ['save'],
+            ['getCollection'],
+            ['getResource'],
+        ];
     }
 }
