@@ -15,7 +15,7 @@
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{productQty}}" stepKey="fillProduct1Quantity"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCartButton"/>
-        <waitForPageLoad stepKey="waitForProductToAddInCart1"/>
+        <waitForPageLoad stepKey="waitForProductToAddInCart"/>
         <seeElement selector="{{StorefrontProductPageSection.successMsg}}" stepKey="seeSuccessSaveMessage"/>
     </actionGroup>
 </actionGroups>
