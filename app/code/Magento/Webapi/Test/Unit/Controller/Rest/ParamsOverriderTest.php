@@ -8,6 +8,7 @@ namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
 use \Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -56,9 +57,9 @@ class ParamsOverriderTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        /** @var \Magento\Webapi\Controller\Rest\ParamsOverrider $paramsOverrider */
+        /** @var ParamsOverrider $paramsOverrider */
         $paramsOverrider = $objectManager->getObject(
-            'Magento\Webapi\Controller\Rest\ParamsOverrider',
+            ParamsOverrider::class,
             [
                 'paramOverriders' => ['%customer_id%' => $paramOverriderCustomerId ],
                 'dataObjectConverter' => $objectConverter
