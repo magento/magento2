@@ -48,26 +48,45 @@ class OptionPriceRendererTest extends TestCase
         );
     }
 
-    public function testRenderTierPrice()
+    /**
+     * Test to render Tier price html
+     *
+     * @param bool $priceRenderExist
+     * @param string $expectedHtml
+     * @dataProvider renderTierPriceDataProvider
+     */
+    public function testRenderTierPrice(bool $priceRenderExist, string $expectedHtml): void
     {
-        $tierPriceHtml = 'tier price html';
+        $priceRenderer = false;
         $expectedArguments = ['zone' => Render::ZONE_ITEM_OPTION];
-
         $productMock = $this->createMock(Product::class);
-        $blockMock = $this->createPartialMock(BlockInterface::class, ['toHtml', 'render']);
-        $blockMock->expects($this->once())
-            ->method('render')
-            ->with('tier_price', $productMock, $expectedArguments)
-        ->willReturn($tierPriceHtml);
+
+        if ($priceRenderExist) {
+            $priceRenderer = $this->createPartialMock(BlockInterface::class, ['toHtml', 'render']);
+            $priceRenderer->expects($this->once())
+                ->method('render')
+                ->with('tier_price', $productMock, $expectedArguments)
+                ->willReturn($expectedHtml);
+        }
 
         $this->layoutMock->method('getBlock')
             ->with('product.price.render.default')
-            ->willReturn($blockMock);
+            ->willReturn($priceRenderer);
 
         $this->assertEquals(
-            $tierPriceHtml,
+            $expectedHtml,
             $this->renderer->renderTierPrice($productMock),
             'Render Tier price is wrong'
         );
+    }
+
+    /**
+     * Data provider for test to render Tier price
+     *
+     * @return array
+     */
+    public function renderTierPriceDataProvider(): array
+    {
+        return [[true, 'tier price html'], [false, '']];
     }
 }
