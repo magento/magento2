@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14769"/>
             <group value="CatalogRule"/>
+            <group value="banana"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
