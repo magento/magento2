@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\Translation\Model\Js;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\View\Asset\PreProcessor\Chain;
-use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\FileSystem;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\Framework\Translate;
+use Magento\Framework\App\AreaList;
+use Magento\Framework\Phrase;
+use Magento\Framework\Phrase\RendererInterface;
 
 /**
  * Class for testing translation.
@@ -24,6 +24,11 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
      * @var PreProcessor
      */
     private $model;
+
+    /**
+     * @var RendererInterface
+     */
+    private $origRenderer;
 
     /**
      * Set up.
@@ -38,21 +43,30 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
         $objectManager->addSharedInstance($viewFileSystem, FileSystem::class);
         $translator = $objectManager->create(Translate::class);
         $objectManager->addSharedInstance($translator, Translate::class);
-
-        $config = $this->createPartialMock(Config::class, ['isEmbeddedStrategy', 'getPatterns']);
-        $config->expects($this->atLeastOnce())->method('isEmbeddedStrategy')->willReturn(true);
-        $config->expects($this->atLeastOnce())->method('getPatterns')->willReturn(
-            [
-                "~(?:\\$|jQuery)\\.mage\\.__\\((?s)[^'\\\")]*?(['\\\"])(?P<translate>.+?)(?<!\\\\)\\1(?s).*?\\)~",
-                "~\\\$t\\((?s)[^'\\\")]*?([\\\"'])(?P<translate>.+?)\\1(?s).*?\\)~"
-            ]
+        $areaList = $objectManager->create(AreaList::class);
+        $this->origRenderer = Phrase::getRenderer();
+        Phrase::setRenderer(
+            $objectManager->get(RendererInterface::class)
         );
+
         $this->model = $objectManager->create(
             PreProcessor::class,
             [
-                'config' => $config
+                'translate' => $translator,
+                'areaList' => $areaList
             ]
         );
+
+        $translator->setLocale('en_AU');
+        $translator->loadData();
+    }
+
+    /**
+     * Tear down.
+     */
+    protected function tearDown()
+    {
+        Phrase::setRenderer($this->origRenderer);
     }
 
     /**
@@ -66,25 +80,7 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
     public function testProcess(string $content, string $translation)
     {
         CacheCleaner::cleanAll();
-        $locale = $this->getMockBuilder(
-            LocalInterface::class
-        )->getMockForAbstractClass();
-        $context = $this->createPartialMock(
-            FallbackContext::class,
-            ['getAreaCode', 'getLocale']
-        );
-
-        $context->expects($this->atLeastOnce())->method('getAreaCode')->willReturn('base');
-        $context->expects($this->atLeastOnce())->method('getLocale')->willReturn('en_AU');
-        $locale->expects($this->atLeastOnce())->method('getContext')->willReturn($context);
-
-        $chain =  Bootstrap::getObjectManager()->create(
-            Chain::class,
-            ['asset' => $locale, 'origContent' => '', 'origContentType' => '', 'origAssetPath' => '']
-        );
-        $chain->setContent($content);
-        $this->model->process($chain);
-        $this->assertEquals($translation, $chain->getContent());
+        $this->assertEquals($translation, $this->model->translate($content));
     }
 
     /**
