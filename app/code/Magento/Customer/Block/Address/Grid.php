@@ -1,9 +1,10 @@
 <?php
-declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Block\Address;
 
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory as AddressCollectionFactory;
@@ -236,8 +237,12 @@ class Grid extends \Magento\Framework\View\Element\Template
             }
             /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
             $collection = $this->addressCollectionFactory->create();
-            $collection->setOrder('entity_id', 'desc')
-                ->setCustomerFilter([$this->getCustomer()->getId()]);
+            $collection->setOrder('entity_id', 'desc');
+            $collection->addFieldToFilter(
+                'entity_id',
+                ['nin' => [$this->getDefaultBilling(), $this->getDefaultShipping()]]
+            );
+            $collection->setCustomerFilter([$this->getCustomer()->getId()]);
             $this->addressCollection = $collection;
         }
         return $this->addressCollection;
