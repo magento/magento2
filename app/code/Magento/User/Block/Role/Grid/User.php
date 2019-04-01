@@ -213,7 +213,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         if (false === $users) {
             $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
         }
-        if (count($users) > 0) {
+        if (!empty($users)) {
             if ($json) {
                 $jsonUsers = [];
                 foreach ($users as $userid) {
@@ -249,7 +249,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @return array|bool
      * @since 100.1.0
-     * @SuppressWarnings(PHPMD.ForbiddenFunctionsSniff)
+     * @SuppressWarnings(PHPMD.DiscouragedFunctionsSniff)
      */
     protected function restoreUsersFormData()
     {
