@@ -82,7 +82,7 @@
         <amOnPage url="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}" stepKey="goToOrderReviewPage"/>
         <see userInput="{{UK_Default_Address.street[0]}} {{UK_Default_Address.city}}, {{UK_Default_Address.postcode}}"
              selector="{{StorefrontCustomerOrderViewSection.shippingAddress}}" stepKey="checkShippingAddress"/>
-        <see userInput="{{UK_Default_Address.street[0]}} {{UK_Default_Address.city}}, {{UK_Default_Address.postcode}}"
+        <see userInput="{{US_Address_TX.street[0]}}"
              selector="{{StorefrontCustomerOrderViewSection.billingAddress}}" stepKey="checkBillingAddress"/>
     </test>
 </tests>

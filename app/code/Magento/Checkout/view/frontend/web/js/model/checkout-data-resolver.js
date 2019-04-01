@@ -60,7 +60,6 @@ define([
                     this.resolveBillingAddress();
                 }
             }
-
         },
 
         /**
@@ -244,7 +243,7 @@ define([
                 return;
             }
 
-            if (quote.isVirtual()) {
+            if (quote.isVirtual() || !quote.billingAddress()) {
                 isBillingAddressInitialized = addressList.some(function (addrs) {
                     if (addrs.isDefaultBilling()) {
                         selectBillingAddress(addrs);
