@@ -11,7 +11,6 @@ use Magento\Backend\Block\Widget\Grid\Column;
  * Roles grid
  *
  * @api
- * @since 100.0.2
  */
 class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -158,7 +157,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
                 $result = json_decode($userRoles);
                 return $result ? $this->_jsonEncoder->encode($result) : '{}';
             }
-            return $this->escapeJs($this->escapeHtml($userRoles));
+            return $this->helper(\Magento\Framework\EscapeHelper::class)->escapeJs($this->escapeHtml($userRoles));
         }
         /* @var $user \Magento\User\Model\User */
         $user = $this->_coreRegistry->registry('permissions_user');

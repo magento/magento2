@@ -202,7 +202,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
             if ($json) {
                 return $this->getJSONString($inRoleUser);
             }
-            return $this->escapeJs($this->escapeHtml($inRoleUser));
+            return $this->helper(\Magento\Framework\EscapeHelper::class)->escapeJs($this->escapeHtml($inRoleUser));
         }
         $roleId = $this->getRoleId();
         $users = $this->getUsersFormData();
@@ -282,5 +282,4 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         $output = json_decode($input);
         return $output ? $this->_jsonEncoder->encode($output) : '{}';
     }
-
 }
