@@ -301,8 +301,8 @@ class AnnotationFormatValidator
                 $this->validateShortDescriptionFormat(
                     $phpcsFile,
                     (int) $shortPtr,
-                    $commentStartPtr,
-                    $commentEndPtr,
+                    (int)$commentStartPtr,
+                    (int)$commentEndPtr,
                     $emptyTypeTokens
                 );
             }
