@@ -123,27 +123,55 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $fileName
+     * @param string $fileType
+     * @param string|null $storageType
+     *
+     * @return void
+     * @dataProvider testUploadFileWithWrongExtensionDataProvider
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage File validation failed.
      */
-    public function testUploadFileWithWrongExtension()
+    public function testUploadFileWithWrongExtension(string $fileName, string $fileType, $storageType = null)
     {
         $fileName = 'text.txt';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
         $file = fopen($filePath, "wb");
         fwrite($file, 'just a text');
+        $fixtureDir = realpath(__DIR__ . '/../../../_files');
+        copy($fixtureDir . DIRECTORY_SEPARATOR . $fileName, $filePath);
 
         $_FILES['image'] = [
             'name' => $fileName,
             'type' => 'text/plain',
+            'type' => $fileType,
             'tmp_name' => $filePath,
             'error' => 0,
             'size' => 12500,
         ];
 
         $this->storage->uploadFile(self::$_baseDir);
+        $this->storage->uploadFile(self::$_baseDir, $storageType);
         $this->assertFalse(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+    }
+
+    /**
+     * @return array
+     */
+    public function testUploadFileWithWrongExtensionDataProvider(): array
+    {
+        return [
+            [
+                'fileName' => 'text.txt',
+                'fileType' => 'text/plain',
+            ],
+            [
+                'fileName' => 'test.swf',
+                'fileType' => 'application/x-shockwave-flash',
+                'storageType' => 'media',
+            ],
+        ];
     }
 
     /**
