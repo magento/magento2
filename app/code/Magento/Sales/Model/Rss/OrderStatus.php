@@ -107,6 +107,7 @@ class OrderStatus implements DataProviderInterface
      * Get rss data.
      *
      * @return array
+     * @throws \InvalidArgumentException
      */
     public function getRssData()
     {
