@@ -348,7 +348,7 @@ class CommonTaxCollector extends AbstractTotal
         $useBaseCurrency
     ) {
         $items = $shippingAssignment->getItems();
-        if (!count($items)) {
+        if (empty($items)) {
             return [];
         }
 
@@ -478,7 +478,7 @@ class CommonTaxCollector extends AbstractTotal
     {
         $items = $shippingAssignment->getItems();
         $address = $shippingAssignment->getShipping()->getAddress();
-        if (!count($items)) {
+        if (empty($items)) {
             return $this->quoteDetailsDataObjectFactory->create();
         }
 
