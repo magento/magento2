@@ -6,14 +6,15 @@
 namespace Magento\Paypal\Test\Unit\Controller\Transparent;
 
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Request\Http;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\Session\SessionManager;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Controller\Transparent\RequestSecureToken;
 use Magento\Paypal\Model\Payflow\Service\Request\SecureToken;
 use Magento\Paypal\Model\Payflow\Transparent;
+use Magento\Quote\Model\Quote;
 
 /**
  * Class RequestSecureTokenTest
@@ -58,6 +59,11 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
     protected $sessionManagerMock;
 
     /**
+     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $formKeyValidator;
+
+    /**
      * Set up
      *
      * @return void
@@ -65,13 +71,12 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
 
+        $request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $requestMock = $this->createMock(Http::class);
-        $requestMock->expects($this->any())->method('isPost')->willReturn(true);
-        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($requestMock);
+        $this->contextMock->method('getRequest')
+            ->willReturn($request);
 
         $this->resultJsonFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\JsonFactory::class)
             ->setMethods(['create'])
@@ -96,13 +101,19 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->formKeyValidator = $this->getMockBuilder(Validator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->controller = new \Magento\Paypal\Controller\Transparent\RequestSecureToken(
             $this->contextMock,
             $this->resultJsonFactoryMock,
             $this->sessionTransparentMock,
             $this->secureTokenServiceMock,
             $this->sessionManagerMock,
-            $this->transparentMock
+            $this->transparentMock,
+            null,
+            $this->formKeyValidator
         );
     }
 
@@ -119,16 +130,15 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
             'error' => false
         ];
 
-        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+        $quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
         $tokenMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $jsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
+        $this->formKeyValidator->method('validate')
+            ->willReturn(true);
         $this->sessionManagerMock->expects($this->atLeastOnce())
             ->method('getQuote')
             ->willReturn($quoteMock);
@@ -153,15 +163,9 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
                     ['securetoken', null, $secureToken]
                 ]
             );
-        $this->resultJsonFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($jsonMock);
-        $jsonMock->expects($this->once())
-            ->method('setData')
-            ->with($resultExpectation)
-            ->willReturnSelf();
+        $jsonResult = $this->getJsonResult($resultExpectation);
 
-        $this->assertEquals($jsonMock, $this->controller->execute());
+        $this->assertEquals($jsonResult, $this->controller->execute());
     }
 
     public function testExecuteTokenRequestException()
@@ -173,13 +177,11 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
             'error_messages' => __('Your payment has been declined. Please try again.')
         ];
 
-        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+        $quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $jsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $this->formKeyValidator->method('validate')
+            ->willReturn(true);
         $this->sessionManagerMock->expects($this->atLeastOnce())
             ->method('getQuote')
             ->willReturn($quoteMock);
@@ -193,18 +195,21 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
             ->method('requestToken')
             ->with($quoteMock)
             ->willThrowException(new \Exception());
-        $this->resultJsonFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($jsonMock);
-        $jsonMock->expects($this->once())
-            ->method('setData')
-            ->with($resultExpectation)
-            ->willReturnSelf();
 
-        $this->assertEquals($jsonMock, $this->controller->execute());
+        $jsonResult = $this->getJsonResult($resultExpectation);
+
+        $this->assertEquals($jsonResult, $this->controller->execute());
     }
 
-    public function testExecuteEmptyQuoteError()
+    /**
+     * Tests error generation.
+     *
+     * @param Quote|null $quote
+     * @param bool $isValidToken
+     * @return void
+     * @dataProvider executeErrorDataProvider
+     */
+    public function testExecuteError($quote, bool $isValidToken)
     {
         $resultExpectation = [
             'success' => false,
@@ -212,22 +217,51 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
             'error_messages' => __('Your payment has been declined. Please try again.')
         ];
 
-        $quoteMock = null;
-        $jsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
+        $this->sessionManagerMock->expects($this->atLeastOnce())
+            ->method('getQuote')
+            ->willReturn($quote);
+        $this->formKeyValidator->method('validate')
+            ->willReturn($isValidToken);
+
+        $jsonResult = $this->getJsonResult($resultExpectation);
+
+        $this->assertEquals($jsonResult, $this->controller->execute());
+    }
+
+    /**
+     * @return array
+     */
+    public function executeErrorDataProvider()
+    {
+        $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->sessionManagerMock->expects($this->atLeastOnce())
-            ->method('getQuote')
-            ->willReturn($quoteMock);
+        return [
+            'empty quote' => [null, true],
+            'invalid CSRF token' => [$quote, false]
+        ];
+    }
+
+    /**
+     * Returns json result.
+     *
+     * @param array $result
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getJsonResult(array $result): \PHPUnit_Framework_MockObject_MockObject
+    {
+        $jsonMock = $this->getMockBuilder(Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $jsonMock->expects($this->once())
+            ->method('setData')
+            ->with($result)
+            ->willReturnSelf();
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($jsonMock);
-        $jsonMock->expects($this->once())
-            ->method('setData')
-            ->with($resultExpectation)
-            ->willReturnSelf();
 
-        $this->assertEquals($jsonMock, $this->controller->execute());
+        return $jsonMock;
     }
 }
