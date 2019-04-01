@@ -155,7 +155,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
                 $result = json_decode($userRoles);
                 return $result ? $this->_jsonEncoder->encode($result) : '{}';
             }
-            return $this->helper(\Magento\Framework\EscapeHelper::class)->escapeJs($this->escapeHtml($userRoles));
+            return $this->_escaper->escapeJs($this->escapeHtml($userRoles));
         }
         /* @var $user \Magento\User\Model\User */
         $user = $this->_coreRegistry->registry('permissions_user');

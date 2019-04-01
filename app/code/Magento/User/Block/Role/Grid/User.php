@@ -185,7 +185,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        $roleId = $this->getRequest()->getParam('rid');
+        $roleId =  $this->_escaper->escapeJs($this->escapeHtml($this->getRequest()->getParam('rid')));
         return $this->getUrl('*/*/editrolegrid', ['rid' => $roleId]);
     }
 
@@ -202,14 +202,14 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
             if ($json) {
                 return $this->getJSONString($inRoleUser);
             }
-            return $this->helper(\Magento\Framework\EscapeHelper::class)->escapeJs($this->escapeHtml($inRoleUser));
+            return $this->_escaper->escapeJs($this->escapeHtml($inRoleUser));
         }
         $roleId = $this->getRoleId();
         $users = $this->getUsersFormData();
         if (false === $users) {
             $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
         }
-        if (sizeof($users) > 0) {
+        if (!empty($users)) {
             if ($json) {
                 $jsonUsers = [];
                 foreach ($users as $userid) {
@@ -243,6 +243,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * Restore Users Form Data from the registry
      *
      * @return array|bool
+     * @SuppressWarnings(PHPMD.DiscouragedFunctionsSniff)
      */
     protected function restoreUsersFormData()
     {
