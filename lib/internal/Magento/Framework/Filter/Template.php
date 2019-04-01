@@ -60,13 +60,13 @@ class Template implements \Zend_Filter_Interface
      * @var string[]
      */
     private $restrictedMethods = [
-        'addafterfiltercallback',
         'getresourcecollection',
         'load',
         'save',
         'getcollection',
         'getresource',
         'getconfig',
+        'delete',
     ];
 
     /**
@@ -315,25 +315,6 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * Validate method call initiated in a template.
-     *
-     * Deny calls for methods that may disrupt template processing.
-     *
-     * @param object $object
-     * @param string $method
-     * @return void
-     * @throws \InvalidArgumentException
-     */
-    private function validateVariableMethodCall($object, $method)
-    {
-        if ($object === $this) {
-            if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
-                throw new \InvalidArgumentException("Method $method cannot be called from template.");
-            }
-        }
-    }
-
-    /**
      * Check allowed methods for data objects.
      *
      * Deny calls for methods that may disrupt template processing.
@@ -400,19 +381,6 @@ class Template implements \Zend_Filter_Interface
                             );
                         }
                     }
-                }
-                $last = $i;
-            } elseif (isset($stackVars[$i - 1]['variable'])
-                      && is_object($stackVars[$i - 1]['variable'])
-                      && $stackVars[$i]['type'] == 'method'
-            ) {
-                // Calling object methods
-                $object = $stackVars[$i - 1]['variable'];
-                $method = $stackVars[$i]['name'];
-                if (method_exists($object, $method)) {
-                    $args = $this->getStackArgs($stackVars[$i]['args']);
-                    $this->validateVariableMethodCall($object, $method);
-                    $stackVars[$i]['variable'] = call_user_func_array([$object, $method], $args);
                 }
                 $last = $i;
             }
