@@ -7,6 +7,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\LinkFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\ResourceModel\Product\LinkProcessor as LinkProcessorResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\ImportExport\Model\Import;
@@ -54,27 +55,20 @@ class LinkProcessor
     private $skuProcessor;
 
     /**
-     * @var AdapterInterface
+     * @var LinkProcessorResourceModel
      */
-    private $connection;
-
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Link
-     */
-    private $resource;
+    private $resourceModel;
 
     public function __construct(
-        ResourceConnection $resourceConnection,
         LinkFactory $linkFactory,
         LoggerInterface $logger,
-        Helper $resourceHelper,
         Data $importData,
         SkuProcessor $skuProcessor,
+        LinkProcessorResourceModel $resourceModel,
         array $linkNameToId
     ) {
         $this->linkFactory = $linkFactory;
         $this->logger = $logger;
-        $this->resourceHelper = $resourceHelper;
         $this->dataSourceModel = $importData;
         $this->skuProcessor = $skuProcessor;
 
@@ -85,8 +79,9 @@ class LinkProcessor
             $this->linkNameToId[$key] = constant($value);
         }
 
-        $this->connection = $resourceConnection->getConnection();
         $this->resource = $this->linkFactory->create();
+
+        $this->resourceModel = $resourceModel;
     }
 
     /**
@@ -106,10 +101,10 @@ class LinkProcessor
         $this->entityModel = $entityModel;
         $this->_productEntityLinkField = $productEntityLinkField;
 
-        $mainTable = $this->resource->getMainTable();
+        $nextLinkId = $this->getNextAutoincrement();
+
         $positionAttrId = [];
-        $nextLinkId = $this->resourceHelper->getNextAutoincrement($mainTable);
-        $positionAttrId = $this->loadPositionAttributes($positionAttrId);
+        $positionAttrId = $this->loadPositionAttributes($this->linkNameToId, $positionAttrId);
 
         while ($bunch = $this->dataSourceModel->getNextBunch()) {
             $productIds = [];
@@ -124,7 +119,7 @@ class LinkProcessor
                 $sku = $rowData[Product::COL_SKU];
 
                 $productId = $this->skuProcessor->getNewSku($sku)[$this->_productEntityLinkField];
-                $productLinkKeys = $this->fetchExistingLinks($productId);
+                $productLinkKeys = $this->resourceModel->fetchExistingLinks($productId);
 
                 foreach ($this->linkNameToId as $linkName => $linkId) {
                     $productIds[] = $productId;
@@ -172,7 +167,9 @@ class LinkProcessor
                 }
             }
 
-            $this->deleteExistingLinks($productIds);
+            if (Import::BEHAVIOR_APPEND !== $this->entityModel->getBehavior() && $productIds) {
+                $this->deleteExistingLinks($productIds);
+            }
             $this->insertNewLinks($linkRows, $positionRows);
         }
 
@@ -223,30 +220,7 @@ class LinkProcessor
             && strcasecmp($linkedSku, $sku) !== 0;
     }
 
-    /**
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Link $resource
-     * @param $productId
-     *
-     * @return array
-     */
-    private function fetchExistingLinks(
-        $productId
-    ): array {
-        $productLinkKeys = [];
-        $select = $this->connection->select()->from(
-            $this->resource->getTable('catalog_product_link'),
-            ['id' => 'link_id', 'linked_id' => 'linked_product_id', 'link_type_id' => 'link_type_id']
-        )->where(
-            'product_id = :product_id'
-        );
-        $bind = [':product_id' => $productId];
-        foreach ($this->connection->fetchAll($select, $bind) as $linkData) {
-            $linkKey = "{$productId}-{$linkData['linked_id']}-{$linkData['link_type_id']}";
-            $productLinkKeys[$linkKey] = $linkData['id'];
-        }
 
-        return $productLinkKeys;
-    }
 
     /**
      * @param $rowData
@@ -281,61 +255,6 @@ class LinkProcessor
     }
 
     /**
-     * pre-load 'position' attributes ID for each link type once
-     *
-     * @param array $positionAttrId
-     *
-     * @return array
-     */
-    private function loadPositionAttributes(array $positionAttrId): array
-    {
-        foreach ($this->linkNameToId as $linkName => $linkId) {
-            $select = $this->connection->select()->from(
-                $this->resource->getTable('catalog_product_link_attribute'),
-                ['id' => 'product_link_attribute_id']
-            )->where(
-                'link_type_id = :link_id AND product_link_attribute_code = :position'
-            );
-            $bind = [':link_id' => $linkId, ':position' => 'position'];
-            $positionAttrId[$linkId] = $this->connection->fetchOne($select, $bind);
-        }
-
-        return $positionAttrId;
-}
-
-    /**
-     * @param array $productIds
-     */
-    private function deleteExistingLinks(array $productIds): void
-    {
-        if (Import::BEHAVIOR_APPEND !== $this->entityModel->getBehavior() && $productIds) {
-            $this->connection->delete(
-                $this->resource->getMainTable(),
-                $this->connection->quoteInto('product_id IN (?)', array_unique($productIds))
-            );
-        }
-    }
-
-    /**
-     * @param array $linkRows
-     * @param array $positionRows
-     */
-    private function insertNewLinks(array $linkRows, array $positionRows): void
-    {
-        if ($linkRows) {
-            $this->connection->insertOnDuplicate($this->resource->getMainTable(), $linkRows, ['link_id']);
-        }
-        if ($positionRows) {
-            // process linked product positions
-            $this->connection->insertOnDuplicate(
-                $this->resource->getAttributeTypeTable('int'),
-                $positionRows,
-                ['value']
-            );
-        }
-    }
-
-    /**
      * @param string $linkedSku
      *
      * @return mixed
@@ -351,4 +270,6 @@ class LinkProcessor
 
         return $linkedId;
 }
+
+
 }
