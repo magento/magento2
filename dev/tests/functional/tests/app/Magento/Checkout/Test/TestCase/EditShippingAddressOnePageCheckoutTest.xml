@@ -14,7 +14,6 @@
             <data name="editShippingAddress/dataset" xsi:type="string">empty_UK_address_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
-            <data name="billingCheckboxState" xsi:type="string">Yes</data>
             <data name="products" xsi:type="array">
                 <item name="0" xsi:type="string">catalogProductSimple::default</item>
             </data>
