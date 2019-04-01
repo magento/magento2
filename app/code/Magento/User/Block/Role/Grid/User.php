@@ -249,7 +249,6 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @return array|bool
      * @since 100.1.0
-     * @SuppressWarnings(PHPMD.DiscouragedFunctionsSniff)
      */
     protected function restoreUsersFormData()
     {
@@ -257,6 +256,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
             \Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY
         );
         if (null !== $sessionData) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             parse_str($sessionData, $sessionData);
             return array_keys($sessionData);
         }
