@@ -146,7 +146,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $serviceMethodName name of the method that we are trying to call
      * @param array $inputArray data to send to method in key-value format
      * @return array list of parameters that can be used to call the service method
-     * @throws InputException if no value is provided for required parameters
      * @throws WebapiException
      */
     public function process($serviceClassName, $serviceMethodName, array $inputArray)
@@ -230,6 +229,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $data
      * @return object the newly created and populated object
      * @throws \Exception
+     * @throws SerializationException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _createFromArray($className, $data)
@@ -365,10 +365,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     /**
      * Prepare attribute value by loaded attribute preprocessors
      *
-     * @param string $key
+     * @param mixed $key
      * @param mixed $customAttribute
      */
-    private function runCustomAttributePreprocessors(string $key, &$customAttribute)
+    private function runCustomAttributePreprocessors($key, &$customAttribute)
     {
         $preprocessorsMap = $this->getAttributesPreprocessorsMap();
         if ($key && is_array($customAttribute) && array_key_exists($key, $preprocessorsMap)) {
@@ -386,6 +386,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      *
      * @param string[] $customAttribute
      * @return string[]
+     * @throws SerializationException
      */
     private function processCustomAttribute($customAttribute)
     {
