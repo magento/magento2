@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backup\Model;
 
 use Magento\Backup\Helper\Data as Helper;
 use Magento\Backup\Model\ResourceModel\Table\GetListTables;
 use Magento\Backup\Model\ResourceModel\View\CreateViewsBackup;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\RuntimeException;
 
 /**
@@ -184,8 +186,6 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 
         $backup->write($this->getResource()->getHeader());
 
-        $ignoreDataTablesList = $this->getIgnoreDataTablesList();
-
         foreach ($tables as $table) {
             $backup->write(
                 $this->getResource()->getTableHeader($table) . $this->getResource()->getTableDropSql($table) . "\n"
@@ -194,7 +194,7 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 
             $tableStatus = $this->getResource()->getTableStatus($table);
 
-            if ($tableStatus->getRows() && !in_array($table, $ignoreDataTablesList)) {
+            if (!$this->isTableEmpty($tableStatus) && !$this->isTableIgnored($table)) {
                 $backup->write($this->getResource()->getTableDataBeforeSql($table));
 
                 if ($tableStatus->getDataLength() > self::BUFFER_LENGTH) {
@@ -236,15 +236,16 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
     public function getDBBackupSize()
     {
         $tables = $this->getResource()->getTables();
-        $ignoreDataTablesList = $this->getIgnoreDataTablesList();
-        $size = 0;
-        foreach ($tables as $table) {
+
+        return array_reduce($tables, function ($size, $table) {
             $tableStatus = $this->getResource()->getTableStatus($table);
-            if ($tableStatus->getRows() && !in_array($table, $ignoreDataTablesList)) {
+
+            if (!$this->isTableIgnored($table) && !$this->isTableEmpty($tableStatus)) {
                 $size += $tableStatus->getDataLength() + $tableStatus->getIndexLength();
             }
-        }
-        return $size;
+
+            return $size;
+        }, 0);
     }
 
     /**
@@ -252,14 +253,28 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
      *
      * @return string[]
      */
-    public function getIgnoreDataTablesList()
+    public function getIgnoreDataTablesList(): array
     {
-        $result = [];
+        return array_map([$this->_resource, 'getTableName'], $this->_ignoreDataTablesList);
+    }
 
-        foreach ($this->_ignoreDataTablesList as $table) {
-            $result[] = $this->_resource->getTableName($table);
-        }
+    /**
+     * @param DataObject|bool $tableStatus
+     * @return bool
+     */
+    private function isTableEmpty($tableStatus)
+    {
+        return !($tableStatus && $tableStatus->getRows());
+    }
 
-        return $result;
+    /**
+     * Returns information whether table is ignored
+     *
+     * @param string $table
+     * @return bool
+     */
+    private function isTableIgnored($table): bool
+    {
+        return in_array($table, $this->getIgnoreDataTablesList());
     }
 }
