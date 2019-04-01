@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Ups;
 
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -30,9 +30,9 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     const CARRIER_METHOD_CODE_GROUND = 'GND';
 
     /**
-     * @var QuoteFactory
+     * @var Quote
      */
-    private $quoteFactory;
+    private $quote;
 
     /**
      * @var CustomerTokenServiceInterface
@@ -40,14 +40,9 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var QuoteResource
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteResource;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
      * @inheritdoc
@@ -55,15 +50,14 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->quote = $objectManager->create(Quote::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
@@ -71,9 +65,9 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
      */
     public function testSetUpsShippingMethod()
     {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_quote', 'reserved_order_id');
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
+        $quoteReservedId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
+        $quote = $this->quote->load($quoteReservedId, 'reserved_order_id');
         $shippingAddressId = (int)$quote->getShippingAddress()->getId();
 
         $query = $this->getAddUpsShippingMethodQuery(
