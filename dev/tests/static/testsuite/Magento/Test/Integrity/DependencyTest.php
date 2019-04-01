@@ -392,7 +392,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     protected function _collectDependencies($currentModuleName, $dependencies = [])
     {
-        if (!count($dependencies)) {
+        if (empty($dependencies)) {
             return [];
         }
         $undeclared = [];
