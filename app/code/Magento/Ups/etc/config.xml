@@ -19,7 +19,7 @@
                 <cutoff_cost />
                 <dest_type>RES</dest_type>
                 <free_method>GND</free_method>
-                <gateway_url>http://www.ups.com/using/services/rave/qcostcgi.cgi</gateway_url>
+                <gateway_url>https://www.ups.com/using/services/rave/qcostcgi.cgi</gateway_url>
                 <gateway_xml_url>https://onlinetools.ups.com/ups.app/xml/Rate</gateway_xml_url>
                 <handling>0</handling>
                 <model>Magento\Ups\Model\Carrier</model>
