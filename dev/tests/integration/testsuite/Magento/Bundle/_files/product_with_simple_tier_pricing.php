@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
+include __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 
 /** @var $productFactory Magento\Catalog\Model\ProductFactory */
 $productFactory = $objectManager->create(\Magento\Catalog\Model\ProductFactory::class);
