@@ -409,6 +409,11 @@
             <stringProp name="Argument.value">${__P(graphqlGetProductSearchByTextAndCategoryIdPercentage,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="graphqlGetSimpleProductDetailsByNamePercentage" elementType="Argument">
+            <stringProp name="Argument.name">graphqlGetSimpleProductDetailsByNamePercentage</stringProp>
+            <stringProp name="Argument.value">${__P(graphqlGetSimpleProductDetailsByNamePercentage,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="graphqlGetSimpleProductDetailsByProductUrlKeyPercentage" elementType="Argument">
             <stringProp name="Argument.name">graphqlGetSimpleProductDetailsByProductUrlKeyPercentage</stringProp>
             <stringProp name="Argument.value">${__P(graphqlGetSimpleProductDetailsByProductUrlKeyPercentage,0)}</stringProp>
