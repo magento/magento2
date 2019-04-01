@@ -15,6 +15,7 @@ use Magento\Framework\Filesystem\DriverPool;
  * @api
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Functions.DiscouragedFunction
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {
@@ -282,7 +283,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 
         $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
         if (!$this->checkAllowedExtension($fileExtension)) {
-            throw new \Exception('Disallowed file type.');
+            throw new \Magento\Framework\Exception\LocalizedException('Disallowed file type.');
         }
         //run validate callbacks
         foreach ($this->_validateCallbacks as $params) {
@@ -386,6 +387,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      */
     protected function chmod($file)
     {
+        //phpcs:ignore Squiz.PHP.NonExecutableCode.ReturnNotRequired
         return;
     }
 }

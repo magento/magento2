@@ -6,6 +6,11 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
+/**
+ * Class UploaderTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class UploaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
