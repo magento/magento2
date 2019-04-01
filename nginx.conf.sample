@@ -166,6 +166,11 @@ location /media/downloadable/ {
 location /media/import/ {
     deny all;
 }
+location /errors/ {
+    location ~* \.xml$ {
+        deny all;
+    }
+}
 
 # PHP entry point for main application
 location ~ ^/(index|get|static|errors/report|errors/404|errors/503|health_check)\.php$ {
@@ -205,6 +210,6 @@ gzip_types
 gzip_vary on;
 
 # Banned locations (only reached if the earlier PHP entry point regexes don't match)
-location ~* (\.php$|\.htaccess$|\.git) {
+location ~* (\.php$|\.phtml$|\.htaccess$|\.git) {
     deny all;
 }
