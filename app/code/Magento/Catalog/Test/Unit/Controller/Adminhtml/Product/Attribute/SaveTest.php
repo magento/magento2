@@ -7,6 +7,7 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save;
+use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
 use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
 use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
@@ -94,6 +95,11 @@ class SaveTest extends AttributeTest
      */
     private $productAttributeMock;
 
+    /**
+     * @var AttributeCodeValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeCodeValidatorMock;
+
     protected function setUp()
     {
         parent::setUp();
@@ -138,6 +144,9 @@ class SaveTest extends AttributeTest
         $this->formDataSerializerMock = $this->getMockBuilder(FormData::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->attributeCodeValidatorMock = $this->getMockBuilder(AttributeCodeValidator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
             ->setMethods(['getId', 'get'])
             ->getMockForAbstractClass();
@@ -171,6 +180,7 @@ class SaveTest extends AttributeTest
             'groupCollectionFactory' => $this->groupCollectionFactoryMock,
             'layoutFactory' => $this->layoutFactoryMock,
             'formDataSerializer' => $this->formDataSerializerMock,
+            'attributeCodeValidator' => $this->attributeCodeValidatorMock
         ]);
     }
 
@@ -224,6 +234,10 @@ class SaveTest extends AttributeTest
         $this->productAttributeMock
             ->method('getAttributeCode')
             ->willReturn('test_code');
+        $this->attributeCodeValidatorMock
+            ->method('isValid')
+            ->with('test_code')
+            ->willReturn(true);
         $this->requestMock->expects($this->once())
             ->method('getPostValue')
             ->willReturn($data);
