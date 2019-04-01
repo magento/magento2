@@ -9,13 +9,12 @@ namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
-use Magento\Quote\Model\Quote\Address\Rate;
-use Magento\Quote\Model\Quote\Address\RateFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
@@ -36,9 +35,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     private $productRepository;
 
     /**
-     * @var RateFactory
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $rateFactory;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
      * @var QuoteResource
@@ -67,7 +66,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
-        $this->rateFactory = $objectManager->get(RateFactory::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
@@ -76,75 +75,51 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_check_payment.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
      * @throws \Exception
      */
     public function testShippingMethodWithVirtualProduct()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_virtual_product');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         /** @var Quote $quote */
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_with_virtual_product', 'reserved_order_id');
+        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
 
-        $shippingAddress = $quote->getShippingAddress();
-
-        /** @var Rate $rate */
-        $rate = $this->rateFactory->create();
-
-        $rate->setPrice(2)
-            ->setAddressId($shippingAddress->getId())
-            ->setCode('flatrate_flatrate');
-        $shippingAddress->setShippingMethod('flatrate_flatrate')
-            ->addShippingRate($rate);
-
+        $virtualProduct = $this->productRepository->get('virtual-product');
+        $quote->addProduct($virtualProduct, 1);
         $this->quoteRepository->save($quote);
 
         $mutation = $this->prepareMutationQuery(
             $maskedQuoteId,
-            'flatrate',
-            'flatrate_flatrate',
-            (int)$shippingAddress->getId()
+            'freeshipping',
+            'freeshipping',
+            (int)$quote->getShippingAddress()->getId()
         );
 
         $this->graphQlQuery($mutation, [], '', $this->getHeaderMap());
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_check_payment.php
      * @throws \Exception
      */
     public function testShippingMethodWithSimpleProduct()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
-
-        /** @var Product $product */
-        $product = $this->productRepository->get('simple');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         /** @var Quote $quote */
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
 
-        $quote->addProduct($product, 1);
-
-        $shippingAddress = $quote->getShippingAddress();
-
-        /** @var Rate $rate */
-        $rate = $this->rateFactory->create();
-
-        $rate->setPrice(2)
-            ->setAddressId($shippingAddress->getId())
-            ->setCode('flatrate_flatrate');
-        $shippingAddress->setShippingMethod('flatrate_flatrate')
-            ->addShippingRate($rate);
-
-        $this->quoteRepository->save($quote);
-
         $mutation = $this->prepareMutationQuery(
             $maskedQuoteId,
-            'flatrate',
-            'flatrate',
-            (int)$shippingAddress->getId()
+            'freeshipping',
+            'freeshipping',
+            (int)$quote->getShippingAddress()->getId()
         );
 
         $this->graphQlQuery($mutation, [], '', $this->getHeaderMap());
@@ -163,28 +138,15 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
 
-        $shippingAddress = $quote->getShippingAddress();
-
-        /** @var Rate $rate */
-        $rate = $this->rateFactory->create();
-
-        $rate->setPrice(2)
-            ->setAddressId($shippingAddress->getId())
-            ->setCode('flatrate_flatrate');
-        $shippingAddress->setShippingMethod('flatrate_flatrate')
-            ->addShippingRate($rate);
-
-        $this->quoteRepository->save($quote);
-
         $mutation = $this->prepareMutationQuery(
             $maskedQuoteId,
             'flatrate',
             'flatrate',
-            (int)$shippingAddress->getId()
+            (int)$quote->getShippingAddress()->getId()
         );
 
         self::expectExceptionMessage(
-            'The shipping address is missing. Set the address and try again.'
+            'Required parameter "cart_address_id" is missing'
         );
         $this->graphQlQuery($mutation, [], '', $this->getHeaderMap());
     }
@@ -211,40 +173,23 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_check_payment.php
      * @throws \Exception
      */
     public function testSetNonExistentShippingMethod()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
-
-        /** @var Product $product */
-        $product = $this->productRepository->get('simple');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         /** @var Quote $quote */
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
 
-        $quote->addProduct($product, 1);
-
-        $shippingAddress = $quote->getShippingAddress();
-
-        /** @var Rate $rate */
-        $rate = $this->rateFactory->create();
-
-        $rate->setPrice(2)
-            ->setAddressId($shippingAddress->getId())
-            ->setCode('flatrate_flatrate');
-        $shippingAddress->setShippingMethod('flatrate_flatrate')
-            ->addShippingRate($rate);
-
-        $this->quoteRepository->save($quote);
-
         $mutation = $this->prepareMutationQuery(
             $maskedQuoteId,
             'non-existed-method-code',
             'non-existed-carrier-code',
-            (int)$shippingAddress->getId()
+            (int)$quote->getShippingAddress()->getId()
         );
 
         self::expectExceptionMessage(
@@ -255,35 +200,14 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_check_payment.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @throws \Exception
      */
     public function testSetShippingMethodIfAddressIsNotBelongToCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
-
-        /** @var Product $product */
-        $product = $this->productRepository->get('simple');
-
-        /** @var Quote $quote */
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
-
-        $quote->addProduct($product, 1);
-
-        $shippingAddress = $quote->getShippingAddress();
-
-        /** @var Rate $rate */
-        $rate = $this->rateFactory->create();
-
-        $rate->setPrice(2)
-            ->setAddressId($shippingAddress->getId())
-            ->setCode('flatrate_flatrate');
-        $shippingAddress->setShippingMethod('flatrate_flatrate')
-            ->addShippingRate($rate);
-
-        $this->quoteRepository->save($quote);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $mutation = $this->prepareMutationQuery(
             $maskedQuoteId,
@@ -300,13 +224,14 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_check_payment.php
      * @throws \Exception
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSetShippingMethodToNonExistentCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('Non_existent_cart_reversed_quote_id');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('Non_existent_cart_reversed_quote_id');
 
         $mutation = $this->prepareMutationQuery(
             $maskedQuoteId,
@@ -324,7 +249,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      */
     public function testSetShippingMethodToGuestCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('guest_quote');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('guest_quote');
 
         /** @var Quote $quote */
         $quote = $this->quoteFactory->create();
@@ -341,15 +266,16 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_check_payment.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
      * @throws \Exception
      */
     public function testSetShippingMethodToAnotherCustomerCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_virtual_product');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_with_virtual_product');
 
-        /** @var Quote $quote test01 */
+        /** @var Quote $quote */
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
 
@@ -372,7 +298,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      */
     public function testSetShippingMethodToNonExistentCartAddress()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $mutation = $this->prepareMutationQuery(
             $maskedQuoteId,
@@ -393,7 +319,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      */
     public function testSetShippingMethodToGuestCartAddress()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('guest_quote');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('guest_quote');
 
         /** @var Quote $quote */
         $quote = $this->quoteFactory->create();
@@ -416,7 +342,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      */
     public function testSetShippingMethodToAnotherCustomerCartAddress()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_with_virtual_product');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_with_virtual_product');
 
         /** @var Quote $quote */
         $quote = $this->quoteFactory->create();
@@ -441,7 +367,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      */
     public function testSetMultipleShippingMethods()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         /** @var Quote $quote */
         $quote = $this->quoteFactory->create();
@@ -536,30 +462,17 @@ QUERY;
     }
 
     /**
-     * @param string $reversedQuoteId
-     * @return string
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
-     */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
-    }
-
-    /**
-     * @param string $reversedQuoteId
+     * @param string $reversedOrderId
      * @param int $customerId
      * @return string
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function assignQuoteToCustomer(
-        string $reversedQuoteId,
+        string $reversedOrderId,
         int $customerId
     ): string {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
         $quote->setCustomerId($customerId);
         $this->quoteResource->save($quote);
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
