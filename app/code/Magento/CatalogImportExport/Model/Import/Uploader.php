@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\DriverPool;
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {
