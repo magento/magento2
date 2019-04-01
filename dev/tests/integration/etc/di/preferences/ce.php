@@ -29,4 +29,5 @@ return [
         \Magento\TestFramework\Lock\Backend\DummyLocker::class,
     \Magento\Framework\ShellInterface::class => \Magento\TestFramework\App\Shell::class,
     \Magento\Framework\App\Shell::class => \Magento\TestFramework\App\Shell::class,
+    \Magento\Framework\Session\SessionStartChecker::class => \Magento\TestFramework\Session\SessionStartChecker::class,
 ];
