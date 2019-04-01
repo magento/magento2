@@ -1305,7 +1305,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Create address instance
+     * Create Address from Factory
      *
      * @return Address
      */
@@ -1315,7 +1315,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Create address collection instance
+     * Create Address Collection from Factory
      *
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
      */
@@ -1325,7 +1325,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Returns templates types
+     * Get Template Types
      *
      * @return array
      */
