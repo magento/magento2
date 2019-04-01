@@ -8,6 +8,9 @@ namespace Magento\Cms\Test\Unit\Ui\Component\Listing\Column;
 use Magento\Cms\Ui\Component\Listing\Column\PageActions;
 use Magento\Framework\Escaper;
 
+/**
+ * Test for Magento\Cms\Ui\Component\Listing\Column\PageActions class.
+ */
 class PageActionsTest extends \PHPUnit\Framework\TestCase
 {
     public function testPrepareItemsByPageId()
