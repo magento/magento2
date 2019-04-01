@@ -9,8 +9,6 @@ use Magento\Backend\Block\Widget\Grid\Column;
 
 /**
  * Roles grid
- *
- * @api
  */
 class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
 {
