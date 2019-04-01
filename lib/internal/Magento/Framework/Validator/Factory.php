@@ -10,12 +10,20 @@ use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Validator;
+use Magento\Framework\Cache\FrontendInterface;
 
 /**
  * Factory for \Magento\Framework\Validator and \Magento\Framework\Validator\Builder.
  */
 class Factory
 {
+    /**
+     * cache key
+     *
+     * @deprecated
+     */
+    const CACHE_KEY = __CLASS__;
+
     /**
      * @var ObjectManagerInterface
      */
@@ -26,7 +34,7 @@ class Factory
      *
      * @var iterable|null
      */
-    protected $_configFiles;
+    protected $_configFiles = null;
 
     /**
      * @var bool
@@ -43,10 +51,12 @@ class Factory
      *
      * @param ObjectManagerInterface $objectManager
      * @param Reader $moduleReader
+     * @param FrontendInterface $cache @deprecated
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        Reader $moduleReader
+        Reader $moduleReader,
+        FrontendInterface $cache
     ) {
         $this->_objectManager = $objectManager;
         $this->moduleReader = $moduleReader;
