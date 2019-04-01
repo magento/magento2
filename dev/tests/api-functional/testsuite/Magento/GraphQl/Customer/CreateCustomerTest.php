@@ -12,6 +12,9 @@ use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test for create customer functionallity
+ */
 class CreateCustomerTest extends GraphQlAbstract
 {
     /**
