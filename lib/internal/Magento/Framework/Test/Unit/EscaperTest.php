@@ -43,6 +43,7 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
      *
      * @param int $codepoint Unicode codepoint in hex notation
      * @return string UTF-8 literal string
+     * @throws \Exception
      */
     protected function codepointToUtf8($codepoint)
     {
