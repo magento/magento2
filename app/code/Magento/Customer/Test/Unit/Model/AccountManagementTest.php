@@ -1238,7 +1238,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         $storeId = 1;
 
-        $hash = md5(uniqid(microtime() . random_int(0, PHP_INT_MAX), true));
+        $hash = hash("sha256", uniqid(microtime() . random_int(0, PHP_INT_MAX), true));
 
         $this->emailNotificationMock->expects($this->once())
             ->method('passwordReminder')
@@ -1262,7 +1262,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
 
-        $hash = md5(uniqid(microtime() . random_int(0, PHP_INT_MAX), true));
+        $hash = hash("sha256", uniqid(microtime() . random_int(0, PHP_INT_MAX), true));
 
         $this->emailNotificationMock->expects($this->once())
             ->method('passwordResetConfirmation')
@@ -1286,7 +1286,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
 
-        $hash = md5(uniqid(microtime() . random_int(0, PHP_INT_MAX), true));
+        $hash = hash("sha256", uniqid(microtime() . random_int(0, PHP_INT_MAX), true));
 
         $this->prepareInitiatePasswordReset($email, $templateIdentifier, $sender, $storeId, $customerId, $hash);
 

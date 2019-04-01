@@ -858,7 +858,7 @@ class ConfigurableProductsFixture extends Fixture
     ) {
         if (null === $this->dataGenerator) {
             $fileName = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'dictionary.csv';
-            $this->dataGenerator = new DataGenerator(realpath($fileName));
+            $this->dataGenerator = new DataGenerator($fileName);
         }
 
         return function ($index) use (
