@@ -17,7 +17,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     /**
      * @var ElementFactory
      */
-    protected $_elementFactory;
+    private $elementFactory;
 
     /**
      * @inheritdoc
@@ -25,7 +25,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->_elementFactory = $objectManager->create(ElementFactory::class);
+        $this->elementFactory = $objectManager->create(ElementFactory::class);
     }
 
     /**
@@ -39,7 +39,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     public function testGetValue(array $data, string $expect): void
     {
         /** @var $date Date */
-        $date = $this->_elementFactory->create(Date::class, $data);
+        $date = $this->elementFactory->create(Date::class, $data);
         $this->assertEquals($expect, $date->getValue());
     }
 
