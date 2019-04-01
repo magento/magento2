@@ -15,7 +15,7 @@ use Magento\Framework\App\DeploymentConfig;
 /**
  * Class for generating signature.
  */
-class Signature extends \Magento\Framework\App\Helper\AbstractHelper
+class Signature
 {
     /**
      * Version of encryption key.
@@ -37,12 +37,12 @@ class Signature extends \Magento\Framework\App\Helper\AbstractHelper
     private $deploymentConfig;
 
     /**
-     * @inheritdoc
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      */
     public function __construct(
-        \Magento\Framework\App\DeploymentConfig $deploymentConfig = null
+        \Magento\Framework\App\DeploymentConfig $deploymentConfig
     ) {
-        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->deploymentConfig = $deploymentConfig;
         // load all possible keys
         $this->keys = preg_split(
             '/\s+/s',

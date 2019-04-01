@@ -29,7 +29,7 @@ class SignatureTest extends \PHPUnit\Framework\TestCase
     /**
      * @var ObjectManagerHelper
      */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
     /**
      * @var \Magento\Sales\Model\Rss\Signature
