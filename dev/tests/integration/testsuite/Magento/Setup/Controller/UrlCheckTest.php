@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
@@ -21,12 +21,11 @@ class UrlCheckTest extends \PHPUnit_Framework_TestCase
         $this->controller = Bootstrap::getObjectManager()->create(UrlCheck::class);
  	}
 
- 	/**
-     * @param array $requestContent
-     * @param bool $successUrl
-     * @param bool $successSecureUrl
-     * @return void
-     * @dataProvider indexActionDataProvider
+    /**
+     * @param $requestContent
+     * @param $successUrl
+     * @param $successSecureUrl
+     * @throws \ReflectionException
      */
     public function testIndexAction($requestContent, $successUrl, $successSecureUrl)
     {
