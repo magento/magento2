@@ -248,17 +248,13 @@ class Widget
         $result = $widgets;
 
         // filter widgets by params
-        if (is_array($filters) && count($filters) > 0) {
+        if (is_array($filters) && !empty($filters)) {
             foreach ($widgets as $code => $widget) {
-                try {
-                    foreach ($filters as $field => $value) {
-                        if (!isset($widget[$field]) || (string)$widget[$field] != $value) {
-                            throw new \Exception();
-                        }
+                foreach ($filters as $field => $value) {
+                    if (!isset($widget[$field]) || (string)$widget[$field] != $value) {
+                        unset($result[$code]);
+                        break;
                     }
-                } catch (\Exception $e) {
-                    unset($result[$code]);
-                    continue;
                 }
             }
         }

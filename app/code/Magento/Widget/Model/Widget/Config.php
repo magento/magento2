@@ -159,7 +159,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
             }
         }
 
-        if (count($skipped) > 0) {
+        if (!empty($skipped)) {
             $params['skip_widgets'] = $this->encodeWidgetsToQuery($skipped);
         }
         return $this->_backendUrl->getUrl('adminhtml/widget/index', $params);
