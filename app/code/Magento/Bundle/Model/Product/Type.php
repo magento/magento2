@@ -8,6 +8,7 @@ namespace Magento\Bundle\Model\Product;
 
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
+use Magento\Bundle\Model\Selection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -240,7 +241,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         $this->selectionCollectionFilterApplier = $selectionCollectionFilterApplier
             ?: ObjectManager::getInstance()->get(SelectionCollectionFilterApplier::class);
-        $this->arrayUtility= $arrayUtility ?: ObjectManager::getInstance()->get(ArrayUtils::class);
+        $this->arrayUtility = $arrayUtility ?: ObjectManager::getInstance()->get(ArrayUtils::class);
 
         parent::__construct(
             $catalogProductOption,
@@ -340,24 +341,22 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         if ($product->getData('weight_type')) {
             return $product->getData('weight');
-        } else {
-            $weight = 0;
+        }
 
-            if ($product->hasCustomOptions()) {
-                $customOption = $product->getCustomOption('bundle_selection_ids');
-                $selectionIds = $this->serializer->unserialize($customOption->getValue());
-                $selections = $this->getSelectionsByIds($selectionIds, $product);
-                foreach ($selections->getItems() as $selection) {
-                    $qtyOption = $product->getCustomOption('selection_qty_' . $selection->getSelectionId());
-                    if ($qtyOption) {
-                        $weight += $selection->getWeight() * $qtyOption->getValue();
-                    } else {
-                        $weight += $selection->getWeight();
-                    }
+        if ($product->hasCustomOptions()) {
+            $customOption = $product->getCustomOption('bundle_selection_ids');
+            $selectionIds = $this->serializer->unserialize($customOption->getValue());
+            $selections = $this->getSelectionsByIds($selectionIds, $product);
+
+            return array_reduce($selections->getItems(), function ($weight, Selection $selection) use ($product) {
+                $qtyOption = $product->getCustomOption('selection_qty_' . $selection->getSelectionId());
+
+                if ($qtyOption) {
+                    return $weight += $selection->getWeight() * $qtyOption->getValue();
                 }
-            }
 
-            return $weight;
+                return $weight += $selection->getWeight();
+            });
         }
     }
 
@@ -501,7 +500,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $selectionsCollection = $this->_bundleCollection->create();
         $selectionsCollection
             ->addAttributeToSelect($this->_config->getProductAttributes())
-            ->addAttributeToSelect('tax_class_id') //used for calculation item taxes in Bundle with Dynamic Price
+            ->addAttributeToSelect('tax_class_id')//used for calculation item taxes in Bundle with Dynamic Price
             ->setFlag('product_children', true)
             ->setPositionOrder()
             ->addStoreFilter($this->getStoreFilter($product))
@@ -530,10 +529,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Example: the catalog inventory validation of decimal qty can change qty to int,
      * so need to change quote item qty option value too.
      *
-     * @param   array $options
-     * @param   \Magento\Framework\DataObject $option
-     * @param   mixed $value
-     * @param   \Magento\Catalog\Model\Product $product
+     * @param array $options
+     * @param \Magento\Framework\DataObject $option
+     * @param mixed $value
+     * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
     public function updateQtyOption($options, \Magento\Framework\DataObject $option, $value, $product)
@@ -549,7 +548,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 foreach ($options as $quoteItemOption) {
                     if ($quoteItemOption->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
                         if ($optionUpdateFlag) {
-                            $quoteItemOption->setValue((int) $quoteItemOption->getValue());
+                            $quoteItemOption->setValue((int)$quoteItemOption->getValue());
                         } else {
                             $quoteItemOption->setValue($value);
                         }
@@ -571,7 +570,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function prepareQuoteItemQty($qty, $product)
     {
-        return (int) $qty;
+        return (int)$qty;
     }
 
     /**
@@ -986,8 +985,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * Sort selections by option position, selection position and selection id
      *
-     * @param  \Magento\Catalog\Model\Product $firstItem
-     * @param  \Magento\Catalog\Model\Product $secondItem
+     * @param \Magento\Catalog\Model\Product $firstItem
+     * @param \Magento\Catalog\Model\Product $secondItem
      * @return int
      */
     public function shakeSelections($firstItem, $secondItem)
@@ -1091,7 +1090,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         $skipSaleableCheck = $this->_catalogProduct->getSkipSaleableCheck();
         foreach ($selectionIds as $selectionId) {
-            /* @var $selection \Magento\Bundle\Model\Selection */
+            /* @var $selection Selection */
             $selection = $productSelections->getItemById($selectionId);
             if (!$selection || !$selection->isSalable() && !$skipSaleableCheck) {
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -1117,7 +1116,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * At least one product in each group has to be purchased
      *
-     * @param  \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\Product $product
      * @return array
      */
     public function getProductsToPurchaseByReqGroups($product)
@@ -1146,8 +1145,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Prepare selected options for bundle product
      *
-     * @param  \Magento\Catalog\Model\Product $product
-     * @param  \Magento\Framework\DataObject $buyRequest
+     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Framework\DataObject $buyRequest
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -1172,9 +1171,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function canConfigure($product)
     {
-        return $product instanceof \Magento\Catalog\Model\Product && $product->isAvailable() && parent::canConfigure(
-            $product
-        );
+        return $product instanceof \Magento\Catalog\Model\Product
+            && $product->isAvailable()
+            && parent::canConfigure($product);
     }
 
     /**
@@ -1221,13 +1220,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected function getQty($selection, $qtys, $selectionOptionId)
     {
         if ($selection->getSelectionCanChangeQty() && isset($qtys[$selectionOptionId])) {
-            $qty = (float)$qtys[$selectionOptionId] > 0 ? $qtys[$selectionOptionId] : 1;
-        } else {
-            $qty = (float)$selection->getSelectionQty() ? $selection->getSelectionQty() : 1;
+            return (float)($qtys[$selectionOptionId] > 0 ? $qtys[$selectionOptionId] : 1);
         }
-        $qty = (float)$qty;
 
-        return $qty;
+        return (float)($selection->getSelectionQty() ? $selection->getSelectionQty() : 1);
     }
 
     /**
