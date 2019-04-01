@@ -10,29 +10,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
          xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
-    <rule name="FinalImplementation"
-          class="Magento\CodeMessDetector\Rule\Design\FinalImplementation"
-          message= "The {0} {1} declared as final.">
-        <description>
-            <![CDATA[
-Final keyword is prohibited in Magento as this decreases extensibility and customizability.
-Final classes and method are not compatible with plugins and proxies.
-            ]]>
-        </description>
-        <priority>1</priority>
-        <properties />
-        <example>
-            <![CDATA[
-final class Foo
-{
-    public function bar() {}
-}
-class Baz {
-    final public function bad() {}
-}
-            ]]>
-        </example>
-    </rule>
     <rule name="AllPurposeAction"
           class="Magento\CodeMessDetector\Rule\Design\AllPurposeAction"
           message= "The class {0} does not restrict processed HTTP methods by implementing a Http*Method name*ActionInterface">
