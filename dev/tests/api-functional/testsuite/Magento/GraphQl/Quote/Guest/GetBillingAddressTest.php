@@ -46,10 +46,11 @@ class GetBillingAddressTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      */
     public function testGetCartWithBillingAddress()
     {
@@ -59,21 +60,21 @@ class GetBillingAddressTest extends GraphQlAbstract
         $expectedBillingAddressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'company' => null,
+            'company' => 'CompanyName',
             'street' => [
-                'Black str, 48'
+                'Green str, 67'
             ],
-            'city' => 'CityX',
+            'city' => 'CityM',
             'region' => [
                 'code' => 'AL',
                 'label' => 'Alabama',
             ],
-            'postcode' => '47676',
+            'postcode' => '75477',
             'country' => [
                 'code' => 'US',
                 'label' => 'US',
             ],
-            'telephone' => '3234676',
+            'telephone' => '3468676',
             'address_type' => 'BILLING',
         ];
 
@@ -82,10 +83,11 @@ class GetBillingAddressTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      */
     public function testGetBillingAddressFromAnotherCustomerCart()
     {
@@ -100,9 +102,10 @@ class GetBillingAddressTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
     public function testGetBillingAddressIfBillingAddressIsNotSet()
     {

@@ -25,7 +25,7 @@ if ($quoteId > 0) {
 }
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 try {
     $product = $productRepository->get('simple-product-guest-quote', false, null, true);
