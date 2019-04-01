@@ -37,7 +37,7 @@
                 <negotiated_active>0</negotiated_active>
                 <include_taxes>0</include_taxes>
                 <mode_xml>1</mode_xml>
-                <type>UPS</type>
+                <type>UPS_XML</type>
                 <is_account_live>0</is_account_live>
                 <active_rma>0</active_rma>
                 <is_online>1</is_online>
