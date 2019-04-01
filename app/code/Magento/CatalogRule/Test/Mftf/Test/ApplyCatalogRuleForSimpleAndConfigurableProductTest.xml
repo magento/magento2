@@ -166,7 +166,6 @@
         </actionGroup>
 
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
-
         <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddConfigProduct1ToCart">
             <argument name="productQty" value="1"/>
         </actionGroup>
