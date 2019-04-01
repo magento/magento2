@@ -25,6 +25,7 @@ class UrlCheckTest extends \PHPUnit_Framework_TestCase
      * @param $requestContent
      * @param $successUrl
      * @param $successSecureUrl
+     * @dataProvider indexActionDataProvider
      * @throws \ReflectionException
      */
     public function testIndexAction($requestContent, $successUrl, $successSecureUrl)
