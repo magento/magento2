@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Ups;
 
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\GraphQl\Quote\GetQuoteShippingAddressIdByReservedQuoteId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -30,9 +30,9 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     const CARRIER_METHOD_CODE_GROUND = 'GND';
 
     /**
-     * @var Quote
+     * @var GetQuoteShippingAddressIdByReservedQuoteId
      */
-    private $quote;
+    private $getQuoteShippingAddressIdByReservedQuoteId;
 
     /**
      * @var CustomerTokenServiceInterface
@@ -50,9 +50,9 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quote = $objectManager->create(Quote::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->getQuoteShippingAddressIdByReservedQuoteId = $objectManager->get(GetQuoteShippingAddressIdByReservedQuoteId::class);
     }
 
     /**
@@ -67,10 +67,9 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     {
         $quoteReservedId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
-        $quote = $this->quote->load($quoteReservedId, 'reserved_order_id');
-        $shippingAddressId = (int)$quote->getShippingAddress()->getId();
+        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
 
-        $query = $this->getAddUpsShippingMethodQuery(
+        $query = $this->getQuery(
             $maskedQuoteId,
             $shippingAddressId,
             self::CARRIER_CODE,
@@ -96,7 +95,7 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $methodCode
      * @return string
      */
-    private function getAddUpsShippingMethodQuery(
+    private function getQuery(
         string $maskedQuoteId,
         int $shippingAddressId,
         string $carrierCode,
