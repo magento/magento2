@@ -13,7 +13,6 @@ namespace Magento\Catalog\Model\Product\Attribute\Source;
 
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\Data\OptionSourceInterface;
-use \Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use \Magento\Framework\Data\Collection;
 
 class Countryofmanufacture extends AbstractSource implements OptionSourceInterface
@@ -100,8 +99,10 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
      * all NULL values will add to the end
      *
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
-     * @param string $dir direction
+     * @param string $dir
+     *
      * @return \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addValueSortToCollection($collection, $dir = Collection::SORT_ORDER_DESC) : AbstractSource
     {
