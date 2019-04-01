@@ -507,7 +507,7 @@ define([
                 return '';
             }
 
-            $.each(config.options, function () {
+            $.each(config.options, function (index) {
                 var id,
                     type,
                     value,
@@ -543,6 +543,7 @@ define([
                 div = document.createElement('div');
 
                 div.setAttribute('id', controlId + '-item-' + id);
+                div.setAttribute('index', index);
                 div.setAttribute('aria-checked', false);
                 div.setAttribute('aria-describedby', controlId);
                 div.setAttribute('tabindex', 0);
@@ -777,6 +778,12 @@ define([
             ) {
                 $widget._UpdatePrice();
             }
+
+            $(document).trigger('updateMsrpPriceBlock',
+                [
+                    parseInt($this.attr('index'), 10) + 1,
+                    $widget.options.jsonConfig.optionPrices
+                ]);
 
             $widget._loadMedia(eventName);
             $input.trigger('change');
