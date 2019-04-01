@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CaptchaEditCustomerEmailTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="Check captcha and lockout customer on the account edit page."/>
+            <title value="Test for checking captcha on the customer account edit page and customer is locked."/>
+            <description value="Test for checking captcha on the customer account edit page and customer is locked."/>
+            <severity value="MAJOR"/>
+            <group value="captcha"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set customer/captcha/forms user_edit" stepKey="enableUserEditCaptcha"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches1"/>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <!-- Sign in as customer -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+                <argument name="Customer" value="$$customer$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <!-- Revert Captcha forms configurations -->
+            <magentoCLI command="config:set customer/captcha/forms user_login,user_forgotpassword" stepKey="revertCaptchaConfigurations"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches2"/>
+        </after>
+
+        <!-- Open Customer edit page -->
+        <amOnPage url="{{StorefrontCustomerEditPage.url}}" stepKey="goToCustomerEditPage"/>
+        <waitForPageLoad stepKey="waitForEditPage"/>
+
+        <!-- Update email with incorrect password 3 times. -->
+        <actionGroup ref="StorefrontCustomerChangeEmailActionGroup" stepKey="changeEmailFirstAttempt">
+            <argument name="email" value="$$customer.email$$" />
+            <argument name="password" value="{{Colorado_US_Customer.password}}" />
+            <argument name="message" value="The password doesn't match this account. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCustomerChangeEmailActionGroup" stepKey="changeEmailSecondAttempt">
+            <argument name="email" value="$$customer.email$$" />
+            <argument name="password" value="{{Colorado_US_Customer.password}}" />
+            <argument name="message" value="The password doesn't match this account. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCustomerChangeEmailActionGroup" stepKey="changeEmailThirdAttempt">
+            <argument name="email" value="$$customer.email$$" />
+            <argument name="password" value="{{Colorado_US_Customer.password}}" />
+            <argument name="message" value="The password doesn't match this account. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <!-- Check captcha visibility after incorrect password submit form -->
+        <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaField}}" stepKey="seeCaptchaField"/>
+        <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaImg}}" stepKey="seeCaptchaImage"/>
+        <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaReload}}" stepKey="seeCaptchaReloadButton"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageReloaded" />
+        <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaField}}" stepKey="seeCaptchaFieldAfterPageReload"/>
+        <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaImg}}" stepKey="seeCaptchaImageAfterPageReload"/>
+        <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaReload}}" stepKey="seeCaptchaReloadButtonAfterPageReload"/>
+
+        <!-- Try to submit form with incorrect captcha -->
+        <click selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}" stepKey="clickChangeEmailCheckbox4"/>
+        <fillField selector="{{StorefrontCustomerAccountInformationSection.currentPassword}}" userInput="incorrectPassword" stepKey="enterWrongPassword4"/>
+        <fillField selector="{{StorefrontCustomerAccountInformationSection.captchaField}}" userInput="wrongCaptcha" stepKey="enterWrongCaptcha"/>
+        <click selector="{{StorefrontCustomerAccountInformationSection.saveButton}}" stepKey="saveChange4"/>
+        <see userInput="Incorrect CAPTCHA" selector="{{StorefrontCustomerMessagesSection.errorMessage}}" stepKey="verifyMessage4"/>
+    </test>
+</tests>
