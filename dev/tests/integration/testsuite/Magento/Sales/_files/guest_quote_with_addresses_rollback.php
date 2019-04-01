@@ -19,7 +19,7 @@ $quoteIdMask = $objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
 $quote->load('guest_quote', 'reserved_order_id');
 
 $quoteId = $quote->getId();
-if ($quoteId > 0) {
+if (null !== $quoteId) {
     $quote->delete();
     $quoteIdMask->delete($quoteId);
 }
