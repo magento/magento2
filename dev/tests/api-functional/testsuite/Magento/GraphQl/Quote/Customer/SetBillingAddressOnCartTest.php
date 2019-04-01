@@ -429,6 +429,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @expectedException \Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
@@ -436,10 +437,19 @@ QUERY;
     {
         $maskedQuoteId = 'non_existent_masked_id';
         $query = <<<QUERY
-{
-  cart(cart_id: "$maskedQuoteId") {
-    items {
-      id
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+          customer_address_id: 1
+       }
+    }
+  ) {
+    cart {
+      billing_address {
+        city
+      }
     }
   }
 }

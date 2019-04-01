@@ -33,7 +33,10 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $testHelper->getObject(
             \Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import::class,
-            ['data' => $testData]
+            [
+                'data' => $testData,
+                '_escaper' => $testHelper->getObject(\Magento\Framework\Escaper::class)
+            ]
         );
         $this->_object->setForm($this->_formMock);
     }
