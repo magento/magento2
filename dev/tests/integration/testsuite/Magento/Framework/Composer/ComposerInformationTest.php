@@ -92,7 +92,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
     public function testGetRequiredExtensions($composerDir)
     {
         $this->setupDirectory($composerDir);
-        $expectedExtensions = ['ctype', 'gd', 'spl', 'dom', 'simplexml', 'mcrypt', 'hash', 'curl', 'iconv', 'intl'];
+        $expectedExtensions = ['ctype', 'gd', 'spl', 'dom', 'simplexml', 'mcrypt', 'hash', 'curl', 'iconv'];
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $composerInfo = $this->objectManager->create(
