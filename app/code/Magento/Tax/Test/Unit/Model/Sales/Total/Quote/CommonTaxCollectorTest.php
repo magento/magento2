@@ -83,7 +83,7 @@ class CommonTaxCollectorTest extends TestCase
     /**
      * @var TaxHelper
      */
-    protected $taxHelper;
+    private $taxHelper;
 
     /**
      * {@inheritdoc}
@@ -152,6 +152,8 @@ class CommonTaxCollectorTest extends TestCase
      * @param bool $useBaseCurrency
      * @param string $shippingTaxClass
      * @param bool $shippingPriceInclTax
+     *
+     * @return void
      * @dataProvider getShippingDataObjectDataProvider
      */
     public function testGetShippingDataObject(

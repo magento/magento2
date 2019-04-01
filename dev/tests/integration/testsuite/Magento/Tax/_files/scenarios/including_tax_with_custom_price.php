@@ -12,7 +12,7 @@ $taxCalculationData['including_tax_with_custom_price'] = [
     'config_data' => [
         SetupUtil::CONFIG_OVERRIDES => [
             Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX => 1,
-            Config::CONFIG_XML_PATH_APPLY_ON => 0
+            Config::CONFIG_XML_PATH_APPLY_ON => 0,
         ],
         SetupUtil::TAX_RATE_OVERRIDES => [
             SetupUtil::TAX_RATE_TX => 8.25,
