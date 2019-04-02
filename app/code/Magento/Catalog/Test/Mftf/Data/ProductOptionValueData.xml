@@ -32,6 +32,12 @@
         <data key="price">99.99</data>
         <data key="price_type">percent</data>
     </entity>
+    <entity name="ProductOptionValueRadioButtons3" type="product_option_value">
+        <data key="title">OptionValueRadioButtons3</data>
+        <data key="sort_order">3</data>
+        <data key="price">10</data>
+        <data key="price_type">fixed</data>
+    </entity>
     <entity name="ProductOptionValueCheckbox" type="product_option_value">
         <data key="title">OptionValueCheckbox</data>
         <data key="sort_order">1</data>
