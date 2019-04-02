@@ -920,12 +920,12 @@ define([
         ],
         'validate-per-page-value-list': [
             function (value) {
-                var isValid = utils.isEmpty(value),
+                var isValid = true,
                     values = value.split(','),
                     i;
 
-                if (isValid) {
-                    return true;
+                if (utils.isEmpty(value)) {
+                    return isValid;
                 }
 
                 for (i = 0; i < values.length; i++) {
