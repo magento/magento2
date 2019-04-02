@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckingConfigurableProductPriceWithMapTest">
+        <annotations>
+            <features value="Mrsp"/>
+            <stories value="Configurable child products with MAP"/>
+            <title value="Simple product with MAP assigned to configurable should displays the same way as products with special price"/>
+            <description value="Check that simple products with MAP assigned to configurable product displayed correctly"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-15014"/>
+            <useCaseId value="MAGETWO-73985"/>
+            <group value="msrp"/>
+            <group value="configurableProduct"/>
+        </annotations>
+        <before>
+            <!--Enable MAP in configuration-->
+            <createData entity="EnableMAPConfig" stepKey="enableMapConfig"/>
+            <!--Create configurable product-->
+            <actionGroup ref="AdminCreateApiConfigurableProductWithThreeChildActionGroup" stepKey="createConfigProduct"/>
+            <!--Login-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Disable MAP in configuration-->
+            <createData entity="DisableMAPConfig" stepKey="disableMAPConfig"/>
+            <!--Delete entities-->
+            <deleteData createDataKey="createConfigProductCreateConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createChildProduct1CreateConfigProduct" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createChildProduct2CreateConfigProduct" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createChildProduct3CreateConfigProduct" stepKey="deleteConfigChildProduct3"/>
+            <deleteData createDataKey="createConfigProductAttributeCreateConfigProduct" stepKey="deleteConfigProductAttribute"/>
+            <!--Logout-->
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!--Set MSRP for Child product 1-->
+        <actionGroup ref="AdminProductSetMsrp" stepKey="setMsrpForChildProduct1">
+            <argument name="product" value="$createChildProduct1CreateConfigProduct$"/>
+            <argument name="msrp" value="45"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveChildProduct1"/>
+
+        <!--Set MSRP for Child product 2-->
+        <actionGroup ref="AdminProductSetMsrp" stepKey="setMsrpForChildProduct2">
+            <argument name="product" value="$createChildProduct2CreateConfigProduct$"/>
+            <argument name="msrp" value="66"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveChildProduct2"/>
+
+        <amOnPage url="{{StorefrontProductPage.url($createConfigProductCreateConfigProduct.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
+        <!--Checking MSRP of configurable product on Storefront page-->
+        <actionGroup ref="AssertMsrpOfProduct" stepKey="assertMsrpOfChildProduct">
+            <argument name="msrp" value="66.00"/>
+        </actionGroup>
+
+        <!--Checking when Option has a price higher than MSRP-->
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$getConfigAttributeOption1CreateConfigProduct.value$" stepKey="selectOption1"/>
+        <actionGroup ref="AssertMsrpFallbackOfProduct" stepKey="assertMsrpOfChildProduct1">
+            <argument name="msrp" value="50.00"/>
+        </actionGroup>
+
+        <!--Checking when Option has a price less than MSRP-->
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$getConfigAttributeOption2CreateConfigProduct.value$" stepKey="selectOption2"/>
+        <actionGroup ref="AssertMsrpOfProduct" stepKey="assertMsrpOfChildProduct2">
+            <argument name="msrp" value="66.00"/>
+        </actionGroup>
+
+        <!--Checking when Option doesn't have MSRP-->
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$getConfigAttributeOption3CreateConfigProduct.value$" stepKey="selectOption3"/>
+        <actionGroup ref="AssertMsrpFallbackOfProduct" stepKey="assertMsrpOfChildProduct3">
+            <argument name="msrp" value="70.00"/>
+        </actionGroup>
+    </test>
+</tests>
