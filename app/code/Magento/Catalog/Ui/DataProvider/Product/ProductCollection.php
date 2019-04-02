@@ -13,6 +13,8 @@ use Magento\Eav\Model\Entity\Attribute\AttributeInterface;
  * Collection which is used for rendering product list in the backend.
  *
  * Used for product grid and customizes behavior of the default Product collection for grid needs.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
