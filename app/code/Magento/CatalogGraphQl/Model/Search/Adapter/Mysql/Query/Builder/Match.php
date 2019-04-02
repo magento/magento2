@@ -44,6 +44,7 @@ class Match extends BuilderMatch
         array $preprocessors = []
     ) {
         parent::__construct($resolver, $fulltextHelper, $fulltextSearchMode, $preprocessors);
+        $this->replaceSymbols = str_split(self::SPECIAL_CHARACTERS, 1);
         $this->searchHelper = $searchHelper;
     }
 
