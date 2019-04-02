@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Catalog;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
@@ -16,6 +17,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\ObjectManager;
 
+/**
+ * Test loading of category tree
+ */
 class CategoryTest extends GraphQlAbstract
 {
     /**
@@ -23,9 +27,15 @@ class CategoryTest extends GraphQlAbstract
      */
     private $objectManager;
 
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
     }
 
     /**
@@ -101,6 +111,42 @@ QUERY;
             13,
             $responseDataObject->getData('category/children/0/children/1/id')
         );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testCategoriesTreeWithDisabledCategory()
+    {
+        $category = $this->categoryRepository->get(3);
+        $category->setIsActive(false);
+        $this->categoryRepository->save($category);
+
+        $rootCategoryId = 2;
+        $query = <<<QUERY
+{
+  category(id: {$rootCategoryId}) {
+      id
+      name
+      level
+      description
+      children {
+        id
+        name
+        productImagePreview: products(pageSize: 1) {
+            items {
+                id
+                } 
+            }
+      }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey('category', $response);
+        $this->assertArrayHasKey('children', $response['category']);
+        $this->assertSame(6, count($response['category']['children']));
     }
 
     /**
