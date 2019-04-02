@@ -22,11 +22,6 @@ class SignatureTest extends \PHPUnit\Framework\TestCase
     private $deploymentConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Signature
-     */
-    private $signatureMock;
-
-    /**
      * @var ObjectManagerHelper
      */
     private $objectManagerHelper;
@@ -48,7 +43,6 @@ class SignatureTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with('crypt/key')
             ->willReturn('1234567890abc');
-        $this->signatureMock = $this->createMock(Signature::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -69,7 +63,6 @@ class SignatureTest extends \PHPUnit\Framework\TestCase
      */
     public function testSignData(string $data, string $expected): void
     {
-        $this->signatureMock->expects($this->any())->method('signData')->willReturn($expected);
         $this->assertEquals($expected, $this->model->signData($data));
     }
 
