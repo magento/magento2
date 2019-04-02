@@ -17,7 +17,7 @@ class Topmenu
     /**
      * Cache tag for menu block
      */
-    const CACHE_TAG = "top_menu";
+    private $cacheTag = "top_menu";
 
     /**
      * Catalog category
@@ -135,7 +135,7 @@ class Topmenu
             $subject->addIdentity(Category::CACHE_TAG . '_' . $category->getId());
         }
         if ($currentCategory) {
-            $subject->addIdentity(self::CACHE_TAG . '_' . Category::CACHE_TAG . '_' . $currentCategory->getId());
+            $subject->addIdentity($this->cacheTag . '_' . Category::CACHE_TAG . '_' . $currentCategory->getId());
         }
     }
 
