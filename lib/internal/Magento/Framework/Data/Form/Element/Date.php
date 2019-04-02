@@ -101,7 +101,7 @@ class Date extends AbstractElement
         try {
             if (preg_match('/^[0-9]+$/', $value)) {
                 $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
-            } else if (is_string($value) && $this->isDate($value)) {
+            } elseif (is_string($value) && $this->isDate($value)) {
                 $this->_value = new \DateTime($value, new \DateTimeZone($this->localeDate->getConfigTimezone()));
             } else {
                 $this->_value = '';
