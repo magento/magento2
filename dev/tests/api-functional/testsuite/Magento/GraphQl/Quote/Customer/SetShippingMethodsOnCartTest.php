@@ -84,37 +84,6 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * Shipping address for quote will be created automatically BUT with NULL values (considered that address
-     * is not set)
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_virtual_product.php
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
-     */
-    public function testSetShippingMethodOnCartWithSimpleProductAndWithoutAddress()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $carrierCode = 'flatrate';
-        $methodCode = 'flatrate';
-        $quoteAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute('test_quote');
-
-        $query = $this->getQuery(
-            $maskedQuoteId,
-            $methodCode,
-            $carrierCode,
-            $quoteAddressId
-        );
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
