@@ -110,7 +110,7 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
             ->with('cart654')
             ->will($this->returnValue($quoteMock));
 
-        $this->validatorMock->expects($this->once())->method('validate')
+        $this->validatorMock->expects($this->once())->method('validateForCart')
             ->will($this->throwException(new \Magento\Framework\Exception\NoSuchEntityException(__('error345'))));
 
         $this->service->assign('cart654', $this->quoteAddressMock);
@@ -143,8 +143,8 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
             ->with($customerAddressId)
             ->willReturn($customerAddressMock);
 
-        $this->validatorMock->expects($this->once())->method('validate')
-            ->with($this->quoteAddressMock)
+        $this->validatorMock->expects($this->once())->method('validateForCart')
+            ->with($quoteMock, $this->quoteAddressMock)
             ->willReturn(true);
 
         $quoteMock->expects($this->exactly(3))->method('getShippingAddress')->willReturn($this->quoteAddressMock);
@@ -218,8 +218,8 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
             ->with($customerAddressId)
             ->willReturn($customerAddressMock);
 
-        $this->validatorMock->expects($this->once())->method('validate')
-            ->with($this->quoteAddressMock)
+        $this->validatorMock->expects($this->once())->method('validateForCart')
+            ->with($quoteMock, $this->quoteAddressMock)
             ->willReturn(true);
 
         $this->quoteAddressMock->expects($this->once())->method('getSaveInAddressBook')->willReturn(1);
