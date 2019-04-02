@@ -68,7 +68,7 @@ define([
             });
 
             return labels.sort(
-                function(a, b) {
+                function (a, b) {
                     return a.toLowerCase().localeCompare(b.toLowerCase());
                 }
             );
