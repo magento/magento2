@@ -11,9 +11,14 @@
  */
 namespace Magento\Wishlist\Block\Customer;
 
+use Magento\Captcha\Block\Captcha;
+
 /**
+ * Class Sharing
+ *
  * @api
  * @since 100.0.2
+ * @package Magento\Wishlist\Block\Customer
  */
 class Sharing extends \Magento\Framework\View\Element\Template
 {
@@ -60,6 +65,20 @@ class Sharing extends \Magento\Framework\View\Element\Template
      */
     protected function _prepareLayout()
     {
+        if (!$this->getChildBlock('captcha')) {
+            $this->addChild(
+                'captcha',
+                Captcha::class,
+                [
+                    'cacheable' => false,
+                    'after' => '-',
+                    'form_id' => 'share_wishlist_form',
+                    'image_width' => 230,
+                    'image_height' => 230
+                ]
+            );
+        }
+
         $this->pageConfig->getTitle()->set(__('Wish List Sharing'));
     }
 
