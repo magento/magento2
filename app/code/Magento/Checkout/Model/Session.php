@@ -10,8 +10,11 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
+ * Represents the session data for the checkout process
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
@@ -219,6 +222,15 @@ class Session extends \Magento\Framework\Session\SessionManager
                         $quote = $this->quoteRepository->getActive($this->getQuoteId());
                     }
 
+                    $customerId = $this->_customer
+                        ? $this->_customer->getId()
+                        : $this->_customerSession->getCustomerId();
+
+                    if ($quote->getData('customer_id') && $quote->getData('customer_id') !== $customerId) {
+                        $quote = $this->quoteFactory->create();
+                        throw new \Magento\Framework\Exception\NoSuchEntityException();
+                    }
+
                     /**
                      * If current currency code of quote is not equal current currency code of store,
                      * need recalculate totals of quote. It is possible if customer use currency switcher or
@@ -285,6 +297,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Return the quote's key
+     *
      * @return string
      * @codeCoverageIgnore
      */
@@ -294,6 +308,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Set the current session's quote id
+     *
      * @param int $quoteId
      * @return void
      * @codeCoverageIgnore
@@ -304,6 +320,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Return the current quote's ID
+     *
      * @return int
      * @codeCoverageIgnore
      */
@@ -357,6 +375,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Associate data to a specified step of the checkout process
+     *
      * @param string $step
      * @param array|string $data
      * @param bool|string|null $value
@@ -383,6 +403,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Return the data associated to a specified step
+     *
      * @param string|null $step
      * @param string|null $data
      * @return array|string|bool
@@ -406,8 +428,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
-     * Destroy/end a session
-     * Unset all data associated with object
+     * Destroy/end a session and unset all data associated with it
      *
      * @return $this
      */
@@ -443,6 +464,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Revert the state of the checkout to the beginning
+     *
      * @return $this
      * @codeCoverageIgnore
      */
@@ -453,6 +476,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Replace the quote in the session with a specified object
+     *
      * @param Quote $quote
      * @return $this
      */
@@ -505,7 +530,9 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
-     * @param $isQuoteMasked bool
+     * Flag whether or not the quote uses a masked quote id
+     *
+     * @param bool $isQuoteMasked
      * @return void
      * @codeCoverageIgnore
      */
@@ -515,6 +542,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Return if the quote has a masked quote id
+     *
      * @return bool|null
      * @codeCoverageIgnore
      */
