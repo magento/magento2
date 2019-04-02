@@ -27,6 +27,6 @@
         <arguments>
             <argument name="ruleName" type="string"/>
         </arguments>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="{{ruleName.simple_free_shipping}}" stepKey="selectForMatchingItemsOnly"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="{{ruleName}}" stepKey="selectForMatchingItemsOnly"/>
     </actionGroup>
 </actionGroups>
