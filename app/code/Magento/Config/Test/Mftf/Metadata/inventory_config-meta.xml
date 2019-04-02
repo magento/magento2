@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="AdminOutOfStockProductsConfig" dataType="admin_out_of_stock_products_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/cataloginventory/" method="POST">
+        <object key="groups" dataType="admin_out_of_stock_products_config">
+            <object key="options" dataType="admin_out_of_stock_products_config">
+                 <object key="fields" dataType="admin_out_of_stock_products_config">
+                    <object key="show_out_of_stock" dataType="enable">
+                        <field key="value">string</field>
+                    </object>
+                 </object>
+            </object>
+        </object>
+    </operation>
+</operations>
