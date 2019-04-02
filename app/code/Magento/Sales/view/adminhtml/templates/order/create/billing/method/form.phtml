@@ -7,7 +7,7 @@
 ?>
 <?php if ($block->hasMethods()) : ?>
 <div id="order-billing_method_form">
-    <dl class="admin__payment-methods">
+    <dl class="admin__payment-methods control">
     <?php
         $_methods = $block->getMethods();
         $_methodsCount = count($_methods);
@@ -28,8 +28,8 @@
                     <?php if ($currentSelectedMethod == $_code) : ?>
                     checked="checked"
                     <?php endif; ?>
-                    <?php $className = ($_counter == $_methodsCount) ? ' validate-one-required-by-name' : ''; ?>
-                   class="admin__control-radio<?= $block->escapeHtml($className); ?>"/>
+                   data-validate="{'validate-one-required-by-name':true}"
+                   class="admin__control-radio"/>
         <?php else :?>
             <span class="no-display">
                 <input id="p_method_<?= $block->escapeHtml($_code); ?>"
