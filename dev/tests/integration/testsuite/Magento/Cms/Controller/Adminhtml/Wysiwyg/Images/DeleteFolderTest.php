@@ -60,6 +60,7 @@ class DeleteFolderTest extends \PHPUnit_Framework_TestCase
             $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . $directoryName)
         );
         $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
+        $this->model->getRequest()->setMethod('POST');
         $this->model->execute();
         $this->assertFalse(
             $this->mediaDirectory->isExist(

@@ -34,8 +34,6 @@ class PageActions extends Column
     private $editUrl;
 
     /**
-     * Escaper.
-     *
      * @var Escaper
      */
     private $escaper;
@@ -88,6 +86,7 @@ class PageActions extends Column
                             'title' => __('Delete %1', $title),
                             'message' => __('Are you sure you wan\'t to delete a %1 record?', $title),
                         ],
+                        'post' => true,
                     ];
                 }
                 if (isset($item['identifier'])) {

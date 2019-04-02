@@ -9,6 +9,7 @@ namespace Magento\User\Controller\Adminhtml\User\Role;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
 
@@ -66,9 +67,14 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * Role form submit action to save or create new role
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws NotFoundException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
@@ -109,7 +115,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             foreach ($roleUsers as $nRuid) {
                 $this->_addUserToRole($nRuid, $role->getId());
             }
-            $this->messageManager->addSuccess(__('You saved the role.'));
+            $this->messageManager->addSuccessMessage(__('You saved the role.'));
         } catch (UserLockedException $e) {
             $this->_auth->logout();
             $this->getSecurityCookie()->setLogoutReasonCookie(
@@ -117,12 +123,12 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             );
             return $resultRedirect->setPath('*');
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
-            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
+            $this->messageManager->addErrorMessage(__('You have entered an invalid password for current user.'));
             return $this->saveDataToSessionAndRedirect($role, $this->getRequest()->getPostValue(), $resultRedirect);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('An error occurred while saving this role.'));
+            $this->messageManager->addErrorMessage(__('An error occurred while saving this role.'));
         }
 
         return $resultRedirect->setPath('*/*/');

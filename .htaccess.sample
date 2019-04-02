@@ -278,6 +278,10 @@ DirectoryIndex index.php
         order allow,deny
         deny from all
     </Files>
+    <Files .user.ini>
+        order allow,deny
+        deny from all
+    </Files>
 
 # For 404s and 403s that aren't handled by the application, show plain 404 response
 ErrorDocument 404 /pub/errors/404.php

@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Class Save
@@ -81,12 +82,17 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * Update product attributes
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws NotFoundException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         if (!$this->_validateProducts()) {
             return $this->resultRedirectFactory->create()->setPath('catalog/product/', ['_current' => true]);
         }

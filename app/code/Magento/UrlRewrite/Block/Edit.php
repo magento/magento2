@@ -65,7 +65,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      */
     protected function _prepareLayout()
     {
-        $this->setTemplate('edit.phtml');
+        $this->setTemplate('Magento_UrlRewrite::edit.phtml');
 
         $this->_addBackButton();
         $this->_prepareLayoutFeatures();
@@ -173,7 +173,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
                             ['id' => $this->getUrlRewrite()->getId()]
                         )
                     )
-                    . ')',
+                    . ', {data: {}})',
                 'class' => 'scalable delete',
                 'level' => -1
             ]
