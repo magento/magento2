@@ -55,7 +55,7 @@ class Delete extends \Magento\Backend\App\Action
         $id = $this->getRequest()->getParam('group_id');
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        if ($id) {
+        if ($this->getRequest()->isPost() && $id) {
             try {
                 /** @var \Magento\Search\Model\SynonymGroup $synGroupModel */
                 $synGroupModel = $this->synGroupRepository->get($id);
