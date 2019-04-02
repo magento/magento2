@@ -334,7 +334,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         $uniqueLabels = [];
         foreach ($product->getAttributes() as $attribute) {
             if ($attribute->getIsUnique() && $attribute->getIsUserDefined()
-                && $product->getData($attribute->getAttributeCode()) !== null
+                && !empty($product->getData($attribute->getAttributeCode()))
             ) {
                 $uniqueLabels[] = $attribute->getDefaultFrontendLabel();
             }

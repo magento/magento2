@@ -83,7 +83,7 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
                 'getStoreId',
                 'save',
                 '__sleep',
-                '__wakeup'
+                '__wakeup',
             ])
             ->getMock();
         $this->product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
