@@ -185,7 +185,8 @@ QUERY;
         $request->setHeaders($headers);
         $response = $this->graphQlController->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
-        $expectedOutput = require __DIR__ . '/../_files/schema_response_sdl_description.php';
+        $expectationFile = __DIR__ . '/../_files/schema_response_sdl_description.php';
+        $expectedOutput = require $expectationFile;
 
         $schemaResponseFields = $output['data']['__schema']['types'];
         $schemaResponseFieldsFirstHalf = array_slice($schemaResponseFields, 0, 25);

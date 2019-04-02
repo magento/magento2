@@ -153,34 +153,6 @@ QUERY;
         $this->assertEquals($output['data']['products']['items'][0]['name'], $product->getName());
     }
 
-    /**
-     * Test mutation over GET returns error
-     */
-    public function testMutationWithHttpGet()
-    {
-        $mutation = <<<MUTATION
-mutation {
-  testItem(id: 3) {
-    item_id,
-    name,
-    integer_list
-  }
-}
-MUTATION;
-
-        $request = $this->objectManager->get(Http::class);
-        $request->setPathInfo('/graphql');
-        $request->setMethod('GET');
-        //Http::isSafeMethod() checks $_SERVER which will be set on real HTTP request
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $request->setQueryValue('query', $mutation);
-        $response = $this->graphql->dispatch($request);
-        $output = $this->jsonSerializer->unserialize($response->getContent());
-        $this->assertArrayHasKey('errors', $output);
-        $errorMessage = $output['errors'][0]['message'];
-        $this->assertEquals('Mutation requests allowed only for POST requests', $errorMessage);
-    }
-
     /** Test request is dispatched and response generated when using GET request with parameterized query string
      *
      * @return void
