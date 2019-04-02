@@ -24,16 +24,18 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     protected $productRepository;
 
     /**
+     * @var \Magento\Framework\Data\Form\FormKey
+     */
+    private $formKey;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
     {
         parent::setUp();
-
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        $this->productRepository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $this->formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+        $this->productRepository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
     }
 
     /**
@@ -44,16 +46,13 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testAddAction()
     {
         $this->_requireVisitorWithNoProducts();
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
-        $formKey = $objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
         $product = $this->productRepository->get('simple_product_1');
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch(
             sprintf(
                 'catalog/product_compare/add/product/%s/form_key/%s?nocookie=1',
                 $product->getEntityId(),
-                $formKey->getFormKey()
+                $this->formKey->getFormKey()
             )
         );
 
@@ -77,12 +76,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @return void
      */
-    public function testAddDisabledProductAction()
+    public function testAddActionForDisabledProduct(): void
     {
         $this->_requireVisitorWithNoProducts();
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
-        $formKey = $objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->setProductDisabled('simple_product_1');
 
@@ -91,7 +87,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
             sprintf(
                 'catalog/product_compare/add/product/%s/form_key/%s?nocookie=1',
                 $product->getEntityId(),
-                $formKey->getFormKey()
+                $this->formKey->getFormKey()
             )
         );
 
@@ -143,7 +139,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @return void
      */
-    public function testRemoveDisabledAction()
+    public function testRemoveActionForDisabledProduct(): void
     {
         $this->_requireVisitorWithTwoProducts();
         /** @var \Magento\Catalog\Model\Product $product */
@@ -254,7 +250,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
      * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductInterface
      */
-    private function setProductDisabled(string $sku)
+    private function setProductDisabled(string $sku): \Magento\Catalog\Api\Data\ProductInterface
     {
         $product = $this->productRepository->get($sku);
         $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED)
