@@ -25,7 +25,7 @@
     </actionGroup>
     <actionGroup name="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup">
         <arguments>
-            <argument name="ruleName" type="entity"/>
+            <argument name="ruleName" type="string"/>
         </arguments>
         <selectOption selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="{{ruleName.simple_free_shipping}}" stepKey="selectForMatchingItemsOnly"/>
     </actionGroup>
