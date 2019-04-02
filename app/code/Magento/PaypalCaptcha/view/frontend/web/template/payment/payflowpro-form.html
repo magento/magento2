@@ -58,6 +58,12 @@
             </div>
             <!-- /ko -->
         </form>
+        <fieldset class="fieldset payment items ccard">
+            <!-- ko foreach: $parent.getRegion('paypal-captcha') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+        </fieldset>
+
 
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
