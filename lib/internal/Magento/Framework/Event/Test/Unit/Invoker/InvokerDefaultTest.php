@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Event\Test\Unit\Invoker;
 
+/**
+ * Test for Magento\Framework\Event\Invoker\InvokerDefault.
+ */
 class InvokerDefaultTest extends \PHPUnit\Framework\TestCase
 {
     /**
