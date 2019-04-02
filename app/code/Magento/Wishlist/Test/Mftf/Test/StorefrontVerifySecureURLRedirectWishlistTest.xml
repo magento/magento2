@@ -15,7 +15,7 @@
             <title value="Verify Secure URLs For Storefront Wishlist Pages"/>
             <description value="Verify that the Secure URL configuration applies to the Wishlist pages on the Storefront"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-15543"/>
+            <testCaseId value="MC-15712"/>
             <group value="wishlist"/>
             <group value="configuration"/>
             <group value="secure_storefront_url"/>

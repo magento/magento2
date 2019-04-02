@@ -15,7 +15,7 @@
             <title value="Verify Secure URLs For Storefront Contact Pages"/>
             <description value="Verify that the Secure URL configuration applies to the Contact pages on the Storefront"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-15539"/>
+            <testCaseId value="MC-15716"/>
             <group value="contact"/>
             <group value="configuration"/>
             <group value="secure_storefront_url"/>

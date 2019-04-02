@@ -15,7 +15,7 @@
             <title value="Verify Secure URLs For Storefront Vault Pages"/>
             <description value="Verify that the Secure URL configuration applies to the Vault pages on the Storefront"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-15562"/>
+            <testCaseId value="MC-15709"/>
             <group value="vault"/>
             <group value="configuration"/>
             <group value="secure_storefront_url"/>

@@ -15,7 +15,7 @@
             <title value="Verify Secure URLs For Storefront Paypal Pages"/>
             <description value="Verify that the Secure URL configuration applies to the Paypal pages on the Storefront"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-15541"/>
+            <testCaseId value="MC-15714"/>
             <group value="paypal"/>
             <group value="configuration"/>
             <group value="secure_storefront_url"/>

@@ -15,7 +15,7 @@
             <title value="Verify Secure URLs For Storefront Newsletter Pages"/>
             <description value="Verify that the Secure URL configuration applies to the Newsletter pages on the Storefront"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-15584"/>
+            <testCaseId value="MC-15706"/>
             <group value="newsletter"/>
             <group value="configuration"/>
             <group value="secure_storefront_url"/>
