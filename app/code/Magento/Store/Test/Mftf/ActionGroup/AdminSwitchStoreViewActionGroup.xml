@@ -16,6 +16,7 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitingForInformationModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmScopeSwitch"/>
         <waitForPageLoad stepKey="waitForScopeSwitched"/>
+        <scrollToTopOfPage stepKey="scrollToStoreSwitcher"/>
         <see userInput="{{scopeName}}" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewScopeName"/>
     </actionGroup>
 
@@ -27,5 +28,10 @@
     <actionGroup name="AdminSwitchWebsiteActionGroup" extends="AdminSwitchBaseActionGroup">
         <waitForElementVisible selector="{{AdminMainActionsSection.websiteByName(scopeName)}}" after="clickScopeSwitchDropdown" stepKey="waitForWebsiteNameIsVisible"/>
         <click selector="{{AdminMainActionsSection.websiteByName(scopeName)}}" after="waitForWebsiteNameIsVisible" stepKey="clickStoreViewByName"/>
+    </actionGroup>
+
+    <actionGroup name="AdminSwitchToAllStoreViewActionGroup" extends="AdminSwitchBaseActionGroup">
+        <click selector="{{AdminMainActionsSection.allStoreViews}}" after="clickScopeSwitchDropdown" stepKey="clickStoreViewByName"/>
+        <see selector="{{AdminMainActionsSection.storeSwitcher}}" userInput="{{scopeName}}" after="clickStoreViewByName" stepKey="seeNewStoreViewName"/>
     </actionGroup>
 </actionGroups>

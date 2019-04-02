@@ -12,6 +12,7 @@
         "magento/module-media-storage": "100.2.*",
         "magento/module-config": "101.0.*",
         "magento/module-theme": "100.2.*",
+        "magento/module-page-cache": "100.2.*",
         "magento/framework": "101.0.*"
     },
     "suggest": {
@@ -19,7 +20,7 @@
         "magento/module-swatches-sample-data": "Sample Data version:100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.5",
+    "version": "100.2.6",
     "license": [
         "proprietary"
     ],

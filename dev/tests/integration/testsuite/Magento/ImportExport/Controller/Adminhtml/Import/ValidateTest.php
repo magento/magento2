@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
 use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
@@ -61,10 +63,7 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
 
         $this->_objectManager->configure(
             [
-                'preferences' => [
-                    \Magento\Framework\HTTP\Adapter\FileTransferFactory::class =>
-                        \Magento\ImportExport\Controller\Adminhtml\Import\HttpFactoryMock::class
-                ]
+                'preferences' => [FileTransferFactory::class => HttpFactoryMock::class]
             ]
         );
 
@@ -81,7 +80,7 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     /**
      * @return array
      */
-    public function validationDataProvider()
+    public function validationDataProvider(): array
     {
         return [
             [

@@ -6,8 +6,11 @@
 namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Checkout\Helper\Data;
+use Magento\Customer\Model\AttributeMetadataDataProvider;
+use Magento\Customer\Model\Options;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Api\StoreResolverInterface;
+use Magento\Ui\Component\Form\AttributeMapper;
 
 /**
  * Class LayoutProcessor
@@ -15,12 +18,12 @@ use Magento\Store\Api\StoreResolverInterface;
 class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
     /**
-     * @var \Magento\Customer\Model\AttributeMetadataDataProvider
+     * @var AttributeMetadataDataProvider
      */
     private $attributeMetadataDataProvider;
 
     /**
-     * @var \Magento\Ui\Component\Form\AttributeMapper
+     * @var AttributeMapper
      */
     protected $attributeMapper;
 
@@ -30,7 +33,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     protected $merger;
 
     /**
-     * @var \Magento\Customer\Model\Options
+     * @var Options
      */
     private $options;
 
@@ -50,30 +53,21 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     private $shippingConfig;
 
     /**
-     * @param \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider
-     * @param \Magento\Ui\Component\Form\AttributeMapper $attributeMapper
+     * @param AttributeMetadataDataProvider $attributeMetadataDataProvider
+     * @param AttributeMapper $attributeMapper
      * @param AttributeMerger $merger
+     * @param Options|null $options
      */
     public function __construct(
-        \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider,
-        \Magento\Ui\Component\Form\AttributeMapper $attributeMapper,
-        AttributeMerger $merger
+        AttributeMetadataDataProvider $attributeMetadataDataProvider,
+        AttributeMapper $attributeMapper,
+        AttributeMerger $merger,
+        Options $options = null
     ) {
         $this->attributeMetadataDataProvider = $attributeMetadataDataProvider;
         $this->attributeMapper = $attributeMapper;
         $this->merger = $merger;
-    }
-
-    /**
-     * @deprecated 100.0.11
-     * @return \Magento\Customer\Model\Options
-     */
-    private function getOptions()
-    {
-        if (!is_object($this->options)) {
-            $this->options = ObjectManager::getInstance()->get(\Magento\Customer\Model\Options::class);
-        }
-        return $this->options;
+        $this->options = $options ?? ObjectManager::getInstance()->get(Options::class);
     }
 
     /**
@@ -143,8 +137,8 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     public function process($jsLayout)
     {
         $attributesToConvert = [
-            'prefix' => [$this->getOptions(), 'getNamePrefixOptions'],
-            'suffix' => [$this->getOptions(), 'getNameSuffixOptions'],
+            'prefix' => [$this->options, 'getNamePrefixOptions'],
+            'suffix' => [$this->options, 'getNameSuffixOptions'],
         ];
 
         $elements = $this->getAddressAttributes();

@@ -278,6 +278,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $metadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
         $this->metaDataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
         $metadataMock->expects($this->once())->method('getLinkField')->willReturn('id');
+        $this->productMock->expects($this->once())->method('getTypeInstance')->willReturn($this->configurableMock);
+        $this->attributeMock->method('getData')->with('attribute_code')->willReturn('color');
 
         $this->getSwatchAttributes($product);
 

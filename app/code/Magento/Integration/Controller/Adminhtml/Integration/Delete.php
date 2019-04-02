@@ -6,6 +6,7 @@
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Controller\ResultFactory;
@@ -16,9 +17,14 @@ class Delete extends \Magento\Integration\Controller\Adminhtml\Integration
      * Delete the integration.
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $integrationId = (int)$this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);

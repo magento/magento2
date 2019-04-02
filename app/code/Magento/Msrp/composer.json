@@ -8,6 +8,7 @@
         "magento/module-downloadable": "100.2.*",
         "magento/module-eav": "101.0.*",
         "magento/module-grouped-product": "100.2.*",
+        "magento/module-configurable-product": "100.2.*",
         "magento/module-tax": "100.2.*",
         "magento/framework": "101.0.*"
     },
@@ -16,7 +17,7 @@
         "magento/module-msrp-sample-data": "Sample Data version:100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.3",
+    "version": "100.2.4",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

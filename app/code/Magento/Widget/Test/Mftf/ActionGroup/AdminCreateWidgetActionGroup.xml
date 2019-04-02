@@ -32,6 +32,8 @@
         <click selector="{{AdminNewWidgetSection.addNewCondition}}" stepKey="clickAddNewCondition"/>
         <selectOption selector="{{AdminNewWidgetSection.selectCondition}}" userInput="{{widget.condition}}" stepKey="selectCondition"/>
         <waitForElement selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="waitRuleParameter"/>
+        <click selector="{{AdminNewWidgetSection.ruleParameterEdit}}" stepKey="clickRuleParameterEdit"/>
+        <selectOption selector="{{AdminNewWidgetSection.ruleParameterEditSelect}}" userInput="{{widget.ruleIsOneOf}}" stepKey="selectRuleParameterEdit"/>
         <click selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="clickRuleParameter"/>
         <click selector="{{AdminNewWidgetSection.openChooser}}" stepKey="clickChooser"/>
         <waitForPageLoad stepKey="waitForAjaxLoad"/>
@@ -62,5 +64,36 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForAjaxLoad"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been deleted" stepKey="seeSuccess"/>
+    </actionGroup>
+
+    <actionGroup name="AdminCreateWidgetWithBlockActionGroup" extends="AdminCreateWidgetActionGroup">
+        <arguments>
+            <argument name="blockTitle" type="string"/>
+        </arguments>
+        <waitForElement selector="{{AdminNewWidgetSection.widgetSelectBlock}}" time="60" after="clickWidgetOptions" stepKey="waitForSelectBlock"/>
+        <click selector="{{AdminNewWidgetSection.widgetSelectBlock}}" stepKey="openSelectBlock"/>
+        <waitForPageLoad stepKey="waitForLoadBlocks"/>
+        <waitForElementVisible selector="{{AdminSelectWidgetBlockGridSection.sectionTitle}}" stepKey="waitSectionHeaderIsLoaded"/>
+        <selectOption selector="{{AdminSelectWidgetBlockGridSection.blockStatusFilter}}" userInput="Disabled" stepKey="chooseDisabledStatus"/>
+        <fillField selector="{{AdminSelectWidgetBlockGridSection.blockTitleFilter}}" userInput="{{blockTitle}}" stepKey="fillBlockTitle"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="searchBlock"/>
+        <click selector="{{AdminDataGridTableSection.row('1')}}" stepKey="clickSearchedBlock"/>
+        <waitForPageLoad stepKey="wait"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveWidget"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been saved." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AdminCreateProductLinkWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <selectOption selector="{{AdminNewWidgetSection.selectTemplate}}" userInput="{{widget.template}}" after="waitForPageLoad" stepKey="setTemplate"/>
+        <waitForAjaxLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{AdminNewWidgetSection.selectProduct}}" after="clickWidgetOptions" stepKey="clickSelectProduct"/>
+        <fillField selector="{{AdminNewWidgetSelectProductPopupSection.filterBySku}}" userInput="{{product.sku}}" stepKey="fillProductNameInFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="applyFilter"/>
+        <click selector="{{AdminNewWidgetSelectProductPopupSection.firstRow}}" stepKey="selectProduct"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
     </actionGroup>
 </actionGroups>

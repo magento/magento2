@@ -18,6 +18,12 @@
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Canceled" stepKey="seeOrderStatusCanceled"/>
     </actionGroup>
 
+    <!--Cancel order that is in processing status-->
+    <actionGroup name="CancelProcessingOrder" extends="cancelPendingOrder">
+        <remove keyForRemoval="seeOrderStatusCanceled"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" after="seeCancelSuccessMessage" userInput="{{CONST.orderStatusComplete}}" stepKey="seeOrderStatusComplete"/>
+    </actionGroup>
+
     <!--Navigate to create order page (New Order -> Create New Customer)-->
     <actionGroup name="navigateToNewOrderPageNewCustomerSingleStore">
         <arguments>
@@ -86,6 +92,7 @@
             <argument name="product" defaultValue="_defaultProduct"/>
             <argument name="quantity" type="string" defaultValue="1"/>
         </arguments>
+        <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductVisible"/>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilter"/>
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
@@ -174,6 +181,51 @@
         <fillField selector="{{AdminOrderFormBillingAddressSection.postalCode}}" userInput="{{address.postcode}}" stepKey="fillPostalCode"/>
         <fillField selector="{{AdminOrderFormBillingAddressSection.phone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
     </actionGroup>
+    <!--Check customer billing address fields-->
+    <actionGroup name="CheckOrderCustomerBillingInformation">
+        <arguments>
+            <argument name="customer"/>
+            <argument name="address"/>
+        </arguments>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.firstName}}" userInput="{{customer.firstname}}" stepKey="checkFirstName"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.lastName}}" userInput="{{customer.lastname}}" stepKey="checkLastName"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.streetLine1}}" userInput="{{address.street[0]}}" stepKey="checkStreet"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.city}}" userInput="{{address.city}}" stepKey="checkCity"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.country}}" userInput="{{address.country_id}}" stepKey="checkCountry"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.state}}" userInput="{{address.state}}" stepKey="checkState"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.postalCode}}" userInput="{{address.postcode}}" stepKey="checkPostCode"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.phone}}" userInput="{{address.telephone}}" stepKey="checkTelephone"/>
+    </actionGroup>
+    <!--Fill customer shipping address-->
+    <actionGroup name="FillOrderCustomerShippingInformation">
+        <arguments>
+            <argument name="customer"/>
+            <argument name="address"/>
+        </arguments>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.firstName}}" userInput="{{customer.firstname}}" stepKey="fillFirstName"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.lastName}}" userInput="{{customer.lastname}}" stepKey="fillLastName"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.streetLine1}}" userInput="{{address.street[0]}}" stepKey="fillStreetLine1"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.city}}" userInput="{{address.city}}" stepKey="fillCity"/>
+        <selectOption selector="{{AdminOrderFormShippingAddressSection.country}}" userInput="{{address.country_id}}" stepKey="fillCountry"/>
+        <selectOption selector="{{AdminOrderFormShippingAddressSection.state}}" userInput="{{address.state}}" stepKey="fillState"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.postalCode}}" userInput="{{address.postcode}}" stepKey="fillPostalCode"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.phone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
+    </actionGroup>
+    <!--Check customer shipping address fields-->
+    <actionGroup name="CheckOrderCustomerShippingInformation">
+        <arguments>
+            <argument name="customer"/>
+            <argument name="address"/>
+        </arguments>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.firstName}}" userInput="{{customer.firstname}}" stepKey="checkFirstName"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.lastName}}" userInput="{{customer.lastname}}" stepKey="checkLastName"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.streetLine1}}" userInput="{{address.street[0]}}" stepKey="checkStreet"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.city}}" userInput="{{address.city}}" stepKey="checkCity"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.country}}" userInput="{{address.country_id}}" stepKey="checkCountry"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.state}}" userInput="{{address.state}}" stepKey="checkState"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.postalCode}}" userInput="{{address.postcode}}" stepKey="checkPostCode"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.phone}}" userInput="{{address.telephone}}" stepKey="checkTelephone"/>
+    </actionGroup>
     <!--Select flat rate shipping method-->
     <actionGroup name="orderSelectFlatRateShipping">
         <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
@@ -244,5 +296,11 @@
     <actionGroup name="SelectCheckMoneyPaymentMethod">
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
         <conditionalClick selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" dependentSelector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" visible="true" stepKey="checkCheckMoneyOption"/>
+    </actionGroup>
+    <!--Submit order-->
+    <actionGroup name="SubmitOrderActionGroup">
+        <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="clickSubmitOrder"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." stepKey="seeOrderSuccessMessage"/>
     </actionGroup>
 </actionGroups>

@@ -22,10 +22,11 @@
         "magento/module-sales-rule": "101.0.*",
         "magento/module-product-video": "100.2.*",
         "magento/module-configurable-sample-data": "Sample Data version:100.2.*",
-        "magento/module-product-links-sample-data": "Sample Data version:100.2.*"
+        "magento/module-product-links-sample-data": "Sample Data version:100.2.*",
+        "magento/module-tax": "100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.7",
+    "version": "100.2.8",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

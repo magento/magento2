@@ -6,15 +6,22 @@
  */
 namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 
+use Magento\Framework\Exception\NotFoundException;
+
 class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer
 {
     /**
      * Turn mview off for the given indexers
      *
      * @return void
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         $indexerIds = $this->getRequest()->getParam('indexer_ids');
         if (!is_array($indexerIds)) {
             $this->messageManager->addError(__('Please select indexers.'));
