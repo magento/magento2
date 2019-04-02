@@ -379,7 +379,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $string
-     * @dataProvider GenerateWordProvider
+     * @dataProvider generateWordProvider
      * @throws \ReflectionException
      */
     public function testGenerateWord($string)
