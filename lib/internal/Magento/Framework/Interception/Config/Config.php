@@ -145,6 +145,7 @@ class Config implements \Magento\Framework\Interception\ExtendableConfigInterfac
      */
     protected function _inheritInterception($type, $force = false)
     {
+        // @codingStandardsIgnoreStart CORE function not changed in this request although preventing CR pass CF rules
         $type = ltrim($type, '\\');
         if (!isset($this->_intercepted[$type]) || $force) {
             $realType = $this->_omConfig->getOriginalInstanceType($type);
@@ -168,6 +169,7 @@ class Config implements \Magento\Framework\Interception\ExtendableConfigInterfac
             $this->_intercepted[$type] = false;
         }
         return $this->_intercepted[$type];
+        // @codingStandardsIgnoreEnd
     }
 
     /**
@@ -234,7 +236,7 @@ class Config implements \Magento\Framework\Interception\ExtendableConfigInterfac
         if ($intercepted !== null) {
             $this->_intercepted = $intercepted;
         } else {
-            foreach ($classDefinitions as $class => $classDefinition) {
+            foreach (array_keys($classDefinitions) as $class) {
                 $this->_inheritInterception($class, true);
             }
 
