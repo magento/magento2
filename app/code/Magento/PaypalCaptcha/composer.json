@@ -1,24 +1,20 @@
 {
     "name": "magento/module-paypal-captcha",
-    "description": "Provides CAPTCHA validation for PayPal Payflow Pro",
-    "config": {
-        "sort-packages": true
-    },
+    "description": "N/A",
     "require": {
         "php": "~7.0.13|~7.1.0",
-        "magento/framework": "*",
-        "magento/module-captcha": "*",
-        "magento/module-checkout": "*",
-        "magento/module-store": "*"
+        "magento/framework": "101.0.*",
+        "magento/module-captcha": "100.2.*",
+        "magento/module-checkout": "100.2.*",
+        "magento/module-store": "100.2.*"
     },
     "suggest": {
-        "magento/module-paypal": "*"
+        "magento/module-paypal": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0",
     "license": [
-        "OSL-3.0",
-        "AFL-3.0"
+        "proprietary"
     ],
     "autoload": {
         "files": [
