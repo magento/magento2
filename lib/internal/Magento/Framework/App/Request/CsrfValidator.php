@@ -70,7 +70,7 @@ class CsrfValidator implements ValidatorInterface
         }
         if ($valid === null) {
             $valid = !$request->isPost()
-                || $request->isAjax()
+                || $request->isXmlHttpRequest()
                 || $this->formKeyValidator->validate($request);
         }
 
