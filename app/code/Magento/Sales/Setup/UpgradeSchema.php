@@ -112,6 +112,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.0.11', '<')) {
             $this->expandLastTransIdField($installer);
         }
+        if (version_compare($context->getVersion(), '2.0.12', '<')) {
+            $this->addColumnOrderCurrencyCode($installer);
+        }
     }
 
     /**
@@ -178,6 +181,20 @@ class UpgradeSchema implements UpgradeSchemaInterface
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 'length' => 255
+            ]
+        );
+    }
+
+    private function addColumnOrderCurrencyCode(SchemaSetupInterface $installer)
+    {
+        $connection = $installer->getConnection(self::$connectionName);
+        $connection->addColumn(
+            $installer->getTable('sales_invoice_grid', self::$connectionName),
+            'order_currency_code',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 3,
+                'comment' => 'Order Currency Code'
             ]
         );
     }
