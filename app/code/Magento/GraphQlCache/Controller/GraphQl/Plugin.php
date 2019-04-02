@@ -43,7 +43,7 @@ class Plugin
         /** @var \Magento\Framework\App\Request\Http $request */
         /** @var \Magento\Framework\App\Response\Http $response */
         $cacheTags = $this->cacheTags->getCacheTags();
-        if ($request->isGet() && count($cacheTags)) {
+        if (count($cacheTags)) {
             // assume that response should be cacheable if it contains cache tags
             $response->setHeader('Pragma', 'cache', true);
             // TODO: Take from configuration

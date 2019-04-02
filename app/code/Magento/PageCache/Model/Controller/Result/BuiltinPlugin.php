@@ -87,8 +87,8 @@ class BuiltinPlugin
         $tags = [];
 
         if ($tagsHeader) {
-            //$tags = explode(',', $tagsHeader->getFieldValue());
-            //$response->clearHeader('X-Magento-Tags');
+            $tags = explode(',', $tagsHeader->getFieldValue());
+            $response->clearHeader('X-Magento-Tags');
         }
 
         $tags = array_unique(array_merge($tags, [CacheType::CACHE_TAG]));

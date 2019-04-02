@@ -27,6 +27,9 @@ class Plugin
         $this->cacheTags = $cacheTags;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function afterResolve(
         ResolverInterface $subject,
         $resolvedValue,

@@ -9,7 +9,7 @@
     <type name="Magento\Framework\App\FrontControllerInterface">
         <plugin name="cache" type="Magento\GraphQlCache\Controller\GraphQl\Plugin"/>
         <plugin name="front-controller-builtin-cache" type="Magento\PageCache\Model\App\FrontController\BuiltinPlugin"/>
-        <!--<plugin name="front-controller-varnish-cache" type="Magento\PageCache\Model\App\FrontController\VarnishPlugin"/>-->
+        <plugin name="front-controller-varnish-cache" type="Magento\PageCache\Model\App\FrontController\VarnishPlugin"/>
     </type>
     <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
         <plugin name="cache" type="Magento\GraphQlCache\Query\Resolver\Plugin"/>
@@ -20,7 +20,7 @@
     <!--</type>-->
     <type name="Magento\Framework\Controller\ResultInterface">
         <plugin name="result-builtin-cache" type="Magento\PageCache\Model\Controller\Result\BuiltinPlugin"/>
-        <!--<plugin name="result-varnish-cache" type="Magento\PageCache\Model\Controller\Result\VarnishPlugin"/>-->
+        <plugin name="result-varnish-cache" type="Magento\PageCache\Model\Controller\Result\VarnishPlugin"/>
     </type>
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="response-http-page-cache" type="Magento\PageCache\Model\App\Response\HttpPlugin"/>
