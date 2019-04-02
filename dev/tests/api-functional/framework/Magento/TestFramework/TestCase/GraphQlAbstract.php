@@ -61,6 +61,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
                 $this->composeHeaders($headers)
             );
         } else {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception("Unsupported request type");
         }
 

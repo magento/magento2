@@ -66,12 +66,14 @@ class Client
         $responseBodyArray = $this->json->jsonDecode($responseBody);
 
         if (!is_array($responseBodyArray)) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
         }
 
         $this->processErrors($responseBodyArray);
 
         if (!isset($responseBodyArray['data'])) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
         } else {
             return $responseBodyArray['data'];
@@ -101,12 +103,14 @@ class Client
         $responseBodyArray = $this->json->jsonDecode($responseBody);
 
         if (!is_array($responseBodyArray)) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
         }
 
         $this->processErrors($responseBodyArray);
 
         if (!isset($responseBodyArray['data'])) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
         } else {
             return $responseBodyArray['data'];
@@ -142,6 +146,7 @@ class Client
                     $responseBodyArray
                 );
             }
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('GraphQL responded with an unknown error: ' . json_encode($responseBodyArray));
         }
     }

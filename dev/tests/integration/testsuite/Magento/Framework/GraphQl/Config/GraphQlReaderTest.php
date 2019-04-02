@@ -45,7 +45,9 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Config\FileResolverInterface::class
         )->disableOriginalConstructor()->getMock();
         $fileList = [
+            //phpcs:ignore Magento2.Functions.DiscouragedFunction
             file_get_contents(__DIR__ . '/../_files/schemaA.graphqls'),
+            //phpcs:ignore Magento2.Functions.DiscouragedFunction
             file_get_contents(__DIR__ . '/../_files/schemaB.graphqls')
         ];
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileList));
@@ -185,7 +187,7 @@ QUERY;
         $request->setHeaders($headers);
         $response = $this->graphQlController->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
-        //phpcs:ignore Magento2.Security.IncludeFile.FoundIncludeFile
+        //phpcs:ignore Magento2.Security.IncludeFile
         $expectedOutput = require __DIR__ . '/../_files/schema_response_sdl_description.php';
 
         $schemaResponseFields = $output['data']['__schema']['types'];
