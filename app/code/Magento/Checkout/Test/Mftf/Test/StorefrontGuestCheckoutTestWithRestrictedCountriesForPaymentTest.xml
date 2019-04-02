@@ -57,10 +57,9 @@
         <!-- Fill UK Address and verify that payment available and checkout successful -->
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressSameAsShippingShared}}" stepKey="uncheckBillingAddressSameAsShippingCheckCheckBox"/>
         <waitForPageLoad stepKey="waitNewAddressBillingForm"/>
-        <actionGroup ref="GuestCheckoutFillNewBillingAddressActionGroupWithoutEmail" stepKey="guestCheckoutFillingShippingAddress">
+        <actionGroup ref="GuestCheckoutFillNewBillingAddressWithoutEmailActionGroup" stepKey="guestCheckoutFillingShippingAddress">
             <argument name="customerVar" value="CustomerEntityOne" />
             <argument name="customerAddressVar" value="UK_Default_Address" />
-            <argument name="classPrefix" value="[aria-hidden=false]"/>
         </actionGroup>
         <click selector="{{CheckoutPaymentSection.addressAction('Update')}}" stepKey="clickUpdateBillingAddressButton" />
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment" />
