@@ -13,6 +13,8 @@ use Zend\Stdlib\StringWrapper\MbString;
 
 /**
  * Sales admin helper.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 {
