@@ -182,10 +182,11 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * Gets grid url
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getGridUrl()
     {
-        $roleId =  $this->_escaper->escapeJs($this->escapeHtml($this->getRequest()->getParam('rid')));
+        $roleId =  $this->escapeHtml($this->getRequest()->getParam('rid'));
         return $this->getUrl('*/*/editrolegrid', ['rid' => $roleId]);
     }
 
