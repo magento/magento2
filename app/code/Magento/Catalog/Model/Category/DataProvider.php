@@ -350,6 +350,11 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
             $meta[$code]['scopeLabel'] = $this->getScopeLabel($attribute);
             $meta[$code]['componentType'] = Field::NAME;
+            
+            if($code == "filter_price_range"){
+                $meta[$code]['addbefore'] = $this->storeManager->getStore()
+                ->getBaseCurrency()->getCurrencySymbol();
+            }
         }
 
         $result = [];
