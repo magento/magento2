@@ -6,6 +6,7 @@
 
 namespace Magento\Integration\Plugin\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Model\AdminTokenService;
 
 /**
@@ -33,7 +34,6 @@ class AdminUser
      * @param \Magento\User\Model\User $subject
      * @param \Magento\Framework\DataObject $object
      * @return \Magento\User\Model\User
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterSave(
         \Magento\User\Model\User $subject,
@@ -41,7 +41,11 @@ class AdminUser
     ): \Magento\User\Model\User {
         $isActive = $object->getIsActive();
         if ($isActive !== null && $isActive == 0) {
-            $this->adminTokenService->revokeAdminAccessToken($object->getId());
+            try {
+                $this->adminTokenService->revokeAdminAccessToken($object->getId());
+            } catch (LocalizedException $e) {
+                //token for admin use doesn't exist in oauth_token table, no action
+            }
         }
         return $subject;
     }
