@@ -11,8 +11,8 @@
     <entity name="_defaultVariable" type="cms_page">
         <data key="city"> Austin </data>
     </entity>
-    <entity name="customVariable" type="cms_page">
-        <data key="code" unique="suffix">variale-code</data>
+    <entity name="customVariable" type="variable">
+        <data key="code" unique="suffix">variable-code</data>
         <data key="name">Test Variable</data>
         <data key="html"> Sample Variable </data>
         <data key="plain">variable-plain-</data>
