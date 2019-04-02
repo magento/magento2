@@ -985,7 +985,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected function _getQuotesFromServer($request)
     {
         $client = $this->_httpClientFactory->create();
-        $client->setUri((string)$this->getConfigData('gateway_url'));
+        $client->setUri($this->getGatewayURL());
         $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
         $client->setRawData(utf8_encode($request));
 
@@ -1578,7 +1578,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             try {
                 /** @var \Magento\Framework\HTTP\ZendClient $client */
                 $client = $this->_httpClientFactory->create();
-                $client->setUri((string)$this->getConfigData('gateway_url'));
+                $client->setUri($this->getGatewayURL());
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
                 $client->setRawData($request);
                 $responseBody = $client->request(\Magento\Framework\HTTP\ZendClient::POST)->getBody();
@@ -1745,7 +1745,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             try {
                 /** @var \Magento\Framework\HTTP\ZendClient $client */
                 $client = $this->_httpClientFactory->create();
-                $client->setUri((string)$this->getConfigData('gateway_url'));
+                $client->setUri($this->getGatewayURL());
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
                 $client->setRawData($request);
                 $responseBody = $client->request(\Magento\Framework\HTTP\ZendClient::POST)->getBody();
@@ -2020,5 +2020,19 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     private function buildSoftwareVersion(): string
     {
         return substr($this->productMetadata->getVersion(), 0, 10);
+    }
+
+    /**
+     * Get the gateway URL
+     *
+     * @return string
+     */
+    private function getGatewayURL(): string
+    {
+        if ($this->getConfigData('sandbox_mode')) {
+            return (string)$this->getConfigData('sandbox_url');
+        } else {
+            return (string)$this->getConfigData('gateway_url');
+        }
     }
 }
