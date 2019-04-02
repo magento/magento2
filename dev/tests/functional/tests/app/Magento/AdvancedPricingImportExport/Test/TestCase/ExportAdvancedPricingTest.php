@@ -66,6 +66,13 @@ class ExportAdvancedPricingTest extends Injectable
     private $catalogProductIndex;
 
     /**
+     * Cron command
+     *
+     * @var Cron
+     */
+    private $cron;
+
+    /**
      * Run cron before tests running
      *
      * @param Cron $cron
@@ -85,18 +92,21 @@ class ExportAdvancedPricingTest extends Injectable
      * @param FixtureFactory $fixtureFactory
      * @param AdminExportIndex $adminExportIndex
      * @param CatalogProductIndex $catalogProductIndexPage
+     * @param Cron $cron
      * @return void
      */
     public function __inject(
         TestStepFactory $stepFactory,
         FixtureFactory $fixtureFactory,
         AdminExportIndex $adminExportIndex,
-        CatalogProductIndex $catalogProductIndexPage
+        CatalogProductIndex $catalogProductIndexPage,
+        Cron $cron
     ) {
         $this->stepFactory = $stepFactory;
         $this->fixtureFactory = $fixtureFactory;
         $this->adminExportIndex = $adminExportIndex;
         $this->catalogProductIndex = $catalogProductIndexPage;
+        $this->cron = $cron;
     }
 
     /**
@@ -130,8 +140,12 @@ class ExportAdvancedPricingTest extends Injectable
         if ($website) {
             $website->persist();
             $this->setupCurrencyForCustomWebsite($website, $currencyCustomWebsite);
+            $this->cron->run();
+            $this->cron->run();
         }
         $products = $this->prepareProducts($products, $website);
+        $this->cron->run();
+        $this->cron->run();
         $this->adminExportIndex->open();
         $this->adminExportIndex->getExportedGrid()->deleteAllExportedFiles();
         $exportData = $this->fixtureFactory->createByCode(

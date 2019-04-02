@@ -41,6 +41,7 @@
                         </block>
                         <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart" name="customer.wishlist.item.cart" template="Magento_Wishlist::item/column/cart.phtml" cacheable="false">
                             <arguments>
+                                <argument name="allowedQuantityViewModel" xsi:type="object">Magento\Wishlist\ViewModel\AllowedQuantity</argument>
                                 <argument name="title" translate="true" xsi:type="string">Add to Cart</argument>
                             </arguments>
                         </block>
