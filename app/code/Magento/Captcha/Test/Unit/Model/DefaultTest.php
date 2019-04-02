@@ -405,7 +405,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function GenerateWordProvider()
+    public function generateWordProvider()
     {
         return [
             ['ABC123'],

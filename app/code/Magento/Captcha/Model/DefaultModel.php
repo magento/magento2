@@ -379,6 +379,16 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     }
 
     /**
+     * Get symbols array to use for word generation
+     *
+     * @return array
+     */
+    protected function _getSymbols()
+    {
+        return str_split((string)$this->_captchaData->getConfig('symbols'));
+    }
+
+    /**
      * Returns length for generating captcha word. This value may be dynamic.
      *
      * @return int
