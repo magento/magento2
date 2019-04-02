@@ -198,7 +198,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param string $url
      * @param string $driver
      * @return string
-     * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function downloadFileFromUrl($url, $driver)
@@ -270,7 +269,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Validate uploaded file by type and etc.
      *
      * @return void
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _validateFile()
     {
@@ -283,7 +282,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 
         $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
         if (!$this->checkAllowedExtension($fileExtension)) {
-            throw new \Magento\Framework\Exception\LocalizedException('Disallowed file type.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Disallowed file type.'));
         }
         //run validate callbacks
         foreach ($this->_validateCallbacks as $params) {
