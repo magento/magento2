@@ -165,7 +165,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
                 'region' => 'IL',
                 'postalCode' => '60618',
                 'countryCodeAlpha2' => 'US',
-                'recipientName' => 'John Doe',
+                'recipientName' => 'Jane Smith',
             ],
             'billingAddress' => [
                 'streetAddress' => '123 Billing Street',
@@ -186,9 +186,9 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
     private function updateShippingAddressStep(array $details): void
     {
         $this->shippingAddress->method('setLastname')
-            ->with($details['lastName']);
+            ->with('Smith');
         $this->shippingAddress->method('setFirstname')
-            ->with($details['firstName']);
+            ->with('Jane');
         $this->shippingAddress->method('setEmail')
             ->with($details['email']);
         $this->shippingAddress->method('setCollectShippingRates')
