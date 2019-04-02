@@ -7,8 +7,18 @@ namespace Magento\Framework\DB\Helper\Mysql;
 
 use Magento\Framework\App\ResourceConnection;
 
+/**
+ * MySQL Fulltext Query Builder
+ */
 class Fulltext
 {
+    /**
+     * Characters that have special meaning in fulltext match syntax
+     *
+     * @var string
+     */
+    const SPECIAL_CHARACTERS = '-+<>*()~';
+
     /**
      * FULLTEXT search in MySQL search mode "natural language"
      */
@@ -51,7 +61,7 @@ class Fulltext
     {
         $this->connection = $resource->getConnection();
     }
-    
+
     /**
      * Method for FULLTEXT search in Mysql, will generated MATCH ($columns) AGAINST ('$expression' $mode)
      *
@@ -73,8 +83,7 @@ class Fulltext
     }
 
     /**
-     * Method for FULLTEXT search in Mysql, will added generated
-     * MATCH ($columns) AGAINST ('$expression' $mode) to where clause
+     * Method for FULLTEXT search in Mysql; will add generated MATCH ($columns) AGAINST ('$expression' $mode) to $select
      *
      * @param \Magento\Framework\DB\Select $select
      * @param string|string[] $columns Columns which add to MATCH ()
@@ -94,5 +103,16 @@ class Fulltext
         }
 
         return $select;
+    }
+
+    /**
+     * Remove special characters from fulltext query expression
+     *
+     * @param string $expression
+     * @return string
+     */
+    public function removeSpecialCharacters($expression)
+    {
+        return str_replace(str_split(static::SPECIAL_CHARACTERS), '', $expression);
     }
 }
