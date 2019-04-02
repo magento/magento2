@@ -715,6 +715,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
     protected function _getAllItems()
     {
@@ -1307,7 +1308,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     public function processAdditionalValidation(\Magento\Framework\DataObject $request)
     {
         //Skip by item validation if there is no items in request
-        if (!count($this->getAllItems($request))) {
+        if (empty($this->getAllItems($request))) {
             $this->_errors[] = __('There is no items in this order');
         }
 
@@ -1775,7 +1776,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $errorTitle = __('Unable to retrieve tracking');
         $resultArr = [];
 
-        if (strlen(trim($response)) > 0) {
+        if (!empty(trim($response))) {
             $xml = $this->parseXml($response, \Magento\Shipping\Model\Simplexml\Element::class);
             if (!is_object($xml)) {
                 $errorTitle = __('Response is in the wrong format');
@@ -1944,6 +1945,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             }
             $result->setTrackingNumber((string)$xml->AirwayBillNumber);
             $labelContent = (string)$xml->LabelImage->OutputImage;
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $result->setShippingLabelContent(base64_decode($labelContent));
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
