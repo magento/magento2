@@ -55,8 +55,10 @@ class CsrfValidator implements ValidatorInterface
     }
 
     /**
+     * Validate given request.
+     *
      * @param HttpRequest $request
-     * @param ActionInterface  $action
+     * @param ActionInterface $action
      *
      * @return bool
      */
@@ -78,6 +80,8 @@ class CsrfValidator implements ValidatorInterface
     }
 
     /**
+     * Create exception for when incoming request failed validation.
+     *
      * @param HttpRequest $request
      * @param ActionInterface $action
      *
