@@ -12,6 +12,8 @@ use Magento\Framework\Exception\StateException;
 
 /**
  * Configurable product link management.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementInterface
 {
@@ -110,6 +112,10 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
 
     /**
      * @inheritdoc
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws StateException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function addChild($sku, $childSku)
     {
@@ -153,6 +159,10 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
 
     /**
      * @inheritdoc
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws StateException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function removeChild($sku, $childSku)
     {
