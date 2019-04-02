@@ -7,9 +7,10 @@
 define([
     "jquery",
     'Magento_Ui/js/modal/confirm',
+    'mage/dataPost',
     "jquery/ui",
     "mage/translate"
-], function($, confirm){
+], function($, confirm, dataPost){
     "use strict";
     
     $.widget('mage.address', {
@@ -50,24 +51,29 @@ define([
         /**
          * Delete the address whose id is specified in a data attribute after confirmation from the user.
          * @private
-         * @param {Event}
+         * @param {jQuery.Event} e
          * @return {Boolean}
          */
         _deleteAddress: function(e) {
-            var self = this;
+            var self = this,
+                addressId;
 
             confirm({
                 content: this.options.deleteConfirmMessage,
                 actions: {
                     confirm: function() {
                         if (typeof $(e.target).parent().data('address') !== 'undefined') {
-                            window.location = self.options.deleteUrlPrefix + $(e.target).parent().data('address')
-                                + '/form_key/' + $.mage.cookies.get('form_key');
+                            addressId = $(e.target).parent().data('address');
+                        } else {
+                            addressId = $(e.target).data('address');
                         }
-                        else {
-                            window.location = self.options.deleteUrlPrefix + $(e.target).data('address')
-                                + '/form_key/' + $.mage.cookies.get('form_key');
-                        }
+
+                        dataPost().postData({
+                            action: self.options.deleteUrlPrefix + addressId,
+                            data: {
+                                'form_key': $.mage.cookies.get('form_key')
+                            }
+                        });
                     }
                 }
             });

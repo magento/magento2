@@ -10,6 +10,9 @@
 
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
+/**
+ * Renderer class for action in the admin notifications grid.
+ */
 class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
@@ -39,9 +42,9 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
      */
     public function render(\Magento\Framework\DataObject $row)
     {
-        $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' . $row->getUrl() . '">' . __(
-            'Read Details'
-        ) . '</a> | ' : '';
+        $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' .
+            $this->escapeUrl($row->getUrl()) . '">' .
+            __('Read Details') . '</a> | ' : '';
 
         $markAsReadHtml = !$row->getIsRead() ? '<a class="action-mark" href="' . $this->getUrl(
             '*/*/markAsRead/',
@@ -52,7 +55,8 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
 
         $encodedUrl = $this->_urlHelper->getEncodedUrl();
         return sprintf(
-            '%s%s<a class="action-delete" href="%s" onClick="deleteConfirm(\'%s\', this.href); return false;">%s</a>',
+            '%s%s<a class="action-delete" href="%s" onclick="deleteConfirm(\'%s\', this.href, {data: {}});' .
+            ' return false;">%s</a>',
             $readDetailsHtml,
             $markAsReadHtml,
             $this->getUrl(

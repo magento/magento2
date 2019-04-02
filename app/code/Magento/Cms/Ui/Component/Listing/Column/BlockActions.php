@@ -30,8 +30,6 @@ class BlockActions extends Column
     protected $urlBuilder;
 
     /**
-     * Escaper.
-     *
      * @var Escaper
      */
     private $escaper;
@@ -90,6 +88,7 @@ class BlockActions extends Column
                                 'title' => __('Delete %1', $title),
                                 'message' => __('Are you sure you wan\'t to delete a %1 record?', $title),
                             ],
+                            'post' => true,
                         ],
                     ];
                 }

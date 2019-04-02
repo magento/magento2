@@ -57,52 +57,45 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     protected $filterManagerMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
-
-        $this->helperMock = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
-
-        $this->redirectMock = $this->getMock('Magento\Framework\App\Response\RedirectInterface', [], [], '', false);
-
-        $this->responseMock = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
-            ['setRedirect', 'sendResponse'],
-            [],
-            '',
-            false
-        );
-
-        $this->currencySymbolMock = $this->getMock(
-            'Magento\CurrencySymbol\Model\System\Currencysymbol',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->filterManagerMock = $this->getMock(
-            'Magento\Framework\Filter\FilterManager',
-            ['stripTags'],
-            [],
-            '',
-            false
-        );
-
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
-
-        $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface', [], [], '', false);
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->setMethods(['isPost'])
+            ->getMockForAbstractClass();
+        $this->requestMock->expects($this->any())->method('isPost')->willReturn(true);
+        $this->helperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->redirectMock = $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)
+            ->getMockForAbstractClass();
+        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
+            ->setMethods(['setRedirect', 'sendResponse'])
+            ->getMockForAbstractClass();
+        $this->currencySymbolMock = $this->getMockBuilder(\Magento\CurrencySymbol\Model\System\Currencysymbol::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filterManagerMock = $this->getMockBuilder(\Magento\Framework\Filter\FilterManager::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['stripTags'])
+            ->getMock();
+        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+            ->getMockForAbstractClass();
+        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+            ->getMockForAbstractClass();
         $this->action = $objectManager->getObject(
-            'Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Save',
+            \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Save::class,
             [
                 'request' => $this->requestMock,
                 'response' => $this->responseMock,
                 'objectManager' => $this->objectManagerMock,
                 'redirect' => $this->redirectMock,
                 'helper' => $this->helperMock,
-                'messageManager' => $this->messageManagerMock
+                'messageManager' => $this->messageManagerMock,
             ]
         );
     }
@@ -131,16 +124,16 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\CurrencySymbol\Model\System\Currencysymbol')
+            ->with(\Magento\CurrencySymbol\Model\System\Currencysymbol::class)
             ->willReturn($this->currencySymbolMock);
 
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with('Magento\Framework\Filter\FilterManager')
+            ->with(\Magento\Framework\Filter\FilterManager::class)
             ->willReturn($this->filterManagerMock);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You applied the custom currency symbols.'));
 
         $this->action->execute();

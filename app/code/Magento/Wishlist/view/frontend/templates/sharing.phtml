@@ -40,6 +40,7 @@
             </div>
         <?php endif; ?>
     </fieldset>
+    <?= $block->getChildHtml('captcha'); ?>
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" title="<?php /* @escapeNotVerified */ echo __('Share Wish List') ?>" class="action submit primary">
