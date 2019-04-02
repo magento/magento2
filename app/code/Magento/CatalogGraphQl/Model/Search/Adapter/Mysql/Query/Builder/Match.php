@@ -9,8 +9,9 @@ namespace Magento\CatalogGraphQl\Model\Search\Adapter\Mysql\Query\Builder;
 
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
 use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
-use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match as BuilderMatch;
+use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Search\Helper\Data;
 
 /**
@@ -22,6 +23,11 @@ class Match extends BuilderMatch
      * @var Data
      */
     private $searchHelper;
+
+    /**
+     * @var string[]
+     */
+    private $replaceSymbols = [];
 
     /**
      * @param ResolverInterface $resolver
@@ -44,8 +50,33 @@ class Match extends BuilderMatch
     /**
      * @inheritdoc
      */
-    protected function getMinimalCharacterLength()
+    protected function prepareQuery($queryValue, $conditionType)
     {
-        return $this->searchHelper->getMinQueryLength();
+        $queryValue = str_replace($this->replaceSymbols, ' ', $queryValue);
+        foreach ($this->preprocessors as $preprocessor) {
+            $queryValue = $preprocessor->process($queryValue);
+        }
+
+        $stringPrefix = '';
+        if ($conditionType === BoolExpression::QUERY_CONDITION_MUST) {
+            $stringPrefix = '+';
+        } elseif ($conditionType === BoolExpression::QUERY_CONDITION_NOT) {
+            $stringPrefix = '-';
+        }
+
+        $queryValues = explode(' ', $queryValue);
+
+        foreach ($queryValues as $queryKey => $queryValue) {
+            if (empty($queryValue)) {
+                unset($queryValues[$queryKey]);
+            } else {
+                $stringSuffix = $this->searchHelper->getMinQueryLength() > strlen($queryValue) ? '' : '*';
+                $queryValues[$queryKey] = $stringPrefix . $queryValue . $stringSuffix;
+            }
+        }
+
+        $queryValue = implode(' ', $queryValues);
+
+        return $queryValue;
     }
 }

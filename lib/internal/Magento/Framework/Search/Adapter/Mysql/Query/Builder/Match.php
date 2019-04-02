@@ -148,7 +148,7 @@ class Match implements QueryInterface
             if (empty($queryValue)) {
                 unset($queryValues[$queryKey]);
             } else {
-                $stringSuffix = $this->getMinimalCharacterLength() > strlen($queryValue) ? '' : '*';
+                $stringSuffix = self::MINIMAL_CHARACTER_LENGTH > strlen($queryValue) ? '' : '*';
                 $queryValues[$queryKey] = $stringPrefix . $queryValue . $stringSuffix;
             }
         }
@@ -156,15 +156,5 @@ class Match implements QueryInterface
         $queryValue = implode(' ', $queryValues);
 
         return $queryValue;
-    }
-
-    /**
-     * Retrieves minimal character length
-     *
-     * @return int
-     */
-    protected function getMinimalCharacterLength()
-    {
-        return self::MINIMAL_CHARACTER_LENGTH;
     }
 }
