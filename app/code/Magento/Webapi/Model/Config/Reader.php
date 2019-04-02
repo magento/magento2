@@ -18,7 +18,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
     protected $_idAttributes = [
         '/routes/route' => ['url', 'method'],
         '/routes/route/resources/resource' => 'ref',
-        '/routes/route/data' => 'name',
+        '/routes/route/data/parameter' => 'name',
     ];
 
     /**

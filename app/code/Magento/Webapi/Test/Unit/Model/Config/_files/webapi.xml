@@ -25,7 +25,7 @@
             <parameter name="id" force="true">%customer_id%</parameter>
         </data>
     </route>
-    <route url="/V1/customers/me" method="PUT" secure="true">
+    <route url="/V1/customers/me" method="PUT" secure="true" soapOperation="saveSelf">
         <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="save" />
         <resources>
             <resource ref="Magento_Customer::customer_self" />
