@@ -356,7 +356,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 }
 
                 return $weight += $selection->getWeight();
-            });
+            }, 0);
         }
     }
 
