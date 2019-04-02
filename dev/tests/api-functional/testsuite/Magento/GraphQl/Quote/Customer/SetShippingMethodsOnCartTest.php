@@ -162,30 +162,30 @@ QUERY;
     }
 
     /**
-     * @param string $reversedOrderId
+     * @param string $reservedOrderId
      * @return string
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function getMaskedQuoteIdByReservedOrderId(string $reversedOrderId): string
+    private function getMaskedQuoteIdByReservedOrderId(string $reservedOrderId): string
     {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
 
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 
     /**
-     * @param string $reversedOrderId
+     * @param string $reservedOrderId
      * @param int $customerId
      * @return string
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function assignQuoteToCustomer(
-        string $reversedOrderId,
+        string $reservedOrderId,
         int $customerId
     ): string {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
         $quote->setCustomerId($customerId);
         $this->quoteResource->save($quote);
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
