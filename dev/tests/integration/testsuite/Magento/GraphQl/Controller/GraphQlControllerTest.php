@@ -38,7 +38,6 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
     /** @var MetadataPool */
     private $metadataPool;
 
-    //phpcs:ignore Magento2.Functions.StaticFunction
     public static function setUpBeforeClass()
     {
         $db = Bootstrap::getInstance()->getBootstrap()
@@ -265,5 +264,13 @@ QUERY;
                 }
             }
         }
+    }
+
+    /**
+     * teardown
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 }
