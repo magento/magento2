@@ -17,4 +17,10 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see selector="{{StorefrontHeaderSection.mainTitle}}"  userInput="{{tabName}}" stepKey="checkTabTitle"/>
     </actionGroup>
+
+    <!--Go to Storefront > Account Information-->
+    <actionGroup name="StorefrontStartCustomerAccountInformationEdit">
+        <amOnPage url="{{StorefrontCustomerAccountInformationPage.url}}" stepKey="goToAccountInformationEditPage"/>
+        <see selector="{{StorefrontCustomerAccountInformationSection.title}}" userInput="Edit Account Information" stepKey="seeEditAccountInformationPageTitle"/>
+    </actionGroup>
 </actionGroups>

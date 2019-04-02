@@ -15,6 +15,6 @@
         <element name="changeEmail" type="checkbox" selector="#change_email"/>
         <element name="changePassword" type="checkbox" selector="#change_password"/>
         <element name="customAttributeFiled" type="input" selector="#{{attribute_code}}" parameterized="true"/>
-        <element name="saveButton" type="button" selector="#form-validate .action.save.primary"/>
+        <element name="saveButton" type="button" selector="#form-validate .action.save.primary" timeout="30"/>
     </section>
 </sections>
