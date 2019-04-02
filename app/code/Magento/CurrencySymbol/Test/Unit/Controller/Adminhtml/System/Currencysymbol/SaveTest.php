@@ -57,11 +57,18 @@ class SaveTest extends \PHPUnit\Framework\TestCase
      */
     protected $filterManagerMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isPost'])
+            ->getMockForAbstractClass();
+        $this->requestMock->expects($this->any())->method('isPost')->willReturn(true);
 
         $this->helperMock = $this->createMock(\Magento\Backend\Helper\Data::class);
 
@@ -128,7 +135,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->filterManagerMock);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You applied the custom currency symbols.'));
 
         $this->action->execute();

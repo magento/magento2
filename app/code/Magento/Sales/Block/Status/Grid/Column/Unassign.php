@@ -36,9 +36,16 @@ class Unassign extends \Magento\Backend\Block\Widget\Grid\Column
         $cell = '';
         $state = $row->getState();
         if (!empty($state)) {
-            $url = $this->getUrl('*/*/unassign', ['status' => $row->getStatus(), 'state' => $row->getState()]);
+            $url = $this->getUrl('*/*/unassign');
             $label = __('Unassign');
-            $cell = '<a href="' . $url . '">' . $label . '</a>';
+            $cell = '<a href="#" data-post="'
+                .$this->escapeHtmlAttr(
+                    \json_encode([
+                        'action' => $url,
+                        'data' => ['status' => $row->getStatus(), 'state' => $row->getState()]
+                    ])
+                )
+                .'">' . $label . '</a>';
         }
         return $cell;
     }
