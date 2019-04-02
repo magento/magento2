@@ -270,62 +270,6 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array $items
-     * @param string $result
-     *
-     * @dataProvider dataProviderGetGridIdsJsonWithUseSelectAll
-     */
-    public function testGetGridIdsJsonWithUseSelectAll(array $items, $result)
-    {
-        $this->_block->setUseSelectAll(true);
-
-        if ($this->_block->getMassactionIdField()) {
-            $massActionIdField = $this->_block->getMassactionIdField();
-        } else {
-            $massActionIdField = $this->_block->getParentBlock()->getMassactionIdField();
-        }
-
-        $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->_gridMock->expects($this->once())
-            ->method('getCollection')
-            ->willReturn($collectionMock);
-        $collectionMock->expects($this->once())
-            ->method('setPageSize')
-            ->with(0)
-            ->willReturnSelf();
-        $collectionMock->expects($this->once())
-            ->method('getColumnValues')
-            ->with($massActionIdField)
-            ->willReturn($items);
-
-        $this->assertEquals($result, $this->_block->getGridIdsJson());
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderGetGridIdsJsonWithUseSelectAll()
-    {
-        return [
-            [
-                [],
-                '',
-            ],
-            [
-                [1],
-                '1',
-            ],
-            [
-                [1, 2, 3],
-                '1,2,3',
-            ],
-        ];
-    }
-
-    /**
      * @param string $itemId
      * @param array|\Magento\Framework\DataObject $item
      * @param int $count
