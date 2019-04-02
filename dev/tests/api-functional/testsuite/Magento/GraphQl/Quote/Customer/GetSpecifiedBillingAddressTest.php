@@ -162,7 +162,8 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
-        $this->graphQlQuery($this->getQuery($maskedQuoteId),
+        $this->graphQlQuery(
+            $this->getQuery($maskedQuoteId),
             [],
             '',
             $this->getHeaderMap('customer2@search.example.com')
