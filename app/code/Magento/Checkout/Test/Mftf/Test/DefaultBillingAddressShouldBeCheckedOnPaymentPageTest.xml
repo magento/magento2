@@ -51,7 +51,7 @@
         <dontSeeElement selector="{{CheckoutAddressPopupSection.newAddressModalPopup}}" stepKey="dontSeeModalPopup"/>
         <!--Select Shipping Rate "Flat Rate" and click "Next" button-->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForShippingMethodMaskDisappear"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
         <waitForPageLoad stepKey="waitForAddressSaved"/>
         <!--Verify that "My billing and shipping address are the same" is unchecked and billing address is preselected-->

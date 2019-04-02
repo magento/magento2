@@ -46,6 +46,6 @@
         <element name="noPaymentMethods" type="text" selector=".no-quotes-block"/>
         <element name="billingAddressSelectShared" type="select" selector=".checkout-billing-address select[name='billing_address_id']"/>
         <element name="billingAddressSameAsShippingShared" type="checkbox" selector="#billing-address-same-as-shipping-shared"/>
-        <element name="addressAction" type="button" selector="//span[text()='{{action}}']" parameterized="true"/>
+        <element name="addressAction" type="button" selector="//div[@class='actions-toolbar']//span[text()='{{action}}']" parameterized="true"/>
     </section>
 </sections>

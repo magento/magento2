@@ -38,10 +38,10 @@
         <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" after="seeRegion" stepKey="waitNextButton"/>
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" after="waitNextButton" stepKey="selectShippingMethod"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" after="selectShippingMethod" stepKey="clickNextButton" />
+        <waitForPageLoad after="clickNextButton" stepKey="waitForPaymentStep"/>
         <selectOption selector="{{CheckoutPaymentSection.billingAddressSelectShared}}" userInput="New Address" after="uncheckBillingAddressSameAsShippingCheckCheckBox" stepKey="clickOnNewAddress"/>
-        <waitForPageLoad after="clickNextButton" stepKey="waitBillingForm"/>
-        <seeElement selector="{{CheckoutPaymentSection.isPaymentSection}}" after="waitBillingForm" stepKey="checkoutPaymentStepIsOpened"/>
-        <actionGroup ref="CheckoutPlaceOrderActionGroup" after="selectCheckMoneyOrderPayment" stepKey="customerPlaceorder">
+        <waitForPageLoad stepKey="waitBillingAddressForm"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceorder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
         </actionGroup>
