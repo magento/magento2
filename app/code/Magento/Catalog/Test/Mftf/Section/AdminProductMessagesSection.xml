@@ -11,6 +11,5 @@
     <section name="AdminProductMessagesSection">
         <element name="successMessage" type="text" selector=".message-success"/>
         <element name="errorMessage" type="text" selector=".message.message-error.error"/>
-        <element name="adminMessage" type="text" selector="//*[contains(@class, 'message-error')]"/>
     </section>
 </sections>
