@@ -40,7 +40,7 @@ $params = $block->getParams();
                     $(parent).trigger('clearTimeout');
                     fullScreenLoader.stopLoader();
                     globalMessageList.addErrorMessage({
-                        message: $t(<?= /* @escapeNotVerified */ json_encode($params['error_msg'])?>)
+                        message: $t(<?= /* @noEscape */ json_encode($params['error_msg'])?>)
                     });
                 }
             );
