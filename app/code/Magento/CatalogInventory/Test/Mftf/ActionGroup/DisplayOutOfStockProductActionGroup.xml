@@ -26,13 +26,4 @@
         <selectOption selector="{{InventoryConfigSection.DisplayOutOfStockDropdown}}" userInput="No" stepKey="switchToNo" />
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
     </actionGroup>
-    <actionGroup name="setAsDefaultOutOfStockProduct">
-        <amOnPage url="{{InventoryConfigurationPage.url}}" stepKey="navigateToInventoryConfigurationPage"/>
-        <waitForPageLoad time="30" stepKey="waitForConfigPageToLoad"/>
-        <conditionalClick selector="{{InventoryConfigSection.ProductStockOptionsTab}}" dependentSelector="{{InventoryConfigSection.DisplayOutOfStockSystemValue}}" visible="false" stepKey="expandStockOptions"/>
-        <waitForElementVisible selector="{{InventoryConfigSection.DisplayOutOfStockSystemValue}}" time="30" stepKey="waitForCheckBoxVisible"/>
-        <checkOption selector="{{InventoryConfigSection.DisplayOutOfStockSystemValue}}" stepKey="uncheckUseSystemValue"/>
-        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
-        <waitForPageLoad time="30" stepKey="waitForConfigPageToLoad2"/>
-    </actionGroup>
 </actionGroups>

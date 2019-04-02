@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <createData entity="DisableDisplayOutOfStock" stepKey="displayOutOfStockNo"/>
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 0" stepKey="displayOutOfStockNo"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <createData entity="SimpleProduct4" stepKey="product">
@@ -28,12 +28,11 @@
             </createData>
         </before>
         <after>
-            <actionGroup ref="setAsDefaultOutOfStockProduct" stepKey="setAsDefaultOutOfStockProduct"/>
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 0" stepKey="displayOutOfStockNo2"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
-
         </after>
         <!--Open product page-->
         <comment userInput="Open product page" stepKey="openProdPage"/>
@@ -44,7 +43,7 @@
         <dontSeeElement selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="dontSeeAddToCompareLink"/>
         <!--Turn on 'out on stock' config-->
         <comment userInput="Turn on 'out of stock' config" stepKey="onOutOfStockConfig"/>
-        <createData entity="EnableDisplayOutOfStock" stepKey="displayOutOfStockYes"/>
+        <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 1" stepKey="displayOutOfStockYes"/>
         <!--Clear cache and reindex-->
         <comment userInput="Clear cache and reindex" stepKey="cleanCache"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
@@ -66,10 +65,16 @@
         <amOnPage url="{{StorefrontProductComparePage.url}}" stepKey="navigateToComparePage"/>
         <waitForPageLoad stepKey="waitForStorefrontProductComparePageLoad"/>
         <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($product.name$)}}" stepKey="seeProductInCompareList"/>
-        <!--Add product to compare list fom Category page-->
-        <comment userInput="Add product to compare list fom Category page" stepKey="addToCmpFromCategPage"/>
+        <!--Go to Category page and delete product from comparison list-->
+        <comment userInput="Go to Category page and delete prduct from comparison list" stepKey="deletProdFromCmpList"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <click selector="{{StorefrontComparisonSidebarSection.ClearAll}}" stepKey="clickClearAll"/>
+        <waitForPageLoad time="30" stepKey="waitForConfirmPageLoad"/>
+        <click selector="{{AdminDeleteRoleSection.confirm}}" stepKey="confirmProdDelate"/>
+        <waitForPageLoad time="30" stepKey="waitForConfirmLoad"/>
+        <!--Add product to compare list from Category page-->
+        <comment userInput="Add product to compare list fom Category page" stepKey="addToCmpFromCategPage"/>
         <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverOverProduct"/>
         <click selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="clickAddToCompare"/>
         <waitForPageLoad stepKey="waitProdAddingToCmpList"/>
