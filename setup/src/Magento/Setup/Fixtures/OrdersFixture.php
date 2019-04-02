@@ -574,7 +574,7 @@ class OrdersFixture extends Fixture
      * @param string $typeId
      * @param int $limit
      * @return array
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     private function getProductIds(\Magento\Store\Api\Data\StoreInterface $store, $typeId, $limit = null)
     {

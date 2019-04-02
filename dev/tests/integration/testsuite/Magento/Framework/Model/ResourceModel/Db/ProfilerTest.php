@@ -139,7 +139,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         $connection = $this->_getConnection();
 
         try {
-            $connection->select()->from('unknown_table');
+            $connection->select()->from('unknown_table')->query()->fetch();
         } catch (\Zend_Db_Statement_Exception $exception) {
             $this->assertNotEmpty($exception);
         }
@@ -152,7 +152,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\ResourceConnection::class);
         $testTableName = $resource->getTableName('setup_module');
-        $connection->select()->from($testTableName);
+        $connection->select()->from($testTableName)->query()->fetch();
 
         /** @var \Magento\Framework\Model\ResourceModel\Db\Profiler $profiler */
         $profiler = $connection->getProfiler();
