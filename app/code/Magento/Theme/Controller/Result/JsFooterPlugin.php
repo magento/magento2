@@ -20,8 +20,7 @@ class JsFooterPlugin
     {
         $content = $subject->getContent();
         $script = [];
-        if (strpos($content, '</body') > 0) {
-            $content = preg_replace('#<!--(?!\s?/?ko).*?-->#s', '', $content);
+        if (strpos($content, '</body') !== false) {
             $pattern = '#<script[^>]*+(?<!text/x-magento-template.)>.*?</script>#is';
             $content = preg_replace_callback(
                 $pattern,
