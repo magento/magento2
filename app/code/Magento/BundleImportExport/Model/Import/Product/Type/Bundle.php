@@ -675,12 +675,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             $childIds = [];
             foreach ($options as $option) {
                 foreach ($option['selections'] as $selection) {
-                    if (!isset($selection['parent_product_id'])) {
-                        if (!isset($this->_cachedSkuToProducts[$selection['sku']])) {
-                            continue;
-                        }
-                        $childIds[] = $this->_cachedSkuToProducts[$selection['sku']];
+                    if (!isset($this->_cachedSkuToProducts[$selection['sku']])) {
+                        continue;
                     }
+                    $childIds[] = $this->_cachedSkuToProducts[$selection['sku']];
                 }
 
                 $this->relationsDataSaver->saveProductRelations($productId, $childIds);
