@@ -73,6 +73,34 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * Test adding disabled product to compare list.
+     *
+     * @return void
+     */
+    public function testAddDisabledProductAction()
+    {
+        $this->_requireVisitorWithNoProducts();
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->setProductDisabled('simple_product_1');
+
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->dispatch(
+            sprintf(
+                'catalog/product_compare/add/product/%s/form_key/%s?nocookie=1',
+                $product->getEntityId(),
+                $formKey->getFormKey()
+            )
+        );
+
+        $this->assertRedirect();
+
+        $this->_assertCompareListEquals([]);
+    }
+
+    /**
      * Test comparing a product.
      *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -108,6 +136,24 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertRedirect();
         $restProduct = $this->productRepository->get('simple_product_1');
         $this->_assertCompareListEquals([$restProduct->getEntityId()]);
+    }
+
+    /**
+     * Test removing a disabled product from compare list.
+     *
+     * @return void
+     */
+    public function testRemoveDisabledAction()
+    {
+        $this->_requireVisitorWithTwoProducts();
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->setProductDisabled('simple_product_1');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
+
+        $this->assertRedirect();
+        $restProduct = $this->productRepository->get('simple_product_2');
+        $this->_assertCompareListEquals([$product->getEntityId(), $restProduct->getEntityId()]);
     }
 
     /**
@@ -200,6 +246,21 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
             ),
             MessageInterface::TYPE_SUCCESS
         );
+    }
+
+    /**
+     * Set product status disabled.
+     *
+     * @param string $sku
+     * @return \Magento\Catalog\Api\Data\ProductInterface
+     */
+    private function setProductDisabled(string $sku)
+    {
+        $product = $this->productRepository->get($sku);
+        $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED)
+            ->save();
+
+        return $product;
     }
 
     /**
