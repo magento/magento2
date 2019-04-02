@@ -19,5 +19,7 @@
         <element name="searchTermRowCheckboxBySearchQuery" type="checkbox" selector="//*[normalize-space()='{{var1}}']/preceding-sibling::td//input[@name='search']" parameterized="true" timeout="30"/>
         <element name="okButton" type="button" selector="//button[@class='action-primary action-accept']/span" timeout="30"/>
         <element name="emptyRecords" type="text" selector="//tr[@class='data-grid-tr-no-data even']/td[@class='empty-text']"/>
+        <element name="gridRow" type="text" selector="//tr[@data-role='row']"/>
+        <element name="numberOfSearchTermResults" type="text" selector="//tr[@data-role='row']/td[@data-column='num_results']"/>
     </section>
 </sections>
