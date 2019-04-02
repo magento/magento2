@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\File\Test\Unit\Transfer\Adapter;
 
 use \Magento\Framework\File\Transfer\Adapter\Http;
 
+/**
+ * Tests http transfer adapter.
+ */
 class HttpTest extends \PHPUnit\Framework\TestCase
 {
     /**

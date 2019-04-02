@@ -6,9 +6,11 @@
 
 namespace Magento\Framework\File\Transfer\Adapter;
 
+/**
+ * File adapter to send the file to the client.
+ */
 class Http
 {
-
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\Response
      */
@@ -25,7 +27,7 @@ class Http
     private $request;
 
     /**
-     * @param \Magento\Framework\App\Response\Http $response
+     * @param \Magento\Framework\HTTP\PhpEnvironment\Response $response
      * @param \Magento\Framework\File\Mime $mime
      * @param \Magento\Framework\App\Request\Http|null $request
      */
@@ -56,14 +58,7 @@ class Http
             throw new \InvalidArgumentException("File '{$filepath}' does not exists.");
         }
 
-        $mimeType = $this->mime->getMimeType($filepath);
-        if (is_array($options) && isset($options['headers']) && $options['headers'] instanceof \Zend\Http\Headers) {
-            $this->response->setHeaders($options['headers']);
-        }
-        $this->response->setHeader('Content-length', filesize($filepath));
-        $this->response->setHeader('Content-Type', $mimeType);
-
-        $this->response->sendHeaders();
+        $this->prepareResponse($options, $filepath);
 
         if ($this->request->isHead()) {
             // Do not send the body on HEAD requests.
@@ -73,6 +68,7 @@ class Http
         $handle = fopen($filepath, 'r');
         if ($handle) {
             while (($buffer = fgets($handle, 4096)) !== false) {
+                // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
                 echo $buffer;
             }
             if (!feof($handle)) {
@@ -102,5 +98,23 @@ class Http
         }
 
         return $filePath;
+    }
+
+    /**
+     * Set and send all necessary headers.
+     *
+     * @param array $options
+     * @param string $filepath
+     */
+    protected function prepareResponse($options, string $filepath): void
+    {
+        $mimeType = $this->mime->getMimeType($filepath);
+        if (is_array($options) && isset($options['headers']) && $options['headers'] instanceof \Zend\Http\Headers) {
+            $this->response->setHeaders($options['headers']);
+        }
+        $this->response->setHeader('Content-length', filesize($filepath));
+        $this->response->setHeader('Content-Type', $mimeType);
+
+        $this->response->sendHeaders();
     }
 }

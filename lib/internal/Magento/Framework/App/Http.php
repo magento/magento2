@@ -3,17 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Debug;
-use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\Response\HttpInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Debug;
 use Magento\Framework\Event;
 use Magento\Framework\Filesystem;
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 /**
  * HTTP web application. Called from webroot index.php to serve web requests.
@@ -154,6 +155,7 @@ class Http implements \Magento\Framework\AppInterface
 
     /**
      * Handle HEAD requests by adding the Content-Length header and removing the body from the response.
+     *
      * @return void
      */
     private function handleHeadRequest()
@@ -266,7 +268,7 @@ class Http implements \Magento\Framework\AppInterface
                 . "because the Magento setup directory cannot be accessed. \n"
                 . 'You can install Magento using either the command line or you must restore access '
                 . 'to the following directory: ' . $setupInfo->getDir($projectRoot) . "\n";
-
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($newMessage, 0, $exception);
         }
     }
@@ -282,6 +284,7 @@ class Http implements \Magento\Framework\AppInterface
     {
         $bootstrapCode = $bootstrap->getErrorCode();
         if (Bootstrap::ERR_MAINTENANCE == $bootstrapCode) {
+            // phpcs:ignore Magento2.Security.IncludeFile
             require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/503.php');
             return true;
         }
@@ -322,6 +325,7 @@ class Http implements \Magento\Framework\AppInterface
     {
         if ($exception instanceof \Magento\Framework\Exception\State\InitException) {
             $this->getLogger()->critical($exception);
+            // phpcs:ignore Magento2.Security.IncludeFile
             require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/404.php');
             return true;
         }
@@ -353,6 +357,7 @@ class Http implements \Magento\Framework\AppInterface
         if (isset($params['SCRIPT_NAME'])) {
             $reportData['script_name'] = $params['SCRIPT_NAME'];
         }
+        // phpcs:ignore Magento2.Security.IncludeFile
         require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/report.php');
         return true;
     }

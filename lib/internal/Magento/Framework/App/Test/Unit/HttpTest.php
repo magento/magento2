@@ -175,13 +175,13 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->frontControllerMock->expects($this->once())->method('dispatch')->with($this->requestMock)->will(
             $this->returnCallback(
                 function () {
+                    // phpcs:ignore Magento2.Exceptions.DirectThrow
                     throw new \Exception('Message');
                 }
             )
         );
         $this->http->launch();
     }
-
 
     /**
      * Test that HEAD requests lead to an empty body and a Content-Length header matching the original body size.
