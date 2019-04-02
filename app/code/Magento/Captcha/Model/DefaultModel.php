@@ -81,8 +81,8 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Captcha\Helper\Data $captchaData
      * @param \Magento\Captcha\Model\ResourceModel\LogFactory $resLogFactory
-     * @param Random $randomMath
      * @param string $formId
+     * @param Random $randomMath
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
