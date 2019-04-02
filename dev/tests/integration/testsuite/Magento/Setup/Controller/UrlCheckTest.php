@@ -14,12 +14,12 @@ class UrlCheckTest extends \PHPUnit_Framework_TestCase
     /**
      * @var UrlCheck
      */
- 	private $controller;
+    private $controller;
 
- 	protected function setUp()
- 	{
+    protected function setUp()
+    {
         $this->controller = Bootstrap::getObjectManager()->create(UrlCheck::class);
- 	}
+    }
 
     /**
      * @param $requestContent

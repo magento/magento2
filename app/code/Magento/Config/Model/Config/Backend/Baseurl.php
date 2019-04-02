@@ -231,10 +231,10 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @return UrlValidator
      */
     private function getUrlValidator()
- 	{
- 	    if (!$this->urlValidator) {
- 	        $this->urlValidator = ObjectManager::getInstance()->get(UrlValidator::class);
- 	    }
+    {
+        if (!$this->urlValidator) {
+            $this->urlValidator = ObjectManager::getInstance()->get(UrlValidator::class);
+        }
         return $this->urlValidator;
     }
 }
