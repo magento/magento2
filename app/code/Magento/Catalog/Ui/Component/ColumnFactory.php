@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Ui\Component;
 
+use Magento\Catalog\Ui\Component\Column\DataTypeConfigProviderInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Ui\Component\Filters\FilterModifier;
 
 /**
@@ -43,11 +45,21 @@ class ColumnFactory
     ];
 
     /**
-     * @param \Magento\Framework\View\Element\UiComponentFactory $componentFactory
+     * @var \Magento\Catalog\Ui\Component\Column\DataTypeConfigProviderInterface
      */
-    public function __construct(\Magento\Framework\View\Element\UiComponentFactory $componentFactory)
-    {
+    private $configProvider;
+
+    /**
+     * @param \Magento\Framework\View\Element\UiComponentFactory                   $componentFactory
+     * @param \Magento\Catalog\Ui\Component\Column\DataTypeConfigProviderInterface $configProvider
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\UiComponentFactory $componentFactory,
+        DataTypeConfigProviderInterface $configProvider
+    ) {
         $this->componentFactory = $componentFactory;
+        $this->configProvider = $configProvider
+            ?? ObjectManager::getInstance()->get(DataTypeConfigProviderInterface::class);
     }
 
     /**
@@ -83,7 +95,7 @@ class ColumnFactory
         
         $arguments = [
             'data' => [
-                'config' => $config,
+                'config' => $config + $this->configProvider->getConfig($config['dataType']),
             ],
             'context' => $context,
         ];

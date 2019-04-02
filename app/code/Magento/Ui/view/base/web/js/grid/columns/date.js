@@ -9,8 +9,10 @@
 define([
     'mageUtils',
     'moment',
-    './column'
-], function (utils, moment, Column) {
+    './column',
+    'underscore',
+    'moment-timezone-with-data'
+], function (utils, moment, Column, _) {
     'use strict';
 
     return Column.extend({
@@ -37,7 +39,10 @@ define([
          * @returns {String} Formatted date.
          */
         getLabel: function (value, format) {
-            var date = moment(this._super());
+            let date = moment.utc(this._super());
+            if (!_.isUndefined(this.timeZone)) {
+                date = date.tz(this.timeZone);
+            }
 
             date = date.isValid() && value[this.index] ?
                 date.format(format || this.dateFormat) :
