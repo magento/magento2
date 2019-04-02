@@ -10,8 +10,15 @@ namespace Magento\GraphQlCache\Query\Resolver;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\Resolver\Context;
 use Magento\GraphQlCache\Model\CacheTags;
+use Magento\Framework\App\RequestInterface;
 
+/**
+ * Class Plugin
+ *
+ * @package Magento\GraphQlCache\Query\Resolver
+ */
 class Plugin
 {
     /**
@@ -20,15 +27,33 @@ class Plugin
     private $cacheTags;
 
     /**
-     * @param CacheTags $cacheTags
+     * @var Request
      */
-    public function __construct(CacheTags $cacheTags)
+    private $request;
+
+    /**
+     * Constructor
+     *
+     * @param CacheTags $cacheTags
+     * @param RequestInterface $request
+     */
+    public function __construct(CacheTags $cacheTags, RequestInterface $request)
     {
         $this->cacheTags = $cacheTags;
+        $this->request = $request;
     }
 
     /**
      * @inheritdoc
+     *
+     * @param ResolverInterface $subject
+     * @param Object $resolvedValue
+     * @param Field $field
+     * @param Context $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed
      */
     public function afterResolve(
         ResolverInterface $subject,
@@ -39,12 +64,8 @@ class Plugin
         array $value = null,
         array $args = null
     ) {
-        if ($field->getName() == 'products') {
-            // TODO: Read cache tag value from the GraphQL schema and make it accessible via $field
-            $cacheTag = 'cat_p';
-        }
-        // TODO: Can be optimized to avoid tags calculation for POST requests
-        if (!empty($cacheTag)) {
+        $cacheTag = $field->getCacheTag();
+        if (!empty($cacheTag) && $this->request->isGet()) {
             $cacheTags = [$cacheTag];
             // Resolved value must have cache IDs defined
             $resolvedItemsIds = $this->extractResolvedItemsIds($resolvedValue);
@@ -56,6 +77,12 @@ class Plugin
         return $resolvedValue;
     }
 
+    /**
+     * Extract ids for resolved items
+     *
+     * @param Object $resolvedValue
+     * @return array
+     */
     private function extractResolvedItemsIds($resolvedValue)
     {
         // TODO: Implement safety checks and think about additional places which can hold items IDs
@@ -66,6 +93,11 @@ class Plugin
             return array_keys($resolvedValue['items']);
         }
         $ids = [];
+        if (isset($resolvedValue['id'])) {
+            $ids[] = $resolvedValue['id'];
+            return $ids;
+        }
+
         if (is_array($resolvedValue)) {
             foreach ($resolvedValue as $item) {
                 if (isset($item['id'])) {
@@ -73,5 +105,6 @@ class Plugin
                 }
             }
         }
+        return $ids;
     }
 }

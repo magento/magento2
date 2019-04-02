@@ -10,6 +10,8 @@ namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\TypeMetaWrapperReader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DocReader;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\CacheTagReader;
+
 
 /**
  * Composite configuration reader to handle the input object type meta
@@ -27,13 +29,24 @@ class InputObjectType implements TypeMetaReaderInterface
     private $docReader;
 
     /**
+     * @var CacheTagReader
+     */
+    private $cacheTagReader;
+
+    /**
+     * InputObjectType constructor.
      * @param TypeMetaWrapperReader $typeMetaReader
      * @param DocReader $docReader
+     * @param CacheTagReader $cacheTagReader
      */
-    public function __construct(TypeMetaWrapperReader $typeMetaReader, DocReader $docReader)
-    {
+    public function __construct(
+        TypeMetaWrapperReader $typeMetaReader,
+        DocReader $docReader,
+        CacheTagReader $cacheTagReader
+    ) {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;
+        $this->cacheTagReader = $cacheTagReader;
     }
 
     /**
@@ -55,6 +68,10 @@ class InputObjectType implements TypeMetaReaderInterface
 
             if ($this->docReader->read($typeMeta->astNode->directives)) {
                 $result['description'] = $this->docReader->read($typeMeta->astNode->directives);
+            }
+
+            if ($this->docReader->read($typeMeta->astNode->directives)) {
+                $result['cacheable'] = $this->cacheTagReader->read($typeMeta->astNode->directives);
             }
             return $result;
         } else {

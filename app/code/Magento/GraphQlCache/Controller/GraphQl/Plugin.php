@@ -13,6 +13,11 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\GraphQlCache\Model\CacheTags;
 use Magento\Framework\App\State as AppState;
 
+/**
+ * Class Plugin
+
+ * @package Magento\GraphQlCache\Controller\GraphQl
+ */
 class Plugin
 {
     /**
@@ -26,6 +31,8 @@ class Plugin
     private $state;
 
     /**
+     * Constructor
+     *
      * @param CacheTags $cacheTags
      * @param AppState $state
      */
@@ -35,6 +42,14 @@ class Plugin
         $this->state = $state;
     }
 
+    /**
+     * Plugin for GraphQL Controller
+     *
+     * @param FrontControllerInterface $subject
+     * @param ResponseInterface $response
+     * @param RequestInterface $request
+     * @return ResponseInterface|\Magento\Framework\Webapi\Response
+     */
     public function afterDispatch(
         FrontControllerInterface $subject,
         /* \Magento\Framework\App\Response\Http */ $response,

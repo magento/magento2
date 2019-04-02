@@ -52,6 +52,13 @@ class FieldFactory
             $fieldData['itemType'] = str_replace('[]', '', $fieldData['type']);
         }
 
+        if (isset($fieldData['description'])) {
+            if ($fieldData['description'] == "The list of products assigned to the category") {
+                $fieldType = $fieldData['type'];
+            }
+        }
+
+
         return $this->objectManager->create(
             Field::class,
             [
@@ -62,7 +69,8 @@ class FieldFactory
                 'itemType' => isset($fieldData['itemType']) ? $fieldData['itemType'] : '',
                 'resolver' => isset($fieldData['resolver']) ? $fieldData['resolver'] : '',
                 'description' => isset($fieldData['description']) ? $fieldData['description'] : '',
-                'arguments' => $arguments
+                'cacheTag' => isset($fieldData['cacheable']) ? $fieldData['cacheable'] : false,
+                'arguments' => $arguments,
             ]
         );
     }
