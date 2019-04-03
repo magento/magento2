@@ -9,6 +9,8 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Observer for setting "is_persistent" value to quote
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class SetQuotePersistentDataObserver implements ObserverInterface
 {

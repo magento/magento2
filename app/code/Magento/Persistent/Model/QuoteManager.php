@@ -7,6 +7,8 @@ namespace Magento\Persistent\Model;
 
 /**
  * Class QuoteManager
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class QuoteManager
 {

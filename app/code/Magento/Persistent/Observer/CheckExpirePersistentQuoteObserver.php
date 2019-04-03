@@ -9,6 +9,8 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Observer of expired session
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CheckExpirePersistentQuoteObserver implements ObserverInterface
 {
