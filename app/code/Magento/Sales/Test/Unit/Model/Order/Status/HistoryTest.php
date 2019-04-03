@@ -83,6 +83,17 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($status, $this->model->getStatusLabel());
     }
 
+    /**
+     * @return void
+     */
+    public function testGetStatusLabelWithNullStatus()
+    {
+        $this->model->setOrder($this->order);
+        $this->model->setStatus(null);
+
+        $this->assertNull($this->model->getStatusLabel());
+    }
+
     public function testGetStoreFromStoreManager()
     {
         $resultStore = 1;
