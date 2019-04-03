@@ -8,10 +8,13 @@ namespace Magento\Catalog\Controller\Product\Compare;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Add item to compare list action.
+ */
 class Add extends \Magento\Catalog\Controller\Product\Compare
 {
     /**
-     * Add item to compare list
+     * Add item to compare list.
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
@@ -26,12 +29,13 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
         if ($productId && ($this->_customerVisitor->getId() || $this->_customerSession->isLoggedIn())) {
             $storeId = $this->_storeManager->getStore()->getId();
             try {
+                /** @var \Magento\Catalog\Model\Product $product */
                 $product = $this->productRepository->getById($productId, false, $storeId);
             } catch (NoSuchEntityException $e) {
                 $product = null;
             }
 
-            if ($product) {
+            if ($product && $product->isSalable()) {
                 $this->_catalogProductCompareList->addProduct($product);
                 $productName = $this->_objectManager->get(
                     \Magento\Framework\Escaper::class
@@ -40,7 +44,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
                     'addCompareSuccessMessage',
                     [
                         'product_name' => $productName,
-                        'compare_list_url' => $this->_url->getUrl('catalog/product_compare')
+                        'compare_list_url' => $this->_url->getUrl('catalog/product_compare'),
                     ]
                 );
 
@@ -49,6 +53,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
 
             $this->_objectManager->get(\Magento\Catalog\Helper\Product\Compare::class)->calculate();
         }
+
         return $resultRedirect->setRefererOrBaseUrl();
     }
 
