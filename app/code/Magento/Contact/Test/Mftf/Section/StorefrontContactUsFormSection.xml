@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontContactUsFormSection">
+        <element name="nameField" type="input" selector="#name"/>
+        <element name="emailField" type="input" selector="#email"/>
+        <element name="commentField" type="textarea" selector="#comment"/>
+        <element name="submitFormButton" type="button" selector=".action.submit.primary" timeout="30"/>
+    </section>
+</sections>
