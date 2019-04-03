@@ -96,7 +96,8 @@ class Escaper extends \Zend\Escaper\Escaper
         $pattern = '/((javascript(\\\\x3a|:|%3A))|(data(\\\\x3a|:|%3A))|(vbscript:))|'
             . '((\\\\x6A\\\\x61\\\\x76\\\\x61\\\\x73\\\\x63\\\\x72\\\\x69\\\\x70\\\\x74(\\\\x3a|:|%3A))|'
             . '(\\\\x64\\\\x61\\\\x74\\\\x61(\\\\x3a|:|%3A)))/i';
-        $result = preg_replace($pattern, ':', $data);
+        $filteredData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $data);
+        $result = preg_replace($pattern, ':', $filteredData);
         return htmlspecialchars($result, ENT_COMPAT | ENT_HTML5 | ENT_HTML401, 'UTF-8', false);
     }
 
