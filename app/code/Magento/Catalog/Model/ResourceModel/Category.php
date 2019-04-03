@@ -15,8 +15,6 @@ use Magento\Catalog\Model\Indexer\Category\Product\Processor;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
-use Magento\Framework\AuthorizationInterface;
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Catalog\Model\Category as CategoryEntity;
 
 /**
@@ -94,17 +92,6 @@ class Category extends AbstractResource
      * @var Processor
      */
     private $indexerProcessor;
-
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
-    /**
-     * @var AuthorizationInterface
-     */
-    private $authorization;
-
     /**
      * Category constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
@@ -116,8 +103,6 @@ class Category extends AbstractResource
      * @param Processor $indexerProcessor
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @param UserContextInterface|null $userContext
-     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -129,9 +114,7 @@ class Category extends AbstractResource
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         Processor $indexerProcessor,
         $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        ?UserContextInterface $userContext = null,
-        ?AuthorizationInterface $authorization = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct(
             $context,
@@ -146,8 +129,6 @@ class Category extends AbstractResource
         $this->indexerProcessor = $indexerProcessor;
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
-        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
-        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**
@@ -1164,22 +1145,6 @@ class Category extends AbstractResource
         $isValid = parent::validate($object);
         if ($isValid !== true) {
             return $isValid;
-        }
-
-        //Validate changing of design.
-        $userType = $this->userContext->getUserType();
-        if ((
-                $userType === UserContextInterface::USER_TYPE_ADMIN
-                || $userType === UserContextInterface::USER_TYPE_INTEGRATION
-            )
-            && !$this->authorization->isAllowed('Magento_Catalog::edit_category_design')
-        ) {
-            $object->setData('custom_design', $object->getOrigData('custom_design'));
-            $object->setData('custom_design_from', $object->getOrigData('custom_design_from'));
-            $object->setData('custom_design_to', $object->getOrigData('custom_design_to'));
-            $object->setData('page_layout', $object->getOrigData('page_layout'));
-            $object->setData('custom_layout_update', $object->getOrigData('custom_layout_update'));
-            $object->setData('custom_apply_to_products', $object->getOrigData('custom_apply_to_products'));
         }
 
         return true;

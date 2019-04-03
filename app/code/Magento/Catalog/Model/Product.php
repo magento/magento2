@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -14,6 +15,7 @@ use Magento\Catalog\Model\FilterProductCustomAttribute;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 
@@ -354,6 +356,16 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     private $filterCustomAttribute;
 
     /**
+     * @var UserContextInterface
+     */
+    private $userContext;
+
+    /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -391,6 +403,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param array $data
      * @param \Magento\Eav\Model\Config|null $config
      * @param FilterProductCustomAttribute|null $filterCustomAttribute
+     * @param UserContextInterface|null $userContext
+     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -431,7 +445,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = [],
         \Magento\Eav\Model\Config $config = null,
-        FilterProductCustomAttribute $filterCustomAttribute = null
+        FilterProductCustomAttribute $filterCustomAttribute = null,
+        ?UserContextInterface $userContext = null,
+        ?AuthorizationInterface $authorization = null
     ) {
         $this->metadataService = $metadataService;
         $this->_itemOptionFactory = $itemOptionFactory;
@@ -473,6 +489,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->eavConfig = $config ?? ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
         $this->filterCustomAttribute = $filterCustomAttribute
             ?? ObjectManager::getInstance()->get(FilterProductCustomAttribute::class);
+        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
+        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**
@@ -873,6 +891,20 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->setRequiredOptions(false);
 
         $this->getTypeInstance()->beforeSave($this);
+
+        //Validate changing of design.
+        $userType = $this->userContext->getUserType();
+        if ((
+                $userType === UserContextInterface::USER_TYPE_ADMIN
+                || $userType === UserContextInterface::USER_TYPE_INTEGRATION
+            )
+            && !$this->authorization->isAllowed('Magento_Catalog::edit_product_design')
+        ) {
+            $this->setData('custom_design', $this->getOrigData('custom_design'));
+            $this->setData('page_layout', $this->getOrigData('page_layout'));
+            $this->setData('options_container', $this->getOrigData('options_container'));
+            $this->setData('custom_layout_update', $this->getOrigData('custom_layout_update'));
+        }
 
         $hasOptions = false;
         $hasRequiredOptions = false;
