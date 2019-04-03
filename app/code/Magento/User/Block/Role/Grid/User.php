@@ -81,6 +81,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Adds column filter to collection
+     *
      * @param Column $column
      * @return $this
      */
@@ -105,6 +107,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepares collection
+     *
      * @return $this
      */
     protected function _prepareCollection()
@@ -117,6 +121,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepares columns
+     *
      * @return $this
      */
     protected function _prepareColumns()
@@ -173,52 +179,51 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Gets grid url
+     *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getGridUrl()
     {
-        $roleId = $this->getRequest()->getParam('rid');
+        $roleId =  $this->escapeHtml($this->getRequest()->getParam('rid'));
         return $this->getUrl('*/*/editrolegrid', ['rid' => $roleId]);
     }
 
     /**
+     * Gets users
+     *
      * @param bool $json
      * @return string|array
      */
     public function getUsers($json = false)
     {
-        if ($this->getRequest()->getParam('in_role_user') != "") {
-            return $this->getRequest()->getParam('in_role_user');
+        $inRoleUser = $this->getRequest()->getParam('in_role_user');
+        if ($inRoleUser) {
+            if ($json) {
+                return $this->getJSONString($inRoleUser);
+            }
+            return $this->_escaper->escapeJs($this->escapeHtml($inRoleUser));
         }
-        $roleId = $this->getRequest()->getParam(
-            'rid'
-        ) > 0 ? $this->getRequest()->getParam(
-            'rid'
-        ) : $this->_coreRegistry->registry(
-            'RID'
-        );
-
+        $roleId = $this->getRoleId();
         $users = $this->getUsersFormData();
         if (false === $users) {
             $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
         }
-        if (sizeof($users) > 0) {
+        if (!empty($users)) {
             if ($json) {
                 $jsonUsers = [];
-                foreach ($users as $usrid) {
-                    $jsonUsers[$usrid] = 0;
+                foreach ($users as $userid) {
+                    $jsonUsers[$userid] = 0;
                 }
                 return $this->_jsonEncoder->encode((object)$jsonUsers);
-            } else {
-                return array_values($users);
             }
-        } else {
-            if ($json) {
-                return '{}';
-            } else {
-                return [];
-            }
+            return array_values($users);
         }
+        if ($json) {
+            return '{}';
+        }
+        return [];
     }
 
     /**
@@ -239,6 +244,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * Restore Users Form Data from the registry
      *
      * @return array|bool
+     * @SuppressWarnings(PHPMD.DiscouragedFunctionsSniff)
      */
     protected function restoreUsersFormData()
     {
@@ -251,5 +257,31 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         }
 
         return false;
+    }
+
+    /**
+     * Gets role ID
+     *
+     * @return string
+     */
+    private function getRoleId()
+    {
+        $roleId = $this->getRequest()->getParam('rid');
+        if ($roleId <= 0) {
+            $roleId = $this->_coreRegistry->registry('RID');
+        }
+        return $roleId;
+    }
+
+    /**
+     * Gets JSON string
+     *
+     * @param string $input
+     * @return string
+     */
+    private function getJSONString($input)
+    {
+        $output = json_decode($input);
+        return $output ? $this->_jsonEncoder->encode($output) : '{}';
     }
 }
