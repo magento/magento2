@@ -93,7 +93,7 @@ class CouponManagementTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/' . $couponCode,
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/' . urlencode($couponCode),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -129,7 +129,7 @@ class CouponManagementTest extends WebapiAbstract
         $couponCode = $salesRule->getPrimaryCoupon()->getCode();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/' . $couponCode,
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/' . urlencode($couponCode),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -232,7 +232,7 @@ class CouponManagementTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . 'mine/coupons/' . $couponCode,
+                'resourcePath' => self::RESOURCE_PATH . 'mine/coupons/' . urlencode($couponCode),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
                 'token' => $token,
             ],
@@ -280,7 +280,7 @@ class CouponManagementTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . 'mine/coupons/' . $couponCode,
+                'resourcePath' => self::RESOURCE_PATH . 'mine/coupons/' . urlencode($couponCode),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
                 'token' => $token,
             ],
