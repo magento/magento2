@@ -97,7 +97,7 @@
             <argument name="UrlKey" value="{{_duplicatedCMSPage.identifier}}"/>
         </actionGroup>
 
-        <!--Create CMS page with single store mode-->
+        <!--Create CMS page in single store mode-->
         <!--Enable single store mode-->
         <magentoCLI command="config:set general/single_store_mode/enabled 1" stepKey="enableSingleStoreMode"/>
         <!--Go to New CMS Page page-->
