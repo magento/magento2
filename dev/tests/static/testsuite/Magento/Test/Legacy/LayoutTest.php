@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Coverage of obsolete nodes in layout
- */
 namespace Magento\Test\Legacy;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
+/**
+ * Coverage of obsolete nodes in layout
+ */
 class LayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -356,8 +356,6 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             'unsetChildren',
             'updateButton',
             'setIsProductListingContext',
-            'checkCompanyStatus', // MAGETWO-88965
-            'setRendererType', // MAGETWO-88965
         ];
     }
 }
