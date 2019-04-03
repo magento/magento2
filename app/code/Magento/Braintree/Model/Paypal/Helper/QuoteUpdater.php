@@ -197,8 +197,9 @@ class QuoteUpdater extends AbstractHelper
      */
     private function getShippingRecipientFirstName(array $details)
     {
-        return explode(' ', $details['shippingAddress']['recipientName'], 2)[0]
-            ?? $details['firstName'];
+        return isset($details['shippingAddress']['recipientName'])
+            ? explode(' ', $details['shippingAddress']['recipientName'], 2)[0]
+            : $details['firstName'];
     }
 
     /**
@@ -209,7 +210,8 @@ class QuoteUpdater extends AbstractHelper
      */
     private function getShippingRecipientLastName(array $details)
     {
-        return explode(' ', $details['shippingAddress']['recipientName'], 2)[1]
-            ?? $details['lastName'];
+        return isset($details['shippingAddress']['recipientName'])
+            ? explode(' ', $details['shippingAddress']['recipientName'], 2)[1]
+            : $details['lastName'];
     }
 }
