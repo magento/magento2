@@ -139,6 +139,7 @@
         "magento/module-page-cache": "100.1.8",
         "magento/module-payment": "100.1.11",
         "magento/module-paypal": "100.1.13",
+        "magento/module-paypal-captcha": "100.1.0",
         "magento/module-persistent": "100.1.6",
         "magento/module-product-alert": "100.1.6",
         "magento/module-product-video": "100.1.12",
