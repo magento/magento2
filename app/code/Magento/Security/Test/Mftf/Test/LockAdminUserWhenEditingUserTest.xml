@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="LockAdminUserWhenEditingUserTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Runs Lock admin user when creating new user test."/>
+            <title value="Lock admin user when creating new user"/>
+            <description value="Runs Lock admin user when creating new user test."/>
+            <severity value="MAJOR"/>
+            <group value="security"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="Admin3" stepKey="user"/>
+            <!-- Log in to Admin Panel -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Unlock Admin user -->
+            <magentoCLI command="admin:user:unlock {{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="unlockAdminUser"/>
+            <!-- TODO Need to create delete operation for data entity="Admin3"
+            <deleteData createDataKey="user" stepKey="removeAdminUser"/>-->
+        </after>
+
+        <actionGroup ref="AdminEditUserActionGroup" stepKey="editUserFirstAttempt">
+            <argument name="adminUser" value="$$user.username$$"/>
+            <argument name="adminFirstname" value="NEW$$user.firstname$$"/>
+            <argument name="adminLastname" value="NEW$$user.lastname$$"/>
+            <argument name="adminEmail" value="new$$user.email$$"/>
+            <argument name="adminPassword" value="NEW$$user.password$$"/>
+            <argument name="adminPasswordConfirmation" value="NEW$$user.password_confirmation$$"/>
+            <argument name="adminUserRole" value="1"/>
+            <argument name="messageSelector" value="{{AdminMessagesSection.error}}" />
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminEditUserActionGroup" stepKey="editUserSecondAttempt">
+            <argument name="adminUser" value="$$user.username$$"/>
+            <argument name="adminFirstname" value="NEW$$user.firstname$$"/>
+            <argument name="adminLastname" value="NEW$$user.lastname$$"/>
+            <argument name="adminEmail" value="new$$user.email$$"/>
+            <argument name="adminPassword" value="NEW$$user.password$$"/>
+            <argument name="adminPasswordConfirmation" value="NEW$$user.password_confirmation$$"/>
+            <argument name="adminUserRole" value="1"/>
+            <argument name="messageSelector" value="{{AdminMessagesSection.error}}" />
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminEditUserActionGroup" stepKey="editUserThirdAttempt">
+            <argument name="adminUser" value="$$user.username$$"/>
+            <argument name="adminFirstname" value="NEW$$user.firstname$$"/>
+            <argument name="adminLastname" value="NEW$$user.lastname$$"/>
+            <argument name="adminEmail" value="new$$user.email$$"/>
+            <argument name="adminPassword" value="NEW$$user.password$$"/>
+            <argument name="adminPasswordConfirmation" value="NEW$$user.password_confirmation$$"/>
+            <argument name="adminUserRole" value="1"/>
+            <argument name="messageSelector" value="{{AdminMessagesSection.error}}" />
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminEditUserActionGroup" stepKey="editUserFourthAttempt">
+            <argument name="adminUser" value="$$user.username$$"/>
+            <argument name="adminFirstname" value="NEW$$user.firstname$$"/>
+            <argument name="adminLastname" value="NEW$$user.lastname$$"/>
+            <argument name="adminEmail" value="new$$user.email$$"/>
+            <argument name="adminPassword" value="NEW$$user.password$$"/>
+            <argument name="adminPasswordConfirmation" value="NEW$$user.password_confirmation$$"/>
+            <argument name="adminUserRole" value="1"/>
+            <argument name="messageSelector" value="{{AdminMessagesSection.error}}" />
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminEditUserActionGroup" stepKey="editUserFifthAttempt">
+            <argument name="adminUser" value="$$user.username$$"/>
+            <argument name="adminFirstname" value="NEW$$user.firstname$$"/>
+            <argument name="adminLastname" value="NEW$$user.lastname$$"/>
+            <argument name="adminEmail" value="new$$user.email$$"/>
+            <argument name="adminPassword" value="NEW$$user.password$$"/>
+            <argument name="adminPasswordConfirmation" value="NEW$$user.password_confirmation$$"/>
+            <argument name="adminUserRole" value="1"/>
+            <argument name="messageSelector" value="{{AdminMessagesSection.error}}" />
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminEditUserActionGroup" stepKey="openEditLastPage">
+            <argument name="adminUser" value="$$user.username$$"/>
+            <argument name="adminFirstname" value="NEW$$user.firstname$$"/>
+            <argument name="adminLastname" value="NEW$$user.lastname$$"/>
+            <argument name="adminEmail" value="new$$user.email$$"/>
+            <argument name="adminPassword" value="NEW$$user.password$$"/>
+            <argument name="adminPasswordConfirmation" value="NEW$$user.password_confirmation$$"/>
+            <argument name="adminUserRole" value="1"/>
+            <argument name="messageSelector" value="{{AdminLoginFormSection.error}}" />
+            <argument name="message" value="Your account is temporarily disabled. Please try again later." />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID"/>
+        </actionGroup>
+
+        <!-- Try to login as admin and check error -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsLockedAdmin"/>
+        <waitForPageLoad stepKey="waitForError"/>
+        <see selector="{{AdminLoginFormSection.error}}" userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later"
+             stepKey="seeLoginUserError"/>
+    </test>
+</tests>
