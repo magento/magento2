@@ -55,7 +55,7 @@ class ColumnFactory
      */
     public function __construct(
         \Magento\Framework\View\Element\UiComponentFactory $componentFactory,
-        DataTypeConfigProviderInterface $configProvider
+        DataTypeConfigProviderInterface $configProvider = null
     ) {
         $this->componentFactory = $componentFactory;
         $this->configProvider = $configProvider
