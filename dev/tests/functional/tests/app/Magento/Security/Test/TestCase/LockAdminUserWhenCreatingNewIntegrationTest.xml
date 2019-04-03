@@ -18,6 +18,7 @@
             <data name="integration/data/current_password" xsi:type="string">incorrect password</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <data name="attempts" xsi:type="string">4</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Security\Test\Constraint\AssertUserIsLocked" />
         </variation>
     </testCase>
