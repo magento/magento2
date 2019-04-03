@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckPagerShoppingCartWithMoreThan20ProductsTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Check if the cart pager is visible with more than 20 cart items and the pager disappears if an item is removed from cart"/>
+            <title value="Test if the cart pager is visible with more than 20 cart items and the pager disappears if an item is removed from cart."/>
+            <description value="Test if the cart pager is visible with more than 20 cart items and the pager disappears if an item is removed from cart."/>
+            <severity value="MAJOR"/>
+            <group value="shoppingCart"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!--Set the default number of items on cart which is 20-->
+            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 20" />
+
+            <!--Create and add to cart 20 products-->
+            <actionGroup ref="CreateAndAddToCart20ProductsActionGroup" stepKey="CartItems" />
+
+            <!-- Create and Add the 21th product to the shopping cart -->
+            <createData entity="SimpleTwo" stepKey="simpleProduct21CartItems"/>
+            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem21">
+                <argument name="product" value="$$simpleProduct21CartItems$$"/>
+            </actionGroup>
+        </before>
+        <!-- Go to the shopping cart and check if the pager is visible-->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart2"/>
+        <actionGroup ref="AssertPagerTextIsVisibleActionGroup" stepKey="VerifyPagerText">
+            <argument name="text" value="Items 1 to 20 of 21 total"/>
+        </actionGroup>
+
+        <!-- Remove a product from cart and check if the pager is not visible-->
+        <click selector="{{CheckoutCartProductSection.RemoveItem}}" stepKey="deleteProductFromCheckoutCart"/>
+        <actionGroup ref="AssertPagerTextIsNotVisibleActionGroup" stepKey="VerifyMissingPagerText2" >
+            <argument name="text" value="Items 1 to 20"/>
+        </actionGroup>
+        <after>
+            <!--Set back the default number of items on cart which is 20-->
+            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 20" />
+
+            <actionGroup ref="Delete20ProductsActionGroup" stepKey="Delete20CreatedProducts" />
+            <deleteData createDataKey="simpleProduct21CartItems" stepKey="deleteCartItem21"/>
+        </after>
+    </test>
+</tests>

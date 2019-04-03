@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontMissingPagerShoppingCartWith20ProductsTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Check if the cart pager is missing with 20 cart items"/>
+            <title value="Test if the cart pager is missing with 20 cart items."/>
+            <description value="Test if the cart pager is missing with 20 cart items."/>
+            <severity value="MAJOR"/>
+            <group value="shoppingCart"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!--Set the default number of items on cart which is 20-->
+            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 20" />
+            <!--Create and add to cart 20 products-->
+            <actionGroup ref="CreateAndAddToCart20ProductsActionGroup" stepKey="CartItems" />
+        </before>
+        <!-- Go to the shopping cart and check if the pager is missing-->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
+        <actionGroup ref="AssertPagerTextIsNotVisibleActionGroup" stepKey="VerifyMissingPagerText" >
+            <argument name="text" value="Items 1 to 20"/>
+        </actionGroup>
+        <after>
+            <!--Delete the test products-->
+            <actionGroup ref="Delete20ProductsActionGroup" stepKey="Delete20CreatedProducts" />
+        </after>
+    </test>
+</tests>
