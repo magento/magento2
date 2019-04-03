@@ -136,7 +136,6 @@ class Config implements \Magento\Framework\Interception\ExtendableConfigInterfac
         $this->cacheManager->saveCompiled($this->_cacheId, $this->_intercepted);
     }
 
-    // @codingStandardsIgnoreStart CORE function not changed in this request although preventing CR pass CF rules
     /**
      * Process interception inheritance
      *
@@ -155,14 +154,10 @@ class Config implements \Magento\Framework\Interception\ExtendableConfigInterfac
                     return true;
                 }
             } else {
-                $parts = explode('\\', $type);
-                if (!in_array(end($parts), $this->_serviceClassTypes) && $this->_relations->has($type)) {
-                    $relations = $this->_relations->getParents($type);
-                    foreach ($relations as $relation) {
-                        if ($relation && $this->_inheritInterception($relation)) {
-                            $this->_intercepted[$type] = true;
-                            return true;
-                        }
+                foreach ($this->getTypeRelations($type) as $relation) {
+                    if ($relation && $this->_inheritInterception($relation)) {
+                        $this->_intercepted[$type] = true;
+                        return true;
                     }
                 }
             }
@@ -170,7 +165,21 @@ class Config implements \Magento\Framework\Interception\ExtendableConfigInterfac
         }
         return $this->_intercepted[$type];
     }
-    // @codingStandardsIgnoreEnd
+
+    /**
+     * @param string $type
+     * @return array
+     */
+    private function getTypeRelations(string $type): array
+    {
+        $relations = [];
+        $parts = explode('\\', $type);
+        if (!in_array(end($parts), $this->_serviceClassTypes) && $this->_relations->has($type)) {
+            $relations = $this->_relations->getParents($type);
+        }
+
+        return $relations;
+    }
 
     /**
      * @inheritdoc
