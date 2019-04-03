@@ -39,7 +39,6 @@ class DataProviderWithDefaultAddresses extends \Magento\Ui\DataProvider\Abstract
     private static $forbiddenCustomerFields = [
         'password_hash',
         'rp_token',
-        'confirmation',
     ];
 
     /**
