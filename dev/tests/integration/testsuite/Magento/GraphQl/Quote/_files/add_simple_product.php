@@ -20,7 +20,7 @@ $quoteResource = Bootstrap::getObjectManager()->get(QuoteResource::class);
 /** @var CartRepositoryInterface $cartRepository */
 $cartRepository = Bootstrap::getObjectManager()->get(CartRepositoryInterface::class);
 
-$product = $productRepository->get('simple');
+$product = $productRepository->get('simple_product');
 
 $quote = $quoteFactory->create();
 $quoteResource->load($quote, 'test_quote', 'reserved_order_id');

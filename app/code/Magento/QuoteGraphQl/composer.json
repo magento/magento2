@@ -10,7 +10,8 @@
         "magento/module-catalog": "*",
         "magento/module-store": "*",
         "magento/module-customer": "*",
-        "magento/module-customer-graph-ql": "*"
+        "magento/module-customer-graph-ql": "*",
+        "magento/module-sales": "*"
     },
     "suggest": {
         "magento/module-graph-ql": "*"
