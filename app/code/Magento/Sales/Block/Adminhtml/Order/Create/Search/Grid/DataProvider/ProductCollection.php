@@ -53,4 +53,3 @@ class ProductCollection
         return $collection;
     }
 }
-

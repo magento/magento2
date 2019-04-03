@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -166,22 +167,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'type_id',
             $this->_salesConfig->getAvailableProductTypes()
         );
-
-        /*
-        $collection = $this->_productFactory->create()->getCollection();
-        $collection->setStore(
-            $this->getStore()
-        )->addAttributeToSelect(
-            $attributes
-        )->addAttributeToSelect(
-            'sku'
-        )->addStoreFilter()->addAttributeToFilter(
-            'type_id',
-            $this->_salesConfig->getAvailableProductTypes()
-        )->addAttributeToSelect(
-            'gift_message_available'
-        );
-        */
 
         $this->setCollection($collection);
         return parent::_prepareCollection();
