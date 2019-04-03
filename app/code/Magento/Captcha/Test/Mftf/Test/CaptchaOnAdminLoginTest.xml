@@ -29,34 +29,40 @@
         <waitForPageLoad stepKey="waitForPageLoad1" />
 
         <!-- Login as Admin with incorrect credentials 3 times -->
-        <fillField selector="{{AdminLoginFormSection.username}}" userInput="adminUser" stepKey="fillUsername1"/>
-        <fillField selector="{{AdminLoginFormSection.password}}" userInput="adminPassword" stepKey="fillPassword1"/>
-        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin1"/>
-        <see userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later." selector="{{AdminLoginFormSection.error}}" stepKey="seeLoginError1"/>
+        <actionGroup ref="LoginAdminWithCredentialsActionGroup" stepKey="failedFirstLoginAdminUser">
+            <argument name="adminUser" value="adminUser" />
+            <argument name="adminPassword" value="INVALIDAdminPassword" />
+        </actionGroup>
+        <see userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later."
+             selector="{{AdminLoginFormSection.error}}" stepKey="seeFirstLoginError"/>
 
-        <fillField selector="{{AdminLoginFormSection.username}}" userInput="adminUser" stepKey="fillUsername2"/>
-        <fillField selector="{{AdminLoginFormSection.password}}" userInput="adminPassword" stepKey="fillPassword2"/>
-        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin2"/>
-        <see userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later." selector="{{AdminLoginFormSection.error}}" stepKey="seeLoginError2"/>
+        <actionGroup ref="LoginAdminWithCredentialsActionGroup" stepKey="failedSecondLoginAdminUser">
+            <argument name="adminUser" value="adminUser" />
+            <argument name="adminPassword" value="INVALIDAdminPassword" />
+        </actionGroup>
+        <see userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later."
+             selector="{{AdminLoginFormSection.error}}" stepKey="seeSecondLoginError"/>
 
-        <fillField selector="{{AdminLoginFormSection.username}}" userInput="adminUser" stepKey="fillUsername3"/>
-        <fillField selector="{{AdminLoginFormSection.password}}" userInput="adminPassword" stepKey="fillPassword3"/>
-        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin3"/>
-        <see userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later." selector="{{AdminLoginFormSection.error}}" stepKey="seeLoginError3"/>
+        <actionGroup ref="LoginAdminWithCredentialsActionGroup" stepKey="failedThirdLoginAdminUser">
+            <argument name="adminUser" value="adminUser" />
+            <argument name="adminPassword" value="INVALIDAdminPassword" />
+        </actionGroup>
+        <see userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later."
+             selector="{{AdminLoginFormSection.error}}" stepKey="seeThirdLoginError"/>
 
         <!-- Check captcha visibility on admin login page  -->
-        <waitForElementVisible selector="{{AdminLoginFormSection.captchaField}}" stepKey="seeCaptchaField1"/>
-        <waitForElementVisible selector="{{AdminLoginFormSection.captchaImg}}" stepKey="seeCaptchaImage1"/>
-        <waitForElementVisible selector="{{AdminLoginFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton1"/>
+        <waitForElementVisible selector="{{AdminLoginFormSection.captchaField}}" stepKey="seeFirstCaptchaField"/>
+        <waitForElementVisible selector="{{AdminLoginFormSection.captchaImg}}" stepKey="seeFirstCaptchaImage"/>
+        <waitForElementVisible selector="{{AdminLoginFormSection.captchaReload}}" stepKey="seeFirstCaptchaReloadButton"/>
 
         <!-- Submit form with incorrect captcha -->
-        <fillField selector="{{AdminLoginFormSection.username}}" userInput="adminUser" stepKey="fillUsername4"/>
-        <fillField selector="{{AdminLoginFormSection.password}}" userInput="adminPassword" stepKey="fillPassword4"/>
-        <fillField selector="{{AdminLoginFormSection.captchaField}}" userInput="incorrectCaptcha" stepKey="fillCaptcha4"/>
-        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin4"/>
+        <fillField selector="{{AdminLoginFormSection.username}}" userInput="adminUser" stepKey="fillAdminUserNameWithCaptcha"/>
+        <fillField selector="{{AdminLoginFormSection.password}}" userInput="adminPassword" stepKey="fillPasswordWithCaptcha"/>
+        <fillField selector="{{AdminLoginFormSection.captchaField}}" userInput="incorrectCaptcha" stepKey="fillCaptcha"/>
+        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLoginWithCaptcha"/>
         <see userInput="Incorrect CAPTCHA." selector="{{AdminLoginFormSection.error}}" stepKey="seeCaptchaError"/>
-        <waitForElementVisible selector="{{AdminLoginFormSection.captchaField}}" stepKey="seeCaptchaField2"/>
-        <waitForElementVisible selector="{{AdminLoginFormSection.captchaImg}}" stepKey="seeCaptchaImage2"/>
-        <waitForElementVisible selector="{{AdminLoginFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton2"/>
+        <waitForElementVisible selector="{{AdminLoginFormSection.captchaField}}" stepKey="seeSecondCaptchaField"/>
+        <waitForElementVisible selector="{{AdminLoginFormSection.captchaImg}}" stepKey="seeSecondCaptchaImage"/>
+        <waitForElementVisible selector="{{AdminLoginFormSection.captchaReload}}" stepKey="seeSecondCaptchaReloadButton"/>
     </test>
 </tests>
