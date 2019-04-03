@@ -73,7 +73,7 @@ class FieldMetaReader
         }
 
         if ($this->docReader->read($fieldMeta->astNode->directives)) {
-            $result['cacheable'] = $this->cacheTagReader->read($fieldMeta->astNode->directives);
+            $result['cache'] = $this->cacheTagReader->read($fieldMeta->astNode->directives);
         }
 
         $arguments = $fieldMeta->args;

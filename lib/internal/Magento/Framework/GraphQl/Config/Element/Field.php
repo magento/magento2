@@ -49,9 +49,9 @@ class Field implements OutputFieldInterface
     private $description;
 
     /**
-     * @var string
+     * @var array
      */
-    private $cacheTag;
+    private $cache;
 
     /**
      * @param string $name
@@ -61,7 +61,7 @@ class Field implements OutputFieldInterface
      * @param string $itemType
      * @param string $resolver
      * @param string $description
-     * @param string $cacheTag
+     * @param array $cache
      * @param array $arguments
      */
     public function __construct(
@@ -72,7 +72,7 @@ class Field implements OutputFieldInterface
         string $itemType = '',
         string $resolver = '',
         string $description = '',
-        string $cacheTag = '',
+        array $cache = [],
         array $arguments = []
     ) {
         $this->name = $name;
@@ -82,7 +82,7 @@ class Field implements OutputFieldInterface
         $this->resolver = $resolver;
         $this->description = $description;
         $this->arguments = $arguments;
-        $this->cacheTag = $cacheTag;
+        $this->cache = $cache;
     }
 
     /**
@@ -158,10 +158,10 @@ class Field implements OutputFieldInterface
     /**
      * Return the cache tag for the field.
      *
-     * @return string|null
+     * @return array|null
      */
-    public function getCacheTag() : string
+    public function getCache() : array
     {
-        return $this->cacheTag;
+        return $this->cache;
     }
 }

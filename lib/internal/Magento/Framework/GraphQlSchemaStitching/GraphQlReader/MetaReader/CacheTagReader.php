@@ -16,19 +16,29 @@ class CacheTagReader
      * Read documentation annotation for a specific node if exists
      *
      * @param \GraphQL\Language\AST\NodeList $directives
-     * @return string
+     * @return array
      */
-    public function read(\GraphQL\Language\AST\NodeList $directives) : string
+    public function read(\GraphQL\Language\AST\NodeList $directives) : array
     {
+        $argMap = [];
         foreach ($directives as $directive) {
-            if ($directive->name->value == 'cacheable') {
+            if ($directive->name->value == 'cache') {
                 foreach ($directive->arguments as $directiveArgument) {
                     if ($directiveArgument->name->value == 'cache_tag') {
-                        return $directiveArgument->value->value;
+                        $argMap = array_merge(
+                            $argMap,
+                            ["cache_tag" => $directiveArgument->value->value]
+                        );
+                    }
+                    if ($directiveArgument->name->value == 'cacheable') {
+                        $argMap = array_merge(
+                            $argMap,
+                            ["cacheable" => $directiveArgument->value->value]
+                        );
                     }
                 }
             }
         }
-        return '';
+        return $argMap;
     }
 }

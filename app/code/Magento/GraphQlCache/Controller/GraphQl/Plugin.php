@@ -10,20 +10,23 @@ namespace Magento\GraphQlCache\Controller\GraphQl;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
-use Magento\GraphQlCache\Model\CacheTags;
+use Magento\GraphQlCache\Model\CacheInfo;
 use Magento\Framework\App\State as AppState;
+use \Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class Plugin
-
+ *
  * @package Magento\GraphQlCache\Controller\GraphQl
  */
 class Plugin
 {
+    const CACHE_TTL = 'system/full_page_cache/ttl';
+
     /**
-     * @var CacheTags
+     * @var CacheInfo
      */
-    private $cacheTags;
+    private $cacheInfo;
 
     /**
      * @var AppState
@@ -31,15 +34,21 @@ class Plugin
     private $state;
 
     /**
-     * Constructor
-     *
-     * @param CacheTags $cacheTags
-     * @param AppState $state
+     * @var ScopeConfigInterface
      */
-    public function __construct(CacheTags $cacheTags, AppState $state)
+    private $scopeConfig;
+
+    /**
+     * Plugin constructor.
+     * @param CacheInfo $cacheInfo
+     * @param AppState $state
+     * @param ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(CacheInfo $cacheInfo, AppState $state, ScopeConfigInterface $scopeConfig)
     {
-        $this->cacheTags = $cacheTags;
+        $this->cacheInfo = $cacheInfo;
         $this->state = $state;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -55,14 +64,13 @@ class Plugin
         /* \Magento\Framework\App\Response\Http */ $response,
         RequestInterface $request
     ) {
-        /** @var \Magento\Framework\App\Request\Http $request */
-        /** @var \Magento\Framework\App\Response\Http $response */
-        $cacheTags = $this->cacheTags->getCacheTags();
-        if (count($cacheTags)) {
-            // assume that response should be cacheable if it contains cache tags
+        $cacheTags = $this->cacheInfo->getCacheTags();
+        $isCacheValid = $this->cacheInfo->isCacheable();
+        $ttl = $this->getTtl();
+
+        if (count($cacheTags) && $isCacheValid) {
             $response->setHeader('Pragma', 'cache', true);
-            // TODO: Take from configuration
-            $response->setHeader('Cache-Control', 'max-age=86400, public, s-maxage=86400', true);
+            $response->setHeader('Cache-Control', 'max-age='.$ttl.', public, s-maxage='.$ttl.'', true);
             $response->setHeader('X-Magento-Tags', implode(',', $cacheTags), true);
         }
 
@@ -71,5 +79,15 @@ class Plugin
         }
 
         return $response;
+    }
+
+    /**
+     * Return page lifetime
+     *
+     * @return int
+     */
+    private function getTtl()
+    {
+        return $this->scopeConfig->getValue(self::CACHE_TTL);
     }
 }
