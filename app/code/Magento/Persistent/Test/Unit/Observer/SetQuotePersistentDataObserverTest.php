@@ -7,6 +7,9 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
+/**
+ * Observer test for setting "is_persistent" value to quote
+ */
 class SetQuotePersistentDataObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
