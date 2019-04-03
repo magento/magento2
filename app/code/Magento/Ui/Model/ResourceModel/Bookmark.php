@@ -5,7 +5,12 @@
  */
 namespace Magento\Ui\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Ui\Api\Data\BookmarkInterface;
 
 /**
  * Bookmark resource
@@ -13,14 +18,22 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 class Bookmark extends AbstractDb
 {
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @var DateTime
+     */
+    private $dateTime;
+
+    /**
+     * @param Context $context
      * @param string $connectionName
+     * @param DateTime|null $dateTime
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        $connectionName = null
+        Context $context,
+        $connectionName = null,
+        DateTime $dateTime = null
     ) {
         parent::__construct($context, $connectionName);
+        $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(DateTime::class);
     }
 
     /**
@@ -31,5 +44,23 @@ class Bookmark extends AbstractDb
     protected function _construct()
     {
         $this->_init('ui_bookmark', 'bookmark_id');
+    }
+
+    /**
+     * Perform actions before object save
+     *
+     * @param AbstractModel|BookmarkInterface $object
+     * @return $this
+     */
+    protected function _beforeSave(AbstractModel $object)
+    {
+        $gmtDate = $this->dateTime->gmtDate();
+
+        $object->setUpdatedAt($gmtDate);
+        if ($object->isObjectNew()) {
+            $object->setCreatedAt($gmtDate);
+        }
+
+        return parent::_beforeSave($object);
     }
 }
