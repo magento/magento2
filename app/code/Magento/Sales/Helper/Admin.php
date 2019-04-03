@@ -6,6 +6,9 @@
 
 namespace Magento\Sales\Helper;
 
+use Magento\Framework\App\ObjectManager;
+use Symfony\Component\DomCrawler\Crawler;
+
 /**
  * Sales admin helper.
  */
@@ -149,30 +152,35 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     public function escapeHtmlWithLinks($data, $allowedTags = null)
     {
         if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
-            $links = [];
-            $i = 1;
-            $data = str_replace('%', '%%', $data);
-            $regexp = "#(?J)<a"
-                ."(?:(?:\s+(?:(?:href\s*=\s*(['\"])(?<link>.*?)\\1\s*)|(?:\S+\s*=\s*(['\"])(.*?)\\3)\s*)*)|>)"
-                .">?(?:(?:(?<text>.*?)(?:<\/a\s*>?|(?=<\w))|(?<text>.*)))#si";
-            while (preg_match($regexp, $data, $matches)) {
-                $text = '';
-                if (!empty($matches['text'])) {
-                    $text = str_replace('%%', '%', $matches['text']);
+            $crawler = ObjectManager::getInstance()->create(
+                Crawler::class,
+                [
+                    'node' => '<html><body>' . $data . '</body></html>',
+                ]
+            );
+
+            $linkTags = $crawler->filter('a');
+
+            foreach ($linkTags as $linkNode) {
+                $linkAttributes = [];
+                foreach ($linkNode->attributes as $attribute) {
+                    $linkAttributes[$attribute->name] = $attribute->value;
                 }
-                $url = $this->filterUrl($matches['link'] ?? '');
-                //Recreate a minimalistic secure a tag
-                $links[] = sprintf(
-                    '<a href="%s">%s</a>',
-                    htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false),
-                    $this->escaper->escapeHtml($text)
-                );
-                $data = str_replace($matches[0], '%' . $i . '$s', $data);
-                ++$i;
+
+                foreach ($linkAttributes as $attributeName => $attributeValue) {
+                    if ($attributeName === 'href') {
+                        $url = $this->filterUrl($attributeValue ?? '');
+                        $url = $this->escaper->escapeUrl($url);
+                        $linkNode->setAttribute('href', $url);
+                    } else {
+                        $linkNode->removeAttribute($attributeName);
+                    }
+                }
             }
-            $data = $this->escaper->escapeHtml($data, $allowedTags);
-            return vsprintf($data, $links);
+
+            $data = mb_convert_encoding($crawler->filter('body')->html(), 'UTF-8', 'HTML-ENTITIES');
         }
+
         return $this->escaper->escapeHtml($data, $allowedTags);
     }
 
@@ -186,8 +194,9 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     {
         if ($url) {
             //Revert the sprintf escaping
-            $url = str_replace('%%', '%', $url);
+            //phpcs:disable
             $urlScheme = parse_url($url, PHP_URL_SCHEME);
+            //phpcs:enable
             $urlScheme = $urlScheme ? strtolower($urlScheme) : '';
             if ($urlScheme !== 'http' && $urlScheme !== 'https') {
                 $url = null;
