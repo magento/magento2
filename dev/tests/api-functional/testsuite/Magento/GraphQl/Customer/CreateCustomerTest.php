@@ -8,16 +8,19 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test for create customer functionallity
+ */
 class CreateCustomerTest extends GraphQlAbstract
 {
     /**
-     * @var CustomerRegistry
+     * @var Registry
      */
-    private $customerRegistry;
+    private $registry;
 
     /**
      * @var CustomerRepositoryInterface
@@ -28,7 +31,7 @@ class CreateCustomerTest extends GraphQlAbstract
     {
         parent::setUp();
 
-        $this->customerRegistry = Bootstrap::getObjectManager()->get(CustomerRegistry::class);
+        $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
     }
 
@@ -40,7 +43,7 @@ class CreateCustomerTest extends GraphQlAbstract
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';
         $currentPassword = 'test123#';
-        $newEmail = 'customer_created' . rand(1, 2000000) . '@example.com';
+        $newEmail = 'new_customer@example.com';
 
         $query = <<<QUERY
 mutation {
@@ -50,7 +53,7 @@ mutation {
             lastname: "{$newLastname}"
             email: "{$newEmail}"
             password: "{$currentPassword}"
-          	is_subscribed: true
+            is_subscribed: true
         }
     ) {
         customer {
@@ -78,7 +81,7 @@ QUERY;
     {
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';
-        $newEmail = 'customer_created' . rand(1, 2000000) . '@example.com';
+        $newEmail = 'new_customer@example.com';
 
         $query = <<<QUERY
 mutation {
@@ -87,7 +90,7 @@ mutation {
             firstname: "{$newFirstname}"
             lastname: "{$newLastname}"
             email: "{$newEmail}"
-          	is_subscribed: true
+            is_subscribed: true
         }
     ) {
         customer {
@@ -151,7 +154,7 @@ mutation {
             firstname: "{$newFirstname}"
             lastname: "{$newLastname}"
             password: "{$currentPassword}"
-          	is_subscribed: true
+            is_subscribed: true
         }
     ) {
         customer {
@@ -186,7 +189,7 @@ mutation {
             lastname: "{$newLastname}"
             email: "{$newEmail}"
             password: "{$currentPassword}"
-          	is_subscribed: true
+            is_subscribed: true
         }
     ) {
         customer {
@@ -211,7 +214,7 @@ QUERY;
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';
         $currentPassword = 'test123#';
-        $newEmail = 'customer_created' . rand(1, 2000000) . '@example.com';
+        $newEmail = 'new_customer@example.com';
 
         $query = <<<QUERY
 mutation {
@@ -222,7 +225,7 @@ mutation {
             test123: "123test123"
             email: "{$newEmail}"
             password: "{$currentPassword}"
-          	is_subscribed: true
+            is_subscribed: true
         }
     ) {
         customer {
@@ -236,5 +239,22 @@ mutation {
 }
 QUERY;
         $this->graphQlQuery($query);
+    }
+
+    public function tearDown()
+    {
+        $newEmail = 'new_customer@example.com';
+        try {
+            $customer = $this->customerRepository->get($newEmail);
+        } catch (\Exception $exception) {
+            return;
+        }
+
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+        $this->customerRepository->delete($customer);
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', false);
+        parent::tearDown();
     }
 }

@@ -10,8 +10,8 @@ namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Test\Integrity\Dependency\DeclarativeSchemaDependencyProvider;
 use Magento\TestFramework\Dependency\DbRule;
-use Magento\TestFramework\Dependency\DeclarativeSchemaRule;
 use Magento\TestFramework\Dependency\DiRule;
 use Magento\TestFramework\Dependency\LayoutRule;
 use Magento\TestFramework\Dependency\PhpRule;
@@ -26,19 +26,28 @@ use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 class DependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Types of dependencies between modules
+     * Soft dependency between modules
      */
     const TYPE_SOFT = 'soft';
 
+    /**
+     * Hard dependency between modules
+     */
     const TYPE_HARD = 'hard';
 
     /**
-     * Types of dependencies map arrays
+     * The identifier of dependency for mapping.
      */
     const MAP_TYPE_DECLARED = 'declared';
 
+    /**
+     * The identifier of dependency for mapping.
+     */
     const MAP_TYPE_FOUND = 'found';
 
+    /**
+     * The identifier of dependency for mapping.
+     */
     const MAP_TYPE_REDUNDANT = 'redundant';
 
     /**
@@ -56,17 +65,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @var array
      */
     protected static $_listConfigXml = [];
-
-    /**
-     * List of db_schema.xml files by modules
-     *
-     * Format: array(
-     *  '{Module_Name}' => '{Filename}'
-     * )
-     *
-     * @var array
-     */
-    protected static $_listDbSchemaXml = [];
 
     /**
      * List of routes.xml files by modules
@@ -186,7 +184,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         self::$_namespaces = implode('|', Files::init()->getNamespaces());
 
         self::_prepareListConfigXml();
-        self::_prepareListDbSchemaXml();
         self::_prepareListRoutesXml();
         self::_prepareListAnalyticsXml();
 
@@ -224,6 +221,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         $defaultThemes = [];
         foreach (self::$_listConfigXml as $file) {
             $config = simplexml_load_file($file);
+            //phpcs:ignore Generic.PHP.NoSilencedErrors
             $nodes = @($config->xpath("/config/*/design/theme/full_name") ?: []);
             foreach ($nodes as $node) {
                 $defaultThemes[] = (string)$node;
@@ -237,13 +235,13 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     protected static function _initRules()
     {
-        $replaceFilePattern = str_replace('\\', '/', realpath(__DIR__)) . '/_files/dependency_test/*.php';
+        $replaceFilePattern = str_replace('\\', '/', realpath(__DIR__)) . '/_files/dependency_test/tables_*.php';
         $dbRuleTables = [];
         foreach (glob($replaceFilePattern) as $fileName) {
+            //phpcs:ignore Generic.PHP.NoSilencedErrors
             $dbRuleTables = array_merge($dbRuleTables, @include $fileName);
         }
         self::$_rulesInstances = [
-            new DeclarativeSchemaRule($dbRuleTables),
             new PhpRule(self::$_mapRouters, self::$_mapLayoutBlocks),
             new DbRule($dbRuleTables),
             new LayoutRule(
@@ -275,7 +273,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 break;
             case 'layout':
             case 'config':
-            case 'db_schema':
                 //Removing xml comments
                 $contents = preg_replace('~\<!\-\-/.*?\-\-\>~s', '', $contents);
                 break;
@@ -299,6 +296,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         return $contents;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function testUndeclared()
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
@@ -341,12 +341,12 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 $result = [];
                 foreach ($undeclaredDependency as $type => $modules) {
                     $modules = array_unique($modules);
-                    if (!count($modules)) {
+                    if (empty($modules)) {
                         continue;
                     }
                     $result[] = sprintf("%s [%s]", $type, implode(', ', $modules));
                 }
-                if (count($result)) {
+                if (!empty($result)) {
                     $this->fail('Module ' . $module . ' has undeclared dependencies: ' . implode(', ', $result));
                 }
             },
@@ -392,7 +392,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     protected function _collectDependencies($currentModuleName, $dependencies = [])
     {
-        if (!count($dependencies)) {
+        if (empty($dependencies)) {
             return [];
         }
         $undeclared = [];
@@ -430,18 +430,35 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Collect redundant dependencies
+     *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @test
      * @depends testUndeclared
+     * @throws \Exception
      */
     public function collectRedundant()
     {
+        $schemaDependencyProvider = new DeclarativeSchemaDependencyProvider();
+
+        /** TODO: Remove this temporary solution after MC-5806 is closed */
+        $filePattern = __DIR__ . '/_files/dependency_test/undetected_dependencies_*.php';
+        $undetectedDependencies = [];
+        foreach (glob($filePattern) as $fileName) {
+            $undetectedDependencies = array_merge($undetectedDependencies, require $fileName);
+        }
+
         foreach (array_keys(self::$mapDependencies) as $module) {
             $declared = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
             $found = array_merge(
                 $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_FOUND),
-                $this->_getDependencies($module, self::TYPE_SOFT, self::MAP_TYPE_FOUND)
+                $this->_getDependencies($module, self::TYPE_SOFT, self::MAP_TYPE_FOUND),
+                $schemaDependencyProvider->getDeclaredExistingModuleDependencies($module)
             );
+            /** TODO: Remove this temporary solution after MC-5806 is closed */
+            if (!empty($undetectedDependencies[$module])) {
+                $found = array_merge($found, $undetectedDependencies[$module]);
+            }
+
             $found['Magento\Framework'] = 'Magento\Framework';
             $this->_setDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT, array_diff($declared, $found));
         }
@@ -458,7 +475,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         foreach (array_keys(self::$mapDependencies) as $module) {
             $result = [];
             $redundant = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT);
-            if (count($redundant)) {
+            if (!empty($redundant)) {
                 $result[] = sprintf(
                     "\r\nModule %s: %s [%s]",
                     $module,
@@ -467,11 +484,11 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 );
             }
 
-            if (count($result)) {
+            if (!empty($result)) {
                 $output[] = implode(', ', $result);
             }
         }
-        if (count($output)) {
+        if (!empty($output)) {
             $this->fail("Redundant dependencies found!\r\n" . implode(' ', $output));
         }
     }
@@ -501,6 +518,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * Return all files
      *
      * @return array
+     * @throws \Exception
      */
     public function getAllFiles()
     {
@@ -520,12 +538,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         $files = array_merge(
             $files,
             $this->_prepareFiles('config', Files::init()->getConfigFiles())
-        );
-
-        // Get all configuration files
-        $files = array_merge(
-            $files,
-            $this->_prepareFiles('db_schema', Files::init()->getDbSchemaFiles())
         );
 
         //Get all layout updates files
@@ -553,20 +565,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
                 self::$_listConfigXml[$module] = $file;
-            }
-        }
-    }
-
-    /**
-     * Prepare list of db_schema.xml files (by modules)
-     */
-    protected static function _prepareListDbSchemaXml()
-    {
-        $files = Files::init()->getDbSchemaFiles('db_schema.xml', [], false);
-        foreach ($files as $file) {
-            if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
-                $module = $matches['namespace'] . '\\' . $matches['module'];
-                self::$_listDbSchemaXml[$module] = $file;
             }
         }
     }
@@ -658,7 +656,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $area = 'default';
             if (preg_match('/[\/](?<area>adminhtml|frontend)[\/]/', $file, $matches)) {
                 $area = $matches['area'];
-                self::$_mapLayoutBlocks[$area] = @(self::$_mapLayoutBlocks[$area] ?: []);
+                self::$_mapLayoutBlocks[$area] = self::$_mapLayoutBlocks[$area] ?? [];
             }
             if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
@@ -668,7 +666,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                     $attributes = $element->attributes();
                     $block = (string)$attributes->name;
                     if (!empty($block)) {
-                        self::$_mapLayoutBlocks[$area][$block] = @(self::$_mapLayoutBlocks[$area][$block] ?: []);
+                        self::$_mapLayoutBlocks[$area][$block] = self::$_mapLayoutBlocks[$area][$block] ?? [];
                         self::$_mapLayoutBlocks[$area][$block][$module] = $module;
                     }
                 }
@@ -686,7 +684,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $area = 'default';
             if (preg_match('/\/(?<area>adminhtml|frontend)\//', $file, $matches)) {
                 $area = $matches['area'];
-                self::$_mapLayoutHandles[$area] = @(self::$_mapLayoutHandles[$area] ?: []);
+                self::$_mapLayoutHandles[$area] = self::$_mapLayoutHandles[$area] ?? [];
             }
             if (preg_match('/app\/code\/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)
             ) {
@@ -695,7 +693,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 foreach ((array)$xml->xpath('/layout/child::*') as $element) {
                     /** @var \SimpleXMLElement $element */
                     $handle = $element->getName();
-                    self::$_mapLayoutHandles[$area][$handle] = @(self::$_mapLayoutHandles[$area][$handle] ?: []);
+                    self::$_mapLayoutHandles[$area][$handle] = self::$_mapLayoutHandles[$area][$handle] ?? [];
                     self::$_mapLayoutHandles[$area][$handle][$module] = $module;
                 }
             }
@@ -755,6 +753,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $contents = file_get_contents($file);
             $decodedJson = json_decode($contents);
             if (null == $decodedJson) {
+                //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception("Invalid Json: $file");
             }
             $json = new \Magento\Framework\Config\Composer\Package(json_decode($contents));
@@ -843,6 +842,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $contents = file_get_contents($file);
             $composerJson = json_decode($contents);
             if (null == $composerJson) {
+                //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception("Invalid Json: $file");
             }
             $moduleXml = simplexml_load_file(dirname($file) . '/etc/module.xml');

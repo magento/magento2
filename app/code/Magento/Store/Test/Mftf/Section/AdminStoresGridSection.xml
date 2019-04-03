@@ -23,5 +23,6 @@
         <element name="firstRow" type="textarea" selector="(//*[@id='storeGrid_table']/tbody/tr)[1]"/>
         <element name="successMessage" type="text" selector="//div[@class='message message-success success']/div"/>
         <element name="emptyText" type="text" selector="//tr[@class='data-grid-tr-no-data even']/td[@class='empty-text']"/>
+        <element name="websiteName" type="text" selector="//td[@class='a-left col-website_title  ']/a[contains(.,'{{websiteName}}')]" parameterized="true"/>
      </section>
 </sections>
