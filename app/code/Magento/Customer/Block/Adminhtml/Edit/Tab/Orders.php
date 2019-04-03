@@ -63,7 +63,8 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         parent::_construct();
         $this->setId('customer_orders_grid');
-        $this->setDefaultSort('created_at', 'desc');
+        $this->setDefaultSort('created_at');
+        $this->setDefaultDir('desc');
         $this->setUseAjax(true);
     }
 

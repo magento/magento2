@@ -220,6 +220,16 @@ ErrorDocument 403 /errors/404.php
             Require all denied
         </IfVersion>
     </Files>
+## Deny access  to .user.ini
+    <Files .user.ini>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+    </Files>
 
 <IfModule mod_headers.c>
     ############################################
