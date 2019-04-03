@@ -15,9 +15,10 @@ $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->creat
 );
 try {
     $product = $repository->get('virtual', false, null, true);
-    $product->delete();
+    $repository->delete($product);
 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
     //Entity already deleted
+} catch (\Magento\Framework\Exception\StateException $e) {
 }
 
 $registry->unregister('isSecureArea');

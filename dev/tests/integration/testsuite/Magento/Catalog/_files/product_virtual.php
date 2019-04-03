@@ -28,5 +28,5 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL)
         ]
     );
 /** @var ProductResource $productResource */
-$productResource = Bootstrap::getObjectManager()->create(ProductResource::class);
+$productResource = Bootstrap::getObjectManager()->get(ProductResource::class);
 $productResource->save($product);

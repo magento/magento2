@@ -89,7 +89,7 @@ $options = [
 $customOptions = [];
 
 /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
-$customOptionFactory = $objectManager->create(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
+$customOptionFactory = $objectManager->get(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
 
 foreach ($options as $option) {
     /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $customOption */
