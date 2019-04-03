@@ -17,12 +17,11 @@
     <legend class="legend admin__legend">
         <span><?= /* @escapeNotVerified */ __('Associated Products') ?></span>
     </legend>
-    <div class="product-options fieldset admin__fieldset">
-        <?php foreach ($_attributes as $_attribute): ?>
-            <div class="field admin__field _required required">
-                <label class="label admin__field-label"><?php
-                    /* @escapeNotVerified */ echo $_attribute->getProductAttribute()
-                        ->getStoreLabel($_product->getStoreId());
+    <div class="product-options">
+        <div class="field admin__field _required required">
+            <?php foreach ($_attributes as $_attribute): ?>
+                <label class="label admin__field-label"><?=
+                    $block->escapeHtml($_attribute->getProductAttribute()->getStoreLabel($_product->getStoreId()))
                     ?></label>
                 <div class="control admin__field-control <?php
                     if ($_attribute->getDecoratedIsLast()):
@@ -34,8 +33,8 @@
                         <option><?= /* @escapeNotVerified */ __('Choose an Option...') ?></option>
                     </select>
                 </div>
-            </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        </div>
     </div>
 </fieldset>
 <script>
