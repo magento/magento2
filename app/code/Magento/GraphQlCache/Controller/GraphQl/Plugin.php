@@ -11,83 +11,69 @@ use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\GraphQlCache\Model\CacheInfo;
-use Magento\Framework\App\State as AppState;
-use \Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\PageCache\Model\Config;
 
 /**
  * Class Plugin
- *
- * @package Magento\GraphQlCache\Controller\GraphQl
  */
 class Plugin
 {
-    const CACHE_TTL = 'system/full_page_cache/ttl';
-
     /**
      * @var CacheInfo
      */
     private $cacheInfo;
 
     /**
-     * @var AppState
+     * @var HttpResponse
      */
-    private $state;
+    private $response;
 
     /**
-     * @var ScopeConfigInterface
+     * @var Config
      */
-    private $scopeConfig;
+    private $config;
 
     /**
      * Plugin constructor.
      * @param CacheInfo $cacheInfo
-     * @param AppState $state
-     * @param ScopeConfigInterface $scopeConfig
+     * @param Config $config
+     * @param HttpResponse $response
      */
-    public function __construct(CacheInfo $cacheInfo, AppState $state, ScopeConfigInterface $scopeConfig)
+    public function __construct(CacheInfo $cacheInfo, Config $config, HttpResponse $response)
     {
         $this->cacheInfo = $cacheInfo;
-        $this->state = $state;
-        $this->scopeConfig = $scopeConfig;
+        $this->config = $config;
+        $this->response = $response;
     }
 
     /**
-     * Plugin for GraphQL Controller
+     * Plugin for GraphQL after dispatch to set tag and cache headers
+     *
+     * The $response doesn't have a set type because it's alternating between ResponseInterface and ResultInterface.
      *
      * @param FrontControllerInterface $subject
-     * @param ResponseInterface $response
+     * @param ResponseInterface | ResultInterface $response
      * @param RequestInterface $request
-     * @return ResponseInterface|\Magento\Framework\Webapi\Response
+     * @return ResponseInterface | ResultInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterDispatch(
         FrontControllerInterface $subject,
-        /* \Magento\Framework\App\Response\Http */ $response,
+        $response,
         RequestInterface $request
     ) {
         $cacheTags = $this->cacheInfo->getCacheTags();
         $isCacheValid = $this->cacheInfo->isCacheable();
-        $ttl = $this->getTtl();
-
-        if (count($cacheTags) && $isCacheValid) {
-            $response->setHeader('Pragma', 'cache', true);
-            $response->setHeader('Cache-Control', 'max-age='.$ttl.', public, s-maxage='.$ttl.'', true);
-            $response->setHeader('X-Magento-Tags', implode(',', $cacheTags), true);
-        }
-
-        if ($request->isGet() && $this->state->getMode() == AppState::MODE_DEVELOPER) {
-            $response->setHeader('X-Magento-Debug', 1);
+        if (count($cacheTags)
+            && $isCacheValid
+            && $request->isGet()
+            && $this->config->isEnabled()) {
+            $this->response->setPublicHeaders($this->config->getTtl());
+            $this->response->setHeader('X-Magento-Tags', implode(',', $cacheTags), true);
         }
 
         return $response;
-    }
-
-    /**
-     * Return page lifetime
-     *
-     * @return int
-     */
-    private function getTtl()
-    {
-        return $this->scopeConfig->getValue(self::CACHE_TTL);
     }
 }
