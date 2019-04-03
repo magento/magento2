@@ -129,7 +129,7 @@ class Customer extends AbstractCustomer
     /**
      * @var IndexerRegistry
      */
-    protected $_indexerRegistry;
+    private $indexerRegistry;
 
     /**
      * {@inheritdoc}
@@ -258,7 +258,7 @@ class Customer extends AbstractCustomer
         $this->_initStores(true)->_initAttributes();
 
         $this->_customerModel = $customerFactory->create();
-        $this->_indexerRegistry = $indexerRegistry ?: ObjectManager::getInstance()->get(IndexerRegistry::class);
+        $this->indexerRegistry = $indexerRegistry ?: ObjectManager::getInstance()->get(IndexerRegistry::class);
         /** @var $customerResource \Magento\Customer\Model\ResourceModel\Customer */
         $customerResource = $this->_customerModel->getResource();
         $this->_entityTable = $customerResource->getEntityTable();
@@ -689,7 +689,7 @@ class Customer extends AbstractCustomer
     private function reindexCustomers($customerIdsToReindex = [])
     {
         if (is_array($customerIdsToReindex) && count($customerIdsToReindex) > 0) {
-            $indexer = $this->_indexerRegistry->get('customer_grid');
+            $indexer = $this->indexerRegistry->get('customer_grid');
             $indexer->reindexList($customerIdsToReindex);
         }
     }
