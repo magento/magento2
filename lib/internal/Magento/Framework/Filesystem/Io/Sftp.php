@@ -17,7 +17,7 @@ class Sftp extends AbstractIo
     const SSH2_PORT = 22;
 
     /**
-     * @var \phpseclib\Net\SFTP $_connection
+     * @var \phpseclib\Net\SFTP
      */
     protected $_connection = null;
 

@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
-use Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
@@ -44,29 +43,21 @@ class Products implements ResolverInterface
     private $searchFilter;
 
     /**
-     * @var Layer\DataProvider\Filters
-     */
-    private $filtersDataProvider;
-
-    /**
      * @param Builder $searchCriteriaBuilder
      * @param Search $searchQuery
      * @param Filter $filterQuery
      * @param SearchFilter $searchFilter
-     * @param Filters $filtersDataProvider
      */
     public function __construct(
         Builder $searchCriteriaBuilder,
         Search $searchQuery,
         Filter $filterQuery,
-        SearchFilter $searchFilter,
-        Filters $filtersDataProvider
+        SearchFilter $searchFilter
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
         $this->filterQuery = $filterQuery;
         $this->searchFilter = $searchFilter;
-        $this->filtersDataProvider = $filtersDataProvider;
     }
 
     /**
@@ -119,7 +110,7 @@ class Products implements ResolverInterface
                 'current_page' => $currentPage,
                 'total_pages' => $maxPages
             ],
-            'filters' => $this->filtersDataProvider->getData($layerType)
+            'layer_type' => $layerType
         ];
 
         return $data;

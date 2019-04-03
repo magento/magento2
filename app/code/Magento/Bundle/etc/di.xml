@@ -123,6 +123,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\Quote\Item">
+        <plugin name="update_price_for_bundle_in_quote_item_option" type="Magento\Bundle\Plugin\UpdatePriceInQuoteItemOptions"/>
+    </type>
     <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="append_bundle_data_to_order" type="Magento\Bundle\Model\Plugin\QuoteItem"/>
     </type>
@@ -134,6 +137,13 @@
         </arguments>
     </type>
     <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Bundle\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\ProductOption">
         <arguments>
             <argument name="processorPool" xsi:type="array">
                 <item name="bundle" xsi:type="object">Magento\Bundle\Model\ProductOptionProcessor</item>

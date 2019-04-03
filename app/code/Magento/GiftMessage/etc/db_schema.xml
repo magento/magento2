@@ -15,7 +15,7 @@
         <column xsi:type="varchar" name="sender" nullable="true" length="255" comment="Sender"/>
         <column xsi:type="varchar" name="recipient" nullable="true" length="255" comment="Registrant"/>
         <column xsi:type="text" name="message" nullable="true" comment="Message"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="gift_message_id"/>
         </constraint>
     </table>

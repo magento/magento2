@@ -1,0 +1,80 @@
+{
+    "reference_table": {
+        "column": {
+            "tinyint_ref": true,
+            "tinyint_without_padding": true,
+            "bigint_without_padding": true,
+            "integer_without_padding": true,
+            "smallint_with_big_padding": true,
+            "smallint_without_default": true,
+            "int_without_unsigned": true,
+            "int_unsigned": true,
+            "bigint_default_nullable": true,
+            "bigint_not_default_not_nullable": true,
+            "smallint_without_padding": true
+        },
+        "constraint": {
+            "tinyint_primary": true,
+            "PRIMARY": true
+        }
+    },
+    "auto_increment_test": {
+        "column": {
+            "int_auto_increment_with_nullable": true,
+            "int_disabled_auto_increment": true
+        },
+        "constraint": {
+            "AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE": true
+        }
+    },
+    "test_table": {
+        "column": {
+            "smallint": true,
+            "tinyint": true,
+            "bigint": true,
+            "float": true,
+            "double": true,
+            "decimal": true,
+            "date": true,
+            "timestamp": true,
+            "datetime": true,
+            "longtext": true,
+            "mediumtext": true,
+            "varchar": true,
+            "mediumblob": true,
+            "blob": true,
+            "boolean": true,
+            "varbinary_rename": true
+        },
+        "index": {
+            "TEST_TABLE_TINYINT_BIGINT": true
+        },
+        "constraint": {
+            "TEST_TABLE_SMALLINT_BIGINT": true,
+            "TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF": true
+        }
+    },
+    "store": {
+        "column": {
+            "store_owner_id": true,
+            "store_owner": true
+        },
+        "constraint": {
+            "STORE_STORE_OWNER_ID_STORE_OWNER_OWNER_ID": true
+        }
+    },
+    "store_owner": {
+        "column": {
+            "owner_id": true,
+            "label": true
+        },
+        "constraint": {
+            "": true
+        }
+    },
+    "some_table": {
+        "column": {
+            "some_column": true
+        }
+    }
+}

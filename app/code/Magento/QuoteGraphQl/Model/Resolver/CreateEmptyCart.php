@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -25,6 +24,7 @@ class CreateEmptyCart implements ResolverInterface
      * @var CartManagementInterface
      */
     private $cartManagement;
+
     /**
      * @var GuestCartManagementInterface
      */
@@ -36,11 +36,6 @@ class CreateEmptyCart implements ResolverInterface
     private $quoteIdToMaskedId;
 
     /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
-    /**
      * @var QuoteIdMaskFactory
      */
     private $quoteIdMaskFactory;
@@ -48,20 +43,17 @@ class CreateEmptyCart implements ResolverInterface
     /**
      * @param CartManagementInterface $cartManagement
      * @param GuestCartManagementInterface $guestCartManagement
-     * @param UserContextInterface $userContext
      * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedId
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
         CartManagementInterface $cartManagement,
         GuestCartManagementInterface $guestCartManagement,
-        UserContextInterface $userContext,
         QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedId,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->cartManagement = $cartManagement;
         $this->guestCartManagement = $guestCartManagement;
-        $this->userContext = $userContext;
         $this->quoteIdToMaskedId = $quoteIdToMaskedId;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
@@ -71,7 +63,7 @@ class CreateEmptyCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $customerId = $this->userContext->getUserId();
+        $customerId = $context->getUserId();
 
         if (0 !== $customerId && null !== $customerId) {
             $quoteId = $this->cartManagement->createEmptyCartForCustomer($customerId);

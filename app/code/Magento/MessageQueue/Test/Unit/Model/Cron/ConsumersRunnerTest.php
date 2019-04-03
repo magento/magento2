@@ -5,6 +5,7 @@
  */
 namespace Magento\MessageQueue\Test\Unit\Model\Cron;
 
+use Magento\Framework\MessageQueue\ConnectionTypeResolver;
 use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\ShellInterface;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
@@ -42,6 +43,11 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     private $phpExecutableFinderMock;
 
     /**
+     * @var ConnectionTypeResolver
+     */
+    private $connectionTypeResover;
+
+    /**
      * @var ConsumersRunner
      */
     private $consumersRunner;
@@ -66,13 +72,18 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->connectionTypeResover = $this->getMockBuilder(ConnectionTypeResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->connectionTypeResover->method('getConnectionType')->willReturn('something');
 
         $this->consumersRunner = new ConsumersRunner(
             $this->phpExecutableFinderMock,
             $this->consumerConfigMock,
             $this->deploymentConfigMock,
             $this->shellBackgroundMock,
-            $this->pidConsumerManagerMock
+            $this->pidConsumerManagerMock,
+            $this->connectionTypeResover
         );
     }
 

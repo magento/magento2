@@ -33,7 +33,7 @@
                                 <div class="product-item-actions">
                                     <div class="actions-primary">
                                         <?php if ($_product->isSaleable()): ?>
-                                            <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
+                                            <?php if (!$_product->getTypeInstance()->isPossibleBuyFromList($_product)): ?>
                                                 <button type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>"
                                                         class="action tocart primary"
                                                         data-mage-init='{"redirectUrl":{"url":"<?= /* @escapeNotVerified */ $block->getAddToCartUrl($_product) ?>"}}'>

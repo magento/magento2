@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Class to work with zip archives
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\Archive;
 
+/**
+ * Zip compressed file archive.
+ */
 class Zip extends AbstractArchive implements ArchiveInterface
 {
     /**
@@ -54,11 +52,34 @@ class Zip extends AbstractArchive implements ArchiveInterface
     public function unpack($source, $destination)
     {
         $zip = new \ZipArchive();
-        $zip->open($source);
-        $filename = $zip->getNameIndex(0);
-        $zip->extractTo(dirname($destination), $filename);
-        rename(dirname($destination).'/'.$filename, $destination);
-        $zip->close();
+        if ($zip->open($source) === true) {
+            $filename = $this->filterRelativePaths($zip->getNameIndex(0) ?: '');
+            if ($filename) {
+                $zip->extractTo(dirname($destination), $filename);
+                rename(dirname($destination).'/'.$filename, $destination);
+            } else {
+                $destination = '';
+            }
+            $zip->close();
+        } else {
+            $destination = '';
+        }
+
         return $destination;
+    }
+
+    /**
+     * Filter file names with relative paths.
+     *
+     * @param string $path
+     * @return string
+     */
+    private function filterRelativePaths(string $path): string
+    {
+        if ($path && preg_match('#^\s*(../)|(/../)#i', $path)) {
+            $path = '';
+        }
+
+        return $path;
     }
 }

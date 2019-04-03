@@ -5,13 +5,20 @@
  */
 
 /**
- * Reports Product Index Abstract Product Resource Collection
- *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Index\Collection;
 
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
+
 /**
+ * Reports Product Index Abstract Product Resource Collection.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -53,7 +60,12 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param mixed $connection
-     *
+     * @param ProductLimitationFactory|null $productLimitationFactory
+     * @param MetadataPool|null $metadataPool
+     * @param TableMaintainer|null $tableMaintainer
+     * @param PriceTableResolver|null $priceTableResolver
+     * @param DimensionFactory|null $dimensionFactory
+     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -77,7 +89,13 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Customer\Model\Visitor $customerVisitor,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ProductLimitationFactory $productLimitationFactory = null,
+        MetadataPool $metadataPool = null,
+        TableMaintainer $tableMaintainer = null,
+        PriceTableResolver $priceTableResolver = null,
+        DimensionFactory $dimensionFactory = null,
+        ResourceModelPoolInterface $resourceModelPool = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -99,7 +117,13 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
             $customerSession,
             $dateTime,
             $groupManagement,
-            $connection
+            $connection,
+            $productLimitationFactory,
+            $metadataPool,
+            $tableMaintainer,
+            $priceTableResolver,
+            $dimensionFactory,
+            $resourceModelPool
         );
         $this->_customerVisitor = $customerVisitor;
     }
@@ -181,7 +205,8 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
     }
 
     /**
-     * Set customer id, that will be used in 'whereCondition'
+     * Set customer id, that will be used in 'whereCondition'.
+     *
      * @codeCoverageIgnore
      *
      * @param int $id

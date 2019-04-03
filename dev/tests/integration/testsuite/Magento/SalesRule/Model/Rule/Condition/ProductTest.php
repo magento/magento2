@@ -36,15 +36,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @param int $categoryId
      * @param bool $expectedResult
+     *
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
+     * @magentoDataFixture Magento/SalesRule/_files/rules_category.php
      * @dataProvider validateProductConditionDataProvider
      * @magentoDbIsolation disabled
      */
     public function testValidateCategorySalesRuleIncludesChildren($categoryId, $expectedResult)
     {
-        //* @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
-        //* @magentoDataFixture Magento/SalesRule/_files/rules_category.php
-        $this->markTestSkipped('MAGETWO-87436');
-
         // Load the quote that contains a child of a configurable product
         /** @var \Magento\Quote\Model\Quote  $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)

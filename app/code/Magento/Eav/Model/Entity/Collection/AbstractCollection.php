@@ -6,10 +6,12 @@
 
 namespace Magento\Eav\Model\Entity\Collection;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
  * Entity/Attribute/Model - collection abstract
@@ -125,9 +127,15 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected $_resourceHelper;
 
     /**
+     * @deprecated To instantiate resource models, use $resourceModelPool instead
+     *
      * @var \Magento\Framework\Validator\UniversalFactory
      */
     protected $_universalFactory;
+    /**
+     * @var ResourceModelPoolInterface
+     */
+    private $resourceModelPool;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -140,6 +148,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param mixed $connection
+     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -152,8 +161,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\Validator\UniversalFactory $universalFactory = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ResourceModelPoolInterface $resourceModelPool = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_eavConfig = $eavConfig;
@@ -161,6 +171,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $this->_eavEntityFactory = $eavEntityFactory;
         $this->_resourceHelper = $resourceHelper;
         $this->_universalFactory = $universalFactory;
+        if ($resourceModelPool === null) {
+            $resourceModelPool = ObjectManager::getInstance()->get(
+                ResourceModelPoolInterface::class
+            );
+        }
+        $this->resourceModelPool = $resourceModelPool;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $connection);
         $this->_construct();
         $this->setConnection($this->getEntity()->getConnection());
@@ -227,7 +243,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected function _init($model, $entityModel)
     {
         $this->setItemObjectClass($model);
-        $entity = $this->_universalFactory->create($entityModel);
+        $entity = $this->resourceModelPool->get($entityModel);
         $this->setEntity($entity);
 
         return $this;
@@ -399,7 +415,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     public function addFieldToFilter($attribute, $condition = null)
     {
-        return $this->addAttributeToFilter($attribute, $condition);
+        return $this->addAttributeToFilter($attribute, $condition, 'left');
     }
 
     /**
@@ -1243,7 +1259,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
         if ($entity->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE && $entity->getTypeId()) {
             $select->where(
-                'entity_type_id =?',
+                't_d.entity_type_id =?',
                 $entity->getTypeId()
             );
         }

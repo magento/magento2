@@ -3,11 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
@@ -39,6 +39,16 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     protected $filesystemMock;
 
     /**
+     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configMock;
+
+    /**
+     * @var SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sessionMock;
+
+    /**
      * @var \Magento\Framework\Url\ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $urlModifierMock;
@@ -61,12 +71,22 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             'isSecure',
             'getServer',
         ]);
+
         $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->configMock = $this->getMockBuilder(ReinitableConfigInterface::class)
+            ->getMock();
+        $this->sessionMock = $this->getMockBuilder(SessionManagerInterface::class)
+            ->setMethods(['getCurrencyCode'])
+            ->getMockForAbstractClass();
         $this->store = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
-            ['filesystem' => $this->filesystemMock]
+            [
+                'filesystem' => $this->filesystemMock,
+                'config' => $this->configMock,
+                'session' => $this->sessionMock,
+            ]
         );
 
         $this->urlModifierMock = $this->createMock(\Magento\Framework\Url\ModifierInterface::class);
@@ -692,6 +712,80 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     public function testGetScopeTypeName()
     {
         $this->assertEquals('Store View', $this->store->getScopeTypeName());
+    }
+
+    /**
+     * @param array $availableCodes
+     * @param string $currencyCode
+     * @param string $defaultCode
+     * @param string $expectedCode
+     * @return void
+     * @dataProvider currencyCodeDataProvider
+     */
+    public function testGetCurrentCurrencyCode(
+        array $availableCodes,
+        string $currencyCode,
+        string $defaultCode,
+        string $expectedCode
+    ): void {
+        $this->store->setData('available_currency_codes', $availableCodes);
+        $this->sessionMock->method('getCurrencyCode')
+            ->willReturn($currencyCode);
+        $this->configMock->method('getValue')
+            ->with(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_DEFAULT)
+            ->willReturn($defaultCode);
+
+        $code = $this->store->getCurrentCurrencyCode();
+        $this->assertEquals($expectedCode, $code);
+    }
+
+    /**
+     * @return array
+     */
+    public function currencyCodeDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'USD',
+                ],
+                'USD',
+                'USD',
+                'USD',
+            ],
+            [
+                [
+                    'USD',
+                    'EUR',
+                ],
+                'EUR',
+                'USD',
+                'EUR',
+            ],
+            [
+                [
+                    'EUR',
+                    'USD',
+                ],
+                'GBP',
+                'USD',
+                'USD',
+            ],
+            [
+                [
+                    'USD',
+                ],
+                'GBP',
+                'EUR',
+                'USD',
+            ],
+            [
+                [],
+                'GBP',
+                'EUR',
+                'EUR',
+            ],
+        ];
     }
 
     /**

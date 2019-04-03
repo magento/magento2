@@ -8,6 +8,12 @@ namespace Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 
+/**
+ * Term filter builder.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class Term implements FilterInterface
 {
     const CONDITION_OPERATOR_EQUALS = '=';
@@ -30,7 +36,7 @@ class Term implements FilterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function buildFilter(
         RequestFilterInterface $filter,
@@ -46,6 +52,8 @@ class Term implements FilterInterface
     }
 
     /**
+     * Get condition operator.
+     *
      * @param string|array $value
      * @param bool $isNegation
      * @return string
