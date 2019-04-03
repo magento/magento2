@@ -87,6 +87,7 @@ class QuoteManager
                 ->setCustomerLastname(null)
                 ->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID)
                 ->setIsPersistent(false)
+                ->setCustomerIsGuest(true)
                 ->removeAllAddresses();
             //Create guest addresses
             $quote->getShippingAddress();
