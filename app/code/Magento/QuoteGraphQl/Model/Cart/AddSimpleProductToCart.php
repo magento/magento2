@@ -170,7 +170,7 @@ class AddSimpleProductToCart
      */
     private function convertCustomOptions(string $value)
     {
-        if (substr($value, 0, 1) === "[" ||
+        if (substr($value, 0, 1) === "[" &&
             substr($value, strlen($value) - 1, 1) === "]") {
             return explode(',', substr($value, 1, -1));
         }
