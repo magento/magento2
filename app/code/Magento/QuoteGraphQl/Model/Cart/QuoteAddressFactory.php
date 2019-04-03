@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\AddressFactory as BaseQuoteAddressFactory;
+use Magento\QuoteGraphQl\Model\Cart\QuoteAddress\Validator;
 
 /**
  * Create QuoteAddress
@@ -22,14 +23,21 @@ class QuoteAddressFactory
      * @var BaseQuoteAddressFactory
      */
     private $quoteAddressFactory;
+    /**
+     * @var Validator
+     */
+    private $quoteAddressValidator;
 
     /**
      * @param BaseQuoteAddressFactory $quoteAddressFactory
+     * @param Validator $quoteAddressValidator
      */
     public function __construct(
-        BaseQuoteAddressFactory $quoteAddressFactory
+        BaseQuoteAddressFactory $quoteAddressFactory,
+        Validator $quoteAddressValidator
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
+        $this->quoteAddressValidator = $quoteAddressValidator;
     }
 
     /**
@@ -44,6 +52,8 @@ class QuoteAddressFactory
 
         $quoteAddress = $this->quoteAddressFactory->create();
         $quoteAddress->addData($addressInput);
+        $this->quoteAddressValidator->validate($quoteAddress);
+
         return $quoteAddress;
     }
 
@@ -62,6 +72,8 @@ class QuoteAddressFactory
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()), $e);
         }
+        $this->quoteAddressValidator->validate($quoteAddress);
+
         return $quoteAddress;
     }
 }
