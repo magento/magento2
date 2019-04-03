@@ -63,7 +63,7 @@ class Signature
      * @param string $data
      * @return string
      */
-    public function signData(string $data)
+    public function signData($data)
     {
         return hash_hmac('sha256', $data, pack('H*', $this->getSecretKey()));
     }

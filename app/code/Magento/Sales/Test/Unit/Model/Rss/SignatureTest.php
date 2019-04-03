@@ -59,7 +59,7 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
      * @return void
      * @dataProvider checkSignatureDataProvider
      */
-    public function testSignData(string $data, string $expected)
+    public function testSignData($data, $expected)
     {
         $this->assertEquals($expected, $this->model->signData($data));
     }
