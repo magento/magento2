@@ -130,7 +130,7 @@
                 <label translate="true">Status</label>
             </settings>
         </column>
-        <column name="grand_total" class="Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice">
+        <column name="base_grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <settings>
                 <filter>textRange</filter>
                 <label translate="true">Amount</label>
