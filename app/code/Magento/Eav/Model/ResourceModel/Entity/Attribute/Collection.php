@@ -128,7 +128,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Specify attribute set filter
      *
-     * @param int $setId
+     * @param int|int[] $setId
      * @return $this
      */
     public function setAttributeSetFilter($setId)
