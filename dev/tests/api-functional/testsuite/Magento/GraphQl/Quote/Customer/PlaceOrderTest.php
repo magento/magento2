@@ -7,8 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -28,6 +32,21 @@ class PlaceOrderTest extends GraphQlAbstract
     private $getMaskedQuoteIdByReservedOrderId;
 
     /**
+     * @var CollectionFactory
+     */
+    private $orderCollectionFactory;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -35,6 +54,9 @@ class PlaceOrderTest extends GraphQlAbstract
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->orderCollectionFactory = $objectManager->get(CollectionFactory::class);
+        $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
+        $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
     }
 
     /**
@@ -252,5 +274,23 @@ QUERY;
         $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         return $headerMap;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function tearDown()
+    {
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+
+        $orderCollection = $this->orderCollectionFactory->create();
+        foreach ($orderCollection as $order) {
+            $this->orderRepository->delete($order);
+        }
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', false);
+
+        parent::tearDown();
     }
 }
