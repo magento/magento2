@@ -5,6 +5,8 @@
  */
 namespace Magento\Captcha\Test\Unit\Model;
 
+use Magento\Framework\Math\Random;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -371,7 +373,7 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerateWord($string)
     {
-        $randomMock = $this->createMock('Magento\Framework\Math\Random');
+        $randomMock = $this->createMock(Random::class);
         $randomMock->expects($this->once())
             ->method('getRandomString')
             ->will($this->returnValue($string));
