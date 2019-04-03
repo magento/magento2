@@ -218,6 +218,12 @@ class General extends AbstractModifier
 
             $hasWeightPath = $this->arrayManager->slicePath($weightPath, 0, -1) . '/'
                 . ProductAttributeInterface::CODE_HAS_WEIGHT;
+
+            $sortOrder = $this->arrayManager->get(
+                $this->arrayManager->findPath('sortOrder', $meta, $weightPath),
+                $meta
+            );
+
             $meta = $this->arrayManager->set(
                 $hasWeightPath . static::META_CONFIG_PATH,
                 $meta,
@@ -228,6 +234,7 @@ class General extends AbstractModifier
                     'componentType' => Form\Field::NAME,
                     'dataScope' => 'product_has_weight',
                     'label' => '',
+                    'sortOrder' => $sortOrder + 1,
                     'options' => [
                         [
                             'label' => __('This item has weight'),
