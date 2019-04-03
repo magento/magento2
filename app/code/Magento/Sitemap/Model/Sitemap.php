@@ -277,24 +277,24 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
 
         $this->addSitemapItem(new DataObject(
             [
-                'changefreq' => $helper->getCategoryChangefreq($storeId),
-                'priority' => $helper->getCategoryPriority($storeId),
+                'changefreq' => $this->_escaper->escapeHtml($helper->getCategoryChangefreq($storeId)),
+                'priority' => $this->_escaper->escapeHtml($helper->getCategoryPriority($storeId)),
                 'collection' => $this->_categoryFactory->create()->getCollection($storeId),
             ]
         ));
 
         $this->addSitemapItem(new DataObject(
             [
-                'changefreq' => $helper->getProductChangefreq($storeId),
-                'priority' => $helper->getProductPriority($storeId),
+                'changefreq' => $this->_escaper->escapeHtml($helper->getProductChangefreq($storeId)),
+                'priority' => $this->_escaper->escapeHtml($helper->getProductPriority($storeId)),
                 'collection' => $this->_productFactory->create()->getCollection($storeId),
             ]
         ));
 
         $this->addSitemapItem(new DataObject(
             [
-                'changefreq' => $helper->getPageChangefreq($storeId),
-                'priority' => $helper->getPagePriority($storeId),
+                'changefreq' => $this->_escaper->escapeHtml($helper->getPageChangefreq($storeId)),
+                'priority' => $this->_escaper->escapeHtml($helper->getPagePriority($storeId)),
                 'collection' => $this->_cmsFactory->create()->getCollection($storeId),
             ]
         ));
