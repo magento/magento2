@@ -33,6 +33,11 @@ charset UTF-8;
 error_page 404 403 = /errors/404.php;
 #add_header "X-UA-Compatible" "IE=Edge";
 
+# Deny access to sensitive files
+location /.user.ini {
+    deny all;
+}
+
 # PHP entry point for setup application
 location ~* ^/setup($|/) {
     root $MAGE_ROOT;
@@ -161,7 +166,7 @@ location /media/import/ {
 }
 
 # PHP entry point for main application
-location ~ (index|get|static|report|404|503|health_check)\.php$ {
+location ~ ^/(index|get|static|errors/report|errors/404|errors/503|health_check)\.php$ {
     try_files $uri =404;
     fastcgi_pass   fastcgi_backend;
     fastcgi_buffers 1024 4k;

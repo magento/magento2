@@ -84,6 +84,7 @@ class Date extends AbstractElement
         }
         if (preg_match('/^[0-9]+$/', $value)) {
             $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
+
             return $this;
         }
 

@@ -9,7 +9,8 @@ define([
     'mage/translate',
     'Magento_Ui/js/modal/modal',
     'jquery/ui',
-    'prototype'
+    'prototype',
+    'mage/adminhtml/tools'
 ], function (jQuery, $t) {
     'use strict';
 

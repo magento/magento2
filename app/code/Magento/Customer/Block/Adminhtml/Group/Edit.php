@@ -57,6 +57,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Update Save and Delete buttons. Remove Delete button if group can't be deleted.
      *
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _construct()
     {
@@ -68,6 +70,23 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         $this->buttonList->update('save', 'label', __('Save Customer Group'));
         $this->buttonList->update('delete', 'label', __('Delete Customer Group'));
+        $this->buttonList->update(
+            'delete',
+            'onclick',
+            sprintf(
+                "deleteConfirm('%s','%s', %s)",
+                'Are you sure?',
+                $this->getDeleteUrl(),
+                json_encode(
+                    [
+                        'action' => '',
+                        'data' => [
+                            'form_key' => $this->getFormKey()
+                        ]
+                    ]
+                )
+            )
+        );
 
         $groupId = $this->coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
         if (!$groupId || $this->groupManagement->isReadonly($groupId)) {

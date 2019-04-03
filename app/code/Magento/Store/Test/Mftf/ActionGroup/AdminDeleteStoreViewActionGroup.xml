@@ -7,16 +7,19 @@
 -->
 <!-- Test XML Example -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteStoreViewActionGroup">
         <arguments>
             <argument name="customStore" defaultValue="customStore"/>
         </arguments>
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
         <waitForPageLoad stepKey="waitStoreIndexPageLoad" />
-        <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>
-        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearch"/>
-        <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickStoreViewInGrid"/>
+        <conditionalClick selector="{{AdminStoresGridFilterSection.clearFilters}}" dependentSelector="{{AdminStoresGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminStoresGridFilterSection.filters}}" stepKey="openStoresFilters"/>
+        <fillField selector="{{AdminStoresGridFilterSection.storeViewFilter}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>
+        <click selector="{{AdminStoresGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+        <click selector="{{AdminStoresGridSection.storeViewInFirstRow}}" stepKey="clickStoreViewInGrid"/>
         <waitForPageLoad stepKey="waitForStoreViewPage"/>
         <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreView"/>
         <selectOption selector="{{AdminStoreBackupOptionsSection.createBackupSelect}}" userInput="No" stepKey="dontCreateDbBackup"/>
@@ -24,5 +27,11 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.title}}" stepKey="waitingForWarningModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreDelete"/>
         <see userInput="You deleted the store view." stepKey="seeDeleteMessage"/>
+    </actionGroup>
+    <actionGroup name="AdminDeleteStoreViewUseStringArgumentsActionGroup" extends="AdminDeleteStoreViewActionGroup">
+        <arguments>
+            <argument name="customStoreName" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminStoresGridFilterSection.storeViewFilter}}" userInput="{{customStoreName}}" stepKey="fillStoreViewFilterField"/>
     </actionGroup>
 </actionGroups>

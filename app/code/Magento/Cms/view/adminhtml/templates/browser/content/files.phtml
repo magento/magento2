@@ -15,7 +15,7 @@ $_height = $block->getImagesHeight();
 <?php if ($block->getFilesCount() > 0): ?>
     <?php foreach ($block->getFiles() as $file): ?>
     <div data-row="file" class="filecnt" id="<?= $block->escapeHtmlAttr($block->getFileId($file)) ?>">
-        <p class="nm" style="height:<?= $block->escapeHtmlAttr($_height) ?>px;width:<?= $block->escapeHtmlAttr($_width) ?>px;">
+        <p class="nm" style="height:<?= $block->escapeHtmlAttr($_height) ?>px;">
         <?php if ($block->getFileThumbUrl($file)):?>
             <img src="<?= $block->escapeHtmlAttr($block->getFileThumbUrl($file)) ?>" alt="<?= $block->escapeHtmlAttr($block->getFileName($file)) ?>"/>
         <?php endif; ?>

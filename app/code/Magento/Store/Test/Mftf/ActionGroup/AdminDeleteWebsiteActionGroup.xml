@@ -12,16 +12,19 @@
             <argument name="websiteName" type="string"/>
         </arguments>
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
-        <fillField userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillSearchWebsiteField"/>
-        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
-        <see userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="verifyThatCorrectWebsiteFound"/>
-        <click selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
+        <conditionalClick selector="{{AdminStoresGridFilterSection.clearFilters}}" dependentSelector="{{AdminStoresGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminStoresGridFilterSection.filters}}" stepKey="openStoresFilters"/>
+        <fillField selector="{{AdminStoresGridFilterSection.websiteFilter}}" userInput="{{websiteName}}" stepKey="fillWebsiteFilter"/>
+        <click selector="{{AdminStoresGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+        <see userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteInFirstRow}}" stepKey="verifyThatCorrectWebsiteFound"/>
+        <click selector="{{AdminStoresGridSection.websiteInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
         <waitForPageLoad stepKey="waitForStoreToLoad"/>
         <click selector="{{AdminStoresMainActionsSection.deleteButton}}" stepKey="clickDeleteWebsiteButtonOnEditWebsitePage"/>
         <selectOption userInput="No" selector="{{AdminStoresDeleteStoreGroupSection.createDbBackup}}" stepKey="setCreateDbBackupToNo"/>
         <click selector="{{AdminStoresDeleteStoreGroupSection.deleteStoreGroupButton}}" stepKey="clickDeleteWebsiteButton"/>
-        <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload"/>
+        <waitForElementVisible selector="{{AdminStoresGridFilterSection.filters}}" stepKey="waitForStoreGridToReload"/>
         <see userInput="You deleted the website." stepKey="seeSavedMessage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
     </actionGroup>
 </actionGroups>

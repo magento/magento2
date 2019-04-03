@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\ProductOption;
@@ -665,8 +666,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $isRefundZero = abs($totalRefunded) < .0001;
         // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
         $hasAdjustmentFee = abs($totalRefunded - $this->getAdjustmentNegative()) < .0001;
-        $hasActinFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
-        if ($isRefundZero || $hasAdjustmentFee || $hasActinFlag) {
+        $hasActionFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
+        if ($isRefundZero || $hasAdjustmentFee || $hasActionFlag) {
             return false;
         }
 
@@ -682,15 +683,15 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private function canCreditmemoForZeroTotal(float $totalRefunded): bool
     {
         $totalPaid = $this->getTotalPaid();
-        //check if total paid is less than grandtotal
+        //check if total paid is less than grand total
         $checkAmtTotalPaid = $totalPaid <= $this->getGrandTotal();
         //case when amount is due for invoice
-        $dueAmountCondition = $this->canInvoice() && $checkAmtTotalPaid;
+        $hasDueAmount = $this->canInvoice() && $checkAmtTotalPaid;
         //case when paid amount is refunded and order has creditmemo created
         $creditmemos = ($this->getCreditmemosCollection() === false) ?
             true : (count($this->getCreditmemosCollection()) > 0);
         $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
-        if (($dueAmountCondition || $paidAmtIsRefunded)
+        if (($hasDueAmount || $paidAmtIsRefunded)
             || (!$checkAmtTotalPaid && abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)
         ) {
             return false;
@@ -750,7 +751,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Retrieve order shipment availability
+     * Retrieve order shipment availability.
      *
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -770,11 +771,27 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         }
 
         foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyToShip() > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
+            if ($item->getQtyToShip() > 0
+                && !$item->getIsVirtual()
+                && !$item->getLockedDoShip()
+                && !$this->isRefunded($item)
+            ) {
                 return true;
             }
         }
+
         return false;
+    }
+
+    /**
+     * Check if item is refunded.
+     *
+     * @param OrderItemInterface $item
+     * @return bool
+     */
+    private function isRefunded(OrderItemInterface $item): bool
+    {
+        return $item->getQtyRefunded() == $item->getQtyOrdered();
     }
 
     /**
@@ -1281,12 +1298,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Retrieve shipping method
      *
      * @param bool $asObject return carrier code and shipping method data as object
-     * @return string|\Magento\Framework\DataObject
+     * @return string|null|\Magento\Framework\DataObject
      */
     public function getShippingMethod($asObject = false)
     {
         $shippingMethod = parent::getShippingMethod();
-        if (!$asObject) {
+        if (!$asObject || !$shippingMethod) {
             return $shippingMethod;
         } else {
             list($carrierCode, $method) = explode('_', $shippingMethod, 2);
@@ -1383,7 +1400,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Get random items collection with or without related children
+     * Get random items collection with or without related children.
      *
      * @param int $limit
      * @param bool $nonChildrenOnly
@@ -1391,7 +1408,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     protected function _getItemsRandomCollection($limit, $nonChildrenOnly = false)
     {
-        $collection = $this->_orderItemCollectionFactory->create()->setOrderFilter($this)->setRandomOrder();
+        $collection = $this->_orderItemCollectionFactory->create()
+            ->setOrderFilter($this)
+            ->setRandomOrder()
+            ->setPageSize($limit);
 
         if ($nonChildrenOnly) {
             $collection->filterByParent();
@@ -1405,9 +1425,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $products
         )->setVisibility(
             $this->_productVisibility->getVisibleInSiteIds()
-        )->addPriceData()->setPageSize(
-            $limit
-        )->load();
+        )->addPriceData()->load();
 
         foreach ($collection as $item) {
             $product = $productsCollection->getItemById($item->getProductId());
@@ -2130,11 +2148,18 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\Sales\Api\Data\OrderExtensionInterface|null
+     * @return \Magento\Sales\Api\Data\OrderExtensionInterface
      */
     public function getExtensionAttributes()
     {
-        return $this->_getExtensionAttributes();
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            /** @var \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes */
+            $extensionAttributes = $this->extensionAttributesFactory->create(OrderInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+
+        return $extensionAttributes;
     }
 
     /**

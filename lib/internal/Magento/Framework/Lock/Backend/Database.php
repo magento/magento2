@@ -3,8 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
+
 namespace Magento\Framework\Lock\Backend;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -14,6 +14,9 @@ use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
 
+/**
+ * Implementation of the lock manager on the basis of MySQL.
+ */
 class Database implements \Magento\Framework\Lock\LockManagerInterface
 {
     /** @var ResourceConnection */
@@ -53,9 +56,13 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @return bool
      * @throws InputException
      * @throws AlreadyExistsException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function lock(string $name, int $timeout = -1): bool
     {
+        if (!$this->deploymentConfig->isDbAvailable()) {
+            return true;
+        };
         $name = $this->addPrefix($name);
 
         /**
@@ -66,7 +73,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
         if ($this->currentLock) {
             throw new AlreadyExistsException(
                 new Phrase(
-                    'Current connection is already holding lock for $1, only single lock allowed',
+                    'Current connection is already holding lock for %1, only single lock allowed',
                     [$this->currentLock]
                 )
             );
@@ -90,9 +97,13 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @param string $name lock name
      * @return bool
      * @throws InputException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function unlock(string $name): bool
     {
+        if (!$this->deploymentConfig->isDbAvailable()) {
+            return true;
+        };
         $name = $this->addPrefix($name);
 
         $result = (bool)$this->resource->getConnection()->query(
@@ -113,9 +124,13 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @param string $name lock name
      * @return bool
      * @throws InputException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function isLocked(string $name): bool
     {
+        if (!$this->deploymentConfig->isDbAvailable()) {
+            return false;
+        };
         $name = $this->addPrefix($name);
 
         return (bool)$this->resource->getConnection()->query(

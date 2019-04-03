@@ -107,6 +107,9 @@ class RetrieveImage extends \Magento\Backend\App\Action
     {
         $baseTmpMediaPath = $this->mediaConfig->getBaseTmpMediaPath();
         try {
+            if (!$this->getRequest()->isPost()) {
+                throw new LocalizedException(__('Invalid request type.'));
+            }
             $remoteFileUrl = $this->getRequest()->getParam('remote_image');
             $this->validateRemoteFile($remoteFileUrl);
             $localFileName = Uploader::getCorrectFileName(basename($remoteFileUrl));

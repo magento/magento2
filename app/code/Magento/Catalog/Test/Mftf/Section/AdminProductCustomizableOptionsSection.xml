@@ -10,7 +10,7 @@
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminProductCustomizableOptionsSection">
         <element name="checkIfCustomizableOptionsTabOpen" type="text" selector="//span[text()='Customizable Options']/parent::strong/parent::*[@data-state-collapsible='closed']"/>
-        <element name="customizableOptions" type="text" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Customizable Options']"/>
+        <element name="customizableOptions" type="text" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Customizable Options']" timeout="30"/>
         <element name="useDefaultOptionTitle" type="text" selector="[data-index='options'] tr.data-row [data-index='title'] [name^='options_use_default']"/>
         <element name="useDefaultOptionValueTitleByIndex" type="text" selector="[data-index='options'] [data-index='values'] tr[data-repeat-index='{{var1}}'] [name^='options_use_default']" parameterized="true"/>
         <element name="addOptionBtn" type="button" selector="button[data-index='button_add']"/>
