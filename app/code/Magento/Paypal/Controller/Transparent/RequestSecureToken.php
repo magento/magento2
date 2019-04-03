@@ -12,6 +12,7 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\Session\SessionManager;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Paypal\Model\Payflow\Service\Request\SecureToken;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Quote\Model\Quote;
@@ -40,7 +41,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action implements
     private $secureTokenService;
 
     /**
-     * @var SessionManager
+     * @var SessionManager|SessionManagerInterface
      */
     private $sessionManager;
 
@@ -56,6 +57,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action implements
      * @param SecureToken $secureTokenService
      * @param SessionManager $sessionManager
      * @param Transparent $transparent
+     * @param SessionManagerInterface|null $sessionInterface
      */
     public function __construct(
         Context $context,
@@ -63,12 +65,13 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action implements
         Generic $sessionTransparent,
         SecureToken $secureTokenService,
         SessionManager $sessionManager,
-        Transparent $transparent
+        Transparent $transparent,
+        SessionManagerInterface $sessionInterface = null
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->sessionTransparent = $sessionTransparent;
         $this->secureTokenService = $secureTokenService;
-        $this->sessionManager = $sessionManager;
+        $this->sessionManager = $sessionInterface ?: $sessionManager;
         $this->transparent = $transparent;
         parent::__construct($context);
     }
@@ -84,6 +87,10 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action implements
         $quote = $this->sessionManager->getQuote();
 
         if (!$quote || !$quote instanceof Quote) {
+            return $this->getErrorResponse();
+        }
+
+        if (!$this->transparent->isActive($quote->getStoreId())) {
             return $this->getErrorResponse();
         }
 

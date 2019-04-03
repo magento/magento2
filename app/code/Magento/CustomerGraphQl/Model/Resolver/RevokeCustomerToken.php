@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
+use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -19,9 +19,9 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 class RevokeCustomerToken implements ResolverInterface
 {
     /**
-     * @var CheckCustomerAccount
+     * @var GetCustomer
      */
-    private $checkCustomerAccount;
+    private $getCustomer;
 
     /**
      * @var CustomerTokenServiceInterface
@@ -29,14 +29,14 @@ class RevokeCustomerToken implements ResolverInterface
     private $customerTokenService;
 
     /**
-     * @param CheckCustomerAccount $checkCustomerAccount
+     * @param GetCustomer $getCustomer
      * @param CustomerTokenServiceInterface $customerTokenService
      */
     public function __construct(
-        CheckCustomerAccount $checkCustomerAccount,
+        GetCustomer $getCustomer,
         CustomerTokenServiceInterface $customerTokenService
     ) {
-        $this->checkCustomerAccount = $checkCustomerAccount;
+        $this->getCustomer = $getCustomer;
         $this->customerTokenService = $customerTokenService;
     }
 
@@ -50,11 +50,8 @@ class RevokeCustomerToken implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $currentUserId = $context->getUserId();
-        $currentUserType = $context->getUserType();
+        $customer = $this->getCustomer->execute($context);
 
-        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
-
-        return ['result' => $this->customerTokenService->revokeCustomerAccessToken((int)$currentUserId)];
+        return ['result' => $this->customerTokenService->revokeCustomerAccessToken((int)$customer->getId())];
     }
 }

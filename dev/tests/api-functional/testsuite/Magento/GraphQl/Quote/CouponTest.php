@@ -58,7 +58,7 @@ class CouponTest extends GraphQlAbstract
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
         $response = $this->graphQlQuery($query);
 
-        self::assertArrayHasKey("applyCouponToCart", $response);
+        self::assertArrayHasKey('applyCouponToCart', $response);
         self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
     }
 
@@ -89,17 +89,17 @@ class CouponTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Cart does not contain products.
      */
     public function testApplyCouponToCartWithNoItems()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/191');
         $couponCode = '2?ds5!2d';
 
         $this->quoteResource->load($this->quote, 'test_order_1', 'reserved_order_id');
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
 
-        self::expectExceptionMessageRegExp('/Cart doesn\'t contain products/');
         $this->graphQlQuery($query);
     }
 
@@ -154,7 +154,7 @@ class CouponTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('removeCouponFromCart', $response);
-        self::assertSame('', $response['removeCouponFromCart']['cart']['applied_coupon']['code']);
+        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
     }
 
     /**
