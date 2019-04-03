@@ -67,27 +67,22 @@ class QuoteAddressValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $customerId = 100;
         $address = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $customerMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
 
         $address->expects($this->atLeastOnce())->method('getCustomerId')->willReturn($customerId);
         $this->customerRepositoryMock->expects($this->once())->method('getById')->with($customerId)
-            ->willReturn($customerMock);
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
         $this->model->validate($address);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Invalid address id 101
+     * @expectedExceptionMessage Invalid customer address id 101
      */
     public function testValidateInvalidAddress()
     {
         $address = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
         $this->customerRepositoryMock->expects($this->never())->method('getById');
-        $address->expects($this->atLeastOnce())->method('getCustomerAddressId')->willReturn(101);
-        $address->expects($this->once())->method('getId')->willReturn(101);
-
-        $this->addressRepositoryMock->expects($this->once())->method('getById')
-            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
+        $address->expects($this->exactly(2))->method('getCustomerAddressId')->willReturn(101);
 
         $this->model->validate($address);
     }
@@ -115,7 +110,6 @@ class QuoteAddressValidatorTest extends \PHPUnit\Framework\TestCase
         $customerAddress = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
         $this->customerRepositoryMock->expects($this->exactly(2))->method('getById')->willReturn($customerMock);
-        $customerMock->expects($this->once())->method('getId')->willReturn($addressCustomer);
 
         $this->addressRepositoryMock->expects($this->once())->method('getById')->willReturn($this->quoteAddressMock);
         $this->quoteAddressMock->expects($this->any())->method('getCustomerId')->willReturn($addressCustomer);

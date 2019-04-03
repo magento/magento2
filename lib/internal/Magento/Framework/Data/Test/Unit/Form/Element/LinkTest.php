@@ -26,6 +26,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
         $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $escaperMock->method('escapeHtml')->willReturnArgument(0);
         $this->_link = new \Magento\Framework\Data\Form\Element\Link(
             $factoryMock,
             $collectionFactoryMock,

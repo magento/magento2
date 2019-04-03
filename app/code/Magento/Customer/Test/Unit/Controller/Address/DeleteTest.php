@@ -78,7 +78,9 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->setMethods(['isPost'])
             ->getMockForAbstractClass();
+        $this->request->expects($this->any())->method('isPost')->willReturn(true);
         $this->address = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
             ->getMockForAbstractClass();
         $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
@@ -146,7 +148,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->method('deleteById')
             ->with($addressId);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You deleted the address.'));
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
@@ -183,11 +185,11 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->willReturn(34);
         $exception = new \Exception('Exception');
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('We can\'t delete the address right now.'))
             ->willThrowException($exception);
         $this->messageManager->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with($exception, __('We can\'t delete the address right now.'));
         $this->resultRedirect->expects($this->once())
             ->method('setPath')

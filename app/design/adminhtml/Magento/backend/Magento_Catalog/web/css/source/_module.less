@@ -29,6 +29,19 @@
             &:extend(.abs-control-qty all);
         }
     }
+
+    .admin__field {
+        &.required,
+        &._required {
+            & > .admin__field-label > span {
+                width: 100%;
+
+                & span:after {
+                    display: none;
+                }
+            }
+        }
+    }
 }
 
 //
