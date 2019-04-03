@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -20,25 +21,33 @@ use Magento\Quote\Api\Data\CartInterface;
 class SetBillingAddressOnCart
 {
     /**
+     * @var QuoteAddressFactory
+     */
+    private $quoteAddressFactory;
+
+    /**
+     * @var GetCustomer
+     */
+    private $getCustomer;
+
+    /**
      * @var AssignBillingAddressToCart
      */
     private $assignBillingAddressToCart;
 
     /**
-     * @var CreateQuoteAddressByCustomerAddress
-     */
-    private $createQuoteAddressByCustomerAddress;
-
-    /**
+     * @param QuoteAddressFactory $quoteAddressFactory
+     * @param GetCustomer $getCustomer
      * @param AssignBillingAddressToCart $assignBillingAddressToCart
-     * @param CreateQuoteAddressByCustomerAddress $createQuoteAddressByCustomerAddress
      */
     public function __construct(
-        AssignBillingAddressToCart $assignBillingAddressToCart,
-        CreateQuoteAddressByCustomerAddress $createQuoteAddressByCustomerAddress
+        QuoteAddressFactory $quoteAddressFactory,
+        GetCustomer $getCustomer,
+        AssignBillingAddressToCart $assignBillingAddressToCart
     ) {
+        $this->quoteAddressFactory = $quoteAddressFactory;
+        $this->getCustomer = $getCustomer;
         $this->assignBillingAddressToCart = $assignBillingAddressToCart;
-        $this->createQuoteAddressByCustomerAddress = $createQuoteAddressByCustomerAddress;
     }
 
     /**
@@ -49,9 +58,9 @@ class SetBillingAddressOnCart
      * @param array $billingAddressInput
      * @return void
      * @throws GraphQlInputException
-     * @throws GraphQlNoSuchEntityException
-     * @throws GraphQlAuthorizationException
      * @throws GraphQlAuthenticationException
+     * @throws GraphQlAuthorizationException
+     * @throws GraphQlNoSuchEntityException
      */
     public function execute(ContextInterface $context, CartInterface $cart, array $billingAddressInput): void
     {
@@ -79,11 +88,15 @@ class SetBillingAddressOnCart
             );
         }
 
-        $billingAddress = $this->createQuoteAddressByCustomerAddress->execute(
-            $context,
-            $customerAddressId,
-            $addressInput
-        );
+        if (null === $customerAddressId) {
+            $billingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
+        } else {
+            $customer = $this->getCustomer->execute($context);
+            $billingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress(
+                (int)$customerAddressId,
+                (int)$customer->getId()
+            );
+        }
 
         $this->assignBillingAddressToCart->execute($cart, $billingAddress, $useForShipping);
     }
