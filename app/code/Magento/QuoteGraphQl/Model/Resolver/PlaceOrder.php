@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartManagementInterface;
@@ -56,13 +58,12 @@ class PlaceOrder implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($args['input']['cart_id'])) {
+        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        $currentUserId = $context->getUserId();
-        $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId);
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
 
         try {
             $orderId = $this->cartManagement->placeOrder($cart->getId());
@@ -70,13 +71,13 @@ class PlaceOrder implements ResolverInterface
 
             return [
                 'order' => [
-                    'order_id' => $order->getIncrementId()
-                ]
+                    'order_id' => $order->getIncrementId(),
+                ],
             ];
-        } catch (LocalizedException $exception) {
-            throw new GraphQlInputException(
-                __('Unable to place order: %message', ['message' => $exception->getMessage()])
-            );
+        } catch (NoSuchEntityException $e) {
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__('Unable to place order: %message', ['message' => $e->getMessage()]), $e);
         }
     }
 }
