@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -11,6 +10,9 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Framework\Stdlib\ArrayUtils;
 
+/**
+ * Gallery options block.
+ */
 class GalleryOptions extends AbstractView implements ArgumentInterface
 {
     /**
