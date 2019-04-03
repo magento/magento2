@@ -8,9 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Model\Rss;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Class for generating signature.
@@ -32,7 +30,7 @@ class Signature
     private $keys = [];
 
     /**
-     * @var mixed
+     * @var \Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
 
