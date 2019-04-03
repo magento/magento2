@@ -35,11 +35,14 @@ class BackordersCondition implements GetIsStockItemSalableConditionInterface
     public function execute(Select $select): string
     {
         $globalBackorders = (int)$this->configuration->getBackorders();
+        $itemBackordersCondition = 'legacy_stock_item.backorders <> 0';
+        $useDefaultBackorders = 'legacy_stock_item.use_config_backorders';
+        $itemMinQty = 'legacy_stock_item.min_qty';
 
-        $condition = (1 === $globalBackorders)
-            ? 'legacy_stock_item.use_config_backorders = 1'
-            : 'legacy_stock_item.use_config_backorders = 0 AND legacy_stock_item.backorders = 1';
-        $condition .= ' AND (legacy_stock_item.min_qty >= 0 OR legacy_stock_item.qty > legacy_stock_item.min_qty)';
+        $condition = $globalBackorders === 0
+            ? "$useDefaultBackorders = 0 AND $itemBackordersCondition"
+            : "$useDefaultBackorders = 1 OR $itemBackordersCondition";
+        $condition .= " AND ($itemMinQty >= 0 OR legacy_stock_item.qty > $itemMinQty)";
 
         return $condition;
     }
