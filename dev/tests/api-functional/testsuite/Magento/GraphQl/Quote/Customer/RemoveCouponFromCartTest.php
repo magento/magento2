@@ -7,92 +7,50 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
-use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
-use Magento\SalesRule\Api\CouponRepositoryInterface;
-use Magento\SalesRule\Model\Coupon;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Check removing of the coupon from customer quotes
+ * Check removing of the coupon from customer cart
  */
 class RemoveCouponFromCartTest extends GraphQlAbstract
 {
-    /**
-     * @var QuoteResource
-     */
-    private $quoteResource;
-
-    /**
-     * @var Quote
-     */
-    private $quote;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
-
     /**
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
 
     /**
-     * @var CouponRepositoryInterface
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $couponRepository;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
-     * @var Coupon
+     * @inheritdoc
      */
-    private $coupon;
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->create(QuoteResource::class);
-        $this->quote = $objectManager->create(Quote::class);
-        $this->quoteIdToMaskedId = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->couponRepository = $objectManager->get(CouponRepositoryInterface::class);
-        $this->coupon = $objectManager->create(Coupon::class);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Checkout/_files/discount_10percent_generalusers.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/apply_coupon.php
      */
     public function testRemoveCouponFromCart()
     {
-        $couponCode = '2?ds5!2d';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
-        /* Assign the quote to the customer */
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-
-        /* Apply coupon to the customer quote */
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
-        $this->graphQlQuery($query, [], '', $queryHeaders);
-
-        /* Remove coupon from the quote */
-        $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
-        $response = $this->graphQlQuery($query, [], '', $queryHeaders);
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('removeCouponFromCart', $response);
         self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
@@ -100,293 +58,88 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
-    public function testRemoveCouponFromCartTwice()
+    public function testRemoveCouponFromNonExistentCart()
     {
-        $couponCode = '2?ds5!2d';
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = $this->getQuery($maskedQuoteId);
 
-        /* Assign the quote to the customer */
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-
-        /* Apply coupon to the customer quote */
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
-        $this->graphQlQuery($query, [], '', $queryHeaders);
-
-        /* Remove coupon from the quote */
-        $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
-        $response = $this->graphQlQuery($query, [], '', $queryHeaders);
-
-        self::assertArrayHasKey('removeCouponFromCart', $response);
-        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
-
-        /* Remove coupon from the quote the second time */
-        $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
-        $response = $this->graphQlQuery($query, [], '', $queryHeaders);
-
-        self::assertArrayHasKey('removeCouponFromCart', $response);
-        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     */
-    public function testRemoveCouponFromCartWithNoCouponApplied()
-    {
-        /* Assign the quote to the customer */
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-
-        /* Remove coupon from the quote */
-        $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $response = $this->graphQlQuery($query, [], '', $queryHeaders);
-
-        self::assertArrayHasKey('removeCouponFromCart', $response);
-        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Cart does not contain products
      */
     public function testRemoveCouponFromEmptyCart()
     {
-        /* Assign the empty quote to the customer */
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-        $quoteId = (int)$this->quote->getId();
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute($quoteId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
 
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-
-        /* Remove coupon from the empty quote */
-        $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-
-        $this->expectExceptionMessage("The \"$quoteId\" Cart doesn't contain products");
-        $this->graphQlQuery($query, [], '', $queryHeaders);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testRemoveCouponFromCartWithoutItems()
+    public function testRemoveCouponFromCartIfCouponWasNotSet()
     {
-        $couponCode = '2?ds5!2d';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
-        /* Assign the quote to the customer */
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-
-        /* Apply coupon to the customer quote */
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
-        $this->graphQlQuery($query, [], '', $queryHeaders);
-
-        /* Clear the quote */
-        $this->quote->removeAllItems();
-        $this->quoteResource->save($this->quote);
-
-        /* Remove coupon from the customer quote */
-        $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
-        $response = $this->graphQlQuery($query, [], '', $queryHeaders);
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('removeCouponFromCart', $response);
         self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
-     */
-    public function testRemoveCouponFromAnotherCustomerCart()
-    {
-        $couponCode = '2?ds5!2d';
-
-        /* Assign the quote to the customer */
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-
-        /* Apply coupon to the first customer quote */
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $this->graphQlQuery($query, [], '', $queryHeaders);
-
-        /* Remove coupon from the quote from the second customer */
-        $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer_two@example.com', 'password');
-
-        $this->expectExceptionMessage("The current user cannot perform operations on cart \"$maskedQuoteId\"");
-        $this->graphQlQuery($query, [], '', $queryHeaders);
-    }
-
-    /**
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/apply_coupon.php
      */
     public function testRemoveCouponFromGuestCart()
     {
-        $couponCode = '2?ds5!2d';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
 
-        /* Apply coupon to the guest quote */
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
-        $this->graphQlQuery($query);
-
-        /* Remove coupon from quote */
-        $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-
-        $this->expectExceptionMessage("The current user cannot perform operations on cart \"$maskedQuoteId\"");
-        $this->graphQlQuery($query, [], '', $queryHeaders);
+        self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Checkout/_files/discount_10percent_generalusers.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/apply_coupon.php
      */
-    public function testRemoveNonExistentCouponFromCart()
+    public function testRemoveCouponFromAnotherCustomerCart()
     {
-        $couponCode = '2?ds5!2d';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
 
-        /* Assign the quote to the customer */
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-
-        /* Apply coupon to the customer quote */
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $this->graphQlQuery($query, [], '', $queryHeaders);
-
-        /* Remove the coupon */
-        $this->removeCoupon($couponCode);
-
-        /* Remove the non-existent coupon from the quote */
-        $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
-
-        $response = $this->graphQlQuery($query, [], '', $queryHeaders);
-
-        self::assertArrayHasKey('removeCouponFromCart', $response);
-        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
+        self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer3@search.example.com'));
     }
 
     /**
-     * Remove the given coupon code from the database
-     *
-     * @param string $couponCode
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
-     */
-    private function removeCoupon(string $couponCode): void
-    {
-        $this->coupon->loadByCode($couponCode);
-        $couponId = $this->coupon->getCouponId();
-
-        if ($couponId) {
-            $this->couponRepository->deleteById($couponId);
-        }
-    }
-
-    /**
-     * Retrieve customer authorization headers
-     *
-     * @param string $email
-     * @param string $password
-     * @return array
-     * @throws AuthenticationException
-     */
-    private function prepareAuthorizationHeaders(string $email, string $password): array
-    {
-        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
-
-        return ['Authorization' => 'Bearer ' . $customerToken];
-    }
-
-    /**
-     * Retrieve add coupon GraphQL query
-     *
-     * @param string $maskedQuoteId
-     * @param string $couponCode
-     * @return string
-     */
-    private function prepareAddCouponRequestQuery(string $maskedQuoteId, string $couponCode): string
-    {
-        return <<<QUERY
-mutation {
-  applyCouponToCart(input: {cart_id: "$maskedQuoteId", coupon_code: "$couponCode"}) {
-    cart {
-      applied_coupon {
-        code
-      }
-    }
-  }
-}
-QUERY;
-    }
-
-    /**
-     * Retrieve remove coupon GraphQL query
-     *
      * @param string $maskedQuoteId
      * @return string
      */
-    private function prepareRemoveCouponRequestQuery(string $maskedQuoteId): string
+    private function getQuery(string $maskedQuoteId): string
     {
         return <<<QUERY
 mutation {
@@ -400,5 +153,17 @@ mutation {
 }
 
 QUERY;
+    }
+
+    /**
+     * @param string $username
+     * @param string $password
+     * @return array
+     */
+    private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
+    {
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
+        return $headerMap;
     }
 }

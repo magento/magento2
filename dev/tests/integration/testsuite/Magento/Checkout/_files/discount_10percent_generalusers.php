@@ -21,7 +21,7 @@ $data = [
     ],
     'customer_group_ids' => [1],
     'coupon_type' => \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC,
-    'coupon_code' => uniqid(),
+    'coupon_code' => '2?ds5!2d',
     'simple_action' => \Magento\SalesRule\Model\Rule::BY_PERCENT_ACTION,
     'discount_amount' => 10,
     'discount_step' => 1
