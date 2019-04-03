@@ -35,6 +35,6 @@
         <amOnUrl url="http://{$hostname}/contact" stepKey="goToUnsecureContactURL"/>
         <seeCurrentUrlEquals url="https://{$hostname}/contact" stepKey="seeSecureContactURL"/>
         <amOnUrl url="http://{$hostname}/contact/index/post" stepKey="goToUnsecureContactFormURL"/>
-        <seeCurrentUrlEquals url="https://{$hostname}/contact/index/post" stepKey="seeSecureContactFormURL"/>
+        <seeInCurrentUrl url="https://{$hostname}/contact/index" stepKey="seeSecureContactFormURL"/>
     </test>
 </tests>
