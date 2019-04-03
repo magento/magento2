@@ -274,7 +274,7 @@
         <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <checkOption selector="{{AdminProductModalSlideGridSection.productRowCheckboxBySku(sku)}}" stepKey="selectProduct"/>
+        <click selector="{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectProduct"/>
         <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
     </actionGroup>
 
