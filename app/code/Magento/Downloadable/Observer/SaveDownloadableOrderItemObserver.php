@@ -92,14 +92,15 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
         if ($purchasedLink->getId()) {
             return $this;
         }
+        $storeId = $orderItem->getOrder()->getStoreId();
         $orderStatusToEnableItem = $this->_scopeConfig->getValue(
             \Magento\Downloadable\Model\Link\Purchased\Item::XML_PATH_ORDER_ITEM_STATUS,
             ScopeInterface::SCOPE_STORE,
-            $orderItem->getOrder()->getStoreId()
+            $storeId
         );
         if (!$product) {
             $product = $this->_createProductModel()->setStoreId(
-                $orderItem->getOrder()->getStoreId()
+                $storeId
             )->load(
                 $orderItem->getProductId()
             );
