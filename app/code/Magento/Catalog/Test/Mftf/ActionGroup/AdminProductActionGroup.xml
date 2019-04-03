@@ -15,12 +15,12 @@
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
         <waitForElementVisible selector="{{AdminProductGridActionSection.addTypeProduct(product.type_id)}}" stepKey="waitForAddProductDropdown" time="30"/>
         <click selector="{{AdminProductGridActionSection.addTypeProduct(product.type_id)}}" stepKey="clickAddProductType"/>
-        <waitForPageLoad stepKey="waitForCreateProductPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForCreateProductPageLoad"/>
         <seeInCurrentUrl url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, product.type_id)}}" stepKey="seeNewProductUrl"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeNewProductTitle"/>
     </actionGroup>
 
-    <!--Fill main fields in create product form-->
+    <!-- Fill main fields in create product form using a product entity -->
     <actionGroup name="fillMainProductForm">
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
@@ -32,6 +32,25 @@
         <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{product.status}}" stepKey="selectStockStatus"/>
         <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeight"/>
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{product.weight}}" stepKey="fillProductWeight"/>
+    </actionGroup>
+
+    <!-- Fill main fields in create product form using strings for flexibility -->
+    <actionGroup name="FillMainProductFormByString">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productSku" type="string"/>
+            <argument name="productPrice" type="string"/>
+            <argument name="productQuantity" type="string"/>
+            <argument name="productStatus" type="string"/>
+            <argument name="productWeight" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{productName}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{productSku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{productPrice}}" stepKey="fillProductPrice"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{productQuantity}}" stepKey="fillProductQty"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{productStatus}}" stepKey="selectStockStatus"/>
+        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeight"/>
+        <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{productWeight}}" stepKey="fillProductWeight"/>
     </actionGroup>
 
     <!--Fill main fields in create product form with no weight, useful for virtual and downloadable products -->
@@ -75,6 +94,11 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <waitForPageLoad stepKey="waitForProductToSave"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
+    </actionGroup>
+
+    <!-- Save product but do not expect a success message -->
+    <actionGroup name="SaveProductFormNoSuccessCheck" extends="saveProductForm">
+        <remove keyForRemoval="seeSaveConfirmation"/>
     </actionGroup>
 
     <!--Upload image for product-->
@@ -180,12 +204,14 @@
         <arguments>
             <argument name="website" type="string"/>
         </arguments>
-        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ScrollToWebsites"/>
-        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ClickTpOpenProductInWebsite"/>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToWebsites"/>
+        <conditionalClick selector="{{ProductInWebsitesSection.sectionHeader}}" dependentSelector="{{ProductInWebsitesSection.website(website)}}" visible="false" stepKey="clickToOpenProductInWebsite"/>
         <waitForPageLoad stepKey="waitForPageOpened"/>
-        <click selector="{{ProductInWebsitesSection.website(website)}}" stepKey="SelectWebsite"/>
+        <click selector="{{ProductInWebsitesSection.website(website)}}" stepKey="selectWebsite"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
-        <waitForPageLoad time='60' stepKey="waitForPageOpened1"/>
+        <waitForPageLoad time='60' stepKey="waitForProducrSaved"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSaveSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveSuccessMessage"/>
     </actionGroup>
 
     <actionGroup name="ProductSetAdvancedPricing">
@@ -387,6 +413,22 @@
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
         <fillField userInput="{{product.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
     </actionGroup>
+
+    <actionGroup name="SetProductUrlKeyByString">
+        <arguments>
+            <argument name="urlKey" type="string"/>
+        </arguments>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="{{urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+    </actionGroup>
+
+    <actionGroup name="SetCategoryByName">
+        <arguments>
+            <argument name="categoryName" type="string"/>
+        </arguments>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{categoryName}}]" stepKey="searchAndSelectCategory"/>
+    </actionGroup>
+
     <actionGroup name="expandAdminProductSection">
         <arguments>
             <argument name="sectionSelector" defaultValue="{{AdminProductContentSection.sectionHeader}}" type="string"/>
