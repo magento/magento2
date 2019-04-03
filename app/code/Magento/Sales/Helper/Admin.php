@@ -9,12 +9,9 @@ namespace Magento\Sales\Helper;
 
 use Magento\Framework\App\ObjectManager;
 use Symfony\Component\DomCrawler\Crawler;
-use Zend\Stdlib\StringWrapper\MbString;
 
 /**
  * Sales admin helper.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -39,31 +36,23 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     protected $escaper;
 
     /**
-     * @var MbString
-     */
-    private $converter;
-
-    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Escaper $escaper
-     * @param Mbstring|null $converter
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Escaper $escaper,
-        MbString $converter = null
+        \Magento\Framework\Escaper $escaper
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->_storeManager = $storeManager;
         $this->_salesConfig = $salesConfig;
         $this->escaper = $escaper;
-        $this->converter = $converter ?: ObjectManager::getInstance()->get(MbString::class);
         parent::__construct($context);
     }
 
@@ -164,11 +153,10 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     public function escapeHtmlWithLinks($data, $allowedTags = null)
     {
         if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
-            $wrapperElementId = uniqid();
             $crawler = ObjectManager::getInstance()->create(
                 Crawler::class,
                 [
-                    'node' => '<html><body id="' . $wrapperElementId . '">' . $data . '</body></html>',
+                    'node' => '<html><body>' . $data . '</body></html>',
                 ]
             );
 
@@ -191,10 +179,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
                 }
             }
 
-            $this->converter->setEncoding('HTML-ENTITIES', 'UTF-8');
-            $result = $this->converter->convert($crawler->html());
-            preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body>$/si', $result, $matches);
-            $data = $matches[1] ?? '';
+            $data = mb_convert_encoding($crawler->filter('body')->html(), 'UTF-8', 'HTML-ENTITIES');
         }
 
         return $this->escaper->escapeHtml($data, $allowedTags);
