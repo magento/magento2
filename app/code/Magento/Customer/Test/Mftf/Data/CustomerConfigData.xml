@@ -21,4 +21,11 @@
     <entity name="GlobalCustomerAccountSharing" type="account_share_scope_value">
         <data key="value">0</data>
     </entity>
+
+    <entity name="CustomerAccountSharingSystemValue" type="customer_account_sharing_config_inherit">
+        <requiredEntity type="account_share_scope_inherit">CustomerAccountSharingInherit</requiredEntity>
+    </entity>
+    <entity name="CustomerAccountSharingInherit" type="account_share_scope_inherit">
+        <data key="inherit">true</data>
+    </entity>
 </entities>
