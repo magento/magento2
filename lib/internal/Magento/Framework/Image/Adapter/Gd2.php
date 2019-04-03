@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Framework\Image\Adapter;
 
 /**
@@ -59,6 +62,9 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      */
     public function open($filename)
     {
+        if (filesize($filename) === 0) {
+            throw new \InvalidArgumentException("Wrong file size: '{$filename}'.");
+        }
         $this->_fileName = $filename;
         $this->_reset();
         $this->getMimeType();
@@ -225,7 +231,8 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param null|int $fileType
      * @param string $unsupportedText
      * @return string
-     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @throws \BadFunctionCallException
      */
     private function _getCallback($callbackType, $fileType = null, $unsupportedText = 'Unsupported image format.')
     {
@@ -233,10 +240,10 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $fileType = $this->_fileType;
         }
         if (empty(self::$_callbacks[$fileType])) {
-            throw new \Exception($unsupportedText);
+            throw new \InvalidArgumentException($unsupportedText);
         }
         if (empty(self::$_callbacks[$fileType][$callbackType])) {
-            throw new \Exception('Callback not found.');
+            throw new \BadFunctionCallException('Callback not found.');
         }
         return self::$_callbacks[$fileType][$callbackType];
     }
@@ -248,7 +255,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param resource &$imageResourceTo
      * @return int
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function _fillBackgroundColor(&$imageResourceTo)
@@ -261,17 +268,17 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
                 // fill truecolor png with alpha transparency
                 if ($isAlpha) {
                     if (!imagealphablending($imageResourceTo, false)) {
-                        throw new \Exception('Failed to set alpha blending for PNG image.');
+                        throw new \InvalidArgumentException('Failed to set alpha blending for PNG image.');
                     }
                     $transparentAlphaColor = imagecolorallocatealpha($imageResourceTo, 0, 0, 0, 127);
                     if (false === $transparentAlphaColor) {
-                        throw new \Exception('Failed to allocate alpha transparency for PNG image.');
+                        throw new \InvalidArgumentException('Failed to allocate alpha transparency for PNG image.');
                     }
                     if (!imagefill($imageResourceTo, 0, 0, $transparentAlphaColor)) {
-                        throw new \Exception('Failed to fill PNG image with alpha transparency.');
+                        throw new \InvalidArgumentException('Failed to fill PNG image with alpha transparency.');
                     }
                     if (!imagesavealpha($imageResourceTo, true)) {
-                        throw new \Exception('Failed to save alpha transparency into PNG image.');
+                        throw new \InvalidArgumentException('Failed to save alpha transparency into PNG image.');
                     }
 
                     return $transparentAlphaColor;
@@ -283,22 +290,22 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
                         $transparentColor = imagecolorallocate($imageResourceTo, $r, $g, $b);
                     }
                     if (false === $transparentColor) {
-                        throw new \Exception('Failed to allocate transparent color for image.');
+                        throw new \InvalidArgumentException('Failed to allocate transparent color for image.');
                     }
                     if (!imagefill($imageResourceTo, 0, 0, $transparentColor)) {
-                        throw new \Exception('Failed to fill image with transparency.');
+                        throw new \InvalidArgumentException('Failed to fill image with transparency.');
                     }
                     imagecolortransparent($imageResourceTo, $transparentColor);
                     return $transparentColor;
                 }
             } catch (\Exception $e) {
-                // fallback to default background color
+                throw new \DomainException('Failed to fill image.');
             }
         }
         list($r, $g, $b) = $this->_backgroundColor;
         $color = imagecolorallocate($imageResourceTo, $r, $g, $b);
         if (!imagefill($imageResourceTo, 0, 0, $color)) {
-            throw new \Exception("Failed to fill image background with color {$r} {$g} {$b}.");
+            throw new \InvalidArgumentException("Failed to fill image background with color {$r} {$g} {$b}.");
         }
 
         return $color;
@@ -637,13 +644,13 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Checks required dependencies
      *
      * @return void
-     * @throws \Exception If some of dependencies are missing
+     * @throws \RuntimeException If some of dependencies are missing
      */
     public function checkDependencies()
     {
         foreach ($this->_requiredExtensions as $value) {
             if (!extension_loaded($value)) {
-                throw new \Exception("Required PHP extension '{$value}' was not loaded.");
+                throw new \RuntimeException("Required PHP extension '{$value}' was not loaded.");
             }
         }
     }
@@ -755,7 +762,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param string $text
      * @param string $font
      * @return void
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     protected function _createImageFromTtfText($text, $font)
     {
@@ -777,7 +784,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $text
         );
         if ($result === false) {
-            throw new \Exception('Unable to create TTF text');
+            throw new \InvalidArgumentException('Unable to create TTF text');
         }
     }
 
