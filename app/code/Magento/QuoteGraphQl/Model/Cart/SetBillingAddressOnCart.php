@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddress;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -30,11 +31,6 @@ class SetBillingAddressOnCart
     private $getCustomer;
 
     /**
-     * @var GetCustomerAddress
-     */
-    private $getCustomerAddress;
-
-    /**
      * @var AssignBillingAddressToCart
      */
     private $assignBillingAddressToCart;
@@ -42,18 +38,15 @@ class SetBillingAddressOnCart
     /**
      * @param QuoteAddressFactory $quoteAddressFactory
      * @param GetCustomer $getCustomer
-     * @param GetCustomerAddress $getCustomerAddress
      * @param AssignBillingAddressToCart $assignBillingAddressToCart
      */
     public function __construct(
         QuoteAddressFactory $quoteAddressFactory,
         GetCustomer $getCustomer,
-        GetCustomerAddress $getCustomerAddress,
         AssignBillingAddressToCart $assignBillingAddressToCart
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
         $this->getCustomer = $getCustomer;
-        $this->getCustomerAddress = $getCustomerAddress;
         $this->assignBillingAddressToCart = $assignBillingAddressToCart;
     }
 
@@ -65,6 +58,8 @@ class SetBillingAddressOnCart
      * @param array $billingAddressInput
      * @return void
      * @throws GraphQlInputException
+     * @throws GraphQlAuthenticationException
+     * @throws GraphQlAuthorizationException
      * @throws GraphQlNoSuchEntityException
      */
     public function execute(ContextInterface $context, CartInterface $cart, array $billingAddressInput): void
@@ -97,8 +92,10 @@ class SetBillingAddressOnCart
             $billingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
         } else {
             $customer = $this->getCustomer->execute($context);
-            $customerAddress = $this->getCustomerAddress->execute((int)$customerAddressId, (int)$customer->getId());
-            $billingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress($customerAddress);
+            $billingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress(
+                (int)$customerAddressId,
+                (int)$customer->getId()
+            );
         }
 
         $this->assignBillingAddressToCart->execute($cart, $billingAddress, $useForShipping);
