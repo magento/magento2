@@ -55,7 +55,7 @@ class GetCartTest extends GraphQlAbstract
 
         self::assertNotEmpty($response['cart']['items'][0]['id']);
         self::assertEquals(2, $response['cart']['items'][0]['qty']);
-        self::assertEquals('simple', $response['cart']['items'][0]['product']['sku']);
+        self::assertEquals('simple_product', $response['cart']['items'][0]['product']['sku']);
 
         self::assertNotEmpty($response['cart']['items'][1]['id']);
         self::assertEquals(2, $response['cart']['items'][1]['qty']);
