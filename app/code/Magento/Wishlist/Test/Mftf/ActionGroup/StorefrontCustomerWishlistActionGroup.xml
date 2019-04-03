@@ -87,4 +87,13 @@
         <click selector="{{StorefrontCustomerWishlistProductSection.productUpdateWishList}}" stepKey="submitUpdateWishlist"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="{{product.name}} has been updated in your Wish List." stepKey="successMessage"/>
     </actionGroup>
+
+    <actionGroup name="StorefrontValidateQtyAfterEditProductInWishlist" extends="StorefrontCustomerEditProductInWishlist">
+        <arguments>
+            <argument name="maxQtyAllowed" type="string" default="10000"/>
+        </arguments>
+        <remove keyForRemoval="successMessage"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productInfoByName(product.name)}}" after="submitUpdateWishlist" stepKey="moveMouseOverProduct"/>
+        <see selector="{{StorefrontCustomerWishlistProductSection.productQtyError(product.name)}}" userInput="The maximum you may purchase is {{maxQtyAllowed}}." after="moveMouseOverProduct" stepKey="seeErrorMessage"/>
+    </actionGroup>
 </actionGroups>
