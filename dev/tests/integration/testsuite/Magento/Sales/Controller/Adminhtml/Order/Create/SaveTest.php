@@ -78,6 +78,7 @@ class SaveTest extends AbstractBackendController
                 'email' => $email,
             ]
         ];
+        $this->getRequest()->setMethod('POST');
         $this->getRequest()->setPostValue(['order' => $data]);
 
         /** @var OrderService|MockObject $orderService */

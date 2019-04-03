@@ -71,7 +71,10 @@ class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
 
-        $request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->setMethods(['isPost'])
+            ->getMockForAbstractClass();
+        $request->expects($this->any())->method('isPost')->willReturn(true);
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
