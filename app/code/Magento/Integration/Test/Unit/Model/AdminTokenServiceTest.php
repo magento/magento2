@@ -99,10 +99,6 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->_tokenService->revokeAdminAccessToken($adminId));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This user has no tokens.
-     */
     public function testRevokeAdminAccessTokenWithoutAdminId()
     {
         $this->_tokenModelCollectionMock->expects($this->once())
