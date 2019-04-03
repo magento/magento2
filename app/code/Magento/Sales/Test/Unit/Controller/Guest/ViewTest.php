@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Controller\Guest;
 
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ViewTest extends \PHPUnit\Framework\TestCase
@@ -50,12 +51,18 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     protected $resultPageMock;
 
     /**
+     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $formKeyValidatorMock;
+
+    /**
      * @return void
      */
     protected function setUp()
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
-            ->getMock();
+            ->setMethods(['isPost'])
+            ->getMockForAbstractClass();
         $this->guestHelperMock = $this->getMockBuilder(\Magento\Sales\Helper\Guest::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -69,6 +76,13 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->formKeyValidatorMock = $this->createMock(Validator::class);
+
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn(true);
+        $this->formKeyValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->requestMock)
+            ->willReturn(true);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $this->objectManagerHelper->getObject(
@@ -82,7 +96,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             [
                 'context' => $this->context,
                 'guestHelper' => $this->guestHelperMock,
-                'resultPageFactory' => $this->resultPageFactoryMock
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'formKeyValidator' => $this->formKeyValidatorMock,
             ]
         );
     }

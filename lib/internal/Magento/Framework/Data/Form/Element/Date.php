@@ -82,13 +82,14 @@ class Date extends AbstractElement
             $this->_value = $value;
             return $this;
         }
+        if (preg_match('/^[0-9]+$/', $value)) {
+            $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
+
+            return $this;
+        }
+
         try {
-            if (preg_match('/^[0-9]+$/', $value)) {
-                $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
-            } else {
-                $this->_value = new \DateTime($value);
-                $this->_value->setTimezone(new \DateTimeZone($this->localeDate->getConfigTimezone()));
-            }
+            $this->_value = new \DateTime($value, new \DateTimeZone($this->localeDate->getConfigTimezone()));
         } catch (\Exception $e) {
             $this->_value = '';
         }
