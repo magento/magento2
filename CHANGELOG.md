@@ -785,7 +785,7 @@ Tests:
     * Refactored controller actions in the Product area
     * Moved commands cache.php, indexer.php, log.php, test.php, compiler.php, singletenant\_compiler.php, generator.php, pack.php, deploy.php and file\_assembler.php to the new bin/magento CLI framework
 * Data Migration Tool
-    * The Data Migraiton Tool is published in the separate [repository](https://github.com/magento/data-migration-tool-ce "Data Migration Tool repository")
+    * The Data Migration Tool is published in the separate [repository](https://github.com/magento/data-migration-tool-ce "Data Migration Tool repository")
 * Fixed bugs
     * Fixed an issue where error appeared during placing order with virtual product
     * Fixed an issue where billing and shipping sections didn't contain address information on order print
