@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderStatusDuplicatingLabelTest">
+        <annotations>
+            <stories value="Create order status"/>
+            <title value="Create order status with duplicating label"/>
+            <description value="Create an order status and get success message"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-15433" />
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to new order status page -->
+        <amOnPage url="{{AdminOrderStatusPage.url}}" stepKey="goToOrderStatusPage"/>
+        <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
+
+        <!-- Fill the form and validate message -->
+        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+            <argument name="status" value="{{duplicatingLabelOrderStatus.status}}"/>
+            <argument name="label" value="{{duplicatingLabelOrderStatus.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
+
+        <!-- Verify the order status grid page shows the order status we just created -->
+        <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="searchCreatedOrderStatus">
+            <argument name="status" value="{{duplicatingLabelOrderStatus.status}}"/>
+            <argument name="label" value="{{duplicatingLabelOrderStatus.label}}"/>
+        </actionGroup>
+    </test>
+</tests>

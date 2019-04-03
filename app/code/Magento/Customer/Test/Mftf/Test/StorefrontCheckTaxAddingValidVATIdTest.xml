@@ -72,7 +72,7 @@
         </actionGroup>
 
         <!--Go to My account > Address book-->
-        <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+        <actionGroup ref="EnterCustomerAddressInfoFillState" stepKey="enterAddressInfo">
             <argument name="Address" value="UK_Simple_Address"/>
         </actionGroup>
 

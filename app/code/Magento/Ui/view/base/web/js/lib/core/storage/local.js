@@ -79,7 +79,7 @@ define([
 
     /**
      * Extracts and parses data stored in localStorage by the
-     * key specified in 'root' varaible.
+     * key specified in 'root' variable.
      *
      * @returns {Object}
      */
