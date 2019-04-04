@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\StoreGraphQl\Controller\HttpHeaderProcessor;
 
-use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Controller\HttpHeaderProcessorInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -62,15 +61,8 @@ class StoreProcessor implements HttpHeaderProcessorInterface
     {
         if (!empty($headerValue)) {
             $storeCode = ltrim(rtrim($headerValue));
-            $stores = $this->storeManager->getStores(false, true);
-            if (isset($stores[$storeCode])) {
-                $this->storeManager->setCurrentStore($storeCode);
-                $this->updateContext($storeCode);
-            } elseif (strtolower($storeCode) !== 'default') {
-                throw new GraphQlInputException(
-                    new \Magento\Framework\Phrase('Store code %1 does not exist', [$storeCode])
-                );
-            }
+            $this->storeManager->setCurrentStore($storeCode);
+            $this->updateContext($storeCode);
         } elseif (!$this->isAlreadySet()) {
             $storeCode = $this->storeCookieManager->getStoreCodeFromCookie()
                 ?: $this->storeManager->getDefaultStoreView()->getCode();

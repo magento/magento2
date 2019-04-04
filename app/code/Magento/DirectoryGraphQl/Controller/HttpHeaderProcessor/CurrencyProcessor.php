@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\DirectoryGraphQl\Controller\HttpHeaderProcessor;
 
-use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Controller\HttpHeaderProcessorInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\Session\SessionManagerInterface;
 
 /**
  * Process the "Currency" header entry
@@ -29,18 +29,19 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
     private $httpContext;
 
     /**
-     * @var \Magento\Framework\Session\SessionManagerInterface
+     * @var SessionManagerInterface
      */
     private $session;
 
     /**
      * @param StoreManagerInterface $storeManager
      * @param HttpContext $httpContext
+     * @param SessionManagerInterface $session
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         HttpContext $httpContext,
-        \Magento\Framework\Session\SessionManagerInterface $session
+        SessionManagerInterface $session
     ) {
         $this->storeManager = $storeManager;
         $this->httpContext = $httpContext;
@@ -65,10 +66,6 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
             $headerCurrency = strtoupper(ltrim(rtrim($headerValue)));
             if (in_array($headerCurrency, $currentStore->getAvailableCurrencyCodes())) {
                 $currentStore->setCurrentCurrencyCode($headerCurrency);
-            } else {
-                throw new GraphQlInputException(
-                    new \Magento\Framework\Phrase('Currency not allowed for store %1', [$currentStore->getStoreId()])
-                );
             }
         } else {
             if ($this->session->getCurrencyCode()) {

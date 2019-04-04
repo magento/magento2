@@ -11,6 +11,9 @@
             <argument name="graphQlHeaders" xsi:type="array">
                 <item name="Content-Currency" xsi:type="object">Magento\DirectoryGraphQl\Controller\HttpHeaderProcessor\CurrencyProcessor</item>
             </argument>
+            <argument name="requestValidators" xsi:type="array">
+                <item name="currencyValidator" xsi:type="object">Magento\DirectoryGraphQl\Controller\HttpHeaderProcessor\CurrencyValidator</item>
+            </argument>
         </arguments>
     </type>
 </config>
