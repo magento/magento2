@@ -307,7 +307,6 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(false, $this->_model->collectRates($request));
     }
 
-
     /**
      * Tests if the DHL client returns the appropriate API URL.
      *
