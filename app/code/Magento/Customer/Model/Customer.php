@@ -1055,17 +1055,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Prepare customer for delete
-     *
-     * @return $this
-     */
-    public function beforeDelete()
-    {
-        //TODO : Revisit and figure handling permissions in MAGETWO-11084 Implementation: Service Context Provider
-        return parent::beforeDelete();
-    }
-
-    /**
      * Processing object after save data
      *
      * @return $this
