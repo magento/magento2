@@ -155,6 +155,7 @@
         "magento/module-page-cache": "100.2.5",
         "magento/module-payment": "100.2.6",
         "magento/module-paypal": "100.2.6",
+        "magento/module-paypal-captcha": "100.2.0",
         "magento/module-persistent": "100.2.4",
         "magento/module-product-alert": "100.2.4",
         "magento/module-product-video": "100.2.6",
