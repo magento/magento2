@@ -59,7 +59,7 @@
         <!--Set "Maximum Qty Allowed in Shopping Cart" config to "0"-->
         <createData entity="SetMaxQtyAllowedConfigZero" stepKey="setMaxQtyAllowedConfigToZero"/>
         <!--Go to Wishlist page-->
-        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishlist"/>
+        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishlistPage"/>
         <!--Validate quantity after edit product in Wishlist - Case 1-->
         <actionGroup ref="StorefrontValidateQtyAfterEditProductInWishlist" stepKey="validateQtySecondCase">
             <argument name="product" value="$createProduct$"/>
