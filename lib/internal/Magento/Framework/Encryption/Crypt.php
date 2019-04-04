@@ -66,7 +66,7 @@ class Crypt
             $allowedCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             $initVector = '';
             for ($i = 0; $i < $initVectorSize; $i++) {
-                $initVector .= $allowedCharacters[rand(0, strlen($allowedCharacters) - 1)];
+                $initVector .= $allowedCharacters[random_int(0, strlen($allowedCharacters) - 1)];
             }
             // @codingStandardsIgnoreStart
             @mcrypt_generic_deinit($handle);
