@@ -10,7 +10,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerWishlistSection">
         <element name="productItemNameText" type="text" selector=".products-grid .product-item-name a"/>
-        <element name="removeWishlistButton" type="button" selector=".products-grid .btn-remove.action.delete>span" timeout="30"/>
+        <element name="removeWishlistButton" type="button" selector=".products-grid .btn-remove.action.delete" timeout="30"/>
         <element name="emptyWishlistText" type="text" selector=".message.info.empty>span"/>
         <element name="successMsg" type="text" selector="div.message-success.success.message"/>
     </section>

@@ -118,8 +118,10 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function upgradeQuoteItemPrice(ModuleDataSetupInterface $setup)
     {
-        $connection = $setup->getConnection();
-        $quoteItemTable = $setup->getTable('quote_item');
+        $connectionName = 'checkout';
+        $connection = $setup->getConnection($connectionName);
+        $quoteItemTable = $setup->getTable('quote_item', $connectionName);
+
         $select = $connection->select();
         $select->joinLeft(
             ['qi2' => $quoteItemTable],
@@ -130,10 +132,10 @@ class UpgradeData implements UpgradeDataInterface
             . ' AND qi1.parent_item_id IS NOT NULL'
             . ' AND qi2.product_type = "' . Configurable::TYPE_CODE . '"'
         );
-        $updateQuoteItem = $setup->getConnection()->updateFromSelect(
+        $updateQuoteItem = $connection->updateFromSelect(
             $select,
             ['qi1' => $quoteItemTable]
         );
-        $setup->getConnection()->query($updateQuoteItem);
+        $connection->query($updateQuoteItem);
     }
 }

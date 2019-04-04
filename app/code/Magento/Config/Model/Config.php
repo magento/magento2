@@ -525,24 +525,29 @@ class Config extends \Magento\Framework\DataObject
         if ($path === '') {
             throw new \UnexpectedValueException('Path must not be empty');
         }
+
         $pathParts = explode('/', $path);
         $keyDepth = count($pathParts);
-        if ($keyDepth !== 3) {
+        if ($keyDepth < 3) {
             throw new \UnexpectedValueException(
-                "Allowed depth of configuration is 3 (<section>/<group>/<field>). Your configuration depth is "
-                . $keyDepth . " for path '$path'"
+                'Minimal depth of configuration is 3. Your configuration depth is ' . $keyDepth
             );
         }
+
+        $section = array_shift($pathParts);
         $data = [
-            'section' => $pathParts[0],
-            'groups' => [
-                $pathParts[1] => [
-                    'fields' => [
-                        $pathParts[2] => ['value' => $value],
-                    ],
-                ],
+            'fields' => [
+                array_pop($pathParts) => ['value' => $value],
             ],
         ];
+        while ($pathParts) {
+            $data = [
+                'groups' => [
+                    array_pop($pathParts) => $data,
+                ],
+            ];
+        }
+        $data['section'] = $section;
         $this->addData($data);
     }
 
