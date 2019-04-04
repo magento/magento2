@@ -70,10 +70,7 @@ class RewriteUrl implements StoreSwitcherInterface
         if ($oldRewrite) {
             $targetUrl = $targetStore->getBaseUrl();
             // look for url rewrite match on the target store
-            $currentRewrite = $this->urlFinder->findOneByData([
-                UrlRewrite::TARGET_PATH => $oldRewrite->getTargetPath(),
-                UrlRewrite::STORE_ID => $targetStore->getId(),
-            ]);
+            $currentRewrite = $this->findCurrentRewrite($oldRewrite, $targetStore);
             if ($currentRewrite) {
                 $targetUrl .= $currentRewrite->getRequestPath();
             }
@@ -92,5 +89,27 @@ class RewriteUrl implements StoreSwitcherInterface
             }
         }
         return $targetUrl;
+    }
+
+    /**
+     * Look for url rewrite match on the target store
+     *
+     * @param UrlRewrite $oldRewrite
+     * @param StoreInterface $targetStore
+     * @return UrlRewrite|null
+     */
+    private function findCurrentRewrite(UrlRewrite $oldRewrite, StoreInterface $targetStore)
+    {
+        $currentRewrite = $this->urlFinder->findOneByData([
+            UrlRewrite::TARGET_PATH => $oldRewrite->getTargetPath(),
+            UrlRewrite::STORE_ID => $targetStore->getId(),
+        ]);
+        if (!$currentRewrite) {
+            $currentRewrite = $this->urlFinder->findOneByData([
+                UrlRewrite::REQUEST_PATH => $oldRewrite->getTargetPath(),
+                UrlRewrite::STORE_ID => $targetStore->getId(),
+            ]);
+        }
+        return $currentRewrite;
     }
 }
