@@ -230,6 +230,7 @@ EXPECTED_RESULT;
             ['getCollection'],
             ['getResource'],
             ['getConfig'],
+            ['delete'],
         ];
     }
 }

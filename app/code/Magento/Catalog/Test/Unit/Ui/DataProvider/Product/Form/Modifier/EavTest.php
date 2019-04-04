@@ -8,6 +8,7 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
@@ -254,7 +255,15 @@ class EavTest extends AbstractModifierTest
         $this->searchResultsMock = $this->getMockBuilder(SearchResultsInterface::class)
             ->getMockForAbstractClass();
         $this->eavAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['load', 'getAttributeGroupCode', 'getApplyTo', 'getFrontendInput', 'getAttributeCode'])
+            ->setMethods([
+                'load',
+                'getAttributeGroupCode',
+                'getApplyTo',
+                'getFrontendInput',
+                'getAttributeCode',
+                'usesSource',
+                'getSource',
+            ])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
@@ -460,6 +469,20 @@ class EavTest extends AbstractModifierTest
         $configPath =  'arguments/data/config';
         $groupCode = 'product-details';
         $sortOrder = '0';
+        $attributeOptions = [
+            ['value' => 1, 'label' => 'Int label'],
+            ['value' => 1.5, 'label' => 'Float label'],
+            ['value' => true, 'label' => 'Boolean label'],
+            ['value' => 'string', 'label' => 'String label'],
+            ['value' => ['test1', 'test2'], 'label' => 'Array label'],
+        ];
+        $attributeOptionsExpected = [
+            ['value' => '1', 'label' => 'Int label', '__disableTmpl' => true],
+            ['value' => '1.5', 'label' => 'Float label', '__disableTmpl' => true],
+            ['value' => '1', 'label' => 'Boolean label', '__disableTmpl' => true],
+            ['value' => 'string', 'label' => 'String label', '__disableTmpl' => true],
+            ['value' => ['test1', 'test2'], 'label' => 'Array label', '__disableTmpl' => true],
+        ];
 
         $this->productMock->expects($this->any())
             ->method('getId')
@@ -491,6 +514,11 @@ class EavTest extends AbstractModifierTest
             ->method('getCustomAttribute')
             ->willReturn($attributeMock);
 
+        $this->eavAttributeMock->method('usesSource')->willReturn(true);
+        $attributeSource = $this->getMockBuilder(SourceInterface::class)->getMockForAbstractClass();
+        $attributeSource->method('getAllOptions')->willReturn($attributeOptions);
+        $this->eavAttributeMock->method('getSource')->willReturn($attributeSource);
+
         $this->arrayManagerMock->expects($this->any())
             ->method('set')
             ->with(
@@ -502,6 +530,15 @@ class EavTest extends AbstractModifierTest
 
         $this->arrayManagerMock->expects($this->any())
             ->method('merge')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                $this->callback(
+                    function ($value) use ($attributeOptionsExpected) {
+                        return isset($value['options']) ? $value['options'] === $attributeOptionsExpected : true;
+                    }
+                )
+            )
             ->willReturn($expected);
 
         $this->arrayManagerMock->expects($this->any())

@@ -27,17 +27,20 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     protected $filter;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->filter = $objectManager->getObject(
-            'Magento\Cms\Model\Template\Filter',
+            \Magento\Cms\Model\Template\Filter::class,
             ['storeManager' => $this->storeManagerMock]
         );
         $this->storeManagerMock->expects($this->any())
@@ -46,6 +49,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test processing media directives.
+     *
      * @covers \Magento\Cms\Model\Template\Filter::mediaDirective
      */
     public function testMediaDirective()
@@ -61,5 +66,28 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ->method('getBaseMediaDir')
             ->willReturn($baseMediaDir);
         $this->assertEquals($expectedResult, $this->filter->mediaDirective($construction));
+    }
+
+    /**
+     * Test using media directive with relative path to image.
+     *
+     * @covers \Magento\Cms\Model\Template\Filter::mediaDirective
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Image path must be absolute
+     *
+     * @return void
+     */
+    public function testMediaDirectiveRelativePath()
+    {
+        $baseMediaDir = 'pub/media';
+        $construction = [
+            '{{media url="wysiwyg/images/../image.jpg"}}',
+            'media',
+            ' url="wysiwyg/images/../image.jpg"'
+        ];
+        $this->storeMock->expects($this->any())
+            ->method('getBaseMediaDir')
+            ->willReturn($baseMediaDir);
+        $this->filter->mediaDirective($construction);
     }
 }

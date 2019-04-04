@@ -85,6 +85,7 @@ class PageActions extends Column
                         'confirm' => [
                             'title' => __('Delete %1', $title),
                             'message' => __('Are you sure you wan\'t to delete a %1 record?', $title),
+                            '__disableTmpl' => true,
                         ],
                         'post' => true,
                     ];

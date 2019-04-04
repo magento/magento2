@@ -5,6 +5,11 @@
  */
 namespace Magento\Catalog\Ui\Component;
 
+use Magento\Ui\Component\Filters\FilterModifier;
+
+/**
+ * Product grid columns factory.
+ */
 class ColumnFactory
 {
     /**
@@ -50,19 +55,24 @@ class ColumnFactory
      */
     public function create($attribute, $context, array $config = [])
     {
+        $filterModifiers = $context->getRequestParam(FilterModifier::FILTER_MODIFIER, []);
+
         $columnName = $attribute->getAttributeCode();
         $config = array_merge([
             'label' => __($attribute->getDefaultFrontendLabel()),
             'dataType' => $this->getDataType($attribute),
             'add_field' => true,
             'visible' => $attribute->getIsVisibleInGrid(),
-            'filter' => ($attribute->getIsFilterableInGrid())
+            'filter' => ($attribute->getIsFilterableInGrid() || array_key_exists($columnName, $filterModifiers))
                 ? $this->getFilterType($attribute->getFrontendInput())
                 : null,
         ], $config);
 
         if ($attribute->usesSource()) {
             $config['options'] = $attribute->getSource()->getAllOptions();
+            foreach ($config['options'] as &$optionData) {
+                $optionData['__disableTmpl'] = true;
+            }
         }
         
         $config['component'] = $this->getJsComponent($config['dataType']);
