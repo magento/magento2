@@ -35,4 +35,11 @@
         <click selector="{{StoreFrontRemoveItemModalSection.ok}}" stepKey="confirmDelete"/>
         <waitForPageLoad stepKey="waitForDeleteToFinish"/>
     </actionGroup>
+
+    <!--Check that the minicart is empty-->
+    <actionGroup name="assertMiniCartEmpty">
+        <dontSeeElement selector="{{StorefrontMinicartSection.productCount}}" stepKey="dontSeeMinicartProductCount"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="expandMinicart"/>
+        <see selector="{{StorefrontMinicartSection.minicartContent}}" userInput="You have no items in your shopping cart." stepKey="seeEmptyCartMessage"/>
+    </actionGroup>
 </actionGroups>

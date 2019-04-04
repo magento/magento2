@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,6 +10,11 @@ namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Observer of expired session
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class CheckExpirePersistentQuoteObserver implements ObserverInterface
 {
     /**
@@ -110,8 +114,12 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             !$this->_persistentSession->isPersistent() &&
             !$this->_customerSession->isLoggedIn() &&
             $this->_checkoutSession->getQuoteId() &&
-            !$this->isRequestFromCheckoutPage($this->request)
+            !$this->isRequestFromCheckoutPage($this->request) &&
             // persistent session does not expire on onepage checkout page
+            (
+                $this->_checkoutSession->getQuote()->getIsPersistent() ||
+                $this->_checkoutSession->getQuote()->getCustomerIsGuest()
+            )
         ) {
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
