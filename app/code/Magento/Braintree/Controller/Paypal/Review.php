@@ -63,6 +63,7 @@ class Review extends AbstractAction
             $this->getRequest()->getPostValue('result', '{}'),
             true
         );
+        $this->logger->debug($requestData);
         $quote = $this->checkoutSession->getQuote();
 
         try {
@@ -90,8 +91,6 @@ class Review extends AbstractAction
             return $resultPage;
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
-        } finally {
-            $this->logger->debug($requestData);
         }
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
