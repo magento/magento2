@@ -22,7 +22,7 @@
             <!--Enabled The Persistent Shopping Cart feature -->
             <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
             <createData entity="PersistentLogoutClearDisabled" stepKey="persistentLogoutClearDisable"/>
-            <!--Create simple product-->
+            <!--Create category and simple product-->
             <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
             <createData entity="SimpleProduct2" stepKey="createProduct">
                 <requiredEntity createDataKey="createSubCategory"/>
@@ -38,6 +38,7 @@
             <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Step 1: Login as a Customer with remember me checked-->
