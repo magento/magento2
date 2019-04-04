@@ -202,6 +202,8 @@
         <column xsi:type="text" name="vat_request_date" nullable="true" comment="Vat Request Date"/>
         <column xsi:type="smallint" name="vat_request_success" padding="6" unsigned="false" nullable="true"
                 identity="false" comment="Vat Request Success"/>
+        <column xsi:type="text" name="validated_country_code" nullable="true" comment="Validated Country Code"/>
+        <column xsi:type="text" name="validated_vat_number" nullable="true" comment="Validated Vat Number"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="address_id"/>
         </constraint>
