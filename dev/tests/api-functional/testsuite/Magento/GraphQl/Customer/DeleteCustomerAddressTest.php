@@ -55,7 +55,7 @@ mutation {
   deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
-        $response = $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('deleteCustomerAddress', $response);
         $this->assertEquals(true, $response['deleteCustomerAddress']);
     }
@@ -73,7 +73,7 @@ mutation {
   deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
-        $this->graphQlQuery($mutation);
+        $this->graphQlMutation($mutation);
     }
 
     /**
@@ -99,7 +99,7 @@ mutation {
   deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**
@@ -125,7 +125,7 @@ mutation {
   deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**
@@ -144,7 +144,7 @@ mutation {
   deleteCustomerAddress(id: 9999)
 }
 MUTATION;
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**

@@ -66,7 +66,7 @@ mutation {
 }
 QUERY;
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         self::assertEquals('Name', $response['sendEmailToFriend']['sender']['name']);
         self::assertEquals('e@mail.com', $response['sendEmailToFriend']['sender']['email']);
         self::assertEquals('Lorem Ipsum', $response['sendEmailToFriend']['sender']['message']);
@@ -117,7 +117,7 @@ QUERY;
         $this->expectExceptionMessage(
             'The product that was requested doesn\'t exist. Verify the product and try again.'
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -181,7 +181,7 @@ mutation {
 QUERY;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage("No more than {$sendFriend->getMaxRecipients()} emails can be sent at a time.");
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -214,7 +214,7 @@ mutation {
 QUERY;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage($errorMessage);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -270,7 +270,7 @@ QUERY;
         );
 
         for ($i = 0; $i <= $sendFriend->getMaxSendsToFriend() + 1; $i++) {
-            $this->graphQlQuery($query);
+            $this->graphQlMutation($query);
         }
     }
 

@@ -34,7 +34,7 @@ mutation {
   createEmptyCart
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('createEmptyCart', $response);
 

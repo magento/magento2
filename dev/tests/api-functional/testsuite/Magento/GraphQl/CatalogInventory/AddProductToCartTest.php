@@ -54,7 +54,7 @@ class AddProductToCartTest extends GraphQlAbstract
 
         $maskedQuoteId = $this->getMaskedQuoteId();
         $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
         self::fail('Should be "The requested qty is not available" error message.');
     }
 
@@ -74,7 +74,7 @@ class AddProductToCartTest extends GraphQlAbstract
 
         $maskedQuoteId = $this->getMaskedQuoteId();
         $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
         self::fail('Should be "The most you may purchase is 5." error message.');
     }
 
