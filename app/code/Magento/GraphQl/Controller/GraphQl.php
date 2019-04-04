@@ -104,7 +104,6 @@ class GraphQl implements FrontControllerInterface
         try {
             /** @var HttpRequest $request */
             if ($this->isHttpVerbValid($request)) {
-                $this->requestProcessor->processHeaders($request);
                 $data = $this->getDataFromRequest($request);
                 $query = isset($data['query']) ? $data['query'] : '';
                 $variables = isset($data['variables']) ? $data['variables'] : null;
