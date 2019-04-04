@@ -209,6 +209,13 @@
             .fieldset {
                 > .field {
                     margin: 0 0 @indent__base;
+                    
+                    &.choice {
+                        &:before {
+                            padding: 0;
+                            width: 0;
+                        }
+                    }
 
                     &.type {
                         .control {

@@ -7,6 +7,9 @@ namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 
+/**
+ * Test for Magento\Sales\Model\Order\Email\Sender\CreditmemoSender class.
+ */
 class CreditmemoSenderTest extends AbstractSenderTest
 {
     /**
