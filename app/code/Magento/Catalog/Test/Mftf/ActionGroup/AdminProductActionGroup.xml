@@ -472,4 +472,17 @@
         <click selector="{{AdminAddUpSellProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
     </actionGroup>
+    <actionGroup name="AdminProductAdvancedPricingNewCustomerGroupPrice">
+        <arguments>
+            <argument name="qty" type="string"/>
+            <argument name="priceType" type="string"/>
+            <argument name="discount" type="string"/>
+            <argument name="customerGroup" type="string"/>
+        </arguments>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroup"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput(customerGroup)}}" userInput="{{qty}}" stepKey="fillProductTierPriceQtyInput1"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect(customerGroup)}}" userInput="{{priceType}}" stepKey="selectProductTierPriceValueType1"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput(customerGroup)}}" userInput="{{discount}}" stepKey="selectProductTierPricePriceInput"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton1"/>
+    </actionGroup>
 </actionGroups>
