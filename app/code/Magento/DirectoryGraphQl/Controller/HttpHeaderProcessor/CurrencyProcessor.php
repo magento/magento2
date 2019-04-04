@@ -50,10 +50,11 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
     /**
      * Handle the header 'Content-Currency' value.
      *
-     * @inheritDoc
+     * @param string $headerValue
+     * @return void
      * @throws GraphQlInputException
      */
-    public function processHeaderValue(string $headerValue, HttpRequestInterface $request) : void
+    public function processHeaderValue(string $headerValue) : void
     {
         /** @var \Magento\Store\Model\Store $defaultStore */
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();

@@ -28,14 +28,13 @@ abstract class GraphQlAbstract extends WebapiAbstract
     private $appCache;
 
     /**
-     * Perform GraphQL call to the system under test.
+     * Perform GraphQL query call via GET to the system under test.
      *
      * @see \Magento\TestFramework\TestCase\GraphQl\Client::call()
      * @param string $query
      * @param array $variables
      * @param string $operationName
      * @param array $headers
-     * @param string $requestType
      * @return array|int|string|float|bool GraphQL call results
      * @throws \Exception
      */
@@ -43,28 +42,39 @@ abstract class GraphQlAbstract extends WebapiAbstract
         string $query,
         array $variables = [],
         string $operationName = '',
-        array $headers = [],
-        string $requestType = Http::METHOD_POST
+        array $headers = []
     ) {
-        if ($requestType === Http::METHOD_POST) {
-            $response = $this->getGraphQlClient()->postQuery(
-                $query,
-                $variables,
-                $operationName,
-                $this->composeHeaders($headers)
-            );
-        } elseif ($requestType === Http::METHOD_GET) {
-            $response = $this->getGraphQlClient()->getQuery(
-                $query,
-                $variables,
-                $operationName,
-                $this->composeHeaders($headers)
-            );
-        } else {
-            throw new \Exception("Unsupported request type");
-        }
+        return $this->getGraphQlClient()->get(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
+    }
 
-        return $response;
+    /**
+     * Perform GraphQL mutations call via POST to the system under test.
+     *
+     * @see \Magento\TestFramework\TestCase\GraphQl\Client::call()
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array|int|string|float|bool GraphQL call results
+     * @throws \Exception
+     */
+    public function graphQlMutation(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ) {
+        return $this->getGraphQlClient()->post(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
     }
 
     /**

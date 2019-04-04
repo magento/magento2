@@ -51,7 +51,7 @@ class Client
      * @return array|string|int|float|bool
      * @throws \Exception
      */
-    public function postQuery(string $query, array $variables = [], string $operationName = '', array $headers = [])
+    public function post(string $query, array $variables = [], string $operationName = '', array $headers = [])
     {
         $url = $this->getEndpointUrl();
         $headers = array_merge($headers, ['Accept: application/json', 'Content-Type: application/json']);
@@ -63,19 +63,7 @@ class Client
         $postData = $this->json->jsonEncode($requestArray);
 
         $responseBody = $this->curlClient->post($url, $postData, $headers);
-        $responseBodyArray = $this->json->jsonDecode($responseBody);
-
-        if (!is_array($responseBodyArray)) {
-            throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
-        }
-
-        $this->processErrors($responseBodyArray);
-
-        if (!isset($responseBodyArray['data'])) {
-            throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
-        } else {
-            return $responseBodyArray['data'];
-        }
+        return $this->processResponse($responseBody);
     }
 
     /**
@@ -88,7 +76,7 @@ class Client
      * @return mixed
      * @throws \Exception
      */
-    public function getQuery(string $query, array $variables = [], string $operationName = '', array $headers = [])
+    public function get(string $query, array $variables = [], string $operationName = '', array $headers = [])
     {
         $url = $this->getEndpointUrl();
         $requestArray = [
@@ -98,19 +86,31 @@ class Client
         ];
 
         $responseBody = $this->curlClient->get($url, $requestArray, $headers);
-        $responseBodyArray = $this->json->jsonDecode($responseBody);
+        return $this->processResponse($responseBody);
+    }
 
-        if (!is_array($responseBodyArray)) {
-            throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
+    /**
+     * Process response from GraphQl server
+     *
+     * @param string $response
+     * @return mixed
+     * @throws \Exception
+     */
+    private function processResponse(string $response)
+    {
+        $responseArray = $this->json->jsonDecode($response);
+
+        if (!is_array($responseArray)) {
+            throw new \Exception('Unknown GraphQL response body: ' . $response);
         }
 
-        $this->processErrors($responseBodyArray);
+        $this->processErrors($responseArray);
 
-        if (!isset($responseBodyArray['data'])) {
-            throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
-        } else {
-            return $responseBodyArray['data'];
+        if (!isset($responseArray['data'])) {
+            throw new \Exception('Unknown GraphQL response body: ' . $response);
         }
+
+        return $responseArray['data'];
     }
 
     /**

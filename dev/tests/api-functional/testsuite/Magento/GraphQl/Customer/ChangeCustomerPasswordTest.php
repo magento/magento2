@@ -50,7 +50,7 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
         $query = $this->getChangePassQuery($oldCustomerPassword, $newCustomerPassword);
         $headerMap = $this->getCustomerAuthHeaders($customerEmail, $oldCustomerPassword);
 
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $response = $this->graphQlMutation($query, [], '', $headerMap);
         $this->assertEquals($customerEmail, $response['changeCustomerPassword']['email']);
 
         try {
@@ -69,7 +69,7 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     public function testChangePasswordIfUserIsNotAuthorizedTest()
     {
         $query = $this->getChangePassQuery('currentpassword', 'newpassword');
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -87,7 +87,7 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
         $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/Minimum of different classes of characters in password is.*/');
 
-        $this->graphQlQuery($query, [], '', $headerMap);
+        $this->graphQlMutation($query, [], '', $headerMap);
     }
 
     /**
@@ -105,7 +105,7 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
         $query = $this->getChangePassQuery($incorrectPassword, $newCustomerPassword);
 
         $headerMap = $this->getCustomerAuthHeaders($customerEmail, $oldCustomerPassword);
-        $this->graphQlQuery($query, [], '', $headerMap);
+        $this->graphQlMutation($query, [], '', $headerMap);
     }
 
     private function getChangePassQuery($currentPassword, $newPassword)

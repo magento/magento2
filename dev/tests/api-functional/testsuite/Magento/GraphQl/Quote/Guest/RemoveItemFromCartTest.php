@@ -59,7 +59,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
         $itemId = (int)$quote->getItemByProduct($this->productRepository->get('simple'))->getId();
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $itemId);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         $this->assertArrayHasKey('removeItemFromCart', $response);
         $this->assertArrayHasKey('cart', $response['removeItemFromCart']);
@@ -73,7 +73,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     public function testRemoveItemFromNonExistentCart()
     {
         $query = $this->prepareMutationQuery('non_existent_masked_id', 1);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -89,7 +89,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
         $this->expectExceptionMessage("Cart doesn't contain the {$notExistentItemId} item.");
 
         $query = $this->prepareMutationQuery($maskedQuoteId, $notExistentItemId);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -117,7 +117,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
         $this->expectExceptionMessage("Cart doesn't contain the {$secondQuoteItemId} item.");
 
         $query = $this->prepareMutationQuery($firstQuoteMaskedId, $secondQuoteItemId);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -135,7 +135,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
         $this->expectExceptionMessage("The current user cannot perform operations on cart \"$customerQuoteMaskedId\"");
 
         $query = $this->prepareMutationQuery($customerQuoteMaskedId, $customerQuoteItemId);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -161,7 +161,7 @@ mutation {
 }
 QUERY;
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**

@@ -28,7 +28,7 @@ mutation {
 }
 MUTATION;
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         $this->assertArrayHasKey('testItem', $response);
         $testItem = $response['testItem'];
         $this->assertArrayHasKey('integer_list', $testItem);

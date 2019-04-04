@@ -54,7 +54,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
 
         $query = $this->getAddConfigurableProductMutationQuery($maskedQuoteId, $variantSku, $qty);
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         $cartItems = $response['addConfigurableProductsToCart']['cart']['items'];
         self::assertEquals($qty, $cartItems[0]['qty']);
         self::assertEquals($variantSku, $cartItems[0]['product']['sku']);
@@ -74,7 +74,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteId();
         $query = $this->getAddConfigurableProductMutationQuery($maskedQuoteId, $variantSku, $qty);
 
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -90,7 +90,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteId();
         $query = $this->getAddConfigurableProductMutationQuery($maskedQuoteId, $variantSku, $qty);
 
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**

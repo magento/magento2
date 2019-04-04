@@ -56,7 +56,7 @@ class CouponTest extends GraphQlAbstract
         );
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('applyCouponToCart', $response);
         self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
@@ -77,13 +77,13 @@ class CouponTest extends GraphQlAbstract
         );
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey("applyCouponToCart", $response);
         self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
 
         self::expectExceptionMessage('A coupon is already applied to the cart. Please remove it to apply another');
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -100,7 +100,7 @@ class CouponTest extends GraphQlAbstract
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
 
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -123,7 +123,7 @@ class CouponTest extends GraphQlAbstract
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
 
         self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -147,11 +147,11 @@ class CouponTest extends GraphQlAbstract
             'reserved_order_id'
         );
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
 
         /* Remove coupon from quote */
         $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('removeCouponFromCart', $response);
         self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
@@ -180,7 +180,7 @@ class CouponTest extends GraphQlAbstract
         $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
 
         self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**

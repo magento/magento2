@@ -52,7 +52,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteId();
 
         $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
 
         self::assertEquals($qty, $response['addSimpleProductsToCart']['cart']['items'][0]['qty']);
@@ -72,7 +72,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteId();
 
         $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -158,6 +158,6 @@ mutation {
 }
 QUERY;
 
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 }

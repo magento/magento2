@@ -54,12 +54,11 @@ class StoreProcessor implements HttpHeaderProcessorInterface
      * @see \Magento\Store\App\Action\Plugin\Context::beforeDispatch
      *
      * @param string $headerValue
-     * @param HttpRequestInterface $request
      * @return void
      * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function processHeaderValue(string $headerValue, HttpRequestInterface $request) : void
+    public function processHeaderValue(string $headerValue) : void
     {
         if (!empty($headerValue)) {
             $storeCode = ltrim(rtrim($headerValue));

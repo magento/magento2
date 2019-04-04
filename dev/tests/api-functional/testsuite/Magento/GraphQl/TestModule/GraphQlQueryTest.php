@@ -77,4 +77,26 @@ QUERY;
 
         $this->assertArrayHasKey('testItem', $response);
     }
+
+    public function testQueryViaGetRequestWithVariablesReturnsResults()
+    {
+        $id = 1;
+
+        $query = <<<QUERY
+{
+    testItem(\$id: Int!)
+    {
+        item_id
+        name
+    }
+}
+QUERY;
+        $variables = [
+            "id" => $id
+        ];
+
+        $response = $this->graphQlQuery($query, $variables, '', [], 'GET');
+
+        $this->assertArrayHasKey('testItem', $response);
+    }
 }
