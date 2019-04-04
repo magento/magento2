@@ -7,6 +7,7 @@ namespace Magento\Dhl\Test\Unit\Model;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Framework\Xml\Security;
+use Magento\Dhl\Model\Carrier;
 
 class CarrierTest extends \PHPUnit_Framework_TestCase
 {
@@ -304,5 +305,54 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $request->setPackageWeight(1);
 
         $this->assertFalse(false, $this->_model->collectRates($request));
+    }
+
+
+    /**
+     * Tests if the DHL client returns the appropriate API URL.
+     *
+     * @dataProvider getGatewayURLProvider
+     * @param $sandboxMode
+     * @param $expectedURL
+     * @throws \ReflectionException
+     */
+    public function testGetGatewayURL($sandboxMode, $expectedURL)
+    {
+        $scope = $this->getMockBuilder(
+            '\Magento\Framework\App\Config\ScopeConfigInterface'
+        )->disableOriginalConstructor()->getMock();
+
+        $scopeConfigValueMap = [
+            ['carriers/dhl/gateway_url', 'store', null, 'https://xmlpi-ea.dhl.com/XMLShippingServlet'],
+            ['carriers/dhl/sandbox_url', 'store', null, 'https://xmlpitest-ea.dhl.com/XMLShippingServlet'],
+            ['carriers/dhl/sandbox_mode', 'store', null, $sandboxMode]
+        ];
+
+        $scope->method('getValue')
+            ->willReturnMap($scopeConfigValueMap);
+
+        $this->model = $this->_helper->getObject(
+            Carrier::class,
+            [
+                'scopeConfig' => $scope
+            ]
+        );
+
+        $method = new \ReflectionMethod($this->model, 'getGatewayURL');
+        $method->setAccessible(true);
+        $this->assertEquals($expectedURL, $method->invoke($this->model));
+    }
+
+    /**
+     * Data provider for testGetGatewayURL
+     *
+     * @return array
+     */
+    public function getGatewayURLProvider()
+    {
+        return [
+            'standard_url' => [0, 'https://xmlpi-ea.dhl.com/XMLShippingServlet'],
+            'sandbox_url' => [1, 'https://xmlpitest-ea.dhl.com/XMLShippingServlet']
+        ];
     }
 }
