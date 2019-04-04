@@ -89,9 +89,9 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             $this->requestMock
         );
         $this->quoteMock = $this->getMockBuilder(Quote::class)
-        ->setMethods(['getCustomerIsGuest', 'getIsPersistent'])
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->setMethods(['getCustomerIsGuest', 'getIsPersistent'])
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testExecuteWhenCanNotApplyPersistentData()

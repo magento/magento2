@@ -7,16 +7,17 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ShippingQuotePersistedForGuestTest">
+    <test name="StorefrontQuoteShippingDataPersistedForGuestTest">
         <annotations>
             <features value="Persistent"/>
-            <stories value="Guest checkout"/>
+            <stories value="Checkout via Guest Checkout"/>
             <title value="Estimate Shipping and Tax block sections on shipping cart saving correctly for Guest."/>
             <description value="Verify that 'Estimate Shipping and Tax' block sections on shipping cart saving correctly for Guest after switching to another page. And check that the shopping cart is cleared after reset persistent cookie."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-99048"/>
             <useCaseId value="MAGETWO-98569"/>
             <group value="persistent"/>
+            <group value="checkout"/>
         </annotations>
         <before>
             <!--Enabled The Persistent Shopping Cart feature -->
@@ -39,7 +40,6 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Step 1: Login as a Customer with remember me checked-->
         <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeChecked" stepKey="loginToStorefrontAccountWithRememberMeChecked">
@@ -51,13 +51,11 @@
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
         <!--Step 3: Log out, reset persistent cookie and go to homepage-->
-        <amOnPage url="{{StorefrontCustomerSignOutPage.url}}" stepKey="signOut"/>
-        <waitForLoadingMaskToDisappear stepKey="waitSignOutPage"/>
+        <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="customerLogout"/>
         <resetCookie userInput="persistent_shopping_cart" stepKey="resetPersistentCookie"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePageAfterResetPersistentCookie"/>
-        <waitForPageLoad stepKey="waitHomePageLoadAfterResetCookie"/>
         <!--Check that the minicart is empty-->
-        <actionGroup ref="assertMiniCartEmpty" after="waitHomePageLoadAfterResetCookie" stepKey="seeMinicartEmpty"/>
+        <actionGroup ref="AssertMiniCartEmpty" after="amOnHomePageAfterResetPersistentCookie" stepKey="seeMinicartEmpty"/>
         <!--Step 4: Add the product to shopping cart and open cart-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPageAsGuestUser"/>
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCartAsGuestUser">
@@ -68,13 +66,17 @@
         <conditionalClick  selector="{{StorefrontCheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{StorefrontCheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTax" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <selectOption selector="{{StorefrontCheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="selectUSCountry"/>
+        <waitForPageLoad stepKey="waitAfterSelectCountry"/>
         <selectOption selector="{{StorefrontCheckoutCartSummarySection.region}}" userInput="{{US_Address_CA.state}}" stepKey="selectCaliforniaRegion"/>
+        <waitForPageLoad stepKey="waitAfterSelectRegion"/>
         <fillField selector="{{StorefrontCheckoutCartSummarySection.postcode}}" userInput="{{US_Address_CA.postcode}}" stepKey="inputPostCode"/>
+        <waitForPageLoad stepKey="waitAfterSelectPostcode"/>
         <!--Step 6: Go to Homepage-->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePageAfterChangingShippingAndTaxSection"/>
         <!--Step 7: Go to shopping cart and check "Estimate Shipping and Tax" fields values are saved-->
         <actionGroup ref="clickViewAndEditCartFromMiniCart" after="goToHomePageAfterChangingShippingAndTaxSection" stepKey="goToShoppingCartAfterChangingShippingAndTaxSection"/>
         <conditionalClick  selector="{{StorefrontCheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{StorefrontCheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTaxAfterChanging" />
+        <waitForLoadingMaskToDisappear stepKey="waitEstimateBlock"/>
         <seeOptionIsSelected selector="{{StorefrontCheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="checkCustomerCountry" />
         <seeOptionIsSelected selector="{{StorefrontCheckoutCartSummarySection.region}}" userInput="{{US_Address_CA.state}}" stepKey="checkCustomerRegion" />
         <grabValueFrom  selector="{{StorefrontCheckoutCartSummarySection.postcode}}" stepKey="grabTextPostCode"/>
