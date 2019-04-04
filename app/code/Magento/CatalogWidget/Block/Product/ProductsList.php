@@ -6,10 +6,13 @@
 
 namespace Magento\CatalogWidget\Block\Product;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\LayoutFactory;
 use Magento\Widget\Block\BlockInterface;
 use Magento\Framework\Url\EncoderInterface;
 
@@ -97,9 +100,19 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     private $json;
 
     /**
+     * @var LayoutFactory
+     */
+    private $layoutFactory;
+
+    /**
      * @var \Magento\Framework\Url\EncoderInterface|null
      */
     private $urlEncoder;
+
+    /**
+     * @var \Magento\Framework\View\Element\RendererList
+     */
+    private $rendererListBlock;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
@@ -111,7 +124,10 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * @param \Magento\Widget\Helper\Conditions $conditionsHelper
      * @param array $data
      * @param Json|null $json
+     * @param LayoutFactory|null $layoutFactory
      * @param \Magento\Framework\Url\EncoderInterface|null $urlEncoder
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -123,6 +139,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         \Magento\Widget\Helper\Conditions $conditionsHelper,
         array $data = [],
         Json $json = null,
+        LayoutFactory $layoutFactory = null,
         EncoderInterface $urlEncoder = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
@@ -132,6 +149,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $this->rule = $rule;
         $this->conditionsHelper = $conditionsHelper;
         $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
+        $this->layoutFactory = $layoutFactory ?: ObjectManager::getInstance()->get(LayoutFactory::class);
         $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
         parent::__construct(
             $context,
@@ -179,6 +197,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             $this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_GROUP),
             (int) $this->getRequest()->getParam($this->getData('page_var_name'), 1),
             $this->getProductsPerPage(),
+            $this->getProductsCount(),
             $conditions,
             $this->json->serialize($this->getRequest()->getParams()),
             $this->getTemplate(),
@@ -231,6 +250,41 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     /**
      * @inheritdoc
      */
+    protected function getDetailsRendererList()
+    {
+        if (empty($this->rendererListBlock)) {
+            /** @var $layout \Magento\Framework\View\LayoutInterface */
+            $layout = $this->layoutFactory->create(['cacheable' => false]);
+            $layout->getUpdate()->addHandle('catalog_widget_product_list')->load();
+            $layout->generateXml();
+            $layout->generateElements();
+
+            $this->rendererListBlock = $layout->getBlock('category.product.type.widget.details.renderers');
+        }
+        return $this->rendererListBlock;
+    }
+
+    /**
+     * Get post parameters.
+     *
+     * @param Product $product
+     * @return array
+     */
+    public function getAddToCartPostParams(Product $product)
+    {
+        $url = $this->getAddToCartUrl($product);
+        return [
+            'action' => $url,
+            'data' => [
+                'product' => $product->getEntityId(),
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
+            ]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function _beforeToHtml()
     {
         $this->setProductCollection($this->createCollection());
@@ -247,10 +301,16 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     {
         /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $collection = $this->productCollectionFactory->create();
+
+        if ($this->getData('store_id') !== null) {
+            $collection->setStoreId($this->getData('store_id'));
+        }
+
         $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
 
         $collection = $this->_addProductAttributesAndPrices($collection)
             ->addStoreFilter()
+            ->addAttributeToSort('created_at', 'desc')
             ->setPageSize($this->getPageSize())
             ->setCurPage($this->getRequest()->getParam($this->getData('page_var_name'), 1));
 

@@ -560,7 +560,7 @@ class Eav extends AbstractModifier
      * Loads attributes for specified groups at once
      *
      * @param AttributeGroupInterface[] $groups
-     * @return @return ProductAttributeInterface[]
+     * @return ProductAttributeInterface[]
      */
     private function loadAttributesForGroups(array $groups)
     {
@@ -676,7 +676,7 @@ class Eav extends AbstractModifier
         // TODO: Refactor to $attribute->getOptions() when MAGETWO-48289 is done
         $attributeModel = $this->getAttributeModel($attribute);
         if ($attributeModel->usesSource()) {
-            $options = $attributeModel->getSource()->getAllOptions();
+            $options = $attributeModel->getSource()->getAllOptions(true, true);
             $meta = $this->arrayManager->merge($configPath, $meta, [
                 'options' => $this->convertOptionsValueToString($options),
             ]);

@@ -21,18 +21,42 @@ define([
         },
 
         /**
+         * Initializes observable properties of instance
+         *
+         * @returns {Abstract} Chainable.
+         */
+        initObservable: function () {
+            this._super();
+
+            /**
+             * equalityComparer function
+             *
+             * @returns boolean.
+             */
+            this.value.equalityComparer = function (oldValue, newValue) {
+                return !oldValue && !newValue || oldValue === newValue;
+            };
+
+            return this;
+        },
+
+        /**
          * @param {String} value
          */
         update: function (value) {
             var country = registry.get(this.parentName + '.' + 'country_id'),
                 options = country.indexedOptions,
-                option;
+                option = null;
 
             if (!value) {
                 return;
             }
 
             option = options[value];
+
+            if (!option) {
+                return;
+            }
 
             if (option['is_zipcode_optional']) {
                 this.error(false);

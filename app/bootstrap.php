@@ -8,6 +8,7 @@
  * Environment initialization
  */
 error_reporting(E_ALL);
+stream_wrapper_unregister('phar');
 #ini_set('display_errors', 1);
 
 /* PHP version validation */
