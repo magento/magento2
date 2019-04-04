@@ -394,4 +394,30 @@ QUERY;
         $this->assertEquals('PRODUCT', $response['urlResolver']['type']);
         $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
     }
+
+    /**
+     * Test for custom type which point to the invalid product/category/cms page.
+     *
+     * @magentoApiDataFixture Magento/UrlRewrite/_files/url_rewrite_not_existing_entity.php
+     */
+    public function testNonExistentEntityUrlRewrite()
+    {
+        $urlPath = 'non-exist-entity.html';
+
+        $query = <<<QUERY
+{
+  urlResolver(url:"{$urlPath}")
+  {
+   id
+   relative_url
+   type
+  }
+}
+QUERY;
+
+        $this->expectExceptionMessage(
+            "No such entity found with matching URL key: " . $urlPath
+        );
+        $this->graphQlQuery($query);
+    }
 }
