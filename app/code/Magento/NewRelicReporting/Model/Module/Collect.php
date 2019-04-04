@@ -277,7 +277,7 @@ class Collect
                 $changes = array_diff($module, $changeTest);
                 $changesCleanArray = $this->getCleanChangesArray($changes);
 
-                if ($changesCleanArray) {
+                if (!empty($changesCleanArray)) {
                     $data = [
                         'entity_id' => $changeTest['entity_id'],
                         'name' => $changeTest['name'],
