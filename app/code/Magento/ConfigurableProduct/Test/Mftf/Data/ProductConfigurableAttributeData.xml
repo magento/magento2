@@ -42,4 +42,22 @@
         <data key="name">Black</data>
         <data key="price">5.00</data>
     </entity>
+    <entity name="colorConfigurableProductAttribute1" type="product_attribute">
+        <data key="name" unique="suffix">Green</data>
+        <data key="sku" unique="suffix">sku-green</data>
+        <data key="type_id">simple</data>
+        <data key="price">1</data>
+        <data key="visibility">1</data>
+        <data key="quantity">1</data>
+        <data key="weight">1</data>
+    </entity>
+    <entity name="colorConfigurableProductAttribute2" type="product_attribute">
+        <data key="name" unique="suffix">Red</data>
+        <data key="sku" unique="suffix">sku-red</data>
+        <data key="type_id">simple</data>
+        <data key="price">2</data>
+        <data key="visibility">1</data>
+        <data key="quantity">10</data>
+        <data key="weight">1</data>
+    </entity>
 </entities>
