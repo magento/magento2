@@ -91,7 +91,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
     /**
      * @var PatchBackwardCompatability |\PHPUnit_Framework_MockObject_MockObject
      */
-    private $patchBacwardCompatability;
+    private $patchBackwardCompatability;
 
     protected function setUp()
     {
@@ -109,7 +109,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         $this->moduleDataSetupMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
         $objectManager = new ObjectManager($this);
-        $this->patchBacwardCompatability = $objectManager->getObject(
+        $this->patchBackwardCompatability = $objectManager->getObject(
             PatchBackwardCompatability::class,
             [
                 'moduleResource' => $this->moduleResourceMock
@@ -128,7 +128,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
                 'objectManager' => $this->objectManagerMock,
                 'schemaSetup' => $this->schemaSetupMock,
                 'moduleDataSetup' => $this->moduleDataSetupMock,
-                'patchBackwardCompatability' => $this->patchBacwardCompatability
+                'patchBackwardCompatability' => $this->patchBackwardCompatability
             ]
         );
         require_once __DIR__ . '/../_files/data_patch_classes.php';
