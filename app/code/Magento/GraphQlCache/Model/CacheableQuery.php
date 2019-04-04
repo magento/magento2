@@ -7,12 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlCache\Model;
 
-use Magento\Eav\Model\Attribute\Data\Boolean;
-
 /**
- * CacheInfo object is a registry for collecting cache related info and tags of all entities.
+ * CacheableQuery object is a registry for collecting cache related info and tags of all entities.
  */
-class CacheInfo
+class CacheableQuery
 {
     /**
      * @var string[]
@@ -46,7 +44,7 @@ class CacheInfo
     }
 
     /**
-     * Returns if its valid to cache the response
+     * Return if its valid to cache the response
      *
      * @return bool
      */
@@ -56,12 +54,24 @@ class CacheInfo
     }
 
     /**
-     * Sets cache validity
+     * Set cache validity
      *
      * @param bool $cacheable
      */
     public function setCacheValidity(bool $cacheable): void
     {
         $this->cacheable = $cacheable;
+    }
+
+    /**
+     * Check if query is cacheable and we have a list of tags to populate
+     *
+     * @return bool
+     */
+    public function shouldPopulateCacheHeadersWithTags() : bool
+    {
+        $cacheTags = $this->getCacheTags();
+        $isQueryCaheable = $this->isCacheable();
+        return !empty($cacheTags) && $isQueryCaheable;
     }
 }

@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\Resolver\Context;
-use Magento\GraphQlCache\Model\CacheInfo;
+use Magento\GraphQlCache\Model\CacheableQuery;
 use Magento\Framework\App\RequestInterface;
 
 /**
@@ -22,9 +22,9 @@ use Magento\Framework\App\RequestInterface;
 class Plugin
 {
     /**
-     * @var CacheInfo
+     * @var CacheableQuery
      */
-    private $cacheInfo;
+    private $cacheableQuery;
 
     /**
      * @var Request
@@ -32,14 +32,12 @@ class Plugin
     private $request;
 
     /**
-     * Constructor
-     *
-     * @param CacheInfo $cacheInfo
+     * @param CacheableQuery $cacheableQuery
      * @param RequestInterface $request
      */
-    public function __construct(CacheInfo $cacheInfo, RequestInterface $request)
+    public function __construct(CacheableQuery $cacheableQuery, RequestInterface $request)
     {
-        $this->cacheInfo = $cacheInfo;
+        $this->cacheableQuery = $cacheableQuery;
         $this->request = $request;
     }
 
@@ -74,7 +72,7 @@ class Plugin
             foreach ($resolvedItemsIds as $itemId) {
                 $cacheTags[] = $cacheTag . '_' . $itemId;
             }
-            $this->cacheInfo->addCacheTags($cacheTags);
+            $this->cacheableQuery->addCacheTags($cacheTags);
         }
         $this->setCacheValidity($cacheable);
         return $resolvedValue;
@@ -117,7 +115,7 @@ class Plugin
      */
     private function setCacheValidity(bool $isValid): void
     {
-        $cacheValidity = $this->cacheInfo->isCacheable() && $isValid;
-        $this->cacheInfo->setCacheValidity($cacheValidity);
+        $cacheValidity = $this->cacheableQuery->isCacheable() && $isValid;
+        $this->cacheableQuery->setCacheValidity($cacheValidity);
     }
 }
