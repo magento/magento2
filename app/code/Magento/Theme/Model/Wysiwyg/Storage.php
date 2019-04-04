@@ -110,7 +110,7 @@ class Storage
      * Upload file
      *
      * @param string $targetPath
-     * @return bool
+     * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function uploadFile($targetPath)

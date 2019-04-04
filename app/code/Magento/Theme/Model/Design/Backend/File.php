@@ -109,9 +109,8 @@ class File extends BackendFile
     }
 
     /**
-     * After Load
+     * @return $this
      *
-     * @return File
      * @throws LocalizedException
      */
     public function afterLoad()

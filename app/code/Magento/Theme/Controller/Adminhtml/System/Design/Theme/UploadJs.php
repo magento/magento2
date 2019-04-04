@@ -16,7 +16,6 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      * Upload js file
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
