@@ -31,11 +31,11 @@ define([
                 if (response.errors) {
                     messageContainer.addErrorMessage(response);
                     callbacks.forEach(function (callback) {
-                        callback(loginData, response);
+                        callback(loginData);
                     });
                 } else {
                     callbacks.forEach(function (callback) {
-                        callback(loginData, response);
+                        callback(loginData);
                     });
                     customerData.invalidate(['customer']);
 

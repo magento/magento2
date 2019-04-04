@@ -65,7 +65,7 @@
         <actionGroup ref="StorefrontFillCartDataActionGroup" stepKey="StorefrontFillCartDataActionGroup"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <!--Place order-->
-        <click selector="{{CheckoutPaymentSection.placeOrder}}"
+        <click selector="{{BraintreeConfigurationPaymentSection.paymentMethodContainer}}{{CheckoutPaymentSection.placeOrder}}"
                stepKey="PlaceOrder"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
 

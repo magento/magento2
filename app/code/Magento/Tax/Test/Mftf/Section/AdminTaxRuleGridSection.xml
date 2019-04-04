@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminTaxRuleGridSection">
+        <element name="add" type="button" selector="#add" timeout="30"/>
+        <element name="search" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
+        <element name="code" type="input" selector="#taxRuleGrid_filter_code"/>
+        <element name="taxRate" type="input" selector="#taxRuleGrid_filter_tax_rates_codes"/>
+        <element name="nthRow" type="block" selector="tr[data-role='row']:nth-of-type({{var}})" parameterized="true" timeout="30"/>
+        <element name="successMessage" type="text" selector="#messages"/>
+        <element name="emptyText" type="text" selector="td.empty-text"/>
+    </section>
+</sections>

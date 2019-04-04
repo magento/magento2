@@ -13,6 +13,13 @@
     <entity name="freeActiveEnable" type="active">
         <data key="value">1</data>
     </entity>
+    <!-- Disable Free Shipping method -->
+    <entity name="FreeShippingMethodDisableConfig" type="free_shipping_method">
+        <requiredEntity type="active">freeActiveDisable</requiredEntity>
+    </entity>
+    <entity name="freeActiveDisable" type="active">
+        <data key="value">0</data>
+    </entity>
     <!-- Free Shipping method default setup -->
     <entity name="FreeShippinMethodDefault" type="free_shipping_method">
         <requiredEntity type="active">freeActiveDefault</requiredEntity>

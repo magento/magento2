@@ -220,6 +220,13 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     private $accountConfirmation;
 
     /**
+     * Caching property to store customer address data models by the address ID.
+     *
+     * @var array
+     */
+    private $storedAddress;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -314,7 +321,10 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $addressesData = [];
         /** @var \Magento\Customer\Model\Address $address */
         foreach ($this->getAddresses() as $address) {
-            $addressesData[] = $address->getDataModel();
+            if (!isset($this->storedAddress[$address->getId()])) {
+                $this->storedAddress[$address->getId()] = $address->getDataModel();
+            }
+            $addressesData[] = $this->storedAddress[$address->getId()];
         }
         $customerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(

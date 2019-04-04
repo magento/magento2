@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-69455"/>
             <group value="persistent"/>
+            <skip>
+                <issueId value="MC-5777"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
@@ -61,7 +64,7 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" userInput="$$createProduct.price$$" stepKey="checkPriceSimpleProduct"/>
 
-        <!--Login to storfront from customer and check price-->
+        <!--Login to storefront from customer and check price-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInFromCustomer">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>

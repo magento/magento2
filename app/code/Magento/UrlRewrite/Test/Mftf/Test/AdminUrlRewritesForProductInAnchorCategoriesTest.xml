@@ -16,9 +16,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-69826"/>
             <group value="urlRewrite"/>
-            <skip>
-                <issueId value="MAGETWO-96713"/>
-            </skip>
         </annotations>
 
         <!-- Preconditions-->

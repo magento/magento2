@@ -4,7 +4,7 @@ To get detailed information about changes in Magento 2.3.0, see the [Release Not
 
 2.1.0
 =============
-To get detailed information about changes in Magento 2.1.0, please visit [Magento Community Edition (CE) Release Notes](http://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.0CE.html "Magento Community Edition (CE) Release Notes")
+To get detailed information about changes in Magento 2.1.0, please visit [Magento Community Edition (CE) Release Notes](https://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.0CE.html "Magento Community Edition (CE) Release Notes")
 
 2.0.0
 =============
@@ -489,7 +489,7 @@ Tests:
     * Fixed an issue where found records in global search in Backend could not be selected via keyboard
     * Fixed an issue where Category menu items went out of screen when page side was reached
     * Fixed an issue where subcategories in menu were shown instantly when user moved mouse quickly
-    * Fixed an issue where popup header was our of window range while creating group product
+    * Fixed an issue where popup header was out of window range while creating group product
     * Fixed an issue where region field was absent in customer address form on backend for "United Kingdom" country
     * Fixed an ability to edit the Order from Admin panel
     * Fixed an issue where email could not be retrieved from \Magento\Quote\Api\Data\AddressInterface after adding an address on OnePageCheckout
@@ -626,7 +626,7 @@ Tests:
     * Fixed an issue where filters were not shown on product reviews report grid
     * Fixed an issue where second customer address was not deleted from customer account
     * Fixed an issue where custom options pop-up was still displayed after submit
-    * Fixed an issue where Second Product was not added to Shopping Cart from Wishlist at first atempt
+    * Fixed an issue where Second Product was not added to Shopping Cart from Wishlist at first attempt
     * Fixed an issue where customer invalid email message was not displayed
     * Fixed an issue where All Access Tokens for Customer without Tokens could not be revoked
     * Fixed an issue where it was impossible to add Product to Shopping Cart from shared Wishlist
@@ -1025,7 +1025,7 @@ Tests:
     * Improved backend menu keyboard accessibility
     * Accessibility improvements: WAI-ARIA in a product item on a category page and related products
     * Checkout flow code can work with a separate DB storage
-    * <a href="http://devdocs.magento.com/guides/v1.0/release-notes/changes.html#change-devrc-unit">Unit tests moved to module directories</a>
+    * <a href="https://devdocs.magento.com/guides/v1.0/release-notes/changes.html#change-devrc-unit">Unit tests moved to module directories</a>
     * Addressed naming inconsistencies in REST routes
     * Added Advanced Developer workflow for frontend developers
 * Setup

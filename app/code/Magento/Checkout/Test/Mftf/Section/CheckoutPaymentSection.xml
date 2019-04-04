@@ -23,7 +23,7 @@
         <element name="guestRegion" type="select" selector=".billing-address-form select[name*='region_id']"/>
         <element name="guestPostcode" type="input" selector=".billing-address-form input[name*='postcode']"/>
         <element name="guestTelephone" type="input" selector=".billing-address-form input[name*='telephone']"/>
-        <element name="billingAddress" type="text" selector="div.billing-address-details"/>
+        <element name="billingAddress" type="text" selector=".payment-method._active div.billing-address-details"/>
         <element name="cartItems" type="text" selector="ol.minicart-items"/>
         <element name="cartItemsArea" type="button" selector="div.block.items-in-cart"/>
         <element name="cartItemsAreaActive" type="textarea" selector="div.block.items-in-cart.active" timeout="30"/>
@@ -53,5 +53,6 @@
         <element name="addressAction" type="button" selector="//span[text()='{{action}}']" parameterized="true"/>
         <element name="addressBook" type="button" selector="//a[text()='Address Book']"/>
         <element name="noQuotes" type="text" selector=".no-quotes-block"/>
+        <element name="paymentMethodByName" type="text" selector="//*[@id='checkout-payment-method-load']//*[contains(@class, 'payment-group')]//label[normalize-space(.)='{{var1}}']" parameterized="true"/>
     </section>
 </sections>
