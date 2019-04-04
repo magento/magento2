@@ -20,6 +20,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
 use Zend\Code\Reflection\ClassReflection;
 
 /**
@@ -73,6 +74,16 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $config;
 
     /**
+     * @var PreprocessorInterface[]
+     */
+    private $customAttributePreprocessors;
+
+    /**
+     * @var array
+     */
+    private $attributesPreprocessorsMap = [];
+
+    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
@@ -82,6 +93,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param MethodsMap $methodsMap
      * @param ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap
      * @param ConfigInterface $config
+     * @param array $customAttributePreprocessors
      */
     public function __construct(
         TypeProcessor $typeProcessor,
@@ -90,7 +102,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
         MethodsMap $methodsMap,
         ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
-        ConfigInterface $config = null
+        ConfigInterface $config = null,
+        array $customAttributePreprocessors = []
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
@@ -101,6 +114,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ServiceTypeToEntityTypeMap::class);
         $this->config = $config
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->customAttributePreprocessors = $customAttributePreprocessors;
     }
 
     /**
@@ -132,7 +146,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $serviceMethodName name of the method that we are trying to call
      * @param array $inputArray data to send to method in key-value format
      * @return array list of parameters that can be used to call the service method
-     * @throws InputException if no value is provided for required parameters
      * @throws WebapiException
      */
     public function process($serviceClassName, $serviceMethodName, array $inputArray)
@@ -216,6 +229,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $data
      * @return object the newly created and populated object
      * @throws \Exception
+     * @throws SerializationException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _createFromArray($className, $data)
@@ -261,6 +275,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                     } else {
                         $setterValue = $this->convertValue($value, $returnType);
                     }
+                // phpcs:ignore Magento2.Exceptions.ThrowCatch
                 } catch (SerializationException $e) {
                     throw new SerializationException(
                         new Phrase(
@@ -289,12 +304,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
 
         foreach ($customAttributesValueArray as $key => $customAttribute) {
+            $this->runCustomAttributePreprocessors($key, $customAttribute);
             if (!is_array($customAttribute)) {
                 $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
             }
-
             list($customAttributeCode, $customAttributeValue) = $this->processCustomAttribute($customAttribute);
-
             $entityType = $this->serviceTypeToEntityTypeMap->getEntityType($dataObjectClassName);
             if ($entityType) {
                 $type = $this->customAttributeTypeLocator->getType(
@@ -310,6 +324,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             ) {
                 try {
                     $attributeValue = $this->convertValue($customAttributeValue, $type);
+                // phpcs:ignore Magento2.Exceptions.ThrowCatch
                 } catch (SerializationException $e) {
                     throw new SerializationException(
                         new Phrase(
@@ -332,10 +347,48 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     }
 
     /**
+     * Get map of preprocessors related to the custom attributes
+     *
+     * @return array
+     */
+    private function getAttributesPreprocessorsMap(): array
+    {
+        if (!$this->attributesPreprocessorsMap) {
+            foreach ($this->customAttributePreprocessors as $attributePreprocessor) {
+                foreach ($attributePreprocessor->getAffectedAttributes() as $attributeKey) {
+                    $this->attributesPreprocessorsMap[$attributeKey][] = $attributePreprocessor;
+                }
+            }
+        }
+
+        return $this->attributesPreprocessorsMap;
+    }
+
+    /**
+     * Prepare attribute value by loaded attribute preprocessors
+     *
+     * @param mixed $key
+     * @param mixed $customAttribute
+     */
+    private function runCustomAttributePreprocessors($key, &$customAttribute)
+    {
+        $preprocessorsMap = $this->getAttributesPreprocessorsMap();
+        if ($key && is_array($customAttribute) && array_key_exists($key, $preprocessorsMap)) {
+            $preprocessorsList = $preprocessorsMap[$key];
+            foreach ($preprocessorsList as $attributePreprocessor) {
+                if ($attributePreprocessor->shouldBeProcessed($key, $customAttribute)) {
+                    $attributePreprocessor->process($key, $customAttribute);
+                }
+            }
+        }
+    }
+
+    /**
      * Derive the custom attribute code and value.
      *
      * @param string[] $customAttribute
      * @return string[]
+     * @throws SerializationException
      */
     private function processCustomAttribute($customAttribute)
     {
