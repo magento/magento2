@@ -20,6 +20,7 @@
     <div class="control">
         <?php if ($block->showSingle()): ?>
             <?= /* @escapeNotVerified */ $block->getSelectionTitlePrice($_selections[0]) ?>
+            <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selections[0]) ?>
             <input type="hidden"
                    class="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>  product bundle option"
                    name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
@@ -39,6 +40,15 @@
                     </option>
                 <?php endforeach; ?>
             </select>
+            <div id="option-tier-prices-<?= /* @escapeNotVerified */ $_option->getId() ?>" class="option-tier-prices">
+                <?php foreach ($_selections as $_selection): ?>
+                    <div data-role="selection-tier-prices"
+                         data-selection-id="<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>"
+                         class="selection-tier-prices">
+                        <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selection) ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         <?php endif; ?>
         <div class="nested">
             <div class="field qty qty-holder">
