@@ -91,7 +91,23 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         if (!$entityAttribute || !$entityAttribute->getIsUserDefined()) {
             $this->buttonList->remove('delete');
         } else {
-            $this->buttonList->update('delete', 'label', __('Delete Attribute'));
+            $this->buttonList->update(
+                'delete',
+                'onclick',
+                sprintf(
+                    "deleteConfirm('%s','%s', %s)",
+                    __('Are you sure you want to do this?'),
+                    $this->getDeleteUrl(),
+                    json_encode(
+                        [
+                            'action' => '',
+                            'data' => [
+                                'form_key' => $this->getFormKey()
+                            ]
+                        ]
+                    )
+                )
+            );
         }
     }
 

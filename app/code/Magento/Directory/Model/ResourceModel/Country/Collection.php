@@ -207,6 +207,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Add filter by country code to collection.
+     *
      * $countryCode can be either array of country codes or string representing one country code.
      * $iso can be either array containing 'iso2', 'iso3' values or string with containing one of that values directly.
      * The collection will contain countries where at least one of contry $iso fields matches $countryCode.
@@ -299,7 +300,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             }
             $options[] = $option;
         }
-        if ($emptyLabel !== false && count($options) > 0) {
+        if ($emptyLabel !== false && count($options) > 1) {
             array_unshift($options, ['value' => '', 'label' => $emptyLabel]);
         }
 

@@ -6,9 +6,11 @@
 namespace Magento\Paypal\Controller\Transparent;
 
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\Session\SessionManager;
 use Magento\Framework\Session\SessionManagerInterface;
@@ -50,6 +52,11 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
     private $transparent;
 
     /**
+     * @var Validator
+     */
+    private $formKeyValidator;
+
+    /**
      * @param Context $context
      * @param JsonFactory $resultJsonFactory
      * @param Generic $sessionTransparent
@@ -57,6 +64,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
      * @param SessionManager $sessionManager
      * @param Transparent $transparent
      * @param SessionManagerInterface|null $sessionInterface
+     * @param Validator $formKeyValidator
      */
     public function __construct(
         Context $context,
@@ -65,13 +73,16 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
         SecureToken $secureTokenService,
         SessionManager $sessionManager,
         Transparent $transparent,
-        SessionManagerInterface $sessionInterface = null
+        SessionManagerInterface $sessionInterface = null,
+        Validator $formKeyValidator = null
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->sessionTransparent = $sessionTransparent;
         $this->secureTokenService = $secureTokenService;
         $this->sessionManager = $sessionInterface ?: $sessionManager;
         $this->transparent = $transparent;
+        $this->formKeyValidator = $formKeyValidator ?: ObjectManager::getInstance()->get(Validator::class);
+
         parent::__construct($context);
     }
 
@@ -85,8 +96,9 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
         /** @var Quote $quote */
         $quote = $this->sessionManager->getQuote();
 
-        if (!$quote || !$quote instanceof Quote) {
-            return $this->getErrorResponse();
+        if (!$quote || !$quote instanceof Quote || !$this->formKeyValidator->validate($this->getRequest())
+            || !$this->getRequest()->isPost()) {
+                return $this->getErrorResponse();
         }
 
         $this->sessionTransparent->setQuoteId($quote->getId());

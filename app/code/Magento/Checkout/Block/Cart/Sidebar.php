@@ -67,7 +67,7 @@ class Sidebar extends AbstractCart
     }
 
     /**
-     * Returns minicart config
+     * Returns minicart config.
      *
      * @return array
      */
@@ -82,7 +82,8 @@ class Sidebar extends AbstractCart
             'baseUrl' => $this->getBaseUrl(),
             'minicartMaxItemsVisible' => $this->getMiniCartMaxItemsCount(),
             'websiteId' => $this->_storeManager->getStore()->getWebsiteId(),
-            'maxItemsToDisplay' => $this->getMaxItemsToDisplay()
+            'maxItemsToDisplay' => $this->getMaxItemsToDisplay(),
+            'storeId' => $this->_storeManager->getStore()->getId(),
         ];
     }
 
@@ -132,6 +133,7 @@ class Sidebar extends AbstractCart
      *
      * @return string
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getUpdateItemQtyUrl()
     {
@@ -143,6 +145,7 @@ class Sidebar extends AbstractCart
      *
      * @return string
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getRemoveItemUrl()
     {
