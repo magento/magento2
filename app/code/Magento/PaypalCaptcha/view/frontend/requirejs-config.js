@@ -2,8 +2,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// eslint-disable-next-line no-unused-vars
+/*eslint no-unused-vars: 0*/
 var config = {
     config: {
         mixins: {
