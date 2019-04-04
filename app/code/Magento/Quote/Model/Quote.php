@@ -952,7 +952,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                     $billingAddress = $this->_quoteAddressFactory->create();
                     $billingAddress->importCustomerAddressData($defaultBillingAddress);
                     if($this->isAddressAllowedForWebsite($billingAddress, (int)$this->getStoreId())) {
-                        $this->setBilliphpngAddress($billingAddress);
+                        $this->setBillingAddress($billingAddress);
                     }
                 }
             }
