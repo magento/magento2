@@ -224,7 +224,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     private $authorization;
 
-
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -957,7 +956,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
         return parent::beforeSave();
     }
-
 
     /**
      * Retrieve anchors above
