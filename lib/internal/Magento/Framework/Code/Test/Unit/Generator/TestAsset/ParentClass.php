@@ -7,6 +7,9 @@ namespace Magento\Framework\Code\Test\Unit\Generator\TestAsset;
 
 use Zend\Code\Generator\DocBlockGenerator;
 
+/**
+ * phpcs:ignoreFile
+ */
 class ParentClass
 {
     /**
@@ -78,9 +81,6 @@ class ParentClass
     {
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.FinalImplementation) Suppressed as is a fixture but not a real code
-     */
     final public function publicParentFinal()
     {
     }

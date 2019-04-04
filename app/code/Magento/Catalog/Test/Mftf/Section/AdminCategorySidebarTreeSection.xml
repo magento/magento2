@@ -16,5 +16,6 @@
         <element name="categoryInTreeUnderRoot" type="text" selector="//li/ul/li[@class='x-tree-node']/div/a/span[contains(text(), '{{name}}')]" parameterized="true"/>
         <element name="lastCreatedCategory" type="block" selector=".x-tree-root-ct li li:last-child" />
         <element name="treeContainer" type="block" selector=".tree-holder" />
+        <element name="expandRootCategory" type="text" selector="img.x-tree-elbow-end-plus"/>
     </section>
 </sections>
