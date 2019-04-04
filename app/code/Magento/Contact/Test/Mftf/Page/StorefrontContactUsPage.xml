@@ -10,6 +10,5 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="StorefrontContactUsPage" url="/contact/" area="storefront" module="Magento_Contact">
         <section name="StorefrontContactUsFormSection"/>
-        <section name="StorefrontContactUsCaptchaSection"/>
     </page>
 </pages>

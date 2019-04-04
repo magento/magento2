@@ -55,7 +55,7 @@
         </actionGroup>
         <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonThirdAttempt" />
         <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterThirdAttempt" />
-        <actionGroup ref="AssertCaptchaVisibleOnCustomerLoginFormActionGroup" stepKey="dontSeeCaptchaAfterThirdAttempt" />
+        <actionGroup ref="AssertCaptchaVisibleOnCustomerLoginFormActionGroup" stepKey="seeCaptchaAfterThirdAttempt" />
 
         <!-- Submit form with incorrect captcha -->
         <actionGroup ref="StorefrontFillCustomerLoginFormWithCaptchaActionGroup" stepKey="fillLoginFormCorrectAccountIncorrectCaptcha">

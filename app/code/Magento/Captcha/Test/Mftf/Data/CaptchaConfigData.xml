@@ -27,6 +27,12 @@
         <data key="label">Create user</data>
         <data key="value">user_create</data>
     </entity>
+    <entity name="StorefrontCaptchaOnContactUsFormConfigData">
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Contact Us</data>
+        <data key="value">contact_us</data>
+    </entity>
     <entity name="StorefrontCaptchaOnCustomerLoginConfigData">
         <!-- Magento default value -->
         <data key="path">customer/captcha/forms</data>
