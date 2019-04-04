@@ -66,6 +66,7 @@ class Review extends AbstractAction implements HttpPostActionInterface, HttpGetA
             $this->getRequest()->getPostValue('result', '{}'),
             true
         );
+        $this->logger->debug($requestData);
         $quote = $this->checkoutSession->getQuote();
 
         try {
@@ -93,8 +94,6 @@ class Review extends AbstractAction implements HttpPostActionInterface, HttpGetA
             return $resultPage;
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
-        } finally {
-            $this->logger->debug($requestData);
         }
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
