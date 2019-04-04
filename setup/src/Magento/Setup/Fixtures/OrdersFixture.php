@@ -324,10 +324,11 @@ class OrdersFixture extends Fixture
         $entityId++;
         while ($entityId <= $requestedOrders) {
             $batchNumber++;
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $productCount = [
-                Type::TYPE_SIMPLE => random_int($orderSimpleCountFrom, $orderSimpleCountTo),
-                Configurable::TYPE_CODE => random_int($orderConfigurableCountFrom, $orderConfigurableCountTo),
-                self::BIG_CONFIGURABLE_TYPE => random_int($orderBigConfigurableCountFrom, $orderBigConfigurableCountTo)
+                Type::TYPE_SIMPLE => mt_rand($orderSimpleCountFrom, $orderSimpleCountTo),
+                Configurable::TYPE_CODE => mt_rand($orderConfigurableCountFrom, $orderConfigurableCountTo),
+                self::BIG_CONFIGURABLE_TYPE => mt_rand($orderBigConfigurableCountFrom, $orderBigConfigurableCountTo)
             ];
             $order = [
                 '%itemsPerOrder%' => array_sum($productCount),

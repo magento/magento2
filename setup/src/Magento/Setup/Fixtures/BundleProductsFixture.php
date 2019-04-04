@@ -165,8 +165,9 @@ class BundleProductsFixture extends Fixture
             'sku' => $skuClosure,
             'meta_title' => $skuClosure,
             'price' => function ($index) use ($priceTypeClosure) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 return $priceTypeClosure($index) === LinkInterface::PRICE_TYPE_PERCENT
-                    ? random_int(10, 90)
+                    ? mt_rand(10, 90)
                     : $this->priceProvider->getPrice();
             },
             'priceType' => $priceTypeClosure,

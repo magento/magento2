@@ -186,9 +186,12 @@ class SimpleProductsFixture extends Fixture
 
         $additionalAttributeSets = $this->getAdditionalAttributeSets();
         $attributeSet = function ($index) use ($defaultAttributeSets, $additionalAttributeSets) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            mt_srand($index);
             $attributeSetCount = count(array_keys($defaultAttributeSets));
             if ($attributeSetCount > (($index - 1) % (int)$this->fixtureModel->getValue('categories', 30))) {
-                return array_keys($defaultAttributeSets)[random_int(0, count(array_keys($defaultAttributeSets)) - 1)];
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                return array_keys($defaultAttributeSets)[mt_rand(0, count(array_keys($defaultAttributeSets)) - 1)];
             } else {
                 $customSetsAmount = count($additionalAttributeSets);
                 return $customSetsAmount
@@ -207,7 +210,8 @@ class SimpleProductsFixture extends Fixture
             $attributeValues = [];
             if (isset($defaultAttributeSets[$attributeSetId])) {
                 foreach ($defaultAttributeSets[$attributeSetId] as $attributeCode => $values) {
-                    $attributeValues[$attributeCode] = $values[random_int(0, count($values) - 1)];
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    $attributeValues[$attributeCode] = $values[mt_rand(0, count($values) - 1)];
                 }
             }
 

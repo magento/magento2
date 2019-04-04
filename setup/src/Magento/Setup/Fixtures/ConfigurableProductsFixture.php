@@ -320,9 +320,12 @@ class ConfigurableProductsFixture extends Fixture
     {
         $attributeSetClosure = function ($index) use ($defaultAttributeSets) {
             $attributeSetAmount = count(array_keys($defaultAttributeSets));
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            mt_srand($index);
 
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             return $attributeSetAmount > ($index - 1) % (int)$this->fixtureModel->getValue('categories', 30)
-                ? array_keys($defaultAttributeSets)[random_int(0, $attributeSetAmount - 1)]
+                ? array_keys($defaultAttributeSets)[mt_rand(0, $attributeSetAmount - 1)]
                 : 'Default';
         };
         $productsPerSet = [];
@@ -877,6 +880,8 @@ class ConfigurableProductsFixture extends Fixture
                         $configurableProductsCount / ($simpleProductsCount + $configurableProductsCount)
                     )
                 );
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            mt_srand($index);
             return $this->dataGenerator->generate(
                 $minAmountOfWordsDescription,
                 $maxAmountOfWordsDescription,
