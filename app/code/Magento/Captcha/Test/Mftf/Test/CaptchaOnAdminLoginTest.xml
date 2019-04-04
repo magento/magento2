@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CaptchaOnAdminLoginTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="Test creation for send comment using the contact us form with captcha."/>
+            <title value="Captcha contact us form test"/>
+            <description value="Test creation for send comment using the contact us form with captcha."/>
+            <severity value="MAJOR"/>
+            <group value="captcha"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+
+        </before>
+        <after>
+
+        </after>
+        <!-- Open admin login page -->
+        <amOnPage url="{{AdminLoginPage.url}}" stepKey="goToAdminLoginPage" />
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+
+        <!-- Login as Admin with incorrect credentials 3 times -->
+        <actionGroup ref="LoginAdminWithCredentialsActionGroup" stepKey="failedFirstLoginAdminUser">
+            <argument name="adminUser" value="adminUser" />
+            <argument name="adminPassword" value="INVALIDAdminPassword" />
+        </actionGroup>
+        <see userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later."
+             selector="{{AdminLoginFormSection.error}}" stepKey="seeFirstLoginError"/>
+
+        <actionGroup ref="LoginAdminWithCredentialsActionGroup" stepKey="failedSecondLoginAdminUser">
+            <argument name="adminUser" value="adminUser" />
+            <argument name="adminPassword" value="INVALIDAdminPassword" />
+        </actionGroup>
+        <see userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later."
+             selector="{{AdminLoginFormSection.error}}" stepKey="seeSecondLoginError"/>
+
+        <actionGroup ref="LoginAdminWithCredentialsActionGroup" stepKey="failedThirdLoginAdminUser">
+            <argument name="adminUser" value="adminUser" />
+            <argument name="adminPassword" value="INVALIDAdminPassword" />
+        </actionGroup>
+        <see userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later."
+             selector="{{AdminLoginFormSection.error}}" stepKey="seeThirdLoginError"/>
+
+        <!-- Check captcha visibility on admin login page  -->
+        <waitForElementVisible selector="{{AdminLoginFormSection.captchaField}}" stepKey="seeFirstCaptchaField"/>
+        <waitForElementVisible selector="{{AdminLoginFormSection.captchaImg}}" stepKey="seeFirstCaptchaImage"/>
+        <waitForElementVisible selector="{{AdminLoginFormSection.captchaReload}}" stepKey="seeFirstCaptchaReloadButton"/>
+
+        <!-- Submit form with incorrect captcha -->
+        <fillField selector="{{AdminLoginFormSection.username}}" userInput="adminUser" stepKey="fillAdminUserNameWithCaptcha"/>
+        <fillField selector="{{AdminLoginFormSection.password}}" userInput="adminPassword" stepKey="fillPasswordWithCaptcha"/>
+        <fillField selector="{{AdminLoginFormSection.captchaField}}" userInput="incorrectCaptcha" stepKey="fillCaptcha"/>
+        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLoginWithCaptcha"/>
+        <see userInput="Incorrect CAPTCHA." selector="{{AdminLoginFormSection.error}}" stepKey="seeCaptchaError"/>
+        <waitForElementVisible selector="{{AdminLoginFormSection.captchaField}}" stepKey="seeSecondCaptchaField"/>
+        <waitForElementVisible selector="{{AdminLoginFormSection.captchaImg}}" stepKey="seeSecondCaptchaImage"/>
+        <waitForElementVisible selector="{{AdminLoginFormSection.captchaReload}}" stepKey="seeSecondCaptchaReloadButton"/>
+    </test>
+</tests>
