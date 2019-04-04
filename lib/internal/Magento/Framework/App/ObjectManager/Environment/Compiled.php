@@ -120,6 +120,6 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
             ->get(\Magento\Framework\App\Cache\Manager::class)
             ->setEnabled([CompiledConfig::TYPE_IDENTIFIER], true);
 
-        $sharedInstances[\Magento\Framework\Interception\ExtendableConfigInterface::class] = $interceptorConfig;
+        $sharedInstances[\Magento\Framework\Interception\Config\Config::class] = $interceptorConfig;
     }
 }

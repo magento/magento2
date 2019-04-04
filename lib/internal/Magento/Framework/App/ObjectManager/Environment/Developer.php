@@ -89,6 +89,6 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
         $sharedInstances[\Magento\Framework\ObjectManager\ConfigLoaderInterface::class] = $objectManager
             ->get(\Magento\Framework\App\ObjectManager\ConfigLoader::class);
 
-        $sharedInstances[\Magento\Framework\Interception\ExtendableConfigInterface::class] = $interceptorConfig;
+        $sharedInstances[\Magento\Framework\Interception\Config\Config::class] = $interceptorConfig;
     }
 }

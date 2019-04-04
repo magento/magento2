@@ -65,6 +65,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     protected $filesystemMock;
 
+    /**
+     * @var \Magento\Framework\Interception\Config\Config
+     */
+    protected $interceptionConfigMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -113,6 +118,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['dispatch'])
             ->getMock();
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->interceptionConfigMock = $this->getMockBuilder(\Magento\Framework\Interception\Config\Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->http = $this->objectManager->getObject(
             \Magento\Framework\App\Http::class,
@@ -142,10 +150,12 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->configLoaderMock->expects($this->once())
             ->method('load')->with($areaCode)->will($this->returnValue([]));
         $this->objectManagerMock->expects($this->once())->method('configure')->with([]);
-        $this->objectManagerMock->expects($this->once())
+        $this->objectManagerMock->expects($this->any())
             ->method('get')
-            ->with(\Magento\Framework\App\FrontControllerInterface::class)
-            ->will($this->returnValue($this->frontControllerMock));
+            ->willReturnMap([
+                \Magento\Framework\App\FrontControllerInterface::class => $this->frontControllerMock,
+                \Magento\Framework\Interception\Config\Config::class => $this->interceptionConfigMock
+            ]);
         $this->frontControllerMock->expects($this->once())
             ->method('dispatch')
             ->with($this->requestMock)

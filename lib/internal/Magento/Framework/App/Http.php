@@ -132,12 +132,10 @@ class Http implements \Magento\Framework\AppInterface
 
         $frontendConfig = $this->_configLoader->load($areaCode);
         $this->_objectManager->configure($frontendConfig);
-        try {
-            /** @var  \Magento\Framework\Interception\ExtendableConfigInterface $interceptionConfig */
-            $interceptionConfig = $this->_objectManager->get(\Magento\Framework\Interception\ExtendableConfigInterface::class);
+        /** @var  \Magento\Framework\Interception\ExtendableConfigInterface $interceptionConfig */
+        $interceptionConfig = $this->_objectManager->get(\Magento\Framework\Interception\Config\Config::class);
+        if ($interceptionConfig instanceof \Magento\Framework\Interception\ExtendableConfigInterface) {
             $interceptionConfig->extend($frontendConfig, $areaCode);
-        } catch (\Exception $e) {
-            // Exception means that Object Manager was configured in a way different than normal App flow (e.g. in test suite)
         }
 
         /** @var \Magento\Framework\App\FrontControllerInterface $frontController */
