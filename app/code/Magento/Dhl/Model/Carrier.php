@@ -741,12 +741,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                         $itemWeight = $this->_getWeight($itemWeight * $item->getQty());
                         $maxWeight = $this->_getWeight($this->_maxWeight, true);
                         if ($itemWeight > $maxWeight) {
-                            $qtyItem = floor($itemWeight / $maxWeight);
-                            $decimalItems[] = ['weight' => $maxWeight, 'qty' => $qtyItem];
-                            $weightItem = $this->mathDivision->getExactDivision($itemWeight, $maxWeight);
-                            if ($weightItem) {
-                                $decimalItems[] = ['weight' => $weightItem, 'qty' => 1];
-                            }
+                            $this->pushDecimalItems($decimalItems, $itemWeight, $maxWeight);
                             $checkWeight = false;
                         }
                     }
@@ -781,6 +776,23 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         sort($fullItems);
 
         return $fullItems;
+    }
+
+    /**
+     * Pushes items into array that are decimal places on item weight
+     *
+     * @param array $decimalItems
+     * @param float $itemWeight
+     * @param float $maxWeight
+     */
+    private function pushDecimalItems(array &$decimalItems, float $itemWeight, float $maxWeight): void
+    {
+        $qtyItem = floor($itemWeight / $maxWeight);
+        $decimalItems[] = ['weight' => $maxWeight, 'qty' => $qtyItem];
+        $weightItem = $this->mathDivision->getExactDivision($itemWeight, $maxWeight);
+        if ($weightItem) {
+            $decimalItems[] = ['weight' => $weightItem, 'qty' => 1];
+        }
     }
 
     /**
@@ -968,7 +980,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected function _getQuotesFromServer($request)
     {
         $client = $this->_httpClientFactory->create();
-        $client->setUri((string)$this->getConfigData('gateway_url'));
+        $client->setUri($this->getGatewayURL());
         $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
         $client->setRawData(utf8_encode($request));
 
@@ -1557,7 +1569,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             try {
                 /** @var \Magento\Framework\HTTP\ZendClient $client */
                 $client = $this->_httpClientFactory->create();
-                $client->setUri((string)$this->getConfigData('gateway_url'));
+                $client->setUri($this->getGatewayURL());
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
                 $client->setRawData($request);
                 $responseBody = $client->request(\Magento\Framework\HTTP\ZendClient::POST)->getBody();
@@ -1751,7 +1763,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             try {
                 /** @var \Magento\Framework\HTTP\ZendClient $client */
                 $client = $this->_httpClientFactory->create();
-                $client->setUri((string)$this->getConfigData('gateway_url'));
+                $client->setUri($this->getGatewayURL());
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
                 $client->setRawData($request);
                 $responseBody = $client->request(\Magento\Framework\HTTP\ZendClient::POST)->getBody();
@@ -1950,6 +1962,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             }
             $result->setTrackingNumber((string)$xml->AirwayBillNumber);
             $labelContent = (string)$xml->LabelImage->OutputImage;
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $result->setShippingLabelContent(base64_decode($labelContent));
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
@@ -1959,6 +1972,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     }
 
     /**
+     * Verify if the shipment is dutiable
+     *
      * @param string $origCountryId
      * @param string $destCountryId
      *
@@ -1971,5 +1986,19 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         return
             self::DHL_CONTENT_TYPE_NON_DOC == $this->getConfigData('content_type')
             || !$this->_isDomestic;
+    }
+
+    /**
+     * Get the gateway URL
+     *
+     * @return string
+     */
+    private function getGatewayURL(): string
+    {
+        if ($this->getConfigData('sandbox_mode')) {
+            return (string)$this->getConfigData('sandbox_url');
+        } else {
+            return (string)$this->getConfigData('gateway_url');
+        }
     }
 }
