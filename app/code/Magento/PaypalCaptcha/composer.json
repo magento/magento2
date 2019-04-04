@@ -1,0 +1,27 @@
+{
+    "name": "magento/module-paypal-captcha",
+    "description": "N/A",
+    "require": {
+        "php": "~7.0.13|~7.1.0",
+        "magento/framework": "101.0.*",
+        "magento/module-captcha": "100.2.*",
+        "magento/module-checkout": "100.2.*",
+        "magento/module-store": "100.2.*"
+    },
+    "suggest": {
+        "magento/module-paypal": "100.2.*"
+    },
+    "type": "magento2-module",
+    "version": "100.2.0",
+    "license": [
+        "proprietary"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\PaypalCaptcha\\": ""
+        }
+    }
+}
