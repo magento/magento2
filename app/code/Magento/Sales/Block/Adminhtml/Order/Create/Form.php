@@ -182,7 +182,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                 );
             }
         }
-        if ($this->getStoreId()) {
+        if ($this->getStoreId() !== null) {
             $data['store_id'] = $this->getStoreId();
             $currency = $this->_localeCurrency->getCurrency($this->getStore()->getCurrentCurrencyCode());
             $symbol = $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();
