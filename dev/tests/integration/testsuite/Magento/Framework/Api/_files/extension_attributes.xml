@@ -29,6 +29,11 @@
                 <field>date</field>
             </join>
         </attribute>
+        <attribute code="review_id" type="int">
+            <join reference_table="reviews" reference_field="product_id" join_on_field="id">
+                <field>id</field>
+            </join>
+        </attribute>
     </extension_attributes>
     <extension_attributes for="Magento\Catalog\Api\Data\ProductLinkInterface">
         <attribute code="qty" type="float"/>

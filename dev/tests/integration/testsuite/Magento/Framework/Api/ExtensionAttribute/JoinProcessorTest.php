@@ -120,7 +120,8 @@ class JoinProcessorTest extends \PHPUnit\Framework\TestCase
         $this->joinProcessor->process($collection, \Magento\Catalog\Api\Data\ProductInterface::class);
         $expectedTableName = 'reviews';
         $this->assertEquals($expectedTableName, $extensionAttributeJoinData->getReferenceTable());
-        $this->assertEquals('extension_attribute_review_id', $extensionAttributeJoinData->getReferenceTableAlias());
+        $this->assertEquals('extension_attribute_table_reviews_on_id_reference_product_id',
+                            $extensionAttributeJoinData->getReferenceTableAlias());
         $this->assertEquals('product_id', $extensionAttributeJoinData->getReferenceField());
         $this->assertEquals('id', $extensionAttributeJoinData->getJoinField());
         $this->assertEquals(
@@ -128,7 +129,7 @@ class JoinProcessorTest extends \PHPUnit\Framework\TestCase
                 [
                     'external_alias' => 'review_id',
                     'internal_alias' => 'extension_attribute_review_id_db_review_id',
-                    'with_db_prefix' => 'extension_attribute_review_id.db_review_id',
+                    'with_db_prefix' => 'extension_attribute_table_reviews_on_id_reference_product_id.db_review_id',
                     'setter' => 'setReviewId',
                 ]
             ],
@@ -243,12 +244,13 @@ class JoinProcessorTest extends \PHPUnit\Framework\TestCase
         $reviews = $this->appResource->getTableName('reviews');
         $expectedSql = <<<EXPECTED_SQL
 SELECT `e`.*,
-     `extension_attribute_stock_item`.`qty` AS `extension_attribute_stock_item_qty`,
-     `extension_attribute_reviews`.`comment` AS `extension_attribute_reviews_comment`,
-     `extension_attribute_reviews`.`rating` AS `extension_attribute_reviews_rating`,
-     `extension_attribute_reviews`.`date` AS `extension_attribute_reviews_date` FROM `$catalogProductEntity` AS `e`
- LEFT JOIN `$catalogInventoryStockItem` AS `extension_attribute_stock_item` ON e.id = extension_attribute_stock_item.id
- LEFT JOIN `$reviews` AS `extension_attribute_reviews` ON e.id = extension_attribute_reviews.product_id
+     `extension_attribute_table_cataloginventory_stock_item_on_id_reference_id`.`qty` AS `extension_attribute_stock_item_qty`,
+     `extension_attribute_table_reviews_on_id_reference_product_id`.`comment` AS `extension_attribute_reviews_comment`,
+     `extension_attribute_table_reviews_on_id_reference_product_id`.`rating` AS `extension_attribute_reviews_rating`,
+     `extension_attribute_table_reviews_on_id_reference_product_id`.`date` AS `extension_attribute_reviews_date`,
+     `extension_attribute_table_reviews_on_id_reference_product_id`.`id` AS `extension_attribute_review_id_id` FROM `$catalogProductEntity` AS `e`
+ LEFT JOIN `$catalogInventoryStockItem` AS `extension_attribute_table_cataloginventory_stock_item_on_id_reference_id` ON e.id = extension_attribute_table_cataloginventory_stock_item_on_id_reference_id.id
+ LEFT JOIN `$reviews` AS `extension_attribute_table_reviews_on_id_reference_product_id` ON e.id = extension_attribute_table_reviews_on_id_reference_product_id.product_id
 EXPECTED_SQL;
         $resultSql = $collection->getSelectSql(true);
         $formattedResultSql = str_replace(',', ",\n    ", $resultSql);
