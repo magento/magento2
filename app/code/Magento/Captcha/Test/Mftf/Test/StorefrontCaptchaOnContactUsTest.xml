@@ -15,7 +15,7 @@
             <title value="Captcha on contact us form test"/>
             <description value="Test creation for send comment using the contact us form with captcha."/>
             <testCaseId value="MC-14103" />
-            <severity value="AVERAGE"/>
+            <severity value="MAJOR"/>
             <group value="captcha"/>
             <group value="mtf_migrated"/>
         </annotations>

@@ -96,4 +96,47 @@
         <data key="label">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
         <data key="value">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
     </entity>
+    <entity name="AdminCaptchaEnableConfigData">
+        <!-- Magento default value -->
+        <data key="path">admin/captcha/enable</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminCaptchaDisableConfigData">
+        <data key="path">admin/captcha/enable</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminCaptchaLength3ConfigData">
+        <data key="path">admin/captcha/length</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">1</data>
+        <data key="label">3</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="AdminCaptchaSymbols1ConfigData">
+        <data key="path">admin/captcha/symbols</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">1</data>
+        <data key="label">1</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminCaptchaDefaultLengthConfigData">
+        <!-- Magento default value -->
+        <data key="path">admin/captcha/length</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">1</data>
+        <data key="label">4-5</data>
+        <data key="value">4-5</data>
+    </entity>
+    <entity name="AdminCaptchaDefaultSymbolsConfigData">
+        <!-- Magento default value -->
+        <data key="path">admin/captcha/symbols</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">1</data>
+        <data key="label">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
+        <data key="value">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
+    </entity>
 </entities>

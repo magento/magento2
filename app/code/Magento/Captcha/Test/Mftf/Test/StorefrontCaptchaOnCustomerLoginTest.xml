@@ -14,7 +14,7 @@
             <stories value="Login with Customer Account + Captcha"/>
             <title value="Captcha customer login page test"/>
             <description value="Check CAPTCHA on Storefront Login Page."/>
-            <severity value="AVERAGE"/>
+            <severity value="MAJOR"/>
             <testCaseId value="MC-14010" />
             <group value="captcha"/>
             <group value="mtf_migrated"/>

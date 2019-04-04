@@ -15,7 +15,7 @@
             <title value="Test for checking captcha on the customer account edit page."/>
             <description value="Test for checking captcha on the customer account edit page and customer is locked."/>
             <testCaseId value="MC-14013" />
-            <severity value="AVERAGE"/>
+            <severity value="MAJOR"/>
             <group value="captcha"/>
             <group value="mtf_migrated"/>
         </annotations>
