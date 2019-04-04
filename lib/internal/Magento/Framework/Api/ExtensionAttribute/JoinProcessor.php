@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Api\ExtensionAttribute;
 
@@ -73,25 +74,14 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
             $joinData = $this->joinProcessorHelper->getJoinDataInterface();
             $joinData->setAttributeCode($attributeCode)
                 ->setReferenceTable($directive[Converter::JOIN_REFERENCE_TABLE])
-                ->setReferenceTableAlias($this->getReferenceTableAlias($attributeCode))
+                ->setReferenceTableAlias($this->joinProcessorHelper->getAttributeReferenceTableAlias($directive))
                 ->setReferenceField($directive[Converter::JOIN_REFERENCE_FIELD])
                 ->setJoinField($directive[Converter::JOIN_ON_FIELD]);
             $joinData->setSelectFields(
-                $this->joinProcessorHelper->getSelectFieldsMap($attributeCode, $directive[Converter::JOIN_FIELDS])
+                $this->joinProcessorHelper->getSelectFieldsMapForDirective($attributeCode, $directive)
             );
             $collection->joinExtensionAttribute($joinData, $this);
         }
-    }
-
-    /**
-     * Generate reference table alias.
-     *
-     * @param string $attributeCode
-     * @return string
-     */
-    private function getReferenceTableAlias($attributeCode)
-    {
-        return 'extension_attribute_' . $attributeCode;
     }
 
     /**
@@ -141,7 +131,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
     ) {
         $attributeType = $directive[Converter::DATA_TYPE];
         $selectFields = $this->joinProcessorHelper
-            ->getSelectFieldsMap($attributeCode, $directive[Converter::JOIN_FIELDS]);
+            ->getSelectFieldsMapForDirective($attributeCode, $directive);
 
         foreach ($selectFields as $selectField) {
             $internalAlias = $selectField[JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS];
