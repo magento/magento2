@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Controller;
 
 use Magento\Framework\App\FrontControllerInterface;
-use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -54,11 +54,6 @@ class GraphQl implements FrontControllerInterface
     private $resolverContext;
 
     /**
-     * @var HttpRequestProcessor
-     */
-    private $requestProcessor;
-
-    /**
      * @var QueryFields
      */
     private $queryFields;
@@ -74,7 +69,6 @@ class GraphQl implements FrontControllerInterface
      * @param QueryProcessor $queryProcessor
      * @param \Magento\Framework\GraphQl\Exception\ExceptionFormatter $graphQlError
      * @param \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $resolverContext
-     * @param HttpRequestProcessor $requestProcessor
      * @param QueryFields $queryFields
      * @param JsonFactory $jsonFactory
      */
@@ -84,7 +78,6 @@ class GraphQl implements FrontControllerInterface
         QueryProcessor $queryProcessor,
         ExceptionFormatter $graphQlError,
         ContextInterface $resolverContext,
-        HttpRequestProcessor $requestProcessor,
         QueryFields $queryFields,
         JsonFactory $jsonFactory
     ) {
@@ -93,7 +86,6 @@ class GraphQl implements FrontControllerInterface
         $this->queryProcessor = $queryProcessor;
         $this->graphQlError = $graphQlError;
         $this->resolverContext = $resolverContext;
-        $this->requestProcessor = $requestProcessor;
         $this->queryFields = $queryFields;
         $this->jsonFactory = $jsonFactory;
     }
@@ -105,12 +97,11 @@ class GraphQl implements FrontControllerInterface
      * @param RequestInterface $request
      * @return ResponseInterface|ResultInterface
      */
-    public function dispatch(RequestInterface $request) /* : ResponseInterface */
+    public function dispatch(RequestInterface $request)
     {
         $jsonResult = $this->jsonFactory->create();
         try {
-            /** @var Http $request */
-            $this->requestProcessor->processHeaders($request);
+            /** @var HttpRequest $request */
             if ($request->isPost()) {
                 $data = $this->jsonSerializer->unserialize($request->getContent());
             } else {

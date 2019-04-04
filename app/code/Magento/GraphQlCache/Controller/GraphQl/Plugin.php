@@ -14,6 +14,7 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\GraphQlCache\Model\CacheTags;
 use Magento\PageCache\Model\Config;
+use Magento\GraphQl\Controller\HttpRequestProcessor;
 
 /**
  * Class Plugin
@@ -36,24 +37,49 @@ class Plugin
     private $response;
 
     /**
+     * @var HttpRequestProcessor
+     */
+    private $requestProcessor;
+
+    /**
      * @param CacheTags $cacheTags
      * @param Config $config
      * @param HttpResponse $response
+     * @param HttpRequestProcessor $requestProcessor
      */
     public function __construct(
         CacheTags $cacheTags,
         Config $config,
-        HttpResponse $response
+        HttpResponse $response,
+        HttpRequestProcessor $requestProcessor
     ) {
         $this->cacheTags = $cacheTags;
         $this->config = $config;
         $this->response = $response;
+        $this->requestProcessor = $requestProcessor;
+    }
+
+    /**
+     * Process graphql headers
+     *
+     * @param FrontControllerInterface $subject
+     * @param RequestInterface $request
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeDispatch(
+        FrontControllerInterface $subject,
+        RequestInterface $request
+    ) {
+        /** @var \Magento\Framework\App\Request\Http $request */
+        $this->requestProcessor->processHeaders($request);
     }
 
     /**
      * Plugin for GraphQL after dispatch to set tag and cache headers
      *
-     * The $response doesn't have a set type because it's alternating between ResponseInterface and ResultInterface.
+     * The $response doesn't have a set type because it's alternating between ResponseInterface and ResultInterface
+     * depending if it comes from builtin cache or the dispatch.
      *
      * @param FrontControllerInterface $subject
      * @param ResponseInterface | ResultInterface $response

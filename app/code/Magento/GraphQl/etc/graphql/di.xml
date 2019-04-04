@@ -29,7 +29,6 @@
         <arguments>
             <argument name="graphQlHeaders" xsi:type="array">
                 <item name="Content-Type" xsi:type="object">Magento\GraphQl\Controller\HttpHeaderProcessor\ContentTypeProcessor</item>
-                <item name="Store" xsi:type="object">Magento\GraphQl\Controller\HttpHeaderProcessor\StoreProcessor</item>
             </argument>
         </arguments>
     </type>
