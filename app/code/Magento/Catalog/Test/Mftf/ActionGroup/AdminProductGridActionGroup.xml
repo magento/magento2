@@ -29,6 +29,17 @@
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
 
+    <!--Filter the product grid by the Name field-->
+    <actionGroup name="filterProductGridByName">
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{product.name}}" stepKey="fillProductNameFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+    </actionGroup>
+
     <!--Delete a product by filtering grid and using delete action-->
     <actionGroup name="deleteProductUsingProductGrid">
         <arguments>
