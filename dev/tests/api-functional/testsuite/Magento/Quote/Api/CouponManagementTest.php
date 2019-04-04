@@ -9,6 +9,9 @@ namespace Magento\Quote\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Coupon management service tests
+ */
 class CouponManagementTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
