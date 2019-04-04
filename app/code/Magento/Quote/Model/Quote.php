@@ -7,6 +7,7 @@ namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
@@ -14,6 +15,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total as AddressTotal;
 use Magento\Sales\Model\Status;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -360,6 +362,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     private $orderIncrementIdChecker;
 
     /**
+     * @var AllowedCountries
+     */
+    private $allowedCountriesReader;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -444,7 +451,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Sales\Model\OrderIncrementIdChecker $orderIncrementIdChecker = null
+        \Magento\Sales\Model\OrderIncrementIdChecker $orderIncrementIdChecker = null,
+        AllowedCountries $allowedCountriesReader = null
     ) {
         $this->quoteValidator = $quoteValidator;
         $this->_catalogProduct = $catalogProduct;
@@ -481,6 +489,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->shippingAssignmentFactory = $shippingAssignmentFactory;
         $this->orderIncrementIdChecker = $orderIncrementIdChecker ?: ObjectManager::getInstance()
             ->get(\Magento\Sales\Model\OrderIncrementIdChecker::class);
+        $this->allowedCountriesReader = $allowedCountriesReader
+            ?: ObjectManager::getInstance()->get(AllowedCountries::class);
         parent::__construct(
             $context,
             $registry,
@@ -941,7 +951,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                     /** @var \Magento\Quote\Model\Quote\Address $billingAddress */
                     $billingAddress = $this->_quoteAddressFactory->create();
                     $billingAddress->importCustomerAddressData($defaultBillingAddress);
-                    $this->setBillingAddress($billingAddress);
+                    if($this->isAddressAllowedForWebsite($billingAddress, (int)$this->getStoreId())) {
+                        $this->setBilliphpngAddress($billingAddress);
+                    }
                 }
             }
 
@@ -959,7 +971,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                     $shippingAddress = $this->_quoteAddressFactory->create();
                 }
             }
-            $this->setShippingAddress($shippingAddress);
+            if ($this->isAddressAllowedForWebsite($shippingAddress, (int)$this->getStoreId())) {
+                $this->setShippingAddress($shippingAddress);
+            }
         }
 
         return $this;
@@ -2595,5 +2609,19 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function setExtensionAttributes(\Magento\Quote\Api\Data\CartExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Check is address allowed for store
+     *
+     * @param Address $address
+     * @param int $storeId
+     * @return bool
+     */
+    private function isAddressAllowedForWebsite(Address $address, int $storeId): bool
+    {
+        $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
+
+        return in_array($address->getCountryId(), $allowedCountries);
     }
 }
