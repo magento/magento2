@@ -19,7 +19,9 @@ class ContentTypeProcessor implements HttpHeaderProcessorInterface
     /**
      * Handle the mandatory application/json header
      *
-     * @inheritDoc
+     * @param string $headerValue
+     * @param HttpRequestInterface $request
+     * @return void
      * @throws LocalizedException
      */
     public function processHeaderValue(string $headerValue, HttpRequestInterface $request) : void

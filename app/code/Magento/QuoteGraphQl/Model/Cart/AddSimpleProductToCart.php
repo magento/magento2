@@ -67,6 +67,11 @@ class AddSimpleProductToCart
     {
         $sku = $this->extractSku($cartItemData);
         $qty = $this->extractQty($cartItemData);
+        if ($qty <= 0) {
+            throw new GraphQlInputException(
+                __('Please enter a number greater than 0 in this field.')
+            );
+        }
         $customizableOptions = $this->extractCustomizableOptions($cartItemData);
 
         try {

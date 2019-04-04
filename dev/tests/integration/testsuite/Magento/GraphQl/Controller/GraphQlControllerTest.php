@@ -91,12 +91,108 @@ QUERY;
             'operationName' => null
         ];
         /** @var Http $request */
-        $request = $this->objectManager->get(\Magento\Framework\App\Request\Http::class);
+        $request = $this->objectManager->get(Http::class);
         $request->setPathInfo('/graphql');
+        $request->setMethod('POST');
         $request->setContent(json_encode($postData));
         $headers = $this->objectManager->create(\Zend\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $request->setHeaders($headers);
+        $response = $this->graphql->dispatch($request);
+        $output = $this->jsonSerializer->unserialize($response->getContent());
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+
+        $this->assertArrayNotHasKey('errors', $output, 'Response has errors');
+        $this->assertTrue(!empty($output['data']['products']['items']), 'Products array has items');
+        $this->assertTrue(!empty($output['data']['products']['items'][0]), 'Products array has items');
+        $this->assertEquals($output['data']['products']['items'][0]['id'], $product->getData($linkField));
+        $this->assertEquals($output['data']['products']['items'][0]['sku'], $product->getSku());
+        $this->assertEquals($output['data']['products']['items'][0]['name'], $product->getName());
+    }
+
+    /**
+     * Test request is dispatched and response generated when using GET request with query string
+     *
+     * @return void
+     */
+    public function testDispatchWithGet() : void
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+
+        /** @var ProductInterface $product */
+        $product = $productRepository->get('simple1');
+
+        $query
+            = <<<QUERY
+ {
+           products(filter: {sku: {eq: "simple1"}})
+           {
+               items {
+                   id
+                   name
+                   sku
+               }
+           }
+       }
+QUERY;
+        /** @var Http $request */
+        $request = $this->objectManager->get(Http::class);
+        $request->setPathInfo('/graphql');
+        $request->setMethod('GET');
+        $request->setQueryValue('query', $query);
+        $response = $this->graphql->dispatch($request);
+        $output = $this->jsonSerializer->unserialize($response->getContent());
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+
+        $this->assertArrayNotHasKey('errors', $output, 'Response has errors');
+        $this->assertTrue(!empty($output['data']['products']['items']), 'Products array has items');
+        $this->assertTrue(!empty($output['data']['products']['items'][0]), 'Products array has items');
+        $this->assertEquals($output['data']['products']['items'][0]['id'], $product->getData($linkField));
+        $this->assertEquals($output['data']['products']['items'][0]['sku'], $product->getSku());
+        $this->assertEquals($output['data']['products']['items'][0]['name'], $product->getName());
+    }
+
+    /** Test request is dispatched and response generated when using GET request with parameterized query string
+     *
+     * @return void
+     */
+    public function testDispatchGetWithParameterizedVariables() : void
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+
+        /** @var ProductInterface $product */
+        $product = $productRepository->get('simple1');
+        $query = <<<QUERY
+query GetProducts(\$filterInput:ProductFilterInput){
+    products(
+        filter:\$filterInput
+    ){
+        items{
+            id
+            name
+            sku
+        }  
+    }
+}
+QUERY;
+        $variables = [
+            'filterInput'=>[
+                'sku' =>['eq' => 'simple1']
+            ]
+        ];
+        $queryParams = [
+            'query'         => $query,
+            'variables'     => json_encode($variables),
+            'operationName' => 'GetProducts'
+        ];
+
+        /** @var Http $request */
+        $request = $this->objectManager->get(Http::class);
+        $request->setPathInfo('/graphql');
+        $request->setMethod('GET');
+        $request->setParams($queryParams);
         $response = $this->graphql->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
@@ -141,8 +237,9 @@ QUERY;
             'operationName' => null
         ];
         /** @var Http $request */
-        $request = $this->objectManager->get(\Magento\Framework\App\Request\Http::class);
+        $request = $this->objectManager->get(Http::class);
         $request->setPathInfo('/graphql');
+        $request->setMethod('POST');
         $request->setContent(json_encode($postData));
         $headers = $this->objectManager->create(\Zend\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);

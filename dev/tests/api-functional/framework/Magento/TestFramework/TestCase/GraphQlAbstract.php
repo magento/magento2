@@ -6,6 +6,7 @@
 namespace Magento\TestFramework\TestCase;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\Request\Http;
 
 /**
  * Test case for Web API functional tests for Graphql.
@@ -43,16 +44,16 @@ abstract class GraphQlAbstract extends WebapiAbstract
         array $variables = [],
         string $operationName = '',
         array $headers = [],
-        string $requestType = 'POST'
+        string $requestType = Http::METHOD_POST
     ) {
-        if ($requestType === 'POST') {
+        if ($requestType === Http::METHOD_POST) {
             $response = $this->getGraphQlClient()->postQuery(
                 $query,
                 $variables,
                 $operationName,
                 $this->composeHeaders($headers)
             );
-        } elseif ($requestType === 'GET') {
+        } elseif ($requestType === Http::METHOD_GET) {
             $response = $this->getGraphQlClient()->getQuery(
                 $query,
                 $variables,

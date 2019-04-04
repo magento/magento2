@@ -35,6 +35,10 @@ MUTATION;
         $this->assertEquals([4, 5, 6], $testItem['integer_list']);
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Mutation requests allowed only for POST requests
+     */
     public function testMutationIsNotAllowedViaGetRequest()
     {
         $id = 3;
@@ -48,8 +52,6 @@ mutation {
   }
 }
 MUTATION;
-
-        self::expectException(\Exception::class);
 
         $this->graphQlQuery($query, [], '', [], 'GET');
     }
