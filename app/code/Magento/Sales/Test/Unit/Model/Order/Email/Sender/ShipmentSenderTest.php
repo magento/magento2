@@ -7,6 +7,9 @@ namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 
+/**
+ * Test for Magento\Sales\Model\Order\Email\Sender\ShipmentSender class.
+ */
 class ShipmentSenderTest extends AbstractSenderTest
 {
     /**
