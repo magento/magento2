@@ -76,7 +76,7 @@ class InterfaceType implements TypeMetaReaderInterface
             }
 
             if ($this->docReader->read($typeMeta->astNode->directives)) {
-                $result['cacheable'] = $this->cacheTagReader->read($typeMeta->astNode->directives);
+                $result['cache'] = $this->cacheTagReader->read($typeMeta->astNode->directives);
             }
 
             return $result;

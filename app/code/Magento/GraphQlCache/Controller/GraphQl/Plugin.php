@@ -10,9 +10,9 @@ namespace Magento\GraphQlCache\Controller\GraphQl;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\GraphQlCache\Model\CacheInfo;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\GraphQlCache\Model\CacheTags;
 use Magento\PageCache\Model\Config;
 use Magento\GraphQl\Controller\HttpRequestProcessor;
 
@@ -22,9 +22,9 @@ use Magento\GraphQl\Controller\HttpRequestProcessor;
 class Plugin
 {
     /**
-     * @var CacheTags
+     * @var CacheInfo
      */
-    private $cacheTags;
+    private $cacheInfo;
 
     /**
      * @var Config
@@ -42,18 +42,18 @@ class Plugin
     private $requestProcessor;
 
     /**
-     * @param CacheTags $cacheTags
+     * @param CacheInfo $cacheInfo
      * @param Config $config
      * @param HttpResponse $response
      * @param HttpRequestProcessor $requestProcessor
      */
     public function __construct(
-        CacheTags $cacheTags,
+        CacheInfo $cacheInfo,
         Config $config,
         HttpResponse $response,
         HttpRequestProcessor $requestProcessor
     ) {
-        $this->cacheTags = $cacheTags;
+        $this->cacheInfo = $cacheInfo;
         $this->config = $config;
         $this->response = $response;
         $this->requestProcessor = $requestProcessor;
@@ -92,13 +92,14 @@ class Plugin
         $response,
         RequestInterface $request
     ) {
-        if ($this->config->isEnabled()) {
+        $cacheTags = $this->cacheInfo->getCacheTags();
+        $isCacheValid = $this->cacheInfo->isCacheable();
+        if (!empty($cacheTags)
+            && $isCacheValid
+            && $this->config->isEnabled()
+        ) {
             $this->response->setPublicHeaders($this->config->getTtl());
-            $cacheTags = $this->cacheTags->getCacheTags();
-            if (!empty($cacheTags)) {
-                // assume that response should be cacheable if it contains cache tags
-                $this->response->setHeader('X-Magento-Tags', implode(',', $cacheTags), true);
-            }
+            $this->response->setHeader('X-Magento-Tags', implode(',', $cacheTags), true);
         }
 
         return $response;

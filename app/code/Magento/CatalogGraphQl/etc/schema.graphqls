@@ -9,11 +9,11 @@ type Query {
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
      ): Products
-     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The test products query searches for products that match the criteria specified in the search and filter attributes") @cacheable(cache_tag: "cat_p")
+     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes") @cache(cache_tag: "cat_p", cacheable: true)
     category (
         id: Int @doc(description: "Id of the category")
     ): CategoryTree
-    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The test products query searches for products that match the criteria specified in the search and filter attributes") @cacheable(cache_tag: "cat_c")
+    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes") @cache(cache_tag: "cat_c", cacheable: true)
 }
 
 enum CurrencyEnum @doc(description: "The list of available currency codes") {
@@ -244,7 +244,7 @@ type ProductTierPrices @doc(description: "The ProductTierPrices object defines a
     website_id: Float @doc(description: "The ID assigned to the website")
 }
 
-interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") @cacheable(cache_tag: "cat_p") {
+interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
     id: Int @doc(description: "The ID number assigned to the product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToId")
     name: String @doc(description: "The product name. Customers use this name to identify the product.")
     sku: String @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer")
@@ -275,7 +275,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     price: ProductPrices @doc(description: "A ProductPrices object, indicating the price of an item") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer")
-    categories: [CategoryInterface] @doc(description: "The categories assigned to a product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories")
+    categories: [CategoryInterface] @doc(description: "The categories assigned to a product") @cache(cache_tag: "cat_c", cacheable: true) @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories")
     canonical_url: String @doc(description: "Canonical URL") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
 }
 
@@ -378,9 +378,9 @@ interface CustomizableProductInterface @typeResolver(class: "Magento\\CatalogGra
     options: [CustomizableOptionInterface] @doc(description: "An array of options for a customizable product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Options")
 }
 
-interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CategoryInterfaceTypeResolver") @cacheable(cache_tag: "cat_c") @doc(description: "CategoryInterface contains the full set of attributes that can be returned in a category search") {
+interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CategoryInterfaceTypeResolver") @doc(description: "CategoryInterface contains the full set of attributes that can be returned in a category search") {
     id: Int @doc(description: "An ID that uniquely identifies the category")
-    description: String @doc(description: "An optional description ofm the category") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryHtmlAttribute")
+    description: String @doc(description: "An optional description of the category") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryHtmlAttribute")
     name: String @doc(description: "The display name of the category")
     path: String @doc(description: "Category Path")
     path_in_store: String @doc(description: "Category path in store")
@@ -396,7 +396,7 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
-    ): CategoryProducts @cacheable(cache_tag: "cat_p") @doc(description: "The list of products assigned to the category") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Products")
+    ): CategoryProducts @doc(description: "The list of products assigned to the category") @cache(cache_tag: "cat_p", cacheable: true) @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Products")
     breadcrumbs: [Breadcrumb] @doc(description: "Breadcrumbs, parent categories info") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Breadcrumbs")
 }
 

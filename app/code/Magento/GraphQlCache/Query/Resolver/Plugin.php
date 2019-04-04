@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\Resolver\Context;
-use Magento\GraphQlCache\Model\CacheTags;
+use Magento\GraphQlCache\Model\CacheInfo;
 use Magento\Framework\App\RequestInterface;
 
 /**
@@ -22,9 +22,9 @@ use Magento\Framework\App\RequestInterface;
 class Plugin
 {
     /**
-     * @var CacheTags
+     * @var CacheInfo
      */
-    private $cacheTags;
+    private $cacheInfo;
 
     /**
      * @var Request
@@ -34,12 +34,12 @@ class Plugin
     /**
      * Constructor
      *
-     * @param CacheTags $cacheTags
+     * @param CacheInfo $cacheInfo
      * @param RequestInterface $request
      */
-    public function __construct(CacheTags $cacheTags, RequestInterface $request)
+    public function __construct(CacheInfo $cacheInfo, RequestInterface $request)
     {
-        $this->cacheTags = $cacheTags;
+        $this->cacheInfo = $cacheInfo;
         $this->request = $request;
     }
 
@@ -64,16 +64,19 @@ class Plugin
         array $value = null,
         array $args = null
     ) {
-        $cacheTag = $field->getCacheTag();
-        if (!empty($cacheTag) && $this->request->isGet()) {
+        $cache = $field->getCache();
+        $cacheTag = isset($cache['cache_tag']) ? $cache['cache_tag'] : [];
+        $cacheable = isset($cache['cacheable']) ? $cache['cacheable'] : true;
+        if (!empty($cacheTag) && $this->request->isGet() && $cacheable) {
             $cacheTags = [$cacheTag];
             // Resolved value must have cache IDs defined
             $resolvedItemsIds = $this->extractResolvedItemsIds($resolvedValue);
             foreach ($resolvedItemsIds as $itemId) {
                 $cacheTags[] = $cacheTag . '_' . $itemId;
             }
-            $this->cacheTags->addCacheTags($cacheTags);
+            $this->cacheInfo->addCacheTags($cacheTags);
         }
+        $this->setCacheValidity($cacheable);
         return $resolvedValue;
     }
 
@@ -85,7 +88,6 @@ class Plugin
      */
     private function extractResolvedItemsIds($resolvedValue)
     {
-        // TODO: Implement safety checks and think about additional places which can hold items IDs
         if (isset($resolvedValue['ids']) && is_array($resolvedValue['ids'])) {
             return $resolvedValue['ids'];
         }
@@ -106,5 +108,16 @@ class Plugin
             }
         }
         return $ids;
+    }
+
+    /**
+     * Set cache validity for the graphql request
+     *
+     * @param bool $isValid
+     */
+    private function setCacheValidity(bool $isValid): void
+    {
+        $cacheValidity = $this->cacheInfo->isCacheable() && $isValid;
+        $this->cacheInfo->setCacheValidity($cacheValidity);
     }
 }

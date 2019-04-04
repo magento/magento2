@@ -122,6 +122,13 @@ sub vcl_hash {
         hash_data(server.ip);
     }
 
+    if (req.http.store) {
+        hash_data(req.http.store);
+    }
+    if (req.http.Content-Currency) {
+        hash_data(req.http.Content-Currency);
+    }
+
     # To make sure http users don't see ssl warning
     if (req.http./* {{ ssl_offloaded_header }} */) {
         hash_data(req.http./* {{ ssl_offloaded_header }} */);
