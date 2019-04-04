@@ -328,7 +328,8 @@ class Escaper
      */
     private function escapeScriptIdentifiers(string $data): string
     {
-        $filteredData = preg_replace(self::$xssFiltrationPattern, ':', $data) ?: '';
+        $filteredData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $data) ?: '';
+        $filteredData = preg_replace(self::$xssFiltrationPattern, ':', $filteredData) ?: '';
         if (preg_match(self::$xssFiltrationPattern, $filteredData)) {
             $filteredData = $this->escapeScriptIdentifiers($filteredData);
         }
