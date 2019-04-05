@@ -57,8 +57,9 @@ class CategoriesUrlRewriteGenerator
      */
     public function generate($storeId, Product $product, ObjectRegistry $productCategories)
     {
+        $urls = [];
         if (!$this->isCategoryRewritesEnabled($storeId)){
-            return [];
+            return $urls;
         }
 
         foreach ($productCategories->getList() as $category) {
