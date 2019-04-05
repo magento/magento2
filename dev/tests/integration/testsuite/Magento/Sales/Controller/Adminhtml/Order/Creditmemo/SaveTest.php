@@ -10,15 +10,16 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
-use Magento\TestFramework\TestCase\AbstractBackendController;
 use PHPUnit\Framework\Constraint\StringContains;
 
 /**
  * Provide tests for CreditMemo save controller.
  *
+ * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
+ * @magentoDataFixture Magento/Sales/_files/invoice.php
  */
-class SaveTest extends AbstractBackendController
+class SaveTest extends AbstractCreditmemoControllerTest
 {
     /**
      * @var string
