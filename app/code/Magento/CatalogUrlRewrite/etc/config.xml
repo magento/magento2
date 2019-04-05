@@ -9,7 +9,7 @@
     <default>
         <catalog>
             <seo>
-                <generate_rewrites_on_save>1</generate_rewrites_on_save>
+                <generate_rewrites_on_save>0</generate_rewrites_on_save>
             </seo>
         </catalog>
     </default>
