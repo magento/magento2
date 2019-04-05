@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\StoreGraphQl\Controller\HttpHeaderProcessor;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Controller\HttpHeaderProcessorInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
@@ -36,6 +35,7 @@ class StoreProcessor implements HttpHeaderProcessorInterface
     /**
      * @param StoreManagerInterface $storeManager
      * @param HttpContext $httpContext
+     * @param StoreCookieManagerInterface $storeCookieManager
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -54,7 +54,6 @@ class StoreProcessor implements HttpHeaderProcessorInterface
      *
      * @param string $headerValue
      * @return void
-     * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processHeaderValue(string $headerValue) : void
@@ -74,7 +73,7 @@ class StoreProcessor implements HttpHeaderProcessorInterface
     /**
      * Update context accordingly to the store code found.
      *
-     * @param string $store
+     * @param string $storeCode
      * @return void
      */
     private function updateContext(string $storeCode) : void

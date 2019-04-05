@@ -82,9 +82,9 @@ class Plugin
      * depending if it comes from builtin cache or the dispatch.
      *
      * @param FrontControllerInterface $subject
-     * @param ResponseInterface | ResultInterface $response
+     * @param ResponseInterface|ResultInterface $response
      * @param RequestInterface $request
-     * @return ResponseInterface | ResultInterface
+     * @return ResponseInterface|ResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterDispatch(

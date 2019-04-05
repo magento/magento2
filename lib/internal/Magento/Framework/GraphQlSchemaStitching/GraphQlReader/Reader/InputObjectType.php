@@ -12,7 +12,6 @@ use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\TypeMetaWr
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DocReader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\CacheTagReader;
 
-
 /**
  * Composite configuration reader to handle the input object type meta
  */
@@ -50,7 +49,7 @@ class InputObjectType implements TypeMetaReaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
@@ -80,6 +79,8 @@ class InputObjectType implements TypeMetaReaderInterface
     }
 
     /**
+     * Read the input's meta data
+     *
      * @param \GraphQL\Type\Definition\InputObjectField $fieldMeta
      * @return array
      */

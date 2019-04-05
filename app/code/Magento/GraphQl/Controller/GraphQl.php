@@ -82,8 +82,8 @@ class GraphQl implements FrontControllerInterface
         QueryProcessor $queryProcessor,
         ExceptionFormatter $graphQlError,
         ContextInterface $resolverContext,
-        QueryFields $queryFields,
         HttpRequestProcessor $requestProcessor,
+        QueryFields $queryFields,
         JsonFactory $jsonFactory
     ) {
         $this->schemaGenerator = $schemaGenerator;

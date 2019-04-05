@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\DirectoryGraphQl\Controller\HttpHeaderProcessor;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Controller\HttpHeaderProcessorInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Session\SessionManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Process the "Currency" header entry
@@ -34,6 +34,11 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
     private $session;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param HttpContext $httpContext
      * @param SessionManagerInterface $session
@@ -41,11 +46,13 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
     public function __construct(
         StoreManagerInterface $storeManager,
         HttpContext $httpContext,
-        SessionManagerInterface $session
+        SessionManagerInterface $session,
+        LoggerInterface $logger
     ) {
         $this->storeManager = $storeManager;
         $this->httpContext = $httpContext;
         $this->session = $session;
+        $this->logger = $logger;
     }
 
     /**
@@ -53,7 +60,6 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
      *
      * @param string $headerValue
      * @return void
-     * @throws GraphQlInputException
      */
     public function processHeaderValue(string $headerValue) : void
     {
@@ -81,6 +87,7 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
             }
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             //skip store not found exception as it will be handled in graphql validation
+            $this->logger->warning($e->getMessage());
         }
     }
 }

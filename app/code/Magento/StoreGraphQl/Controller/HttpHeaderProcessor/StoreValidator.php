@@ -36,6 +36,7 @@ class StoreValidator implements HttpRequestValidatorInterface
      *
      * @param HttpRequestInterface $request
      * @return void
+     * @throws GraphQlInputException
      */
     public function validate(HttpRequestInterface $request): void
     {

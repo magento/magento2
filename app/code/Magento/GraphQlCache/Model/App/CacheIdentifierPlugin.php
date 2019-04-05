@@ -6,11 +6,8 @@
 
 namespace Magento\GraphQlCache\Model\App;
 
-use Magento\Framework\Serialize\Serializer\Json;
-
 /**
- * Class CachePlugin
- * Should add unique identifier for graphql query
+ * Handles unique identifier for graphql query
  */
 class CacheIdentifierPlugin
 {
@@ -53,7 +50,7 @@ class CacheIdentifierPlugin
     }
 
     /**
-     * Adds a unique key identifier for graphql specific query and variables that skips X-Magento-Vary cookie
+     * Add/Override a unique key identifier for graphql specific query and variables that skips X-Magento-Vary cookie
      *
      * @param \Magento\Framework\App\PageCache\Identifier $identifier
      * @param string $result
