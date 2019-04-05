@@ -56,6 +56,7 @@ class Serialized extends \Magento\Framework\App\Config\Value
             }
         }
     }
+
     /**
      * @return $this
      */
