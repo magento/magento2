@@ -153,4 +153,12 @@ class Attribute extends AbstractFilter
             ? (int)$optionsFacetedData[$value]['count']
             : 0;
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function isOptionReducesResults($optionCount, $totalSize)
+    {
+        return $optionCount <= $totalSize;
+    }
 }

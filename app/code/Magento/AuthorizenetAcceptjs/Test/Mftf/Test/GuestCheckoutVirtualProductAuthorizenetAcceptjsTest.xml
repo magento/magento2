@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="GuestCheckoutVirtualProductAuthorizenetAcceptjsTest">
+        <annotations>
+            <stories value="Authorize.net Accept.js"/>
+            <title value="Guest Checkout of Virtual Product using Authorize.net Accept.js"/>
+            <description value="Checkout a virtual product with a guest using Authorize.net Accept.js"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-12712"/>
+            <skip>
+                <issueId value="DEVOPS-4604"/>
+            </skip>
+            <group value="AuthorizenetAcceptjs"/>
+            <group value="ThirdPartyPayments"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create virtual product -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <waitForPageLoad stepKey="waitForProductIndexPage"/>
+            <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+                <argument name="product" value="defaultVirtualProduct"/>
+            </actionGroup>
+            <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductForm">
+                <argument name="product" value="defaultVirtualProduct"/>
+            </actionGroup>
+            <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+
+            <!--Configure Auth.net-->
+            <actionGroup ref="ConfigureAuthorizenetAcceptjs" stepKey="configureAuthorizenetAcceptjs">
+                <argument name="paymentAction" value="Authorize and Capture"/>
+            </actionGroup>
+
+        </before>
+        <after>
+            <actionGroup ref="DisableAuthorizenetAcceptjs" stepKey="DisableAuthorizenetAcceptjs"/>
+            <!-- Delete virtual product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="defaultVirtualProduct"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Add product to cart twice-->
+        <amOnPage url="{{defaultVirtualProduct.sku}}.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
+        <waitForPageLoad stepKey="waitForCartToFill"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCartAgain"/>
+        <waitForPageLoad stepKey="waitForCartToFillAgain"/>
+
+        <!--Checkout steps-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
+        <waitForPageLoad stepKey="waitForCheckoutLoad"/>
+
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="enterEmail"/>
+        <click stepKey="clickOnAuthorizenetToggle" selector="{{AuthorizenetCheckoutSection.selectAuthorizenet}}"/>
+        <waitForPageLoad stepKey="waitForBillingInfoLoad"/>
+        <actionGroup ref="GuestCheckoutAuthorizenetFillBillingAddress" stepKey="fillAddressForm">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="FillPaymentInformation" stepKey="fillPaymentInfo"/>
+
+        <!--View and validate order-->
+        <actionGroup ref="ViewAndValidateOrderActionGroupNoSubmit" stepKey="viewAndValidateOrder">
+            <argument name="amount" value="{{AuthorizenetAcceptjsOrderValidationData.virtualProductOrderAmount}}"/>
+            <argument name="status" value="{{AuthorizenetAcceptjsOrderValidationData.processingStatusProcessing}}"/>
+            <argument name="captureStatus" value="{{AuthorizenetAcceptjsOrderValidationData.captureStatusCapture}}"/>
+            <argument name="closedStatus" value="{{AuthorizenetAcceptjsOrderValidationData.closedStatusNo}}"/>
+        </actionGroup>
+    </test>
+</tests>

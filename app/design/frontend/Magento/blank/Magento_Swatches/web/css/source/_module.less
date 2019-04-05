@@ -91,15 +91,19 @@
             &-options {
                 margin-top: @indent__s;
 
+                &:focus {
+                    box-shadow: none;
+                }
+
                 .swatch-option-tooltip-layered .title {
                     .lib-css(color, @swatch-option-tooltip-layered-title__color);
-                    width: 100%;
-                    height: 20px;
-                    position: absolute;
                     bottom: -5px;
+                    height: 20px;
                     left: 0;
-                    text-align: center;
                     margin-bottom: @indent__s;
+                    position: absolute;
+                    text-align: center;
+                    width: 100%;
                 }
             }
 
@@ -110,7 +114,7 @@
                     .lib-css(color, @attr-swatch-option__color);
 
                     &.selected {
-                        .lib-css(blackground, @attr-swatch-option__selected__background);
+                        .lib-css(background, @attr-swatch-option__selected__background);
                         .lib-css(border, @attr-swatch-option__selected__border);
                         .lib-css(color, @attr-swatch-option__selected__color);  
                     }
@@ -132,15 +136,19 @@
             text-align: center;
             text-overflow: ellipsis;
 
+            &:focus {
+                box-shadow: @focus__box-shadow;
+            }
+
             &.text {
                 .lib-css(background, @swatch-option-text__background);
                 .lib-css(color, @swatch-option-text__color);
                 font-size: @font-size__s;
                 font-weight: @font-weight__bold;
                 line-height: 20px;
-                padding: 4px 8px;
-                min-width: 22px;
                 margin-right: 7px;
+                min-width: 22px;
+                padding: 4px 8px;
 
                 &.selected {
                     .lib-css(background-color, @swatch-option-text__selected__background-color) !important;

@@ -116,7 +116,6 @@ QUERY;
      */
     public function testError() : void
     {
-        $this->markTestSkipped('Causes failiure with php unit and php 7.2');
         $query
             = <<<QUERY
   {

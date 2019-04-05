@@ -31,7 +31,10 @@ class State
         }
 
         if (!$order->isCanceled() && !$order->canUnhold() && !$order->canInvoice()) {
-            if (in_array($currentState, [Order::STATE_PROCESSING, Order::STATE_COMPLETE]) && !$order->canCreditmemo()) {
+            if (in_array($currentState, [Order::STATE_PROCESSING, Order::STATE_COMPLETE])
+                && !$order->canCreditmemo()
+                && !$order->canShip()
+            ) {
                 $order->setState(Order::STATE_CLOSED)
                     ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_CLOSED));
             } elseif ($currentState === Order::STATE_PROCESSING && !$order->canShip()) {

@@ -264,7 +264,7 @@ define([
         /**
          * Validates all of the available fields.
          *
-         * @returns {Array} An array with validatation results.
+         * @returns {Array} An array with validation results.
          */
         validate: function () {
             return this.elems.map('validate');
@@ -306,7 +306,7 @@ define([
         },
 
         /**
-         * Updates 'fields' array filling it with available edtiors
+         * Updates 'fields' array filling it with available editors
          * or with column instances if associated field is not present.
          *
          * @returns {Record} Chainable.

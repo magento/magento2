@@ -7,10 +7,12 @@
 namespace Magento\ImportExport\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Framework\Message\ManagerInterface;
 
 /**
  * Import model
@@ -180,6 +182,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     private $localeDate;
 
     /**
+     * @var ManagerInterface
+     */
+    private $messageManager;
+
+    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\ImportExport\Helper\Data $importExportData
@@ -195,6 +202,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param History $importHistoryModel
      * @param DateTime $localeDate
      * @param array $data
+     * @param ManagerInterface|null $messageManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -212,7 +220,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\ImportExport\Model\History $importHistoryModel,
         DateTime $localeDate,
-        array $data = []
+        array $data = [],
+        ManagerInterface $messageManager = null
     ) {
         $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;
@@ -227,6 +236,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $this->_filesystem = $filesystem;
         $this->importHistoryModel = $importHistoryModel;
         $this->localeDate = $localeDate;
+        $this->messageManager = $messageManager ?: ObjectManager::getInstance()->get(ManagerInterface::class);
         parent::__construct($logger, $filesystem, $data);
     }
 
@@ -302,7 +312,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     {
         $messages = [];
         if ($this->getProcessedRowsCount()) {
-            if ($validationResult->getErrorsCount()) {
+            if ($validationResult->isErrorLimitExceeded()) {
                 $messages[] = __('Data validation failed. Please fix the following errors and upload the file again.');
 
                 // errors info
@@ -620,12 +630,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
 
-        $result = !$errorAggregator->getErrorsCount();
-        $validationStrategy = $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY);
-        if ($validationStrategy === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS) {
-            $result = true;
-        }
-
+        $result = !$errorAggregator->isErrorLimitExceeded();
         if ($result) {
             $this->addLogComment(__('Import data validation is complete.'));
         }

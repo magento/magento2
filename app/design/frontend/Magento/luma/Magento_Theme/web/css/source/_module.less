@@ -77,6 +77,14 @@
         .lib-vendor-prefix-flex-grow(1);
     }
 
+    .page-main {
+        > .page-title-wrapper {
+            .page-title {
+                word-break: break-all;
+            }
+        }
+    }
+
     //
     //  Header
     //  ---------------------------------------------
@@ -141,6 +149,12 @@
         .page-print & {
             display: inline-block;
             float: none;
+        }
+    }
+
+    .page-print {
+        .nav-toggle {
+            display: none;
         }
     }
 
@@ -439,7 +453,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .logo {
         margin-bottom: 13px;
         margin-top: 4px;
@@ -452,7 +466,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .cms-page-view .page-main {
-        padding-top: 41px;
+        padding-top: 0;
         position: relative;
     }
 }

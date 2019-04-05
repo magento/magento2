@@ -33,5 +33,6 @@
         <element name="deleteTaxClass" type="button" selector="//span[contains(text(),'{{var1}}')]/../..//*[@class='mselect-delete']" parameterized="true"/>
         <element name="popUpDialogOK" type="button" selector="//*[@class='modal-footer']//*[contains(text(),'OK')]"/>
         <element name="taxRateMultiSelectItems" type="block" selector=".mselect-list-item"/>
+        <element name="taxRateNumber" type="button" selector="//div[@data-ui-id='tax-rate-form-fieldset-element-form-field-tax-rate']//div[@class='mselect-items-wrapper']//label[{{var}}]" parameterized="true"/>
     </section>
 </sections>
