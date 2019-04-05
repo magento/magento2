@@ -11,8 +11,6 @@ use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Controller\HttpRequestValidatorInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Http\Context as HttpContext;
-use Magento\Store\Api\StoreCookieManagerInterface;
 
 /**
  * Validate the "Store" header entry
@@ -25,27 +23,12 @@ class StoreValidator implements HttpRequestValidatorInterface
     private $storeManager;
 
     /**
-     * @var HttpContext
-     */
-    private $httpContext;
-
-    /**
-     * @var StoreCookieManagerInterface
-     */
-    private $storeCookieManager;
-
-    /**
      * @param StoreManagerInterface $storeManager
-     * @param HttpContext $httpContext
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        HttpContext $httpContext,
-        StoreCookieManagerInterface $storeCookieManager
+        StoreManagerInterface $storeManager
     ) {
         $this->storeManager = $storeManager;
-        $this->httpContext = $httpContext;
-        $this->storeCookieManager = $storeCookieManager;
     }
 
     /**

@@ -11,7 +11,6 @@ use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Controller\HttpRequestValidatorInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Http\Context as HttpContext;
 
 /**
  * Validate the "Currency" header entry
@@ -24,20 +23,12 @@ class CurrencyValidator implements HttpRequestValidatorInterface
     private $storeManager;
 
     /**
-     * @var HttpContext
-     */
-    private $httpContext;
-
-    /**
      * @param StoreManagerInterface $storeManager
-     * @param HttpContext $httpContext
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        HttpContext $httpContext
+        StoreManagerInterface $storeManager
     ) {
         $this->storeManager = $storeManager;
-        $this->httpContext = $httpContext;
     }
 
     /**
