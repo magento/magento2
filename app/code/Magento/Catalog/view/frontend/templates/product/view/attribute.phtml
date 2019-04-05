@@ -15,6 +15,11 @@
 <?php
 $_helper = $this->helper('Magento\Catalog\Helper\Output');
 $_product = $block->getProduct();
+
+if (!$_product instanceof \Magento\Catalog\Model\Product) {
+    return;
+}
+
 $_call = $block->getAtCall();
 $_code = $block->getAtCode();
 $_className = $block->getCssClass();

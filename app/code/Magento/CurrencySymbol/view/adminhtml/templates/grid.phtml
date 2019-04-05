@@ -5,37 +5,37 @@
  */
 
 // @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
- * @var \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol $block
+ * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol
  */
-?>
 
-<form id="currency-symbols-form" action="<?= /* @escapeNotVerified */ $block->getFormActionUrl() ?>" method="post">
-    <input name="form_key" type="hidden" value="<?= /* @escapeNotVerified */ $block->getFormKey() ?>" />
+$escapeHelper = $this->helper(\Magento\Framework\EscapeHelper::class);
+?>
+<form id="currency-symbols-form" action="<?php echo $escapeHelper->escapeHtmlAttr($block->getFormActionUrl()) ?>" method="post">
+    <input name="form_key" type="hidden" value="<?php echo $escapeHelper->escapeHtmlAttr($block->getFormKey()) ?>" />
     <fieldset class="admin__fieldset">
         <?php foreach ($block->getCurrencySymbolsData() as $code => $data): ?>
         <div class="admin__field _required">
-            <label class="admin__field-label" for="custom_currency_symbol<?php /* @escapeNotVerified */ echo $code; ?>">
-                <span><?php /* @escapeNotVerified */ echo $code; ?> (<?php /* @escapeNotVerified */ echo $data['displayName']; ?>)</span>
+            <label class="admin__field-label" for="custom_currency_symbol<?php echo $escapeHelper->escapeHtmlAttr($code); ?>">
+                <span><?php echo $block->escapeHtml($code); ?> (<?php echo $block->escapeHtml($data['displayName']); ?>)</span>
             </label>
             <div class="admin__field-control">
-                <input id="custom_currency_symbol<?php /* @escapeNotVerified */ echo $code; ?>"
+                <input id="custom_currency_symbol<?php echo $escapeHelper->escapeHtmlAttr($code); ?>"
                        class="required-entry admin__control-text"
                        type="text"
-                       value="<?php echo $this->helper(\Magento\Framework\EscapeHelper::class)->escapeHtmlAttr($data['displaySymbol']); ?>"
+                       value="<?php echo $escapeHelper->escapeHtmlAttr($data['displaySymbol']); ?>"
                        <?php echo $data['inherited'] ? ' disabled="disabled"' : '';?>
-                       name="custom_currency_symbol[<?php /* @escapeNotVerified */ echo $code; ?>]">
+                       name="custom_currency_symbol[<?php echo $escapeHelper->escapeHtmlAttr($code); ?>]">
                 <div class="admin__field admin__field-option">
-                    <input id="custom_currency_symbol_inherit<?php /* @escapeNotVerified */ echo $code; ?>"
+                    <input id="custom_currency_symbol_inherit<?php echo $escapeHelper->escapeHtmlAttr($code); ?>"
                            class="admin__control-checkbox" type="checkbox"
-                           onclick="toggleUseDefault(<?php /* @escapeNotVerified */ echo '\'' . $code . '\',\'' . $block->escapeQuote($data['parentSymbol'], true) . '\''; ?>)"
+                           onclick="toggleUseDefault(<?php /* @noEscape */ echo '\'' . $escapeHelper->escapeHtmlAttr($block->escapeQuote($code, true)) . '\',\'' . $block->escapeQuote($data['parentSymbol'], true) . '\''; ?>)"
                             <?php echo $data['inherited'] ? ' checked="checked"' : ''; ?>
                            value="1"
-                           name="inherit_custom_currency_symbol[<?php /* @escapeNotVerified */ echo $code; ?>]">
-                    <label class="admin__field-label" for="custom_currency_symbol_inherit<?php /* @escapeNotVerified */ echo $code; ?>"><span><?php /* @escapeNotVerified */ echo $block->getInheritText(); ?></span></label>
+                           name="inherit_custom_currency_symbol[<?php echo $escapeHelper->escapeHtmlAttr($code); ?>]">
+                    <label class="admin__field-label" for="custom_currency_symbol_inherit<?php echo $escapeHelper->escapeHtmlAttr($code); ?>"><span><?php echo $block->escapeHtml($block->getInheritText()); ?></span></label>
                 </div>
             </div>
         </div>
@@ -43,19 +43,26 @@
     </fieldset>
 </form>
 <script>
-require(['jquery', "mage/mage", 'prototype'], function(jQuery){
+require(['jquery', 'mage/mage'], function (jQuery){
+    jQuery('#currency-symbols-form')
+        .mage('form')
+        .mage('validation');
 
-    jQuery('#currency-symbols-form').mage('form').mage('validation');
+    /**
+     * Toggle the field to use the default value
+     *
+     * @param {String} code
+     * @param {String} value
+     */
+    function toggleUseDefault(code, value) {
+        var checkbox = jQuery('#custom_currency_symbol_inherit' + code),
+            input = jQuery('#custom_currency_symbol' + code);
 
-    function toggleUseDefault(code, value)
-    {
-        checkbox = $('custom_currency_symbol_inherit'+code);
-        input = $('custom_currency_symbol'+code);
-        if (checkbox.checked) {
-            input.value = value;
-            input.disabled = true;
+        if (checkbox.is(':checked')) {
+            input.val(value);
+            input.prop('disabled', true);
         } else {
-            input.disabled = false;
+            input.prop('disabled', false);
         }
     }
 

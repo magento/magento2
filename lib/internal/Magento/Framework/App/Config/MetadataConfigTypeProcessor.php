@@ -83,10 +83,12 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
     private function processScopeData(array $data)
     {
         foreach ($this->_metadata as $path => $metadata) {
-            /** @var \Magento\Framework\App\Config\Data\ProcessorInterface $processor */
-            $processor = $this->_processorFactory->get($metadata['backendModel']);
-            $value = $processor->processValue($this->_getValue($data, $path));
-            $this->_setValue($data, $path, $value);
+            if (isset($metadata['backendModel'])) {
+                /** @var \Magento\Framework\App\Config\Data\ProcessorInterface $processor */
+                $processor = $this->_processorFactory->get($metadata['backendModel']);
+                $value = $processor->processValue($this->_getValue($data, $path));
+                $this->_setValue($data, $path, $value);
+            }
         }
 
         return $data;
@@ -95,7 +97,7 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
     /**
      * Process config data
      *
-     * @param array $data
+     * @param array $rawData
      * @return array
      */
     public function process(array $rawData)
