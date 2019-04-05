@@ -14,3 +14,4 @@ $objectManager = Bootstrap::getObjectManager();
 $configWriter = $objectManager->create(WriterInterface::class);
 
 $configWriter->delete('carriers/ups/active');
+$configWriter->delete('carriers/ups/type');
