@@ -52,13 +52,6 @@ class FieldFactory
             $fieldData['itemType'] = str_replace('[]', '', $fieldData['type']);
         }
 
-        if (isset($fieldData['description'])) {
-            if ($fieldData['description'] == "The list of products assigned to the category") {
-                $fieldType = $fieldData['type'];
-            }
-        }
-
-
         return $this->objectManager->create(
             Field::class,
             [
