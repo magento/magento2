@@ -52,7 +52,7 @@ class DeveloperTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $configLoaderMock->expects($this->any())->method('load')->willReturn([]);
 
-        $interceptionConfigMock = $this->getMockBuilder(\Magento\Framework\Interception\Config\Config::class)
+        $interceptConfigMock = $this->getMockBuilder(\Magento\Framework\Interception\Config\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -68,7 +68,7 @@ class DeveloperTest extends \PHPUnit\Framework\TestCase
                     ->disableOriginalConstructor()
                     ->getMock()
             ],
-            [\Magento\Framework\Interception\Config\Config::class, $interceptionConfigMock]
+            [\Magento\Framework\Interception\Config\Config::class, $interceptConfigMock]
         ];
         $objectManagerMock->expects($this->any())->method('get')->willReturnMap($omReturnMap);
 
@@ -78,7 +78,7 @@ class DeveloperTest extends \PHPUnit\Framework\TestCase
         $expectedSharedInstances = [
             'class_name' => 'shared_object',
             \Magento\Framework\ObjectManager\ConfigLoaderInterface::class =>  $configLoaderMock,
-            \Magento\Framework\Interception\Config\Config::class => $interceptionConfigMock
+            \Magento\Framework\Interception\Config\Config::class => $interceptConfigMock
         ];
         $this->assertSame($expectedSharedInstances, $sharedInstances);
         if (isset($origObjectManager)) {
