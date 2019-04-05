@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
-use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -15,34 +14,43 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Api\CouponManagementInterface;
+use Magento\Quote\Api\CartManagementInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
  * @inheritdoc
  */
-class RemoveCouponFromCart implements ResolverInterface
+class PlaceOrder implements ResolverInterface
 {
+    /**
+     * @var CartManagementInterface
+     */
+    private $cartManagement;
+
     /**
      * @var GetCartForUser
      */
     private $getCartForUser;
 
     /**
-     * @var CouponManagementInterface
+     * @var OrderRepositoryInterface
      */
-    private $couponManagement;
+    private $orderRepository;
 
     /**
      * @param GetCartForUser $getCartForUser
-     * @param CouponManagementInterface $couponManagement
+     * @param CartManagementInterface $cartManagement
+     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        CouponManagementInterface $couponManagement
+        CartManagementInterface $cartManagement,
+        OrderRepositoryInterface $orderRepository
     ) {
         $this->getCartForUser = $getCartForUser;
-        $this->couponManagement = $couponManagement;
+        $this->cartManagement = $cartManagement;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -55,26 +63,21 @@ class RemoveCouponFromCart implements ResolverInterface
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        $currentUserId = $context->getUserId();
-        $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId);
-        $cartId = $cart->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
 
         try {
-            $this->couponManagement->remove($cartId);
-        } catch (NoSuchEntityException $e) {
-            $message = $e->getMessage();
-            if (preg_match('/The "\d+" Cart doesn\'t contain products/', $message)) {
-                $message = 'Cart does not contain products';
-            }
-            throw new GraphQlNoSuchEntityException(__($message), $e);
-        } catch (CouldNotDeleteException $e) {
-            throw new LocalizedException(__($e->getMessage()), $e);
-        }
+            $orderId = $this->cartManagement->placeOrder($cart->getId());
+            $order = $this->orderRepository->get($orderId);
 
-        return [
-            'cart' => [
-                'model' => $cart,
-            ],
-        ];
+            return [
+                'order' => [
+                    'order_id' => $order->getIncrementId(),
+                ],
+            ];
+        } catch (NoSuchEntityException $e) {
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__('Unable to place order: %message', ['message' => $e->getMessage()]), $e);
+        }
     }
 }

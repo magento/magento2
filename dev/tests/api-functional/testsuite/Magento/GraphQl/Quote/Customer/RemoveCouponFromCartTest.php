@@ -13,9 +13,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for get available payment methods
+ * Check removing of the coupon from customer cart
  */
-class GetAvailablePaymentMethodsTest extends GraphQlAbstract
+class RemoveCouponFromCartTest extends GraphQlAbstract
 {
     /**
      * @var CustomerTokenServiceInterface
@@ -40,92 +40,99 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/Checkout/_files/discount_10percent_generalusers.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/apply_coupon.php
      */
-    public function testGetAvailablePaymentMethods()
+    public function testRemoveCouponFromCart()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
-        self::assertArrayHasKey('cart', $response);
-        self::assertArrayHasKey('available_payment_methods', $response['cart']);
-
-        self::assertEquals('checkmo', $response['cart']['available_payment_methods'][0]['code']);
-        self::assertEquals('Check / Money order', $response['cart']['available_payment_methods'][0]['title']);
-    }
-
-    /**
-     * _security
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     */
-    public function testGetAvailablePaymentMethodsFromGuestCart()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $query = $this->getQuery($maskedQuoteId);
-
-        $this->expectExceptionMessage(
-            "The current user cannot perform operations on cart \"$maskedQuoteId\""
-        );
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * _security
-     * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     */
-    public function testGetAvailablePaymentMethodsFromAnotherCustomerCart()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $query = $this->getQuery($maskedQuoteId);
-
-        $this->expectExceptionMessage(
-            "The current user cannot perform operations on cart \"$maskedQuoteId\""
-        );
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer3@search.example.com'));
+        self::assertArrayHasKey('removeCouponFromCart', $response);
+        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/disable_all_active_payment_methods.php
-     */
-    public function testGetAvailablePaymentMethodsIfPaymentsAreNotPresent()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
-
-        self::assertArrayHasKey('cart', $response);
-        self::assertArrayHasKey('available_payment_methods', $response['cart']);
-        self::assertEmpty($response['cart']['available_payment_methods']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     *
      * @expectedException \Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
-    public function testGetAvailablePaymentMethodsOfNonExistentCart()
+    public function testRemoveCouponFromNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
         $query = $this->getQuery($maskedQuoteId);
 
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Cart does not contain products
+     */
+    public function testRemoveCouponFromEmptyCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testRemoveCouponFromCartIfCouponWasNotSet()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+
+        self::assertArrayHasKey('removeCouponFromCart', $response);
+        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
+    }
+
+    /**
+     * _security
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/apply_coupon.php
+     */
+    public function testRemoveCouponFromGuestCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+
+        self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/Checkout/_files/discount_10percent_generalusers.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/apply_coupon.php
+     */
+    public function testRemoveCouponFromAnotherCustomerCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+
+        self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer3@search.example.com'));
     }
 
     /**
@@ -135,14 +142,16 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
     private function getQuery(string $maskedQuoteId): string
     {
         return <<<QUERY
-{
-  cart(cart_id: "$maskedQuoteId") {
-    available_payment_methods {
-      code
-      title
+mutation {
+  removeCouponFromCart(input: {cart_id: "$maskedQuoteId"}) {
+    cart {
+      applied_coupon {
+        code
+      }
     }
   }
 }
+
 QUERY;
     }
 
