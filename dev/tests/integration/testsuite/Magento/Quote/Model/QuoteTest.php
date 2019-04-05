@@ -19,7 +19,9 @@ use Magento\TestFramework\ObjectManager;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
-
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Store\Model\StoreManagerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -31,11 +33,22 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
+     * @var string
+     */
+    private $allowedCountriesConfigPath = 'general/country/allow';
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->config = Bootstrap::getObjectManager()->get(ConfigInterface::class);
     }
 
     /**
@@ -328,6 +341,39 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
                 "'{$field}' value in quote shipping address is invalid."
             );
         }
+    }
+
+    /**
+     * Customer has address with country which not allowed in website
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @return void
+     */
+    public function testAssignCustomerWithAddressChangeWithNotAllowedCountry()
+    {
+        /** Preconditions:
+         * Customer with  address is created
+         */
+        $this->config->saveConfig(
+            $this->allowedCountriesConfigPath,
+            'FR'
+        );
+        Bootstrap::getObjectManager()->get(ReinitableConfigInterface::class)->reinit();
+        Bootstrap::getObjectManager()->create(StoreManagerInterface::class)->reinitStores();
+
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
+        $customerData = $this->_prepareQuoteForTestAssignCustomerWithAddressChange($quote);
+
+        /** Execute SUT */
+        $quote->assignCustomerWithAddressChange($customerData);
+
+        /** Check that addresses are empty */
+        $this->assertNull($quote->getBillingAddress()->getCountryId());
+        $this->assertNull($quote->getShippingAddress()->getCountryId());
+
+        $this->config->deleteConfig($this->allowedCountriesConfigPath);
     }
 
     /**

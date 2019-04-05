@@ -17,7 +17,6 @@ use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Customer\CredentialsValidator;
-use Magento\Customer\Model\Data\Address as DataAddress;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 use Magento\Directory\Model\AllowedCountries;
@@ -1618,11 +1617,11 @@ class AccountManagement implements AccountManagementInterface
     /**
      * Check is address allowed for store
      *
-     * @param DataAddress $address
+     * @param AddressInterface $address
      * @param int $storeId
      * @return bool
      */
-    private function isAddressAllowedForWebsite(DataAddress $address, int $storeId): bool
+    private function isAddressAllowedForWebsite(AddressInterface $address, int $storeId): bool
     {
         $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
 
