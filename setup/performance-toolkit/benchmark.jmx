@@ -364,6 +364,16 @@
             <stringProp name="Argument.value">${__P(graphQLPoolUsers,1)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="graphqlAddConfigurableProductToCartPercentage" elementType="Argument">
+            <stringProp name="Argument.name">graphqlAddConfigurableProductToCartPercentage</stringProp>
+            <stringProp name="Argument.value">${__P(graphqlAddConfigurableProductToCartPercentage,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="graphqlAddSimpleProductToCartPercentage" elementType="Argument">
+            <stringProp name="Argument.name">graphqlAddSimpleProductToCartPercentage</stringProp>
+            <stringProp name="Argument.value">${__P(graphqlAddSimpleProductToCartPercentage,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="graphqlGetCategoryListByCategoryIdPercentage" elementType="Argument">
             <stringProp name="Argument.name">graphqlGetCategoryListByCategoryIdPercentage</stringProp>
             <stringProp name="Argument.value">${__P(graphqlGetCategoryListByCategoryIdPercentage,0)}</stringProp>
@@ -40567,6 +40577,534 @@ vars.putObject("category", categories[number]);
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+
+  
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Add Simple Product To Cart" enabled="true">
+      <intProp name="ThroughputController.style">1</intProp>
+      <boolProp name="ThroughputController.perThread">false</boolProp>
+      <intProp name="ThroughputController.maxThroughput">1</intProp>
+      <stringProp name="ThroughputController.percentThroughput">${graphqlAddSimpleProductToCartPercentage}</stringProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/_system/scenario_controller_tmpl.jmx</stringProp></ThroughputController>
+    <hashTree>
+        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Set Test Label" enabled="true">
+            <stringProp name="script">
+var testLabel = "${testLabel}" ? " (${testLabel})" : "";
+if (testLabel
+    &amp;&amp; sampler.getClass().getName() == 'org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy'
+) {
+    if (sampler.getName().indexOf(testLabel) == -1) {
+       sampler.setName(sampler.getName() + testLabel);
+    }
+} else if (sampler.getName().indexOf("SetUp - ") == -1) {
+    sampler.setName("SetUp - " + sampler.getName());
+}
+            </stringProp>
+            <stringProp name="scriptLanguage">javascript</stringProp>
+        <stringProp name="TestPlan.comments">mpaf/tool/fragments/_system/setup_label.jmx</stringProp></JSR223PreProcessor>
+        <hashTree/>
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
+            <stringProp name="BeanShellSampler.query">
+                vars.put("testLabel", "Add Simple Product To Cart");
+            </stringProp>
+            <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
+        </BeanShellSampler>
+        <hashTree/>
+    
+    <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+      <collectionProp name="HeaderManager.headers">
+        <elementProp name="" elementType="Header">
+          <stringProp name="Header.name">Content-Type</stringProp>
+          <stringProp name="Header.value">application/json</stringProp>
+        </elementProp>
+        <elementProp name="" elementType="Header">
+          <stringProp name="Header.name">Accept</stringProp>
+          <stringProp name="Header.value">*/*</stringProp>
+        </elementProp>
+      </collectionProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/header_manager_before_token.jmx</stringProp></HeaderManager>
+    <hashTree/>
+  
+      <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Init Random Generator" enabled="true">
+        <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/common/init_random_generator_setup.jmx</stringProp>
+        <stringProp name="BeanShellSampler.query">
+import java.util.Random;
+
+Random random = new Random();
+if (${seedForRandom} &gt; 0) {
+    random.setSeed(${seedForRandom} + ${__threadNum});
+}
+
+vars.putObject("randomIntGenerator", random);
+        </stringProp>
+        <stringProp name="BeanShellSampler.filename"/>
+        <stringProp name="BeanShellSampler.parameters"/>
+        <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
+      </BeanShellSampler>
+      <hashTree/>
+    
+    <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Prepare Simple Product Data" enabled="true">
+      <stringProp name="BeanShellSampler.query">
+import java.util.Random;
+
+Random random = vars.getObject("randomIntGenerator");
+number = random.nextInt(props.get("simple_products_list").size());
+product = props.get("simple_products_list").get(number);
+
+vars.put("product_url_key", product.get("url_key"));
+vars.put("product_id", product.get("id"));
+vars.put("product_name", product.get("title"));
+vars.put("product_uenc", product.get("uenc"));
+vars.put("product_sku", product.get("sku"));
+      </stringProp>
+      <stringProp name="BeanShellSampler.filename"/>
+      <stringProp name="BeanShellSampler.parameters"/>
+      <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/product_browsing_and_adding_items_to_the_cart/simple_products_setup.jmx</stringProp></BeanShellSampler>
+    <hashTree/>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create Empty Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  createEmptyCart\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/create_empty_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract cart id" enabled="true">
+        <stringProp name="VAR">quote_id</stringProp>
+        <stringProp name="JSONPATH">$.data.createEmptyCart</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Add Simple Product To Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {  \n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cartItems: [\n        {\n          data: {\n            qty: 2\n            sku: \"${product_sku}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        qty\n        product {\n          sku\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/add_simple_product_to_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="1421843282">addSimpleProductsToCart</stringProp>
+          <stringProp name="-1173443935">"sku":"${product_sku}"</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"{\n  cart(cart_id: \"${quote_id}\") {\n    items {\n      id\n      qty\n      product {\n        sku\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/get_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract item id" enabled="true">
+        <stringProp name="VAR">item_id</stringProp>
+        <stringProp name="JSONPATH">$.data.cart.items[0].id</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Remove Simple Product From Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  removeItemFromCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cart_item_id: ${item_id}\n    }\n  ) {\n    cart {\n      items {\n        qty\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/remove_simple_product_from_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="1452665323">{"data":{"removeItemFromCart":{"cart":{"items":[]}}}}</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">8</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+
+  
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Add Configurable Product To Cart" enabled="true">
+      <intProp name="ThroughputController.style">1</intProp>
+      <boolProp name="ThroughputController.perThread">false</boolProp>
+      <intProp name="ThroughputController.maxThroughput">1</intProp>
+      <stringProp name="ThroughputController.percentThroughput">${graphqlAddConfigurableProductToCartPercentage}</stringProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/_system/scenario_controller_tmpl.jmx</stringProp></ThroughputController>
+    <hashTree>
+        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Set Test Label" enabled="true">
+            <stringProp name="script">
+var testLabel = "${testLabel}" ? " (${testLabel})" : "";
+if (testLabel
+    &amp;&amp; sampler.getClass().getName() == 'org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy'
+) {
+    if (sampler.getName().indexOf(testLabel) == -1) {
+       sampler.setName(sampler.getName() + testLabel);
+    }
+} else if (sampler.getName().indexOf("SetUp - ") == -1) {
+    sampler.setName("SetUp - " + sampler.getName());
+}
+            </stringProp>
+            <stringProp name="scriptLanguage">javascript</stringProp>
+        <stringProp name="TestPlan.comments">mpaf/tool/fragments/_system/setup_label.jmx</stringProp></JSR223PreProcessor>
+        <hashTree/>
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
+            <stringProp name="BeanShellSampler.query">
+                vars.put("testLabel", "Add Configurable Product To Cart");
+            </stringProp>
+            <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
+        </BeanShellSampler>
+        <hashTree/>
+    
+    <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+      <collectionProp name="HeaderManager.headers">
+        <elementProp name="" elementType="Header">
+          <stringProp name="Header.name">Content-Type</stringProp>
+          <stringProp name="Header.value">application/json</stringProp>
+        </elementProp>
+        <elementProp name="" elementType="Header">
+          <stringProp name="Header.name">Accept</stringProp>
+          <stringProp name="Header.value">*/*</stringProp>
+        </elementProp>
+      </collectionProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/header_manager_before_token.jmx</stringProp></HeaderManager>
+    <hashTree/>
+  
+      <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Init Random Generator" enabled="true">
+        <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/common/init_random_generator_setup.jmx</stringProp>
+        <stringProp name="BeanShellSampler.query">
+import java.util.Random;
+
+Random random = new Random();
+if (${seedForRandom} &gt; 0) {
+    random.setSeed(${seedForRandom} + ${__threadNum});
+}
+
+vars.putObject("randomIntGenerator", random);
+        </stringProp>
+        <stringProp name="BeanShellSampler.filename"/>
+        <stringProp name="BeanShellSampler.parameters"/>
+        <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
+      </BeanShellSampler>
+      <hashTree/>
+    
+    <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Prepare Configurable Product Data" enabled="true">
+      <stringProp name="BeanShellSampler.query">
+import java.util.Random;
+
+Random random = vars.getObject("randomIntGenerator");
+number = random.nextInt(props.get("configurable_products_list").size());
+product = props.get("configurable_products_list").get(number);
+
+vars.put("product_url_key", product.get("url_key"));
+vars.put("product_id", product.get("id"));
+vars.put("product_name", product.get("title"));
+vars.put("product_uenc", product.get("uenc"));
+vars.put("product_sku", product.get("sku"));
+      </stringProp>
+      <stringProp name="BeanShellSampler.filename"/>
+      <stringProp name="BeanShellSampler.parameters"/>
+      <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/product_browsing_and_adding_items_to_the_cart/configurable_products_setup.jmx</stringProp></BeanShellSampler>
+    <hashTree/>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Configurable Product Details by name" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"query productDetailByName($name: String, $onServer: Boolean!) {\n    products(filter: { name: { eq: $name } }) {\n        items {\n            id\n            sku\n            name\n            ... on ConfigurableProduct {\n                configurable_options {\n                    attribute_code\n                    attribute_id\n                    id\n                    label\n                    values {\n                        default_label\n                        label\n                        store_label\n                        use_default_value\n                        value_index\n                    }\n                }\n                variants {\n                    product {\n                        #fashion_color\n                        #fashion_size\n                        id\n                        media_gallery_entries {\n                            disabled\n                            file\n                            label\n                            position\n                        }\n                        sku\n                        stock_status\n                    }\n                }\n            }\n            meta_title @include(if: $onServer)\n            meta_keyword @include(if: $onServer)\n            meta_description @include(if: $onServer)\n        }\n    }\n}","variables":{"name":"${product_name}","onServer":false},"operationName":"productDetailByName"}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/get_configurable_product_details_by_name.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="1201352014">"sku":"${product_sku}","name":"${product_name}"</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    
+    <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract Configurable Product option" enabled="true">
+      <stringProp name="VAR">product_option</stringProp>
+      <stringProp name="JSONPATH">$.data.products.items[0].variants[0].product.sku</stringProp>
+      <stringProp name="DEFAULT"/>
+      <stringProp name="VARIABLE"/>
+      <stringProp name="SUBJECT">BODY</stringProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/extract_configurable_product_option.jmx</stringProp></com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+    <hashTree/>
+  </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create Empty Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  createEmptyCart\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/create_empty_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract cart id" enabled="true">
+        <stringProp name="VAR">quote_id</stringProp>
+        <stringProp name="JSONPATH">$.data.createEmptyCart</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Add Configurable Product To Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  addConfigurableProductsToCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cartItems: [\n        {\n          variant_sku: \"${product_option}\"\n          data: {\n            qty: 2\n            sku: \"${product_option}\"\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      items {\n        id\n        qty\n        product {\n          name\n          sku\n        }\n        ... on ConfigurableCartItem {\n          configurable_options {\n            option_label\n          }\n        }\n    }\n  }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/add_configurable_product_to_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="1421843282">addConfigurableProductsToCart</stringProp>
+          <stringProp name="675049292">"sku":"${product_option}"</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"{\n  cart(cart_id: \"${quote_id}\") {\n    items {\n      id\n      qty\n      product {\n        sku\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/get_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract item id" enabled="true">
+        <stringProp name="VAR">item_id</stringProp>
+        <stringProp name="JSONPATH">$.data.cart.items[0].id</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Remove Configurable Product From Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  removeItemFromCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      cart_item_id: ${item_id}\n    }\n  ) {\n    cart {\n      items {\n        qty\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/remove_configurable_product_from_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="1452665323">{"data":{"removeItemFromCart":{"cart":{"items":[]}}}}</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">8</intProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
