@@ -126,15 +126,9 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     public function testSetPaymentOnNonExistentCart()
     {
         $maskedQuoteId = 'non_existent_masked_id';
-        $query = <<<QUERY
-{
-  cart(cart_id: "$maskedQuoteId") {
-    items {
-      id
-    }
-  }
-}
-QUERY;
+        $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
+
+        $query = $this->getQuery($maskedQuoteId, $methodCode);
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 

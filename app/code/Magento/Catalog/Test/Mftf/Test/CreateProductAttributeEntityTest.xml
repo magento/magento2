@@ -262,10 +262,10 @@
         </actionGroup>
         <click stepKey="openAttributes" selector="{{AdminProductAttributesSection.sectionHeader}}"/>
         <waitForElementVisible selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" stepKey="waitforLabel"/>
-        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option3_frontend}}" stepKey="seeDefaultIsCorrect"/>
-        <see stepKey="seeOption1Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option1_frontend}}"/>
-        <see stepKey="seeOption2Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option2_frontend}}"/>
-        <see stepKey="seeOption3Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option3_frontend}}"/>
+        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option3_admin}}" stepKey="seeDefaultIsCorrect"/>
+        <see stepKey="seeOption1Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option1_admin}}"/>
+        <see stepKey="seeOption2Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option2_admin}}"/>
+        <see stepKey="seeOption3Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option3_admin}}"/>
     </test>
 
     <test name="CreateProductAttributeEntityDropdownWithSingleQuoteTest">
@@ -333,8 +333,8 @@
         </actionGroup>
         <click stepKey="openAttributes" selector="{{AdminProductAttributesSection.sectionHeader}}"/>
         <waitForElementVisible selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttributeWithQuote.attribute_code)}}" stepKey="waitforLabel"/>
-        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttributeWithQuote.attribute_code)}}" userInput="{{dropdownProductAttributeWithQuote.option1_frontend}}" stepKey="seeDefaultIsCorrect"/>
-        <see stepKey="seeOption1Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttributeWithQuote.attribute_code)}}" userInput="{{dropdownProductAttributeWithQuote.option1_frontend}}"/>
+        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttributeWithQuote.attribute_code)}}" userInput="{{dropdownProductAttributeWithQuote.option1_admin}}" stepKey="seeDefaultIsCorrect"/>
+        <see stepKey="seeOption1Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttributeWithQuote.attribute_code)}}" userInput="{{dropdownProductAttributeWithQuote.option1_admin}}"/>
     </test>
 
     <test name="CreateProductAttributeEntityMultiSelectTest">
@@ -417,9 +417,9 @@
         </actionGroup>
         <click stepKey="openAttributes" selector="{{AdminProductAttributesSection.sectionHeader}}"/>
         <waitForElementVisible selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" stepKey="waitforLabel"/>
-        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option3_frontend}}" stepKey="seeDefaultIsCorrect"/>
-        <see stepKey="seeOption1Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option1_frontend}}"/>
-        <see stepKey="seeOption2Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option2_frontend}}"/>
-        <see stepKey="seeOption3Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option3_frontend}}"/>
+        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option3_admin}}" stepKey="seeDefaultIsCorrect"/>
+        <see stepKey="seeOption1Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option1_admin}}"/>
+        <see stepKey="seeOption2Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option2_admin}}"/>
+        <see stepKey="seeOption3Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option3_admin}}"/>
     </test>
 </tests>
