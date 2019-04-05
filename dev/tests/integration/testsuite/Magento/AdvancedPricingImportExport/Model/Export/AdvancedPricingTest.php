@@ -19,23 +19,25 @@ use Magento\ImportExport\Model\Import;
 
 /**
  * Advanced pricing test
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdvancedPricingTest extends TestCase
 {
     /**
-     * @var \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing
+     * @var ExportAdvancedPricing
      */
-    protected $model;
+    private $model;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
-    protected $fileSystem;
+    private $fileSystem;
 
     // @codingStandardsIgnoreStart
     public static function setUpBeforeClass()
@@ -53,6 +55,9 @@ class AdvancedPricingTest extends TestCase
     }
     // @codingStandardsIgnoreEnd
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -63,12 +68,15 @@ class AdvancedPricingTest extends TestCase
     }
 
     /**
+     * Export test
+     *
      * @magentoAppArea adminhtml
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @return void
      */
-    public function testExport()
+    public function testExport(): void
     {
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $index = 0;
@@ -107,7 +115,7 @@ class AdvancedPricingTest extends TestCase
      * @param string $exportContent
      * @return void
      */
-    private function assertDiscountTypes($exportContent)
+    private function assertDiscountTypes(string $exportContent): void
     {
         $this->assertContains(
             '2.0000,8.000000,Fixed',
@@ -120,13 +128,16 @@ class AdvancedPricingTest extends TestCase
     }
 
     /**
+     * Export multiple websites test
+     *
      * @magentoAppArea adminhtml
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/price/scope 1
      * @magentoDataFixture Magento/AdvancedPricingImportExport/_files/product_with_second_website.php
+     * @return void
      */
-    public function testExportMultipleWebsites()
+    public function testExportMultipleWebsites(): void
     {
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $index = 0;
@@ -162,17 +173,18 @@ class AdvancedPricingTest extends TestCase
     }
 
     /**
+     * Data export
+     *
      * @param string $csvFile
      * @return string
      */
-    private function exportData($csvFile)
+    private function exportData(string $csvFile): string
     {
         $this->model->setWriter(
-            Bootstrap::getObjectManager()
-                ->create(
-                    ExportAdapterCsv::class,
-                    ['fileSystem' => $this->fileSystem, 'destination' => $csvFile]
-                )
+            $this->objectManager->create(
+                ExportAdapterCsv::class,
+                ['fileSystem' => $this->fileSystem, 'destination' => $csvFile]
+            )
         );
         $exportContent = $this->model->export();
         $this->assertNotEmpty($exportContent);
@@ -181,9 +193,12 @@ class AdvancedPricingTest extends TestCase
     }
 
     /**
+     * Data import
+     *
      * @param string $csvFile
+     * @return void
      */
-    private function importData($csvFile)
+    private function importData(string $csvFile): void
     {
         /** @var ImportAdvancedPricing $importModel */
         $importModel = $this->objectManager->create(ImportAdvancedPricing::class);
@@ -211,8 +226,19 @@ class AdvancedPricingTest extends TestCase
         $importModel->importData();
     }
 
-    private function assertEqualsOtherThanSkippedAttributes($expected, $actual, $skippedAttributes)
-    {
+    /**
+     * Assert equals other than skipped attributes
+     *
+     * @param array $expected
+     * @param array $actual
+     * @param array $skippedAttributes
+     * @return void
+     */
+    private function assertEqualsOtherThanSkippedAttributes(
+        array $expected,
+        array $actual,
+        array $skippedAttributes
+    ): void {
         foreach ($expected as $key => $value) {
             if (in_array($key, $skippedAttributes)) {
                 continue;
