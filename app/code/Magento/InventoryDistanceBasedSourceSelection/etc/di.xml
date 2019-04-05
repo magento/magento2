@@ -69,6 +69,7 @@
     <type name="Magento\InventoryDistanceBasedSourceSelection\Model\ImportGeoNames">
         <arguments>
             <argument name="geoNamesBaseUrl" xsi:type="string">http://download.geonames.org/export/zip/</argument>
+            <argument name="client" xsi:type="object">Magento\Framework\HTTP\Client\Curl</argument>
         </arguments>
     </type>
 
