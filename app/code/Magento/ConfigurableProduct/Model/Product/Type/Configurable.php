@@ -1249,7 +1249,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $product->getStoreId(),
             $this->getCustomerSession()->getCustomerGroupId()
         ];
-        if (!is_null($requiredAttributeIds)) {
+        if ($requiredAttributeIds !== null) {
             sort($requiredAttributeIds);
             $keyParts[] = implode('', $requiredAttributeIds);
         }
