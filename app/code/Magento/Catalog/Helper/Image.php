@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
  * Catalog image helper
@@ -14,7 +15,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
-class Image extends AbstractHelper
+class Image extends AbstractHelper implements ArgumentInterface
 {
     /**
      * Media config node

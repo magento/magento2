@@ -207,8 +207,8 @@ class Gallery extends AbstractView
      */
     public function getImageAttribute($imageId, $attributeName, $default = null)
     {
-        $attributes =
-            $this->getConfigView()->getMediaAttributes('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE, $imageId);
+        $attributes = $this->getConfigView()
+                ->getMediaAttributes('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE, $imageId);
         return $attributes[$attributeName] ?? $default;
     }
 
@@ -238,24 +238,5 @@ class Gallery extends AbstractView
         }
 
         return $this->getData('gallery_images_config');
-    }
-
-    /**
-     * Get main product image
-     *
-     * @param string $size
-     * @return string
-     */
-    public function getMainProductImage($size = 'medium_image_url')
-    {
-        foreach ($this->getGalleryImages() as $image) {
-            $image = $image->getData($size);
-
-            if (!$image) {
-                return $this->_imageHelper->getDefaultPlaceholderUrl('image');
-            }
-
-            return $image;
-        }
     }
 }
