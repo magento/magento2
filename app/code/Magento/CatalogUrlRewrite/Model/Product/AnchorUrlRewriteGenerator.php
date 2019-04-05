@@ -13,6 +13,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class AnchorUrlRewriteGenerator
 {
@@ -32,6 +33,11 @@ class AnchorUrlRewriteGenerator
     private $categoryRepository;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $config;
+
+    /**
      * @param ProductUrlPathGenerator $urlPathGenerator
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param CategoryRepositoryInterface $categoryRepository
@@ -39,11 +45,13 @@ class AnchorUrlRewriteGenerator
     public function __construct(
         ProductUrlPathGenerator $urlPathGenerator,
         UrlRewriteFactory $urlRewriteFactory,
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        ScopeConfigInterface $config = null
     ) {
         $this->urlPathGenerator = $urlPathGenerator;
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->categoryRepository = $categoryRepository;
+        $this->config = $config ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -52,11 +60,15 @@ class AnchorUrlRewriteGenerator
      * @param int $storeId
      * @param Product $product
      * @param ObjectRegistry $productCategories
-     * @return UrlRewrite[]
+     * @return UrlRewrite[]|array
+     * @throws NoSuchEntityException
      */
     public function generate($storeId, Product $product, ObjectRegistry $productCategories)
     {
-        $urls = [];
+        if (!$this->isCategoryRewritesEnabled($storeId)){
+            return [];
+        }
+
         foreach ($productCategories->getList() as $category) {
             $anchorCategoryIds = $category->getAnchorsAbove();
             if ($anchorCategoryIds) {
@@ -85,5 +97,20 @@ class AnchorUrlRewriteGenerator
         }
 
         return $urls;
+    }
+
+    /**
+     * Check config value of generate_rewrites_on_save
+     *
+     * @param int $storeId
+     * @return bool
+     */
+    private function isCategoryRewritesEnabled($storeId)
+    {
+        return (bool)$this->config->getValue(
+            'catalog/seo/generate_rewrites_on_save',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 }
