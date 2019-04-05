@@ -7,6 +7,11 @@ namespace Magento\Quote\Observer\Frontend\Quote\Address;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Handle customer VAT number on collect_totals_before event of quote address.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class CollectTotalsObserver implements ObserverInterface
 {
     /**
