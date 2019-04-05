@@ -142,7 +142,7 @@ class BackorderConditionTest extends TestCase
      */
     public function testStockItemBackordersDisabled(string $sku, int $stockId, $expectedData): void
     {
-        $this->setStockItemBackorders($sku, 0);
+        $this->setStockItemBackorders($sku, StockItemConfigurationInterface::BACKORDERS_NO);
 
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
 
@@ -274,7 +274,7 @@ class BackorderConditionTest extends TestCase
         /** @var StockItemInterface $legacyStockItem */
         $legacyStockItem = current($stockItemsCollection->getItems());
         $legacyStockItem->setBackorders($backordersStatus);
-        $legacyStockItem->setUseConfigBackorders(0);
+        $legacyStockItem->setUseConfigBackorders(false);
         $this->stockItemRepository->save($legacyStockItem);
 
         $sourceItem = $this->getSourceItemBySku($sku);
