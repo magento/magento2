@@ -25,11 +25,6 @@ class Match extends BuilderMatch
     private $searchHelper;
 
     /**
-     * @var string[]
-     */
-    private $replaceSymbols = [];
-
-    /**
      * @param ResolverInterface $resolver
      * @param Fulltext $fulltextHelper
      * @param Data $searchHelper
@@ -52,8 +47,8 @@ class Match extends BuilderMatch
      */
     protected function prepareQuery($queryValue, $conditionType)
     {
-        $this->replaceSymbols = str_split(self::SPECIAL_CHARACTERS, 1);
-        $queryValue = str_replace($this->replaceSymbols, ' ', $queryValue);
+        $replaceSymbols = str_split(self::SPECIAL_CHARACTERS, 1);
+        $queryValue = str_replace($replaceSymbols, ' ', $queryValue);
         foreach ($this->preprocessors as $preprocessor) {
             $queryValue = $preprocessor->process($queryValue);
         }
