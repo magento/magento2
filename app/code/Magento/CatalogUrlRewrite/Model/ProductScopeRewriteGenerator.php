@@ -243,20 +243,4 @@ class ProductScopeRewriteGenerator
         }
         return $this->categoryRepository->get($category->getEntityId(), $storeId);
     }
-
-    /**
-     * Check config for "generate product rewrites on category save"
-     *
-     * @param int $storeId
-     * @return bool
-     */
-    private function isCategoryProductRewritesEnabled($storeId)
-    {
-        $scopeConfig = ObjectManager::getInstance()->get(ScopeConfigInterface::class);
-        return (bool)$scopeConfig->getValue(
-            'catalog/seo/generate_rewrites_on_save',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-    }
 }
