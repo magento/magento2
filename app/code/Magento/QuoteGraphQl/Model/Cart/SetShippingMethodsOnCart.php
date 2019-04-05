@@ -7,11 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\StateException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
 
@@ -69,8 +65,7 @@ class SetShippingMethodsOnCart implements SetShippingMethodsOnCartInterface
         }
         $methodCode = $shippingMethodInput['method_code'];
 
-        $quoteAddress = $this->getQuoteAddress->execute($cartAddressId, $context->getUserId());
-
+        $quoteAddress = $this->getQuoteAddress->execute($cart, $cartAddressId, $context->getUserId());
         $this->assignShippingMethodToCart->execute($cart, $quoteAddress, $carrierCode, $methodCode);
     }
 }

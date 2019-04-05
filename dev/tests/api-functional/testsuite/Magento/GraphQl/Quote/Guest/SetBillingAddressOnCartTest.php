@@ -248,10 +248,30 @@ QUERY;
     {
         $maskedQuoteId = 'non_existent_masked_id';
         $query = <<<QUERY
-{
-  cart(cart_id: "$maskedQuoteId") {
-    items {
-      id
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+        address: {
+          firstname: "test firstname"
+          lastname: "test lastname"
+          company: "test company"
+          street: ["test street 1", "test street 2"]
+          city: "test city"
+          region: "test region"
+          postcode: "887766"
+          country_code: "US"
+          telephone: "88776655"
+          save_in_address_book: false
+        }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        city
+      }
     }
   }
 }
@@ -289,7 +309,6 @@ mutation {
   }
 }
 QUERY;
-
         $this->expectExceptionMessage($message);
         $this->graphQlQuery($query);
     }
