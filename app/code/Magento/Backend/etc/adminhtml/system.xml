@@ -503,22 +503,22 @@
                 <field id="base_url" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Secure Base URL</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>Specify URL or {{base_url}}, or {{unsecure_base_url}} placeholder.</comment>
+                    <comment>Specify URL or {{base_url}}{{unsecure_base_url}} placeholder.</comment>
                 </field>
                 <field id="base_link_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Secure Base Link URL</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>May start with {{secure_base_url}} or {{unsecure_base_url}} placeholder.</comment>
+                    <comment>May start with {{secure_base_url}}{{unsecure_base_url}} placeholder.</comment>
                 </field>
                 <field id="base_static_url" translate="label comment" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Secure Base URL for Static View Files</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
+                    <comment>May be empty or start with {{secure_base_url}}{{unsecure_base_url}} placeholder.</comment>
                 </field>
                 <field id="base_media_url" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Secure Base URL for User Media Files</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
+                    <comment>May be empty or start with {{secure_base_url}}{{unsecure_base_url}} placeholder.</comment>
                 </field>
                 <field id="use_in_frontend" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Use Secure URLs on Storefront</label>
