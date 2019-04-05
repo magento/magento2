@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Model;
 
 use Magento\Framework\Api\AbstractSimpleObject;
+use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferExtensionInterface;
 use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferInterface;
 
 class PartialInventoryTransfer extends AbstractSimpleObject implements PartialInventoryTransferInterface
@@ -75,5 +76,21 @@ class PartialInventoryTransfer extends AbstractSimpleObject implements PartialIn
     public function setDestinationSourceCode(string $code): void
     {
         $this->setData(self::DESTINATION_SOURCE_CODE, $code);
+    }
+
+    /**
+     * @return \Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferExtensionInterface
+     */
+    public function getExtensionAttributes(): \Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferExtensionInterface
+    {
+        return $this->_get(self::EXTENSION_ATTRIBUTES_KEY);
+    }
+
+    /**
+     * @param PartialInventoryTransferExtensionInterface $extensionAttributes
+     */
+    public function setExtensionAttributes(\Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferExtensionInterface $extensionAttributes): void
+    {
+        $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
     }
 }

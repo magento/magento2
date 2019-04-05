@@ -60,4 +60,14 @@ interface PartialInventoryTransferInterface extends \Magento\Framework\Api\Exten
      * @param string $code
      */
     public function setDestinationSourceCode(string $code): void;
+
+    /**
+     * @return \Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferExtensionInterface
+     */
+    public function getExtensionAttributes(): \Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferExtensionInterface;
+
+    /**
+     * @param PartialInventoryTransferExtensionInterface $extensionAttributes
+     */
+    public function setExtensionAttributes(\Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferExtensionInterface $extensionAttributes): void;
 }
