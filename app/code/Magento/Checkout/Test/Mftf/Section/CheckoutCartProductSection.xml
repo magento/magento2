@@ -34,6 +34,9 @@
         <element name="productSubtotalByName" type="input" selector="//main//table[@id='shopping-cart-table']//tbody//tr[..//strong[contains(@class, 'product-item-name')]//a/text()='{{var1}}'][1]//td[contains(@class, 'subtotal')]//span[@class='price']" parameterized="true"/>
         <element name="updateShoppingCartButton" type="button" selector="#form-validate button[type='submit'].update" timeout="30"/>
         <element name="qty" type="input" selector="//input[@data-cart-item-id='{{var}}'][@title='Qty']" parameterized="true"/>
+        <element name="messageErrorItem" type="text" selector="#sku-stock-failed-"/>
+        <element name="messageErrorNeedChooseOptions" type="text" selector="//*[contains(@class, 'error')]/div"/>
+        <element name="productOptionsLink" type="text" selector="a.action.configure"/>
         <element name="quantity" type="text" selector="//div[@class='field qty']//div/input[@value='{{qty}}']" parameterized="true"/>
         <element name="productOptionLabel" type="text" selector="//dl[@class='item-options']"/>
         <element name="checkoutCartProductPrice" type="text" selector="//td[@class='col price']//span[@class='price']"/>

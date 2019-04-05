@@ -68,4 +68,11 @@
         <data key="price">20</data>
         <data key="price_type">percent</data>
     </entity>
+    <entity name="ProductOptionPercentPriceValueDropdown" type="product_option_value">
+        <data key="title">40 Percent</data>
+        <data key="sort_order">0</data>
+        <data key="price">40</data>
+        <data key="price_type">percent</data>
+        <data key="sku">sku_drop_down_row_1</data>
+    </entity>
 </entities>

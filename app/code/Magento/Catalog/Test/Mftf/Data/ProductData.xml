@@ -986,6 +986,10 @@
         <data key="tax_class_id">2</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
+    <entity name="SimpleProductWithOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionPercentPriceDropDown</requiredEntity>
+    </entity>
     <entity name="SimpleProductWithDescription" type="product">
         <data key="sku" unique="suffix">productwithdescription</data>
         <data key="type_id">simple</data>

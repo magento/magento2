@@ -13,6 +13,8 @@
         <element name="save" type="button" selector="#save" timeout="30"/>
         <element name="saveAndContinue" type="button" selector="#save_and_continue" timeout="30"/>
         <element name="delete" type="button" selector="#delete" timeout="30"/>
+        <element name="okButton" type="button" selector="//button[@class='action-primary action-accept']"/>
+        <element name="successMessage" type="text" selector="#messages"/>
 
         <element name="ruleName" type="input" selector="[name='name']"/>
         <element name="description" type="textarea" selector="[name='description']"/>
@@ -51,5 +53,11 @@
 
     <section name="AdminCatalogPriceRuleGrid">
         <element name="applyRules" type="button" selector="#apply_rules" timeout="30"/>
+        <element name="updateMessage" type="text" selector="//div[@class='message message-notice notice']//div[contains(.,'We found updated rules that are not applied. Please click')]"/>
+        <element name="ruleFilter" type="input" selector="//td[@data-column='name']/input[@name='name']"/>
+        <element name="resetFilter" type="button" selector="//button[@title='Reset Filter']" timeout="30"/>
+        <element name="search" type="button" selector="//div[@id='promo_catalog_grid']//button[@title='Search']" timeout="30"/>
+        <element name="selectRowByRuleName" type="text" selector="//tr[@data-role='row']//td[contains(.,'{{ruleName}}')]" parameterized="true"/>
+        <element name="firstRow" type="text" selector="//tr[@data-role='row']"/>
     </section>
 </sections>
