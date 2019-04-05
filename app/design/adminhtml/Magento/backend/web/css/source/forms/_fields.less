@@ -127,6 +127,16 @@
             #mix-grid .column(@field-label-grid__column, @field-grid__columns);
         }
 
+        &.field-subscription {
+            > .admin__field-label {
+                width: auto;
+                margin-left: 0;
+                span {
+                    white-space: nowrap;
+                }
+            }
+        }
+
         &:extend(.abs-field-sizes all);
 
         &.admin__field-no-label {
