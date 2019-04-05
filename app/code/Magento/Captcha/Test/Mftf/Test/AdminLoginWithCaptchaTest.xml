@@ -23,10 +23,12 @@
         <before>
             <magentoCLI command="config:set {{AdminCaptchaLength3ConfigData.path}} {{AdminCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength" />
             <magentoCLI command="config:set {{AdminCaptchaSymbols1ConfigData.path}} {{AdminCaptchaSymbols1ConfigData.value}}" stepKey="setCaptchaSymbols" />
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
         </before>
         <after>
             <magentoCLI command="config:set {{AdminCaptchaDefaultLengthConfigData.path}} {{AdminCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength" />
             <magentoCLI command="config:set {{AdminCaptchaDefaultSymbolsConfigData.path}} {{AdminCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
         </after>
         
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminWithWrongCredentialsFirstAttempt">
