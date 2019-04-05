@@ -424,6 +424,10 @@
         <requiredEntity type="product_option">ProductOptionDateTime</requiredEntity>
         <requiredEntity type="product_option">ProductOptionTime</requiredEntity>
     </entity>
+    <entity name="productWithOptionRadiobutton" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionRadiobuttonWithTwoFixedOptions</requiredEntity>
+    </entity>
     <entity name="productWithOptions2" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
@@ -985,5 +989,22 @@
     <entity name="SimpleProductWithTwoOption" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionMultiSelect</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionPercentPriceDropDown</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithDescription" type="product">
+        <data key="sku" unique="suffix">productwithdescription</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">ProductWithDescription</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">productwithdescription</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
     </entity>
 </entities>
