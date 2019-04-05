@@ -95,7 +95,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         }
 
         $this->getSelect()->join(
-            ['cauif' => 'checkout_agreement_used_in_forms'],
+            ['cauif' => $this->getTable('checkout_agreement_used_in_forms')],
             'main_table.agreement_id = cauif.agreement_id',
             'used_in_forms'
         )->where('cauif.used_in_forms = "' . $form . '"');
