@@ -3,22 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Search form.mini block
- */
 namespace Magento\Search\Block;
 
 use \Magento\Framework\View\Element\Template;
 use \Magento\Framework\View\Element\Template\Context;
 
 /**
+ * Search form.mini block
+ *
  * @api
  * @since 100.0.2
  */
 class FormMini extends Template
 {
-
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
@@ -35,8 +34,6 @@ class FormMini extends Template
     private $serializer;
 
     /**
-     * Constructor
-     *
      * @param Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
@@ -47,27 +44,23 @@ class FormMini extends Template
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         array $data = []
-    )
-    {
+    ) {
+        parent::__construct($context, $data);
         $this->scopeConfig = $scopeConfig;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
-
-        parent::__construct($context, $data);
     }
 
-
     /**
-     * getSerializedConfig
+     * Returns serialized config
      *
      * @return mixed
      */
-    public function getSerializedConfig() {
+    public function getSerializedConfig()
+    {
         $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+        $searchSuggestionConfig = $this->scopeConfig->getValue(self::XML_PATH_SEARCH_SUGGESTION, $storeScope);
 
-        return $this->serializer->serialize([
-            'searchSuggestionEnabled' => $this->scopeConfig->getValue(self::XML_PATH_SEARCH_SUGGESTION, $storeScope),
-        ]);
+        return $this->serializer->serialize(['searchSuggestionEnabled' => $searchSuggestionConfig]);
     }
-    
 }
