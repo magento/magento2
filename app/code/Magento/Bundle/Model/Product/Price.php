@@ -258,67 +258,68 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                 foreach ($options as $option) {
                     /* @var $option \Magento\Bundle\Model\Option */
                     $selections = $option->getSelections();
-                    if ($selections) {
-                        $selectionMinimalPrices = [];
-                        $selectionMaximalPrices = [];
+                    if (empty($selections)) {
+                        continue;
+                    }
+                    $selectionMinimalPrices = [];
+                    $selectionMaximalPrices = [];
 
-                        foreach ($option->getSelections() as $selection) {
-                            /* @var $selection \Magento\Bundle\Model\Selection */
-                            if (!$selection->isSalable()) {
-                                /**
-                                 * @todo CatalogInventory Show out of stock Products
-                                 */
-                                continue;
-                            }
+                    foreach ($option->getSelections() as $selection) {
+                        /* @var $selection \Magento\Bundle\Model\Selection */
+                        if (!$selection->isSalable()) {
+                            /**
+                             * @todo CatalogInventory Show out of stock Products
+                             */
+                            continue;
+                        }
 
-                            $qty = $selection->getSelectionQty();
+                        $qty = $selection->getSelectionQty();
 
-                            $item = $product->getPriceType() == self::PRICE_TYPE_FIXED ? $product : $selection;
+                        $item = $product->getPriceType() == self::PRICE_TYPE_FIXED ? $product : $selection;
 
-                            $selectionMinimalPrices[] = $this->_catalogData->getTaxPrice(
-                                $item,
-                                $this->getSelectionFinalTotalPrice(
-                                    $product,
-                                    $selection,
-                                    1,
-                                    $qty,
-                                    true,
-                                    $takeTierPrice
-                                ),
-                                $includeTax
-                            );
-                            $selectionMaximalPrices[] = $this->_catalogData->getTaxPrice(
-                                $item,
-                                $this->getSelectionFinalTotalPrice(
-                                    $product,
-                                    $selection,
-                                    1,
-                                    null,
-                                    true,
-                                    $takeTierPrice
-                                ),
-                                $includeTax
+                        $selectionMinimalPrices[] = $this->_catalogData->getTaxPrice(
+                            $item,
+                            $this->getSelectionFinalTotalPrice(
+                                $product,
+                                $selection,
+                                1,
+                                $qty,
+                                true,
+                                $takeTierPrice
+                            ),
+                            $includeTax
+                        );
+                        $selectionMaximalPrices[] = $this->_catalogData->getTaxPrice(
+                            $item,
+                            $this->getSelectionFinalTotalPrice(
+                                $product,
+                                $selection,
+                                1,
+                                null,
+                                true,
+                                $takeTierPrice
+                            ),
+                            $includeTax
+                        );
+                    }
+
+                    if (count($selectionMinimalPrices)) {
+                        $selMinPrice = min($selectionMinimalPrices);
+                        if ($option->getRequired()) {
+                            $minimalPrice += $selMinPrice;
+                            $minPriceFounded = true;
+                        } elseif (true !== $minPriceFounded) {
+                            $selMinPrice += $minimalPrice;
+                            $minPriceFounded = false === $minPriceFounded ? $selMinPrice : min(
+                                $minPriceFounded,
+                                $selMinPrice
                             );
                         }
 
-                        if (count($selectionMinimalPrices)) {
-                            $selMinPrice = min($selectionMinimalPrices);
-                            if ($option->getRequired()) {
-                                $minimalPrice += $selMinPrice;
-                                $minPriceFounded = true;
-                            } elseif (true !== $minPriceFounded) {
-                                $selMinPrice += $minimalPrice;
-                                $minPriceFounded = false === $minPriceFounded ? $selMinPrice : min(
-                                    $minPriceFounded,
-                                    $selMinPrice
-                                );
-                            }
-
-                            if ($option->isMultiSelection()) {
-                                $maximalPrice += array_sum($selectionMaximalPrices);
-                            } else {
-                                $maximalPrice += max($selectionMaximalPrices);
-                            }
+                        if ($option->isMultiSelection()) {
+                            $maximalPrice += array_sum($selectionMaximalPrices);
+                        } else {
+                            $maximalPrice += max($selectionMaximalPrices);
                         }
                     }
                 }
@@ -341,23 +342,25 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
 
                             $prices[] = $valuePrice;
                         }
-                        if (count($prices)) {
-                            if ($customOption->getIsRequire()) {
-                                $minimalPrice += $this->_catalogData->getTaxPrice($product, min($prices), $includeTax);
-                            }
-
-                            $multiTypes = [
-                                \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX,
-                                \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE,
-                            ];
-
-                            if (in_array($customOption->getType(), $multiTypes)) {
-                                $maximalValue = array_sum($prices);
-                            } else {
-                                $maximalValue = max($prices);
-                            }
-                            $maximalPrice += $this->_catalogData->getTaxPrice($product, $maximalValue, $includeTax);
+                        if (empty($prices)) {
+                            continue;
                         }
+
+                        if ($customOption->getIsRequire()) {
+                            $minimalPrice += $this->_catalogData->getTaxPrice($product, min($prices), $includeTax);
+                        }
+
+                        $multiTypes = [
+                            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX,
+                            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE,
+                        ];
+
+                        if (in_array($customOption->getType(), $multiTypes)) {
+                            $maximalValue = array_sum($prices);
+                        } else {
+                            $maximalValue = max($prices);
+                        }
+                        $maximalPrice += $this->_catalogData->getTaxPrice($product, $maximalValue, $includeTax);
                     } else {
                         $valuePrice = $customOption->getPrice(true);
 

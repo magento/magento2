@@ -171,7 +171,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     {
         if (is_array($selectionId)) {
             $this->_selectedOptions = $selectionId;
-        } else if ($selectionId && $option->getSelectionById($selectionId)) {
+        } elseif ($selectionId && $option->getSelectionById($selectionId)) {
             $this->_selectedOptions = $selectionId;
         } elseif (!$option->getRequired()) {
             $this->_selectedOptions = 'None';
@@ -301,7 +301,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      */
     public function setValidationContainer($elementId, $containerId)
     {
-        return;
+        return '';
     }
 
     /**
