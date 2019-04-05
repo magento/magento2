@@ -76,7 +76,7 @@ class PartialTransferValidator implements PartialInventoryTransferValidatorInter
         try {
             $originSourceItem = $this->getSourceItemBySkuAndSource($item->getSku(), $item->getOriginSourceCode());
             if ($originSourceItem->getQuantity() < $item->getQty()) {
-                $errors[] = __('Requested transfer amount for sku %sku is not available');
+                $errors[] = __('Requested transfer amount for sku %sku is not available', $item->getSku());
             }
 
             $this->getSourceItemBySkuAndSource($item->getSku(), $item->getOriginSourceCode());
