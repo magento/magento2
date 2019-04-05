@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
@@ -12,6 +14,7 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
+use Magento\Framework\AuthorizationInterface;
 
 /**
  * Class CategoriesTest
@@ -45,6 +48,11 @@ class CategoriesTest extends AbstractModifierTest
      */
     protected $categoryCollectionMock;
 
+    /**
+     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $authorizationMock;
+
     protected function setUp()
     {
         parent::setUp();
@@ -61,6 +69,9 @@ class CategoriesTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMock();
         $this->categoryCollectionMock = $this->getMockBuilder(CategoryCollection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -90,6 +101,7 @@ class CategoriesTest extends AbstractModifierTest
             'locator' => $this->locatorMock,
             'categoryCollectionFactory' => $this->categoryCollectionFactoryMock,
             'arrayManager' => $this->arrayManagerMock,
+            'authorization' => $this->authorizationMock
         ]);
     }
 
@@ -130,7 +142,9 @@ class CategoriesTest extends AbstractModifierTest
                 ],
             ],
         ];
-
+        $this->authorizationMock->expects($this->once())
+            ->method('isAllowed')
+            ->willReturn(true);
         $this->arrayManagerMock->expects($this->any())
             ->method('findPath')
             ->willReturn('path');
@@ -167,7 +181,10 @@ class CategoriesTest extends AbstractModifierTest
             ->with(Categories::CATEGORY_TREE_ID . '_');
         $cacheManager->expects($this->once())
             ->method('save');
-        
+        $this->authorizationMock->expects($this->once())
+            ->method('isAllowed')
+            ->willReturn(true);
+
         $modifier = $this->createModel();
         $cacheContextProperty = new \ReflectionProperty(
             Categories::class,

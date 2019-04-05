@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
@@ -14,6 +16,7 @@ use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\AuthorizationInterface;
 
 /**
  * Data provider for categories field of product page
@@ -79,12 +82,18 @@ class Categories extends AbstractModifier
     private $serializer;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
      * @param LocatorInterface $locator
      * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param DbHelper $dbHelper
      * @param UrlInterface $urlBuilder
      * @param ArrayManager $arrayManager
      * @param SerializerInterface $serializer
+     * @param AuthorizationInterface $authorization
      */
     public function __construct(
         LocatorInterface $locator,
@@ -92,7 +101,8 @@ class Categories extends AbstractModifier
         DbHelper $dbHelper,
         UrlInterface $urlBuilder,
         ArrayManager $arrayManager,
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        AuthorizationInterface $authorization = null
     ) {
         $this->locator = $locator;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
@@ -100,6 +110,7 @@ class Categories extends AbstractModifier
         $this->urlBuilder = $urlBuilder;
         $this->arrayManager = $arrayManager;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**
@@ -123,10 +134,23 @@ class Categories extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
+        if (!$this->isAllowed()) {
+            return $meta;
+        }
         $meta = $this->createNewCategoryModal($meta);
         $meta = $this->customizeCategoriesField($meta);
 
         return $meta;
+    }
+
+    /**
+     * Check current user permission on category resource
+     *
+     * @return bool
+     */
+    private function isAllowed()
+    {
+        return $this->authorization->isAllowed('Magento_Catalog::categories');
     }
 
     /**
