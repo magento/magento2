@@ -87,7 +87,12 @@ mutation {
     }
 }
 QUERY;
-        $response = $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
 
         $this->assertEquals($newPrefix, $response['updateCustomer']['customer']['prefix']);
         $this->assertEquals($newFirstname, $response['updateCustomer']['customer']['firstname']);

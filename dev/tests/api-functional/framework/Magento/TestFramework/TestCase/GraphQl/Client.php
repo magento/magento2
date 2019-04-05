@@ -101,12 +101,14 @@ class Client
         $responseArray = $this->json->jsonDecode($response);
 
         if (!is_array($responseArray)) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unknown GraphQL response body: ' . $response);
         }
 
         $this->processErrors($responseArray);
 
         if (!isset($responseArray['data'])) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unknown GraphQL response body: ' . $response);
         }
 
@@ -142,6 +144,7 @@ class Client
                     $responseBodyArray
                 );
             }
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('GraphQL responded with an unknown error: ' . json_encode($responseBodyArray));
         }
     }
