@@ -12,9 +12,10 @@
         <element name="spinner" type="button" selector=".spinner"/>
         <element name="gridLoadingMask" type="button" selector=".admin__data-grid-loading-mask"/>
         <element name="search" type="input" selector="#fulltext"/>
-        <element name="delete" type="button" selector="//*[contains(@class, 'admin__data-grid-header')]//span[contains(@class,'action-menu-item') and text()='Delete']"/>
+        <element name="delete" type="button" selector="//*[contains(@class, 'admin__data-grid-header')]//span[contains(@class,'action-menu-item') and text()='Delete']" timeout="30"/>
         <element name="actions" type="text" selector="//div[@class='admin__data-grid-header']//button[@class='action-select']"/>
         <element name="filters" type="button" selector="button[data-action='grid-filter-expand']" timeout="30"/>
-        <element name="ok" type="button" selector="//button[@data-role='action']//span[text()='OK']"/>
+        <element name="ok" type="button" selector="//button[@data-role='action']//span[text()='OK']" timeout="30"/>
+        <element name="headerRow" type="text" selector=".admin__data-grid-header-row.row.row-gutter"/>
     </section>
 </sections>
