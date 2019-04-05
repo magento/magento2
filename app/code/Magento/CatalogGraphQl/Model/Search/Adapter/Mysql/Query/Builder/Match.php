@@ -44,7 +44,6 @@ class Match extends BuilderMatch
         array $preprocessors = []
     ) {
         parent::__construct($resolver, $fulltextHelper, $fulltextSearchMode, $preprocessors);
-        $this->replaceSymbols = str_split(self::SPECIAL_CHARACTERS, 1);
         $this->searchHelper = $searchHelper;
     }
 
@@ -53,6 +52,7 @@ class Match extends BuilderMatch
      */
     protected function prepareQuery($queryValue, $conditionType)
     {
+        $this->replaceSymbols = str_split(self::SPECIAL_CHARACTERS, 1);
         $queryValue = str_replace($this->replaceSymbols, ' ', $queryValue);
         foreach ($this->preprocessors as $preprocessor) {
             $queryValue = $preprocessor->process($queryValue);
