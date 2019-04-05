@@ -153,14 +153,14 @@ QUERY;
     }
 
     /**
-     * @param string $reversedQuoteId
+     * @param string $reversedOrderId
      * @return string
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
+    private function getMaskedQuoteIdByReservedOrderId(string $reversedOrderId): string
     {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
 
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }

@@ -46,7 +46,6 @@ class CallbackInvoker implements CallbackInvokerInterface
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function invoke(QueueInterface $queue, $maxNumberOfMessages, $callback)
     {
@@ -54,9 +53,11 @@ class CallbackInvoker implements CallbackInvokerInterface
         for ($i = $maxNumberOfMessages; $i > 0; $i--) {
             do {
                 $message = $queue->dequeue();
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
             } while ($message === null && (sleep(1) === 0));
             if (false === $this->poisonPillCompare->isLatestVersion($this->poisonPillVersion)) {
                 $queue->reject($message);
+                // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
                 exit(0);
             }
             $callback($message);
