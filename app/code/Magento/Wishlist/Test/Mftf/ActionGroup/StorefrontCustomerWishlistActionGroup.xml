@@ -93,9 +93,10 @@
             <argument name="maxQtyAllowed" type="string" default="10000"/>
         </arguments>
         <remove keyForRemoval="successMessage"/>
-        <waitForElement selector="{{StorefrontCustomerWishlistProductSection.productQtyError(product.name)}}" after="submitUpdateWishlist" stepKey="waitForErrorMessage"/>
-        <scrollToTopOfPage after="waitForErrorMessage" stepKey="scrollToTop"/>
+        <waitForAjaxLoad after="submitUpdateWishlist" stepKey="waitForAjaxLoad"/>
+        <scrollToTopOfPage after="waitForAjaxLoad" stepKey="scrollToTop"/>
         <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productInfoByName(product.name)}}" after="scrollToTop" stepKey="moveMouseOverProduct"/>
-        <see selector="{{StorefrontCustomerWishlistProductSection.productQtyError(product.name)}}" userInput="The maximum you may purchase is {{maxQtyAllowed}}." after="moveMouseOverProduct" stepKey="seeErrorMessage"/>
+        <waitForElementVisible selector="{{StorefrontCustomerWishlistProductSection.productQtyError(product.name)}}" after="moveMouseOverProduct" stepKey="waitForErrorMessage"/>
+        <see selector="{{StorefrontCustomerWishlistProductSection.productQtyError(product.name)}}" userInput="The maximum you may purchase is {{maxQtyAllowed}}." after="waitForErrorMessage" stepKey="seeErrorMessage"/>
     </actionGroup>
 </actionGroups>

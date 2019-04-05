@@ -44,6 +44,7 @@ class AllowedQuantity implements ArgumentInterface
     public function setItem(ItemInterface $item): self
     {
         $this->item = $item;
+
         return $this;
     }
 

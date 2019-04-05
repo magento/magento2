@@ -10,9 +10,9 @@
     <test name="StorefrontCheckingMaxQtyAllowedInWishlistTest">
         <annotations>
             <features value="Wishlist"/>
-            <stories value="Add to Wishlist"/>
-            <title value="Checking of quantity input box in Wishlist"/>
-            <description value="Checking of quantity input box in Wishlist"/>
+            <stories value="Update wishlist item"/>
+            <title value="Validate quantity field during updating wishlist item"/>
+            <description value="Validate quantity field during updating wishlist item"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-7192"/>
             <useCaseId value="MAGETWO-73613"/>
@@ -44,7 +44,7 @@
         </after>
 
         <!--Go to product page-->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct.name$)}}" stepKey="goToProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
         <!--Add product to Wishlist-->
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
             <argument name="productVar" value="$createProduct$"/>
