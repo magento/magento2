@@ -65,7 +65,7 @@
         "ext-openssl": "*",
         "ext-zip": "*",
         "sjparkinson/static-review": "~4.1",
-        "paragonie/random_compat": ">=1"
+        "paragonie/random_compat": ">=1 <9.99"
     },
     "require-dev": {
         "phpunit/phpunit": "4.1.0",
