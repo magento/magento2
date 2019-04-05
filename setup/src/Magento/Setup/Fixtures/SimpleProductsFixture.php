@@ -186,7 +186,7 @@ class SimpleProductsFixture extends Fixture
 
         $additionalAttributeSets = $this->getAdditionalAttributeSets();
         $attributeSet = function ($index) use ($defaultAttributeSets, $additionalAttributeSets) {
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            // phpcs:ignore
             mt_srand($index);
             $attributeSetCount = count(array_keys($defaultAttributeSets));
             if ($attributeSetCount > (($index - 1) % (int)$this->fixtureModel->getValue('categories', 30))) {
@@ -208,6 +208,8 @@ class SimpleProductsFixture extends Fixture
             $additionalAttributeSets
         ) {
             $attributeValues = [];
+            // phpcs:ignore
+            mt_srand($index);
             if (isset($defaultAttributeSets[$attributeSetId])) {
                 foreach ($defaultAttributeSets[$attributeSetId] as $attributeCode => $values) {
                     // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -225,8 +227,8 @@ class SimpleProductsFixture extends Fixture
             'sku' => function ($productId) {
                 return sprintf($this->getSkuPattern(), $productId);
             },
-            'price' => function () {
-                return $this->priceProvider->getPrice();
+            'price' => function ($index, $entityNumber) {
+                return $this->priceProvider->getPrice($entityNumber);
             },
             'url_key' => function ($productId) {
                 return sprintf('simple-product-%s', $productId);

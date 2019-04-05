@@ -255,8 +255,8 @@ class ConfigurableProductsFixture extends Fixture
             $fixture = [
                 'name' => $variationSkuClosure,
                 'sku' => $variationSkuClosure,
-                'price' => function () {
-                    return $this->priceProvider->getPrice();
+                'price' => function ($index, $entityNumber) {
+                    return $this->priceProvider->getPrice($entityNumber);
                 },
                 'website_ids' => function ($index, $entityNumber) use ($variationCount) {
                     $configurableIndex = $this->getConfigurableProductIndex($entityNumber, $variationCount);
@@ -320,7 +320,7 @@ class ConfigurableProductsFixture extends Fixture
     {
         $attributeSetClosure = function ($index) use ($defaultAttributeSets) {
             $attributeSetAmount = count(array_keys($defaultAttributeSets));
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            // phpcs:ignore
             mt_srand($index);
 
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -880,7 +880,7 @@ class ConfigurableProductsFixture extends Fixture
                         $configurableProductsCount / ($simpleProductsCount + $configurableProductsCount)
                     )
                 );
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            // phpcs:ignore
             mt_srand($index);
             return $this->dataGenerator->generate(
                 $minAmountOfWordsDescription,

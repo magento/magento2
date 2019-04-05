@@ -127,8 +127,8 @@ class BundleProductsFixture extends Fixture
         $fixtureMap = [
             'name' => $variationSkuClosure,
             'sku' => $variationSkuClosure,
-            'price' => function () {
-                return $this->priceProvider->getPrice();
+            'price' => function ($index, $entityNumber) {
+                return $this->priceProvider->getPrice($entityNumber);
             },
             'website_ids' => function ($index, $entityNumber) use ($variationCount) {
                 $configurableIndex = $this->getBundleProductIndex($entityNumber, $variationCount);
@@ -168,7 +168,7 @@ class BundleProductsFixture extends Fixture
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 return $priceTypeClosure($index) === LinkInterface::PRICE_TYPE_PERCENT
                     ? mt_rand(10, 90)
-                    : $this->priceProvider->getPrice();
+                    : $this->priceProvider->getPrice($index);
             },
             'priceType' => $priceTypeClosure,
             'website_ids' => function ($index, $entityNumber) {

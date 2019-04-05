@@ -14,11 +14,14 @@ class PriceProvider
     /**
      * Get random price for product
      *
+     * @param int $productIndex
      * @return float
      */
-    public function getPrice()
+    public function getPrice($productIndex)
     {
-        switch (random_int(0, 3)) {
+        // phpcs:disable
+        mt_srand($productIndex);
+        switch (mt_rand(0, 3)) {
             case 0:
                 return 9.99;
             case 1:
@@ -26,7 +29,8 @@ class PriceProvider
             case 2:
                 return 1;
             case 3:
-                return random_int(1, 10000) / 10;
+                return mt_rand(1, 10000) / 10;
         }
+        // phpcs:enable
     }
 }
