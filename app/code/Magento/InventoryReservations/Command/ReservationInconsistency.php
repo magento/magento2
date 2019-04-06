@@ -7,30 +7,29 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservations\Command;
 
-use Magento\InventoryReservations\Model\GetReservationsTotOrder\Proxy as GetReservationsTotOrder;
+use Magento\InventoryReservations\Model\GetOrderWithBrokenReservation;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class ImportCustomersCommand
- */
 class ReservationInconsistency extends Command
 {
     /**
-     * @var \Magento\InventoryReservations\Model\GetReservationsTotOrder $getReservationsTotOrder
+     * @var GetOrderWithBrokenReservation
      */
-    private $getReservationsTotOrder;
+    private $getOrderWithBrokenReservation;
 
     /**
      * ReservationInconsistency constructor.
-     * @param GetReservationsTotOrder $getReservationsTotOrder
+     * @param GetOrderWithBrokenReservation $getOrderWithBrokenReservation
      */
     public function __construct(
-        GetReservationsTotOrder $getReservationsTotOrder
+        GetOrderWithBrokenReservation $getOrderWithBrokenReservation
     ) {
         parent::__construct();
-        $this->getReservationsTotOrder = $getReservationsTotOrder;
+        $this->getOrderWithBrokenReservation = $getOrderWithBrokenReservation;
     }
 
     protected function configure()
@@ -49,14 +48,14 @@ class ReservationInconsistency extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): void
     {
-        /** @var array $orderListReservations */
-        $orderListReservations = $this->getReservationsTotOrder->getListReservationsTotOrder();
+        /** @var OrderInterface[] $orders */
+        $orders = $this->getOrderWithBrokenReservation->execute();
 
-        foreach ($orderListReservations as $orderReservationTot){
+        /** @var Order $order */
+        foreach($orders as $order) {
             $output->writeln(
-                __('Order %1 got inconsistency on reservation by %2',
-                    $orderReservationTot['IncrementId'],
-                    $orderReservationTot['ReservationTot']
+                __('Order %1 got inconsistency on inventory reservation',
+                    $order->getIncrementId()
                 )
             );
         }
