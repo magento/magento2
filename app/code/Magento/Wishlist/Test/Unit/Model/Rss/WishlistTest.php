@@ -278,15 +278,35 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
 
     public function testIsAllowed()
     {
+        $customerId = 1;
+        $customerServiceMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)->setMethods(
+            ['getId', '__wakeup', 'getCustomerId', 'getItemCollection', 'getSharingCode']
+        )->disableOriginalConstructor()->getMock();
+        $wishlist->expects($this->once())->method('getCustomerId')->willReturn($customerId);
+        $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
+            ->will($this->returnValue($wishlist));
+        $this->wishlistHelperMock->expects($this->any())
+            ->method('getCustomer')
+            ->will($this->returnValue($customerServiceMock));
+        $customerServiceMock->expects($this->once())->method('getId')->willReturn($customerId);
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/wishlist/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
+
         $this->assertTrue($this->model->isAllowed());
     }
 
     public function testGetCacheKey()
     {
-        $this->assertEquals('rss_wishlist_data', $this->model->getCacheKey());
+        $wishlistId = 1;
+        $wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)->setMethods(
+            ['getId', '__wakeup', 'getCustomerId', 'getItemCollection', 'getSharingCode']
+        )->disableOriginalConstructor()->getMock();
+        $wishlist->expects($this->once())->method('getId')->willReturn($wishlistId);
+        $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
+            ->will($this->returnValue($wishlist));
+        $this->assertEquals('rss_wishlist_data_1', $this->model->getCacheKey());
     }
 
     public function testGetCacheLifetime()

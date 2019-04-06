@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
+use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddress;
+use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -23,9 +24,9 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
     private $quoteAddressFactory;
 
     /**
-     * @var CheckCustomerAccount
+     * @var GetCustomer
      */
-    private $checkCustomerAccount;
+    private $getCustomer;
 
     /**
      * @var GetCustomerAddress
@@ -39,18 +40,18 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
 
     /**
      * @param QuoteAddressFactory $quoteAddressFactory
-     * @param CheckCustomerAccount $checkCustomerAccount
+     * @param GetCustomer $getCustomer
      * @param GetCustomerAddress $getCustomerAddress
      * @param AssignShippingAddressToCart $assignShippingAddressToCart
      */
     public function __construct(
         QuoteAddressFactory $quoteAddressFactory,
-        CheckCustomerAccount $checkCustomerAccount,
+        GetCustomer $getCustomer,
         GetCustomerAddress $getCustomerAddress,
         AssignShippingAddressToCart $assignShippingAddressToCart
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
-        $this->checkCustomerAccount = $checkCustomerAccount;
+        $this->getCustomer = $getCustomer;
         $this->getCustomerAddress = $getCustomerAddress;
         $this->assignShippingAddressToCart = $assignShippingAddressToCart;
     }
@@ -84,8 +85,8 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
         if (null === $customerAddressId) {
             $shippingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
         } else {
-            $this->checkCustomerAccount->execute($context->getUserId(), $context->getUserType());
-            $customerAddress = $this->getCustomerAddress->execute((int)$customerAddressId, (int)$context->getUserId());
+            $customer = $this->getCustomer->execute($context);
+            $customerAddress = $this->getCustomerAddress->execute((int)$customerAddressId, (int)$customer->getId());
             $shippingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress($customerAddress);
         }
 

@@ -424,6 +424,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 $backendModel = $field->getBackendModel();
                 // Backend models which implement ProcessorInterface are processed by ScopeConfigInterface
                 if (!$backendModel instanceof ProcessorInterface) {
+                    if (array_key_exists($path, $this->_configData)) {
+                        $data = $this->_configData[$path];
+                    }
+
                     $backendModel->setPath($path)
                         ->setValue($data)
                         ->setWebsite($this->getWebsiteCode())

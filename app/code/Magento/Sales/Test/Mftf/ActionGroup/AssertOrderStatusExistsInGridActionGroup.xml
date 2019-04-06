@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Search order status grid for item with a specific code and validate data -->
+    <actionGroup name="AssertOrderStatusExistsInGrid">
+        <arguments>
+            <argument name="status" type="string" />
+            <argument name="label" type="string" />
+        </arguments>
+
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters"/>
+        <fillField selector="{{AdminOrderStatusGridSection.statusCodeFilterField}}" userInput="{{status}}" stepKey="fillStatusFilter"/>
+        <click selector="{{AdminSecondaryGridSection.searchButton}}" stepKey="clickSearch"/>
+        <see selector="{{AdminOrderStatusGridSection.statusCodeDataColumn}}" userInput="{{status}}" stepKey="seeStatusCodeInGrid"/>
+        <see selector="{{AdminOrderStatusGridSection.statusLabelDataColumn}}" userInput="{{label}}" stepKey="seeStatusLabelInGrid"/>
+    </actionGroup>
+</actionGroups>
