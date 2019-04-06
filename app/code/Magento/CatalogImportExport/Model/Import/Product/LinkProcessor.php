@@ -5,15 +5,14 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
-use Magento\Catalog\Model\ResourceModel\Product\LinkFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
-use Magento\CatalogImportExport\Model\ResourceModel\Product\LinkProcessor as LinkProcessorResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\ResourceModel\Helper;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Psr\Log\LoggerInterface;
+use Magento\CatalogImportExport\Model\ResourceModel\Product\LinkFactory;
 
 class LinkProcessor
 {
@@ -54,17 +53,11 @@ class LinkProcessor
      */
     private $skuProcessor;
 
-    /**
-     * @var LinkProcessorResourceModel
-     */
-    private $resourceModel;
-
     public function __construct(
-        LinkFactory $linkFactory,
+        \Magento\CatalogImportExport\Model\ResourceModel\Product\LinkFactory $linkFactory,
         LoggerInterface $logger,
         Data $importData,
         SkuProcessor $skuProcessor,
-        LinkProcessorResourceModel $resourceModel,
         array $linkNameToId
     ) {
         $this->linkFactory = $linkFactory;
@@ -72,16 +65,14 @@ class LinkProcessor
         $this->dataSourceModel = $importData;
         $this->skuProcessor = $skuProcessor;
 
-        // Temporary solution: arrays do not seem to support init_parameter,
+        // arrays do not seem to support init_parameter,
         // so we have to parse the constant by ourselves
         $this->linkNameToId = [];
         foreach($linkNameToId as $key=>$value) {
             $this->linkNameToId[$key] = constant($value);
         }
 
-        $this->resource = $this->linkFactory->create();
-
-        $this->resourceModel = $resourceModel;
+        $this->resource = $this->linkFactory->create(['connectionName' => null]);
     }
 
     /**
@@ -101,10 +92,10 @@ class LinkProcessor
         $this->entityModel = $entityModel;
         $this->_productEntityLinkField = $productEntityLinkField;
 
-        $nextLinkId = $this->getNextAutoincrement();
+        $nextLinkId = $this->resource->getNextAutoincrement();
 
         $positionAttrId = [];
-        $positionAttrId = $this->loadPositionAttributes($this->linkNameToId, $positionAttrId);
+        $positionAttrId = $this->resource->loadPositionAttributes($this->linkNameToId, $positionAttrId);
 
         while ($bunch = $this->dataSourceModel->getNextBunch()) {
             $productIds = [];
@@ -119,7 +110,7 @@ class LinkProcessor
                 $sku = $rowData[Product::COL_SKU];
 
                 $productId = $this->skuProcessor->getNewSku($sku)[$this->_productEntityLinkField];
-                $productLinkKeys = $this->resourceModel->fetchExistingLinks($productId);
+                $productLinkKeys = $this->resource->fetchExistingLinks($productId);
 
                 foreach ($this->linkNameToId as $linkName => $linkId) {
                     $productIds[] = $productId;
@@ -168,9 +159,9 @@ class LinkProcessor
             }
 
             if (Import::BEHAVIOR_APPEND !== $this->entityModel->getBehavior() && $productIds) {
-                $this->deleteExistingLinks($productIds);
+                $this->resource->deleteExistingLinks($productIds);
             }
-            $this->insertNewLinks($linkRows, $positionRows);
+            $this->resource->insertNewLinks($linkRows, $positionRows);
         }
 
         return $this;

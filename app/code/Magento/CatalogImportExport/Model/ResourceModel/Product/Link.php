@@ -1,19 +1,18 @@
 <?php
 
-
 namespace Magento\CatalogImportExport\Model\ResourceModel\Product;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\ImportExport\Model\Import;
 
-class LinkProcessor extends \Magento\Catalog\Model\ResourceModel\Product\Link
+class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
 {
     /** @var \Magento\ImportExport\Model\ResourceModel\Helper */
     protected $resourceHelper;
 
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        Relation $catalogProductRelation,
+        \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation,
         $connectionName = null,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
     ) {
@@ -58,7 +57,7 @@ class LinkProcessor extends \Magento\Catalog\Model\ResourceModel\Product\Link
     {
         foreach ($linkNameToId as $linkName => $linkId) {
             $select = $this->getConnection()->select()->from(
-                $this->resource->getTable('catalog_product_link_attribute'),
+                $this->getTable('catalog_product_link_attribute'),
                 ['id' => 'product_link_attribute_id']
             )->where(
                 'link_type_id = :link_id AND product_link_attribute_code = :position'
