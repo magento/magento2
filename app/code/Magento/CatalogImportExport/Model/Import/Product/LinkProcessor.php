@@ -81,10 +81,9 @@ class LinkProcessor
        $this->linkNameToId = array_merge($nameToIds, $this->linkNameToId);
     }
 
-    public function saveLinks($entityModel, $productEntityLinkField)
+    public function saveLinks($entityModel, $linkField)
     {
         $this->entityModel = $entityModel;
-        $this->_productEntityLinkField = $productEntityLinkField;
 
         $nextLinkId = $this->resource->getNextAutoincrement();
 
@@ -103,7 +102,7 @@ class LinkProcessor
 
                 $sku = $rowData[Product::COL_SKU];
 
-                $productId = $this->skuProcessor->getNewSku($sku)[$this->_productEntityLinkField];
+                $productId = $this->skuProcessor->getNewSku($sku)[$linkField];
                 $productLinkKeys = $this->resource->fetchExistingLinks($productId);
 
                 foreach ($this->linkNameToId as $linkName => $linkId) {
