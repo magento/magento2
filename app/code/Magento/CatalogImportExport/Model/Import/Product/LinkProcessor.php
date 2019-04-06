@@ -9,7 +9,6 @@ use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\ImportExport\Model\Import;
-use Magento\ImportExport\Model\ResourceModel\Helper;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Psr\Log\LoggerInterface;
 use Magento\CatalogImportExport\Model\ResourceModel\Product\LinkFactory;
@@ -37,11 +36,6 @@ class LinkProcessor
      * @var LoggerInterface
      */
     private $logger;
-
-    /**
-     * @var Helper
-     */
-    private $resourceHelper;
 
     /**
      * @var Data
@@ -254,13 +248,10 @@ class LinkProcessor
     {
         $newSku = $this->skuProcessor->getNewSku($linkedSku);
         if ( ! empty($newSku)) {
-            $linkedId = $newSku['entity_id'];
-        } else {
-            $linkedId = $this->entityModel->getExistingSku($linkedSku)['entity_id'];
+            return $newSku['entity_id'];
         }
 
-        return $linkedId;
-}
-
+        return $this->entityModel->getExistingSku($linkedSku)['entity_id'];
+    }
 
 }
