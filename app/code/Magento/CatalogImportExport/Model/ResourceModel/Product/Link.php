@@ -49,12 +49,14 @@ class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
     /**
      * pre-load 'position' attributes ID for each link type once
      *
-     * @param array $positionAttrId
+     * @param array $linkNameToId
      *
      * @return array
      */
-    public function loadPositionAttributes(array $linkNameToId, array $positionAttrId): array
+    public function loadPositionAttributes(array $linkNameToId): array
     {
+        $positionAttrId = [];
+
         foreach ($linkNameToId as $linkId) {
             $select = $this->getConnection()->select()->from(
                 $this->getTable('catalog_product_link_attribute'),

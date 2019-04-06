@@ -86,9 +86,7 @@ class LinkProcessor
         $this->entityModel = $entityModel;
 
         $nextLinkId = $this->resource->getNextAutoincrement();
-
-        $positionAttrId = [];
-        $positionAttrId = $this->resource->loadPositionAttributes($this->linkNameToId, $positionAttrId);
+        $positionAttrId = $this->resource->loadPositionAttributes();
 
         while ($bunch = $this->dataSourceModel->getNextBunch()) {
             $productIds = [];
