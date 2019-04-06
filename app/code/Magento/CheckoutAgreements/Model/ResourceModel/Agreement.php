@@ -83,6 +83,11 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getConnection()->insert($this->getTable('checkout_agreement_store'), $storeArray);
         }
 
+        $this->getConnection()->delete(
+            $this->getTable('checkout_agreement_used_in_forms'),
+            ['agreement_id = ?' => $object->getId()]
+        );
+
         foreach ((array)$object->getData('used_in_forms') as $form) {
             $formArray = [
                 'agreement_id' => $object->getId(),

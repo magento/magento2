@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="_defaultAgreement" type="agreement">
+        <data key="name" unique="suffix">testAgreement</data>
+        <data key="status">Enabled</data>
+        <data key="showContentAs">Text</data>
+        <data key="applied">Automatically</data>
+        <data key="storeView">All Store Views</data>
+        <data key="checkboxText">Test text</data>
+        <data key="content">test Content</data>
+        <data key="formsToUseIn">Checkout</data>
+    </entity>
+</entities>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateAgreementForDifferentFormsTest">
+        <annotations>
+            <features value="Agreements"/>
+            <stories value="Create/Edit Agreements"/>
+            <title value="Admin should be able to add/edit agreements"/>
+            <description value="Admin should be able to add/edit agreements"/>
+            <group value="Agreements"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{AdminAgreementCreatePage.url}}" stepKey="goToAgreementCreationPage"/>
+        <waitForPageLoad stepKey="waitForAgreementCreatePageToLoad"/>
+
+        <actionGroup ref="fillMainAgreementForm" stepKey="fillMainAgreementForm">
+            <argument name="agreement" value="_defaultAgreement"/>
+        </actionGroup>
+        <actionGroup ref="saveAgreement" stepKey="saveAgreement"/>
+
+        <conditionalClick selector="//table/thead/tr/th/span[contains(text(), 'ID')]" dependentSelector="//table/thead/tr/th[contains(@data-sort, 'agreement_id')][contains(@data-direction, 'desc')]" stepKey="clickToAttemptSortByIdDescending" visible="true"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFirstIdSortDescendingToFinish" />
+        <click selector="{{TermsAndConditionsGridSection.firstRow}}" stepKey="clickAgreementRow"/>
+        <waitForPageLoad stepKey="waitForAgreementEditPageToLoad"/>
+
+        <grabMultiple selector="{{TermsAndConditionsInformationSection.formsToUseInSelected}}"  stepKey="grabFormsToUseIn"/>
+        <assertEquals stepKey="verifyOnlyCustomerFormIsChecked">
+            <expectedResult type="array">[{{_defaultAgreement.formsToUseIn}}]</expectedResult>
+            <actualResult type="variable">grabFormsToUseIn</actualResult>
+        </assertEquals>
+
+        <selectOption selector="{{TermsAndConditionsInformationSection.formsToUseIn}}" parameterArray="['Customer Registration', 'Checkout']" stepKey="selectFormsToUseInRegistration" />
+        <actionGroup ref="saveAgreement" stepKey="saveAgreementSecondTime"/>
+
+        <click selector="{{TermsAndConditionsGridSection.firstRow}}" stepKey="clickAgreementRowSecondTime"/>
+        <waitForPageLoad stepKey="waitForAgreementEditPageToLoadSecondTime"/>
+        <grabMultiple selector="{{TermsAndConditionsInformationSection.formsToUseInSelected}}"  stepKey="grabFormsToUseInBoth"/>
+        <assertEquals stepKey="verifyTheBothFormAreChecked">
+            <expectedResult type="array">['Checkout', 'Customer Registration']</expectedResult>
+            <actualResult type="variable">grabFormsToUseInBoth</actualResult>
+        </assertEquals>
+
+        <actionGroup ref="deleteAgreement" stepKey="deleteAgreement"/>
+    </test>
+</tests>

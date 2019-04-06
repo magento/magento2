@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="TermsAndConditionsInformationSection">
+        <element name="name" type="text" selector="//*[@id='edit_form']//input[@id='name']"/>
+        <element name="status" type="select" selector="//*[@id='edit_form']//select[@id='is_active']"/>
+        <element name="showContentAs" type="select" selector="//*[@id='edit_form']//select[@id='is_html']"/>
+        <element name="applied" type="select" selector="//*[@id='edit_form']//select[@id='mode']"/>
+        <element name="storeView" type="multiselect" selector="//*[@id='edit_form']//select[@id='stores']"/>
+        <element name="checkboxText" type="text" selector="//*[@id='edit_form']//textarea[@id='checkbox_text']"/>
+        <element name="content" type="text" selector="//*[@id='edit_form']//textarea[@id='content']"/>
+        <element name="contentHeight" type="text" selector="//*[@id='edit_form']//input[@id='content_height']"/>
+        <element name="formsToUseIn" type="multiselect" selector="//*[@id='edit_form']//select[@id='used_in_forms']"/>
+        <element name="formsToUseInSelected" type="multiselect" selector="//*[@id='edit_form']//select[@id='used_in_forms']//option[@selected='selected']"/>
+    </section>
+</sections>
