@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservations\Model\ResourceModel;
 
-
 use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Model\Order;
 
@@ -30,9 +29,13 @@ class GetListReservationsTotOrder
 
     public function execute(): array
     {
+        $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('inventory_reservation');
         $tableSalesOrderName = $this->resourceConnection->getTableName('sales_order');
-        $connection = $this->resourceConnection->getConnection();
+
+        $complete = Order::STATE_COMPLETE;
+        $closed = Order::STATE_CLOSED;
+        $canceled = Order::STATE_CANCELED;
 
         //todo: modularity rework
         $qry = $connection
@@ -40,7 +43,8 @@ class GetListReservationsTotOrder
             ->from($tableName, ['ReservationTot' => 'sum(quantity)'])
             ->joinInner($tableSalesOrderName,
                 'entity_id = ' . new \Zend_Db_Expr("CAST(JSON_EXTRACT(metadata, '$.object_id') as UNSIGNED)
-    AND state IN ('complete', 'closed', 'canceled')"), ['IncrementId' => 'increment_id']
+    AND " . $connection->quoteInto('state IN (?)', [$complete, $closed, $canceled])),
+                ['IncrementId' => 'increment_id']
             )
             ->group('IncrementId')
             ->having('ReservationTot != ?', 0);
