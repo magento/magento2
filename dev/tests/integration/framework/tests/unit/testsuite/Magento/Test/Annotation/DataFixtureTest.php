@@ -5,6 +5,8 @@
  */
 namespace Magento\Test\Annotation;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 /**
  * Test class for \Magento\TestFramework\Annotation\DataFixture.
  *
@@ -177,5 +179,17 @@ class DataFixtureTest extends \PHPUnit\Framework\TestCase
             $this->stringEndsWith('sample_fixture_two_rollback.php')
         );
         $this->_object->rollbackTransaction();
+    }
+
+    /**
+     * @magentoDataFixture Foo_DataFixtureDummy::Test/Integration/foo.php
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
+    public function testModuleDataFixture()
+    {
+        ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Foo_DataFixtureDummy', __DIR__);
+        $this->_object->expects($this->once())->method('_applyOneFixture')
+            ->with(__DIR__ . '/Test/Integration/foo.php');
+        $this->_object->startTransaction($this);
     }
 }
