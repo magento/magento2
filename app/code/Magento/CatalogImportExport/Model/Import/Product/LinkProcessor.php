@@ -120,7 +120,6 @@ class LinkProcessor
                         }
 
                         $linkedId = $this->getLinkedId($linkedSku);
-
                         if ($this->checkForEmptyLinkId($linkedId, $sku, $productId, $linkedSku)) {
                             continue;
                         }
@@ -129,6 +128,7 @@ class LinkProcessor
                         if (empty($productLinkKeys[$linkKey])) {
                             $productLinkKeys[$linkKey] = $nextLinkId;
                         }
+
                         if ( ! isset($linkRows[$linkKey])) {
                             $linkRows[$linkKey] = [
                                 'link_id' => $productLinkKeys[$linkKey],
