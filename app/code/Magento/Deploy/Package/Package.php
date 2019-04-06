@@ -320,7 +320,10 @@ class Package
      */
     public function deleteFile($fileId)
     {
+        $file = $this->files[$fileId];
+        $deployedFileId = $file->getDeployedFileId();
         unset($this->files[$fileId]);
+        unset($this->map[$deployedFileId]);
     }
 
     /**

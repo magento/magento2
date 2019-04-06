@@ -77,7 +77,7 @@ class Processor implements ContentProcessorInterface
             $content = $this->assetSource->getContent($asset);
 
             if (trim($content) === '') {
-                return '';
+                throw new ContentProcessorException(new Phrase(ContentProcessorInterface::ERROR_MESSAGE_PREFIX . 'LESS file is empty: ' . $path));
             }
 
             $tmpFilePath = $this->temporaryFile->createFile($path, $content);
@@ -88,8 +88,7 @@ class Processor implements ContentProcessorInterface
             gc_enable();
 
             if (trim($content) === '') {
-                $this->logger->warning('Parsed less file is empty: ' . $path);
-                return '';
+                throw new ContentProcessorException(new Phrase(ContentProcessorInterface::ERROR_MESSAGE_PREFIX . 'LESS file is empty: ' . $path));
             } else {
                 return $content;
             }
