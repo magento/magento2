@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\InventoryLegacySynchronization\Plugin;
 
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface;
+use Magento\InventoryCatalogApi\Api\BulkSourceUnassignInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryLegacySynchronization\Model\Synchronize;
 
@@ -42,7 +42,7 @@ class SetZeroQuantityToLegacyAtBulkUnassign
     }
 
     /**
-     * @param BulkInventoryTransferInterface $subject
+     * @param BulkSourceUnassignInterface $subject
      * @param int $result
      * @param array $skus
      * @param array $sourceCodes
@@ -51,7 +51,7 @@ class SetZeroQuantityToLegacyAtBulkUnassign
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
-        BulkInventoryTransferInterface $subject,
+        BulkSourceUnassignInterface $subject,
         int $result,
         array $skus,
         array $sourceCodes
