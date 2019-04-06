@@ -19,7 +19,7 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
     /**
      * @var RequestInterface
      */
-    protected $request;
+    private $request;
 
     /**
      * @var \Magento\Shipping\Model\Config
@@ -87,7 +87,7 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
      *
      * @return int
      */
-    private function getAdminStoreId()
+    private function getAdminStoreId(): int
     {
         $website = $this->request->getParam('website');
         if ($website) {
