@@ -65,6 +65,7 @@
         <dynamicRows name="assigned_sources" component="Magento_Ui/js/dynamic-rows/dynamic-rows-grid" sortOrder="20">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="deleteButtonLabel" xsi:type="string">Unassign</item>
                     <item name="dataProvider" xsi:type="string">data.sources.assign_sources_grid</item>
                     <item name="map" xsi:type="array">
                         <item name="source_code" xsi:type="string">source_code</item>
