@@ -8,15 +8,8 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
-use Magento\SalesRule\Api\Data\ConditionInterface;
-use Magento\SalesRule\Api\Data\ConditionInterfaceFactory;
-use Magento\SalesRule\Api\RuleRepositoryInterface;
-use Magento\SalesRule\Model\Coupon;
-use Magento\SalesRule\Model\Spi\CouponResourceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -26,278 +19,186 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class ApplyCouponToCartTest extends GraphQlAbstract
 {
     /**
-     * @var QuoteResource
-     */
-    private $quoteResource;
-
-    /**
-     * @var Quote
-     */
-    private $quote;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
-
-    /**
-     * @var CouponResourceInterface
-     */
-    protected $couponResource;
-
-    /**
-     * @var Coupon
-     */
-    private $coupon;
-
-    /**
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
 
     /**
-     * @var RuleRepositoryInterface
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $ruleRepository;
-
-    /**
-     * @var ConditionInterfaceFactory
-     */
-    private $conditionFactory;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->create(QuoteResource::class);
-        $this->quote = $objectManager->create(Quote::class);
-        $this->quoteIdToMaskedId = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);
-        $this->couponResource = $objectManager->get(CouponResourceInterface::class);
-        $this->coupon = $objectManager->create(Coupon::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->ruleRepository = $objectManager->get(RuleRepositoryInterface::class);
-        $this->conditionFactory = $objectManager->get(ConditionInterfaceFactory::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/discount_10percent_generalusers.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testApplyCouponToCart()
     {
         $couponCode = '2?ds5!2d';
-
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
-        $response = $this->graphQlQuery($query, [], '', $queryHeaders);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $couponCode);
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('applyCouponToCart', $response);
         self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/discount_10percent_generalusers.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @expectedException \Exception
      * @expectedExceptionMessage A coupon is already applied to the cart. Please remove it to apply another
      */
     public function testApplyCouponTwice()
     {
         $couponCode = '2?ds5!2d';
-
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
-        $response = $this->graphQlQuery($query, [], '', $queryHeaders);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $couponCode);
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey("applyCouponToCart", $response);
         self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
 
-        $this->graphQlQuery($query, [], '', $queryHeaders);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/discount_10percent_generalusers.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @expectedException \Exception
      * @expectedExceptionMessage Cart does not contain products.
      */
     public function testApplyCouponToCartWithoutItems()
     {
         $couponCode = '2?ds5!2d';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $couponCode);
 
-        $this->quoteResource->load($this->quote, 'test_order_1', 'reserved_order_id');
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
-
-        $this->graphQlQuery($query, [], '', $queryHeaders);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
+     * _security
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
      */
     public function testApplyCouponToGuestCart()
     {
         $couponCode = '2?ds5!2d';
-
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $couponCode);
 
         self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
-        $this->graphQlQuery($query, [], '', $queryHeaders);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/discount_10percent_generalusers.php
      * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @expectedException \Exception
      */
     public function testApplyCouponToAnotherCustomerCart()
     {
         $couponCode = '2?ds5!2d';
-
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $this->quote->setCustomerId(2);
-        $this->quoteResource->save($this->quote);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $couponCode);
 
         self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
-        $this->graphQlQuery($query, [], '', $queryHeaders);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer_two@example.com'));
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @expectedException \Exception
      * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
      */
     public function testApplyNonExistentCouponToCart()
     {
-        $couponCode = '1%q#f5';
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
+        $couponCode = 'non_existent_coupon_code';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $couponCode);
 
-        $this->graphQlQuery($query, [], '', $queryHeaders);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
      * @expectedException \Exception
      */
     public function testApplyCouponToNonExistentCart()
     {
         $couponCode = '2?ds5!2d';
-        $maskedQuoteId = '1hk3y1842h1n';
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = $this->getQuery($maskedQuoteId, $couponCode);
 
         self::expectExceptionMessage('Could not find a cart with ID "' . $maskedQuoteId . '"');
-        $this->graphQlQuery($query, [], '', $queryHeaders);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/discount_10percent_generalusers.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/make_coupon_expired.php
      * @expectedException \Exception
      * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
      */
     public function testApplyExpiredCoupon()
     {
         $couponCode = '2?ds5!2d';
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $couponCode);
 
-        $this->coupon->loadByCode($couponCode);
-        $yesterday = new \DateTime();
-        $yesterday->add(\DateInterval::createFromDateString('-1 day'));
-        $this->coupon->setExpirationDate($yesterday->format('Y-m-d'));
-        $this->couponResource->save($this->coupon);
-
-        $this->graphQlQuery($query, [], '', $queryHeaders);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
      * Products in cart don't fit to the coupon
      *
+     * @magentoApiDataFixture Magento/Checkout/_files/discount_10percent_generalusers.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/restrict_coupon_usage_for_simple_product.php
      * @expectedException \Exception
      * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
      */
     public function testApplyCouponWhichIsNotApplicable()
     {
         $couponCode = '2?ds5!2d';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $couponCode);
 
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_with_simple_product_without_address',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-        $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
-        $this->excludeProductPerCoupon($couponCode, 'simple');
-
-        $this->graphQlQuery($query, [], '', $queryHeaders);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -305,6 +206,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
      * @param string $message
      * @dataProvider dataProviderUpdateWithMissedRequiredParameters
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @expectedException \Exception
      */
     public function testApplyCouponWithMissedRequiredParameters(string $input, string $message)
@@ -321,12 +223,8 @@ mutation {
 }
 QUERY;
 
-        $this->quote->setCustomerId(1);
-        $this->quoteResource->save($this->quote);
-        $queryHeaders = $this->prepareAuthorizationHeaders('customer@example.com', 'password');
-
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query, [], '', $queryHeaders);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -347,54 +245,18 @@ QUERY;
     }
 
     /**
-     * @param string $couponCode
-     * @param string $sku
-     * @throws \Exception
-     */
-    private function excludeProductPerCoupon(string $couponCode, string $sku)
-    {
-        $this->coupon->loadByCode($couponCode);
-        $ruleId = $this->coupon->getRuleId();
-        $salesRule = $this->ruleRepository->getById($ruleId);
-
-        /** @var ConditionInterface $conditionProductSku */
-        $conditionProductSku = $this->conditionFactory->create();
-        $conditionProductSku->setConditionType(\Magento\SalesRule\Model\Rule\Condition\Product::class);
-        $conditionProductSku->setAttributeName('sku');
-        $conditionProductSku->setValue('1');
-        $conditionProductSku->setOperator('!=');
-        $conditionProductSku->setValue($sku);
-
-        /** @var ConditionInterface $conditionProductFound */
-        $conditionProductFound = $this->conditionFactory->create();
-        $conditionProductFound->setConditionType(\Magento\SalesRule\Model\Rule\Condition\Product\Found::class);
-        $conditionProductFound->setValue('1');
-        $conditionProductFound->setAggregatorType('all');
-        $conditionProductFound->setConditions([$conditionProductSku]);
-
-        /** @var ConditionInterface $conditionCombine */
-        $conditionCombine = $this->conditionFactory->create();
-        $conditionCombine->setConditionType(\Magento\SalesRule\Model\Rule\Condition\Combine::class);
-        $conditionCombine->setValue('1');
-        $conditionCombine->setAggregatorType('all');
-        $conditionCombine->setConditions([$conditionProductFound]);
-
-        $salesRule->setCondition($conditionCombine);
-        $this->ruleRepository->save($salesRule);
-    }
-
-    /**
      * Retrieve customer authorization headers
      *
-     * @param string $email
+     * @param string $username
      * @param string $password
      * @return array
      * @throws AuthenticationException
      */
-    private function prepareAuthorizationHeaders(string $email, string $password): array
+    private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
     {
-        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
-        return ['Authorization' => 'Bearer ' . $customerToken];
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
+        return $headerMap;
     }
 
     /**
@@ -402,7 +264,7 @@ QUERY;
      * @param string $couponCode
      * @return string
      */
-    private function prepareAddCouponRequestQuery(string $maskedQuoteId, string $couponCode): string
+    private function getQuery(string $maskedQuoteId, string $couponCode): string
     {
         return <<<QUERY
 mutation {
