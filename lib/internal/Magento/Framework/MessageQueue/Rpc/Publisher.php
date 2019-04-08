@@ -91,7 +91,7 @@ class Publisher implements PublisherInterface
                 'properties' => [
                     'reply_to' => $replyTo,
                     'delivery_mode' => 2,
-                    'correlation_id' => rand(),
+                    'correlation_id' => mt_rand(),
                     'message_id' => md5(uniqid($topicName))
                 ]
             ]
