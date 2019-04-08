@@ -116,11 +116,7 @@ class Config implements \Magento\Framework\Interception\ExtendableConfigInterfac
         $this->cacheManager =
             $cacheManager ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CacheManager::class);
         $intercepted = $this->cacheManager->load($cacheId);
-        if ($intercepted !== null) {
-            $this->_intercepted = $intercepted;
-        } else {
-            $this->initializeUncompiled($this->_classDefinitions->getClasses());
-        }
+        $this->_intercepted = $intercepted ?? $this->initializeUncompiled($this->_classDefinitions->getClasses());
     }
 
     /**
