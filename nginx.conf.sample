@@ -9,6 +9,7 @@
 #    listen 80;
 #    server_name mage.dev;
 #    set $MAGE_ROOT /var/www/magento2;
+#    set $MAGE_DEBUG_SHOW_ARGS 1;
 #    include /vagrant/magento2/nginx.conf.sample;
 # }
 #
@@ -32,6 +33,12 @@ autoindex off;
 charset UTF-8;
 error_page 404 403 = /errors/404.php;
 #add_header "X-UA-Compatible" "IE=Edge";
+
+
+# Deny access to sensitive files
+location /.user.ini {
+    deny all;
+}
 
 # PHP entry point for setup application
 location ~* ^/setup($|/) {
@@ -159,6 +166,11 @@ location /media/downloadable/ {
 location /media/import/ {
     deny all;
 }
+location /errors/ {
+    location ~* \.xml$ {
+        deny all;
+    }
+}
 
 # PHP entry point for main application
 location ~ ^/(index|get|static|errors/report|errors/404|errors/503|health_check)\.php$ {
@@ -198,6 +210,6 @@ gzip_types
 gzip_vary on;
 
 # Banned locations (only reached if the earlier PHP entry point regexes don't match)
-location ~* (\.php$|\.htaccess$|\.git) {
+location ~* (\.php$|\.phtml$|\.htaccess$|\.git) {
     deny all;
 }

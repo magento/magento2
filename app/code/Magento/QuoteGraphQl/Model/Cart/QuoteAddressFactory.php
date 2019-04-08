@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
+use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddress;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\AddressFactory as BaseQuoteAddressFactory;
 
@@ -24,12 +26,20 @@ class QuoteAddressFactory
     private $quoteAddressFactory;
 
     /**
+     * @var GetCustomerAddress
+     */
+    private $getCustomerAddress;
+
+    /**
      * @param BaseQuoteAddressFactory $quoteAddressFactory
+     * @param GetCustomerAddress $getCustomerAddress
      */
     public function __construct(
-        BaseQuoteAddressFactory $quoteAddressFactory
+        BaseQuoteAddressFactory $quoteAddressFactory,
+        GetCustomerAddress $getCustomerAddress
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
+        $this->getCustomerAddress = $getCustomerAddress;
     }
 
     /**
@@ -48,14 +58,19 @@ class QuoteAddressFactory
     }
 
     /**
-     * Create QuoteAddress based on CustomerAddress
+     * Create Quote Address based on Customer Address
      *
-     * @param CustomerAddress $customerAddress
+     * @param int $customerAddressId
+     * @param int $customerId
      * @return QuoteAddress
      * @throws GraphQlInputException
+     * @throws GraphQlAuthorizationException
+     * @throws GraphQlNoSuchEntityException
      */
-    public function createBasedOnCustomerAddress(CustomerAddress $customerAddress): QuoteAddress
+    public function createBasedOnCustomerAddress(int $customerAddressId, int $customerId): QuoteAddress
     {
+        $customerAddress = $this->getCustomerAddress->execute((int)$customerAddressId, $customerId);
+
         $quoteAddress = $this->quoteAddressFactory->create();
         try {
             $quoteAddress->importCustomerAddressData($customerAddress);
