@@ -128,16 +128,24 @@
         }
 
         &.field-subscription {
+            display: flex;
             > .admin__field-label {
-                width: auto;
-                margin-left: 0;
-                span {
-                    white-space: nowrap;
-                }
-                &:before {
-                    content: '';
-                    margin-left: 0;
-                }
+              width: auto;
+              order: 1;
+              line-height: 3.7rem;
+              margin-left: 5px;
+              span {
+                  white-space: nowrap;
+              }
+              &:before {
+                  content: '';
+                  margin-left: 0;
+              }
+            }
+            > .admin__field-control {
+              width: auto;
+              float: left;
+              margin-left: 0;
             }
         }
 
