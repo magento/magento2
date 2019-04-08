@@ -178,7 +178,7 @@ class NotificationRenderer
      */
     private function formatContentWithLinks($content)
     {
-        $urlRegex = '#\bhttps?://[^,\s()<>]+(?:\([\w\d]+\)|([^,[:punct:]\s]|/))#';
+        $urlRegex = '#\bhttps?://[^,\s()<>]+(?:\(\w+\)|([^,[:punct:]\s]|/))#';
         $urlTextRegex = '/\[(.*?)\]/';
 
         preg_match_all($urlRegex, $content, $urlMatches);

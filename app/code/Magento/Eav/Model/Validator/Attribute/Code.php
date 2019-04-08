@@ -22,7 +22,7 @@ class Code extends AbstractValidator
     /**
      * Validation pattern for attribute code
      */
-    const VALIDATION_RULE_PATTERN = '/^[a-zA-Z]+[a-zA-Z0-9_]*$/u';
+    const VALIDATION_RULE_PATTERN = '/^[a-zA-Z]+\w*$/u';
 
     /**
      * Validates the correctness of the attribute code

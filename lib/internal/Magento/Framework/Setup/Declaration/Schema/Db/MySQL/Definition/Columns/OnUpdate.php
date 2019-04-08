@@ -36,7 +36,7 @@ class OnUpdate implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/^(?:on update)\s([\_\-\s\w\d]+)/', $data['extra'], $matches)) {
+        if (preg_match('/^(?:on update)\s([\_\-\s\w]+)/', $data['extra'], $matches)) {
             $data['on_update'] = true;
         }
 
