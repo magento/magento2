@@ -48,10 +48,12 @@
         <comment userInput="Click on first category" stepKey="openFirstCategoryPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$category1.name$$)}}" stepKey="clickCategory1Name"/>
         <waitForPageLoad stepKey="waitForCategory1Page"/>
-        <!--Check if current category is highlighted-->
-        <comment userInput="Check if current category is highlighted" stepKey="checkCateg1NameIsHighlighted"/>
+        <!--Check if current category is highlighted and the others are not-->
+        <comment userInput="Check if current category is highlighted and the others are not" stepKey="checkCateg1NameIsHighlighted"/>
         <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$category1.name$$)}}" userInput="class" stepKey="grabCategory1Class"/>
         <assertContains expectedType="string" expected="active" actual="$grabCategory1Class" stepKey="assertCategory1IsHighlighted"/>
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="highlightedAmount"/>
+        <assertEquals expectedType="int" expected="1" actual="$highlightedAmount" stepKey="assertRestCategories1IsNotHighlighted"/>
         <!--See products in the category page-->
         <comment userInput="See products in the category page" stepKey="seeProductsInCategoryPage"/>
         <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo($product1.name$)}}" stepKey="seeProduct1InCategoryPage"/>
@@ -60,9 +62,11 @@
         <comment userInput="Click on second category" stepKey="openSecondCategoryPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$category2.name$$)}}" stepKey="clickCategory2Name"/>
         <waitForPageLoad stepKey="waitForCategory2Page"/>
-        <!--Check if current category is highlighted-->
-        <comment userInput="Check if current category is highlighted" stepKey="checkCateg2NameIsHighlighted"/>
+        <!--Check if current category is highlighted  and the others are not-->
+        <comment userInput="Check if current category is highlighted and the others are not" stepKey="checkCateg2NameIsHighlighted"/>
         <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$category2.name$$)}}" userInput="class" stepKey="grabCategory2Class"/>
         <assertContains expectedType="string" expected="active" actual="$grabCategory2Class" stepKey="assertCategory2IsHighlighted"/>
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="highlightedAmount2"/>
+        <assertEquals expectedType="int" expected="1" actual="$highlightedAmount2" stepKey="assertRestCategories1IsNotHighlighted2"/>
     </test>
 </tests>
