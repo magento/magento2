@@ -16,6 +16,7 @@ use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -62,7 +63,7 @@ class BackorderConditionTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -93,7 +94,7 @@ class BackorderConditionTest extends TestCase
      * @param int $stockId
      * @param array|null $expectedData
      */
-    public function testBackordersDisabled(string $sku, int $stockId, $expectedData)
+    public function testBackordersDisabled(string $sku, int $stockId, $expectedData): void
     {
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
 
@@ -110,13 +111,13 @@ class BackorderConditionTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/item_options/backorders 1
-     * @dataProvider backordersEnabledDataProvider
+     * @dataProvider backordersGlobalEnabledDataProvider
      *
      * @param string $sku
      * @param int $stockId
      * @param array|null $expectedData
      */
-    public function testGlobalBackordersEnabled(string $sku, int $stockId, $expectedData)
+    public function testGlobalBackordersEnabled(string $sku, int $stockId, $expectedData): void
     {
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
 
@@ -139,9 +140,9 @@ class BackorderConditionTest extends TestCase
      * @param int $stockId
      * @param array|null $expectedData
      */
-    public function testStockItemBackordersDisabled(string $sku, int $stockId, $expectedData)
+    public function testStockItemBackordersDisabled(string $sku, int $stockId, $expectedData): void
     {
-        $this->setStockItemBackorders($sku, 0);
+        $this->setStockItemBackorders($sku, StockItemConfigurationInterface::BACKORDERS_NO);
 
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
 
@@ -162,15 +163,30 @@ class BackorderConditionTest extends TestCase
      *
      * @param string $sku
      * @param int $stockId
+     * @param int $itemBackorders
      * @param array|null $expectedData
      */
-    public function testStockItemBackordersEnabled(string $sku, int $stockId, $expectedData)
+    public function testStockItemBackordersEnabled(string $sku, int $stockId, int $itemBackorders, $expectedData): void
     {
-        $this->setStockItemBackorders($sku, 1);
+        $this->setStockItemBackorders($sku, $itemBackorders);
 
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
 
         self::assertEquals($expectedData, $stockItemData);
+    }
+
+    /**
+     * Data provider for test with global enabled backorders.
+     *
+     * @return array
+     */
+    public function backordersGlobalEnabledDataProvider(): array
+    {
+        return [
+            ['SKU-1', 10, [GetStockItemDataInterface::QUANTITY => 8.5, GetStockItemDataInterface::IS_SALABLE => 1]],
+            ['SKU-2', 10, null],
+            ['SKU-3', 10, [GetStockItemDataInterface::QUANTITY => 0, GetStockItemDataInterface::IS_SALABLE => 1]],
+        ];
     }
 
     /**
@@ -181,9 +197,50 @@ class BackorderConditionTest extends TestCase
     public function backordersEnabledDataProvider(): array
     {
         return [
-            ['SKU-1', 10, [GetStockItemDataInterface::QUANTITY => 8.5, GetStockItemDataInterface::IS_SALABLE => 1]],
-            ['SKU-2', 10, null],
-            ['SKU-3', 10, [GetStockItemDataInterface::QUANTITY => 0, GetStockItemDataInterface::IS_SALABLE => 1]],
+            [
+                'SKU-1',
+                10,
+                StockItemConfigurationInterface::BACKORDERS_YES_NONOTIFY,
+                [
+                    GetStockItemDataInterface::QUANTITY => 8.5, GetStockItemDataInterface::IS_SALABLE => 1
+                ]
+            ],
+            [
+                'SKU-1',
+                10,
+                StockItemConfigurationInterface::BACKORDERS_YES_NOTIFY,
+                [
+                    GetStockItemDataInterface::QUANTITY => 8.5, GetStockItemDataInterface::IS_SALABLE => 1
+                ]
+            ],
+            [
+                'SKU-2',
+                10,
+                StockItemConfigurationInterface::BACKORDERS_YES_NONOTIFY,
+                null
+            ],
+            [
+                'SKU-2',
+                10,
+                StockItemConfigurationInterface::BACKORDERS_YES_NOTIFY,
+                null
+            ],
+            [
+                'SKU-3',
+                10,
+                StockItemConfigurationInterface::BACKORDERS_YES_NONOTIFY,
+                [
+                    GetStockItemDataInterface::QUANTITY => 0, GetStockItemDataInterface::IS_SALABLE => 1
+                ]
+            ],
+            [
+                'SKU-3',
+                10,
+                StockItemConfigurationInterface::BACKORDERS_YES_NOTIFY,
+                [
+                    GetStockItemDataInterface::QUANTITY => 0, GetStockItemDataInterface::IS_SALABLE => 1
+                ]
+            ],
         ];
     }
 
@@ -217,7 +274,7 @@ class BackorderConditionTest extends TestCase
         /** @var StockItemInterface $legacyStockItem */
         $legacyStockItem = current($stockItemsCollection->getItems());
         $legacyStockItem->setBackorders($backordersStatus);
-        $legacyStockItem->setUseConfigBackorders(0);
+        $legacyStockItem->setUseConfigBackorders(false);
         $this->stockItemRepository->save($legacyStockItem);
 
         $sourceItem = $this->getSourceItemBySku($sku);
