@@ -12,6 +12,8 @@ use Magento\Framework\Exception\LocalizedException;
  * System Configuration Abstract Controller
  * @api
  * @since 100.0.2
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
 {
@@ -75,7 +77,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     {
         $sectionId = $this->_request->getParam('section');
         return parent::_isAllowed()
-            || $this->_configStructure->getElement($sectionId)->isAllowed();
+            && $this->_configStructure->getElement($sectionId)->isAllowed();
     }
 
     /**

@@ -15,5 +15,6 @@
         <element name="asLowAsLabel" type="text" selector=".minimal-price-link > span"/>
         <element name="textArea" type="text" selector="li[class='item']"/>
         <element name="regularPrice" type="text" selector="//span[@class='price-wrapper ']/span[@class='price']"/>
+        <element name="messageSection" type="text" selector="div .message"/>
     </section>
 </sections>

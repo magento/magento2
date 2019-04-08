@@ -8,13 +8,14 @@ namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Sitemap\Controller\Adminhtml\Sitemap;
 use Magento\Store\Model\App\Emulation;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * Controller class Generate. Represents requests flow logic for sitemap generation
+ * Generate sitemap file
  */
-class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap implements HttpGetActionInterface
+class Generate extends Sitemap implements HttpGetActionInterface
 {
     /** @var \Magento\Store\Model\App\Emulation $appEmulation */
     private $appEmulation;
@@ -48,14 +49,7 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap implements 
         // if sitemap record exists
         if ($sitemap->getId()) {
             try {
-                //We need to emulate to get the correct frontend URL for the product images
-                $this->appEmulation->startEnvironmentEmulation(
-                    $sitemap->getStoreId(),
-                    \Magento\Framework\App\Area::AREA_FRONTEND,
-                    true
-                );
                 $sitemap->generateXml();
-
                 $this->messageManager->addSuccessMessage(
                     __('The sitemap "%1" has been generated.', $sitemap->getSitemapFilename())
                 );
@@ -63,8 +57,6 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap implements 
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('We can\'t generate the sitemap right now.'));
-            } finally {
-                $this->appEmulation->stopEnvironmentEmulation();
             }
         } else {
             $this->messageManager->addErrorMessage(__('We can\'t find a sitemap to generate.'));

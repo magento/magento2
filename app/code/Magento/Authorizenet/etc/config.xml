@@ -22,6 +22,7 @@
                 <title>Credit Card Direct Post (Authorize.Net)</title>
                 <trans_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <trans_md5 backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <signature_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <allowspecific>0</allowspecific>
                 <currency>USD</currency>
                 <create_order_before>1</create_order_before>

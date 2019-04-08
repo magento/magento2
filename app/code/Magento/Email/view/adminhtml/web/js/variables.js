@@ -21,6 +21,7 @@ define([
         overlayShowEffectOptions: null,
         overlayHideEffectOptions: null,
         insertFunction: 'Variables.insertVariable',
+        variablesValue: [],
 
         /**
          * @param {*} textareaElementId
@@ -52,11 +53,12 @@ define([
                 this.variablesContent = '<ul class="insert-variable">';
                 variables.each(function (variableGroup) {
                     if (variableGroup.label && variableGroup.value) {
-                        this.variablesContent += '<li><b>' + variableGroup.label + '</b></li>';
+                        this.variablesContent += '<li><b>' + variableGroup.label.escapeHTML() + '</b></li>';
                         variableGroup.value.each(function (variable) {
                             if (variable.value && variable.label) {
+                                this.variablesValue.push(variable.value);
                                 this.variablesContent += '<li>' +
-                                    this.prepareVariableRow(variable.value, variable.label) + '</li>';
+                                    this.prepareVariableRow(this.variablesValue.length, variable.label) + '</li>';
                             }
                         }.bind(this));
                     }
@@ -75,7 +77,7 @@ define([
         openDialogWindow: function (variablesContent) {
             var windowId = this.dialogWindowId;
 
-            jQuery('<div id="' + windowId + '">' + Variables.variablesContent + '</div>').modal({
+            jQuery('<div id="' + windowId + '">' + variablesContent + '</div>').modal({
                 title: $t('Insert Variable...'),
                 type: 'slide',
                 buttons: [],
@@ -87,8 +89,6 @@ define([
             });
 
             jQuery('#' + windowId).modal('openModal');
-
-            variablesContent.evalScripts.bind(variablesContent).defer();
         },
 
         /**
@@ -99,27 +99,24 @@ define([
         },
 
         /**
-         * @param {String} varValue
+         * @param {Number} index
          * @param {*} varLabel
          * @return {String}
          */
-        prepareVariableRow: function (varValue, varLabel) {
-            var value = varValue.replace(/"/g, '&quot;').replace(/'/g, '\\&#39;'),
-                content = '<a href="#" onclick="' +
-                    this.insertFunction +
-                    '(\'' +
-                    value +
-                    '\');return false;">' +
-                    varLabel +
-                    '</a>';
-
-            return content;
+        prepareVariableRow: function (index, varLabel) {
+            return '<a href="#" onclick="' +
+                this.insertFunction +
+                '(' +
+                index +
+                ');return false;">' +
+                varLabel.escapeHTML() +
+                '</a>';
         },
 
         /**
-         * @param {*} value
+         * @param {*} variable
          */
-        insertVariable: function (value) {
+        insertVariable: function (variable) {
             var windowId = this.dialogWindowId,
                 textareaElm, scrollPos;
 
@@ -128,14 +125,17 @@ define([
 
             if (textareaElm) {
                 scrollPos = textareaElm.scrollTop;
-                updateElementAtCursor(textareaElm, value);
+
+                if (!isNaN(variable)) {
+                    updateElementAtCursor(textareaElm, Variables.variablesValue[variable - 1]);
+                } else {
+                    updateElementAtCursor(textareaElm, variable);
+                }
                 textareaElm.focus();
                 textareaElm.scrollTop = scrollPos;
                 jQuery(textareaElm).change();
                 textareaElm = null;
             }
-
-            return;
         }
     };
 
@@ -172,8 +172,6 @@ define([
             } else {
                 this.openChooser(this.variables);
             }
-
-            return;
         },
 
         /**
@@ -194,8 +192,6 @@ define([
                 Variables.closeDialogWindow();
                 this.editor.execCommand('mceInsertContent', false, value);
             }
-
-            return;
         }
     };
 });

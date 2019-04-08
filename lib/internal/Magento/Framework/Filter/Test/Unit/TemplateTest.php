@@ -441,7 +441,8 @@ TEMPLATE;
             ['setVariables'],
             ['setTemplateProcessor'],
             ['getTemplateProcessor'],
-            ['varDirective']
+            ['varDirective'],
+            ['delete']
         ];
     }
 }

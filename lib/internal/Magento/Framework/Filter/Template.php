@@ -80,7 +80,8 @@ class Template implements \Zend_Filter_Interface
         'setvariables',
         'settemplateprocessor',
         'gettemplateprocessor',
-        'vardirective'
+        'vardirective',
+        'delete'
     ];
 
     /**
