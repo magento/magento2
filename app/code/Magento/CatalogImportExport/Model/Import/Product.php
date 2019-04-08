@@ -1542,6 +1542,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
 
                 if ($this->getBehavior() == Import::BEHAVIOR_APPEND ||
+                    $this->getBehavior() == Import::BEHAVIOR_ADD_UPDATE ||
                     empty($rowData[self::COL_SKU])
                 ) {
                     $rowData = $productTypeModel->clearEmptyData($rowData);
