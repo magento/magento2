@@ -2120,15 +2120,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('newAccount')
             ->willThrowException($exception);
         $this->logger->expects($this->once())->method('error')->with($exception);
-        $this->allowedCountriesReader
-            ->expects($this->atLeastOnce())
-            ->method('getAllowedCountries')
-            ->willReturn(['US' => 'US']);
-        $address
-            ->expects($this->atLeastOnce())
-            ->method('getCountryId')
-            ->willReturn('US');
-
+        $this->allowedCountriesReader->expects($this->atLeastOnce())
+            ->method('getAllowedCountries')->willReturn(['US' => 'US']);
+        $address->expects($this->atLeastOnce())->method('getCountryId')->willReturn('US');
         $this->accountManagement->createAccount($customer);
     }
 

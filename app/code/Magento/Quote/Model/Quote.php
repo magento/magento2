@@ -409,6 +409,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param array $data
      * @param \Magento\Sales\Model\OrderIncrementIdChecker|null $orderIncrementIdChecker
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -929,6 +930,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param Address $billingAddress Quote billing address
      * @param Address $shippingAddress Quote shipping address
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return $this
      */
     public function assignCustomerWithAddressChange(
