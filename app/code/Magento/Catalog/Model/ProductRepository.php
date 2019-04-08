@@ -546,6 +546,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         } catch (LocalizedException $e) {
             throw $e;
         } catch (\Exception $e) {
+            echo $e->getMessage(), PHP_EOL, $e->getTraceAsString();
             throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'));
         }
         unset($this->instances[$product->getSku()]);
