@@ -17,8 +17,14 @@ use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Observer\VaultEnableAssigner;
 use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * Test for Magento\Vault\Observer\VaultEnableAssigner
+ */
 class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Test not active code
+     */
     public function testExecuteNoActiveCode()
     {
         $dataObject = new DataObject();
@@ -35,6 +41,8 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test main flow
+     *
      * @param string $activeCode
      * @param boolean $expectedBool
      * @dataProvider booleanDataProvider
@@ -69,6 +77,8 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data provider for testExecute
+     *
      * @return array
      */
     public function booleanDataProvider()
@@ -85,6 +95,8 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Get observer mock that returns an event instance based on provided return map
+     *
      * @param array $returnMap
      * @return MockObject|Observer
      */
