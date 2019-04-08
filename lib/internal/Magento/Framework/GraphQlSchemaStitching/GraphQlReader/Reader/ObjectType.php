@@ -43,18 +43,24 @@ class ObjectType implements TypeMetaReaderInterface
      * @param FieldMetaReader $fieldMetaReader
      * @param DocReader $docReader
      * @param ImplementsReader $implementsAnnotation
-     * @param CacheTagReader $cacheTagReader
+     * @param CacheTagReader|null $cacheTagReader
      */
     public function __construct(
         FieldMetaReader $fieldMetaReader,
         DocReader $docReader,
         ImplementsReader $implementsAnnotation,
-        CacheTagReader $cacheTagReader
+        CacheTagReader $cacheTagReader = null
     ) {
         $this->fieldMetaReader = $fieldMetaReader;
         $this->docReader = $docReader;
         $this->implementsAnnotation = $implementsAnnotation;
-        $this->cacheTagReader = $cacheTagReader;
+        if ($cacheTagReader) {
+            $this->cacheTagReader = $cacheTagReader;
+        } else {
+            $this->cacheTagReader = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                CacheTagReader::class
+            );
+        }
     }
 
     /**

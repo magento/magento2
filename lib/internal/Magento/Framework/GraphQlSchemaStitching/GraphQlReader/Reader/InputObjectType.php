@@ -33,19 +33,24 @@ class InputObjectType implements TypeMetaReaderInterface
     private $cacheTagReader;
 
     /**
-     * InputObjectType constructor.
      * @param TypeMetaWrapperReader $typeMetaReader
      * @param DocReader $docReader
-     * @param CacheTagReader $cacheTagReader
+     * @param CacheTagReader|null $cacheTagReader
      */
     public function __construct(
         TypeMetaWrapperReader $typeMetaReader,
         DocReader $docReader,
-        CacheTagReader $cacheTagReader
+        CacheTagReader $cacheTagReader = null
     ) {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;
-        $this->cacheTagReader = $cacheTagReader;
+        if ($cacheTagReader) {
+            $this->cacheTagReader = $cacheTagReader;
+        } else {
+            $this->cacheTagReader = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                CacheTagReader::class
+            );
+        }
     }
 
     /**

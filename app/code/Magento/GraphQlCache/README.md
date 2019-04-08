@@ -1,4 +1,4 @@
 # GraphQl Cache
 
-**GraphQl Cache** provides the caching ability for a graphql query. 
-This enabled Magento's builtin cache and varnish by leveraging FPC (Full page cache) that's used for front end.
+**GraphQL Cache** provides the ability to cache GraphQL queries.
+This module allows Magento's built-in cache or Varnish as the application for serving the Full Page Cache to the front end. 

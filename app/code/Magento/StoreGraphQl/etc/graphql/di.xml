@@ -12,7 +12,7 @@
                 <item name="Store" xsi:type="object">Magento\StoreGraphQl\Controller\HttpHeaderProcessor\StoreProcessor</item>
             </argument>
             <argument name="requestValidators" xsi:type="array">
-                <item name="storeValidator" xsi:type="object">Magento\StoreGraphQl\Controller\HttpHeaderProcessor\StoreValidator</item>
+                <item name="storeValidator" xsi:type="object">Magento\StoreGraphQl\Controller\HttpRequestValidator\StoreValidator</item>
             </argument>
         </arguments>
     </type>

@@ -61,8 +61,8 @@ class Field implements OutputFieldInterface
      * @param string $itemType
      * @param string $resolver
      * @param string $description
-     * @param array $cache
      * @param array $arguments
+     * @param array $cache
      */
     public function __construct(
         string $name,
@@ -72,8 +72,8 @@ class Field implements OutputFieldInterface
         string $itemType = '',
         string $resolver = '',
         string $description = '',
-        array $cache = [],
-        array $arguments = []
+        array $arguments = [],
+        array $cache = []
     ) {
         $this->name = $name;
         $this->type = $isList ? $itemType : $type;

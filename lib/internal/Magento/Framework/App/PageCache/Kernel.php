@@ -67,7 +67,7 @@ class Kernel
      * @param \Magento\Framework\App\Http\ContextFactory|null $contextFactory
      * @param \Magento\Framework\App\Response\HttpFactory|null $httpFactory
      * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
-     * @param AppState $state
+     * @param AppState|null $state
      */
     public function __construct(
         \Magento\Framework\App\PageCache\Cache $cache,
@@ -77,12 +77,11 @@ class Kernel
         \Magento\Framework\App\Http\ContextFactory $contextFactory = null,
         \Magento\Framework\App\Response\HttpFactory $httpFactory = null,
         \Magento\Framework\Serialize\SerializerInterface $serializer = null,
-        AppState $state
+        AppState $state = null
     ) {
         $this->cache = $cache;
         $this->identifier = $identifier;
         $this->request = $request;
-        $this->state = $state;
 
         if ($context) {
             $this->context = $context;
@@ -110,6 +109,14 @@ class Kernel
         } else {
             $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Framework\Serialize\SerializerInterface::class
+            );
+        }
+
+        if ($state) {
+            $this->state = $state;
+        } else {
+            $this->state = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                AppState::class
             );
         }
     }

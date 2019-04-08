@@ -54,7 +54,6 @@ class StoreProcessor implements HttpHeaderProcessorInterface
      *
      * @param string $headerValue
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processHeaderValue(string $headerValue) : void
     {

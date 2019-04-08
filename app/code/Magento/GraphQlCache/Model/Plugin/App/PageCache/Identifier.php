@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\GraphQlCache\Model\App;
+namespace Magento\GraphQlCache\Model\Plugin\App\PageCache;
 
 /**
  * Handles unique identifier for graphql query
  */
-class CacheIdentifierPlugin
+class Identifier
 {
     /**
      * @var \Magento\Framework\App\Request\Http
@@ -57,7 +58,7 @@ class CacheIdentifierPlugin
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetValue(\Magento\Framework\App\PageCache\Identifier $identifier, string $result)
+    public function afterGetValue(\Magento\Framework\App\PageCache\Identifier $identifier, string $result) : string
     {
         if ($this->config->isEnabled()) {
             $data = [

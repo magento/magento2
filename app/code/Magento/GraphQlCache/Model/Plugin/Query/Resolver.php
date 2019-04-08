@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQlCache\Query\Resolver;
+namespace Magento\GraphQlCache\Model\Plugin\Query;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -15,11 +15,9 @@ use Magento\GraphQlCache\Model\CacheableQuery;
 use Magento\Framework\App\RequestInterface;
 
 /**
- * Class Plugin
- *
- * @package Magento\GraphQlCache\Query\Resolver
+ * Plugin to handle cache validation that can be done after each resolver
  */
-class Plugin
+class Resolver
 {
     /**
      * @var CacheableQuery
@@ -42,7 +40,7 @@ class Plugin
     }
 
     /**
-     * @inheritdoc
+     * Set cache validity to the cacheableQuery after resolving any resolver in a query
      *
      * @param ResolverInterface $subject
      * @param Object $resolvedValue
@@ -52,6 +50,7 @@ class Plugin
      * @param array|null $value
      * @param array|null $args
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterResolve(
         ResolverInterface $subject,
@@ -84,7 +83,7 @@ class Plugin
      * @param Object $resolvedValue
      * @return array
      */
-    private function extractResolvedItemsIds($resolvedValue)
+    private function extractResolvedItemsIds($resolvedValue) : array
     {
         if (isset($resolvedValue['ids']) && is_array($resolvedValue['ids'])) {
             return $resolvedValue['ids'];

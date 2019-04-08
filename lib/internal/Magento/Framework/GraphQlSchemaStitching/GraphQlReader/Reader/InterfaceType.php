@@ -33,19 +33,24 @@ class InterfaceType implements TypeMetaReaderInterface
     private $cacheTagReader;
 
     /**
-     * InterfaceType constructor.
      * @param FieldMetaReader $fieldMetaReader
      * @param DocReader $docReader
-     * @param CacheTagReader $cacheTagReader
+     * @param CacheTagReader|null $cacheTagReader
      */
     public function __construct(
         FieldMetaReader $fieldMetaReader,
         DocReader $docReader,
-        CacheTagReader $cacheTagReader
+        CacheTagReader $cacheTagReader = null
     ) {
         $this->fieldMetaReader = $fieldMetaReader;
         $this->docReader = $docReader;
-        $this->cacheTagReader = $cacheTagReader;
+        if ($cacheTagReader) {
+            $this->cacheTagReader = $cacheTagReader;
+        } else {
+            $this->cacheTagReader = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                CacheTagReader::class
+            );
+        }
     }
 
     /**

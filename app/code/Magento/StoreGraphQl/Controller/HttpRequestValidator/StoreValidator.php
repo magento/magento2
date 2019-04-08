@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\StoreGraphQl\Controller\HttpHeaderProcessor;
+namespace Magento\StoreGraphQl\Controller\HttpRequestValidator;
 
 use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
