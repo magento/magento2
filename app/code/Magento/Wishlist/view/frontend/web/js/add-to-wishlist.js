@@ -162,18 +162,11 @@ define([
                 $.each(elementValue, function (key, option) {
                     data[elementName + '[' + option + ']'] = option;
                 });
+            } else if (elementName.substr(elementName.length - 2) == '[]') { //eslint-disable-line eqeqeq, max-depth
+                elementName = elementName.substring(0, elementName.length - 2);
+                data[elementName + '[' + elementValue + ']'] = elementValue;
             } else {
-                if (elementValue) { //eslint-disable-line no-lonely-if
-                    if (elementName.substr(elementName.length - 2) == '[]') { //eslint-disable-line eqeqeq, max-depth
-                        elementName = elementName.substring(0, elementName.length - 2);
-
-                        if (elementValue) { //eslint-disable-line max-depth
-                            data[elementName + '[' + elementValue + ']'] = elementValue;
-                        }
-                    } else {
-                        data[elementName] = elementValue;
-                    }
-                }
+                data[elementName] = elementValue;
             }
 
             return data;
