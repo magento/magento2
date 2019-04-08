@@ -4,8 +4,9 @@
     "type": "magento2-module",
     "require": {
         "php": "~7.1.3||~7.2.0",
-        "magento/module-graph-ql": "*",
-        "magento/module-page-cache": "*"
+        "magento/framework": "*",
+        "magento/module-page-cache": "*",
+        "magento/module-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",
