@@ -5,9 +5,13 @@
  */
 namespace Magento\SendFriend\Controller\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Send extends \Magento\SendFriend\Controller\Product
+/**
+ * Controller class. Represents rendering and request flow
+ */
+class Send extends \Magento\SendFriend\Controller\Product implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Session
