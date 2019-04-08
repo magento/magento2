@@ -85,6 +85,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Constructor
      *
      * @return void
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _construct()
     {
@@ -95,7 +96,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setRowInitCallback('order.productGridRowInit.bind(order)');
         $this->setDefaultSort('entity_id');
         $this->setUseAjax(true);
-        // phpcs:ignore Generic.CodeAnalysis.RequestAwareBlockMethod
         if ($this->getRequest()->getParam('collapse')) {
             $this->setIsCollapsed(true);
         }
@@ -261,10 +261,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get selected products
      *
      * @return mixed
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _getSelectedProducts()
     {
-        // phpcs:ignore Generic.CodeAnalysis.RequestAwareBlockMethod
         $products = $this->getRequest()->getPost('products', []);
 
         return $products;
