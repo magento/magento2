@@ -7,12 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
+use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddress;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\AddressFactory as BaseQuoteAddressFactory;
-use Magento\QuoteGraphQl\Model\Cart\QuoteAddress\Validator;
 
 /**
  * Create QuoteAddress
@@ -23,21 +24,22 @@ class QuoteAddressFactory
      * @var BaseQuoteAddressFactory
      */
     private $quoteAddressFactory;
+
     /**
-     * @var Validator
+     * @var GetCustomerAddress
      */
-    private $quoteAddressValidator;
+    private $getCustomerAddress;
 
     /**
      * @param BaseQuoteAddressFactory $quoteAddressFactory
-     * @param Validator $quoteAddressValidator
+     * @param GetCustomerAddress $getCustomerAddress
      */
     public function __construct(
         BaseQuoteAddressFactory $quoteAddressFactory,
-        Validator $quoteAddressValidator
+        GetCustomerAddress $getCustomerAddress
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
-        $this->quoteAddressValidator = $quoteAddressValidator;
+        $this->getCustomerAddress = $getCustomerAddress;
     }
 
     /**
@@ -52,28 +54,29 @@ class QuoteAddressFactory
 
         $quoteAddress = $this->quoteAddressFactory->create();
         $quoteAddress->addData($addressInput);
-        $this->quoteAddressValidator->validate($quoteAddress);
-
         return $quoteAddress;
     }
 
     /**
-     * Create QuoteAddress based on CustomerAddress
+     * Create Quote Address based on Customer Address
      *
-     * @param CustomerAddress $customerAddress
+     * @param int $customerAddressId
+     * @param int $customerId
      * @return QuoteAddress
      * @throws GraphQlInputException
+     * @throws GraphQlAuthorizationException
+     * @throws GraphQlNoSuchEntityException
      */
-    public function createBasedOnCustomerAddress(CustomerAddress $customerAddress): QuoteAddress
+    public function createBasedOnCustomerAddress(int $customerAddressId, int $customerId): QuoteAddress
     {
+        $customerAddress = $this->getCustomerAddress->execute((int)$customerAddressId, $customerId);
+
         $quoteAddress = $this->quoteAddressFactory->create();
         try {
             $quoteAddress->importCustomerAddressData($customerAddress);
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()), $e);
         }
-        $this->quoteAddressValidator->validate($quoteAddress);
-
         return $quoteAddress;
     }
 }

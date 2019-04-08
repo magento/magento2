@@ -57,7 +57,7 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
@@ -166,7 +166,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
@@ -211,7 +211,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
@@ -248,7 +248,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
@@ -371,7 +371,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
@@ -427,7 +427,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
@@ -587,16 +587,16 @@ QUERY;
     }
 
     /**
-     * @param string $reversedOrderId
+     * @param string $reservedOrderId
      * @param int $customerId
      * @return string
      */
     private function assignQuoteToCustomer(
-        string $reversedOrderId = 'test_order_with_simple_product_without_address',
+        string $reservedOrderId = 'test_order_with_simple_product_without_address',
         int $customerId = 1
     ): string {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
         $quote->setCustomerId($customerId);
         $this->quoteResource->save($quote);
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
