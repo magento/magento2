@@ -142,7 +142,7 @@ class CategoriesTest extends AbstractModifierTest
                 ],
             ],
         ];
-        $this->authorizationMock->expects($this->once())
+        $this->authorizationMock->expects($this->exactly(2))
             ->method('isAllowed')
             ->willReturn(true);
         $this->arrayManagerMock->expects($this->any())
@@ -181,7 +181,7 @@ class CategoriesTest extends AbstractModifierTest
             ->with(Categories::CATEGORY_TREE_ID . '_');
         $cacheManager->expects($this->once())
             ->method('save');
-        $this->authorizationMock->expects($this->once())
+        $this->authorizationMock->expects($this->exactly(2))
             ->method('isAllowed')
             ->willReturn(true);
 
