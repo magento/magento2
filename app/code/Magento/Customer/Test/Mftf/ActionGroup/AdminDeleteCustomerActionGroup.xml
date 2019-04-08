@@ -21,22 +21,4 @@
         <click stepKey="accept" selector="{{AdminCustomerGridMainActionsSection.ok}}"/>
         <see stepKey="seeSuccessMessage" userInput="were deleted."/>
     </actionGroup>
-    <actionGroup name="DeleteCustomerByEmailActionGroup">
-        <arguments>
-            <argument name="email" type="string"/>
-        </arguments>
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
-        <waitForPageLoad stepKey="waitForAdminCustomerPageLoad"/>
-        <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="clickFilterButton"/>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
-        <waitForPageLoad stepKey="waitForClearFilters"/>
-        <fillField selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="{{email}}" stepKey="filterEmail"/>
-        <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
-        <click selector="{{AdminCustomerGridSection.selectFirstRow}}" stepKey="clickOnEditButton1"/>
-        <click selector="{{CustomersPageSection.actions}}" stepKey="clickActionsDropdown"/>
-        <click selector="{{CustomersPageSection.delete}}" stepKey="clickDelete"/>
-        <click selector="{{CustomersPageSection.ok}}" stepKey="clickOkConfirmationButton"/>
-        <waitForPageLoad time="30" stepKey="waitForPageToLoad2"/>
-    </actionGroup>
 </actionGroups>

@@ -77,6 +77,15 @@
         <requiredEntity type="product_option_value">ProductOptionValueRadioButtons1</requiredEntity>
         <requiredEntity type="product_option_value">ProductOptionValueRadioButtons2</requiredEntity>
     </entity>
+    <entity name="ProductOptionRadiobuttonWithTwoFixedOptions" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionRadioButtons</data>
+        <data key="type">radio</data>
+        <data key="sort_order">5</data>
+        <data key="is_require">true</data>
+        <requiredEntity type="product_option_value">ProductOptionValueRadioButtons1</requiredEntity>
+        <requiredEntity type="product_option_value">ProductOptionValueRadioButtons3</requiredEntity>
+    </entity>
     <entity name="ProductOptionCheckbox" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
         <data key="title">OptionCheckbox</data>
@@ -120,5 +129,13 @@
         <data key="is_require">true</data>
         <data key="price">0.00</data>
         <data key="price_type">percent</data>
+    </entity>
+    <entity name="ProductOptionPercentPriceDropDown" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionDropDown</data>
+        <data key="type">drop_down</data>
+        <data key="sort_order">4</data>
+        <data key="is_require">true</data>
+        <requiredEntity type="product_option_value">ProductOptionPercentPriceValueDropdown</requiredEntity>
     </entity>
 </entities>

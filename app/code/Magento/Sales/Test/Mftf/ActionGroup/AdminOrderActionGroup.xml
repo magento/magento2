@@ -18,7 +18,8 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
         <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
-        <click selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" stepKey="selectDefaultStoreView"/>
+        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoadAfterStoreSelect" />
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
     </actionGroup>
 

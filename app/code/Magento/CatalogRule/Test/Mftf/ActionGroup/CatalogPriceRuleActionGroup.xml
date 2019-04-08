@@ -70,7 +70,6 @@
         <click selector="{{AdminNewCatalogPriceRule.fromDateButton}}" stepKey="clickFromCalender"/>
         <click selector="{{AdminNewCatalogPriceRule.todayDate}}" stepKey="clickFromToday"/>
     </actionGroup>
-
     <!-- Apply all of the saved catalog price rules -->
     <actionGroup name="applyCatalogPriceRules">
         <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>

@@ -9,7 +9,7 @@ namespace Magento\GraphQl\Quote;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 
@@ -21,9 +21,9 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     private $quoteResource;
 
     /**
-     * @var Quote
+     * @var QuoteFactory
      */
-    private $quote;
+    private $quoteFactory;
 
     /**
      * @var QuoteIdToMaskedQuoteIdInterface
@@ -37,33 +37,68 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quote = $objectManager->create(Quote::class);
+        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
     }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The requested qty is not available
      */
-    public function testAddProductIfQuantityIsNotAvailable()
+    public function testAddSimpleProductToCart()
     {
         $sku = 'simple';
-        $qty = 200;
+        $qty = 2;
+        $maskedQuoteId = $this->getMaskedQuoteId();
 
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
+        $response = $this->graphQlQuery($query);
+        self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
 
-        $query = <<<QUERY
+        self::assertEquals($qty, $response['addSimpleProductsToCart']['cart']['items'][0]['qty']);
+        self::assertEquals($sku, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Please enter a number greater than 0 in this field.
+     */
+    public function testAddSimpleProductToCartWithNegativeQty()
+    {
+        $sku = 'simple';
+        $qty = -2;
+        $maskedQuoteId = $this->getMaskedQuoteId();
+
+        $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMaskedQuoteId() : string
+    {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
+
+        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @param string $sku
+     * @param int $qty
+     * @return string
+     */
+    public function getAddSimpleProductQuery(string $maskedQuoteId, string $sku, int $qty): string
+    {
+        return <<<QUERY
 mutation {  
   addSimpleProductsToCart(
     input: {
-      cart_id: "{$maskedQuoteId}", 
+      cart_id: "{$maskedQuoteId}"
       cartItems: [
         {
           data: {
@@ -75,7 +110,49 @@ mutation {
     }
   ) {
     cart {
-      cart_id
+      items {
+        qty
+        product {
+          sku
+        }
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "wrong_cart_hash"
+     */
+    public function testAddProductWithWrongCartHash()
+    {
+        $sku = 'simple';
+        $qty = 1;
+
+        $maskedQuoteId = 'wrong_cart_hash';
+
+        $query = <<<QUERY
+mutation {  
+  addSimpleProductsToCart(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+      cartItems: [
+        {
+          data: {
+            qty: $qty
+            sku: "$sku"
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      items {
+        qty
+      }
     }
   }
 }

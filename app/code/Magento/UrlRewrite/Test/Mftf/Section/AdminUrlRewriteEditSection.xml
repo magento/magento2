@@ -22,5 +22,6 @@
         <element name="saveButton" type="button" selector="#save" timeout="30"/>
         <element name="deleteButton" type="button" selector="#delete" timeout="30"/>
         <element name="okButton" type="button" selector="//button[@class='action-primary action-accept']" timeout="30"/>
+        <element name="requestPathField" type="input" selector="#request_path"/>
     </section>
 </sections>

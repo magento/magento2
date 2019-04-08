@@ -72,6 +72,11 @@
         <fillField stepKey="fillZip" selector="{{StorefrontCustomerAddressSection.zip}}" userInput="{{Address.postcode}}"/>
         <click stepKey="saveAddress" selector="{{StorefrontCustomerAddressSection.saveAddress}}"/>
     </actionGroup>
+    <!-- Fills State Field instead of selecting it-->
+    <actionGroup name="EnterCustomerAddressInfoFillState" extends="EnterCustomerAddressInfo">
+        <fillField stepKey="selectState" selector="{{StorefrontCustomerAddressSection.stateProvinceFill}}" userInput="{{Address.state}}"/>
+    </actionGroup>
+
     <actionGroup name="VerifyCustomerBillingAddress">
         <arguments>
             <argument name="address"/>
