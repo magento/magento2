@@ -110,6 +110,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
     }
 
     /**
+     * _security
      * @magentoApiDataFixture Magento/Checkout/_files/discount_10percent_generalusers.php
      * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
