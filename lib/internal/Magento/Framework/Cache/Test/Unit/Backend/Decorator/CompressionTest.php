@@ -105,7 +105,7 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveLoad()
     {
-        $cacheId = 'cacheId' . rand(1, 100);
+        $cacheId = 'cacheId' . mt_rand(1, 100);
 
         $backend = $this->createPartialMock(\Zend_Cache_Backend_File::class, ['save', 'load']);
         $backend->expects($this->once())->method('save')->will($this->returnCallback([__CLASS__, 'mockSave']));
