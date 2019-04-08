@@ -23,9 +23,15 @@ class MsrpPriceCalculator implements MsrpPriceCalculatorInterface
     /**
      * @param array $msrpPriceCalculators
      */
-    public function __construct(array $msrpPriceCalculators)
+    public function __construct(?array $msrpPriceCalculators = null)
     {
-        $this->msrpPriceCalculators = $this->getMsrpPriceCalculators($msrpPriceCalculators);
+        /*
+         * This is a workaround for the case of modules Magento_MsrpConfigurableProduct and Magento_MsrpGroupedProduct
+         * are disabled.
+         */
+        if (\is_array($msrpPriceCalculators)) {
+            $this->msrpPriceCalculators = $this->getMsrpPriceCalculators($msrpPriceCalculators);
+        }
     }
 
     /**
