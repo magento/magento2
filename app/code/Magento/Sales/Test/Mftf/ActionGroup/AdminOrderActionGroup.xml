@@ -131,6 +131,50 @@
         <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
+    <actionGroup name="AdminAddProductToOrderBySKU">
+        <arguments>
+            <argument name="productSKU" type="string"/>
+            <argument name="productQty" type="string"/>
+            <argument name="productNumber" type="string"/>
+        </arguments>
+        <click selector="{{AdminOrderFormItemsOrderedSection.addProductsBySku}}" stepKey="clickAddProduct"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuNumber(productNumber)}}" userInput="{{productSKU}}" stepKey="fillProductSKU"/>
+        <fillField selector="{{AdminOrderFormItemsSection.qty(productNumber)}}" userInput="{{productQty}}" stepKey="fillProductQty"/>
+        <click selector="{{AdminOrderFormItemsSection.addToOrder}}" stepKey="clickAddToOrder"/>
+    </actionGroup>
+    <actionGroup name="AdminOrderConfigureConfigurableProduct">
+        <arguments>
+            <argument name="optionName" type="string"/>
+            <argument name="productQty" type="string"/>
+        </arguments>
+        <click selector="{{AdminOrderFormItemsOrderedSection.configureButtonBySku}}" stepKey="clickConfigure"/>
+        <waitForPageLoad stepKey="waitForConfigurePageLoad"/>
+        <selectOption selector="{{AdminOrderFormConfigureProductSection.attributeSelect}}" userInput="{{optionName}}" stepKey="selectOption"/>
+        <fillField selector="{{AdminOrderFormConfigureProductSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQty"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
+    </actionGroup>
+    <actionGroup name="AdminOrderConfigureBundleProduct">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productQty" type="string"/>
+            <argument name="productNumber" type="string"/>
+        </arguments>
+        <click selector="{{AdminOrderFormItemsOrderedSection.configureButtonBySku}}" stepKey="clickConfigure"/>
+        <waitForPageLoad stepKey="waitForConfigurePageLoad"/>
+        <checkOption selector="{{AdminOrderFormConfigureProductSection.bundleProductCheckbox(productNumber)}}" stepKey="checkProduct"/>
+        <fillField selector="{{AdminOrderFormConfigureProductSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQty"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
+    </actionGroup>
+    <actionGroup name="AdminOrderConfigureGroupedProduct">
+        <arguments>
+            <argument name="productSku" type="string"/>
+            <argument name="productQty" type="string"/>
+        </arguments>
+        <click selector="{{AdminOrderFormItemsOrderedSection.configureButtonBySku}}" stepKey="clickConfigure"/>
+        <waitForPageLoad stepKey="waitForConfigurePageLoad"/>
+        <fillField selector="{{AdminOrderFormGroupedProductSection.optionQty(productSku)}}" userInput="{{productQty}}" stepKey="fillOptionQuantity"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
+    </actionGroup>
 
     <!--Add configurable product to order -->
     <actionGroup name="addConfigurableProductToOrderFromAdmin" extends="addConfigurableProductToOrder">
