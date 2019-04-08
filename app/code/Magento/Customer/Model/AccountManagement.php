@@ -377,6 +377,7 @@ class AccountManagement implements AccountManagementInterface
      * @param CollectionFactory|null $visitorCollectionFactory
      * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @param AddressRegistry|null $addressRegistry
+     * @param AllowedCountries|null $allowedCountriesReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

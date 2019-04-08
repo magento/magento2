@@ -22,6 +22,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

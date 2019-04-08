@@ -408,6 +408,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param \Magento\Sales\Model\OrderIncrementIdChecker|null $orderIncrementIdChecker
+     * @param AllowedCountries|null $allowedCountriesReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -953,7 +954,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                     /** @var \Magento\Quote\Model\Quote\Address $billingAddress */
                     $billingAddress = $this->_quoteAddressFactory->create();
                     $billingAddress->importCustomerAddressData($defaultBillingAddress);
-                    if($this->isAddressAllowedForWebsite($billingAddress, (int)$this->getStoreId())) {
+
+                    if ($this->isAddressAllowedForWebsite($billingAddress, (int)$this->getStoreId())) {
                         $this->setBillingAddress($billingAddress);
                     }
                 }
