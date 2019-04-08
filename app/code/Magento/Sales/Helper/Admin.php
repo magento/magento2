@@ -7,7 +7,7 @@
 namespace Magento\Sales\Helper;
 
 use Magento\Framework\App\ObjectManager;
-use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\DomCrawler\CrawlerFactory;
 
 /**
  * Sales admin helper.
@@ -35,23 +35,31 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     protected $escaper;
 
     /**
+     * @var CrawlerFactory
+     */
+    private $crawlerFactory;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Escaper $escaper
+     * @param CrawlerFactory|null $crawlerFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Escaper $escaper
+        \Magento\Framework\Escaper $escaper,
+        CrawlerFactory $crawlerFactory = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->_storeManager = $storeManager;
         $this->_salesConfig = $salesConfig;
         $this->escaper = $escaper;
+        $this->crawlerFactory = $crawlerFactory ?: ObjectManager::getInstance()->get(CrawlerFactory::class);
         parent::__construct($context);
     }
 
@@ -152,8 +160,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     public function escapeHtmlWithLinks($data, $allowedTags = null)
     {
         if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
-            $crawler = ObjectManager::getInstance()->create(
-                Crawler::class,
+            $crawler = $this->crawlerFactory->create(
                 [
                     'node' => '<html><body>' . $data . '</body></html>',
                 ]
