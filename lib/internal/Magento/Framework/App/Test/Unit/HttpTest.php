@@ -153,8 +153,8 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap([
-                \Magento\Framework\App\FrontControllerInterface::class => $this->frontControllerMock,
-                \Magento\Framework\Interception\Config\Config::class => $this->interceptConfigMock
+                [\Magento\Framework\App\FrontControllerInterface::class,  $this->frontControllerMock],
+                [\Magento\Framework\Interception\Config\Config::class, $this->interceptConfigMock]
             ]);
         $this->frontControllerMock->expects($this->once())
             ->method('dispatch')
