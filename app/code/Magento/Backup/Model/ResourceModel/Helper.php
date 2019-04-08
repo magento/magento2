@@ -362,7 +362,7 @@ class Helper extends \Magento\Framework\DB\Helper
 
             $triggerData = $this->getConnection()->query('SHOW CREATE TRIGGER '. $trigger['Trigger'])->fetch();
             if ($stripDefiner) {
-                $cleanedScript = preg_replace('/DEFINER=[^\s]*/', '', $triggerData['SQL Original Statement']);
+                $cleanedScript = preg_replace('/DEFINER=\S*/', '', $triggerData['SQL Original Statement']);
                 $script .= $cleanedScript . "\n";
             } else {
                 $script .= $triggerData['SQL Original Statement'] . "\n";
@@ -374,3 +374,4 @@ class Helper extends \Magento\Framework\DB\Helper
         return $script;
     }
 }
+

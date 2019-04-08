@@ -69,7 +69,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     {
         $errors = [];
         if (isset($options[self::INPUT_KEY_BACKEND_FRONTNAME])
-            && !preg_match('/^[a-zA-Z0-9_]+$/', $options[self::INPUT_KEY_BACKEND_FRONTNAME])
+            && !preg_match('/^\w+$/', $options[self::INPUT_KEY_BACKEND_FRONTNAME])
         ) {
             $errors[] = "Invalid backend frontname '{$options[self::INPUT_KEY_BACKEND_FRONTNAME]}'";
         }

@@ -2051,7 +2051,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $zip4 = '';
         $zip5 = '';
         $zip = [$zipString];
-        if (preg_match('/[\\d\\w]{5}\\-[\\d\\w]{4}/', $zipString) != 0) {
+        if (preg_match('/\\w{5}\\-\\w{4}/', $zipString) != 0) {
             $zip = explode('-', $zipString);
         }
         $count = count($zip);

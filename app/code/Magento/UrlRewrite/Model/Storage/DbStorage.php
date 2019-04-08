@@ -312,7 +312,7 @@ class DbStorage extends AbstractStorage
             $this->connection->insertMultiple($this->resource->getTableName(self::TABLE_NAME), $data);
         } catch (\Exception $e) {
             if (($e->getCode() === self::ERROR_CODE_DUPLICATE_ENTRY)
-                && preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\d]#', $e->getMessage())
+                && preg_match('#SQLSTATE\[23000\]: [^:]+: 1062\D#', $e->getMessage())
             ) {
                 throw new \Magento\Framework\Exception\AlreadyExistsException(
                     __('URL key for specified store already exists.'),
