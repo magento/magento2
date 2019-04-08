@@ -590,6 +590,7 @@ class ConfigurablePanel extends AbstractModifier
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => $label,
+            'showLabel' => false,
             'dataScope' => '',
             'showLabel' => false
         ];

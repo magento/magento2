@@ -13,6 +13,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http as Request;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\Result\RedirectFactory as ResultRedirectFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
@@ -67,6 +68,11 @@ class ForgotPasswordPostTest extends \PHPUnit\Framework\TestCase
      */
     protected $messageManager;
 
+    /**
+     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $formKeyValidatorMock;
+
     protected function setUp()
     {
         $this->prepareContext();
@@ -81,12 +87,20 @@ class ForgotPasswordPostTest extends \PHPUnit\Framework\TestCase
         $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->formKeyValidatorMock = $this->createMock(Validator::class);
+
+        $this->request->expects($this->once())->method('isPost')->willReturn(true);
+        $this->formKeyValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
 
         $this->controller = new ForgotPasswordPost(
             $this->context,
             $this->session,
             $this->accountManagement,
-            $this->escaper
+            $this->escaper,
+            $this->formKeyValidatorMock
         );
     }
 
@@ -228,9 +242,7 @@ class ForgotPasswordPostTest extends \PHPUnit\Framework\TestCase
 
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getPost',
-            ])
+            ->setMethods(['getPost', 'isPost'])
             ->getMock();
 
         $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
