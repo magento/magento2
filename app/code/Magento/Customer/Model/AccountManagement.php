@@ -1066,10 +1066,7 @@ class AccountManagement implements AccountManagementInterface
         $result = $this->getEavValidator()->isValid($customerModel);
         if ($result === false && is_array($this->getEavValidator()->getMessages())) {
             return $validationResults->setIsValid(false)->setMessages(
-                call_user_func_array(
-                    'array_merge',
-                    $this->getEavValidator()->getMessages()
-                )
+                array_merge(...$this->getEavValidator()->getMessages())
             );
         }
         return $validationResults->setIsValid(true)->setMessages([]);
