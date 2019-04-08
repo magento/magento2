@@ -84,6 +84,7 @@
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview1" />
         <switchToWindow userInput="action_window" stepKey="switchToWindow1"/>
         <executeJS function="document.getElementById('preview_iframe').sandbox.add('allow-scripts')" stepKey="addSandboxValue"/>
+        <wait time="30" stepKey="waitBeforeSwitchToIframe"/>
         <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe1" />
         <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
         <!--see Default Variable on Storefront-->
