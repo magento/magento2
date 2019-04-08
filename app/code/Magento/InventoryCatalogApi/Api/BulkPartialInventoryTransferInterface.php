@@ -12,8 +12,9 @@ interface BulkPartialInventoryTransferInterface
     /**
      * Run bulk partial inventory transfer for specified items.
      *
-     * @param \Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferInterface[] $items
+     * @param \Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferInterface $transfer
      * @return \Magento\InventoryApi\Api\Data\SourceItemInterface[]
+     * @throws \Magento\Framework\Validation\ValidationException
      */
-    public function execute(array $items): array;
+    public function execute($transfer): array;
 }

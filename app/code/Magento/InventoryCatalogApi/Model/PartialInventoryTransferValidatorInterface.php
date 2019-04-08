@@ -15,8 +15,8 @@ interface PartialInventoryTransferValidatorInterface
     /**
      * Validates a partial transfer request.
      *
-     * @param PartialInventoryTransferInterface $item
+     * @param PartialInventoryTransferInterface $transfer
      * @return ValidationResult
      */
-    public function validate(PartialInventoryTransferInterface $item): ValidationResult;
+    public function validate(PartialInventoryTransferInterface $transfer): ValidationResult;
 }

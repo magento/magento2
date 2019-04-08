@@ -19,69 +19,47 @@ use Magento\InventoryCatalog\Model\GetSourceItemsBySkuAndSourceCodes;
 use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferInterface;
 use Magento\InventoryCatalogApi\Model\PartialInventoryTransferValidatorInterface;
 
-class PartialTransferValidator implements PartialInventoryTransferValidatorInterface
+class PartialTransferItemsValidator implements PartialInventoryTransferValidatorInterface
 {
     /** @var ValidationResultFactory */
     private $validationResultFactory;
-
-    /** @var SourceRepositoryInterface */
-    private $sourceRepository;
 
     /** @var GetSourceItemsBySkuAndSourceCodes  */
     private $getSourceItem;
 
     /**
-     * PartialTransferValidator constructor.
      * @param ValidationResultFactory $validationResultFactory
-     * @param SourceRepositoryInterface $sourceRepository
      * @param GetSourceItemsBySkuAndSourceCodes $getSourceItemsBySkuAndSourceCodes
      */
     public function __construct(
         ValidationResultFactory $validationResultFactory,
-        SourceRepositoryInterface $sourceRepository,
         GetSourceItemsBySkuAndSourceCodes $getSourceItemsBySkuAndSourceCodes
-    )
-    {
+    ) {
         $this->validationResultFactory  = $validationResultFactory;
         $this->getSourceItem            = $getSourceItemsBySkuAndSourceCodes;
-        $this->sourceRepository         = $sourceRepository;
     }
 
     /**
      * Validates a partial transfer request.
      *
-     * @param PartialInventoryTransferInterface $item
+     * @param PartialInventoryTransferInterface $transfer
      * @return ValidationResult
      */
-    public function validate(PartialInventoryTransferInterface $item): ValidationResult
+    public function validate(PartialInventoryTransferInterface $transfer): ValidationResult
     {
         $errors = [];
 
-        try {
-            $this->sourceRepository->get($item->getOriginSourceCode());
-        } catch (NoSuchEntityException $e) {
-            $errors[] = __('Origin source %sourceCode does not exist', ['sourceCode' => $item->getOriginSourceCode()]);
-        }
+        foreach ($transfer->getItems() as $item) {
+            try {
+                $originSourceItem = $this->getSourceItemBySkuAndSource($item->getSku(), $transfer->getOriginSourceCode());
+                if ($originSourceItem->getQuantity() < $item->getQty()) {
+                    $errors[] = __('Requested transfer amount for sku %sku is not available', ['sku' => $item->getSku()]);
+                }
 
-        try {
-            $this->sourceRepository->get($item->getDestinationSourceCode());
-        } catch (NoSuchEntityException $e) {
-            $errors[] = __('Destination source %sourceCode does not exist', ['sourceCode' => $item->getDestinationSourceCode()]);
-        }
-
-        if ($item->getOriginSourceCode() === $item->getDestinationSourceCode()) {
-            $errors[] = __('Cannot transfer a source on itself');
-        }
-
-        try {
-            $originSourceItem = $this->getSourceItemBySkuAndSource($item->getSku(), $item->getOriginSourceCode());
-            if ($originSourceItem->getQuantity() < $item->getQty()) {
-                $errors[] = __('Requested transfer amount for sku %sku is not available', $item->getSku());
+                $this->getSourceItemBySkuAndSource($item->getSku(), $transfer->getOriginSourceCode());
+            } catch (NoSuchEntityException $e) {
+                $errors[] = __('%message', ['message' => $e->getMessage()]);
             }
-
-            $this->getSourceItemBySkuAndSource($item->getSku(), $item->getOriginSourceCode());
-        } catch (NoSuchEntityException $e) {
-            $errors[] = $e->getMessage();
         }
 
         return $this->validationResultFactory->create(['errors' => $errors]);

@@ -12,7 +12,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
-use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferInterface;
+use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface;
 
 class TransferInventoryPartially
 {
@@ -26,7 +26,6 @@ class TransferInventoryPartially
     private $setDataToLegacyStockItemCommand;
 
     /**
-     * TransferInventoryPartially constructor.
      * @param ResourceConnection $resourceConnection
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param SetDataToLegacyStockItem $setDataToLegacyCatalogInventoryCommand
@@ -35,21 +34,25 @@ class TransferInventoryPartially
         ResourceConnection $resourceConnection,
         DefaultSourceProviderInterface $defaultSourceProvider,
         SetDataToLegacyStockItem $setDataToLegacyCatalogInventoryCommand
-    )
-    {
+    ) {
         $this->resourceConnection = $resourceConnection;
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->setDataToLegacyStockItemCommand = $setDataToLegacyCatalogInventoryCommand;
     }
 
-    public function execute(PartialInventoryTransferInterface $transfer)
+    /**
+     * @param PartialInventoryTransferItemInterface $transfer
+     * @param string $originSourceCode
+     * @param string $destinationSourceCode
+     */
+    public function execute(PartialInventoryTransferItemInterface $transfer, string $originSourceCode, string $destinationSourceCode): void
     {
         $tableName = $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
         $connection = $this->resourceConnection->getConnection();
         $connection->beginTransaction();
 
-        $originSourceItemData = $this->getSourceItemData($transfer->getSku(), $transfer->getOriginSourceCode());
-        $destSourceItemData = $this->getSourceItemData($transfer->getSku(), $transfer->getDestinationSourceCode());
+        $originSourceItemData = $this->getSourceItemData($transfer->getSku(), $originSourceCode);
+        $destSourceItemData = $this->getSourceItemData($transfer->getSku(), $destinationSourceCode);
 
         $updatedQtyAtOrigin = $originSourceItemData === null ? 0.0 : (float) $originSourceItemData[SourceItemInterface::QUANTITY] - $transfer->getQty();
         $updatedQtyAtDest = $destSourceItemData === null ? 0.0 : (float) $destSourceItemData[SourceItemInterface::QUANTITY] + $transfer->getQty();
@@ -58,17 +61,17 @@ class TransferInventoryPartially
         $destUpdate = [SourceItemInterface::QUANTITY => $updatedQtyAtDest, SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK];
 
         $connection->update($tableName, $originUpdate, [
-            SourceItemInterface::SOURCE_CODE . '=?' => $transfer->getOriginSourceCode(),
+            SourceItemInterface::SOURCE_CODE . '=?' => $originSourceCode,
             SourceItemInterface::SKU . '=?' => $transfer->getSku(),
         ]);
         $connection->update($tableName, $destUpdate, [
-            SourceItemInterface::SOURCE_CODE . '=?' => $transfer->getDestinationSourceCode(),
+            SourceItemInterface::SOURCE_CODE . '=?' => $destinationSourceCode,
             SourceItemInterface::SKU . '=?' => $transfer->getSku(),
         ]);
 
-        if ($transfer->getOriginSourceCode() === $this->defaultSourceProvider->getCode()) {
+        if ($originSourceCode === $this->defaultSourceProvider->getCode()) {
             $this->setDataToLegacyStockItemCommand->execute($transfer->getSku(), $updatedQtyAtOrigin, $originSourceItemData[SourceItemInterface::STATUS]);
-        } elseif ($transfer->getDestinationSourceCode() === $this->defaultSourceProvider->getCode()) {
+        } elseif ($destinationSourceCode === $this->defaultSourceProvider->getCode()) {
             $this->setDataToLegacyStockItemCommand->execute($transfer->getSku(), $updatedQtyAtDest, SourceItemInterface::STATUS_IN_STOCK);
         }
 

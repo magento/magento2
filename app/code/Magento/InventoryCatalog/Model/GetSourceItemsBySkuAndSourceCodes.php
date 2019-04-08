@@ -20,15 +20,13 @@ class GetSourceItemsBySkuAndSourceCodes
     private $sourceItemRepository;
 
     /**
-     * GetSourceItemsBySkuAndSourceCodes constructor.
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SourceItemRepositoryInterface $sourceItemRepository
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SourceItemRepositoryInterface $sourceItemRepository
-    )
-    {
+    ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sourceItemRepository = $sourceItemRepository;
     }

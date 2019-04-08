@@ -16,30 +16,19 @@ namespace Magento\InventoryCatalogApi\Api\Data;
  */
 interface PartialInventoryTransferInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    const SKU                     = 'sku';
-    const QTY                     = 'qty';
-    const ORIGIN_SOURCE_CODE      = 'origin_source_code';
+    const ITEMS = 'items';
+    const ORIGIN_SOURCE_CODE = 'origin_source_code';
     const DESTINATION_SOURCE_CODE = 'destination_source_code';
 
     /**
-     * @return string
+     * @return \Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface[]
      */
-    public function getSku(): string;
+    public function getItems(): array;
 
     /**
-     * @param string $sku
+     * @param \Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface[] $items
      */
-    public function setSku(string $sku): void;
-
-    /**
-     * @return float
-     */
-    public function getQty(): float;
-
-    /**
-     * @param float $qty
-     */
-    public function setQty(float $qty): void;
+    public function setItems(array $items): void;
 
     /**
      * @return string

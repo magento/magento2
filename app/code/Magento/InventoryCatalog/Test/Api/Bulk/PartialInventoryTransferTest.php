@@ -8,16 +8,19 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Api\Bulk;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferInterface;
+use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class PartialInventoryTransferTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/inventory/bulk-partial-source-transfer';
+    const VALIDATION_FAIL_MESSAGE = 'Transfer validation failed';
 
     /** @var SourceItemRepositoryInterface */
     private $sourceItemRepository;
@@ -45,7 +48,7 @@ class PartialInventoryTransferTest extends WebapiAbstract
             ]
         ];
 
-        $this->_webApiCall($serviceInfo, ['items' => [$this->getTransferItem('SKU-1', 1, 'eu-3', 'eu-2')]]);
+        $this->_webApiCall($serviceInfo, ['transfer' => $this->getTransferItem('SKU-1', 1, 'eu-3', 'eu-2')]);
 
         $originSourceItem = $this->getSourceItem('SKU-1', 'eu-3');
         $destinationSourceItem = $this->getSourceItem('SKU-1', 'eu-2');
@@ -72,11 +75,25 @@ class PartialInventoryTransferTest extends WebapiAbstract
             ]
         ];
 
-        $result = $this->_webApiCall($serviceInfo, ['items' => [$this->getTransferItem('SKU-1', 1, 'eu-999', 'eu-2')]]);
-        $this->assertEquals(1, count($result));
-
-        $destinationItem = array_shift($result);
-        $this->assertEquals(3, $destinationItem[SourceItemInterface::QUANTITY]);
+        $body = ['transfer' => $this->getTransferItem('SKU-1', 1, 'eu-999', 'eu-2')];
+        $expectedError = [
+            'message' => self::VALIDATION_FAIL_MESSAGE,
+            'errors' => [
+                [
+                    'message' => 'Origin source %sourceCode does not exist',
+                    'parameters' => [
+                        'sourceCode' => 'eu-999'
+                    ]
+                ],
+                [
+                    'message' => '%message',
+                    'parameters' => [
+                        'message' => 'Source item for SKU-1 and eu-999 does not exist'
+                    ]
+                ]
+            ]
+        ];
+        $this->webApiCallWithException($serviceInfo, $body, $expectedError);
     }
 
     /**
@@ -93,11 +110,19 @@ class PartialInventoryTransferTest extends WebapiAbstract
             ]
         ];
 
-        $result = $this->_webApiCall($serviceInfo, ['items' => [$this->getTransferItem('SKU-1', 1, 'eu-3', 'eu-999')]]);
-        $this->assertEquals(1, count($result));
-
-        $originItem = array_shift($result);
-        $this->assertEquals(10, $originItem[SourceItemInterface::QUANTITY]);
+        $body = ['transfer' => $this->getTransferItem('SKU-1', 1, 'eu-3', 'eu-999')];
+        $expectedError = [
+            'message' => self::VALIDATION_FAIL_MESSAGE,
+            'errors' => [
+                [
+                    'message' => 'Destination source %sourceCode does not exist',
+                    'parameters' => [
+                        'sourceCode' => 'eu-999'
+                    ]
+                ]
+            ]
+        ];
+        $this->webApiCallWithException($serviceInfo, $body, $expectedError);
     }
 
     /**
@@ -114,11 +139,17 @@ class PartialInventoryTransferTest extends WebapiAbstract
             ]
         ];
 
-        $result = $this->_webApiCall($serviceInfo, ['items' => [$this->getTransferItem('SKU-1', 1, 'eu-3', 'eu-3')]]);
-        $this->assertEquals(1, count($result));
-
-        $originItem = array_shift($result);
-        $this->assertEquals(10, $originItem[SourceItemInterface::QUANTITY]);
+        $body = ['transfer' => $this->getTransferItem('SKU-1', 1, 'eu-3', 'eu-3')];
+        $expectedError = [
+            'message' => self::VALIDATION_FAIL_MESSAGE,
+            'errors' => [
+                [
+                    'message' => 'Cannot transfer a source on itself',
+                    'parameters' => []
+                ]
+            ]
+        ];
+        $this->webApiCallWithException($serviceInfo, $body, $expectedError);
     }
 
     /**
@@ -135,17 +166,19 @@ class PartialInventoryTransferTest extends WebapiAbstract
             ]
         ];
 
-        $this->_webApiCall($serviceInfo, ['items' => [$this->getTransferItem('SKU-1', 100, 'eu-3', 'eu-2')]]);
-
-        $originSourceItem = $this->getSourceItem('SKU-1', 'eu-3');
-        $destinationSourceItem = $this->getSourceItem('SKU-1', 'eu-2');
-
-        if ($originSourceItem === null || $destinationSourceItem === null) {
-            $this->fail('Both source items should exist.');
-        }
-
-        $this->assertEquals(10, $originSourceItem->getQuantity());
-        $this->assertEquals(3, $destinationSourceItem->getQuantity());
+        $body = ['transfer' => $this->getTransferItem('SKU-1', 100, 'eu-3', 'eu-2')];
+        $expectedError = [
+            'message' => self::VALIDATION_FAIL_MESSAGE,
+            'errors' => [
+                [
+                    'message' => 'Requested transfer amount for sku %sku is not available',
+                    'parameters' => [
+                        'sku' => 'SKU-1'
+                    ]
+                ]
+            ]
+        ];
+        $this->webApiCallWithException($serviceInfo, $body, $expectedError);
     }
 
     /**
@@ -158,11 +191,28 @@ class PartialInventoryTransferTest extends WebapiAbstract
     private function getTransferItem(string $sku, float $qty, string $origin, string $destination): array
     {
         return [
-            PartialInventoryTransferInterface::SKU => $sku,
-            PartialInventoryTransferInterface::QTY => $qty,
+            PartialInventoryTransferInterface::ITEMS => [
+                [PartialInventoryTransferItemInterface::SKU => $sku, PartialInventoryTransferItemInterface::QTY => $qty]
+            ],
             PartialInventoryTransferInterface::ORIGIN_SOURCE_CODE => $origin,
             PartialInventoryTransferInterface::DESTINATION_SOURCE_CODE => $destination
         ];
+    }
+
+    /**
+     * @param array $serviceInfo
+     * @param array $data
+     * @param array $expectedError
+     */
+    private function webApiCallWithException(array $serviceInfo, array $data, array $expectedError): void
+    {
+        try {
+            $this->_webApiCall($serviceInfo, $data);
+            $this->fail('An exception is expected but not thrown.');
+        } catch (\Exception $e) {
+            self::assertEquals($expectedError, $this->processRestExceptionResult($e));
+            self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
+        }
     }
 
     /**

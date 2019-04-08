@@ -15,35 +15,19 @@ class PartialInventoryTransfer extends AbstractSimpleObject implements PartialIn
 {
 
     /**
-     * @return string
+     * @return \Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface[]
      */
-    public function getSku(): string
+    public function getItems(): array
     {
-        return $this->_get(self::SKU);
+        return $this->_get(self::ITEMS);
     }
 
     /**
-     * @param string $sku
+     * @param \Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface[] $items
      */
-    public function setSku(string $sku): void
+    public function setItems(array $items): void
     {
-        $this->setData(self::SKU, $sku);
-    }
-
-    /**
-     * @return float
-     */
-    public function getQty(): float
-    {
-        return $this->_get(self::QTY);
-    }
-
-    /**
-     * @param float $qty
-     */
-    public function setQty(float $qty): void
-    {
-        $this->setData(self::QTY, $qty);
+        $this->setData(self::ITEMS, $items);
     }
 
     /**

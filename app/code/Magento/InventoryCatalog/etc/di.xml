@@ -107,8 +107,8 @@
                 type="Magento\InventoryCatalog\Model\BulkPartialInventoryTransfer"/>
     <preference for="Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferInterface"
                 type="Magento\InventoryCatalog\Model\PartialInventoryTransfer"/>
-    <preference for="Magento\InventoryCatalogApi\Model\PartialInventoryTransferValidatorInterface"
-                type="Magento\InventoryCatalog\Model\Source\Validator\PartialTransferValidator"/>
+    <preference for="Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface"
+                type="Magento\InventoryCatalog\Model\PartialInventoryTransferItem"/>
 
     <type name="\Magento\InventoryCatalogApi\Model\BulkSourceAssignValidatorChain">
         <arguments>
@@ -134,6 +134,17 @@
             </argument>
         </arguments>
     </type>
+    <type name="\Magento\InventoryCatalogApi\Model\PartialInventoryTransferValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="sources"
+                      xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\PartialTransferSourceValidator</item>
+                <item name="items"
+                      xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\PartialTransferItemsValidator</item>
+            </argument>
+        </arguments>
+    </type>
+
     <!-- Negative Min Quantity Threshold for Backorders -->
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter">
         <plugin name="allow_negative_min_qty"
