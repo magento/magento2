@@ -17,7 +17,7 @@
         <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" stepKey="waitForOption"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{option.title}}" stepKey="fillTitle"/>
         <click selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}" stepKey="openTypeSelect"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.optionType(option.type)}}" stepKey="selectTypeFile"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionType(option.type_label)}}" stepKey="selectTypeFile"/>
         <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.optionPrice(optionIndex)}}" stepKey="waitForElements"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.optionPrice(optionIndex)}}" userInput="{{option.price}}" stepKey="fillPrice"/>
         <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceType(optionIndex)}}" userInput="{{option.price_type}}" stepKey="selectPriceType"/>
