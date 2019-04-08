@@ -6,6 +6,7 @@
 namespace Magento\CheckoutAgreements\Test\Unit\Block;
 
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\CheckoutAgreements\Model\Config\Source\AgreementForms;
 use Magento\Store\Model\ScopeInterface;
 
 class AgreementsTest extends \PHPUnit\Framework\TestCase
@@ -49,7 +50,8 @@ class AgreementsTest extends \PHPUnit\Framework\TestCase
             \Magento\CheckoutAgreements\Block\Agreements::class,
             [
                 'agreementCollectionFactory' => $this->agreementCollFactoryMock,
-                'context' => $contextMock
+                'context' => $contextMock,
+                'data' => ['form_name' => AgreementForms::CHECKOUT_CODE]
             ]
         );
     }
@@ -72,6 +74,8 @@ class AgreementsTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $agreementCollection->expects($this->once())->method('addStoreFilter')->with($storeId)->willReturnSelf();
+        $agreementCollection->expects($this->once())->method('addFormFilter')->with(AgreementForms::CHECKOUT_CODE)
+            ->willReturnSelf();
         $agreementCollection->expects($this->once())
             ->method('addFieldToFilter')
             ->with('is_active', 1)

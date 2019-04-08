@@ -6,6 +6,8 @@
 
 namespace Magento\CheckoutAgreements\Model\Api\SearchCriteria;
 
+use Magento\CheckoutAgreements\Model\Config\Source\AgreementForms;
+
 class ActiveStoreAgreementsFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -36,20 +38,22 @@ class ActiveStoreAgreementsFilterTest extends \PHPUnit\Framework\TestCase
                             'field' => 'store_id',
                             'condition_type' => 'eq',
                             'value' => 1,
-                        ]
-                    ]
-                ],
-                [
-                    'filters' => [
+                        ],
                         [
                             'field' => 'is_active',
                             'condition_type' => 'eq',
                             'value' => 1,
-                        ]
-                    ]
+                        ],
+                        [
+                            'field' => 'form',
+                            'condition_type' => 'eq',
+                            'value' => AgreementForms::CHECKOUT_CODE,
+                        ],
+                    ],
                 ],
-            ]
+            ],
         ];
+
         $searchCriteria = $this->model->buildSearchCriteria();
         $this->assertEquals($expected, $searchCriteria->__toArray());
     }
