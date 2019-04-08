@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\App\FrontControllerInterface">
-        <plugin name="cache" type="Magento\GraphQlCache\Controller\GraphQl\Plugin"/>
+        <plugin name="graphql-dispatch-plugin" type="Magento\GraphQlCache\Controller\Plugin\GraphQl"/>
         <plugin name="front-controller-builtin-cache" type="Magento\PageCache\Model\App\FrontController\BuiltinPlugin"/>
         <plugin name="front-controller-varnish-cache" type="Magento\PageCache\Model\App\FrontController\VarnishPlugin"/>
     </type>

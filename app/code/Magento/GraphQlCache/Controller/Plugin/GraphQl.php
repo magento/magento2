@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQlCache\Controller\GraphQl;
+namespace Magento\GraphQlCache\Controller\Plugin;
 
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
@@ -19,7 +19,7 @@ use Magento\GraphQl\Controller\HttpRequestProcessor;
 /**
  * Class Plugin
  */
-class Plugin
+class GraphQl
 {
     /**
      * @var CacheableQuery

@@ -42,6 +42,7 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
      * @param StoreManagerInterface $storeManager
      * @param HttpContext $httpContext
      * @param SessionManagerInterface $session
+     * @param LoggerInterface $logger
      */
     public function __construct(
         StoreManagerInterface $storeManager,
