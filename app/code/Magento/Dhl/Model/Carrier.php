@@ -1984,7 +1984,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         return
             self::DHL_CONTENT_TYPE_NON_DOC == $this->getConfigData('content_type')
-            || !$this->_isDomestic;
+            && !$this->_isDomestic;
     }
 
     /**
