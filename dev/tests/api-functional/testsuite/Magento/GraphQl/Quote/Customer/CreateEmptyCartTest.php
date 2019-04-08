@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Quote\Model\QuoteFactory;
+use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
+use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Quote\Api\GuestCartRepositoryInterface;
@@ -29,16 +32,39 @@ class CreateEmptyCartTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var ResourceConnection
+     * @var QuoteResource
      */
-    private $resourceConnection;
+    private $quoteResource;
+
+    /**
+     * @var QuoteFactory
+     */
+    private $quoteFactory;
+
+    /**
+     * @var MaskedQuoteIdToQuoteIdInterface
+     */
+    private $maskedQuoteIdToQuoteId;
+
+    /**
+     * @var QuoteIdMaskFactory
+     */
+    private $quoteIdMaskFactory;
+
+    /**
+     * @var string
+     */
+    private $maskedQuoteId;
 
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->guestCartRepository = $objectManager->get(GuestCartRepositoryInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->resourceConnection = $objectManager->get(ResourceConnection::class);
+        $this->quoteResource = $objectManager->get(QuoteResource::class);
+        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
+        $this->maskedQuoteIdToQuoteId = $objectManager->get(MaskedQuoteIdToQuoteIdInterface::class);
+        $this->quoteIdMaskFactory = $objectManager->get(QuoteIdMaskFactory::class);
     }
 
     /**
@@ -46,27 +72,18 @@ class CreateEmptyCartTest extends GraphQlAbstract
      */
     public function testCreateEmptyCart()
     {
-        $query = <<<QUERY
-mutation {
-  createEmptyCart
-}
-QUERY;
-
-        $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $query = $this->getQuery();
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMapWithCustomerToken());
 
         self::assertArrayHasKey('createEmptyCart', $response);
+        self::assertNotEmpty($response['createEmptyCart']);
 
-        $maskedCartId = $response['createEmptyCart'];
-        $guestCart = $this->guestCartRepository->get($maskedCartId);
+        $guestCart = $this->guestCartRepository->get($response['createEmptyCart']);
+        $this->maskedQuoteId = $response['createEmptyCart'];
 
         self::assertNotNull($guestCart->getId());
         self::assertEquals(1, $guestCart->getCustomer()->getId());
-        self::assertSame('default', $guestCart->getStore()->getCode());
-
-        $this->deleteCreatedQuote($guestCart->getId());
+        self::assertEquals('default', $guestCart->getStore()->getCode());
     }
 
     /**
@@ -75,40 +92,63 @@ QUERY;
      */
     public function testCreateEmptyCartWithNotDefaultStore()
     {
-        $query = <<<QUERY
+        $query = $this->getQuery();
+
+        $headerMap = $this->getHeaderMapWithCustomerToken();
+        $headerMap['Store'] = 'fixture_second_store';
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        self::assertArrayHasKey('createEmptyCart', $response);
+        self::assertNotEmpty($response['createEmptyCart']);
+
+        /* guestCartRepository is used for registered customer to get the cart hash */
+        $guestCart = $this->guestCartRepository->get($response['createEmptyCart']);
+        $this->maskedQuoteId = $response['createEmptyCart'];
+
+        self::assertNotNull($guestCart->getId());
+        self::assertEquals(1, $guestCart->getCustomer()->getId());
+        self::assertEquals('fixture_second_store', $guestCart->getStore()->getCode());
+    }
+
+    /**
+     * @return string
+     */
+    private function getQuery(): string
+    {
+        return <<<QUERY
 mutation {
   createEmptyCart
 }
 QUERY;
-
-        $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken, 'Store' => 'fixture_second_store'];
-
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
-
-        self::assertArrayHasKey('createEmptyCart', $response);
-
-        $maskedCartId = $response['createEmptyCart'];
-        /* guestCartRepository is used for registered customer to get the cart hash */
-        $guestCart = $this->guestCartRepository->get($maskedCartId);
-
-        self::assertNotNull($guestCart->getId());
-        self::assertEquals(1, $guestCart->getCustomer()->getId());
-        self::assertSame('fixture_second_store', $guestCart->getStore()->getCode());
-
-        $this->deleteCreatedQuote($guestCart->getId());
     }
 
     /**
-     * Delete active quote for customer by customer id.
-     * This is needed to have ability to create new quote for another store and not return the active one.
-     * @see QuoteManagement::createCustomerCart
-     *
-     * @param $quoteId
+     * @param string $username
+     * @param string $password
+     * @return array
      */
-    private function deleteCreatedQuote($quoteId)
+    private function getHeaderMapWithCustomerToken(
+        string $username = 'customer@example.com',
+        string $password = 'password'
+    ): array {
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
+        return $headerMap;
+    }
+
+    public function tearDown()
     {
-        $connection = $this->resourceConnection->getConnection();
-        $connection->query('DELETE FROM quote WHERE entity_id = ' . $quoteId);
+        if (null !== $this->maskedQuoteId) {
+            $quoteId = $this->maskedQuoteIdToQuoteId->execute($this->maskedQuoteId);
+
+            $quote = $this->quoteFactory->create();
+            $this->quoteResource->load($quote, $quoteId);
+            $this->quoteResource->delete($quote);
+
+            $quoteIdMask = $this->quoteIdMaskFactory->create();
+            $quoteIdMask->setQuoteId($quoteId)
+                ->delete();
+        }
+        parent::tearDown();
     }
 }

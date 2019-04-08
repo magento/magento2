@@ -85,7 +85,7 @@ class GetCartForUser
         }
 
         if ((int)$cart->getStoreId() !== (int)$this->storeManager->getStore()->getId()) {
-            throw new GraphQlAuthorizationException(
+            throw new GraphQlNoSuchEntityException(
                 __(
                     'Wrong store code specified for cart "%masked_cart_id"',
                     ['masked_cart_id' => $cartHash]
