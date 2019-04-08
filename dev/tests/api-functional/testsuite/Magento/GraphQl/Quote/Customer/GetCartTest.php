@@ -36,7 +36,7 @@ class GetCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -55,7 +55,7 @@ class GetCartTest extends GraphQlAbstract
 
         self::assertNotEmpty($response['cart']['items'][0]['id']);
         self::assertEquals(2, $response['cart']['items'][0]['qty']);
-        self::assertEquals('simple', $response['cart']['items'][0]['product']['sku']);
+        self::assertEquals('simple_product', $response['cart']['items'][0]['product']['sku']);
 
         self::assertNotEmpty($response['cart']['items'][1]['id']);
         self::assertEquals(2, $response['cart']['items'][1]['qty']);
