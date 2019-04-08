@@ -19,25 +19,23 @@ use Magento\ImportExport\Model\Import;
 
 /**
  * Advanced pricing test
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdvancedPricingTest extends TestCase
 {
     /**
      * @var ExportAdvancedPricing
      */
-    private $model;
+    protected $model;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $objectManager;
+    protected $objectManager;
 
     /**
      * @var Filesystem
      */
-    private $fileSystem;
+    protected $fileSystem;
 
     // @codingStandardsIgnoreStart
     public static function setUpBeforeClass()
@@ -55,9 +53,6 @@ class AdvancedPricingTest extends TestCase
     }
     // @codingStandardsIgnoreEnd
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -68,15 +63,12 @@ class AdvancedPricingTest extends TestCase
     }
 
     /**
-     * Export test
-     *
      * @magentoAppArea adminhtml
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @return void
      */
-    public function testExport(): void
+    public function testExport()
     {
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $index = 0;
@@ -115,7 +107,7 @@ class AdvancedPricingTest extends TestCase
      * @param string $exportContent
      * @return void
      */
-    private function assertDiscountTypes(string $exportContent): void
+    private function assertDiscountTypes($exportContent)
     {
         $this->assertContains(
             '2.0000,8.000000,Fixed',
@@ -128,16 +120,13 @@ class AdvancedPricingTest extends TestCase
     }
 
     /**
-     * Export multiple websites test
-     *
      * @magentoAppArea adminhtml
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/price/scope 1
      * @magentoDataFixture Magento/AdvancedPricingImportExport/_files/product_with_second_website.php
-     * @return void
      */
-    public function testExportMultipleWebsites(): void
+    public function testExportMultipleWebsites()
     {
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $index = 0;
@@ -173,18 +162,17 @@ class AdvancedPricingTest extends TestCase
     }
 
     /**
-     * Data export
-     *
      * @param string $csvFile
      * @return string
      */
-    private function exportData(string $csvFile): string
+    private function exportData($csvFile)
     {
         $this->model->setWriter(
-            $this->objectManager->create(
-                ExportAdapterCsv::class,
-                ['fileSystem' => $this->fileSystem, 'destination' => $csvFile]
-            )
+            Bootstrap::getObjectManager()
+                ->create(
+                    ExportAdapterCsv::class,
+                    ['fileSystem' => $this->fileSystem, 'destination' => $csvFile]
+                )
         );
         $exportContent = $this->model->export();
         $this->assertNotEmpty($exportContent);
@@ -193,12 +181,9 @@ class AdvancedPricingTest extends TestCase
     }
 
     /**
-     * Data import
-     *
      * @param string $csvFile
-     * @return void
      */
-    private function importData(string $csvFile): void
+    private function importData($csvFile)
     {
         /** @var ImportAdvancedPricing $importModel */
         $importModel = $this->objectManager->create(ImportAdvancedPricing::class);
@@ -226,19 +211,8 @@ class AdvancedPricingTest extends TestCase
         $importModel->importData();
     }
 
-    /**
-     * Assert equals other than skipped attributes
-     *
-     * @param array $expected
-     * @param array $actual
-     * @param array $skippedAttributes
-     * @return void
-     */
-    private function assertEqualsOtherThanSkippedAttributes(
-        array $expected,
-        array $actual,
-        array $skippedAttributes
-    ): void {
+    private function assertEqualsOtherThanSkippedAttributes($expected, $actual, $skippedAttributes)
+    {
         foreach ($expected as $key => $value) {
             if (in_array($key, $skippedAttributes)) {
                 continue;
