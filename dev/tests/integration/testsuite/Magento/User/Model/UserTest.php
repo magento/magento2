@@ -566,7 +566,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     /**
      * Validate that we can set one of the previous passwords if allow_to_repeat_previous_passwords == true.
      *
-     * @magentoConfigFixture admin/security/allow_to_repeat_previous_passwords 1
+     * @magentoConfigFixture default/admin/security/allow_to_repeat_previous_passwords 1
      */
     public function testValidateSetOneOfThePreviousPasswordsWithAllowToRepeatPassword()
     {
