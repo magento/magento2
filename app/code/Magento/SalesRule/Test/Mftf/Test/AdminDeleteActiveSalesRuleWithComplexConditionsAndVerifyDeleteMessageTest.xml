@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteActiveSalesRuleWithComplexConditionsAndVerifyDeleteMessageTest">
+        <annotations>
+            <stories value="Delete Sales Rule"/>
+            <title value="Delete Active Sales Rule With Complex Conditions And Verify Delete Message"/>
+            <description value="Test log in to Cart Price Rule and Delete Active Sales Rule With Complex Conditions Test"/>
+            <testCaseId value="MC-15450"/>
+            <severity value="CRITICAL"/>
+            <group value="salesRule"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create active cart price rule-->
+            <actionGroup ref="AdminCreateCartPriceRuleRuleInfoSectionActionGroup" stepKey="createActiveCartPriceRuleRuleInfoSection">
+                <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
+            </actionGroup>
+            <!--Fill values for Condition Section-->
+            <actionGroup ref="AdminCreateCartPriceRuleConditionsSectionSubtotalActionGroup" stepKey="createActiveCartPriceRuleConditionsSubtotalSection">
+                <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
+                <argument name="condition1" value="Subtotal"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateCartPriceRuleConditionsSectionShippingCountryActionGroup" stepKey="createActiveCartPriceRuleConditionsShippingCountrySection">
+                <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
+                <argument name="condition2" value="Shipping Country"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateCartPriceRuleConditionsSectionShippingPostcodeActionGroup" stepKey="createActiveCartPriceRuleConditionsShippingPostcodeSection">
+                <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
+                <argument name="condition3" value="Shipping Postcode"/>
+            </actionGroup>
+            <!--Fill values for Action Section-->
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
+                <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionShippingAmountActionGroup" stepKey="createActiveCartPriceRuleShippingAmountActionsSection"/>
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionSubsequentRulesActionGroup" stepKey="createActiveCartPriceRuleDiscardSubsequentRulesActionsSection"/>
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup" stepKey="createActiveCartPriceRuleFreeShippingActionsSection">
+                <argument name="ruleName" value="{{ActiveSalesRuleWithComplexConditions.simple_free_shipping}}"/>
+            </actionGroup>
+            <!--Fill values for Labels Section-->
+            <actionGroup ref="AdminCreateCartPriceRuleLabelsSectionActionGroup" stepKey="createActiveCartPriceRuleLabelsSection">
+                <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
+            </actionGroup>
+            <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="assertVerifyCartPriceRuleSuccessSaveMessage"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Delete active cart price rule-->
+        <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteActiveCartPriceRule">
+            <argument name="ruleName" value="{{ActiveSalesRuleWithComplexConditions.name}}"/>
+        </actionGroup>
+
+        <!--Go to grid and verify AssertCartPriceRuleIsNotPresentedInGrid-->
+        <actionGroup ref="AdminCartPriceRuleNotInGridActionGroup" stepKey="searchAndVerifyActiveCartPriceRuleNotInGrid">
+            <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions.name"/>
+        </actionGroup>
+    </test>
+</tests>
