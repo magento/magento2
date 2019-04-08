@@ -99,17 +99,8 @@
                         <item name="dataScope" xsi:type="string"/>
                     </item>
                 </argument>
-                <field name="source_code" formElement="input" sortOrder="10">
+                <field name="name" formElement="input" sortOrder="20" template="Magento_InventoryCatalogAdminUi/dynamic-rows/cells/text">
                     <settings>
-                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
-                        <dataType>text</dataType>
-                        <dataScope>source_code</dataScope>
-                        <label translate="true">Source Code</label>
-                    </settings>
-                </field>
-                <field name="name" formElement="input" sortOrder="20">
-                    <settings>
-                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                         <dataType>text</dataType>
                         <dataScope>name</dataScope>
                         <label translate="true">Name</label>
