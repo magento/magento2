@@ -206,7 +206,7 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
-     * Returns media gallery atribute instance
+     * Returns media gallery attribute instance
      *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
      * @since 101.0.0
