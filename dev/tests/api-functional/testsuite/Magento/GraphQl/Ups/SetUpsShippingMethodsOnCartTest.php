@@ -55,39 +55,44 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/Ups/_files/enable_ups_shipping_method.php
+     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
      *
-     * @param string $carrierMethodCode
-     * @param string $carrierMethodLabel
+     * @param string $methodCode
+     * @param string $methodLabel
      * @dataProvider availableForCartShippingMethods
      */
-    public function testSetAvailableForCartUpsShippingMethod(string $carrierMethodCode, string $carrierMethodLabel)
+    public function testSetAvailableUpsShippingMethodOnCart(string $methodCode, string $methodLabel)
     {
         $quoteReservedId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
         $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
 
-        $query = $this->getQuery(
-            $maskedQuoteId,
-            $shippingAddressId,
-            self::CARRIER_CODE,
-            $carrierMethodCode
+        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
+        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
+        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+
+        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
+
+        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
+
+        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
+
+        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(
+            self::CARRIER_LABEL . ' - ' . $methodLabel,
+            $shippingAddress['selected_shipping_method']['label']
         );
-
-        $response = $this->sendRequestWithToken($query);
-
-        $addressesInformation = $response['setShippingMethodsOnCart']['cart']['shipping_addresses'];
-        $expectedResult = [
-            'carrier_code' => self::CARRIER_CODE,
-            'method_code' => $carrierMethodCode,
-            'label' => self::CARRIER_LABEL . ' - ' . $carrierMethodLabel,
-        ];
-        self::assertEquals($addressesInformation[0]['selected_shipping_method'], $expectedResult);
     }
 
     /**
@@ -96,7 +101,7 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/Ups/_files/enable_ups_shipping_method.php
+     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
      *
      * @param string $carrierMethodCode
      * @param string $carrierMethodLabel
