@@ -118,10 +118,13 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
             if (!empty($this->configSource->get($configPath))) {
                 continue;
             }
-            /** @var \Magento\Framework\App\Config\Data\ProcessorInterface $processor */
-            $processor = $this->_processorFactory->get($metadata['backendModel']);
-            $value = $processor->processValue($this->_getValue($data, $path));
-            $this->_setValue($data, $path, $value);
+
+            if (isset($metadata['backendModel'])) {
+                /** @var \Magento\Framework\App\Config\Data\ProcessorInterface $processor */
+                $processor = $this->_processorFactory->get($metadata['backendModel']);
+                $value = $processor->processValue($this->_getValue($data, $path));
+                $this->_setValue($data, $path, $value);
+            }
         }
 
         return $data;

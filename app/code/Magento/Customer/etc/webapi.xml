@@ -134,7 +134,7 @@
             <resource ref="Magento_Customer::manage"/>
         </resources>
     </route>
-    <route url="/V1/customers/me" method="PUT">
+    <route url="/V1/customers/me" method="PUT" soapOperation="saveSelf">
         <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="save"/>
         <resources>
             <resource ref="self"/>
@@ -143,7 +143,7 @@
             <parameter name="customer.id" force="true">%customer_id%</parameter>
         </data>
     </route>
-    <route url="/V1/customers/me" method="GET">
+    <route url="/V1/customers/me" method="GET" soapOperation="getSelf">
         <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="getById"/>
         <resources>
             <resource ref="self"/>
@@ -244,7 +244,7 @@
             <resource ref="Magento_Customer::manage"/>
         </resources>
     </route>
-    <route url="/V1/customers/me/billingAddress" method="GET">
+    <route url="/V1/customers/me/billingAddress" method="GET" soapOperation="getMyDefaultBillingAddress">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="getDefaultBillingAddress"/>
         <resources>
             <resource ref="self"/>
@@ -259,7 +259,7 @@
             <resource ref="Magento_Customer::manage"/>
         </resources>
     </route>
-    <route url="/V1/customers/me/shippingAddress" method="GET">
+    <route url="/V1/customers/me/shippingAddress" method="GET" soapOperation="getMyDefaultShippingAddress">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="getDefaultShippingAddress"/>
         <resources>
             <resource ref="self"/>
