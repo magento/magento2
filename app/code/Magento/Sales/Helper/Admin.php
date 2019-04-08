@@ -46,7 +46,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Escaper $escaper
-     * @param CrawlerFactory $crawlerFactory
+     * @param CrawlerFactory|null $crawlerFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
