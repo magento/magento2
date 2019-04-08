@@ -102,8 +102,8 @@ class GetCartTest extends GraphQlAbstract
      */
     public function testGetCartWithNotDefaultStore()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1_not_default_store_guest');
-        $query = $this->getCartQuery($maskedQuoteId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_not_default_store_guest');
+        $query = $this->getQuery($maskedQuoteId);
 
         $headerMap = ['Store' => 'fixture_second_store'];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
@@ -121,8 +121,8 @@ class GetCartTest extends GraphQlAbstract
      */
     public function testGetCartWithWrongStore()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1');
-        $query = $this->getCartQuery($maskedQuoteId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $query = $this->getQuery($maskedQuoteId);
 
         $headerMap = ['Store' => 'fixture_second_store'];
         $this->graphQlQuery($query, [], '', $headerMap);
@@ -137,10 +137,10 @@ class GetCartTest extends GraphQlAbstract
      */
     public function testGetCartWithNotExistingStore()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_order_1_not_default_store_guest');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_not_default_store_guest');
 
         $headerMap['Store'] = 'not_existing_store';
-        $query = $this->getCartQuery($maskedQuoteId);
+        $query = $this->getQuery($maskedQuoteId);
 
         $this->graphQlQuery($query, [], '', $headerMap);
     }
