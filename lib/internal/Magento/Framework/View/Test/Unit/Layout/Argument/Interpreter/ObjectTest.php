@@ -3,10 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
 use Magento\Framework\View\Layout\Argument\Interpreter\DataObject;
 
+/**
+ * Tests layout argument interpreter data object.
+ */
 class ObjectTest extends \PHPUnit\Framework\TestCase
 {
     const EXPECTED_CLASS = \Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\ObjectTest::class;
