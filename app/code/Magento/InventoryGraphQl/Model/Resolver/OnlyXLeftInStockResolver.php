@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryGraphQl\Model\Resolver;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -25,11 +24,6 @@ use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 class OnlyXLeftInStockResolver implements ResolverInterface
 {
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @var GetProductSalableQtyInterface
      */
     private $getProductSalableQty;
@@ -45,18 +39,15 @@ class OnlyXLeftInStockResolver implements ResolverInterface
     private $getStockItemConfiguration;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
      * @param GetProductSalableQtyInterface $getProductSalableQty
      * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
         GetProductSalableQtyInterface $getProductSalableQty,
         GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
         GetStockItemConfigurationInterface $getStockItemConfiguration
     ) {
-        $this->scopeConfig = $scopeConfig;
         $this->getProductSalableQty = $getProductSalableQty;
         $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
@@ -75,8 +66,9 @@ class OnlyXLeftInStockResolver implements ResolverInterface
     }
 
     /**
-     * @param string $sku
+     * Get quantity of a specified product when lower then configuration threshold.
      *
+     * @param string $sku
      * @return null|float
      * @throws SkuIsNotAssignedToStockException
      * @throws LocalizedException

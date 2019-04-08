@@ -180,6 +180,7 @@
         "magento/module-inventory": "*",
         "magento/module-inventory-admin-ui": "*",
         "magento/module-inventory-api": "*",
+        "magento/module-inventory-graph-ql": "*",
         "magento/module-inventory-bundle-product": "*",
         "magento/module-inventory-bundle-product-admin-ui": "*",
         "magento/module-inventory-cache": "*",
