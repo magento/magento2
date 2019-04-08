@@ -24,8 +24,8 @@ define([
     'use strict';
 
     return function (couponCode, isApplied) {
-        couponCode = couponCode.replace('/','');
         var quoteId = quote.getQuoteId(),
+        couponCode = couponCode.replace('/', '');
             url = urlManager.getApplyCouponUrl(couponCode, quoteId),
             message = $t('Your coupon was successfully applied.');
 
