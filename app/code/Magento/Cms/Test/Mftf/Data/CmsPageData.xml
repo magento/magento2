@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="_defaultCmsPage" type="cms_page">
         <data key="title">Test CMS Page</data>
         <data key="content_heading">Test Content Heading</data>
@@ -26,6 +26,7 @@
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
         <data key="file">magento.jpg</data>
+        <data key="fileName">magento</data>
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
     </entity>
@@ -35,8 +36,13 @@
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
         <data key="file">magento2.jpg</data>
+        <data key="fileName">magento2</data>
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
+    </entity>
+    <entity name="ImageUpload2" type="uploadImage">
+        <data key="file">medium.jpg</data>
+        <data key="fileName">medium</data>
     </entity>
     <entity name="ImageFolder" type="uploadImage">
         <data key="name" unique="suffix">Test</data>

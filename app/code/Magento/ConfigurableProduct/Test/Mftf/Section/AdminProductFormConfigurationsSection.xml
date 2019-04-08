@@ -24,5 +24,7 @@
         <element name="enableProductBtn" type="button" selector="//a[text()='Enable Product']"/>
         <element name="configurableMatrixSku" type="input" selector="input[name='configurable-matrix[{{index}}][sku]']" parameterized="true"/>
         <element name="skuValidationMessage" type="text" selector="input[name='configurable-matrix[{{index}}][sku]'] + label" parameterized="true"/>
+        <element name="stepsWizardTitle" type="text" selector="div.content:not([style='display: none;']) .steps-wizard-title"/>
+        <element name="attributeEntityByName" type="text" selector="//div[@class='attribute-entity']//div[normalize-space(.)='{{attributeLabel}}']" parameterized="true"/>
     </section>
 </sections>
