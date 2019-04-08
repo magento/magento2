@@ -84,7 +84,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                         'review/*/save',
                         [
                             'id' => $this->getRequest()->getParam('id'),
-                            'ret' => $this->_coreRegistry->registry('ret')
+                            'ret' => $this->_coreRegistry->registry('ret'),
+                            'productId' => $this->getRequest()->getParam('productId')
                         ]
                     ),
                     'method' => 'post',
