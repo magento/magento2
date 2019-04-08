@@ -10,10 +10,7 @@ namespace Magento\InventoryCatalog\Model;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryCatalog\Model\ResourceModel\BulkInventoryTransfer as BulkInventoryTransferResource;
 use Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface;
-use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\BulkInventoryTransferValidatorInterface;
-use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
-use Magento\CatalogInventory\Model\Indexer\Stock as LegacyIndexer;
 use Magento\InventoryIndexer\Indexer\Source\SourceIndexer;
 
 /**
@@ -32,40 +29,31 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
     private $bulkInventoryTransfer;
 
     /**
-     * @var LegacyIndexer
+     * @var SourceIndexer
      */
-    private $legacyIndexer;
+    private $sourceIndexer;
 
     /**
-     * MassProductSourceAssign constructor.
      * @param BulkInventoryTransferValidatorInterface $inventoryTransferValidator
      * @param BulkInventoryTransferResource $bulkInventoryTransfer
-     * @param SourceIndexer $sourceIndexer @deprecated
-     * @param DefaultSourceProviderInterface $defaultSourceProvider @deprecated
-     * @param GetProductIdsBySkusInterface $getProductIdsBySkus @deprecated
-     * @param LegacyIndexer $legacyIndexer
+     * @param SourceIndexer $sourceIndexer
+     * @param null $defaultSourceProvider @deprecated
+     * @param null $getProductIdsBySkus @deprecated
+     * @param null $legacyIndexer @deprecated
      * @SuppressWarnings(PHPMD.LongVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         BulkInventoryTransferValidatorInterface $inventoryTransferValidator,
         BulkInventoryTransferResource $bulkInventoryTransfer,
         SourceIndexer $sourceIndexer,
-        DefaultSourceProviderInterface $defaultSourceProvider,
-        GetProductIdsBySkusInterface $getProductIdsBySkus,
-        LegacyIndexer $legacyIndexer
+        $defaultSourceProvider,
+        $getProductIdsBySkus,
+        $legacyIndexer
     ) {
         $this->bulkInventoryTransferValidator = $inventoryTransferValidator;
         $this->bulkInventoryTransfer = $bulkInventoryTransfer;
-        $this->legacyIndexer = $legacyIndexer;
-    }
-
-    /**
-     * Reindex legacy stock (for default source)
-     * @param array $productIds
-     */
-    private function reindexLegacy(array $productIds): void
-    {
-        $this->legacyIndexer->executeList($productIds);
+        $this->sourceIndexer = $sourceIndexer;
     }
 
     /**
@@ -94,6 +82,8 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
             $destinationSource,
             $unassignFromOrigin
         );
+
+        $this->sourceIndexer->executeList([$originSource, $destinationSource]);
 
         return true;
     }

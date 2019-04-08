@@ -9,11 +9,9 @@ namespace Magento\InventoryCatalog\Model;
 
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryCatalogApi\Api\BulkSourceUnassignInterface;
-use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\BulkSourceUnassignValidatorInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\BulkSourceUnassign as BulkSourceUnassignResource;
 use Magento\InventoryIndexer\Indexer\Source\SourceIndexer;
-use Magento\CatalogInventory\Model\Indexer\Stock as LegacyIndexer;
 
 /**
  * @inheritdoc
@@ -36,22 +34,22 @@ class BulkSourceUnassign implements BulkSourceUnassignInterface
     private $sourceIndexer;
 
     /**
-     * MassProductSourceAssign constructor.
      * @param BulkSourceUnassignValidatorInterface $unassignValidator
      * @param BulkSourceUnassignResource $bulkSourceUnassign
-     * @param DefaultSourceProviderInterface $defaultSourceProvider @deprecated
-     * @param GetProductIdsBySkus $getProductIdsBySkus @deprecated
+     * @param null $defaultSourceProvider @deprecated
+     * @param null $getProductIdsBySkus @deprecated
      * @param SourceIndexer $sourceIndexer
-     * @param LegacyIndexer $legacyIndexer @deprecated
+     * @param null $legacyIndexer @deprecated
      * @SuppressWarnings(PHPMD.LongVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         BulkSourceUnassignValidatorInterface $unassignValidator,
         BulkSourceUnassignResource $bulkSourceUnassign,
-        DefaultSourceProviderInterface $defaultSourceProvider,
-        GetProductIdsBySkus $getProductIdsBySkus,
+        $defaultSourceProvider,
+        $getProductIdsBySkus,
         SourceIndexer $sourceIndexer,
-        LegacyIndexer $legacyIndexer
+        $legacyIndexer
     ) {
         $this->unassignValidator = $unassignValidator;
         $this->bulkSourceUnassign = $bulkSourceUnassign;
