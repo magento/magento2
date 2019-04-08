@@ -11,11 +11,9 @@
     <!-- Open the Minicart and check Summary -->
     <actionGroup name="StorefrontCheckCartDiscountAndSummaryActionGroup">
         <arguments>
-            <argument name="product" type="entity"/>
             <argument name="total" type="string"/>
             <argument name="discount" type="string"/>
         </arguments>
-        <waitForPageLoad stepKey="waitForSummary"/>
         <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-${{discount}}" stepKey="assertDiscount"/>
         <see selector="{{CheckoutCartSummarySection.total}}" userInput="${{total}}" stepKey="assertTotal"/>
     </actionGroup>

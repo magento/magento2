@@ -6,8 +6,9 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd"><!--Set condition for Customer Segment-->
-    <actionGroup name="SetCartAttributeConditionWIthSegmentForCartPriceRuleActionGroup">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Set condition for Customer Segment-->
+    <actionGroup name="SetCartAttributeConditionWithSegmentForCartPriceRuleActionGroup">
         <arguments>
             <argument name="attributeName" type="string"/>
             <argument name="value" type="entity"/>
@@ -35,7 +36,7 @@
         <click selector="{{AdminMainActionsSection.saveAndContinue}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
     </actionGroup>
-    <actionGroup name="SetCartAttributeConditionWhenMatchForCartPriceRuleActionGroup" extends="SetCartAttributeConditionWIthSegmentForCartPriceRuleActionGroup">
+    <actionGroup name="SetCartAttributeConditionWhenMatchForCartPriceRuleActionGroup" extends="SetCartAttributeConditionWithSegmentForCartPriceRuleActionGroup">
         <arguments>
             <argument name="operatorType" type="string" defaultValue="matches"/>
         </arguments>
