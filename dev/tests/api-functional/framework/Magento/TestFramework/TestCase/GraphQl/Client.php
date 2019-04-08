@@ -114,6 +114,28 @@ class Client
     }
 
     /**
+     * Process the header information from response
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return mixed
+     */
+    public function getQueryResponseHeaders(string $query, array $variables = [], string $operationName = '', array $headers = [])
+    {
+        $url = $this->getEndpointUrl();
+        $requestArray = [
+            'query' => $query,
+            'variables' => empty($variables) ? $variables : null,
+            'operationName' => empty($operationName) ? $operationName : null
+        ];
+
+        $responseHeader = $this->curlClient->getHttpHeaders($url, $requestArray, $headers);
+        return $responseHeader;
+    }
+
+    /**
      * Process errors
      *
      * @param array $responseBodyArray

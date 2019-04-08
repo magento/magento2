@@ -78,6 +78,29 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
+     * Perform GraphQL query via GET and returns only the response headers
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return mixed
+     */
+    public function graphQlQueryForHttpHeaders(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ) {
+        return $response = $this->getGraphQlClient()->getQueryResponseHeaders(
+                $query,
+                $variables,
+                $operationName,
+                $this->composeHeaders($headers)
+            );
+    }
+
+    /**
      * Compose headers
      *
      * @param array $headers

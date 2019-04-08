@@ -32,6 +32,18 @@ class CurlClient
         return $resp["body"];
     }
 
+    public function getHttpHeaders($url, $data = [], $headers = [])
+    {
+        if (!empty($data)) {
+            $url .= '?' . http_build_query($data);
+        }
+
+        $curlOpts = [];
+        $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET;
+        $resp = $this->invokeApi($url, $curlOpts, $headers);
+        return $resp["header"];
+    }
+
     /**
      * Perform HTTP DELETE request
      *
