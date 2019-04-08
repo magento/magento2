@@ -16,6 +16,7 @@
         <!-- Rule Information (the main form on the page) -->
         <element name="ruleInformationHeader" type="button" selector="div[data-index='rule_information']" timeout="30"/>
         <element name="ruleName" type="input" selector="input[name='name']"/>
+        <element name="description" type="textarea" selector="//div[@class='admin__field-control']/textarea[@name='description']"/>
         <element name="websites" type="multiselect" selector="select[name='website_ids']"/>
         <element name="customerGroups" type="multiselect" selector="select[name='customer_group_ids']"/>
         <element name="coupon" type="select" selector="select[name='coupon_type']"/>
@@ -39,6 +40,12 @@
         <element name="ruleParameterInput" type="input" selector="rule[conditions][{{arg}}][value]" parameterized="true"/>
         <element name="openChooser" type="button" selector="//label[@for='conditions__{{arg}}__value']" parameterized="true"/>
         <element name="categoryCheckbox" type="checkbox" selector="//span[contains(text(), '{{arg}}')]/parent::a/preceding-sibling::input[@type='checkbox']" parameterized="true"/>
+        <element name="newCondition" type="button" selector=".rule-param.rule-param-new-child" timeout="30"/>
+        <element name="conditionSelect" type="select" selector="select[name='rule[conditions][1][new_child]']"/>
+        <element name="targetEllipsis" type="input" selector="//ul[contains(@id, 'conditions')]//a[.='...']"/>
+        <element name="ruleFieldByIndex" type="input" selector="[id='conditions__{{index}}__value']" parameterized="true"/>
+        <element name="addNewCondition" type="button" selector="//ul[@id = 'conditions__{{nestedIndex}}__children']/li/span[contains(@class, 'rule-param-new-child')]" parameterized="true" timeout="30"/>
+        <element name="conditionSelectDropdown" type="select" selector="select[name='rule[conditions][{{nestedIndex}}][new_child]']" parameterized="true"/>
 
         <!-- Actions sub-form -->
         <element name="actionsTab" type="text" selector="//div[@data-index='actions']//span[contains(.,'Actions')][1]"/>
@@ -58,9 +65,15 @@
         <element name="applyDiscountToShipping" type="checkbox" selector="input[name='apply_to_shipping']"/>
         <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
+        <element name="maximumQtyDiscount" type="input" selector="input[name='discount_qty']"/>
         <element name="discountStep" type="input" selector="input[name='discount_step']"/>
         <element name="addRewardPoints" type="input" selector="input[name='extension_attributes[reward_points_delta]']"/>
         <element name="freeShipping" type="select" selector="//select[@name='simple_free_shipping']"/>
+
+        <!-- Labels sub-form -->
+        <element name="labelsHeader" type="button" selector="div[data-index='labels']" timeout="30"/>
+        <element name="defaultRuleLabelAllStoreViews" type="input" selector="input[name='store_labels[0]']"/>
+        <element name="defaultStoreView" type="input" selector="input[name='store_labels[1]']"/>
 
         <!-- Manage Coupon Codes sub-form -->
         <element name="manageCouponCodesHeader" type="button" selector="div[data-index='manage_coupon_codes']" timeout="30"/>
