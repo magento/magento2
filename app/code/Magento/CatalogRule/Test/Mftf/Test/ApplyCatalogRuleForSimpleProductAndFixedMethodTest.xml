@@ -27,8 +27,8 @@
 
             <!-- Create Simple Product -->
             <createData entity="_defaultProduct" stepKey="createProduct1">
-            <requiredEntity createDataKey="createCategory"/>
-            <field key="price">56.78</field>
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">56.78</field>
             </createData>
 
             <!-- Update all products to have custom options -->

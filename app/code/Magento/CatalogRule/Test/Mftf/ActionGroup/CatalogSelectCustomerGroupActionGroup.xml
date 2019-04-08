@@ -10,8 +10,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CatalogSelectCustomerGroupActionGroup">
         <arguments>
-            <argument name="customer" defaultValue="NOT LOGGED IN" type="entity"/>
+            <argument name="customerGroupName" defaultValue="NOT LOGGED IN" type="string"/>
         </arguments>
-        <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="{{customer}}" stepKey="selectCustomerGroup"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="{{customerGroupName}}" stepKey="selectCustomerGroup"/>
     </actionGroup>
 </actionGroups>

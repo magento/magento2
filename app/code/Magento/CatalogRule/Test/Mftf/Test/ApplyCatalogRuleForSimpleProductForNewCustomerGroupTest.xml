@@ -68,7 +68,7 @@
 
         <!-- Select custom customer group -->
         <actionGroup ref="CatalogSelectCustomerGroupActionGroup" stepKey="selectCustomCustomerGroup">
-            <argument name="customer" value="$customerGroup.code$"/>
+            <argument name="customerGroupName" value="$customerGroup.code$"/>
         </actionGroup>
 
         <!-- Save and apply the new catalog price rule -->
