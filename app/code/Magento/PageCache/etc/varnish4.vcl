@@ -123,8 +123,8 @@ sub vcl_hash {
         hash_data(server.ip);
     }
 
-    if (req.http.store) {
-        hash_data(req.http.store);
+    if (req.http.Store) {
+        hash_data(req.http.Store);
     }
     if (req.http.Content-Currency) {
         hash_data(req.http.Content-Currency);
