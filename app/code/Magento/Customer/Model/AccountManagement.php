@@ -19,6 +19,7 @@ use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
+use Magento\Directory\Model\AllowedCountries;
 use Magento\Eav\Model\Validator\Attribute\Backend;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -340,6 +341,11 @@ class AccountManagement implements AccountManagementInterface
     private $addressRegistry;
 
     /**
+     * @var AllowedCountries
+     */
+    private $allowedCountriesReader;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -371,6 +377,7 @@ class AccountManagement implements AccountManagementInterface
      * @param CollectionFactory|null $visitorCollectionFactory
      * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @param AddressRegistry|null $addressRegistry
+     * @param AllowedCountries|null $allowedCountriesReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -405,7 +412,8 @@ class AccountManagement implements AccountManagementInterface
         SaveHandlerInterface $saveHandler = null,
         CollectionFactory $visitorCollectionFactory = null,
         SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        AddressRegistry $addressRegistry = null
+        AddressRegistry $addressRegistry = null,
+        AllowedCountries $allowedCountriesReader = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -445,6 +453,8 @@ class AccountManagement implements AccountManagementInterface
             ?: ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
         $this->addressRegistry = $addressRegistry
             ?: ObjectManager::getInstance()->get(AddressRegistry::class);
+        $this->allowedCountriesReader = $allowedCountriesReader
+            ?: ObjectManager::getInstance()->get(AllowedCountries::class);
     }
 
     /**
@@ -882,6 +892,9 @@ class AccountManagement implements AccountManagementInterface
         }
         try {
             foreach ($customerAddresses as $address) {
+                if (!$this->isAddressAllowedForWebsite($address, $customer->getStoreId())) {
+                    continue;
+                }
                 if ($address->getId()) {
                     $newAddress = clone $address;
                     $newAddress->setId(null);
@@ -1571,5 +1584,19 @@ class AccountManagement implements AccountManagementInterface
     private function setIgnoreValidationFlag(Customer $customer)
     {
         $customer->setData('ignore_validation_flag', true);
+    }
+
+    /**
+     * Check is address allowed for store
+     *
+     * @param AddressInterface $address
+     * @param int|null $storeId
+     * @return bool
+     */
+    private function isAddressAllowedForWebsite(AddressInterface $address, $storeId): bool
+    {
+        $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
+
+        return in_array($address->getCountryId(), $allowedCountries);
     }
 }
