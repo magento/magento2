@@ -54,7 +54,7 @@
         <click selector="{{AdminCartPriceRulesFormSection.addNewCondition('1--1')}}" stepKey="clickOnTheAddNewCondition"/>
         <waitForPageLoad stepKey="waitForToggleLoad"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelectDropdown('1--1')}}" userInput="Category" stepKey="selectCategory"/>
-        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="a"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="waitForEllipsis"/>
         <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickOnEllipsis"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1--1')}}" userInput="$$createCategory.id$$" stepKey="fillTotalItemQuantity"/>
         <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
