@@ -9,6 +9,7 @@ use Magento\Deploy\Strategy\DeployStrategyFactory;
 use Magento\Deploy\Process\QueueFactory;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -16,6 +17,7 @@ use Psr\Log\LoggerInterface;
  * Main service for static content deployment
  *
  * Aggregates services to deploy static files, static files bundles, translations and minified templates
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeployStaticContent
 {
@@ -71,6 +73,7 @@ class DeployStaticContent
      * Run deploy procedure
      *
      * @param array $options
+     * @throws LocalizedException
      * @return void
      */
     public function deploy(array $options)
