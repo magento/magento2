@@ -8,8 +8,7 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="StorefrontMessagesSection">
-        <element name="successMessage" type="text" selector=".message-success"/>
-        <element name="errorMessage" type="text" selector=".message-error"/>
+    <section name="StorefrontPaypalReviewOrderShippingSection">
+        <element name="selectShippingMethodByName" type="select" selector="//select[@id='shipping-method']//option[contains(text(),'{{shippingMethod}}')]" parameterized="true"/>
     </section>
 </sections>
