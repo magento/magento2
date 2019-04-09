@@ -65,9 +65,12 @@ class Resolver
         $cacheTag = isset($cache['cache_tag']) ? $cache['cache_tag'] : [];
         $cacheable = isset($cache['cacheable']) ? $cache['cacheable'] : true;
         if (!empty($cacheTag) && $this->request->isGet() && $cacheable) {
-            $cacheTags = [$cacheTag];
+            $cacheTags = [];
             // Resolved value must have cache IDs defined
             $resolvedItemsIds = $this->extractResolvedItemsIds($resolvedValue);
+            if (!empty($resolvedItemsIds)) {
+                $cacheTags = [$cacheTag];
+            }
             foreach ($resolvedItemsIds as $itemId) {
                 $cacheTags[] = $cacheTag . '_' . $itemId;
             }
