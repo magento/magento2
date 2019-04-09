@@ -7,31 +7,39 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservations\Model;
 
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 
 class GetOrderWithBrokenReservation
 {
     /**
-     * @var GetReservationsTotOrder
-     */
-    private $getReservationsTotOrder;
-    /**
      * @var GetOrderInFinalState
      */
     private $getOrderInFinalState;
+    /**
+     * @var GetReservationsList
+     */
+    private $getReservationsList;
+    /**
+     * @var Json
+     */
+    private $json;
 
     /**
      * GetOrderWithBrokenReservation constructor.
-     * @param GetReservationsTotOrder $getReservationsTotOrder
      * @param GetOrderInFinalState $getOrderInFinalState
+     * @param GetReservationsList $getReservationsList
+     * @param Json $json
      */
     public function __construct(
-        GetReservationsTotOrder $getReservationsTotOrder,
-        GetOrderInFinalState $getOrderInFinalState
+        GetOrderInFinalState $getOrderInFinalState,
+        GetReservationsList $getReservationsList,
+        Json $json
     ) {
-        $this->getReservationsTotOrder = $getReservationsTotOrder;
         $this->getOrderInFinalState = $getOrderInFinalState;
+        $this->getReservationsList = $getReservationsList;
+        $this->json = $json;
     }
 
     /**
@@ -40,12 +48,25 @@ class GetOrderWithBrokenReservation
     public function execute(): array
     {
         /** @var array $orderListReservations */
-        $orderListReservations = $this->getReservationsTotOrder->getListReservationsTotOrder();
+        $allReservations = $this->getReservationsList->getListReservationsTotOrder();
 
-        $brokenReservation = array_column($orderListReservations, 'ReservationTot', 'OrderId');
-        $orderIds = array_keys($brokenReservation);
+        $result = [];
+        foreach ($allReservations as $reservation){
+            /** @var array $metadata */
+            $metadata = $this->json->unserialize($reservation['metadata']);
+            $objectId = $metadata['object_id'];
+            if(!array_key_exists($objectId, $result)) {
+                $result[$objectId] = .0;
+            }
+            $result[$objectId] += (float)$reservation['quantity'];
+        }
+        $result = array_filter($result);
+        if(count($result) === 0){
+            return [];
+        }
+
         /** @var Collection $orders */
-        $orders = $this->getOrderInFinalState->execute($orderIds);
+        $orders = $this->getOrderInFinalState->execute(array_keys($result));
         return $orders->getItems();
     }
 }

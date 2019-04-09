@@ -9,7 +9,7 @@ namespace Magento\InventoryReservations\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 
-class GetListReservationsTotOrder
+class GetListReservations
 {
     /**
      * @var ResourceConnection
@@ -33,14 +33,7 @@ class GetListReservationsTotOrder
 
         $qry = $connection
             ->select()
-            ->from($tableName,
-                [
-                    'OrderId' => new \Zend_Db_Expr("CAST(JSON_EXTRACT(metadata, '$.object_id') as UNSIGNED)"),
-                    'ReservationTot' => 'sum(quantity)'
-                ]
-            )
-            ->group('OrderId')
-            ->having('ReservationTot != ?', 0);
+            ->from($tableName);
         return $connection->fetchAll($qry);
     }
 }
