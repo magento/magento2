@@ -39,11 +39,15 @@
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.websites}}" stepKey="selectWebsites"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{CartPriceRuleConditionAppliedForSubtotal.customerGroups}}]" stepKey="selectCustomerGroup"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.coupon_type}}" stepKey="selectCouponType"/>
+
+        <!-- Expand the conditions section -->
         <scrollTo selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="scrollToConditionsHeader"/>
-        <actionGroup ref="AdminCreateCartPriceRuleConditionsSectionSubtotalActionGroup" stepKey="createActiveCartPriceRuleConditionsSubtotalSection">
-            <argument name="ruleName" value="CartPriceRuleConditionAppliedForSubtotal"/>
-            <argument name="condition1" value="Subtotal"/>
-        </actionGroup>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="clickToExpandConditions"/>
+        <click selector="{{AdminCartPriceRulesFormSection.newCondition}}" stepKey="clickNewCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="Subtotal" stepKey="selectCondition1"/>
+        <waitForPageLoad stepKey="waitForConditionLoad"/>
+        <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.subtotal}}" stepKey="fillSubtotalParameter"/>
         <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
             <argument name="ruleName" value="CartPriceRuleConditionAppliedForSubtotal"/>
         </actionGroup>
@@ -68,7 +72,7 @@
         <seeInField selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.websites}}" stepKey="seeWebsites"/>
         <seeInField selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.customerGroups}}" stepKey="seeCustomerGroup"/>
         <seeInField selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.coupon_type}}" stepKey="seeCouponType"/>
-        <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="clickToExpandConditions"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="clickToExpandConditions2"/>
         <seeInField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.subtotal}}" stepKey="seeSubtotalParameter"/>
         <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeader}}" visible="true" stepKey="clickExpandActions"/>
         <see selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.simple_action}}" stepKey="seeActionApplyType"/>

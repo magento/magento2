@@ -24,19 +24,26 @@
             <actionGroup ref="AdminCreateCartPriceRuleRuleInfoSectionActionGroup" stepKey="createActiveCartPriceRuleRuleInfoSection">
                 <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
             </actionGroup>
-            <!--Fill values for Condition Section-->
-            <actionGroup ref="AdminCreateCartPriceRuleConditionsSectionSubtotalActionGroup" stepKey="createActiveCartPriceRuleConditionsSubtotalSection">
-                <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
-                <argument name="condition1" value="Subtotal"/>
-            </actionGroup>
-            <actionGroup ref="AdminCreateCartPriceRuleConditionsSectionShippingCountryActionGroup" stepKey="createActiveCartPriceRuleConditionsShippingCountrySection">
-                <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
-                <argument name="condition2" value="Shipping Country"/>
-            </actionGroup>
-            <actionGroup ref="AdminCreateCartPriceRuleConditionsSectionShippingPostcodeActionGroup" stepKey="createActiveCartPriceRuleConditionsShippingPostcodeSection">
-                <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
-                <argument name="condition3" value="Shipping Postcode"/>
-            </actionGroup>
+            <!-- Expand the conditions section -->
+            <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="clickToExpandConditions"/>
+            <!-- Fill condition 1: Subtotal -->
+            <click selector="{{AdminCartPriceRulesFormSection.newCondition}}" stepKey="clickNewCondition1"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="Subtotal" stepKey="selectCondition1"/>
+            <waitForPageLoad stepKey="waitForConditionLoad1"/>
+            <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickEllipsis1"/>
+            <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="{{ActiveSalesRuleWithComplexConditions.subtotal}}" stepKey="fillSubtotalParameter1"/>
+            <!-- Fill condition 2: Country -->
+            <click selector="{{AdminCartPriceRulesFormSection.newCondition}}" stepKey="clickNewCondition2"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="Shipping Country" stepKey="selectCondition2"/>
+            <waitForPageLoad stepKey="waitForConditionLoad2"/>
+            <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickEllipsis2"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.selectCountryDropdown}}" userInput="{{ActiveSalesRuleWithComplexConditions.shippingCountry}}" stepKey="fillShippingCountryParameter2"/>
+            <!-- Fill condition 3: Shipping Postcode-->
+            <click selector="{{AdminCartPriceRulesFormSection.newCondition}}" stepKey="clickNewCondition3"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="Shipping Postcode" stepKey="selectCondition3"/>
+            <waitForPageLoad stepKey="waitForConditionLoad3"/>
+            <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickEllipsis3"/>
+            <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--3')}}" userInput="{{ActiveSalesRuleWithComplexConditions.shippingPostcode}}" stepKey="fillShippingPostcodeParameter"/>
             <!--Fill values for Action Section-->
             <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
                 <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>

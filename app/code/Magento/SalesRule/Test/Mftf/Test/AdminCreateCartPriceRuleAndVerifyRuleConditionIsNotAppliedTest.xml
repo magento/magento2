@@ -40,10 +40,14 @@
         <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{CartPriceRuleConditionNotApplied.customerGroups}}]" stepKey="selectCustomerGroup"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionNotApplied.coupon_type}}" stepKey="selectCouponType"/>
         <scrollTo selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="scrollToConditionsHeader"/>
-        <actionGroup ref="AdminCreateCartPriceRuleConditionsSectionTotalItemQuantityActionGroup" stepKey="createActiveCartPriceRuleConditionsTotalItemQuantitySection">
-            <argument name="ruleName" value="CartPriceRuleConditionNotApplied"/>
-            <argument name="condition4" value="Total Items Quantity"/>
-        </actionGroup>
+
+        <!-- Fill condition 1: Total Items Quantity -->
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="expandConditions"/>
+        <click selector="{{AdminCartPriceRulesFormSection.newCondition}}" stepKey="clickNewCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="Total Items Quantity" stepKey="selectCondition"/>
+        <waitForPageLoad stepKey="waitForConditionLoad"/>
+        <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="{{CartPriceRuleConditionNotApplied.totalItemQuantity}}" stepKey="fillTotalItemQuantity"/>
         <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
             <argument name="ruleName" value="CartPriceRuleConditionNotApplied"/>
         </actionGroup>
