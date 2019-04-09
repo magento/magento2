@@ -35,6 +35,10 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="ApiSimpleProductWithSpecCharInName" type="product" extends="ApiSimpleProduct">
+        <data key="name">Pursuit Lumaflex&#38;trade; Tone Band</data>
+        <data key="sku" unique="suffix">x&#38;trade;</data>
+    </entity>
     <entity name="ApiSimpleProductWithCustomPrice" type="product" extends="ApiSimpleProduct">
         <data key="price">100</data>
     </entity>
@@ -449,6 +453,16 @@
     <entity name="productWithOptionRadiobutton" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionRadiobuttonWithTwoFixedOptions</requiredEntity>
+    </entity>
+    <entity name="productWithCustomOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionDropDown2</requiredEntity>
+    </entity>
+    <entity name="productWithFixedOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionRadioButton2</requiredEntity>
     </entity>
     <entity name="productWithOptions2" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
@@ -1011,6 +1025,14 @@
         <data key="is_in_stock">1</data>
         <data key="tax_class_id">2</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithTwoOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionMultiSelect</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionPercentPriceDropDown</requiredEntity>
     </entity>
     <entity name="SimpleProductWithDescription" type="product">
         <data key="sku" unique="suffix">productwithdescription</data>

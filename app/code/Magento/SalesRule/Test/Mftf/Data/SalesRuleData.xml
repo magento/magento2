@@ -193,4 +193,52 @@
     <entity name="SalesRuleNoCouponWithFixedDiscount" extends="ApiCartRule">
         <data key="simple_action">by_fixed</data>
     </entity>
+    <entity name="ActiveSalesRuleWithPercentPriceDiscountCoupon">
+        <data key="name" unique="suffix">Cart Price Rule with Specific Coupon</data>
+        <data key="description">Description for Cart Price Rule</data>
+        <data key="is_active">Yes</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN'</data>
+        <data key="coupon_type">Specific Coupon</data>
+        <data key="coupon_code" unique="suffix">123-abc-ABC-987</data>
+        <data key="apply">Percent of product price discount</data>
+        <data key="discountAmount">50</data>
+        <data key="defaultRuleLabelAllStoreViews">Cart Price Rule with Specific Coupon</data>
+        <data key="defaultStoreView">Cart Price Rule with Specific Coupon</data>
+    </entity>
+    <entity name="ActiveSalesRuleWithComplexConditions">
+        <data key="name" unique="suffix">Cart Price Rule with complex conditions</data>
+        <data key="description">Cart Price Rule with complex conditions</data>
+        <data key="is_active">Yes</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
+        <data key="coupon_type">Specific Coupon</data>
+        <data key="coupon_code" unique="suffix">123-abc-ABC-987</data>
+        <data key="uses_per_coupon">13</data>
+        <data key="uses_per_customer">63</data>
+        <data key="sort_order">1</data>
+        <data key="is_rss">Yes</data>
+        <data key="subtotal">300</data>
+        <data key="shippingCountry">US</data>
+        <data key="shippingPostcode">123456789a</data>
+        <data key="simple_action">Percent of product price discount</data>
+        <data key="discount_amount">50</data>
+        <data key="maximumQtyDiscount">0</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">Yes</data>
+        <data key="stop_rules_processing">Yes</data>
+        <data key="simple_free_shipping">For matching items only</data>
+        <data key="defaultRuleLabelAllStoreViews">Cart Price Rule with complex conditions</data>
+        <data key="defaultStoreView">Cart Price Rule with complex conditions</data>
+    </entity>
+    <entity name="InactiveSalesRule">
+        <data key="name" unique="suffix">Inactive Cart Price Rule</data>
+        <data key="description">Inactive Cart Price Rule</data>
+        <data key="is_active">0</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN'</data>
+        <data key="coupon_type">No Coupon</data>
+        <data key="apply">Percent of product price discount</data>
+        <data key="discountAmount">50</data>
+    </entity>
 </entities>
