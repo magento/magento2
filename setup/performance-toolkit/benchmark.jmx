@@ -39866,13 +39866,13 @@ vars.putObject("randomIntGenerator", random);
       </BeanShellSampler>
       <hashTree/>
     
-    <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Prepare Simple Product Data" enabled="true">
+    <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Prepare Configurable Product Data" enabled="true">
       <stringProp name="BeanShellSampler.query">
 import java.util.Random;
 
 Random random = vars.getObject("randomIntGenerator");
-number = random.nextInt(props.get("simple_products_list").size());
-product = props.get("simple_products_list").get(number);
+number = random.nextInt(props.get("configurable_products_list").size());
+product = props.get("configurable_products_list").get(number);
 
 vars.put("product_url_key", product.get("url_key"));
 vars.put("product_id", product.get("id"));
@@ -39883,7 +39883,7 @@ vars.put("product_sku", product.get("sku"));
       <stringProp name="BeanShellSampler.filename"/>
       <stringProp name="BeanShellSampler.parameters"/>
       <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
-    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/product_browsing_and_adding_items_to_the_cart/simple_products_setup.jmx</stringProp></BeanShellSampler>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/product_browsing_and_adding_items_to_the_cart/configurable_products_setup.jmx</stringProp></BeanShellSampler>
     <hashTree/>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Product Search by product_name" enabled="true">
@@ -40782,6 +40782,239 @@ vars.put("product_sku", product.get("sku"));
       <hashTree/>
     </hashTree>
   
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update Simple Product qty In Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  updateCartItems(input: {\n    cart_id: \"${quote_id}\"\n    cart_items: [\n      {\n        cart_item_id: ${item_id}\n        quantity: 5\n      }\n    ]\n  }) {\n    cart {\n      items {\n        id\n        qty\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/update_simple_product_qty_in_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="664196114">{"data":{"updateCartItems":{"cart":{"items":[{"id":"${item_id}","qty":5}]}}}}</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">8</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Set Billing Address On Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  setBillingAddressOnCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      billing_address: {\n        address: {\n          firstname: \"test firstname\"\n          lastname: \"test lastname\"\n          company: \"test company\"\n          street: [\"test street 1\", \"test street 2\"]\n          city: \"test city\"\n          region: \"test region\"\n          postcode: \"887766\"\n          country_code: \"US\"\n          telephone: \"88776655\"\n          save_in_address_book: false\n        }\n      }\n    }\n  ) {\n    cart {\n      billing_address {\n        firstname\n        lastname\n        company\n        street\n        city\n        postcode\n        telephone\n        country {\n          code\n          label\n        }\n        address_type\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/set_billing_address_on_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="1147076914">{"data":{"setBillingAddressOnCart":{"cart":{"billing_address":{"firstname":"test firstname","lastname":"test lastname","company":"test company","street":["test street 1","test street 2"],"city":"test city","postcode":"887766","telephone":"88776655","country":{"code":"US","label":"US"},"address_type":"BILLING"}}}}}</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">8</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Set Shipping Address On Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  setShippingAddressesOnCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      shipping_addresses: [\n        {\n          address: {\n            firstname: \"test firstname\"\n            lastname: \"test lastname\"\n            company: \"test company\"\n            street: [\"test street 1\", \"test street 2\"]\n            city: \"test city\"\n            region: \"test region\"\n            postcode: \"887766\"\n            country_code: \"US\"\n            telephone: \"88776655\"\n            save_in_address_book: false\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      shipping_addresses {\n        firstname\n        lastname\n        company\n        street\n        city\n        postcode\n        telephone\n        country {\n          code\n          label\n        }\n        address_type\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/set_shipping_address_on_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="-1671866339">{"data":{"setShippingAddressesOnCart":{"cart":{"shipping_addresses":[{"firstname":"test firstname","lastname":"test lastname","company":"test company","street":["test street 1","test street 2"],"city":"test city","postcode":"887766","telephone":"88776655","country":{"code":"US","label":"US"},"address_type":"SHIPPING"}]}}}}</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">8</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Set Payment Method On Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  setPaymentMethodOnCart(input: {\n    cart_id: \"${quote_id}\", \n    payment_method: {\n      code: \"checkmo\"\n    }\n  }) {\n    cart {\n      selected_payment_method {\n        code\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/set_payment_method_on_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="-1830199373">{"data":{"setPaymentMethodOnCart":{"cart":{"selected_payment_method":{"code":"checkmo"}}}}}</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">8</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Current Shipping Address" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"{\n  cart(cart_id: \"${quote_id}\") {\n    shipping_addresses {\n      address_id\n      }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/get_current_shipping_address.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract item id" enabled="true">
+        <stringProp name="VAR">address_id</stringProp>
+        <stringProp name="JSONPATH">$.data.cart.shipping_addresses[0].address_id</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Set Shipping Method On Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  setShippingMethodsOnCart(input: \n    {\n      cart_id: \"${quote_id}\", \n      shipping_methods: [{\n        cart_address_id: ${address_id}\n        carrier_code: \"flatrate\"\n        method_code: \"flatrate\"\n      }]\n    }) {\n    cart {\n      shipping_addresses {\n        selected_shipping_method {\n          carrier_code\n          method_code\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/set_shipping_method_on_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="644143859">{"data":{"setShippingMethodsOnCart":{"cart":{"shipping_addresses":[{"selected_shipping_method":{"carrier_code":"flatrate","method_code":"flatrate"}}]}}}}</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">8</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Remove Simple Product From Cart" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -41067,6 +41300,239 @@ vars.put("product_sku", product.get("sku"));
         <stringProp name="VARIABLE"/>
         <stringProp name="SUBJECT">BODY</stringProp>
       </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update Configurable Product qty In Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  updateCartItems(input: {\n    cart_id: \"${quote_id}\"\n    cart_items: [\n      {\n        cart_item_id: ${item_id}\n        quantity: 5\n      }\n    ]\n  }) {\n    cart {\n      items {\n        id\n        qty\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/update_configurable_product_qty_in_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="664196114">{"data":{"updateCartItems":{"cart":{"items":[{"id":"${item_id}","qty":5}]}}}}</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">8</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Set Billing Address On Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  setBillingAddressOnCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      billing_address: {\n        address: {\n          firstname: \"test firstname\"\n          lastname: \"test lastname\"\n          company: \"test company\"\n          street: [\"test street 1\", \"test street 2\"]\n          city: \"test city\"\n          region: \"test region\"\n          postcode: \"887766\"\n          country_code: \"US\"\n          telephone: \"88776655\"\n          save_in_address_book: false\n        }\n      }\n    }\n  ) {\n    cart {\n      billing_address {\n        firstname\n        lastname\n        company\n        street\n        city\n        postcode\n        telephone\n        country {\n          code\n          label\n        }\n        address_type\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/set_billing_address_on_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="1147076914">{"data":{"setBillingAddressOnCart":{"cart":{"billing_address":{"firstname":"test firstname","lastname":"test lastname","company":"test company","street":["test street 1","test street 2"],"city":"test city","postcode":"887766","telephone":"88776655","country":{"code":"US","label":"US"},"address_type":"BILLING"}}}}}</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">8</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Set Shipping Address On Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  setShippingAddressesOnCart(\n    input: {\n      cart_id: \"${quote_id}\"\n      shipping_addresses: [\n        {\n          address: {\n            firstname: \"test firstname\"\n            lastname: \"test lastname\"\n            company: \"test company\"\n            street: [\"test street 1\", \"test street 2\"]\n            city: \"test city\"\n            region: \"test region\"\n            postcode: \"887766\"\n            country_code: \"US\"\n            telephone: \"88776655\"\n            save_in_address_book: false\n          }\n        }\n      ]\n    }\n  ) {\n    cart {\n      shipping_addresses {\n        firstname\n        lastname\n        company\n        street\n        city\n        postcode\n        telephone\n        country {\n          code\n          label\n        }\n        address_type\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/set_shipping_address_on_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="-1671866339">{"data":{"setShippingAddressesOnCart":{"cart":{"shipping_addresses":[{"firstname":"test firstname","lastname":"test lastname","company":"test company","street":["test street 1","test street 2"],"city":"test city","postcode":"887766","telephone":"88776655","country":{"code":"US","label":"US"},"address_type":"SHIPPING"}]}}}}</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">8</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Set Payment Method On Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  setPaymentMethodOnCart(input: {\n    cart_id: \"${quote_id}\", \n    payment_method: {\n      code: \"checkmo\"\n    }\n  }) {\n    cart {\n      selected_payment_method {\n        code\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/set_payment_method_on_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="-1830199373">{"data":{"setPaymentMethodOnCart":{"cart":{"selected_payment_method":{"code":"checkmo"}}}}}</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">8</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Current Shipping Address" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"{\n  cart(cart_id: \"${quote_id}\") {\n    shipping_addresses {\n      address_id\n      }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/get_current_shipping_address.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract item id" enabled="true">
+        <stringProp name="VAR">address_id</stringProp>
+        <stringProp name="JSONPATH">$.data.cart.shipping_addresses[0].address_id</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Set Shipping Method On Cart" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"mutation {\n  setShippingMethodsOnCart(input: \n    {\n      cart_id: \"${quote_id}\", \n      shipping_methods: [{\n        cart_address_id: ${address_id}\n        carrier_code: \"flatrate\"\n        method_code: \"flatrate\"\n      }]\n    }) {\n    cart {\n      shipping_addresses {\n        selected_shipping_method {\n          carrier_code\n          method_code\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port">${graphql_port_number}</stringProp>
+      <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+      <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/set_shipping_method_on_cart.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="644143859">{"data":{"setShippingMethodsOnCart":{"cart":{"shipping_addresses":[{"selected_shipping_method":{"carrier_code":"flatrate","method_code":"flatrate"}}]}}}}</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">8</intProp>
+      </ResponseAssertion>
       <hashTree/>
     </hashTree>
   
