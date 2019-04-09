@@ -130,8 +130,8 @@ class Client
         $url = $this->getEndpointUrl();
         $requestArray = [
             'query' => $query,
-            'variables' => empty($variables) ? $variables : null,
-            'operationName' => empty($operationName) ? $operationName : null
+            'variables' => $variables ? $this->json->jsonEncode($variables) : null,
+            'operationName' => !empty($operationName) ? $operationName : null
         ];
 
         $responseHeader = $this->curlClient->getHttpHeaders($url, $requestArray, $headers);

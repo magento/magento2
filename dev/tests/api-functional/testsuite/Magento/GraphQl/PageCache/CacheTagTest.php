@@ -74,4 +74,64 @@ QUERY;
             );
         }
     }
+
+    /**
+     * Tests if Magento cache tags for categories are generated properly
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testCacheTagFromResponseHeaderForCategoriesWithProduct()
+    {
+        $productSku = 'simple333';
+        $categoryId ='333';
+        $query
+            = <<<'QUERY'
+query GetCategoryQuery($id: Int!, $pageSize: Int!, $currentPage: Int!) {
+        category(id: $id) {
+            id
+            description
+            name
+            product_count
+            products(pageSize: $pageSize, currentPage: $currentPage) {
+                items {
+                    id
+                    name
+                    url_key
+                }
+                total_count
+            }
+        }
+    }
+QUERY;
+        $variables =[
+            'id' => 333,
+            'pageSize'=> 10,
+            'currentPage' => 1
+        ];
+
+        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($query, $variables, '', []);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        /** @var Product $product */
+        $product =$productRepository->get($productSku,false,null, true);
+
+        /** cache-debug header value should be a MISS when category is loaded first time */
+        preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseMissHeaders, $matchesMiss);
+        $this->assertEquals('MISS', rtrim($matchesMiss[1],"\r"));
+
+        /** checks to see if the X-Magento-Tags for category is displayed correctly */
+        preg_match('/X-Magento-Tags: (.*?)\n/', $responseMissHeaders, $headerCacheTags);
+        $actualCacheTags = explode(',', rtrim($headerCacheTags[1],"\r"));
+        $expectedCacheTags=['cat_c','cat_c_' . $categoryId,'cat_p','cat_p_' . $product->getId(),'FPC'];
+        foreach(array_keys($actualCacheTags) as $key){
+            $this->assertEquals($expectedCacheTags[$key], $actualCacheTags[$key]
+            );
+        }
+        /** cache-debug header value should be MISS after  updating child-product and reloading the category */
+        $product->setPrice(15);
+        $product->save();
+        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($query, $variables, '', []);
+        preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseMissHeaders, $matchesMiss);
+        $this->assertEquals('MISS', rtrim($matchesMiss[1],"\r"));
+    }
 }

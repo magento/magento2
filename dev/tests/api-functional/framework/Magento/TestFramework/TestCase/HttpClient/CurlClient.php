@@ -32,6 +32,14 @@ class CurlClient
         return $resp["body"];
     }
 
+    /**
+     * Perform a HTTP GET request and returns just the response headers
+     *
+     * @param $url
+     * @param array $data
+     * @param array $headers
+     * @return mixed
+     */
     public function getHttpHeaders($url, $data = [], $headers = [])
     {
         if (!empty($data)) {
