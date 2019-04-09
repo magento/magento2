@@ -171,8 +171,7 @@ define([
                     if (data.files.length > this.options.maxImageUploadCount) {
                         $('body').notification('clear').notification('add', {
                             error: true,
-                            message: $.mage.__('You can\'t upload more than ' + this.options.maxImageUploadCount +
-                                ' images in one time'),
+                            message: $.mage.__('You can\'t upload more than {count} images in one time').replace('{count}', this.options.maxImageUploadCount),
 
                             /**
                              * @param {*} message

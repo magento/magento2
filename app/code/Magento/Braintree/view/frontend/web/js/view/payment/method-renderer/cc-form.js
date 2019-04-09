@@ -78,7 +78,7 @@ define(
                      * @param {Object} response
                      */
                     onError: function (response) {
-                        braintree.showError($t('Payment ' + this.getTitle() + ' can\'t be initialized'));
+                        braintree.showError($t('Payment {title} can\'t be initialized').replace('{title}', this.getTitle()));
                         this.isPlaceOrderActionAllowed(true);
                         throw response.message;
                     },

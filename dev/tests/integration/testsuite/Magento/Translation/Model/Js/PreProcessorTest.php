@@ -125,22 +125,54 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
                 <<<EOT
                 title: $.mage.__(
                     'Original value for Magento_Store module'
-                )
+                ),
 EOT
                 ,
                 <<<EOT
-                title: 'Translated value for Magento_Store module in en_AU'
+                title: 'Translated value for Magento_Store module in en_AU',
 EOT
             ],
             [
                 <<<EOT
                 title: \$t(
                     'Original value for Magento_Store module'
+                );
+EOT
+                ,
+                <<<EOT
+                title: 'Translated value for Magento_Store module in en_AU';
+EOT
+            ],
+            [
+                <<<EOT
+                $.mage.__('The maximum you may purchase is %1.').replace('%1', params.maxAllowed);
+EOT
+                ,
+                <<<EOT
+                $.mage.__('The maximum you may purchase is %1.').replace('%1', params.maxAllowed);
+EOT
+            ],
+            [
+                <<<EOT
+                \$t("text double quote");
+                \$t('text "some');
+                \$t('Payment ' + this.getTitle() + ' can\'t be initialized')
+                \$t.__('The maximum you may purchase is %1.').replace('%1', params.maxAllowed);
+                \$t(
+                    'Set unique country-state combinations within the same fixed product tax. ' +
+                    'Verify the combinations and try again.'
                 )
 EOT
                 ,
                 <<<EOT
-                title: 'Translated value for Magento_Store module in en_AU'
+                'text double quote';
+                'text "some';
+                \$t('Payment ' + this.getTitle() + ' can\'t be initialized')
+                \$t.__('The maximum you may purchase is %1.').replace('%1', params.maxAllowed);
+                \$t(
+                    'Set unique country-state combinations within the same fixed product tax. ' +
+                    'Verify the combinations and try again.'
+                )
 EOT
             ],
         ];

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Translation\Test\Unit\Model\Js;
 
 use Magento\Translation\Model\Js\PreProcessor;
@@ -10,6 +12,9 @@ use Magento\Translation\Model\Js\Config;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\TranslateInterface;
 
+/**
+ * Class with unit tests for PreProcessor
+ */
 class PreProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
