@@ -74,6 +74,10 @@ class ProductScopeRewriteGenerator
      * @var CategoryRepositoryInterface
      */
     private $categoryRepository;
+    /**
+     * @var Product\RedirectUrlRewritesGenerator|Product\RedirectUrlRewritesGenerator
+     */
+    private $redirectUrlRewritesGenerator;
 
     /**
      * @param StoreViewService $storeViewService
@@ -86,6 +90,7 @@ class ProductScopeRewriteGenerator
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param CategoryRepositoryInterface|null $categoryRepository
      * @param ScopeConfigInterface|null $config
+     * @param Product\RedirectUrlRewritesGenerator $redirectUrlRewritesGenerator
      */
     public function __construct(
         StoreViewService $storeViewService,
@@ -97,7 +102,8 @@ class ProductScopeRewriteGenerator
         AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator,
         MergeDataProviderFactory $mergeDataProviderFactory = null,
         CategoryRepositoryInterface $categoryRepository = null,
-        ScopeConfigInterface $config = null
+        ScopeConfigInterface $config = null,
+        \Magento\CatalogUrlRewrite\Model\Product\RedirectUrlRewritesGenerator $redirectUrlRewritesGenerator
     ) {
         $this->storeViewService = $storeViewService;
         $this->storeManager = $storeManager;
@@ -113,6 +119,7 @@ class ProductScopeRewriteGenerator
         $this->categoryRepository = $categoryRepository ?:
             ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
         $this->config = $config ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->redirectUrlRewritesGenerator = $redirectUrlRewritesGenerator;
     }
 
     /**
@@ -183,33 +190,34 @@ class ProductScopeRewriteGenerator
             $this->canonicalUrlRewriteGenerator->generate($storeId, $product)
         );
 
-        if ($this->isCategoryRewritesEnabled($storeId)) {
+        if (!$this->isCategoryRewritesEnabled($storeId) && $product->getData('save_rewrites_history')) {
+            $mergeDataProvider->merge(
+                $this->redirectUrlRewritesGenerator->generate($storeId, $product, $productCategories)
+            );
+        } else {
             $mergeDataProvider->merge(
                 $this->categoriesUrlRewriteGenerator->generate($storeId, $product, $productCategories)
             );
-
             $mergeDataProvider->merge(
                 $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
             );
+            $mergeDataProvider->merge(
+                $this->currentUrlRewritesRegenerator->generate(
+                    $storeId,
+                    $product,
+                    $productCategories,
+                    $rootCategoryId
+                )
+            );
+            $mergeDataProvider->merge(
+                $this->currentUrlRewritesRegenerator->generateAnchor(
+                    $storeId,
+                    $product,
+                    $productCategories,
+                    $rootCategoryId
+                )
+            );
         }
-
-        $mergeDataProvider->merge(
-            $this->currentUrlRewritesRegenerator->generate(
-                $storeId,
-                $product,
-                $productCategories,
-                $rootCategoryId
-            )
-        );
-
-        $mergeDataProvider->merge(
-            $url = $this->currentUrlRewritesRegenerator->generateAnchor(
-                $storeId,
-                $product,
-                $productCategories,
-                $rootCategoryId
-            )
-        );
 
         return $mergeDataProvider->getData();
     }
