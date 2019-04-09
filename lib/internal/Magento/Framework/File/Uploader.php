@@ -207,12 +207,6 @@ class Uploader
         $this->_result = false;
         $destinationFile = $destinationFolder;
         $fileName = isset($newFileName) ? $newFileName : $this->_file['name'];
-        $basePath = str_replace('/tmp/','/',$destinationFolder);
-        $tmpFileName = $this->_file['name'];
-        while(file_exists($basePath.'/'.$tmpFileName)) {
-            $tmpFileName = pathinfo($tmpFileName, PATHINFO_FILENAME)."_1.".pathinfo($tmpFileName, PATHINFO_EXTENSION);
-        }
-        $fileName = $tmpFileName;
         $fileName = static::getCorrectFileName($fileName);
         if ($this->_enableFilesDispersion) {
             $fileName = $this->correctFileNameCase($fileName);
@@ -610,10 +604,12 @@ class Uploader
     public static function getNewFileName($destinationFile)
     {
         $fileInfo = pathinfo($destinationFile);
-        if (file_exists($destinationFile)) {
+        $destinationBaseFile = str_replace('/tmp/','/',$destinationFile);
+        if (file_exists($destinationFile) || file_exists($destinationBaseFile)) {
             $index = 1;
             $baseName = $fileInfo['filename'] . '.' . $fileInfo['extension'];
-            while (file_exists($fileInfo['dirname'] . '/' . $baseName)) {
+            $dirBasename = str_replace('/tmp/','/',$fileInfo['dirname']);
+            while (file_exists($fileInfo['dirname'] . '/' . $baseName) || file_exists($dirBasename . '/' . $baseName)) {
                 $baseName = $fileInfo['filename'] . '_' . $index . '.' . $fileInfo['extension'];
                 $index++;
             }
