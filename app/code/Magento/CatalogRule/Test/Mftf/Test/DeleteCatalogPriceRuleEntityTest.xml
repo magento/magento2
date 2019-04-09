@@ -94,7 +94,7 @@
 
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer1"/>
-            <createData entity="CatalogRuleByFixed" stepKey="createCatalogRule1"/>
+            <createData entity="ActiveCatalogPriceRuleWithConditions" stepKey="createCatalogRule1"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
 
             <!-- Create the configurable product based on the data in the /data folder -->
