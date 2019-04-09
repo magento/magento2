@@ -13,6 +13,9 @@ use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 
+/**
+ * Test for adding products to cart
+ */
 class AddProductToCartTest extends GraphQlAbstract
 {
     /**

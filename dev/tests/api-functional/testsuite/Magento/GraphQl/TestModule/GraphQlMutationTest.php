@@ -53,6 +53,6 @@ mutation {
 }
 MUTATION;
 
-        $this->graphQlQuery($query, [], '', [], 'GET');
+        $this->graphQlQuery($query, [], '', []);
     }
 }

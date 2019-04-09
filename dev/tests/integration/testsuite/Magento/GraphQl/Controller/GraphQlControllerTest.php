@@ -265,12 +265,4 @@ QUERY;
             }
         }
     }
-
-    /**
-     * teardown
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-    }
 }
