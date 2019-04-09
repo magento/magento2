@@ -4136,7 +4136,7 @@ Tests:
   * Moved Multishipping functionality to newly created module Multishipping
   * Extracted Product duplication behavior from Product model to Product\Copier model
   * Replaced event "catalog_model_product_duplicate" with composite Product\Copier model
-  * Replaced event "catalog_product_prepare_save" with controller product initialization helper that can be customozed via plugins
+  * Replaced event "catalog_product_prepare_save" with controller product initialization helper that can be customized via plugins
   * Consolidated Authorize.Net functionality in single module Authorizenet
   * Eliminated dependency of Sales module on Shipping and Usa modules
   * Eliminated dependency of Shipping module on Customer module
