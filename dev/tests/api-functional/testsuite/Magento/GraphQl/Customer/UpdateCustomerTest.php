@@ -13,6 +13,9 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Tests for update customer
+ */
 class UpdateCustomerTest extends GraphQlAbstract
 {
     /**
@@ -87,7 +90,12 @@ mutation {
     }
 }
 QUERY;
-        $response = $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
 
         $this->assertEquals($newPrefix, $response['updateCustomer']['customer']['prefix']);
         $this->assertEquals($newFirstname, $response['updateCustomer']['customer']['firstname']);

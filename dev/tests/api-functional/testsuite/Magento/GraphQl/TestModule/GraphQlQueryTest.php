@@ -73,7 +73,7 @@ QUERY;
 }
 QUERY;
 
-        $response = $this->graphQlQuery($query, [], '', [], 'GET');
+        $response = $this->graphQlQuery($query, [], '', []);
 
         $this->assertArrayHasKey('testItem', $response);
     }
@@ -83,8 +83,9 @@ QUERY;
         $id = 1;
 
         $query = <<<QUERY
+query getTestItem(\$id: Int!)
 {
-    testItem(\$id: Int!)
+    testItem(id: \$id)
     {
         item_id
         name
@@ -95,7 +96,7 @@ QUERY;
             "id" => $id
         ];
 
-        $response = $this->graphQlQuery($query, $variables, '', [], 'GET');
+        $response = $this->graphQlQuery($query, $variables, '', []);
 
         $this->assertArrayHasKey('testItem', $response);
     }

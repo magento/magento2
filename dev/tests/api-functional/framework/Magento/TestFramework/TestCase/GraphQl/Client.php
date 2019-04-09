@@ -81,9 +81,10 @@ class Client
         $url = $this->getEndpointUrl();
         $requestArray = [
             'query' => $query,
-            'variables' => empty($variables) ? $variables : null,
-            'operationName' => empty($operationName) ? $operationName : null
+            'variables' => $variables ? $this->json->jsonEncode($variables) : null,
+            'operationName' => $operationName ?? null
         ];
+        array_filter($requestArray);
 
         $responseBody = $this->curlClient->get($url, $requestArray, $headers);
         return $this->processResponse($responseBody);
@@ -101,12 +102,14 @@ class Client
         $responseArray = $this->json->jsonDecode($response);
 
         if (!is_array($responseArray)) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unknown GraphQL response body: ' . $response);
         }
 
         $this->processErrors($responseArray);
 
         if (!isset($responseArray['data'])) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unknown GraphQL response body: ' . $response);
         }
 
@@ -164,6 +167,7 @@ class Client
                     $responseBodyArray
                 );
             }
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('GraphQL responded with an unknown error: ' . json_encode($responseBodyArray));
         }
     }
