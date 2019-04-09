@@ -180,11 +180,13 @@ class Css implements ProcessorInterface
      */
     private function collectFileMap($fileName)
     {
-        $result = isset($this->map[$fileName]) ? $this->map[$fileName] : [];
+        $result = [$this->map[$fileName] ?? []];
+
         foreach ($result as $path) {
-            $result = array_merge($result, $this->collectFileMap($path));
+            $result[] = $this->collectFileMap($path);
         }
-        return array_unique($result);
+
+        return array_unique(array_merge(...$result));
     }
 
     /**
