@@ -8,6 +8,9 @@ namespace Magento\Framework\Filter\Test\Unit;
 
 use Magento\Store\Model\Store;
 
+/**
+ * Template Filter test.
+ */
 class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
