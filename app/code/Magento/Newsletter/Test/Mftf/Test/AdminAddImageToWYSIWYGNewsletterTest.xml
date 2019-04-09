@@ -51,9 +51,7 @@
         <waitForPageLoad stepKey="waitForPageLoad11"/>
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview"/>
         <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
-        <executeJS function="document.getElementById('preview_iframe').sandbox.add('allow-scripts')" stepKey="addSandboxValue"/>
-        <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe" />
-        <waitForPageLoad stepKey="waitForPageLoad9"/>
+        <actionGroup ref="SwitchToIframeActionGroup" stepKey="switchToIframe"/>
         <!--Verify that the text and image are present-->
         <seeElement selector="{{StorefrontNewsletterSection.mediaDescription}}" stepKey="assertMediaDescription"/>
         <seeElementInDOM selector="{{StorefrontNewsletterSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource"/>

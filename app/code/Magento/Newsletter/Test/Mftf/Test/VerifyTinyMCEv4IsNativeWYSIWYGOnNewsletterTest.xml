@@ -42,9 +42,7 @@
         <waitForPageLoad stepKey="waitForPageLoad3" />
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview" />
         <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
-        <executeJS function="document.getElementById('preview_iframe').sandbox.add('allow-scripts')" stepKey="addSandboxValue"/>
-        <wait time="30" stepKey="waitBeforeSwitchToIframe"/>
-        <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe" />
+        <actionGroup ref="SwitchToIframeActionGroup" stepKey="switchToIframe"/>
         <waitForText userInput="Hello World From Newsletter Template!" stepKey="waitForPageLoad2"/>
         <see userInput="Hello World From Newsletter Template!" stepKey="seeContent" />
         <closeTab stepKey="closeTab"/>
