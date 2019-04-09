@@ -349,27 +349,19 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture Magento/Backend/_files/allowed_countries_fr.php
      * @return void
      */
     public function testAssignCustomerWithAddressChangeWithNotAllowedCountry()
     {
-        $this->config->saveConfig(
-            $this->allowedCountriesConfigPath,
-            'FR'
-        );
-        Bootstrap::getObjectManager()->get(ReinitableConfigInterface::class)->reinit();
         /** @var Quote $quote */
         $quote = $this->objectManager->create(Quote::class);
         $customerData = $this->_prepareQuoteForTestAssignCustomerWithAddressChange($quote);
-
-        /** Execute SUT */
         $quote->assignCustomerWithAddressChange($customerData);
 
         /** Check that addresses are empty */
         $this->assertNull($quote->getBillingAddress()->getCountryId());
         $this->assertNull($quote->getShippingAddress()->getCountryId());
-
-        $this->config->deleteConfig($this->allowedCountriesConfigPath);
     }
 
     /**

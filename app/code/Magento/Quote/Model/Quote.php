@@ -2613,10 +2613,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Check is address allowed for store
      *
      * @param Address $address
-     * @param  string $storeId
+     * @param  int|null $storeId
      * @return bool
      */
-    private function isAddressAllowedForWebsite(Address $address, string $storeId): bool
+    private function isAddressAllowedForWebsite(Address $address, $storeId): bool
     {
         $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
 
@@ -2627,13 +2627,13 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Assign address to quote
      *
      * @param Address $address
-     * @param bool $billingAddress
+     * @param bool $isBillingAddress
      * @return void
      */
-    private function assignAddress(Address $address, bool $billingAddress = true): void
+    private function assignAddress(Address $address, bool $isBillingAddress = true): void
     {
-        if ($this->isAddressAllowedForWebsite($address, (string) $this->getStoreId())) {
-            $billingAddress
+        if ($this->isAddressAllowedForWebsite($address, $this->getStoreId())) {
+            $isBillingAddress
                 ? $this->setBillingAddress($address)
                 : $this->setShippingAddress($address);
         }

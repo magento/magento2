@@ -862,11 +862,10 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateNewCustomerWithPasswordHashWithNotAllowedCountry()
     {
-        $fixtureCustomerId = 1;
+        $customerId = 1;
         $allowedCountryIdForSecondWebsite = 'UA';
-        /** @var \Magento\Customer\Model\Customer $customer */
         $store = $this->storeManager->getStore('fixture_second_store');
-        $customerData = $this->customerRepository->getById($fixtureCustomerId);
+        $customerData = $this->customerRepository->getById($customerId);
         $customerData->getAddresses()[1]->setRegion(null)->setCountryId($allowedCountryIdForSecondWebsite)
             ->setRegionId(null);
         $customerData->setStoreId($store->getId())->setWebsiteId($store->getWebsiteId())->setId(null);
