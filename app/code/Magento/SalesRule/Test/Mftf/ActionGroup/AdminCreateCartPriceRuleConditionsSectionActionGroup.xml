@@ -29,8 +29,6 @@
         <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="{{condition2}}" stepKey="selectCondition2"/>
         <waitForPageLoad stepKey="waitForSecondConditionLoad"/>
         <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickTheEllipsis"/>
-        <click selector="{{AdminCartPriceRulesFormSection.selectCountryDropdown}}" stepKey="clickSelectCountryDropdown"/>
-        <waitForPageLoad stepKey="waitForDropdownLoad"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.selectCountryDropdown}}" userInput="{{ruleName.shippingCountry}}" stepKey="fillShippingCountryParameter"/>
     </actionGroup>
     <actionGroup name="AdminCreateCartPriceRuleConditionsSectionShippingPostcodeActionGroup">
