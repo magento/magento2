@@ -62,6 +62,9 @@ define([
             _.bindAll(this, '_onKeyDown', '_onPropertyChange', '_onSubmit');
 
             this.submitBtn.disabled = true;
+            if (typeof window.searchConfig !== 'undefined' && window.searchConfig.searchSuggestionEnabled == false) {
+                this.submitBtn.disabled = false;
+            }
 
             this.element.attr('autocomplete', this.options.autocomplete);
 
