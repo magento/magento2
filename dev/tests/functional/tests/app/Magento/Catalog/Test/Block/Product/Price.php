@@ -20,6 +20,9 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
         'regular_price' => [
             'selector' => '.price-final_price .price',
         ],
+        'normal_price' => [
+            'selector' => '.normal-price .price-wrapper ',
+        ],
         'actual_price' => [
             'selector' => '.actual-price .price',
         ],
@@ -92,6 +95,17 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
     public function getOldPrice($currency = '$')
     {
         return $this->getTypePrice('old_price', $currency);
+    }
+
+    /**
+     * This method returns the normal price represented by the block.
+     *
+     * @param string $currency
+     * @return string|null
+     */
+    public function getNormalPrice(string $currency = '$'): ?string
+    {
+        return $this->getTypePrice('normal_price', $currency);
     }
 
     /**
@@ -200,5 +214,15 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
     public function isOldPriceVisible()
     {
         return $this->getTypePriceElement('old_price')->isVisible();
+    }
+
+    /**
+     * This method returns if the normal price is visible.
+     *
+     * @return bool
+     */
+    public function isNormalPriceVisible(): bool
+    {
+        return $this->getTypePriceElement('normal_price')->isVisible();
     }
 }
