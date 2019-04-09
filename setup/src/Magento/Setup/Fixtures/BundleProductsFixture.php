@@ -127,8 +127,8 @@ class BundleProductsFixture extends Fixture
         $fixtureMap = [
             'name' => $variationSkuClosure,
             'sku' => $variationSkuClosure,
-            'price' => function () {
-                return $this->priceProvider->getPrice();
+            'price' => function ($index, $entityNumber) {
+                return $this->priceProvider->getPrice($entityNumber);
             },
             'website_ids' => function ($index, $entityNumber) use ($variationCount) {
                 $configurableIndex = $this->getBundleProductIndex($entityNumber, $variationCount);
@@ -166,8 +166,8 @@ class BundleProductsFixture extends Fixture
             'meta_title' => $skuClosure,
             'price' => function ($index) use ($priceTypeClosure) {
                 return $priceTypeClosure($index) === LinkInterface::PRICE_TYPE_PERCENT
-                    ? random_int(10, 90)
-                    : $this->priceProvider->getPrice();
+                    ? mt_rand(10, 90)
+                    : $this->priceProvider->getPrice($index);
             },
             'priceType' => $priceTypeClosure,
             'website_ids' => function ($index, $entityNumber) {
