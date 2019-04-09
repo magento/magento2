@@ -17,7 +17,6 @@ class GetListReservations
     private $resourceConnection;
 
     /**
-     * GetListReservationsTotOrder constructor.
      * @param ResourceConnection $resourceConnection
      */
     public function __construct (

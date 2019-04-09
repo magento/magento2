@@ -16,8 +16,6 @@ use Magento\InventoryReservationsApi\Model\ReservationInterface;
  */
 class Reservation implements ReservationInterface
 {
-    public const TABLE_NAME = 'inventory_reservation';
-
     /**
      * @var int|null
      */

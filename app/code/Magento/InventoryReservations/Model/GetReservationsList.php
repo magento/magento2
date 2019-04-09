@@ -17,7 +17,6 @@ class GetReservationsList
     private $getListReservations;
 
     /**
-     * GetReservationsTotOrder constructor.
      * @param GetListReservations $getListReservations
      */
     public function __construct (

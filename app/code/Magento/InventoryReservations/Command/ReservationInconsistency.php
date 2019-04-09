@@ -22,7 +22,6 @@ class ReservationInconsistency extends Command
     private $getOrderWithBrokenReservation;
 
     /**
-     * ReservationInconsistency constructor.
      * @param GetOrderWithBrokenReservation $getOrderWithBrokenReservation
      */
     public function __construct(

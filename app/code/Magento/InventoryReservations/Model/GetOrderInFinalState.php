@@ -9,25 +9,28 @@ namespace Magento\InventoryReservations\Model;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 
 class GetOrderInFinalState
 {
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     * @var OrderRepositoryInterface
      */
     private $orderRepository;
+
     /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
 
     /**
-     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @param OrderRepositoryInterface $orderRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct (
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        OrderRepositoryInterface $orderRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->orderRepository = $orderRepository;
@@ -36,9 +39,9 @@ class GetOrderInFinalState
 
     /**
      * @param array $orderIds
-     * @return \Magento\Sales\Api\Data\OrderSearchResultInterface
+     * @return OrderInterface[]
      */
-    public function execute(array $orderIds): \Magento\Sales\Api\Data\OrderSearchResultInterface
+    public function execute(array $orderIds): array
     {
         /** @var SearchCriteriaInterface $filter */
         $filter = $this->searchCriteriaBuilder
@@ -50,7 +53,7 @@ class GetOrderInFinalState
             ], 'in')
             ->create();
 
-        return $this->orderRepository->getList($filter);
+        $orderSearchResult = $this->orderRepository->getList($filter);
+        return $orderSearchResult->getItems();
     }
 }
-

@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservations\Model;
 
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\ResourceModel\Order\Collection;
 
 class GetOrderWithBrokenReservation
 {
@@ -17,29 +16,30 @@ class GetOrderWithBrokenReservation
      * @var GetOrderInFinalState
      */
     private $getOrderInFinalState;
+
     /**
      * @var GetReservationsList
      */
     private $getReservationsList;
-    /**
-     * @var Json
-     */
-    private $json;
 
     /**
-     * GetOrderWithBrokenReservation constructor.
+     * @var SerializerInterface
+     */
+    private $serialize;
+
+    /**
      * @param GetOrderInFinalState $getOrderInFinalState
      * @param GetReservationsList $getReservationsList
-     * @param Json $json
+     * @param SerializerInterface $serialize
      */
     public function __construct(
         GetOrderInFinalState $getOrderInFinalState,
         GetReservationsList $getReservationsList,
-        Json $json
+        SerializerInterface $serialize
     ) {
         $this->getOrderInFinalState = $getOrderInFinalState;
         $this->getReservationsList = $getReservationsList;
-        $this->json = $json;
+        $this->serialize = $serialize;
     }
 
     /**
@@ -53,20 +53,19 @@ class GetOrderWithBrokenReservation
         $result = [];
         foreach ($allReservations as $reservation){
             /** @var array $metadata */
-            $metadata = $this->json->unserialize($reservation['metadata']);
+            $metadata = $this->serialize->unserialize($reservation['metadata']);
             $objectId = $metadata['object_id'];
             if(!array_key_exists($objectId, $result)) {
-                $result[$objectId] = .0;
+                $result[$objectId] = (float) 0;
             }
             $result[$objectId] += (float)$reservation['quantity'];
         }
         $result = array_filter($result);
-        if(count($result) === 0){
+        if(empty($result)){
             return [];
         }
 
-        /** @var Collection $orders */
-        $orders = $this->getOrderInFinalState->execute(array_keys($result));
-        return $orders->getItems();
+        /** @var OrderInterface[] $orders */
+        return $this->getOrderInFinalState->execute(array_keys($result));
     }
 }
