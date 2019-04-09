@@ -1607,9 +1607,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->customerSecure->expects($this->once())->method('setRpTokenCreatedAt')->with(null);
         $this->customerSecure->expects($this->any())->method('setPasswordHash')->willReturn(null);
 
-        $this->sessionManager->expects($this->once())
-            ->method('destroy')
-            ->with(['send_expire_cookie' => false]);
+        $this->sessionManager->method('isSessionExists')->willReturn(false);
         $this->sessionManager->expects($this->atLeastOnce())->method('getSessionId');
         $visitor = $this->getMockBuilder(\Magento\Customer\Model\Visitor::class)
             ->disableOriginalConstructor()
