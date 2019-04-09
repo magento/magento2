@@ -16,11 +16,4 @@
             <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Console\CommandList">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="inventory_reservation_inconsistency" xsi:type="object">Magento\InventoryReservations\Command\ReservationInconsistency</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

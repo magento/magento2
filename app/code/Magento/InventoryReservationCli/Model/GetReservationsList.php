@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservations\Model;
+namespace Magento\InventoryReservationCli\Model;
 
-use Magento\InventoryReservations\Model\ResourceModel\GetListReservations;
+use Magento\InventoryReservationCli\Model\ResourceModel\GetListReservations;
 
 class GetReservationsList
 {

@@ -5,18 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservations\Model;
+namespace Magento\InventoryReservationCli\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
 class GetOrderWithBrokenReservation
 {
-    /**
-     * @var GetOrderInFinalState
-     */
-    private $getOrderInFinalState;
-
     /**
      * @var GetReservationsList
      */
@@ -28,16 +23,13 @@ class GetOrderWithBrokenReservation
     private $serialize;
 
     /**
-     * @param GetOrderInFinalState $getOrderInFinalState
      * @param GetReservationsList $getReservationsList
      * @param SerializerInterface $serialize
      */
     public function __construct(
-        GetOrderInFinalState $getOrderInFinalState,
         GetReservationsList $getReservationsList,
         SerializerInterface $serialize
     ) {
-        $this->getOrderInFinalState = $getOrderInFinalState;
         $this->getReservationsList = $getReservationsList;
         $this->serialize = $serialize;
     }
@@ -50,6 +42,7 @@ class GetOrderWithBrokenReservation
         /** @var array $orderListReservations */
         $allReservations = $this->getReservationsList->getListReservationsTotOrder();
 
+        /** @var array $result */
         $result = [];
         foreach ($allReservations as $reservation){
             /** @var array $metadata */
@@ -61,11 +54,6 @@ class GetOrderWithBrokenReservation
             $result[$objectId] += (float)$reservation['quantity'];
         }
         $result = array_filter($result);
-        if(empty($result)){
-            return [];
-        }
-
-        /** @var OrderInterface[] $orders */
-        return $this->getOrderInFinalState->execute(array_keys($result));
+        return $result;
     }
 }

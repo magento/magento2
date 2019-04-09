@@ -5,30 +5,38 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservations\Command;
+namespace Magento\InventoryReservationCli\Command;
 
-use Magento\InventoryReservations\Model\GetOrderWithBrokenReservation;
+use Magento\InventoryReservationCli\Model\GetOrderInFinalState;
+use Magento\InventoryReservationCli\Model\GetOrderWithBrokenReservation;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ReservationInconsistency extends Command
+class ShowInconsistencyOrderComplete extends Command
 {
     /**
      * @var GetOrderWithBrokenReservation
      */
     private $getOrderWithBrokenReservation;
+    /**
+     * @var GetOrderInFinalState
+     */
+    private $getOrderInFinalState;
 
     /**
      * @param GetOrderWithBrokenReservation $getOrderWithBrokenReservation
+     * @param GetOrderInFinalState $getOrderInFinalState
      */
     public function __construct(
-        GetOrderWithBrokenReservation $getOrderWithBrokenReservation
+        GetOrderWithBrokenReservation $getOrderWithBrokenReservation,
+        GetOrderInFinalState $getOrderInFinalState
     ) {
-        parent::__construct();
         $this->getOrderWithBrokenReservation = $getOrderWithBrokenReservation;
+        $this->getOrderInFinalState = $getOrderInFinalState;
+        parent::__construct();
     }
 
     protected function configure()
@@ -47,8 +55,11 @@ class ReservationInconsistency extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): void
     {
+        /** @var array $orderBrokenReservation */
+        $orderBrokenReservation = $this->getOrderWithBrokenReservation->execute();
+
         /** @var OrderInterface[] $orders */
-        $orders = $this->getOrderWithBrokenReservation->execute();
+        $orders = $this->getOrderInFinalState->execute(array_keys($orderBrokenReservation));
 
         /** @var Order $order */
         foreach($orders as $order) {
