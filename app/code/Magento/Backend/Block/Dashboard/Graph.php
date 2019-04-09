@@ -320,7 +320,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         foreach ($this->getAllSeries() as $index => $serie) {
             $thisdataarray = $serie;
-            for ($j = 0; $j < sizeof($thisdataarray); $j++) {
+            $count = count($thisdataarray);
+            for ($j = 0; $j < $count; $j++) {
                 $currentvalue = $thisdataarray[$j];
                 if (is_numeric($currentvalue)) {
                     $ylocation = $yorigin + $currentvalue;
@@ -341,45 +342,13 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         $valueBuffer = [];
 
-        if (sizeof($this->_axisLabels) > 0) {
+        if (count($this->_axisLabels) > 0) {
             $params['chxt'] = implode(',', array_keys($this->_axisLabels));
             $indexid = 0;
             foreach ($this->_axisLabels as $idx => $labels) {
                 if ($idx == 'x') {
-                    /**
-                     * Format date
-                     */
-                    foreach ($this->_axisLabels[$idx] as $_index => $_label) {
-                        if ($_label != '') {
-                            $period = new \DateTime($_label, new \DateTimeZone($timezoneLocal));
-                            switch ($this->getDataHelper()->getParam('period')) {
-                                case '24h':
-                                    $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
-                                        $period->setTime($period->format('H'), 0, 0),
-                                        \IntlDateFormatter::NONE,
-                                        \IntlDateFormatter::SHORT
-                                    );
-                                    break;
-                                case '7d':
-                                case '1m':
-                                    $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
-                                        $period,
-                                        \IntlDateFormatter::SHORT,
-                                        \IntlDateFormatter::NONE
-                                    );
-                                    break;
-                                case '1y':
-                                case '2y':
-                                    $this->_axisLabels[$idx][$_index] = date('m/Y', strtotime($_label));
-                                    break;
-                            }
-                        } else {
-                            $this->_axisLabels[$idx][$_index] = '';
-                        }
-                    }
-
+                    $this->formatAxisLabelDate($idx, $timezoneLocal);
                     $tmpstring = implode('|', $this->_axisLabels[$idx]);
-
                     $valueBuffer[] = $indexid . ":|" . $tmpstring;
                 } elseif ($idx == 'y') {
                     $valueBuffer[] = $indexid . ":|" . implode('|', $yLabels);
@@ -404,6 +373,46 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             $gaHash = $this->_dashboardData->getChartDataHash($gaData);
             $params = ['ga' => $gaData, 'h' => $gaHash];
             return $this->getUrl('adminhtml/*/tunnel', ['_query' => $params]);
+        }
+    }
+
+    /**
+     * Format dates for axis labels
+     *
+     * @param string $idx
+     * @param string $timezoneLocal
+     *
+     * @return void
+     */
+    private function formatAxisLabelDate($idx, $timezoneLocal)
+    {
+        foreach ($this->_axisLabels[$idx] as $_index => $_label) {
+            if ($_label != '') {
+                $period = new \DateTime($_label, new \DateTimeZone($timezoneLocal));
+                switch ($this->getDataHelper()->getParam('period')) {
+                    case '24h':
+                        $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
+                            $period->setTime($period->format('H'), 0, 0),
+                            \IntlDateFormatter::NONE,
+                            \IntlDateFormatter::SHORT
+                        );
+                        break;
+                    case '7d':
+                    case '1m':
+                        $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
+                            $period,
+                            \IntlDateFormatter::SHORT,
+                            \IntlDateFormatter::NONE
+                        );
+                        break;
+                    case '1y':
+                    case '2y':
+                        $this->_axisLabels[$idx][$_index] = date('m/Y', strtotime($_label));
+                        break;
+                }
+            } else {
+                $this->_axisLabels[$idx][$_index] = '';
+            }
         }
     }
 
