@@ -409,9 +409,9 @@
             <stringProp name="Argument.value">${__P(graphqlGetNavigationMenuByCategoryIdPercentage,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="graphqlGetProductSearchByProductNamePercentage" elementType="Argument">
-            <stringProp name="Argument.name">graphqlGetProductSearchByProductNamePercentage</stringProp>
-            <stringProp name="Argument.value">${__P(graphqlGetProductSearchByProductNamePercentage,0)}</stringProp>
+          <elementProp name="graphqlGetProductDetailByProductNamePercentage" elementType="Argument">
+            <stringProp name="Argument.name">graphqlGetProductDetailByProductNamePercentage</stringProp>
+            <stringProp name="Argument.value">${__P(graphqlGetProductDetailByProductNamePercentage,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="graphqlGetProductSearchByTextAndCategoryIdPercentage" elementType="Argument">
@@ -39803,11 +39803,11 @@ vars.put("product_sku", product.get("sku"));
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get Product Search by product_name" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get Product Detail by product_name" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
-      <stringProp name="ThroughputController.percentThroughput">${graphqlGetProductSearchByProductNamePercentage}</stringProp>
+      <stringProp name="ThroughputController.percentThroughput">${graphqlGetProductDetailByProductNamePercentage}</stringProp>
     <stringProp name="TestPlan.comments">mpaf/tool/fragments/_system/scenario_controller_tmpl.jmx</stringProp></ThroughputController>
     <hashTree>
         <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Set Test Label" enabled="true">
@@ -39828,7 +39828,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Get Product Search by product_name");
+                vars.put("testLabel", "Get Product Detail by product_name");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -39886,7 +39886,7 @@ vars.put("product_sku", product.get("sku"));
     <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/product_browsing_and_adding_items_to_the_cart/configurable_products_setup.jmx</stringProp></BeanShellSampler>
     <hashTree/>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Product Search by product_name" enabled="true">
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Product Detail by product_name" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
         <collectionProp name="Arguments.arguments">
@@ -39911,7 +39911,7 @@ vars.put("product_sku", product.get("sku"));
       <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
       <boolProp name="HTTPSampler.monitor">false</boolProp>
       <stringProp name="HTTPSampler.embedded_url_re"/>
-      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/get_product_search_by_product_name.jmx</stringProp>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/get_product_detail_by_product_name.jmx</stringProp>
     </HTTPSamplerProxy>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
