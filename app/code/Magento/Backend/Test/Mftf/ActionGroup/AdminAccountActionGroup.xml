@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAccountSetInterfaceLocaleActionGroup">
+        <arguments>
+            <argument name="localeName" type="string"/>
+        </arguments>
+        <!-- Navigate to admin System Account Page-->
+        <amOnPage url="{{AdminSystemAccountPage.url}}" stepKey="openAdminSystemAccountPage"/>
+        <!-- Change Admin locale to {{localeName}} -->
+        <selectOption selector="{{AdminSystemAccountSection.interfaceLocale}}" userInput="{{localeName}}" stepKey="setInterfaceLocale"/>
+        <fillField selector="{{AdminSystemAccountSection.currentPassword}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillCurrentPassword"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the account." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>
