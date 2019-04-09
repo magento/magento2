@@ -68,18 +68,18 @@
         <data key="price">20</data>
         <data key="price_type">percent</data>
     </entity>
-    <entity name="ProductDropdownOption1" type="product_option_value">
-        <data key="title">ProductDropdownOption1</data>
+    <entity name="ProductOptionValueWithSkuDropdown1" type="product_option_value">
+        <data key="title">ProductOptionValueWithSkuDropdown1</data>
         <data key="sort_order">1</data>
         <data key="price">10</data>
         <data key="price_type">fixed</data>
-        <data key="sku">product_dropdown_option_1_sku</data>
+        <data key="sku">product_option_value_sku_dropdown_1_</data>
     </entity>
-    <entity name="ProductDropdownOption2" type="product_option_value">
-        <data key="title">ProductDropdownOption2</data>
+    <entity name="ProductOptionValueWithSkuDropdown2" type="product_option_value">
+        <data key="title">ProductOptionValueWithSkuDropdown2</data>
         <data key="sort_order">1</data>
         <data key="price">10</data>
         <data key="price_type">fixed</data>
-        <data key="sku">product_dropdown_option_2_sku</data>
+        <data key="sku">product_option_value_sku_dropdown_2_</data>
     </entity>
 </entities>
