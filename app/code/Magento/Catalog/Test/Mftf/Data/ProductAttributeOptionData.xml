@@ -75,11 +75,11 @@
         <requiredEntity type="StoreLabel">Option9Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option10Store1</requiredEntity>
     </entity>
-    <entity name="productAttributeAdminOption1" extends="productAttributeOption1">
+    <entity name="ProductAttributeAdminOption1" extends="productAttributeOption1">
         <requiredEntity type="StoreLabel">AdminOption1Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option1Store1</requiredEntity>
     </entity>
-    <entity name="productAttributeAdminOption2" extends="productAttributeOption2">
+    <entity name="ProductAttributeAdminOption2" extends="productAttributeOption2">
         <requiredEntity type="StoreLabel">AdminOption2Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option2Store1</requiredEntity>
     </entity>

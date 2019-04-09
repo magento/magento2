@@ -22,10 +22,10 @@
             <!--Create Dropdown product attribute-->
             <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createDropdownProductAttribute"/>
             <!--Add options to attribute-->
-            <createData entity="productAttributeAdminOption1" stepKey="createFirstOption">
+            <createData entity="ProductAttributeAdminOption1" stepKey="createFirstOption">
                 <requiredEntity createDataKey="createDropdownProductAttribute"/>
             </createData>
-            <createData entity="productAttributeAdminOption2" stepKey="createSecondOption">
+            <createData entity="ProductAttributeAdminOption2" stepKey="createSecondOption">
                 <requiredEntity createDataKey="createDropdownProductAttribute"/>
             </createData>
             <!--Add attribute to Default Attribute Set-->
