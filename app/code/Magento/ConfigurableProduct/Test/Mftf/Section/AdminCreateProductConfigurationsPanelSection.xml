@@ -32,6 +32,6 @@
         <element name="applyUniqueImagesToEachSkus" type="radio" selector="label[for='apply-unique-images-radio']" timeout="30"/>
         <element name="selectImagesButton" type="select" selector="#apply-images-attributes" timeout="30"/>
         <element name="uploadImagesButton" type="file" selector="//span[text()='{{optionName}}']/../../div[@data-role='gallery']//input[@type='file']" timeout="30" parameterized="true"/>
-        <element name="imageFile" type="text" selector="//*[@data-role='gallery']//img[contains(@src, '{{url}}')]" parameterized="true"/>
+        <element name="imageFile" type="text" selector="div[data-role='gallery'] img[src*='{{url}}']" parameterized="true"/>
     </section>
 </sections>
