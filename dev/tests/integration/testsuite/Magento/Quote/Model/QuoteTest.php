@@ -19,9 +19,6 @@ use Magento\TestFramework\ObjectManager;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -34,22 +31,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
-     * @var string
-     */
-    private $allowedCountriesConfigPath = 'general/country/allow';
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->config = Bootstrap::getObjectManager()->get(ConfigInterface::class);
     }
 
     /**
