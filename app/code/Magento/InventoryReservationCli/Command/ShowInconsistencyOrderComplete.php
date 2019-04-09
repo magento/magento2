@@ -42,7 +42,7 @@ class ShowInconsistencyOrderComplete extends Command
     protected function configure()
     {
         $this
-            ->setName('inventory:reservation:show-inconsistency')
+            ->setName('inventory:reservation:complete-order-inconsistency')
             ->setDescription('Show all reservation inconsistencies for completed orders');
 
         parent::configure();
