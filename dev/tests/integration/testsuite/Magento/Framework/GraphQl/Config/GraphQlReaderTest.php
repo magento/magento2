@@ -183,7 +183,12 @@ QUERY;
         $headers = $this->objectManager->create(\Zend\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $request->setHeaders($headers);
-        $response = $this->graphQlController->dispatch($request);
+
+        /** @var \Magento\Framework\App\Response\Http $response */
+        $response = $this->objectManager->create(\Magento\Framework\App\Response\Http::class);
+        /** @var \Magento\Framework\Controller\Result\Json $result */
+        $result = $this->graphQlController->dispatch($request);
+        $result->renderResult($response);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $expectedOutput = require __DIR__ . '/../_files/schema_response_sdl_description.php';
 

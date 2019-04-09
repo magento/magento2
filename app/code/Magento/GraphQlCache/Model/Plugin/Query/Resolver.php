@@ -11,8 +11,8 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\Resolver\Context;
-use Magento\GraphQlCache\Model\CacheableQuery;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\GraphQlCache\Model\CacheableQueryHandler;
 
 /**
  * Plugin to handle cache validation that can be done after each resolver
@@ -20,30 +20,24 @@ use Magento\Framework\App\RequestInterface;
 class Resolver
 {
     /**
-     * @var CacheableQuery
+     * @var CacheableQueryHandler
      */
-    private $cacheableQuery;
+    private $cacheableQueryHandler;
 
     /**
-     * @var Request
+     * @param CacheableQueryHandler $cacheableQueryHandler
      */
-    private $request;
-
-    /**
-     * @param CacheableQuery $cacheableQuery
-     * @param RequestInterface $request
-     */
-    public function __construct(CacheableQuery $cacheableQuery, RequestInterface $request)
-    {
-        $this->cacheableQuery = $cacheableQuery;
-        $this->request = $request;
+    public function __construct(
+        CacheableQueryHandler $cacheableQueryHandler
+    ) {
+        $this->cacheableQueryHandler = $cacheableQueryHandler;
     }
 
     /**
      * Set cache validity to the cacheableQuery after resolving any resolver in a query
      *
      * @param ResolverInterface $subject
-     * @param Object $resolvedValue
+     * @param mixed|Value $resolvedValue
      * @param Field $field
      * @param Context $context
      * @param ResolveInfo $info
@@ -61,63 +55,10 @@ class Resolver
         array $value = null,
         array $args = null
     ) {
-        $cache = $field->getCache();
-        $cacheTag = isset($cache['cache_tag']) ? $cache['cache_tag'] : [];
-        $cacheable = isset($cache['cacheable']) ? $cache['cacheable'] : true;
-        if (!empty($cacheTag) && $this->request->isGet() && $cacheable) {
-            $cacheTags = [];
-            // Resolved value must have cache IDs defined
-            $resolvedItemsIds = $this->extractResolvedItemsIds($resolvedValue);
-            if (!empty($resolvedItemsIds)) {
-                $cacheTags = [$cacheTag];
-            }
-            foreach ($resolvedItemsIds as $itemId) {
-                $cacheTags[] = $cacheTag . '_' . $itemId;
-            }
-            $this->cacheableQuery->addCacheTags($cacheTags);
-        }
-        $this->setCacheValidity($cacheable);
-        return $resolvedValue;
-    }
-
-    /**
-     * Extract ids for resolved items
-     *
-     * @param Object $resolvedValue
-     * @return array
-     */
-    private function extractResolvedItemsIds($resolvedValue) : array
-    {
-        if (isset($resolvedValue['ids']) && is_array($resolvedValue['ids'])) {
-            return $resolvedValue['ids'];
-        }
-        if (isset($resolvedValue['items']) && is_array($resolvedValue['items'])) {
-            return array_keys($resolvedValue['items']);
-        }
-        $ids = [];
-        if (isset($resolvedValue['id'])) {
-            $ids[] = $resolvedValue['id'];
-            return $ids;
-        }
-
+        /** Only if array @see \Magento\Framework\GraphQl\Query\Resolver\Value */
         if (is_array($resolvedValue)) {
-            foreach ($resolvedValue as $item) {
-                if (isset($item['id'])) {
-                    $ids[] = $item['id'];
-                }
-            }
+            $this->cacheableQueryHandler->handleCacheFromResolverResponse($resolvedValue, $field);
         }
-        return $ids;
-    }
-
-    /**
-     * Set cache validity for the graphql request
-     *
-     * @param bool $isValid
-     */
-    private function setCacheValidity(bool $isValid): void
-    {
-        $cacheValidity = $this->cacheableQuery->isCacheable() && $isValid;
-        $this->cacheableQuery->setCacheValidity($cacheValidity);
+        return $resolvedValue;
     }
 }
