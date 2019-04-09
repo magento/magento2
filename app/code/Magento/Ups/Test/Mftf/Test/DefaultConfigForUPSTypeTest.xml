@@ -31,7 +31,7 @@
         <createData entity="ShippingMethodsUpsTypeSetDefault" stepKey="setShippingMethodsUpsTypeToDefault"/>
         <!-- Navigate to Stores -> Configuration -> Sales -> Shipping Methods Page -->
         <comment userInput="Navigate to Stores -> Configuration -> Sales -> Shipping Methods Page" stepKey="goToAdminShippingMethodsPage"/>
-        <amonPage url="{{AdminShippingMethodsConfigPage.url}}" stepKey="navigateToAdminShippingMethodsPage"/>
+        <amOnPage url="{{AdminShippingMethodsConfigPage.url}}" stepKey="navigateToAdminShippingMethodsPage"/>
         <waitForPageLoad stepKey="waitPageToLoad"/>
         <!-- Expand 'UPS' tab -->
         <comment userInput="Expand UPS tab" stepKey="expandUpsTab"/>
