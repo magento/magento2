@@ -122,6 +122,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param null|string|bool|int $store
      * @param Quote|null $quote
      * @return AbstractMethod[]
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @deprecated 100.1.3
      * @see \Magento\Payment\Api\PaymentMethodListInterface
      */
@@ -180,6 +181,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param InfoInterface $info
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @return Template
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getInfoBlock(InfoInterface $info, LayoutInterface $layout = null)
     {
@@ -251,6 +253,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param bool $withGroups
      * @param Store|null $store
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -261,8 +264,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $groupRelations = [];
 
         foreach ($this->getPaymentMethods() as $code => $data) {
-            if (!empty($data['active'])) {
-                $storedTitle = $this->getMethodInstance($code)->getConfigData('title', $store);
+            /** @var AbstractMethod $methodInstance */
+            $methodInstance = $this->getMethodInstance($code);
+            if ($methodInstance->isActive()) {
+                $storedTitle = $methodInstance->getConfigData('title', $store);
                 if (isset($storedTitle)) {
                     $methods[$code] = $storedTitle;
                 } elseif (isset($data['title'])) {
