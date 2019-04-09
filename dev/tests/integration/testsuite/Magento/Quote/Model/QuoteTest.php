@@ -353,16 +353,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      */
     public function testAssignCustomerWithAddressChangeWithNotAllowedCountry()
     {
-        /** Preconditions:
-         * Customer with  address is created
-         */
         $this->config->saveConfig(
             $this->allowedCountriesConfigPath,
             'FR'
         );
         Bootstrap::getObjectManager()->get(ReinitableConfigInterface::class)->reinit();
-        Bootstrap::getObjectManager()->create(StoreManagerInterface::class)->reinitStores();
-
         /** @var Quote $quote */
         $quote = $this->objectManager->create(Quote::class);
         $customerData = $this->_prepareQuoteForTestAssignCustomerWithAddressChange($quote);

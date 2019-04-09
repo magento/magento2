@@ -905,7 +905,7 @@ class AccountManagement implements AccountManagementInterface
         }
         try {
             foreach ($customerAddresses as $address) {
-                if (!$this->isAddressAllowedForWebsite($address, (int)$customer->getStoreId())) {
+                if (!$this->isAddressAllowedForWebsite($address, (string)$customer->getStoreId())) {
                     continue;
                 }
                 if ($address->getId()) {
@@ -1619,10 +1619,10 @@ class AccountManagement implements AccountManagementInterface
      * Check is address allowed for store
      *
      * @param AddressInterface $address
-     * @param int $storeId
+     * @param string $storeId
      * @return bool
      */
-    private function isAddressAllowedForWebsite(AddressInterface $address, int $storeId): bool
+    private function isAddressAllowedForWebsite(AddressInterface $address, string $storeId): bool
     {
         $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
 
