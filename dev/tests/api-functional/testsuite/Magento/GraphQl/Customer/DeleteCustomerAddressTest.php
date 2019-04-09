@@ -13,6 +13,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 
+/**
+ * Delete customer address tests
+ */
 class DeleteCustomerAddressTest extends GraphQlAbstract
 {
     /**

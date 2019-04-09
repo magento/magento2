@@ -14,6 +14,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 
+/**
+ * Update customer address tests
+ */
 class UpdateCustomerAddressTest extends GraphQlAbstract
 {
     /**

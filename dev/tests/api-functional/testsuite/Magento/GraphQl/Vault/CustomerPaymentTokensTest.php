@@ -14,6 +14,9 @@ use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\ResourceModel\PaymentToken as TokenResource;
 use Magento\Vault\Model\ResourceModel\PaymentToken\CollectionFactory;
 
+/**
+ * Tests for customer payment tokens
+ */
 class CustomerPaymentTokensTest extends GraphQlAbstract
 {
     /**

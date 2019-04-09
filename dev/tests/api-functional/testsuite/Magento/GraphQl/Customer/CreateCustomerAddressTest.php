@@ -264,7 +264,7 @@ MUTATION;
         $password = 'password';
 
         self::expectExceptionMessage('"Street Address" cannot contain more than 2 lines.');
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**

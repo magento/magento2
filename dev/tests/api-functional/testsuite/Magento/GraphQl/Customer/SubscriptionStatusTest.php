@@ -12,6 +12,9 @@ use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Tests for subscription status
+ */
 class SubscriptionStatusTest extends GraphQlAbstract
 {
     /**

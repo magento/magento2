@@ -12,6 +12,9 @@ use Magento\SendFriend\Model\SendFriendFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Tests for send email to friend
+ */
 class SendFriendTest extends GraphQlAbstract
 {
 
@@ -269,7 +272,8 @@ QUERY;
             "You can't send messages more than {$sendFriend->getMaxSendsToFriend()} times an hour."
         );
 
-        for ($i = 0; $i <= $sendFriend->getMaxSendsToFriend() + 1; $i++) {
+        $maxSendToFriends = $sendFriend->getMaxSendsToFriend();
+        for ($i = 0; $i <= $maxSendToFriends + 1; $i++) {
             $this->graphQlMutation($query);
         }
     }

@@ -287,7 +287,7 @@ mutation {
 }
 QUERY;
         self::expectExceptionMessage('"Street Address" cannot contain more than 2 lines.');
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
