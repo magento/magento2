@@ -32,4 +32,24 @@
         <data key="display_mode">Cart Price Rule Related</data>
         <data key="restrict_type">Header</data>
     </entity>
+    <entity name="RecentlyComparedProductsWidget" type="widget">
+        <data key="type">Recently Compared Products</data>
+        <data key="design_theme">Magento Luma</data>
+        <data key="name" unique="suffix">Recently Compared Products</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="display_on">All Pages</data>
+        <data key="container">Sidebar Additional</data>
+    </entity>
+    <entity name="RecentlyViewedProductsWidget" type="widget">
+        <data key="type">Recently Viewed Products</data>
+        <data key="design_theme">Magento Luma</data>
+        <data key="name" unique="suffix">Recently Viewed Products</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="display_on">All Pages</data>
+        <data key="container">Sidebar Additional</data>
+    </entity>
 </entities>

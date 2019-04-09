@@ -35,5 +35,7 @@
         <element name="displayMode" type="select" selector="select[id*='display_mode']"/>
         <element name="restrictTypes" type="select" selector="select[id*='types']"/>
         <element name="saveAndContinue" type="button" selector="#save_and_edit_button" timeout="30"/>
+        <element name="productAttributesToShow" type="multiselect" selector="select[name='parameters[show_attributes][]']"/>
+        <element name="productButtonsToShow" type="multiselect" selector="select[name='parameters[show_buttons][]']"/>
     </section>
 </sections>

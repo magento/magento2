@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyThatInformationAboutViewingComparisonWishlistIsPersistedUnderLongTermCookieTest">
+        <annotations>
+            <features value="Persistent"/>
+            <stories value="Check the widgets is persisted"/>
+            <title value="Verify that information about viewing, comparison, wishlist and last ordered items is persisted under long-term cookie"/>
+            <description value="Verify that information about viewing, comparison, wishlist and last ordered items is persisted under long-term cookie"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-12180"/>
+            <group value="persistent"/>
+            <skip>
+                <issueId value="MC-15741"/>
+            </skip>
+        </annotations>
+        <before>
+            <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
+            <createData entity="PersistentLogoutClearDisable" stepKey="persistentLogoutClearDisable"/>
+            <createData entity="EnableSynchronizeWidgetProductsWithBackendStorage" stepKey="enableSynchronizeWidgetProductsWithBackendStorage"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminCreateRecentlyProductsWidgetActionGroup" stepKey="createRecentlyComparedProductsWidget">
+                <argument name="widget" value="RecentlyComparedProductsWidget"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateRecentlyProductsWidgetActionGroup" stepKey="createRecentlyViewedProductsWidget">
+                <argument name="widget" value="RecentlyViewedProductsWidget"/>
+            </actionGroup>
+        </before>
+        <after>
+            <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
+            <createData entity="PersistentLogoutClearEnabled" stepKey="persistentLogoutClearEnabled"/>
+            <createData entity="DisableSynchronizeWidgetProductsWithBackendStorage" stepKey="disableSynchronizeWidgetProductsWithBackendStorage"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromCustomer"/>
+            <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteRecentlyComparedProductsWidget">
+                <argument name="widget" value="RecentlyComparedProductsWidget"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteRecentlyViewedProductsWidget">
+                <argument name="widget" value="RecentlyViewedProductsWidget"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Login to storefront from customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInFromCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeCheckWelcome"/>
+
+        <!--Open the details page of Simple Product 1, Simple Product 2 and add to cart, get to the category-->
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart2">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage3"/>
+        <!--The Recently Viewed widget displays Simple Product 1 and Simple Product 2-->
+        <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" stepKey="waitWidgetRecentlyViewedProductsGrid"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProduct1InRecentlyViewedWidget"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" userInput="$$createSimpleProduct2.name$$" stepKey="seeProduct2InRecentlyViewedWidget"/>
+
+        <!--Add Simple Product 1 and Simple Product 2 to Wishlist-->
+        <actionGroup ref="StorefrontCustomerAddCategoryProductToWishlistActionGroup" stepKey="addSimpleProduct1ToWishlist">
+            <argument name="productVar" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage4"/>
+        <actionGroup ref="StorefrontCustomerAddCategoryProductToWishlistActionGroup" stepKey="addSimpleProduct2ToWishlist">
+            <argument name="productVar" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <!--The My Wishlist widget displays Simple Product 1 and Simple Product 2-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage5"/>
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProductInWishlistSidebar">
+            <argument name="productVar" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProduct2InWishlistSidebar">
+            <argument name="productVar" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+
+        <!--Add to compare Simple Product and Simple Product 2-->
+        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="compareAddSimpleProduct1ToCompare" >
+            <argument name="productVar" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="compareAddSimpleProduct2ToCompare" >
+            <argument name="productVar" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <!--The Compare Products widget displays Simple Product 1 and Simple Product 2-->
+        <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="compareSimpleProduct1InSidebar">
+            <argument name="productVar" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="compareSimpleProduct2InSidebar">
+            <argument name="productVar" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+
+        <!--Click Clear all in the Compare Products widget-->
+        <waitForElementVisible selector="{{WidgetSection.ClearCompare}}" stepKey="waitForClearCompareBtn"/>
+        <click selector="{{WidgetSection.ClearCompare}}" stepKey="clickClearCompareBtn"/>
+        <waitForElementVisible selector="{{WidgetSection.AcceptClear}}" stepKey="waitForAcceptBtn"/>
+        <click selector="{{WidgetSection.AcceptClear}}" stepKey="acceptClearCompare"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!--The Recently Compared widget displays Simple Product 1 and Simple Product 2-->
+        <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyComparedProductsGrid}}" stepKey="waitWidgetRecentlyComparedProductsGrid"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyComparedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductInRecentlyComparedWidget"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyComparedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProduct2InRecentlyComparedWidget"/>
+
+        <!--Place the order-->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage"/>
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+        <!--The Recently Ordered widget displays Simple Product 1 and Simple Product 2-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage6"/>
+        <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" stepKey="waitWidgetRecentlyOrderedProductsGrid"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductInRecentlyOrderedWidget"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProduct2InRecentlyOrderedWidget"/>
+
+        <!--Sign out and check that widgets persist the information about the items-->
+        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="storefrontSignOut"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage7"/>
+        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeCheckWelcome2"/>
+        <seeElement selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="checkLinkNotYoy"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProduct1InRecentlyViewedWidget2"/>
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProductInWishlistSidebar2">
+            <argument name="productVar" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyComparedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductInRecentlyComparedWidget2"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductInRecentlyOrderedWidget2"/>
+
+        <!--Click the *Not you?* link and check the price for Simple Product-->
+        <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickNext"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage8"/>
+        <see userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeCheckWelcome3"/>
+        <dontSee selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="dontSeeProduct1InRecentlyViewedWidget"/>
+        <dontSee selector="{{StorefrontCustomerWishlistSidebarSection.ProductTitleByName($$createSimpleProduct.name$$)}}" stepKey="dontSeeProduct1InWishlistWidget"/>
+        <dontSee selector="{{StorefrontWidgetsSection.widgetRecentlyComparedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="dontSeeProductInRecentlyComparedWidget"/>
+        <dontSee selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="dontSeeProductInRecentlyOrderedWidget"/>
+
+        <!--Login to storefront from customer again-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInFromCustomer2">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage9"/>
+        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeCheckWelcome4"/>
+        <waitForElementVisible selector="{{StorefrontCustomerWishlistSidebarSection.ProductTitleByName($$createSimpleProduct.name$$)}}" stepKey="assertWishlistSidebarProductName"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProduct1InRecentlyViewedWidget3"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyComparedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductInRecentlyComparedWidget3"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductInRecentlyOrderedWidget3"/>
+    </test>
+</tests>
