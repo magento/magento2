@@ -604,6 +604,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      * @param \Exception $e
      * @throws \Exception
+     * @return void
      */
     private function rollbackAddresses(
         QuoteEntity $quote,
