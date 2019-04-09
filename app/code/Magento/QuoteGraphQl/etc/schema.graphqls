@@ -17,6 +17,7 @@ type Mutation {
     setBillingAddressOnCart(input: SetBillingAddressOnCartInput): SetBillingAddressOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetBillingAddressOnCart")
     setShippingMethodsOnCart(input: SetShippingMethodsOnCartInput): SetShippingMethodsOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingMethodsOnCart")
     setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart")
+    placeOrder(input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder")
 }
 
 input AddSimpleProductsToCartInput {
@@ -114,6 +115,10 @@ input ShippingMethodInput {
     method_code: String!
 }
 
+input PlaceOrderInput {
+    cart_id: String!
+}
+
 input SetPaymentMethodOnCartInput {
     cart_id: String!
     payment_method: PaymentMethodInput!
@@ -142,6 +147,10 @@ type SetShippingMethodsOnCartOutput {
 
 type ApplyCouponToCartOutput {
     cart: Cart!
+}
+
+type PlaceOrderOutput {
+    order: Order!
 }
 
 type Cart {
@@ -284,4 +293,8 @@ type CartItemSelectedOptionValuePrice {
     value: Float!
     units: String!
     type: PriceTypeEnum!
+}
+
+type Order {
+    order_id: String
 }

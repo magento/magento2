@@ -42,7 +42,7 @@
                 <paymentInfoKeys>cc_type,cc_number,avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision</paymentInfoKeys>
                 <avs_ems_adapter>Magento\Braintree\Model\AvsEmsCodeMapper</avs_ems_adapter>
                 <cvv_ems_adapter>Magento\Braintree\Model\CvvEmsCodeMapper</cvv_ems_adapter>
-                <group>braintree</group>
+                <group>braintree_group</group>
             </braintree>
             <braintree_paypal>
                 <model>BraintreePayPalFacade</model>
@@ -68,7 +68,7 @@
                 <privateInfoKeys>processorResponseCode,processorResponseText,paymentId</privateInfoKeys>
                 <paymentInfoKeys>processorResponseCode,processorResponseText,paymentId,payerEmail</paymentInfoKeys>
                 <supported_locales>en_US,en_GB,en_AU,da_DK,fr_FR,fr_CA,de_DE,zh_HK,it_IT,nl_NL,no_NO,pl_PL,es_ES,sv_SE,tr_TR,pt_BR,ja_JP,id_ID,ko_KR,pt_PT,ru_RU,th_TH,zh_CN,zh_TW</supported_locales>
-                <group>braintree</group>
+                <group>braintree_group</group>
             </braintree_paypal>
             <braintree_cc_vault>
                 <model>BraintreeCreditCardVaultFacade</model>
@@ -78,7 +78,7 @@
                     <tokenFormat>Magento\Braintree\Model\InstantPurchase\CreditCard\TokenFormatter</tokenFormat>
                     <additionalInformation>Magento\Braintree\Model\InstantPurchase\PaymentAdditionalInformationProvider</additionalInformation>
                 </instant_purchase>
-                <group>braintree</group>
+                <group>braintree_group</group>
             </braintree_cc_vault>
             <braintree_paypal_vault>
                 <model>BraintreePayPalVaultFacade</model>
@@ -88,7 +88,7 @@
                     <tokenFormat>Magento\Braintree\Model\InstantPurchase\PayPal\TokenFormatter</tokenFormat>
                     <additionalInformation>Magento\Braintree\Model\InstantPurchase\PaymentAdditionalInformationProvider</additionalInformation>
                 </instant_purchase>
-                <group>braintree</group>
+                <group>braintree_group</group>
             </braintree_paypal_vault>
         </payment>
     </default>
