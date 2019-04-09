@@ -171,14 +171,11 @@ abstract class AbstractSource implements
      * Multibyte support strcasecmp function version
      * @param string $str1
      * @param string $str2
-     * @param null|string $encoding
      * @return int|\\lt
      */
-    private function mbStrcasecmp($str1, $str2, $encoding = null)
+    private function mbStrcasecmp($str1, $str2)
     {
-        if (null === $encoding) {
-            $encoding = mb_internal_encoding();
-        }
+        $encoding = mb_internal_encoding();
         return strcmp(
             mb_strtoupper($str1, $encoding),
             mb_strtoupper($str2, $encoding)
