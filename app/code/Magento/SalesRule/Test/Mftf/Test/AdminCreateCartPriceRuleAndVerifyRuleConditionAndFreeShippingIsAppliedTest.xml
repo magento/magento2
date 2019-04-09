@@ -41,13 +41,13 @@
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.coupon_type}}" stepKey="selectCouponType"/>
         <scrollTo selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="scrollToActionsHeader"/>
         <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
-            <argument name="ruleName" value="CartPriceRuleConditionAndFreeShippingApplied"/>
+            <argument name="rule" value="CartPriceRuleConditionAndFreeShippingApplied"/>
         </actionGroup>
         <actionGroup ref="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup" stepKey="createActiveCartPriceRuleFreeShippingActionsSection">
-            <argument name="ruleName" value="{{CartPriceRuleConditionAndFreeShippingApplied.simple_free_shipping}}"/>
+            <argument name="freeShippingOption" value="{{CartPriceRuleConditionAndFreeShippingApplied.simple_free_shipping}}"/>
         </actionGroup>
         <actionGroup ref="AdminCreateCartPriceRuleLabelsSectionActionGroup" stepKey="createActiveCartPriceRuleLabelsSection">
-            <argument name="ruleName" value="CartPriceRuleConditionAndFreeShippingApplied"/>
+            <argument name="rule" value="CartPriceRuleConditionAndFreeShippingApplied"/>
         </actionGroup>
         <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="seeAssertCartPriceRuleSuccessSaveMessage"/>
 

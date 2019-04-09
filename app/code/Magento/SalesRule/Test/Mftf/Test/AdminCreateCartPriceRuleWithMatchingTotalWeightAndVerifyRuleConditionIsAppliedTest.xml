@@ -47,14 +47,14 @@
         <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickOnEllipsis"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="{{CartPriceRuleConditionAppliedForWeight.totalWeight}}" stepKey="fillTotalItemQuantity"/>
         <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
-            <argument name="ruleName" value="CartPriceRuleConditionAppliedForWeight"/>
+            <argument name="rule" value="CartPriceRuleConditionAppliedForWeight"/>
         </actionGroup>
         <actionGroup ref="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup" stepKey="createActiveCartPriceRuleFreeShippingActionsSection">
-            <argument name="ruleName" value="{{CartPriceRuleConditionAppliedForWeight.simple_free_shipping}}"/>
+            <argument name="freeShippingOption" value="{{CartPriceRuleConditionAppliedForWeight.simple_free_shipping}}"/>
         </actionGroup>
         <scrollTo selector="{{AdminCartPriceRulesFormSection.labelsHeader}}" stepKey="scrollToLabelsHeader"/>
         <actionGroup ref="AdminCreateCartPriceRuleLabelsSectionActionGroup" stepKey="createActiveCartPriceRuleLabelsSection">
-            <argument name="ruleName" value="CartPriceRuleConditionAppliedForWeight"/>
+            <argument name="rule" value="CartPriceRuleConditionAppliedForWeight"/>
         </actionGroup>
         <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="seeAssertCartPriceRuleSuccessSaveMessage"/>
 
