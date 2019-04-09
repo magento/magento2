@@ -609,7 +609,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         QuoteEntity $quote,
         \Magento\Sales\Api\Data\OrderInterface $order,
         \Exception $e
-    ): void {
+    ) {
         try {
             if (!empty($this->addressesToSync)) {
                 foreach ($this->addressesToSync as $addressId) {

@@ -106,4 +106,26 @@
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
     </actionGroup>
+
+    <actionGroup name="CheckoutSelectShippingMethodActionGroup">
+        <arguments>
+            <!-- First available shipping method will be selected if value is not passed for shippingMethod -->
+            <argument name="shippingMethod" defaultValue="" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName(shippingMethod)}}" dependentSelector="{{CheckoutShippingMethodsSection.checkShippingMethodByName(shippingMethod)}}" visible="true" stepKey="selectShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <waitForPageLoad stepKey="waitForPaymentMethod"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+    </actionGroup>
+
+    <actionGroup name="AssertStorefrontErrorMessageOnOrderSubmit">
+        <arguments>
+            <argument name="errorMessage" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrderNoWait}}" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrderNoWait}}" stepKey="clickPlaceOrder"/>
+        <waitForText selector="{{StorefrontMessagesSection.errorMessage}}" userInput="{{errorMessage}}" time="30" stepKey="seeShippingMethodError"/>
+    </actionGroup>
 </actionGroups>
