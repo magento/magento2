@@ -88,6 +88,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
                 $customerGroup->setCode(!empty($customerGroupCode) ? $customerGroupCode : null);
                 $customerGroup->setTaxClassId($taxClass);
 
+                $this->_eventManager->dispatch('adminhtml_controller_customer_group_prepare_save', [
+                    'request' => $this->getRequest(),
+                    'customer_group' => $customerGroup,
+                ]);
+
                 $this->groupRepository->save($customerGroup);
 
                 $this->messageManager->addSuccess(__('You saved the customer group.'));
