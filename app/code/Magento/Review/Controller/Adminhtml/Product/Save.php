@@ -73,7 +73,7 @@ class Save extends ProductController implements HttpPostActionInterface
             } else {
                 $resultRedirect->setPath('*/*/');
             }
-            $productId = $this->getRequest()->getParam('productId');
+            $productId = (int)$this->getRequest()->getParam('productId');
             if ($productId) {
                 $resultRedirect->setPath("catalog/product/edit/id/$productId");
             }
