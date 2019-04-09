@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
   * Copyright © Magento, Inc. All rights reserved.
@@ -9,7 +9,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateCartPriceRuleLabelsSectionActionGroup">
         <arguments>
-            <argument name="ruleName"/>
+            <argument name="ruleName" type="entity"/>
         </arguments>
         <conditionalClick selector="{{AdminCartPriceRulesFormSection.labelsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.labelsHeader}}" visible="true" stepKey="clickToExpandLabels"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.defaultRuleLabelAllStoreViews}}" userInput="{{ruleName.defaultRuleLabelAllStoreViews}}" stepKey="fillDefaultRuleLabelAllStoreViews"/>

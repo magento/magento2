@@ -18,5 +18,6 @@
         <element name="rulesRow" type="text" selector="//tr[@data-role='row']"/>
         <element name="pageCurrent" type="text" selector="//label[@for='promo_quote_grid_page-current']"/>
         <element name="totalCount" type="text" selector="span[data-ui-id*='grid-total-count']"/>
+        <element name="emptyText" type="text" selector="//tr[@class='data-grid-tr-no-data even']/td"/>
     </section>
 </sections>
