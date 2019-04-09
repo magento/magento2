@@ -58,10 +58,48 @@ return [
     ],
     'mt_srand' => [
         'replacement' => '',
-        'exclude' => []
+        'exclude' => [
+            [
+                'type' => 'setup',
+                'path' => 'src/Magento/Setup/Fixtures/ConfigurableProductsFixture.php'
+            ],
+            [
+                'type' => 'setup',
+                'path' => 'src/Magento/Setup/Fixtures/PriceProvider.php'
+            ],
+            [
+                'type' => 'setup',
+                'path' => 'src/Magento/Setup/Fixtures/SimpleProductsFixture.php'
+            ],
+        ]
     ],
     'mt_rand' => [
         'replacement' => 'random_int',
-        'exclude' => []
+        'exclude' => [
+            [
+                'type' => 'setup',
+                'path' => 'src/Magento/Setup/Fixtures/ImagesGenerator/ImagesGenerator.php'
+            ],
+            [
+                'type' => 'setup',
+                'path' => 'src/Magento/Setup/Fixtures/BundleProductsFixture.php'
+            ],
+            [
+                'type' => 'setup',
+                'path' => 'src/Magento/Setup/Fixtures/ConfigurableProductsFixture.php'
+            ],
+            [
+                'type' => 'setup',
+                'path' => 'src/Magento/Setup/Fixtures/OrdersFixture.php'
+            ],
+            [
+                'type' => 'setup',
+                'path' => 'src/Magento/Setup/Fixtures/PriceProvider.php'
+            ],
+            [
+                'type' => 'setup',
+                'path' => 'src/Magento/Setup/Fixtures/SimpleProductsFixture.php'
+            ],
+        ]
     ],
 ];
