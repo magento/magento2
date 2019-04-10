@@ -6,7 +6,8 @@
   */
 -->
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
-    <operation name="CatalogRecentlyProductsConfiguration" dataType="catalog_recently_products" type="create" auth="adminFormKey" url="/admin/system_config/save/section/catalog/" method="POST">
+    <operation name="CatalogRecentlyProductsConfiguration" dataType="catalog_recently_products" type="create"
+               auth="adminFormKey" url="/admin/system_config/save/section/catalog/" method="POST" successRegex="/messages-message-success/">
         <object key="groups" dataType="catalog_recently_products">
             <object key="recently_products" dataType="catalog_recently_products">
                 <object key="fields" dataType="catalog_recently_products">

@@ -78,10 +78,4 @@
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
     </actionGroup>
-    <actionGroup name="AdminCreateRecentlyProductsWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
-        <selectOption selector="{{AdminNewWidgetSection.productAttributesToShow}}" parameterArray="['Name', 'Image', 'Price']" stepKey="selectAllProductAttributes"/>
-        <selectOption selector="{{AdminNewWidgetSection.productButtonsToShow}}" parameterArray="['Add to Cart', 'Add to Compare', 'Add to Wishlist']" stepKey="selectAllProductButtons"/>
-        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
-    </actionGroup>
 </actionGroups>

@@ -8,8 +8,8 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="StorefrontWidgetsSection">
-        <element name="widgetProductsGrid" type="block" selector=".block.widget.block-products-list.grid"/>
-        <element name="widgetProductName" type="text" selector=".product-item-name"/>
+    <section name="AdminCatalogProductWidgetSection">
+        <element name="productAttributesToShow" type="multiselect" selector="select[name='parameters[show_attributes][]']"/>
+        <element name="productButtonsToShow" type="multiselect" selector="select[name='parameters[show_buttons][]']"/>
     </section>
 </sections>
