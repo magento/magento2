@@ -2603,7 +2603,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param bool $isBillingAddress
      * @return void
      */
-    private function assignAddress(Address $address, bool $isBillingAddress = true): void
+    private function assignAddress(Address $address, bool $isBillingAddress = true)
     {
         if ($this->isAddressAllowedForWebsite($address, $this->getStoreId())) {
             $isBillingAddress
