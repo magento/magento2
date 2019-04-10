@@ -9,14 +9,9 @@ namespace Magento\InventoryCatalog\Model\Source\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryCatalog\Model\GetSourceItemsBySkuAndSourceCodes;
-use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferInterface;
 use Magento\InventoryCatalogApi\Model\PartialInventoryTransferValidatorInterface;
 
 class PartialTransferItemsValidator implements PartialInventoryTransferValidatorInterface
@@ -40,23 +35,20 @@ class PartialTransferItemsValidator implements PartialInventoryTransferValidator
     }
 
     /**
-     * Validates a partial transfer request.
-     *
-     * @param PartialInventoryTransferInterface $transfer
-     * @return ValidationResult
+     * @inheritdoc
      */
-    public function validate(PartialInventoryTransferInterface $transfer): ValidationResult
+    public function validate(string $originSourceCode, string $destinationSourceCode, array $items): ValidationResult
     {
         $errors = [];
 
-        foreach ($transfer->getItems() as $item) {
+        foreach ($items as $item) {
             try {
-                $originSourceItem = $this->getSourceItemBySkuAndSource($item->getSku(), $transfer->getOriginSourceCode());
+                $originSourceItem = $this->getSourceItemBySkuAndSource($item->getSku(), $originSourceCode);
                 if ($originSourceItem->getQuantity() < $item->getQty()) {
                     $errors[] = __('Requested transfer amount for sku %sku is not available', ['sku' => $item->getSku()]);
                 }
 
-                $this->getSourceItemBySkuAndSource($item->getSku(), $transfer->getOriginSourceCode());
+                $this->getSourceItemBySkuAndSource($item->getSku(), $destinationSourceCode);
             } catch (NoSuchEntityException $e) {
                 $errors[] = __('%message', ['message' => $e->getMessage()]);
             }

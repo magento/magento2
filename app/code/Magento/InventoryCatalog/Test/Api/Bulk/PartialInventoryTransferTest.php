@@ -48,7 +48,7 @@ class PartialInventoryTransferTest extends WebapiAbstract
             ]
         ];
 
-        $this->_webApiCall($serviceInfo, ['transfer' => $this->getTransferItem('SKU-1', 1, 'eu-3', 'eu-2')]);
+        $this->_webApiCall($serviceInfo, $this->getTransferItem('SKU-1', 1, 'eu-3', 'eu-2'));
 
         $originSourceItem = $this->getSourceItem('SKU-1', 'eu-3');
         $destinationSourceItem = $this->getSourceItem('SKU-1', 'eu-2');
@@ -75,7 +75,6 @@ class PartialInventoryTransferTest extends WebapiAbstract
             ]
         ];
 
-        $body = ['transfer' => $this->getTransferItem('SKU-1', 1, 'eu-999', 'eu-2')];
         $expectedError = [
             'message' => self::VALIDATION_FAIL_MESSAGE,
             'errors' => [
@@ -93,7 +92,7 @@ class PartialInventoryTransferTest extends WebapiAbstract
                 ]
             ]
         ];
-        $this->webApiCallWithException($serviceInfo, $body, $expectedError);
+        $this->webApiCallWithException($serviceInfo, $this->getTransferItem('SKU-1', 1, 'eu-999', 'eu-2'), $expectedError);
     }
 
     /**
@@ -110,7 +109,6 @@ class PartialInventoryTransferTest extends WebapiAbstract
             ]
         ];
 
-        $body = ['transfer' => $this->getTransferItem('SKU-1', 1, 'eu-3', 'eu-999')];
         $expectedError = [
             'message' => self::VALIDATION_FAIL_MESSAGE,
             'errors' => [
@@ -119,10 +117,16 @@ class PartialInventoryTransferTest extends WebapiAbstract
                     'parameters' => [
                         'sourceCode' => 'eu-999'
                     ]
+                ],
+                [
+                    'message' => '%message',
+                    'parameters' => [
+                        'message' => 'Source item for SKU-1 and eu-999 does not exist'
+                    ]
                 ]
             ]
         ];
-        $this->webApiCallWithException($serviceInfo, $body, $expectedError);
+        $this->webApiCallWithException($serviceInfo, $this->getTransferItem('SKU-1', 1, 'eu-3', 'eu-999'), $expectedError);
     }
 
     /**
@@ -139,7 +143,6 @@ class PartialInventoryTransferTest extends WebapiAbstract
             ]
         ];
 
-        $body = ['transfer' => $this->getTransferItem('SKU-1', 1, 'eu-3', 'eu-3')];
         $expectedError = [
             'message' => self::VALIDATION_FAIL_MESSAGE,
             'errors' => [
@@ -149,7 +152,7 @@ class PartialInventoryTransferTest extends WebapiAbstract
                 ]
             ]
         ];
-        $this->webApiCallWithException($serviceInfo, $body, $expectedError);
+        $this->webApiCallWithException($serviceInfo, $this->getTransferItem('SKU-1', 1, 'eu-3', 'eu-3'), $expectedError);
     }
 
     /**
@@ -166,7 +169,6 @@ class PartialInventoryTransferTest extends WebapiAbstract
             ]
         ];
 
-        $body = ['transfer' => $this->getTransferItem('SKU-1', 100, 'eu-3', 'eu-2')];
         $expectedError = [
             'message' => self::VALIDATION_FAIL_MESSAGE,
             'errors' => [
@@ -178,7 +180,7 @@ class PartialInventoryTransferTest extends WebapiAbstract
                 ]
             ]
         ];
-        $this->webApiCallWithException($serviceInfo, $body, $expectedError);
+        $this->webApiCallWithException($serviceInfo, $this->getTransferItem('SKU-1', 100, 'eu-3', 'eu-2'), $expectedError);
     }
 
     /**
@@ -191,11 +193,11 @@ class PartialInventoryTransferTest extends WebapiAbstract
     private function getTransferItem(string $sku, float $qty, string $origin, string $destination): array
     {
         return [
-            PartialInventoryTransferInterface::ITEMS => [
+            'items' => [
                 [PartialInventoryTransferItemInterface::SKU => $sku, PartialInventoryTransferItemInterface::QTY => $qty]
             ],
-            PartialInventoryTransferInterface::ORIGIN_SOURCE_CODE => $origin,
-            PartialInventoryTransferInterface::DESTINATION_SOURCE_CODE => $destination
+            'origin_source_code' => $origin,
+            'destination_source_code' => $destination
         ];
     }
 

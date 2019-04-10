@@ -9,14 +9,8 @@ namespace Magento\InventoryCatalog\Model\Source\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryCatalog\Model\GetSourceItemsBySkuAndSourceCodes;
-use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferInterface;
 use Magento\InventoryCatalogApi\Model\PartialInventoryTransferValidatorInterface;
 
 class PartialTransferSourceValidator implements PartialInventoryTransferValidatorInterface
@@ -35,33 +29,30 @@ class PartialTransferSourceValidator implements PartialInventoryTransferValidato
         ValidationResultFactory $validationResultFactory,
         SourceRepositoryInterface $sourceRepository
     ) {
-        $this->validationResultFactory  = $validationResultFactory;
-        $this->sourceRepository         = $sourceRepository;
+        $this->validationResultFactory = $validationResultFactory;
+        $this->sourceRepository = $sourceRepository;
     }
 
     /**
-     * Validates a partial transfer request.
-     *
-     * @param PartialInventoryTransferInterface $transfer
-     * @return ValidationResult
+     * @inheritdoc
      */
-    public function validate(PartialInventoryTransferInterface $transfer): ValidationResult
+    public function validate(string $originSourceCode, string $destinationSourceCode, array $items): ValidationResult
     {
         $errors = [];
 
         try {
-            $this->sourceRepository->get($transfer->getOriginSourceCode());
+            $this->sourceRepository->get($originSourceCode);
         } catch (NoSuchEntityException $e) {
-            $errors[] = __('Origin source %sourceCode does not exist', ['sourceCode' => $transfer->getOriginSourceCode()]);
+            $errors[] = __('Origin source %sourceCode does not exist', ['sourceCode' => $originSourceCode]);
         }
 
         try {
-            $this->sourceRepository->get($transfer->getDestinationSourceCode());
+            $this->sourceRepository->get($destinationSourceCode);
         } catch (NoSuchEntityException $e) {
-            $errors[] = __('Destination source %sourceCode does not exist', ['sourceCode' => $transfer->getDestinationSourceCode()]);
+            $errors[] = __('Destination source %sourceCode does not exist', ['sourceCode' => $destinationSourceCode]);
         }
 
-        if ($transfer->getOriginSourceCode() === $transfer->getDestinationSourceCode()) {
+        if ($originSourceCode === $destinationSourceCode) {
             $errors[] = __('Cannot transfer a source on itself');
         }
 

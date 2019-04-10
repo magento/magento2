@@ -10,7 +10,6 @@ namespace Magento\InventoryCatalogApi\Model;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferInterface;
 
 /**
  * Chain of validators. Extension point for new validators via di configuration
@@ -54,11 +53,11 @@ class PartialInventoryTransferValidatorChain implements PartialInventoryTransfer
     /**
      * @inheritdoc
      */
-    public function validate(PartialInventoryTransferInterface $transfer): ValidationResult
+    public function validate(string $originSourceCode, string $destinationSourceCode, array $items): ValidationResult
     {
         $errors = [];
         foreach ($this->validators as $validator) {
-            $validationResult = $validator->validate($transfer);
+            $validationResult = $validator->validate($originSourceCode, $destinationSourceCode, $items);
 
             if (!$validationResult->isValid()) {
                 $errors = array_merge($errors, $validationResult->getErrors());

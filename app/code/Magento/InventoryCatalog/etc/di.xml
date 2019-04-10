@@ -105,8 +105,6 @@
                 type="Magento\InventoryCatalog\Model\BulkInventoryTransfer"/>
     <preference for="Magento\InventoryCatalogApi\Api\BulkPartialInventoryTransferInterface"
                 type="Magento\InventoryCatalog\Model\BulkPartialInventoryTransfer"/>
-    <preference for="Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferInterface"
-                type="Magento\InventoryCatalog\Model\PartialInventoryTransfer"/>
     <preference for="Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface"
                 type="Magento\InventoryCatalog\Model\PartialInventoryTransferItem"/>
 

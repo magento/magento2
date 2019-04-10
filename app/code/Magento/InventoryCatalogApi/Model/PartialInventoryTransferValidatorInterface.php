@@ -8,15 +8,17 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalogApi\Model;
 
 use Magento\Framework\Validation\ValidationResult;
-use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferInterface;
+use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface;
 
 interface PartialInventoryTransferValidatorInterface
 {
     /**
      * Validates a partial transfer request.
      *
-     * @param PartialInventoryTransferInterface $transfer
+     * @param string $originSourceCode
+     * @param string $destinationSourceCode
+     * @param PartialInventoryTransferItemInterface[] $items
      * @return ValidationResult
      */
-    public function validate(PartialInventoryTransferInterface $transfer): ValidationResult;
+    public function validate(string $originSourceCode, string $destinationSourceCode, array $items): ValidationResult;
 }
