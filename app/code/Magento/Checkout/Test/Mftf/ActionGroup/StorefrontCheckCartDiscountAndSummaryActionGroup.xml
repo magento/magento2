@@ -14,6 +14,8 @@
             <argument name="total" type="string"/>
             <argument name="discount" type="string"/>
         </arguments>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForPrices"/>
         <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-${{discount}}" stepKey="assertDiscount"/>
         <see selector="{{CheckoutCartSummarySection.total}}" userInput="${{total}}" stepKey="assertTotal"/>
     </actionGroup>
