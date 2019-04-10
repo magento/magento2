@@ -220,6 +220,13 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     private $accountConfirmation;
 
     /**
+     * Caching property to store customer address data models by the address ID.
+     *
+     * @var array
+     */
+    private $storedAddress;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -314,7 +321,10 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $addressesData = [];
         /** @var \Magento\Customer\Model\Address $address */
         foreach ($this->getAddresses() as $address) {
-            $addressesData[] = $address->getDataModel();
+            if (!isset($this->storedAddress[$address->getId()])) {
+                $this->storedAddress[$address->getId()] = $address->getDataModel();
+            }
+            $addressesData[] = $this->storedAddress[$address->getId()];
         }
         $customerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
@@ -1045,17 +1055,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Prepare customer for delete
-     *
-     * @return $this
-     */
-    public function beforeDelete()
-    {
-        //TODO : Revisit and figure handling permissions in MAGETWO-11084 Implementation: Service Context Provider
-        return parent::beforeDelete();
-    }
-
-    /**
      * Processing object after save data
      *
      * @return $this
@@ -1295,7 +1294,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Create address instance
+     * Create Address from Factory
      *
      * @return Address
      */
@@ -1305,7 +1304,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Create address collection instance
+     * Create Address Collection from Factory
      *
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
      */
@@ -1315,7 +1314,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Returns templates types
+     * Get Template Types
      *
      * @return array
      */

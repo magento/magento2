@@ -183,7 +183,7 @@ class InstallCommand extends AbstractSetupCommand
                 self::INPUT_KEY_INTERACTIVE_SETUP,
                 self::INPUT_KEY_INTERACTIVE_SETUP_SHORTCUT,
                 InputOption::VALUE_NONE,
-                'Interactive Magento instalation'
+                'Interactive Magento installation'
             ),
             new InputOption(
                 OperationsExecutor::KEY_SAFE_MODE,

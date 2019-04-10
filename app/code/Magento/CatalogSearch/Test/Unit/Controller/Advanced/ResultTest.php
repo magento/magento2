@@ -20,7 +20,17 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $filters = null;
         $expectedQuery = 'filtersData';
 
-        $view = $this->createPartialMock(\Magento\Framework\App\View::class, ['loadLayout', 'renderLayout']);
+        $view = $this->createPartialMock(
+            \Magento\Framework\App\View::class,
+            ['loadLayout', 'renderLayout', 'getPage', 'getLayout']
+        );
+        $update = $this->createPartialMock(\Magento\Framework\View\Model\Layout\Merge::class, ['getHandles']);
+        $update->expects($this->once())->method('getHandles')->will($this->returnValue([]));
+        $layout = $this->createPartialMock(\Magento\Framework\View\Result\Layout::class, ['getUpdate']);
+        $layout->expects($this->once())->method('getUpdate')->will($this->returnValue($update));
+        $view->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
+        $page = $this->createPartialMock(\Magento\Framework\View\Result\Page::class, ['initLayout']);
+        $view->expects($this->once())->method('getPage')->will($this->returnValue($page));
         $view->expects($this->once())->method('loadLayout')->will(
             $this->returnCallback(
                 function () use (&$filters, $expectedQuery) {
@@ -32,15 +42,9 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $request = $this->createPartialMock(\Magento\Framework\App\Console\Request::class, ['getQueryValue']);
         $request->expects($this->once())->method('getQueryValue')->will($this->returnValue($expectedQuery));
 
-        $collection = $this->createPartialMock(
-            \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class,
-            ['getSize']
-        );
-        $collection->expects($this->once())->method('getSize')->will($this->returnValue(1));
-
         $catalogSearchAdvanced = $this->createPartialMock(
             \Magento\CatalogSearch\Model\Advanced::class,
-            ['addFilters', '__wakeup', 'getProductCollection']
+            ['addFilters', '__wakeup']
         );
         $catalogSearchAdvanced->expects($this->once())->method('addFilters')->will(
             $this->returnCallback(
@@ -49,8 +53,6 @@ class ResultTest extends \PHPUnit\Framework\TestCase
                 }
             )
         );
-        $catalogSearchAdvanced->expects($this->once())->method('getProductCollection')
-            ->will($this->returnValue($collection));
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $context = $objectManager->getObject(
@@ -189,19 +191,10 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $request = $this->createPartialMock(\Magento\Framework\App\Console\Request::class, ['getQueryValue']);
         $request->expects($this->once())->method('getQueryValue')->will($this->returnValue($expectedQuery));
 
-        $collection = $this->createPartialMock(
-            \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class,
-            ['getSize']
-        );
-        $collection->expects($this->once())->method('getSize')->will($this->returnValue(0));
-
         $catalogSearchAdvanced = $this->createPartialMock(
             \Magento\CatalogSearch\Model\Advanced::class,
             ['addFilters', '__wakeup', 'getProductCollection']
         );
-
-        $catalogSearchAdvanced->expects($this->once())->method('getProductCollection')
-            ->will($this->returnValue($collection));
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $context = $objectManager->getObject(

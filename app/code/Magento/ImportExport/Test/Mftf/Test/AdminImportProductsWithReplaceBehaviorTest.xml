@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportProductsWithReplaceBehaviorTest" extends="AdminImportProductsWithAddUpdateBehaviorTest">
+        <annotations>
+            <description value="Verify Magento native import products with replace behavior."/>
+            <stories value="Import Products"/>
+            <features value="Import/Export"/>
+            <title value="Verify Magento native import products with replace behavior."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14076"/>
+            <group value="importExport"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create Simple Product2 -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                <field key="name">SimpleProductForTest2</field>
+                <field key="sku">SimpleProductForTest2</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create Simple Product3 -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct3">
+                <field key="name">SimpleProductForTest3</field>
+                <field key="sku">SimpleProductForTest3</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+
+        <!-- Import products with replace behavior -->
+        <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProducts">
+            <argument name="behavior" value="Replace"/>
+            <argument name="importFile" value="catalog_import_products.csv"/>
+            <argument name="importMessage" value="Created: 3, Updated: 0, Deleted: 3"/>
+        </actionGroup>
+    </test>
+</tests>

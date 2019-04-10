@@ -1472,12 +1472,15 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $passwordHash = '1a2b3f4c';
 
         $this->reInitModel();
-        $customer = $this->getMockBuilder(Customer::class)
+        $customer = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customer->expects($this->any())
             ->method('getId')
             ->willReturn($customerId);
+        $customer->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([]);
 
         $this->customerRepository
             ->expects($this->once())

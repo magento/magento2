@@ -132,7 +132,7 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage Address id 9999 does not exist.
+     * @expectedExceptionMessage Could not find a address with ID "9999"
      */
     public function testDeleteNonExistCustomerAddress()
     {
