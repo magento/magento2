@@ -19,5 +19,6 @@
         <element name="identifier" type="input" selector="input[name=identifier]"/>
         <element name="storeView" type="multiselect" selector="select[name=store_id]"/>
         <element name="duplicatedIdentifier" type="input" selector="//input[contains(@data-value,'{{var1}}')]" parameterized="true"/>
+        <element name="isActiveLabel" type="button" selector="div[data-index=is_active] .admin__actions-switch-label"/>
     </section>
 </sections>
