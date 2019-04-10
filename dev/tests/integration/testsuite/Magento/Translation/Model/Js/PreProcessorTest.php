@@ -149,7 +149,7 @@ EOT
 EOT
                 ,
                 <<<EOT
-                $.mage.__('The maximum you may purchase is %1.').replace('%1', params.maxAllowed);
+                'The maximum you may purchase is %1.'.replace('%1', params.maxAllowed);
 EOT
             ],
             [
@@ -157,7 +157,7 @@ EOT
                 \$t("text double quote");
                 \$t('text "some');
                 \$t('Payment ' + this.getTitle() + ' can\'t be initialized')
-                \$t.__('The maximum you may purchase is %1.').replace('%1', params.maxAllowed);
+                \$t('The maximum you may purchase is %1.').replace('%1', params.maxAllowed);
                 \$t(
                     'Set unique country-state combinations within the same fixed product tax. ' +
                     'Verify the combinations and try again.'
@@ -168,7 +168,7 @@ EOT
                 'text double quote';
                 'text "some';
                 \$t('Payment ' + this.getTitle() + ' can\'t be initialized')
-                \$t.__('The maximum you may purchase is %1.').replace('%1', params.maxAllowed);
+                'The maximum you may purchase is %1.'.replace('%1', params.maxAllowed);
                 \$t(
                     'Set unique country-state combinations within the same fixed product tax. ' +
                     'Verify the combinations and try again.'
