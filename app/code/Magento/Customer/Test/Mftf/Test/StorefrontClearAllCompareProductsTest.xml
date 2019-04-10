@@ -151,10 +151,6 @@
         <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="amOnMyAccountDashboard1"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
-        <seeElement selector="{{StorefrontCustomerCompareProductSection.productListMainArea}}" stepKey="seeCompareProductsMainArea1"/>
-        <see selector="{{StorefrontCustomerCompareProductSection.productCount}}" userInput="6 items" stepKey="seeCountInCompareProductTitle1"/>
-        <seeElement selector="{{StorefrontCustomerCompareProductSection.productByName($$createSimpleProduct1.name$$)}}" stepKey="seeProductInList1"/>
-
         <actionGroup ref="StorefrontClearCompareActionGroup" stepKey="clearComparedProducts1"/>
     </test>
 </tests>
