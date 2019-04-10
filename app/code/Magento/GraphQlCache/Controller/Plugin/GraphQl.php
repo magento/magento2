@@ -24,7 +24,7 @@ class GraphQl
     /**
      * @var CacheableQuery
      */
-    private $cacheInfo;
+    private $cacheableQuery;
 
     /**
      * @var Config
@@ -42,18 +42,18 @@ class GraphQl
     private $requestProcessor;
 
     /**
-     * @param CacheableQuery $cacheInfo
+     * @param CacheableQuery $cacheableQuery
      * @param Config $config
      * @param HttpResponse $response
      * @param HttpRequestProcessor $requestProcessor
      */
     public function __construct(
-        CacheableQuery $cacheInfo,
+        CacheableQuery $cacheableQuery,
         Config $config,
         HttpResponse $response,
         HttpRequestProcessor $requestProcessor
     ) {
-        $this->cacheInfo = $cacheInfo;
+        $this->cacheableQuery = $cacheableQuery;
         $this->config = $config;
         $this->response = $response;
         $this->requestProcessor = $requestProcessor;
@@ -94,9 +94,9 @@ class GraphQl
     ) {
         $sendNoCacheHeaders = false;
         if ($this->config->isEnabled() && $request->isGet()) {
-            if ($this->cacheInfo->shouldPopulateCacheHeadersWithTags()) {
+            if ($this->cacheableQuery->shouldPopulateCacheHeadersWithTags()) {
                 $this->response->setPublicHeaders($this->config->getTtl());
-                $this->response->setHeader('X-Magento-Tags', implode(',', $this->cacheInfo->getCacheTags()), true);
+                $this->response->setHeader('X-Magento-Tags', implode(',', $this->cacheableQuery->getCacheTags()), true);
             } else {
                 $sendNoCacheHeaders = true;
             }

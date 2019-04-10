@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQlCache\Model;
 
 /**
- * CacheableQuery object is a registry for collecting cache related info and tags of all entities.
+ * CacheableQuery should be used as a singleton for collecting cache related info and tags of all entities.
  */
 class CacheableQuery
 {

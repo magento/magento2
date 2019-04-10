@@ -16,8 +16,10 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Webapi\Response;
 use Magento\Framework\GraphQl\Query\Fields as QueryFields;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Front controller for web API GraphQL area.
@@ -26,6 +28,12 @@ use Magento\Framework\Controller\Result\JsonFactory;
  */
 class GraphQl implements FrontControllerInterface
 {
+    /**
+     * @var Response
+     * @deprecated
+     */
+    private $response;
+
     /**
      * @var SchemaGeneratorInterface
      */
@@ -67,6 +75,7 @@ class GraphQl implements FrontControllerInterface
     private $jsonFactory;
 
     /**
+     * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
      * @param QueryProcessor $queryProcessor
@@ -74,9 +83,10 @@ class GraphQl implements FrontControllerInterface
      * @param ContextInterface $resolverContext
      * @param HttpRequestProcessor $requestProcessor
      * @param QueryFields $queryFields
-     * @param JsonFactory $jsonFactory
+     * @param JsonFactory|null $jsonFactory
      */
     public function __construct(
+        Response $response,
         SchemaGeneratorInterface $schemaGenerator,
         SerializerInterface $jsonSerializer,
         QueryProcessor $queryProcessor,
@@ -84,8 +94,9 @@ class GraphQl implements FrontControllerInterface
         ContextInterface $resolverContext,
         HttpRequestProcessor $requestProcessor,
         QueryFields $queryFields,
-        JsonFactory $jsonFactory
+        JsonFactory $jsonFactory = null
     ) {
+        $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
         $this->jsonSerializer = $jsonSerializer;
         $this->queryProcessor = $queryProcessor;
@@ -93,7 +104,7 @@ class GraphQl implements FrontControllerInterface
         $this->resolverContext = $resolverContext;
         $this->requestProcessor = $requestProcessor;
         $this->queryFields = $queryFields;
-        $this->jsonFactory = $jsonFactory;
+        $this->jsonFactory = $jsonFactory ?:ObjectManager::getInstance()->get(JsonFactory::class);
     }
 
     /**
