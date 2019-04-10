@@ -75,26 +75,25 @@ class UpdateDefaultSourceItemAtLegacyStockItemSaveTest extends TestCase
      */
     public function testSaveLegacyStockItemAssignedToDefaultSourceAsynchronously(): void
     {
-//        $stockItem = $this->stockRegistry->getStockItemBySku('SKU-1');
-//        $stockItem->setQty(10);
-//        $this->stockRegistry->updateStockItemBySku('SKU-1', $stockItem);
-//
-//        $defaultSourceItem = $this->getDefaultSourceItemBySku->execute('SKU-1');
-//        self::assertEquals(
-//            5.5,
-//            $defaultSourceItem->getQuantity(),
-//            'Source item was update synchronously even if asynchronous operation was requested'
-//        );
-//
-//        $this->consumer->process(1);
-//
-//        $defaultSourceItem = $this->getDefaultSourceItemBySku->execute('SKU-1');
-//        self::assertEquals(
-//            10,
-//            $defaultSourceItem->getQuantity(),
-//            'Asynchronous source item update failed'
-//        );
-        $this->markTestIncomplete('Test is failing due to missing AMQP configuration');
+        $stockItem = $this->stockRegistry->getStockItemBySku('SKU-1');
+        $stockItem->setQty(10);
+        $this->stockRegistry->updateStockItemBySku('SKU-1', $stockItem);
+
+        $defaultSourceItem = $this->getDefaultSourceItemBySku->execute('SKU-1');
+        self::assertEquals(
+            5.5,
+            $defaultSourceItem->getQuantity(),
+            'Source item was update synchronously even if asynchronous operation was requested'
+        );
+
+        $this->consumer->process(1);
+
+        $defaultSourceItem = $this->getDefaultSourceItemBySku->execute('SKU-1');
+        self::assertEquals(
+            10,
+            $defaultSourceItem->getQuantity(),
+            'Asynchronous source item update failed'
+        );
     }
 
     /**

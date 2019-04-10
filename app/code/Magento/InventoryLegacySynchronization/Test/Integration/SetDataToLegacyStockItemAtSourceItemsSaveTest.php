@@ -135,48 +135,47 @@ class SetDataToLegacyStockItemAtSourceItemsSaveTest extends TestCase
      */
     public function testShouldSynchronizeLegacyStockAsynchronously(): void
     {
-//        $productSku = 'SKU-1';
-//        $product = $this->productRepository->get($productSku);
-//        $productId = $product->getId();
-//        $websiteId = 0;
-//
-//        /** @var StockItemCriteriaInterface $legacyStockItemCriteria */
-//        $legacyStockItemCriteria = $this->legacyStockItemCriteriaFactory->create();
-//        $legacyStockItemCriteria->setProductsFilter($productId);
-//        $legacyStockItemCriteria->setScopeFilter($websiteId);
-//        $legacyStockItems = $this->legacyStockItemRepository->getList($legacyStockItemCriteria)->getItems();
-//        self::assertCount(1, $legacyStockItems);
-//
-//        $legacyStockItem = reset($legacyStockItems);
-//        self::assertTrue($legacyStockItem->getIsInStock());
-//        self::assertEquals(5.5, $legacyStockItem->getQty());
-//
-//        $searchCriteria = $this->searchCriteriaBuilder
-//            ->addFilter(SourceItemInterface::SKU, $productSku)
-//            ->addFilter(SourceItemInterface::SOURCE_CODE, $this->defaultSourceProvider->getCode())
-//            ->create();
-//        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
-//        self::assertCount(1, $sourceItems);
-//
-//        $sourceItem = reset($sourceItems);
-//        $sourceItem->setQuantity(20.0);
-//        $sourceItem->setStatus(SourceItemInterface::STATUS_OUT_OF_STOCK);
-//        $this->sourceItemsSave->execute($sourceItems);
-//
-//        // Make sure we did not yet synchronized it
-//        $legacyStockItems = $this->legacyStockItemRepository->getList($legacyStockItemCriteria)->getItems();
-//        $legacyStockItem = current($legacyStockItems);
-//        self::assertCount(1, $legacyStockItems);
-//        self::assertTrue($legacyStockItem->getIsInStock());
-//        self::assertEquals(5.5, $legacyStockItem->getQty());
-//
-//        $this->consumer->process(1);
-//
-//        // Check after asynchrnous consumer call
-//        $legacyStockItems = $this->legacyStockItemRepository->getList($legacyStockItemCriteria)->getItems();
-//        $legacyStockItem = current($legacyStockItems);
-//        self::assertFalse($legacyStockItem->getIsInStock());
-//        self::assertEquals(20, $legacyStockItem->getQty());
-        $this->markTestIncomplete('Test is failing due to missing AMQP configuration');
+        $productSku = 'SKU-1';
+        $product = $this->productRepository->get($productSku);
+        $productId = $product->getId();
+        $websiteId = 0;
+
+        /** @var StockItemCriteriaInterface $legacyStockItemCriteria */
+        $legacyStockItemCriteria = $this->legacyStockItemCriteriaFactory->create();
+        $legacyStockItemCriteria->setProductsFilter($productId);
+        $legacyStockItemCriteria->setScopeFilter($websiteId);
+        $legacyStockItems = $this->legacyStockItemRepository->getList($legacyStockItemCriteria)->getItems();
+        self::assertCount(1, $legacyStockItems);
+
+        $legacyStockItem = reset($legacyStockItems);
+        self::assertTrue($legacyStockItem->getIsInStock());
+        self::assertEquals(5.5, $legacyStockItem->getQty());
+
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(SourceItemInterface::SKU, $productSku)
+            ->addFilter(SourceItemInterface::SOURCE_CODE, $this->defaultSourceProvider->getCode())
+            ->create();
+        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
+        self::assertCount(1, $sourceItems);
+
+        $sourceItem = reset($sourceItems);
+        $sourceItem->setQuantity(20.0);
+        $sourceItem->setStatus(SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->sourceItemsSave->execute($sourceItems);
+
+        // Make sure we did not yet synchronized it
+        $legacyStockItems = $this->legacyStockItemRepository->getList($legacyStockItemCriteria)->getItems();
+        $legacyStockItem = current($legacyStockItems);
+        self::assertCount(1, $legacyStockItems);
+        self::assertTrue($legacyStockItem->getIsInStock());
+        self::assertEquals(5.5, $legacyStockItem->getQty());
+
+        $this->consumer->process(1);
+
+        // Check after asynchrnous consumer call
+        $legacyStockItems = $this->legacyStockItemRepository->getList($legacyStockItemCriteria)->getItems();
+        $legacyStockItem = current($legacyStockItems);
+        self::assertFalse($legacyStockItem->getIsInStock());
+        self::assertEquals(20, $legacyStockItem->getQty());
     }
 }
