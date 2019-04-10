@@ -26,6 +26,7 @@
         <element name="cartItems" type="text" selector=".minicart-items"/>
         <element name="billingAddress" type="text" selector="div.billing-address-details"/>
         <element name="placeOrder" type="button" selector=".payment-method._active button.action.primary.checkout" timeout="30"/>
+        <element name="placeOrderNoWait" type="button" selector=".payment-method._active button.action.primary.checkout"/>
         <element name="productOptionsByProductItemPrice" type="text" selector="//div[@class='product-item-inner']//div[@class='subtotal']//span[@class='price'][contains(.,'{{price}}')]//ancestor::div[@class='product-item-details']//div[@class='product options']" parameterized="true"/>
         <element name="productOptionsActiveByProductItemPrice" type="text" selector="//div[@class='subtotal']//span[@class='price'][contains(.,'{{price}}')]//ancestor::div[@class='product-item-details']//div[@class='product options active']" parameterized="true"/>
         <element name="productItemPriceByName" type="text" selector="//div[@class='product-item-details'][contains(., '{{ProductName}}')]//span[@class='price']" parameterized="true"/>
