@@ -38,6 +38,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
+    // phpcs:disable
     public static function setUpBeforeClass()
     {
         self::$_baseDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -48,10 +49,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         }
         touch(self::$_baseDir . '/1.swf');
     }
+    // phpcs:enable
 
     /**
      * @inheritdoc
      */
+    // phpcs:ignore
     public static function tearDownAfterClass()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -112,6 +115,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $fileName = 'magento_small_image.jpg';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
+        // phpcs:disable
         $fixtureDir = realpath(__DIR__ . '/../../../../Catalog/_files');
         copy($fixtureDir . DIRECTORY_SEPARATOR . $fileName, $filePath);
 
@@ -122,9 +126,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'error' => 0,
             'size' => 12500,
         ];
-
         $this->storage->uploadFile(self::$_baseDir);
         $this->assertTrue(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        // phpcs:enable
     }
 
     /**
@@ -141,6 +145,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     {
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
+        // phpcs:disable
         $fixtureDir = realpath(__DIR__ . '/../../../_files');
         copy($fixtureDir . DIRECTORY_SEPARATOR . $fileName, $filePath);
 
@@ -154,6 +159,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->storage->uploadFile(self::$_baseDir, $storageType);
         $this->assertFalse(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        // phpcs:enable
     }
 
     /**
@@ -185,6 +191,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $fileName = 'file.gif';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
+        // phpcs:disable
         $file = fopen($filePath, "wb");
         fwrite($file, 'just a text');
 
@@ -198,5 +205,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->storage->uploadFile(self::$_baseDir);
         $this->assertFalse(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        // phpcs:enable
     }
 }
