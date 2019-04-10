@@ -113,32 +113,10 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         if (!$this->auth->isAllowed('Magento_Cms::save_design')) {
             $designMeta = [
                 'design' => [
-                    'children' => [
-                        'page_layout' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'disabled' => true,
-                                    ]
-                                ]
-                            ]
-                        ],
-                        'layout_update_xml' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'disabled' => true,
-                                    ]
-                                ]
-                            ]
-                        ],
-                        'custom_theme' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'disabled' => true,
-                                    ]
-                                ]
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'disabled' => true
                             ]
                         ]
                     ]
