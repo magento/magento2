@@ -8,6 +8,9 @@ namespace Magento\Rule\Block;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 
+/**
+ * Renderer for Editable sales rules
+ */
 class Editable extends AbstractBlock implements RendererInterface
 {
     /**
@@ -48,15 +51,15 @@ class Editable extends AbstractBlock implements RendererInterface
 
         if ($element->getShowAsText()) {
             $html = ' <input type="hidden" class="hidden" id="' .
-                $element->getHtmlId() .
+                $this->escapeHtmlAttr($element->getHtmlId()) .
                 '" name="' .
-                $element->getName() .
+                $this->escapeHtmlAttr($element->getName()) .
                 '" value="' .
-                $element->getValue() .
+                $this->escapeHtmlAttr($element->getValue()) .
                 '" data-form-part="' .
-                $element->getData('data-form-part') .
+                $this->escapeHtmlAttr($element->getData('data-form-part')) .
                 '"/> ' .
-                htmlspecialchars(
+                $this->escapeHtml(
                     $valueName
                 ) . '&nbsp;';
         } else {
@@ -91,5 +94,16 @@ class Editable extends AbstractBlock implements RendererInterface
         }
 
         return $html;
+    }
+
+    /**
+     * Escape html attribute
+     *
+     * @param string\null $attribute
+     * @return string
+     */
+    private function escapeHtmlAttr($attribute)
+    {
+        return $attribute ? $this->_escaper->escapeHtmlAttr($attribute) : $attribute;
     }
 }
