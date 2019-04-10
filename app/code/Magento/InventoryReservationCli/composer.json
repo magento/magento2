@@ -1,11 +1,10 @@
 {
-    "name": "magento/inventoryreservationcli",
+    "name": "magento/module-inventory-reservation-cli",
     "description": "N/A",
     "require": {
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
-        "magento/module-sales": "*",
-        "magento/module-inventory-reservations": "*"
+        "magento/module-sales": "*"
     },
     "type": "magento2-module",
     "license": [
