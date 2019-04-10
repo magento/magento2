@@ -96,4 +96,8 @@
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Second Website" stepKey="selectWebsites"/>
 
     </actionGroup>
+
+    <actionGroup name="AdminInactiveCartPriceRuleActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
+        <click selector="{{AdminCartPriceRulesFormSection.active}}" stepKey="clickActiveToDisable" after="fillRuleName"/>
+    </actionGroup>
 </actionGroups>
