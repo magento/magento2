@@ -31,5 +31,6 @@
         <element name="firstNameRequiredMessage" type="text" selector="//input[@name='customer[firstname]']/../label[contains(.,'This is a required field.')]"/>
         <element name="lastNameRequiredMessage" type="text" selector="//input[@name='customer[lastname]']/../label[contains(.,'This is a required field.')]"/>
         <element name="emailRequiredMessage" type="text" selector="//input[@name='customer[email]']/../label[contains(.,'This is a required field.')]"/>
+        <element name="customAttribute" type="select" selector="//select[contains(@name, 'customer[{{attribute_code}}]')]" parameterized="true"/>
     </section>
 </sections>
