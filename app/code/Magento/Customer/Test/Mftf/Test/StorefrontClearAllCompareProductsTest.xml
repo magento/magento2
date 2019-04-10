@@ -88,21 +88,17 @@
             <deleteData createDataKey="createSimpleCustomer1" stepKey="deleteSimpleCustomer1"/>
             <deleteData createDataKey="createSimpleCategory1" stepKey="deleteSimpleCategory1"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
-            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="createConfigProduct1" stepKey="deleteConfigProduct1"/>
             <deleteData createDataKey="createVirtualProduct1" stepKey="deleteVirtualProduct1"/>
             <deleteData createDataKey="createBundleProduct1" stepKey="deleteBundleProduct1"/>
             <deleteData createDataKey="createGroupedProduct1" stepKey="deleteGroupedProduct1"/>
             <deleteData createDataKey="createDownloadableProduct1" stepKey="deleteDownloadableProduct1"/>
-            <deleteData createDataKey="addDownloadableLink1" stepKey="deleteDownloadableProductLink1"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer1">
             <argument name="Customer" value="$$createSimpleCustomer1$$" />
         </actionGroup>
-        <seeElement selector="{{StorefrontCustomerCompareProductSection.emptyMessage}}" stepKey="seeTheEmptyListMessage1"/>
-        <dontSeeElement selector="{{StorefrontCustomerCompareProductSection.compare}}" stepKey="dontSeeCompareButton1"/>
-        <dontSeeElement selector="{{StorefrontCustomerCompareProductSection.clearAll}}" stepKey="dontSeeCompareClearAll1"/>
 
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage1">
             <argument name="productUrl" value="$$createSimpleProduct1.custom_attributes[url_key]$$"/>
@@ -159,11 +155,6 @@
         <see selector="{{StorefrontCustomerCompareProductSection.productCount}}" userInput="6 items" stepKey="seeCountInCompareProductTitle1"/>
         <seeElement selector="{{StorefrontCustomerCompareProductSection.productByName($$createSimpleProduct1.name$$)}}" stepKey="seeProductInList1"/>
 
-        <click selector="{{StorefrontCustomerCompareProductSection.clearAll}}" stepKey="clickOnClearAll1"/>
-        <click selector="{{AdminGridConfirmActionSection.ok}}" stepKey="clickOnOk1"/>
-
-        <seeElement selector="{{StorefrontCustomerCompareProductSection.emptyMessage}}" stepKey="seeTheEmptyListMessage2"/>
-        <dontSeeElement selector="{{StorefrontCustomerCompareProductSection.compare}}" stepKey="dontSeeCompareButton2"/>
-        <dontSeeElement selector="{{StorefrontCustomerCompareProductSection.clearAll}}" stepKey="dontSeeCompareClearAll2"/>
+        <actionGroup ref="StorefrontClearCompareActionGroup" stepKey="clearComparedProducts1"/>
     </test>
 </tests>
