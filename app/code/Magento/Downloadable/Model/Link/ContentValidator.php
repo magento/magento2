@@ -49,7 +49,7 @@ class ContentValidator
             throw new InputException(__('Link price must have numeric positive value.'));
         }
         if (filter_var((int) $link->getNumberOfDownloads(), FILTER_VALIDATE_INT) === false
-            || $link->getNumberOfDownloads() < 0) {
+            || (int) $link->getNumberOfDownloads() < 0) {
             throw new InputException(__('Number of downloads must be a positive integer.'));
         }
         if (filter_var($link->getSortOrder(), FILTER_VALIDATE_INT) === false
