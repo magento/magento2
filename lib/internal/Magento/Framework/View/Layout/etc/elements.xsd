@@ -14,6 +14,7 @@
                     <xs:sequence>
                         <xs:element name="updater" type="updaterType" minOccurs="0" maxOccurs="1"/>
                     </xs:sequence>
+                    <xs:attribute name="shared" type="xs:boolean" default="true" use="optional"/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
