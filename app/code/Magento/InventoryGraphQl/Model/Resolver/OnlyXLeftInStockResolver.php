@@ -66,7 +66,7 @@ class OnlyXLeftInStockResolver implements ResolverInterface
     }
 
     /**
-     * Get quantity of a specified product when lower then configuration threshold.
+     * Get quantity of a specified product when equals or lower then configured threshold.
      *
      * @param string $sku
      * @return null|float
