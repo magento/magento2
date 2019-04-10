@@ -70,7 +70,7 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
      */
     public function testSetPurchaseOrderPaymentMethodOnCartWithSimpleProduct()
     {
-        $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
+        $methodCode = Purchaseorder::PAYMENT_METHOD_PURCHASEORDER_CODE;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
