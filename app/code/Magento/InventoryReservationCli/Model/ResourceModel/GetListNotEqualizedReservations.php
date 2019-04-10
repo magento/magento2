@@ -9,7 +9,7 @@ namespace Magento\InventoryReservationCli\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 
-class GetListReservations
+class GetListNotEqualizedReservations
 {
     /**
      * @var ResourceConnection
@@ -32,7 +32,9 @@ class GetListReservations
 
         $qry = $connection
             ->select()
-            ->from($tableName);
-        return $connection->fetchAll($qry);
+            ->from(['r' => $tableName], ['reservations' => 'GROUP_CONCAT(r.reservation_id)'])
+            ->group(['r.stock_id', 'r.sku'])
+            ->having('SUM(r.quantity) != 0');
+        return $connection->fetchRow($qry);
     }
 }

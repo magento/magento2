@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\InventoryReservationCli\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Sales\Api\Data\OrderInterface;
+use Magento\InventoryReservationCli\Model\ResourceModel\GetReservationsList;
 
-class GetOrderWithBrokenReservation
+class GetOrdersWithNotCompensatedReservations
 {
     /**
      * @var GetReservationsList
@@ -35,25 +35,40 @@ class GetOrderWithBrokenReservation
     }
 
     /**
-     * @return OrderInterface[]
+     * @return array
      */
     public function execute(): array
     {
-        /** @var array $orderListReservations */
-        $allReservations = $this->getReservationsList->getListReservationsTotOrder();
+        /** @var array $reservationList */
+        $reservationList = $this->getReservationsList->execute();
 
         /** @var array $result */
         $result = [];
-        foreach ($allReservations as $reservation){
+        foreach ($reservationList as $reservation) {
             /** @var array $metadata */
             $metadata = $this->serialize->unserialize($reservation['metadata']);
             $objectId = $metadata['object_id'];
-            if(!array_key_exists($objectId, $result)) {
-                $result[$objectId] = (float) 0;
+            $sku = $reservation['sku'];
+            $orderType = $metadata['object_type'];
+
+            if ($orderType !== 'order') {
+                continue;
             }
-            $result[$objectId] += (float)$reservation['quantity'];
+
+            if (!isset($result[$objectId])) {
+                $result[$objectId] = [];
+            }
+            if (!isset($result[$objectId][$sku])) {
+                $result[$objectId][$sku] = 0.0;
+            }
+
+            $result[$objectId][$sku] += (float) $reservation['quantity'];
         }
-        $result = array_filter($result);
-        return $result;
+
+        foreach ($result as &$entry) {
+            $entry = array_filter($entry);
+        }
+
+        return array_filter($result);
     }
 }

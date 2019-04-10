@@ -13,7 +13,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 
-class GetOrderInFinalState
+class GetOrdersInFinalState
 {
     /**
      * @var OrderRepositoryInterface

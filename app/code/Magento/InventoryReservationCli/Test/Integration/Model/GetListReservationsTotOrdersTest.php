@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservationCli\Test\Integration\Model;
 
-use Magento\InventoryReservationCli\Model\GetOrderInFinalState;
-use Magento\InventoryReservationCli\Model\GetOrderWithBrokenReservation;
+use Magento\InventoryReservationCli\Model\GetOrdersInFinalState;
+use Magento\InventoryReservationCli\Model\GetOrdersWithNotCompensatedReservations;
 use Magento\Sales\Api\Data\OrderInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -23,17 +23,17 @@ class GetListReservationsTotOrdersTest extends TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
 
-        /** @var GetOrderWithBrokenReservation $getOrderWithBrokenReservation */
-        $getOrderWithBrokenReservation = $objectManager->get(GetOrderWithBrokenReservation::class);
+        /** @var GetOrdersWithNotCompensatedReservations $getOrdersWithNotCompensatedReservations */
+        $getOrdersWithNotCompensatedReservations = $objectManager->get(GetOrdersWithNotCompensatedReservations::class);
 
-        /** @var GetOrderInFinalState $getOrderInFinalState */
-        $getOrderInFinalState = $objectManager->get(GetOrderInFinalState::class);
+        /** @var GetOrdersInFinalState $getOrderInFinalState */
+        $getOrderInFinalState = $objectManager->get(GetOrdersInFinalState::class);
 
-        /** @var array $result */
-        $result = $getOrderWithBrokenReservation->execute();
+        /** @var array $itemsNotCompensated */
+        $itemsNotCompensated = $getOrdersWithNotCompensatedReservations->execute();
 
         /** @var OrderInterface[] $orders */
-        $orders = $getOrderInFinalState->execute(array_keys($result));
+        $orders = $getOrderInFinalState->execute(array_keys($itemsNotCompensated));
 
         self::assertSame([], $orders);
     }
@@ -47,17 +47,17 @@ class GetListReservationsTotOrdersTest extends TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
 
-        /** @var GetOrderWithBrokenReservation $getOrderWithBrokenReservation */
-        $getOrderWithBrokenReservation = $objectManager->get(GetOrderWithBrokenReservation::class);
+        /** @var GetOrdersWithNotCompensatedReservations $getOrdersWithNotCompensatedReservations */
+        $getOrdersWithNotCompensatedReservations = $objectManager->get(GetOrdersWithNotCompensatedReservations::class);
 
-        /** @var GetOrderInFinalState $getOrderInFinalState */
-        $getOrderInFinalState = $objectManager->get(GetOrderInFinalState::class);
+        /** @var GetOrdersInFinalState $getOrderInFinalState */
+        $getOrderInFinalState = $objectManager->get(GetOrdersInFinalState::class);
 
-        /** @var array $result */
-        $result = $getOrderWithBrokenReservation->execute();
+        /** @var array $itemsNotCompensated */
+        $itemsNotCompensated = $getOrdersWithNotCompensatedReservations->execute();
 
         /** @var OrderInterface[] $orders */
-        $orders = $getOrderInFinalState->execute(array_keys($result));
+        $orders = $getOrderInFinalState->execute(array_keys($itemsNotCompensated));
 
         self::assertCount(1, $orders);
     }

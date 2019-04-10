@@ -9,7 +9,9 @@
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="inventory_complete_order_inconsistency" xsi:type="object">Magento\InventoryReservationCli\Command\ShowInconsistencyOrderComplete</item>
+                <item name="inventory_complete_order_inconsistency" xsi:type="object">
+                    Magento\InventoryReservationCli\Command\ShowInconsistenciesInCompletedOrders
+                </item>
             </argument>
         </arguments>
     </type>
