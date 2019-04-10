@@ -13,6 +13,11 @@ use PHPUnit\Framework\TestCase;
 class ProductTest extends TestCase
 {
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @var Product
      */
     private $model;
@@ -29,7 +34,8 @@ class ProductTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
-        $this->model = $this->objectManager->get(Product::class);
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->model = $this->objectManager->create(Product::class);
     }
 
     /**
@@ -42,11 +48,29 @@ class ProductTest extends TestCase
         $sku = 'simple';
         $attribute = 'name';
 
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get($sku);
-
+        $product = $this->productRepository->get($sku);
         $actual = $this->model->getAttributeRawValue($product->getId(), $attribute, null);
         self::assertEquals($product->getName(), $actual);
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Catalog/_files/product_special_price.php
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture default_store catalog/price/scope 1
+     */
+    public function testUpdateStoreSpecificSpecialPrice()
+    {
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->productRepository->get('simple', true, 1);
+        $this->assertEquals(5.99, $product->getSpecialPrice());
+
+        $product->setSpecialPrice('');
+        $this->model->save($product);
+        $product = $this->productRepository->get('simple', false, 1, true);
+        $this->assertEmpty($product->getSpecialPrice());
+
+        $product = $this->productRepository->get('simple', false, 0, true);
+        $this->assertEquals(5.99, $product->getSpecialPrice());
     }
 }
