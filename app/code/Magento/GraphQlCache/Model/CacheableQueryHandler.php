@@ -45,9 +45,9 @@ class CacheableQueryHandler
      *
      * @param mixed $resolvedValue
      * @param Field|null $field
-     * @param ResolveInfo|null $info
+     * @return void
      */
-    public function handleCacheFromResolverResponse(array $resolvedValue, Field $field)
+    public function handleCacheFromResolverResponse(array $resolvedValue, Field $field) : void
     {
         $cache = $field->getCache();
         $cacheTag = isset($cache['cache_tag']) ? $cache['cache_tag'] : [];
@@ -100,6 +100,7 @@ class CacheableQueryHandler
      * Set cache validity for the graphql request
      *
      * @param bool $isValid
+     * @return void
      */
     private function setCacheValidity(bool $isValid): void
     {
