@@ -124,6 +124,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
         }
 
         foreach (array_keys($postItems) as $customerId) {
+            $postItems[$customerId]['gender'] = isset($postItems[$customerId]['gender']) ? $postItems[$customerId]['gender'] : '';
             $this->setCustomer($this->customerRepository->getById($customerId));
             $currentCustomer = clone $this->getCustomer();
 
