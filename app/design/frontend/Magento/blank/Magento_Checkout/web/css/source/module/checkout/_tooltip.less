@@ -173,10 +173,10 @@
         width: 0;
     }
     .field-tooltip .field-tooltip-content::before {
-        border-bottom-color: @checkout-tooltip-content__border-color;
+        .lib-css(border-bottom-color, @checkout-tooltip-content__border-color);
     }
     .field-tooltip .field-tooltip-content::after {
-        border-bottom-color: @checkout-tooltip-content__background-color;
+        .lib-css(border-bottom-color, @checkout-tooltip-content__background-color);
         top: 1px;
     }
 }
