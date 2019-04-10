@@ -76,6 +76,7 @@ class FileInfo
     private function getBaseDirectory()
     {
         if (!isset($this->baseDirectory)) {
+            // This could also be DirectoryList::PUB if the webroot is in /pub
             $this->baseDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
         }
 
