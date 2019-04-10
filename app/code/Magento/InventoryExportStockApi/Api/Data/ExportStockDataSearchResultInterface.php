@@ -20,7 +20,7 @@ interface ExportStockDataSearchResultInterface extends SearchResultsInterface
      *
      * @return array
      */
-    public function getItems(): array;
+    public function getItems();
 
     /**
      * Set stock data array
@@ -28,5 +28,5 @@ interface ExportStockDataSearchResultInterface extends SearchResultsInterface
      * @param array $items
      * @return $this
      */
-    public function setItems(array $items): ExportStockDataSearchResultInterface;
+    public function setItems(array $items);
 }

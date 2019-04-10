@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryExportStockApi\Api;
 
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\InventoryExportStockApi\Api\Data\ExportStockDataSearchResultInterface;
-
 /**
  * Interface for ExportStockData
  * @api
@@ -19,9 +16,14 @@ interface ExportStockDataInterface
     /**
      * Provides stock export data
      *
-     * @param SearchCriteriaInterface $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param int $stockId
      * @param int $qtyForNotManageStock
-     * @return ExportStockDataSearchResultInterface
+     * @return \Magento\InventoryExportStockApi\Api\Data\ExportStockDataSearchResultInterface
      */
-    public function execute(SearchCriteriaInterface $searchCriteria, int $qtyForNotManageStock): ExportStockDataSearchResultInterface;
+    public function execute(
+        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria,
+        int $stockId = null,
+        int $qtyForNotManageStock = 1
+    ): \Magento\InventoryExportStockApi\Api\Data\ExportStockDataSearchResultInterface;
 }
