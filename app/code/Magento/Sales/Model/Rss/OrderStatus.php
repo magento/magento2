@@ -10,6 +10,8 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Rss renderer for order statuses.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderStatus implements DataProviderInterface
 {
@@ -128,8 +130,10 @@ class OrderStatus implements DataProviderInterface
         $order = $this->getOrder();
         $key = '';
         if ($order !== null) {
+            // phpcs:ignore
             $key = md5($order->getId() . $order->getIncrementId() . $order->getCustomerId());
         }
+
         return 'rss_order_status_data_' . $key;
     }
 
@@ -158,6 +162,7 @@ class OrderStatus implements DataProviderInterface
         if ((string)$this->request->getParam('signature') !== $this->signature->signData($data)) {
             return null;
         }
+        // phpcs:ignore
         $json = base64_decode($data);
         if ($json) {
             $data = json_decode($json, true);
