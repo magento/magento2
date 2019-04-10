@@ -58,6 +58,15 @@ class Resolver
         /** Only if array @see \Magento\Framework\GraphQl\Query\Resolver\Value */
         if (is_array($resolvedValue)) {
             $this->cacheableQueryHandler->handleCacheFromResolverResponse($resolvedValue, $field);
+        } elseif ($resolvedValue instanceof \Magento\Framework\GraphQl\Query\Resolver\Value) {
+            $resolvedValue->then(function () use ($resolvedValue, $field) {
+                if (is_array($resolvedValue->promise->result) && $field) {
+                    $this->cacheableQueryHandler->handleCacheFromResolverResponse(
+                        $resolvedValue->promise->result,
+                        $field
+                    );
+                }
+            });
         }
         return $resolvedValue;
     }

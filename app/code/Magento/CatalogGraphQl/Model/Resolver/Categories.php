@@ -94,39 +94,35 @@ class Categories implements ResolverInterface
         $this->categoryIds = array_merge($this->categoryIds, $categoryIds);
         $that = $this;
 
-        return $this->valueFactory->create(
-            function () use ($that, $categoryIds, $info) {
-                $categories = [];
-                if (empty($that->categoryIds)) {
-                    return [];
-                }
+        return $this->valueFactory->create(function () use ($that, $categoryIds, $info) {
+            $categories = [];
+            if (empty($that->categoryIds)) {
+                return [];
+            }
 
-                if (!$this->collection->isLoaded()) {
-                    $that->attributesJoiner->join($info->fieldNodes[0], $this->collection);
-                    $this->collection->addIdFilter($this->categoryIds);
-                }
-                /** @var CategoryInterface | \Magento\Catalog\Model\Category $item */
-                foreach ($this->collection as $item) {
-                    if (in_array($item->getId(), $categoryIds)) {
-                        // Try to extract all requested fields from the loaded collection data
-                        $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item, true);
-                        $categories[$item->getId()]['model'] = $item;
-                        $requestedFields = $that->attributesJoiner->getQueryFields($info->fieldNodes[0]);
-                        $extractedFields = array_keys($categories[$item->getId()]);
-                        $foundFields = array_intersect($requestedFields, $extractedFields);
-                        if (count($requestedFields) === count($foundFields)) {
-                            continue;
-                        }
-
-                        // If not all requested fields were extracted from the collection, start more complex extraction
-                        $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item);
+            if (!$this->collection->isLoaded()) {
+                $that->attributesJoiner->join($info->fieldNodes[0], $this->collection);
+                $this->collection->addIdFilter($this->categoryIds);
+            }
+            /** @var CategoryInterface | \Magento\Catalog\Model\Category $item */
+            foreach ($this->collection as $item) {
+                if (in_array($item->getId(), $categoryIds)) {
+                    // Try to extract all requested fields from the loaded collection data
+                    $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item, true);
+                    $categories[$item->getId()]['model'] = $item;
+                    $requestedFields = $that->attributesJoiner->getQueryFields($info->fieldNodes[0]);
+                    $extractedFields = array_keys($categories[$item->getId()]);
+                    $foundFields = array_intersect($requestedFields, $extractedFields);
+                    if (count($requestedFields) === count($foundFields)) {
+                        continue;
                     }
-                }
 
-                return $categories;
-            },
-            $field,
-            $info
-        );
+                    // If not all requested fields were extracted from the collection, start more complex extraction
+                    $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item);
+                }
+            }
+
+            return $categories;
+        });
     }
 }

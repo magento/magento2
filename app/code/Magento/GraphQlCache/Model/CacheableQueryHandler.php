@@ -8,9 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQlCache\Model;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
 
 /**
  * Handler of collecting tagging on cache.
@@ -44,7 +42,7 @@ class CacheableQueryHandler
      * Set cache validity to the cacheableQuery after resolving any resolver or evaluating a promise in a query
      *
      * @param mixed $resolvedValue
-     * @param Field|null $field
+     * @param Field $field
      * @return void
      */
     public function handleCacheFromResolverResponse(array $resolvedValue, Field $field) : void
@@ -70,7 +68,7 @@ class CacheableQueryHandler
     /**
      * Extract ids for resolved items
      *
-     * @param mixed|Value $resolvedValue
+     * @param array $resolvedValue
      * @return array
      */
     private function extractResolvedItemsIds(array $resolvedValue) : array
