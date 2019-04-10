@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Test\Unit\Controller\Adminhtml\Index;
 
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Controller\Adminhtml\Index\Render;
 use Magento\Ui\Model\UiComponentTypeResolver;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Zend\Http\AbstractMessage;
+use Zend\Http\Response;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -97,6 +102,11 @@ class RenderTest extends \PHPUnit\Framework\TestCase
      */
     private $loggerMock;
 
+    /**
+     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $escaperMock;
+
     protected function setUp()
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
@@ -170,6 +180,10 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $this->uiComponentTypeResolverMock = $this->getMockBuilder(UiComponentTypeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->escaperMock = $this->createMock(Escaper::class);
+        $this->escaperMock->expects($this->any())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -181,6 +195,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
                 'contentTypeResolver' => $this->uiComponentTypeResolverMock,
                 'resultJsonFactory' => $this->resultJsonFactoryMock,
                 'logger' => $this->loggerMock,
+                'escaper' => $this->escaperMock,
             ]
         );
     }
@@ -201,7 +216,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->method('appendBody')
             ->willThrowException(new \Exception('exception'));
 
-        $jsonResultMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
+        $jsonResultMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->setMethods(['setData'])
             ->getMock();
@@ -289,6 +304,34 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     {
         $name = 'test-name';
         $renderedData = '<html>data</html>';
+
+        if (false === $isAllowed) {
+            $jsonResultMock = $this->getMockBuilder(Json::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['setStatusHeader', 'setData'])
+                ->getMock();
+
+            $jsonResultMock->expects($this->at(0))
+                ->method('setStatusHeader')
+                ->with(
+                    Response::STATUS_CODE_403,
+                    AbstractMessage::VERSION_11,
+                    'Forbidden'
+                )
+                ->willReturnSelf();
+
+            $jsonResultMock->expects($this->at(1))
+                ->method('setData')
+                ->with([
+                    'error' => 'Forbidden',
+                    'errorcode' => 403
+                ])
+                ->willReturnSelf();
+
+            $this->resultJsonFactoryMock->expects($this->any())
+                ->method('create')
+                ->willReturn($jsonResultMock);
+        }
 
         $this->requestMock->expects($this->any())
             ->method('getParam')

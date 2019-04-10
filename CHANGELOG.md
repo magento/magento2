@@ -626,7 +626,7 @@ Tests:
     * Fixed an issue where filters were not shown on product reviews report grid
     * Fixed an issue where second customer address was not deleted from customer account
     * Fixed an issue where custom options pop-up was still displayed after submit
-    * Fixed an issue where Second Product was not added to Shopping Cart from Wishlist at first atempt
+    * Fixed an issue where Second Product was not added to Shopping Cart from Wishlist at first attempt
     * Fixed an issue where customer invalid email message was not displayed
     * Fixed an issue where All Access Tokens for Customer without Tokens could not be revoked
     * Fixed an issue where it was impossible to add Product to Shopping Cart from shared Wishlist
@@ -785,7 +785,7 @@ Tests:
     * Refactored controller actions in the Product area
     * Moved commands cache.php, indexer.php, log.php, test.php, compiler.php, singletenant\_compiler.php, generator.php, pack.php, deploy.php and file\_assembler.php to the new bin/magento CLI framework
 * Data Migration Tool
-    * The Data Migraiton Tool is published in the separate [repository](https://github.com/magento/data-migration-tool-ce "Data Migration Tool repository")
+    * The Data Migration Tool is published in the separate [repository](https://github.com/magento/data-migration-tool-ce "Data Migration Tool repository")
 * Fixed bugs
     * Fixed an issue where error appeared during placing order with virtual product
     * Fixed an issue where billing and shipping sections didn't contain address information on order print
