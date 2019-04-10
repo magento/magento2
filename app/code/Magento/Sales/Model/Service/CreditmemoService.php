@@ -196,13 +196,13 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
             $creditmemo->getOrder()->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal()
         );
         if ($baseOrderRefund > $this->priceCurrency->round($creditmemo->getOrder()->getBaseTotalPaid())) {
-            $availableRefund = $creditmemo->getOrder()->getTotalPaid()
-                - $creditmemo->getOrder()->getTotalRefunded();
+            $baseAvailableRefund = $creditmemo->getOrder()->getBaseTotalPaid()
+                - $creditmemo->getOrder()->getBaseTotalRefunded();
 
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'The most money available to refund is %1.',
-                    $creditmemo->getOrder()->formatPriceTxt($availableRefund)
+                    $creditmemo->getOrder()->formatPriceTxt($baseAvailableRefund)
                 )
             );
         }

@@ -343,71 +343,17 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($order);
         $creditMemo->method('getBaseGrandTotal')
             ->willReturn($baseGrandTotal);
-        $creditMemo->method('getGrandTotal')
-            ->willReturn($baseGrandTotal);
         $order->method('getBaseTotalRefunded')
-            ->willReturn($baseTotalRefunded);
-        $order->method('getTotalRefunded')
             ->willReturn($baseTotalRefunded);
         $this->priceCurrency->method('round')
             ->withConsecutive([$baseTotalRefunded + $baseGrandTotal], [$baseTotalPaid])
             ->willReturnOnConsecutiveCalls($baseTotalRefunded + $baseGrandTotal, $baseTotalPaid);
         $order->method('getBaseTotalPaid')
-            ->willReturn($baseTotalPaid);
-        $order->method('getTotalPaid')
             ->willReturn($baseTotalPaid);
         $baseAvailableRefund = $baseTotalPaid - $baseTotalRefunded;
         $order->method('formatPriceTxt')
             ->with($baseAvailableRefund)
             ->willReturn($baseAvailableRefund);
-        $this->creditmemoService->refund($creditMemo, true);
-    }
-
-    /**
-     * @expectedExceptionMessage The most money available to refund is €0.88.
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
-    public function testMultiCurrencyRefundExpectsMoneyAvailableToReturn()
-    {
-        $baseGrandTotal = 10.00;
-        $baseTotalRefunded = 9.00;
-        $baseTotalPaid = 10;
-
-        $grandTotal = 8.81;
-        $totalRefunded = 7.929;
-        $totalPaid = 8.81;
-
-        /** @var CreditmemoInterface|MockObject $creditMemo */
-        $creditMemo = $this->getMockBuilder(CreditmemoInterface::class)
-            ->setMethods(['getId', 'getOrder'])
-            ->getMockForAbstractClass();
-        $creditMemo->method('getId')
-            ->willReturn(null);
-        /** @var Order|MockObject $order */
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $creditMemo->method('getOrder')
-            ->willReturn($order);
-        $creditMemo->method('getBaseGrandTotal')
-            ->willReturn($baseGrandTotal);
-        $creditMemo->method('getGrandTotal')
-            ->willReturn($grandTotal);
-        $order->method('getBaseTotalRefunded')
-            ->willReturn($baseTotalRefunded);
-        $order->method('getTotalRefunded')
-            ->willReturn($totalRefunded);
-        $this->priceCurrency->method('round')
-            ->withConsecutive([$baseTotalRefunded + $baseGrandTotal], [$baseTotalPaid])
-            ->willReturnOnConsecutiveCalls($baseTotalRefunded + $baseGrandTotal, $baseTotalPaid);
-        $order->method('getBaseTotalPaid')
-            ->willReturn($baseTotalPaid);
-        $order->method('getTotalPaid')
-            ->willReturn($totalPaid);
-        $availableRefund = $totalPaid - $totalRefunded;
-        $order->method('formatPriceTxt')
-            ->with($availableRefund)
-            ->willReturn(sprintf('€%.2f', $availableRefund));
         $this->creditmemoService->refund($creditMemo, true);
     }
 
