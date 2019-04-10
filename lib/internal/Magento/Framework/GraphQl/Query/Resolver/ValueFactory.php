@@ -41,6 +41,7 @@ class ValueFactory
      * Create value with passed in callback that returns data as parameter
      *
      * @param callable $callback
+     * @param Field $field
      * @param ResolveInfo $info
      * @return Value
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

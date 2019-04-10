@@ -23,8 +23,6 @@ class CurlClientWithCookies
     protected $jsonSerializer;
 
     /**
-     * CurlClient constructor.
-     *
      * @param CurlClient $curlClient
      * @param \Magento\TestFramework\Helper\JsonSerializer $jsonSerializer
      */

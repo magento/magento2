@@ -93,11 +93,11 @@ abstract class GraphQlAbstract extends WebapiAbstract
         array $headers = []
     ) {
         return $response = $this->getGraphQlClient()->getQueryResponseHeaders(
-                $query,
-                $variables,
-                $operationName,
-                $this->composeHeaders($headers)
-            );
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
     }
 
     /**

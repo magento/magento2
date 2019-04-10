@@ -125,8 +125,12 @@ class Client
      * @param array $headers
      * @return mixed
      */
-    public function getQueryResponseHeaders(string $query, array $variables = [], string $operationName = '', array $headers = [])
-    {
+    public function getQueryResponseHeaders(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ) {
         $url = $this->getEndpointUrl();
         $requestArray = [
             'query' => $query,

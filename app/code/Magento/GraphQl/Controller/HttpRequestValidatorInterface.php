@@ -9,6 +9,7 @@ namespace Magento\GraphQl\Controller;
 
 use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+
 /**
  * Use this interface to implement a validator for a Graphql HTTP requests
  */

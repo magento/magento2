@@ -12,6 +12,12 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 
+/**
+ * Handler of collecting tagging on cache.
+ *
+ * This class would be used to collect tags after each operation where we need to collect tags
+ * usually after data is fetched or resolved.
+ */
 class CacheableQueryHandler
 {
     /**
