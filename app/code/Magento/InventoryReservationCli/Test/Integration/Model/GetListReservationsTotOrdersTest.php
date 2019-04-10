@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservations\Test\Integration\Model;
+namespace Magento\InventoryReservationCli\Test\Integration\Model;
 
 use Magento\InventoryReservationCli\Model\GetOrderInFinalState;
 use Magento\InventoryReservationCli\Model\GetOrderWithBrokenReservation;
