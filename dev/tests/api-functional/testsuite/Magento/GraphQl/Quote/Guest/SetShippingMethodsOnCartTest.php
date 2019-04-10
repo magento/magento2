@@ -270,6 +270,14 @@ QUERY;
                 }]',
                 'Could not find a cart with ID "non_existent_masked_id"'
             ],
+            'disabled_shipping_method' => [
+                'cart_id: "cart_id_value", shipping_methods: [{
+                    cart_address_id: cart_address_id_value
+                    carrier_code: "freeshipping"
+                    method_code: "freeshipping"
+                }]',
+                'Carrier with such method not found: freeshipping, freeshipping'
+            ],
         ];
     }
 
