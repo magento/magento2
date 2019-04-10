@@ -100,7 +100,6 @@
         <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$customSource.source[source_code]$$)}}" stepKey="assignCustomSourceToProduct"/>
         <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="doneWithCustomSourceAssignment"/>
 
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$customSource.source[source_code]$$" stepKey="checkCustomSourceCode"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$customSource.source[name]$$" stepKey="checkCustomSourceName"/>
 
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillSourceQty"/>
