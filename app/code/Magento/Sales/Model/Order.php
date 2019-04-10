@@ -1785,6 +1785,17 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Retrieve text formatted base price value
+     *
+     * @param float $price
+     * @return string
+     */
+    public function formatBasePriceTxt($price)
+    {
+        return $this->getBaseCurrency()->formatTxt($price);
+    }
+
+    /**
      * Is currency different
      *
      * @return bool
