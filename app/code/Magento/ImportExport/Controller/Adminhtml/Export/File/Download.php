@@ -23,7 +23,7 @@ class Download extends ExportController implements HttpGetActionInterface
     /**
      * url to this controller
      */
-    const URL = 'admin/export_file/download/';
+    const URL = 'adminhtml/export_file/download/';
 
     /**
      * @var FileFactory
