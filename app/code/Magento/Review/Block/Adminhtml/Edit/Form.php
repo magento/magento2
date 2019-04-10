@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Review\Block\Adminhtml\Edit;
+
 /**
  * Adminhtml Review Edit Form
  */
-namespace Magento\Review\Block\Adminhtml\Edit;
-
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
