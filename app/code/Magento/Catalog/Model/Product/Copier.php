@@ -117,13 +117,21 @@ class Copier
     private function setStoresUrl(Product $product, Product $duplicate) : void
     {
         $storeIds = $duplicate->getStoreIds();
-        $resource = $product->getResource();
         $productId = $product->getId();
+        $productResource = $product->getResource();
+        $defaultUrlKey = $productResource->getAttributeRawValue(
+                $productId,
+                'url_key',
+                \Magento\Store\Model\Store::DEFAULT_STORE_ID
+            );
         $duplicate->setData('save_rewrites_history', false);
         foreach ($storeIds as $storeId) {
             $isDuplicateSaved = false;
             $duplicate->setStoreId($storeId);
-            $urlKey = $resource->getAttributeRawValue($productId, 'url_key', $storeId);
+            $urlKey = $productResource->getAttributeRawValue($productId, 'url_key', $storeId);
+            if ($urlKey === $defaultUrlKey) {
+                continue;
+            }
             do {
                 $urlKey = $this->modifyUrl($urlKey);
                 $duplicate->setUrlKey($urlKey);
