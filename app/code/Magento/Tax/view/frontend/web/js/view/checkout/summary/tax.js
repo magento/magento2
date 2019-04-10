@@ -12,7 +12,6 @@ define([
     'Magento_Checkout/js/view/summary/abstract-total',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/totals',
-    'jquery',
     'mage/translate',
     'underscore'
 ], function (ko, Component, quote, totals, $t, _) {
