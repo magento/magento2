@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\GraphQl\Quote\GetQuoteShippingAddressIdByReservedQuoteId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -132,7 +133,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $input
      * @param string $message
      * @dataProvider dataProviderSetShippingMethodWithWrongParameters
-     * @throws \Exception
+     * @throws Exception
      */
     public function testSetShippingMethodWithWrongParameters(string $input, string $message)
     {
@@ -269,7 +270,7 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage You cannot specify multiple shipping methods.
      */
     public function testSetMultipleShippingMethods()
@@ -315,7 +316,7 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      *
-     * @expectedException \Exception
+     * @expectedException Exception
      */
     public function testSetShippingMethodToGuestCart()
     {
@@ -344,7 +345,7 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      *
-     * @expectedException \Exception
+     * @expectedException Exception
      */
     public function testSetShippingMethodToAnotherCustomerCart()
     {
@@ -428,6 +429,30 @@ mutation {
   }
 }
 QUERY;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessage The shipping method can't be set for an empty cart. Add an item to cart and try again.
+     */
+    public function testSetShippingMethodOnAnEmptyCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $carrierCode = 'flatrate';
+        $methodCode = 'flatrate';
+        $quoteAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute('test_quote');
+
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $methodCode,
+            $carrierCode,
+            $quoteAddressId
+        );
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
