@@ -252,10 +252,12 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
      */
     public function getCacheKeyDataProvider()
     {
+        // phpcs:disable
         return [
             [base64_encode('{"order_id":1,"increment_id":"100000001","customer_id":1}'), md5('11000000011')],
             [base64_encode('{"order_id":"1","increment_id":true,"customer_id":true}'), '']
         ];
+        // phpcs:enable
     }
 
     public function testGetCacheLifetime()
