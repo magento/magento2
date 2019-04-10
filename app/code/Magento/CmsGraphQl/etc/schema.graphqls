@@ -37,6 +37,7 @@ type CmsBlocks @doc(description: "CMS blocks information") {
 }
 
 type CmsBlock @doc(description: "CMS block defines all CMS block information") {
+    block_id: Int @doc(description: "Entity ID of CMS block")
     identifier: String @doc(description: "CMS block identifier")
     title: String @doc(description: "CMS block title")
     content: String @doc(description: "CMS block content")
