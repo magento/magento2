@@ -9,7 +9,8 @@ namespace Magento\InventoryShipping\Plugin\Sales\Model\Order;
 
 use Magento\InventoryShipping\Model\ResourceModel\ShipmentSource\GetSourceCodeByShipmentId;
 use Magento\Sales\Api\Data\ShipmentExtensionFactory;
-use Magento\Sales\Model\Order\ShipmentRepository;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
+use Magento\Sales\Api\Data\ShipmentInterface;
 
 /**
  * Add Source Information to shipments loaded with Magento\Sales\Api\ShipmentRepositoryInterface::getList
@@ -41,14 +42,14 @@ class GetListShipmentRepositoryPlugin
     /**
      * Add Source Information to shipments.
      *
-     * @param ShipmentRepository $subject
-     * @param \Magento\Sales\Api\Data\ShipmentInterface[] $searchResult
-     * @return \Magento\Sales\Api\Data\ShipmentInterface[]
+     * @param ShipmentRepositoryInterface $subject
+     * @param ShipmentInterface[] $searchResult
+     * @return ShipmentInterface[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetList(ShipmentRepository $subject, $searchResult)
+    public function afterGetList(ShipmentRepositoryInterface $subject, $searchResult)
     {
-        /** @var \Magento\Sales\Api\Data\ShipmentInterface $shipment */
+        /** @var ShipmentInterface $shipment */
         foreach ($searchResult->getItems() as $shipment) {
             $shipmentExtension = $shipment->getExtensionAttributes();
             if (empty($shipmentExtension)) {
