@@ -8,28 +8,18 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote;
 
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
-class AddSimpleProductToCartTest extends GraphQlAbstract
+/**
+ * Add simple product with custom options to cart testcases
+ */
+class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
 {
     /**
-     * @var QuoteResource
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteResource;
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
      * @var ProductCustomOptionRepositoryInterface
@@ -42,9 +32,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->productCustomOptionsRepository = $objectManager->get(ProductCustomOptionRepositoryInterface::class);
     }
 
@@ -59,13 +47,12 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     {
         $sku = 'simple';
         $qty = 1;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $customOptionsValues = $this->getCustomOptionsValuesForQuery($sku);
 
         /* Generate customizable options fragment for GraphQl request */
         $queryCustomizableOptions = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($customOptionsValues));
-
-        $maskedQuoteId = $this->getMaskedQuoteId();
 
         $query = <<<QUERY
 mutation {  
@@ -115,126 +102,6 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/products.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     */
-    public function testAddSimpleProductToCart()
-    {
-        $sku = 'simple';
-        $qty = 2;
-        $maskedQuoteId = $this->getMaskedQuoteId();
-
-        $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
-        $response = $this->graphQlQuery($query);
-        self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
-
-        self::assertEquals($qty, $response['addSimpleProductsToCart']['cart']['items'][0]['qty']);
-        self::assertEquals($sku, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Catalog/_files/products.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Please enter a number greater than 0 in this field.
-     */
-    public function testAddSimpleProductToCartWithNegativeQty()
-    {
-        $sku = 'simple';
-        $qty = -2;
-        $maskedQuoteId = $this->getMaskedQuoteId();
-
-        $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @return string
-     */
-    private function getMaskedQuoteId() : string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
-    }
-
-    /**
-     * @param string $maskedQuoteId
-     * @param string $sku
-     * @param int $qty
-     * @return string
-     */
-    public function getAddSimpleProductQuery(string $maskedQuoteId, string $sku, int $qty): string
-    {
-        return <<<QUERY
-mutation {  
-  addSimpleProductsToCart(
-    input: {
-      cart_id: "{$maskedQuoteId}"
-      cartItems: [
-        {
-          data: {
-            qty: $qty
-            sku: "$sku"
-          }
-        }
-      ]
-    }
-  ) {
-    cart {
-      items {
-        qty
-        product {
-          sku
-        }
-      }
-    }
-  }
-}
-QUERY;
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Catalog/_files/products.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "wrong_cart_hash"
-     */
-    public function testAddProductWithWrongCartHash()
-    {
-        $sku = 'simple';
-        $qty = 1;
-
-        $maskedQuoteId = 'wrong_cart_hash';
-
-        $query = <<<QUERY
-mutation {  
-  addSimpleProductsToCart(
-    input: {
-      cart_id: "{$maskedQuoteId}"
-      cartItems: [
-        {
-          data: {
-            qty: $qty
-            sku: "$sku"
-          }
-        }
-      ]
-    }
-  ) {
-    cart {
-      items {
-        qty
-      }
-    }
-  }
-}
-QUERY;
-
-        $this->graphQlQuery($query);
-    }
-
-    /**
      * Test adding a simple product with empty values for required options
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_options.php
@@ -244,8 +111,7 @@ QUERY;
     {
         $sku = 'simple';
         $qty = 1;
-
-        $maskedQuoteId = $this->getMaskedQuoteId();
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = <<<QUERY
 mutation {  

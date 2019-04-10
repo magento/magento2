@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -15,7 +16,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 $productRepository = Bootstrap::getObjectManager()
-    ->create(ProductRepositoryInterface::class);
+    ->get(ProductRepositoryInterface::class);
 
 try {
     $product = $productRepository->get('virtual-product', false, null, true);

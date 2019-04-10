@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 
-$productFactory = Bootstrap::getObjectManager()->get(ProductFactory::class);
+$productFactory = Bootstrap::getObjectManager()->get(ProductInterfaceFactory::class);
 $product = $productFactory->create();
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL)
     ->setId(21)
