@@ -6,7 +6,9 @@
 namespace Magento\Cms\Model\Page;
 
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\AuthorizationInterface;
 
 /**
  * Class DataProvider
@@ -29,6 +31,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $loadedData;
 
     /**
+     * @var AuthorizationInterface
+     */
+    protected $auth;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -36,6 +43,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
+     * @param AuthorizationInterface|null $auth
      */
     public function __construct(
         $name,
@@ -44,11 +52,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         CollectionFactory $pageCollectionFactory,
         DataPersistorInterface $dataPersistor,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        AuthorizationInterface $auth = null
     ) {
         $this->collection = $pageCollectionFactory->create();
         $this->dataPersistor = $dataPersistor;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
+        $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
         $this->meta = $this->prepareMeta($this->meta);
     }
 
@@ -88,5 +98,52 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
 
         return $this->loadedData;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMeta()
+    {
+        $meta = parent::getMeta();
+
+        if (!$this->auth->isAllowed('Magento_Cms::save_design')) {
+            $designMeta = [
+                'design' => [
+                    'children' => [
+                        'page_layout' => [
+                            'arguments' => [
+                                'data' => [
+                                    'config' => [
+                                        'disabled' => true,
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'layout_update_xml' => [
+                            'arguments' => [
+                                'data' => [
+                                    'config' => [
+                                        'disabled' => true,
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'custom_theme' => [
+                            'arguments' => [
+                                'data' => [
+                                    'config' => [
+                                        'disabled' => true,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
+            $meta = array_merge_recursive($meta, $designMeta);
+        }
+
+        return $meta;
     }
 }

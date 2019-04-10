@@ -12,8 +12,10 @@
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\Indexer\Category\Product\Processor;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Catalog\Model\Category as CategoryEntity;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -122,9 +124,9 @@ class Category extends AbstractResource
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
         $this->connectionName  = 'catalog';
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
-        $this->indexerProcessor = $indexerProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->indexerProcessor = $indexerProcessor ?: ObjectManager::getInstance()
             ->get(Processor::class);
     }
 
@@ -1022,7 +1024,7 @@ class Category extends AbstractResource
         if ($afterCategoryId) {
             $select = $connection->select()->from($table, 'position')->where('entity_id = :entity_id');
             $position = $connection->fetchOne($select, ['entity_id' => $afterCategoryId]);
-            $position += 1;
+            $position++;
         } else {
             $position = 1;
         }
@@ -1123,5 +1125,20 @@ class Category extends AbstractResource
                 ->get(\Magento\Catalog\Model\ResourceModel\Category\AggregateCount::class);
         }
         return $this->aggregateCount;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @param CategoryEntity|object $object
+     */
+    public function validate($object)
+    {
+        $isValid = parent::validate($object);
+        if ($isValid !== true) {
+            return $isValid;
+        }
+
+        return true;
     }
 }
