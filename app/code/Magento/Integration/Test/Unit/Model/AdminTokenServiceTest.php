@@ -8,6 +8,9 @@ namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Integration\Model\Oauth\Token;
 
+/**
+ * Test for Magento\Integration\Model\AdminTokenService class.
+ */
 class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
 {
     /** \Magento\Integration\Model\AdminTokenService */

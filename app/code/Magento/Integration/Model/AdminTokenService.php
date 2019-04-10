@@ -72,7 +72,7 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createAdminAccessToken($username, $password)
     {
