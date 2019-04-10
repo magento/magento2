@@ -44,5 +44,6 @@
         <element name="productOptionLabel" type="text" selector="//dl[@class='item-options']"/>
         <element name="checkoutCartProductPrice" type="text" selector="//td[@class='col price']//span[@class='price']"/>
         <element name="checkoutCartSubtotal" type="text" selector="//td[@class='col subtotal']//span[@class='price']"/>
+        <element name="emptyCart" selector=".cart-empty" type="text"/>
     </section>
 </sections>
