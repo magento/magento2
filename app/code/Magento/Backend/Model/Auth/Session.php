@@ -314,7 +314,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      *
      * @return User|null
      */
-    public function getUser(): ?User
+    public function getUser()
     {
         if (!$this->user) {
             $userData = $this->getUserData();
@@ -335,7 +335,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * @param User|null $user
      * @return Session
      */
-    public function setUser(?User $user): self
+    public function setUser($user)
     {
         $this->setUserData(null);
         if ($user) {
@@ -351,7 +351,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      *
      * @return bool
      */
-    public function hasUser(): bool
+    public function hasUser()
     {
         return $this->user || $this->hasUserData();
     }
@@ -361,10 +361,10 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      *
      * @return Session
      */
-    public function unsUser(): self
+    public function unsUser()
     {
         $this->user = null;
-        $this->unsUserData();
+        return $this->unsUserData();
     }
 
     /**
@@ -372,7 +372,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      *
      * @return Acl|null
      */
-    public function getAcl(): ?Acl
+    public function getAcl()
     {
         if (!$this->acl) {
             $aclData = $this->getUserAclData();
@@ -393,7 +393,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * @param Acl|null $acl
      * @return Session
      */
-    public function setAcl(?Acl $acl): self
+    public function setAcl($acl)
     {
         $this->setUserAclData(null);
         if ($acl) {
@@ -409,7 +409,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      *
      * @return bool
      */
-    public function hasAcl(): bool
+    public function hasAcl()
     {
         return $this->acl || $this->hasUserAclData();
     }
@@ -419,10 +419,10 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      *
      * @return Session
      */
-    public function unsAcl(): self
+    public function unsAcl()
     {
         $this->acl = null;
-        $this->unsUserAclData();
+        return $this->unsUserAclData();
     }
 
     /**
