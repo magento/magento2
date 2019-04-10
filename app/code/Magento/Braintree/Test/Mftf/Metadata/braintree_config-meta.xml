@@ -49,6 +49,9 @@
                             <object key="active" dataType="active">
                                 <field key="value">integer</field>
                             </object>
+                            <object key="active_braintree_paypal" dataType="active_braintree_paypal">
+                                <field key="value">integer</field>
+                            </object>
                         </object>
                     </object>
                 </object>
