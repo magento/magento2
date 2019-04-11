@@ -65,6 +65,7 @@
         <dynamicRows name="assigned_sources" component="Magento_Ui/js/dynamic-rows/dynamic-rows-grid" sortOrder="20">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="deleteButtonLabel" xsi:type="string">Unassign</item>
                     <item name="dataProvider" xsi:type="string">data.sources.assign_sources_grid</item>
                     <item name="map" xsi:type="array">
                         <item name="source_code" xsi:type="string">source_code</item>
@@ -98,17 +99,8 @@
                         <item name="dataScope" xsi:type="string"/>
                     </item>
                 </argument>
-                <field name="source_code" formElement="input" sortOrder="10">
+                <field name="name" formElement="input" sortOrder="20" template="Magento_InventoryCatalogAdminUi/dynamic-rows/cells/text">
                     <settings>
-                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
-                        <dataType>text</dataType>
-                        <dataScope>source_code</dataScope>
-                        <label translate="true">Source Code</label>
-                    </settings>
-                </field>
-                <field name="name" formElement="input" sortOrder="20">
-                    <settings>
-                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                         <dataType>text</dataType>
                         <dataScope>name</dataScope>
                         <label translate="true">Name</label>
@@ -161,9 +153,9 @@
                         </imports>
                     </settings>
                 </field>
-                <field name="actionDelete" formElement="actionDelete" sortOrder="90">
+                <field name="actionDelete" formElement="actionDelete" sortOrder="90" template="Magento_InventoryCatalogAdminUi/stock/assign-sources/action-delete">
                     <settings>
-                        <label translate="true">Unassign</label>
+                        <label translate="true"></label>
                     </settings>
                 </field>
             </container>
