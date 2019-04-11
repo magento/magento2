@@ -14,6 +14,9 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Filesystem\Driver\File;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class code generator.
+ */
 class Generator
 {
     const GENERATION_SUCCESS = 'success';

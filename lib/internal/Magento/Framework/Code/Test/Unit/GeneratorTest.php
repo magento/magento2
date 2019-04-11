@@ -23,6 +23,11 @@ use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\GeneratedClass\Factory as GeneratedClassFactory;
 use RuntimeException;
 
+/**
+ * Tests for code generator.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GeneratorTest extends TestCase
 {
     /**
@@ -143,7 +148,7 @@ class GeneratorTest extends TestCase
 
         $this->assertSame(
             Generator::GENERATION_SUCCESS,
-            $this->model->generateClass(GeneratedClassFactory::class)
+            $this->model->generateClass($fullClassName)
         );
     }
 
