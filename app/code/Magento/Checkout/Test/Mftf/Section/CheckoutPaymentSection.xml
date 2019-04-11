@@ -22,6 +22,7 @@
         <element name="guestRegion" type="select" selector=".billing-address-form select[name*='region_id']"/>
         <element name="guestPostcode" type="input" selector=".billing-address-form input[name*='postcode']"/>
         <element name="guestTelephone" type="input" selector=".billing-address-form input[name*='telephone']"/>
+        <element name="country" type="select" selector=".billing-address-form select[name*='country_id']"/>
         <element name="cartItems" type="text" selector=".minicart-items"/>
         <element name="billingAddress" type="text" selector="div.billing-address-details"/>
         <element name="placeOrder" type="button" selector=".payment-method._active button.action.primary.checkout" timeout="30"/>
@@ -45,5 +46,8 @@
         <element name="checkPaymentMethodByName" type="radio" selector="//div[@id='checkout-payment-method-load']//div[contains(., '{{paymentName}}')]/..//input[@type='radio']" parameterized="true"/>
         <element name="orderSummaryShippingTotal" type="text" selector=".totals.shipping.excl span.price"/>
         <element name="noPaymentMethods" type="text" selector=".no-quotes-block"/>
+        <element name="billingAddressSelectShared" type="select" selector=".checkout-billing-address select[name='billing_address_id']"/>
+        <element name="billingAddressSameAsShippingShared" type="checkbox" selector="#billing-address-same-as-shipping-shared"/>
+        <element name="addressAction" type="button" selector="//div[@class='actions-toolbar']//span[text()='{{action}}']" parameterized="true"/>
     </section>
 </sections>
