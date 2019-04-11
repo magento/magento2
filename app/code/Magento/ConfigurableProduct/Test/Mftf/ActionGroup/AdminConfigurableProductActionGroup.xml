@@ -145,8 +145,8 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(secondAttributeCode)}}" stepKey="clickOnSecondAttributeCheckbox" after="clickOnFirstAttributeCheckbox"/>
         <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.defaultLabel(attributeCode)}}" stepKey="grabFirstAttributeDefaultLabel" after="clickOnSecondAttributeCheckbox"/>
         <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.defaultLabel(secondAttributeCode)}}" stepKey="grabSecondAttributeDefaultLabel" after="grabFirstAttributeDefaultLabel"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute({$grabFirstAttributeDefaultLabel})}}" stepKey="clickOnSelectAllForFistAttribute" after="clickOnNextButton1"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute({$grabSecondAttributeDefaultLabel})}}" stepKey="clickOnSelectAllForSecondAttribute" after="clickOnSelectAllForFistAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute({$grabFirstAttributeDefaultLabel})}}" stepKey="clickOnSelectAllForFirstAttribute" after="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute({$grabSecondAttributeDefaultLabel})}}" stepKey="clickOnSelectAllForSecondAttribute" after="clickOnSelectAllForFirstAttribute"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
     </actionGroup>
