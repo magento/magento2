@@ -9,7 +9,8 @@
         "magento/framework": "*"
     },
     "suggest": {
-        "magento/module-webapi": "*"
+        "magento/module-webapi": "*",
+        "magento/module-graph-ql-cache": "*"
     },
     "license": [
         "OSL-3.0",

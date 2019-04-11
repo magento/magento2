@@ -162,6 +162,8 @@ class GraphQl implements FrontControllerInterface
             $data = $request->getParams();
             $data['variables'] = isset($data['variables']) ?
                 $this->jsonSerializer->unserialize($data['variables']) : null;
+            $data['variables'] = is_array($data['variables']) ?
+                $data['variables'] : null;
         } else {
             return [];
         }
