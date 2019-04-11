@@ -13,17 +13,23 @@
         <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last" timeout="30"/>
         <element name="attributeSetFilterResultByName" type="text" selector="//label/span[text() = '{{var}}']" timeout="30" parameterized="true"/>
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
+        <element name="productNameDisabled" type="input" selector=".admin__field[data-index=name] input[disabled=true]"/>
         <element name="RequiredNameIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
         <element name="RequiredSkuIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=sku]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
+        <element name="productSkuDisabled" type="input" selector=".admin__field[data-index=sku] input[disabled=true]"/>
         <element name="enableProductAttributeLabel" type="text" selector="//span[text()='Enable Product']/parent::label"/>
         <element name="enableProductAttributeLabelWrapper" type="text" selector="//span[text()='Enable Product']/parent::label/parent::div"/>
         <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
+        <element name="productStatusDisabled" type="checkbox" selector="input[name='product[status]'][disabled]"/>
         <element name="enableProductLabel" type="checkbox" selector="input[name='product[status]']+label"/>
         <element name="productStatusUseDefault" type="checkbox" selector="input[name='use_default[status]']"/>
         <element name="productNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
+        <element name="productPriceDisabled" type="input" selector=".admin__field[data-index=price] input[disabled=true]"/>
+        <element name="productPriceUseDefault" type="checkbox" selector=".admin__field[data-index=price] [name='use_default[price]']"/>
         <element name="productTaxClass" type="select" selector="//*[@name='product[tax_class_id]']"/>
+        <element name="productTaxClassDisabled" type="select" selector="select[name='product[tax_class_id]'][disabled=true]"/>
         <element name="productTaxClassUseDefault" type="checkbox" selector="input[name='use_default[tax_class_id]']"/>
         <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']" timeout="30"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
@@ -31,6 +37,7 @@
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
         <element name="advancedInventoryLink" type="button" selector="//button[contains(@data-index, 'advanced_inventory_button')]" timeout="30"/>
         <element name="productStockStatus" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]']"/>
+        <element name="productStockStatusDisabled" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]'][disabled=true]"/>
         <element name="stockStatus" type="select" selector="[data-index='product-details'] select[name='product[quantity_and_stock_status][is_in_stock]']"/>
         <element name="productWeight" type="input" selector=".admin__field[data-index=weight] input"/>
         <element name="productWeightSelect" type="select" selector="select[name='product[product_has_weight]']"/>
@@ -48,6 +55,7 @@
         <element name="productFormTab" type="button" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]" parameterized="true"/>
         <element name="productFormTabState" type="text" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]/parent::*/parent::*[@data-state-collapsible='{{state}}']" parameterized="true"/>
         <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
+        <element name="visibilityDisabled" type="select" selector="select[name='product[visibility]'][disabled=true]"/>
         <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
         <element name="divByDataIndex" type="input" selector="div[data-index='{{var}}']" parameterized="true"/>
         <element name="setProductAsNewFrom" type="input" selector="input[name='product[news_from_date]']"/>

@@ -7,11 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\GraphQl\Quote\GetQuoteItemIdByReservedQuoteIdAndSku;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -26,46 +24,37 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var QuoteResource
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteResource;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
-     * @var QuoteFactory
+     * @var GetQuoteItemIdByReservedQuoteIdAndSku
      */
-    private $quoteFactory;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
+    private $getQuoteItemIdByReservedQuoteIdAndSku;
 
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->getQuoteItemIdByReservedQuoteIdAndSku = $objectManager->get(
+            GetQuoteItemIdByReservedQuoteIdAndSku::class
+        );
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testRemoveItemFromCart()
     {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
-        $itemId = (int)$quote->getItemByProduct($this->productRepository->get('simple'))->getId();
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $itemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute('test_quote', 'simple_product');
 
-        $query = $this->prepareMutationQuery($maskedQuoteId, $itemId);
+        $query = $this->getQuery($maskedQuoteId, $itemId);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         $this->assertArrayHasKey('removeItemFromCart', $response);
@@ -80,107 +69,134 @@ class RemoveItemFromCartTest extends GraphQlAbstract
      */
     public function testRemoveItemFromNonExistentCart()
     {
-        $query = $this->prepareMutationQuery('non_existent_masked_id', 1);
-
+        $query = $this->getQuery('non_existent_masked_id', 1);
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testRemoveNotExistentItem()
+    public function testRemoveNonExistentItem()
     {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $notExistentItemId = 999;
 
         $this->expectExceptionMessage("Cart doesn't contain the {$notExistentItemId} item.");
 
-        $query = $this->prepareMutationQuery($maskedQuoteId, $notExistentItemId);
+        $query = $this->getQuery($maskedQuoteId, $notExistentItemId);
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @param string $input
+     * @param string $message
+     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
+     */
+    public function testUpdateWithMissedItemRequiredParameters(string $input, string $message)
+    {
+        $query = <<<QUERY
+mutation {
+  removeItemFromCart(
+    input: {
+      {$input}
+    }
+  ) {
+    cart {
+      items {
+        qty
+      }
+    }
+  }
+}
+QUERY;
+        $this->expectExceptionMessage($message);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderUpdateWithMissedRequiredParameters(): array
+    {
+        return [
+            'missed_cart_id' => [
+                'cart_item_id: 1',
+                'Required parameter "cart_id" is missing.'
+            ],
+            'missed_cart_item_id' => [
+                'cart_id: "test"',
+                'Required parameter "cart_item_id" is missing.'
+            ],
+        ];
+    }
+
+    /**
+     * _security
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
      */
     public function testRemoveItemIfItemIsNotBelongToCart()
     {
-        $firstQuote = $this->quoteFactory->create();
-        $this->quoteResource->load($firstQuote, 'test_order_1', 'reserved_order_id');
-        $firstQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$firstQuote->getId());
-
-        $secondQuote = $this->quoteFactory->create();
-        $this->quoteResource->load(
-            $secondQuote,
-            'test_order_with_virtual_product_without_address',
-            'reserved_order_id'
+        $firstQuoteMaskedId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $secondQuoteItemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute(
+            'test_order_with_virtual_product',
+            'virtual-product'
         );
-        $secondQuote->setCustomerId(1);
-        $this->quoteResource->save($secondQuote);
-        $secondQuoteItemId = (int)$secondQuote
-            ->getItemByProduct($this->productRepository->get('virtual-product'))
-            ->getId();
 
         $this->expectExceptionMessage("Cart doesn't contain the {$secondQuoteItemId} item.");
 
-        $query = $this->prepareMutationQuery($firstQuoteMaskedId, $secondQuoteItemId);
+        $query = $this->getQuery($firstQuoteMaskedId, $secondQuoteItemId);
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * _security
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testRemoveItemFromGuestCart()
     {
-        $guestQuote = $this->quoteFactory->create();
-        $this->quoteResource->load(
-            $guestQuote,
-            'test_order_with_virtual_product_without_address',
-            'reserved_order_id'
-        );
-        $guestQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$guestQuote->getId());
-        $guestQuoteItemId = (int)$guestQuote
-            ->getItemByProduct($this->productRepository->get('virtual-product'))
-            ->getId();
+        $guestQuoteMaskedId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $guestQuoteItemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute('test_quote', 'simple_product');
 
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$guestQuoteMaskedId\""
         );
 
-        $query = $this->prepareMutationQuery($guestQuoteMaskedId, $guestQuoteItemId);
+        $query = $this->getQuery($guestQuoteMaskedId, $guestQuoteItemId);
         $this->graphQlQuery($query, [], '', $this->getHeaderMap());
     }
 
     /**
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testRemoveItemFromAnotherCustomerCart()
     {
-        $anotherCustomerQuote = $this->quoteFactory->create();
-        $this->quoteResource->load(
-            $anotherCustomerQuote,
-            'test_order_with_virtual_product_without_address',
-            'reserved_order_id'
+        $anotherCustomerQuoteMaskedId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $anotherCustomerQuoteItemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute(
+            'test_quote',
+            'simple_product'
         );
-        $anotherCustomerQuote->setCustomerId(2);
-        $this->quoteResource->save($anotherCustomerQuote);
-
-        $anotherCustomerQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$anotherCustomerQuote->getId());
-        $anotherCustomerQuoteItemId = (int)$anotherCustomerQuote
-            ->getItemByProduct($this->productRepository->get('virtual-product'))
-            ->getId();
 
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$anotherCustomerQuoteMaskedId\""
         );
 
-        $query = $this->prepareMutationQuery($anotherCustomerQuoteMaskedId, $anotherCustomerQuoteItemId);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $query = $this->getQuery($anotherCustomerQuoteMaskedId, $anotherCustomerQuoteItemId);
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
     }
 
     /**
@@ -188,7 +204,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
      * @param int $itemId
      * @return string
      */
-    private function prepareMutationQuery(string $maskedQuoteId, int $itemId): string
+    private function getQuery(string $maskedQuoteId, int $itemId): string
     {
         return <<<QUERY
 mutation {
