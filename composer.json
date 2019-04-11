@@ -210,6 +210,7 @@
         "magento/module-inventory-product-alert": "*",
         "magento/module-inventory-reservations": "*",
         "magento/module-inventory-reservations-api": "*",
+        "magento/module-inventory-reservation-cli": "*",
         "magento/module-inventory-sales": "*",
         "magento/module-inventory-sales-admin-ui": "*",
         "magento/module-inventory-sales-api": "*",
