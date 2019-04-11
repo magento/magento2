@@ -21,7 +21,8 @@
         "magento/module-quote": "*",
         "magento/module-sales": "*",
         "magento/module-ui": "*",
-        "magento/module-vault": "*"
+        "magento/module-vault": "*",
+        "magento/module-multishipping": "*"
     },
     "suggest": {
         "magento/module-checkout-agreements": "*",
