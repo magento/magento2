@@ -29,4 +29,9 @@
         <waitForElementVisible selector="{{AdminMainActionsSection.websiteByName(scopeName)}}" after="clickScopeSwitchDropdown" stepKey="waitForWebsiteNameIsVisible"/>
         <click selector="{{AdminMainActionsSection.websiteByName(scopeName)}}" after="waitForWebsiteNameIsVisible" stepKey="clickStoreViewByName"/>
     </actionGroup>
+
+    <actionGroup name="AdminSwitchToAllStoreViewActionGroup" extends="AdminSwitchBaseActionGroup">
+        <click selector="{{AdminMainActionsSection.allStoreViews}}" after="clickScopeSwitchDropdown" stepKey="clickStoreViewByName"/>
+        <see selector="{{AdminMainActionsSection.storeSwitcher}}" userInput="{{scopeName}}" after="clickStoreViewByName" stepKey="seeNewStoreViewName"/>
+    </actionGroup>
 </actionGroups>

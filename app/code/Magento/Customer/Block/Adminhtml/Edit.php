@@ -122,7 +122,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 [
                     'label' => __('Force Sign-In'),
                     'onclick' => 'deleteConfirm(\'' . $this->escapeJs($this->escapeHtml($deleteConfirmMsg)) .
-                        '\', \'' . $url . '\')',
+                        '\', \'' . $url . '\', {data: {}})',
                     'class' => 'invalidate-token'
                 ],
                 10

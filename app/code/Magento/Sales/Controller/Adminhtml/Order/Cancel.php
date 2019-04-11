@@ -24,18 +24,18 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         if (!$this->isValidPostRequest()) {
-            $this->messageManager->addError(__('You have not canceled the item.'));
+            $this->messageManager->addErrorMessage(__('You have not canceled the item.'));
             return $resultRedirect->setPath('sales/*/');
         }
         $order = $this->_initOrder();
         if ($order) {
             try {
                 $this->orderManagement->cancel($order->getEntityId());
-                $this->messageManager->addSuccess(__('You canceled the order.'));
+                $this->messageManager->addSuccessMessage(__('You canceled the order.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('You have not canceled the item.'));
+                $this->messageManager->addErrorMessage(__('You have not canceled the item.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             }
             return $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getId()]);

@@ -29,6 +29,7 @@ use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -117,6 +118,7 @@ class Save extends Attribute
 
     /**
      * @inheritdoc
+     * @throws NotFoundException
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -124,6 +126,10 @@ class Save extends Attribute
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         try {
             $optionData = $this->formDataSerializer->unserialize(
                 $this->getRequest()->getParam('serialized_options', '[]')

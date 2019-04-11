@@ -34,6 +34,7 @@ class Buttons extends \Magento\Backend\Block\Template
 
     /**
      * @return $this
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _prepareLayout()
     {
@@ -64,7 +65,7 @@ class Buttons extends \Magento\Backend\Block\Template
                     ) . '\', \'' . $this->getUrl(
                         '*/*/delete',
                         ['rid' => $this->getRequest()->getParam('rid')]
-                    ) . '\')',
+                    ) . '\', {data: {}})',
                     'class' => 'delete'
                 ]
             );
@@ -110,6 +111,7 @@ class Buttons extends \Magento\Backend\Block\Template
 
     /**
      * @return string|void
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getDeleteButtonHtml()
     {

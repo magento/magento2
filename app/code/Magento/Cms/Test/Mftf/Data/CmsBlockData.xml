@@ -14,4 +14,10 @@
         <data key="content">Here is a block test. Yeah!</data>
         <data key="active">true</data>
     </entity>
+    <entity name="Sales25offBlock" type="cms_block">
+        <data key="title" unique="suffix">Sales25off</data>
+        <data key="identifier" unique="suffix">Sales25off</data>
+        <data key="content">sales25off everything!</data>
+        <data key="active">false</data>
+    </entity>
 </entities>

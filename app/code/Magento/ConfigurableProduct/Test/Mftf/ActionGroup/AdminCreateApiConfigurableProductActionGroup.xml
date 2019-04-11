@@ -82,4 +82,57 @@
             <requiredEntity createDataKey="getConfigAttributeOption2"/>
         </createData>
     </actionGroup>
+
+    <!--Create the configurable product with three child products-->
+    <actionGroup name="AdminCreateApiConfigurableProductWithThreeChildActionGroup" extends="AdminCreateApiConfigurableProductActionGroup">
+        <remove keyForRemoval="createConfigProductOption"/>
+        <remove keyForRemoval="createConfigChildProduct1"/>
+        <remove keyForRemoval="createConfigChildProduct2"/>
+        <remove keyForRemoval="createConfigProductAddChild1"/>
+        <remove keyForRemoval="createConfigProductAddChild2"/>
+
+        <createData entity="ProductAttributeOption3" after="createConfigProductAttributeOption2" stepKey="createConfigProductAttributeOption3">
+            <requiredEntity createDataKey="createConfigProductAttribute"/>
+        </createData>
+        <getData entity="ProductAttributeOptionGetter" index="3" after="getConfigAttributeOption2" stepKey="getConfigAttributeOption3">
+            <requiredEntity createDataKey="createConfigProductAttribute"/>
+        </getData>
+
+        <createData entity="ApiSimpleOne" stepKey="createChildProduct1">
+            <field key="price">50</field>
+            <requiredEntity createDataKey="createConfigProductAttribute"/>
+            <requiredEntity createDataKey="getConfigAttributeOption1"/>
+        </createData>
+        <createData entity="ApiSimpleOne" stepKey="createChildProduct2">
+            <field key="price">60</field>
+            <requiredEntity createDataKey="createConfigProductAttribute"/>
+            <requiredEntity createDataKey="getConfigAttributeOption2"/>
+        </createData>
+        <createData entity="ApiSimpleOne" stepKey="createChildProduct3">
+            <field key="price">70</field>
+            <requiredEntity createDataKey="createConfigProductAttribute"/>
+            <requiredEntity createDataKey="getConfigAttributeOption3"/>
+        </createData>
+
+        <createData entity="ConfigurableProductThreeOptions" stepKey="createConfigProductOptions">
+            <requiredEntity createDataKey="createConfigProduct"/>
+            <requiredEntity createDataKey="createConfigProductAttribute"/>
+            <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            <requiredEntity createDataKey="getConfigAttributeOption3"/>
+        </createData>
+
+        <createData entity="ConfigurableProductAddChild" stepKey="createProductAddChild1">
+            <requiredEntity createDataKey="createConfigProduct"/>
+            <requiredEntity createDataKey="createChildProduct1"/>
+        </createData>
+        <createData entity="ConfigurableProductAddChild" stepKey="createProductAddChild2">
+            <requiredEntity createDataKey="createConfigProduct"/>
+            <requiredEntity createDataKey="createChildProduct2"/>
+        </createData>
+        <createData entity="ConfigurableProductAddChild" stepKey="createProductAddChild3">
+            <requiredEntity createDataKey="createConfigProduct"/>
+            <requiredEntity createDataKey="createChildProduct3"/>
+        </createData>
+    </actionGroup>
 </actionGroups>

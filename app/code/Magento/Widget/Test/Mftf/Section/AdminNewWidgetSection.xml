@@ -36,5 +36,6 @@
         <element name="conditionOperatorSelect" type="select" selector="#conditions__1--{{arg1}}__operator" parameterized="true"/>
         <element name="displayMode" type="select" selector="select[id*='display_mode']"/>
         <element name="restrictTypes" type="select" selector="select[id*='types']"/>
+        <element name="widgetSelectBlock" type="button" selector=".action-default.scalable.btn-chooser"/>
     </section>
 </sections>

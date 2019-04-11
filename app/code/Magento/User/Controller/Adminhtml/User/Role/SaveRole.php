@@ -9,6 +9,7 @@ namespace Magento\User\Controller\Adminhtml\User\Role;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
 use Magento\Framework\Exception\LocalizedException;
@@ -68,9 +69,13 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * Role form submit action to save or create new role
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
@@ -86,7 +91,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
 
         $role = $this->_initRole('role_id');
         if (!$role->getId() && $rid) {
-            $this->messageManager->addError(__('This role no longer exists.'));
+            $this->messageManager->addErrorMessage(__('This role no longer exists.'));
             return $resultRedirect->setPath('adminhtml/*/');
         }
 
