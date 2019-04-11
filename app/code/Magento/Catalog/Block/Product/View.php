@@ -323,10 +323,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     public function getIdentities()
     {
         $identities = $this->getProduct()->getIdentities();
-        $category = $this->_coreRegistry->registry('current_category');
-        if ($category) {
-            $identities[] = Category::CACHE_TAG . '_' . $category->getId();
-        }
+
         return $identities;
     }
 
