@@ -8,7 +8,7 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="AdminNewIntegrationData" type="admin">
-        <data key="integrationName" unique="prefix">_Integration</data>
+    <entity name="IntegrationData" type="admin">
+        <data key="name" unique="prefix">_Integration</data>
     </entity>
 </entities>
