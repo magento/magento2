@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="CmsPageMassActionTest">
+    <test name="AdminCmsPageMassActionTest">
         <annotations>
             <features value="Cms"/>
             <title value="Create two CMS Pages and perform mass disable action"/>
@@ -27,27 +27,29 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Go to Grid page-->
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="navigateToCMSPagesGrid"/>
+        <actionGroup ref="AdminNavigateToCMSPageGrid" stepKey="navigateToCMSPageGrid"/>
         <!--Select pages in Grid-->
-        <checkOption selector="{{CmsPagesPageActionsSection.pageRowCheckboxByIdentifier($$firstCMSPage.identifier$$)}}" stepKey="selectFirstPage"/>
-        <checkOption selector="{{CmsPagesPageActionsSection.pageRowCheckboxByIdentifier($$secondCMSPage.identifier$$)}}" stepKey="selectSecondPage"/>
-        <!-- Disable Pages-->
-        <click selector="{{CmsPagesPageActionsSection.massActionsButton}}" stepKey="clickMassActionDropdown"/>
-        <click selector="{{CmsPagesPageActionsSection.massActionsOption('Disable')}}" stepKey="clickDisableAction"/>
-        <waitForPageLoad stepKey="waitForPageToReload"/>
-        <!--Verify pages in Grid-->
-        <actionGroup ref="AssertCMSPageInGrid" stepKey="VerifyFirstPageinGrid">
-            <argument name="CMSPage" value="$$firstCMSPage$$"/>
+        <actionGroup ref="AdminSelectCMSPageInGrid" stepKey="selectFirstCMSPage">
+            <argument name="identifier" value="$$firstCMSPage.identifier$$"/>
         </actionGroup>
-        <actionGroup ref="AssertCMSPageInGrid" stepKey="VerifySecondPageinGrid">
-            <argument name="CMSPage" value="$$secondCMSPage$$"/>
+        <actionGroup ref="AdminSelectCMSPageInGrid" stepKey="selectSecondCMSPage">
+            <argument name="identifier" value="$$secondCMSPage.identifier$$"/>
+        </actionGroup>
+        <!-- Disable Pages-->
+        <actionGroup ref="AdminCMSPageMassActionDisable" stepKey="disablePages"/>
+        <!--Verify pages in Grid-->
+        <actionGroup ref="AssertCMSPageInGrid" stepKey="verifyFirstPageinGrid">
+            <argument name="identifier" value="$$firstCMSPage.identifier$$$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertCMSPageInGrid" stepKey="verifySecondPageinGrid">
+            <argument name="identifier" value="$$secondCMSPage.identifier$$$$"/>
         </actionGroup>
         <!--Verify Pages are disabled on Frontend-->
-        <amOnPage url="{{StorefrontHomePage.url}}/{{$$firstCMSPage.identifier$$}}" stepKey="amOnFirstPageOnFrontend"/>
-        <waitForPageLoad stepKey="waitForFirstPageLoadOnFrontend"/>
-        <see userInput="Whoops, our bad..." stepKey="seePageErrorForFirstPage"/>
-        <amOnPage url="{{StorefrontHomePage.url}}/{{$$secondCMSPage.identifier$$}}" stepKey="amOnSecondPageOnFrontend"/>
-        <waitForPageLoad stepKey="waitForSecondPageLoadOnFrontend"/>
-        <see userInput="Whoops, our bad..." stepKey="seePageErrorForSecondPage"/>
+        <actionGroup ref="AssertCMSPageNotFoundOnFront" stepKey="checkFirstPageNotFoundOnFront">
+            <argument name="identifier" value="$$firstCMSPage.identifier$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertCMSPageNotFoundOnFront" stepKey="checkSecondPageNotFoundOnFront">
+            <argument name="identifier" value="$$secondCMSPage.identifier$$"/>
+        </actionGroup>
     </test>
 </tests>
