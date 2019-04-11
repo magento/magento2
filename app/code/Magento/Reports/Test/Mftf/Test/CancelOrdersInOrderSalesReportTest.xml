@@ -40,6 +40,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
+
         <!-- Create completed order -->
         <actionGroup ref="CreateOrderActionGroup" stepKey="createOrderd">
             <argument name="product" value="$$createSimpleProduct$$"/>
@@ -63,19 +64,29 @@
         <!-- Cancel order -->
         <actionGroup ref="cancelPendingOrder" stepKey="cancelOrder"/>
 
-        <!-- Generate Order report -->
+        <!-- Generate Order report for statuses  -->
         <amOnPage url="{{OrdersReportPage.url}}" stepKey="goToOrdersReportPage1"/>
         <!-- Get date -->
         <generateDate stepKey="generateEndDate" date="+0 day" format="m/d/Y"/>
         <generateDate stepKey="generateStartDate" date="-1 day" format="m/d/Y"/>
+        <actionGroup ref="GenerateOrderReportForNotCancelActionGroup" stepKey="generateReportAfterCancelOrderBefore">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate"/>
+            <argument name="statuses" value="['closed', 'complete', 'fraud', 'holded', 'payment_review', 'paypal_canceled_reversal', 'paypal_reversed', 'processing']"/>
+        </actionGroup>
+        <waitForElement selector="{{GeneratedReportSection.ordersCount}}" stepKey="waitForOrdersCountBefore"/>
+        <grabTextFrom selector="{{GeneratedReportSection.ordersCount}}" stepKey="grabCanceledOrdersSpecified"/>
+        <!-- Generate Order report -->
+        <amOnPage url="{{OrdersReportPage.url}}" stepKey="goToOrdersReportPage2"/>
+        <!-- Get date -->
         <actionGroup ref="GenerateOrderReportActionGroup" stepKey="generateReportAfterCancelOrder">
             <argument name="orderFromDate" value="$generateStartDate"/>
             <argument name="orderToDate" value="$generateEndDate"/>
         </actionGroup>
         <waitForElement selector="{{GeneratedReportSection.ordersCount}}" stepKey="waitForOrdersCount"/>
-        <grabTextFrom selector="{{GeneratedReportSection.canceledOrders}}" stepKey="grabCanceledOrdersPrice"/>
+        <grabTextFrom selector="{{GeneratedReportSection.ordersCount}}" stepKey="grabCanceledOrdersAny"/>
 
         <!-- Compare canceled orders price -->
-        <assertEquals expected="$0.00" expectedType="string" actual="{$grabCanceledOrdersPrice}" actualType="string"  stepKey="assertEquals"/>
+        <assertEquals expected="{$grabCanceledOrdersSpecified}" expectedType="string" actual="{$grabCanceledOrdersAny}" actualType="string"  stepKey="assertEquals"/>
     </test>
 </tests>

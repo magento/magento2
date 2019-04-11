@@ -63,6 +63,12 @@ define([
                 isFileUploaded = false,
                 self = this;
 
+            if (event.handleObj.selector == this.options.qtyInfo) { //eslint-disable-line eqeqeq
+                this._updateAddToWishlistButton({});
+                event.stopPropagation();
+
+                return;
+            }
             $(event.handleObj.selector).each(function (index, element) {
                 if ($(element).is('input[type=text]') ||
                     $(element).is('input[type=email]') ||
@@ -83,7 +89,9 @@ define([
                 }
             });
 
-            this.bindFormSubmit(isFileUploaded);
+            if (isFileUploaded) {
+                this.bindFormSubmit();
+            }
             this._updateAddToWishlistButton(dataToAdd);
             event.stopPropagation();
         },
@@ -181,45 +189,34 @@ define([
 
         /**
          * Bind form submit.
-         *
-         * @param {Boolean} isFileUploaded
          */
-        bindFormSubmit: function (isFileUploaded) {
+        bindFormSubmit: function () {
             var self = this;
 
             $('[data-action="add-to-wishlist"]').on('click', function (event) {
                 var element, params, form, action;
 
-                if (!$($(self.options.qtyInfo).closest('form')).valid()) {
-                    event.stopPropagation();
-                    event.preventDefault();
+                event.stopPropagation();
+                event.preventDefault();
 
-                    return;
+                element = $('input[type=file]' + self.options.customOptionsInfo);
+                params = $(event.currentTarget).data('post');
+                form = $(element).closest('form');
+                action = params.action;
+
+                if (params.data.id) {
+                    $('<input>', {
+                        type: 'hidden',
+                        name: 'id',
+                        value: params.data.id
+                    }).appendTo(form);
                 }
 
-                if (isFileUploaded) {
-
-                    element = $('input[type=file]' + self.options.customOptionsInfo);
-                    params = $(event.currentTarget).data('post');
-                    form = $(element).closest('form');
-                    action = params.action;
-
-                    if (params.data.id) {
-                        $('<input>', {
-                            type: 'hidden',
-                            name: 'id',
-                            value: params.data.id
-                        }).appendTo(form);
-                    }
-
-                    if (params.data.uenc) {
-                        action += 'uenc/' + params.data.uenc;
-                    }
-
-                    $(form).attr('action', action).submit();
-                    event.stopPropagation();
-                    event.preventDefault();
+                if (params.data.uenc) {
+                    action += 'uenc/' + params.data.uenc;
                 }
+
+                $(form).attr('action', action).submit();
             });
         }
     });

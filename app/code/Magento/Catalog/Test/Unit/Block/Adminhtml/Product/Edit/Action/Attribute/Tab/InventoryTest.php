@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
-use Magento\Customer\Api\Data\GroupInterface;
-
 /**
  * Class InventoryTest
  */
@@ -70,8 +68,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
             [
                 'context' => $this->contextMock,
                 'backorders' => $this->backordersMock,
-                'stockConfiguration' => $this->stockConfigurationMock,
-                'serializer' => new \Magento\Framework\Serialize\Serializer\Json(),
+                'stockConfiguration' => $this->stockConfigurationMock
             ]
         );
     }
@@ -127,32 +124,6 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('return-value'));
 
         $this->assertEquals('return-value', $this->inventory->getDefaultConfigValue('field-name'));
-    }
-
-    /**
-     * @dataProvider getDefaultMinSaleQtyDataProvider
-     * @param string $expected
-     * @param string $default
-     */
-    public function testGetDefaultMinSaleQty($expected, $default)
-    {
-        $this->stockConfigurationMock->method('getDefaultConfigValue')->willReturn($default);
-        $this->assertEquals($expected, $this->inventory->getDefaultMinSaleQty());
-    }
-
-    public function getDefaultMinSaleQtyDataProvider()
-    {
-        return [
-            'single-default-value' => [
-                22, '22'
-            ],
-            'no-default-for-all-group' => [
-                1, json_encode(['12' => '111'])
-            ],
-            'default-for-all-group' => [
-                5, json_encode(['12' => '111', GroupInterface::CUST_GROUP_ALL => '5'])
-            ]
-        ];
     }
 
     /**

@@ -9,7 +9,7 @@
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/payment.xsd">
     <groups>
         <group id="authorizenet">
-            <label>Authorize.net</label>
+            <label>Authorize.Net</label>
         </group>
     </groups>
 </payment>

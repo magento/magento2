@@ -12,6 +12,7 @@
         <element name="firstnameField" type="input" selector="#firstname"/>
         <element name="lastnameField" type="input" selector="#lastname"/>
         <element name="lastnameLabel" type="text" selector="//label[@for='lastname']"/>
+        <element name="signUpForNewsletter" type="checkbox" selector="//div/input[@name='is_subscribed']"/>
         <element name="emailField" type="input" selector="#email_address"/>
         <element name="passwordField" type="input" selector="#password"/>
         <element name="confirmPasswordField" type="input" selector="#password-confirmation"/>

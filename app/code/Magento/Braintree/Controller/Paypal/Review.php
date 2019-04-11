@@ -13,11 +13,12 @@ use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Class Review
  */
-class Review extends AbstractAction implements HttpPostActionInterface
+class Review extends AbstractAction implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var QuoteUpdater
