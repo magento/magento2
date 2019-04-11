@@ -174,6 +174,7 @@
         </column>
         <column name="billing_country_id" component="Magento_Ui/js/grid/columns/select" sortOrder="80">
             <settings>
+                <options class="Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites"/>
                 <filter>select</filter>
                 <dataType>select</dataType>
                 <label translate="true">Country</label>
