@@ -109,26 +109,4 @@
         <waitForPageLoad stepKey="waitForPageLoad20"/>
 
     </actionGroup>
-    <actionGroup name="Delete20ProductsActionGroup">
-        <deleteData createDataKey="simpleProduct1CartItems" stepKey="deleteCartItem1"/>
-        <deleteData createDataKey="simpleProduct2CartItems" stepKey="deleteCartItem2"/>
-        <deleteData createDataKey="simpleProduct3CartItems" stepKey="deleteCartItem3"/>
-        <deleteData createDataKey="simpleProduct4CartItems" stepKey="deleteCartItem4"/>
-        <deleteData createDataKey="simpleProduct5CartItems" stepKey="deleteCartItem5"/>
-        <deleteData createDataKey="simpleProduct6CartItems" stepKey="deleteCartItem6"/>
-        <deleteData createDataKey="simpleProduct7CartItems" stepKey="deleteCartItem7"/>
-        <deleteData createDataKey="simpleProduct8CartItems" stepKey="deleteCartItem8"/>
-        <deleteData createDataKey="simpleProduct9CartItems" stepKey="deleteCartItem9"/>
-        <deleteData createDataKey="simpleProduct10CartItems" stepKey="deleteCartItem10"/>
-        <deleteData createDataKey="simpleProduct11CartItems" stepKey="deleteCartItem11"/>
-        <deleteData createDataKey="simpleProduct12CartItems" stepKey="deleteCartItem12"/>
-        <deleteData createDataKey="simpleProduct13CartItems" stepKey="deleteCartItem13"/>
-        <deleteData createDataKey="simpleProduct14CartItems" stepKey="deleteCartItem14"/>
-        <deleteData createDataKey="simpleProduct15CartItems" stepKey="deleteCartItem15"/>
-        <deleteData createDataKey="simpleProduct16CartItems" stepKey="deleteCartItem16"/>
-        <deleteData createDataKey="simpleProduct17CartItems" stepKey="deleteCartItem17"/>
-        <deleteData createDataKey="simpleProduct18CartItems" stepKey="deleteCartItem18"/>
-        <deleteData createDataKey="simpleProduct19CartItems" stepKey="deleteCartItem19"/>
-        <deleteData createDataKey="simpleProduct20CartItems" stepKey="deleteCartItem20"/>
-    </actionGroup>
 </actionGroups>
