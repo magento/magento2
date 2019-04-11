@@ -14,6 +14,7 @@
             <data name="attempts" xsi:type="number">3</data>
             <data name="captcha" xsi:type="string">111</data>
             <data name="configData" xsi:type="string">captcha_storefront_user_edit_failures_number, customer_max_login_failures_number</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Security\Test\Constraint\AssertCustomerIsLocked" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerIsLockedOnBackend" />
         </variation>
