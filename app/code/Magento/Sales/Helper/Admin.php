@@ -203,9 +203,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     {
         if ($url) {
             //Revert the sprintf escaping
-            //phpcs:disable
             $urlScheme = parse_url($url, PHP_URL_SCHEME);
-            //phpcs:enable
             $urlScheme = $urlScheme ? strtolower($urlScheme) : '';
             if ($urlScheme !== 'http' && $urlScheme !== 'https') {
                 $url = null;
