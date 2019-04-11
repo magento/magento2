@@ -98,6 +98,8 @@ class Matrix extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return currency symbol.
+     *
      * @return string
      */
     public function getCurrencySymbol()
@@ -274,6 +276,8 @@ class Matrix extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return product qty.
+     *
      * @param Product $product
      * @return float
      */
@@ -283,6 +287,8 @@ class Matrix extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return variation wizard.
+     *
      * @param array $initData
      * @return string
      */
@@ -298,6 +304,8 @@ class Matrix extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return product configuration matrix.
+     *
      * @return array|null
      */
     public function getProductMatrix()
@@ -309,6 +317,8 @@ class Matrix extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return product attributes.
+     *
      * @return array|null
      */
     public function getProductAttributes()
@@ -316,10 +326,13 @@ class Matrix extends \Magento\Backend\Block\Template
         if ($this->productAttributes === null) {
             $this->prepareVariations();
         }
+
         return $this->productAttributes;
     }
 
     /**
+     * Prepare product variations.
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return void
      * TODO: move to class
