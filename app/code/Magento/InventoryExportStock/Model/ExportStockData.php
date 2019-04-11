@@ -8,28 +8,68 @@ declare(strict_types=1);
 namespace Magento\InventoryExportStock\Model;
 
 use Exception;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResultsInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForSkuInterface;
 use Magento\InventoryExportStockApi\Api\Data\ExportStockDataSearchResultInterface;
+use Magento\InventoryExportStockApi\Api\Data\ExportStockDataSearchResultInterfaceFactory;
 use Magento\InventoryExportStockApi\Api\ExportStockDataInterface;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 
 /**
- * Class ExportStockData
+ * Class ExportStockData provides product stock information by search criteria
  */
 class ExportStockData implements ExportStockDataInterface
 {
     /**
-     * @var GetExportStockData
+     * @var ProductRepositoryInterface
      */
-    private $getExportStockData;
+    private $productRepository;
 
     /**
-     * ExportStockData constructor.
-     * @param GetExportStockData $getExportStockData
+     * @var ExportStockDataSearchResultInterfaceFactory
+     */
+    private $exportStockDataSearchResultFactory;
+
+    /**
+     * @var GetProductSalableQtyInterface
+     */
+    private $getProductSalableQty;
+
+    /**
+     * @var int
+     */
+    private $qtyForNotManageStock;
+    /**
+     * @var IsSourceItemManagementAllowedForSkuInterface
+     */
+    private $isSourceItemManagementAllowedForSku;
+
+    /**
+     * ExportStockData constructor
+     *
+     * @param ProductRepositoryInterface $productRepository
+     * @param ExportStockDataSearchResultInterfaceFactory $exportStockDataSearchResultFactory
+     * @param GetProductSalableQtyInterface $getProductSalableQty
+     * @param IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku
+     * @param int $qtyForNotManageStock
      */
     public function __construct(
-        GetExportStockData $getExportStockData
+        ProductRepositoryInterface $productRepository,
+        ExportStockDataSearchResultInterfaceFactory $exportStockDataSearchResultFactory,
+        GetProductSalableQtyInterface $getProductSalableQty,
+        IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku,
+        int $qtyForNotManageStock
     ) {
-        $this->getExportStockData = $getExportStockData;
+        $this->productRepository = $productRepository;
+        $this->exportStockDataSearchResultFactory = $exportStockDataSearchResultFactory;
+        $this->getProductSalableQty = $getProductSalableQty;
+        $this->isSourceItemManagementAllowedForSku = $isSourceItemManagementAllowedForSku;
+        $this->qtyForNotManageStock = $qtyForNotManageStock;
     }
 
     /**
@@ -39,9 +79,54 @@ class ExportStockData implements ExportStockDataInterface
      */
     public function execute(
         SearchCriteriaInterface $searchCriteria,
-        int $stockId = null,
-        int $qtyForNotManageStock = 1
+        int $stockId
     ): ExportStockDataSearchResultInterface {
-        return $this->getExportStockData->execute($searchCriteria, $stockId, $qtyForNotManageStock);
+        $productSearchResult = $this->getProducts($searchCriteria);
+        $items = $this->getProductStockDataArray($productSearchResult->getItems(), $stockId);
+        $searchResult = $this->exportStockDataSearchResultFactory->create();
+        $searchResult->setSearchCriteria($productSearchResult->getSearchCriteria());
+        $searchResult->setItems($items);
+        $searchResult->setTotalCount($productSearchResult->getTotalCount());
+
+        return $searchResult;
+    }
+
+    /**
+     * Provides product search result by search criteria
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchResultsInterface
+     */
+    private function getProducts(SearchCriteriaInterface $searchCriteria): SearchResultsInterface
+    {
+        return $this->productRepository->getList($searchCriteria);
+    }
+
+    /**
+     * Provides salable qty and sku in array
+     *
+     * @param Product[] $products
+     * @param int $stockId
+     * @return array
+     * @throws InputException
+     * @throws LocalizedException
+     */
+    private function getProductStockDataArray(array $products, int $stockId): array
+    {
+        $items = [];
+        foreach ($products as $product) {
+            $sku = $product->getSku();
+            if ($this->isSourceItemManagementAllowedForSku->execute($sku)) {
+                $items[] = [
+                    'sku' => $sku,
+                    'qty' => $this->getProductSalableQty->execute(
+                        $sku,
+                        $stockId
+                    ) ?: $this->qtyForNotManageStock
+                ];
+            }
+        }
+
+        return $items;
     }
 }

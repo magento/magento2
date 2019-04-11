@@ -13,4 +13,9 @@
                 type="Magento\InventoryExportStock\Model\ProductStockData"/>
     <preference for="Magento\InventoryExportStockApi\Api\ExportStockDataInterface"
                 type="Magento\InventoryExportStock\Model\ExportStockData"/>
+    <type name="Magento\InventoryExportStock\Model\ExportStockData">
+        <arguments>
+            <argument name="qtyForNotManageStock" xsi:type="number">1</argument>
+        </arguments>
+    </type>
 </config>

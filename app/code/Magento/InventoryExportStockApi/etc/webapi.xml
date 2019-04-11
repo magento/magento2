@@ -10,8 +10,7 @@
     <route url="/V1/inventory/export-stock-data" method="GET">
         <service class="Magento\InventoryExportStockApi\Api\ExportStockDataInterface" method="execute"/>
         <resources>
-<!--            <resource ref="Magento_Catalog::products"/>-->
-            <resource ref="anonymous"/>
+            <resource ref="Magento_InventoryApi::stock"/>
         </resources>
     </route>
 </routes>

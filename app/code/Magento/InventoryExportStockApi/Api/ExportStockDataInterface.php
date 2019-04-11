@@ -2,13 +2,14 @@
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ * @noinspection PhpFullyQualifiedNameUsageInspection
  */
 declare(strict_types=1);
 
 namespace Magento\InventoryExportStockApi\Api;
 
 /**
- * Interface for ExportStockData
+ * Interface for ExportStockData provides product stock information by search criteria
  * @api
  */
 interface ExportStockDataInterface
@@ -18,12 +19,10 @@ interface ExportStockDataInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @param int $stockId
-     * @param int $qtyForNotManageStock
      * @return \Magento\InventoryExportStockApi\Api\Data\ExportStockDataSearchResultInterface
      */
     public function execute(
         \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria,
-        int $stockId = null,
-        int $qtyForNotManageStock = 1
+        int $stockId
     ): \Magento\InventoryExportStockApi\Api\Data\ExportStockDataSearchResultInterface;
 }
