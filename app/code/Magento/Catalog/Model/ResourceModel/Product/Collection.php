@@ -1447,8 +1447,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 $item->setData('request_path', $rewrite->getRequestPath());
             }
         }
-
-        return;
     }
 
     /**
@@ -1968,7 +1966,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             }
             // Set additional field filters
             foreach ($this->_priceDataFieldFilters as $filterData) {
-                $select->where(call_user_func_array('sprintf', $filterData));
+                $select->where(sprintf(...$filterData));
             }
         } else {
             $fromPart['price_index']['joinCondition'] = $joinCond;
@@ -2273,7 +2271,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function addPriceDataFieldFilter($comparisonFormat, $fields)
     {
         if (!preg_match('/^%s( (<|>|=|<=|>=|<>) %s)*$/', $comparisonFormat)) {
-            throw new \Exception('Invalid comparison format.');
+            throw new \InvalidArgumentException('Invalid comparison format.');
         }
 
         if (!is_array($fields)) {

@@ -14,6 +14,9 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Generate url rewrites for categories
+ */
 class CategoriesUrlRewriteGenerator
 {
     /**
@@ -27,24 +30,15 @@ class CategoriesUrlRewriteGenerator
     protected $urlRewriteFactory;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $config;
-
-    /**
      * @param ProductUrlPathGenerator $productUrlPathGenerator
      * @param UrlRewriteFactory $urlRewriteFactory
-     * @param ScopeConfigInterface|null $config
      */
     public function __construct(
         ProductUrlPathGenerator $productUrlPathGenerator,
-        UrlRewriteFactory $urlRewriteFactory,
-        ScopeConfigInterface $config = null
-    )
-    {
+        UrlRewriteFactory $urlRewriteFactory
+    ) {
         $this->productUrlPathGenerator = $productUrlPathGenerator;
         $this->urlRewriteFactory = $urlRewriteFactory;
-        $this->config = $config ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -58,7 +52,6 @@ class CategoriesUrlRewriteGenerator
     public function generate($storeId, Product $product, ObjectRegistry $productCategories)
     {
         $urls = [];
-
         foreach ($productCategories->getList() as $category) {
             $urls[] = $this->urlRewriteFactory->create()
                 ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
@@ -69,20 +62,5 @@ class CategoriesUrlRewriteGenerator
                 ->setMetadata(['category_id' => $category->getId()]);
         }
         return $urls;
-    }
-
-    /**
-     * Check config value of generate_rewrites_on_save
-     *
-     * @param int $storeId
-     * @return bool
-     */
-    private function isCategoryRewritesEnabled($storeId)
-    {
-        return (bool)$this->config->getValue(
-            'catalog/seo/generate_rewrites_on_save',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
     }
 }

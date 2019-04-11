@@ -12,6 +12,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
+use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\Storage\DbStorage as BaseDbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
@@ -157,7 +158,7 @@ class DbStorage extends BaseDbStorage
     {
         $requestPath = $data[UrlRewrite::REQUEST_PATH] ?? null;
 
-        $productUrl = pathinfo($requestPath, PATHINFO_BASENAME);
+        $productUrl = basename($requestPath);
         $data[UrlRewrite::REQUEST_PATH] = [$productUrl];
 
         $productFromDb = $this->connection->fetchRow($this->prepareSelect($data));
@@ -176,8 +177,7 @@ class DbStorage extends BaseDbStorage
             $categoryFromDb = $this->connection->fetchRow($this->prepareSelect($data));
 
             if ($categoryFromDb[UrlRewrite::REDIRECT_TYPE]) {
-                // cat-a/cat-b ==> cat-a1/cat-b1
-                $productFromDb[UrlRewrite::REDIRECT_TYPE] = \Magento\UrlRewrite\Model\OptionProvider::PERMANENT;
+                $productFromDb[UrlRewrite::REDIRECT_TYPE] = OptionProvider::PERMANENT;
                 $categoryPath = str_replace($categorySuffix, '', $categoryFromDb[UrlRewrite::TARGET_PATH]);
             }
 
@@ -227,7 +227,7 @@ class DbStorage extends BaseDbStorage
             $data[UrlRewrite::ENTITY_TYPE] = 'category';
             $categoryFromDb = $this->connection->fetchRow($this->prepareSelect($data));
             foreach ($productsFromDb as $productFromDb) {
-                $productUrl = pathinfo($productFromDb[UrlRewrite::REQUEST_PATH], PATHINFO_BASENAME);
+                $productUrl = basename($productFromDb[UrlRewrite::REQUEST_PATH]);
                 $productFromDb[UrlRewrite::REQUEST_PATH] = str_replace(
                     $this->getCategoryUrlSuffix($data[UrlRewrite::STORE_ID]),
                     '',

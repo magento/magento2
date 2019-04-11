@@ -86,6 +86,7 @@ class ProductScopeRewriteGenerator
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param CategoryRepositoryInterface|null $categoryRepository
      * @param ScopeConfigInterface|null $config
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         StoreViewService $storeViewService,
@@ -203,7 +204,7 @@ class ProductScopeRewriteGenerator
         );
 
         $mergeDataProvider->merge(
-            $url = $this->currentUrlRewritesRegenerator->generateAnchor(
+            $this->currentUrlRewritesRegenerator->generateAnchor(
                 $storeId,
                 $product,
                 $productCategories,
