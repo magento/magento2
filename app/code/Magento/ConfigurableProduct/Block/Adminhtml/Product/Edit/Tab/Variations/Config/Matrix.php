@@ -360,6 +360,7 @@ class Matrix extends \Magento\Backend\Block\Template
                                         'id' => $option->getValue(),
                                         'label' => $option->getLabel(),
                                         'value' => $option->getValue(),
+                                        '__disableTmpl' => true,
                                     ];
                                 }
                             }
@@ -371,6 +372,7 @@ class Matrix extends \Magento\Backend\Block\Template
                             'id' => $optionId,
                             'label' => $variation[$attribute->getId()]['label'],
                             'value' => $optionId,
+                            '__disableTmpl' => true,
                         ];
                         $variationOptions[] = $variationOption;
                         $attributes[$attribute->getAttributeId()]['chosen'][] = $variationOption;
@@ -387,7 +389,8 @@ class Matrix extends \Magento\Backend\Block\Template
                         'price' => $price,
                         'options' => $variationOptions,
                         'weight' => $product->getWeight(),
-                        'status' => $product->getStatus()
+                        'status' => $product->getStatus(),
+                        '__disableTmpl' => true,
                     ];
                 }
             }
