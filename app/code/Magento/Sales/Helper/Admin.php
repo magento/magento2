@@ -162,9 +162,14 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
         if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
             $wrapperElementId = uniqid();
             $domDocument = $this->domDocumentFactory->create();
+
+            $internalErrors = libxml_use_internal_errors(true);
+
             $domDocument->loadHTML(
                 '<html><body id="' . $wrapperElementId . '">' . $data . '</body></html>'
             );
+
+            libxml_use_internal_errors($internalErrors);
 
             $linkTags = $domDocument->getElementsByTagName('a');
 
