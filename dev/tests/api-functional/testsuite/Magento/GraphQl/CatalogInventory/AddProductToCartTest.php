@@ -13,6 +13,9 @@ use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 
+/**
+ * Test for adding products to cart
+ */
 class AddProductToCartTest extends GraphQlAbstract
 {
     /**
@@ -54,7 +57,7 @@ class AddProductToCartTest extends GraphQlAbstract
 
         $maskedQuoteId = $this->getMaskedQuoteId();
         $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
         self::fail('Should be "The requested qty is not available" error message.');
     }
 
@@ -74,7 +77,7 @@ class AddProductToCartTest extends GraphQlAbstract
 
         $maskedQuoteId = $this->getMaskedQuoteId();
         $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
         self::fail('Should be "The most you may purchase is 5." error message.');
     }
 
