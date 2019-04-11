@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\AddressInterfaceFactory;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\ResourceModel\Quote\Address as AddressResource;
 
 /**
@@ -44,14 +44,14 @@ class GetQuoteAddress
     /**
      * Get quote address
      *
+     * @param CartInterface $cart
      * @param int $quoteAddressId
      * @param int|null $customerId
      * @return AddressInterface
-     * @throws GraphQlInputException
-     * @throws GraphQlNoSuchEntityException
      * @throws GraphQlAuthorizationException
+     * @throws GraphQlNoSuchEntityException
      */
-    public function execute(int $quoteAddressId, ?int $customerId): AddressInterface
+    public function execute(CartInterface $cart, int $quoteAddressId, ?int $customerId): AddressInterface
     {
         $quoteAddress = $this->quoteAddressFactory->create();
 
@@ -62,14 +62,15 @@ class GetQuoteAddress
             );
         }
 
-        $quoteAddressCustomerId = (int)$quoteAddress->getCustomerId();
-
-        /* Guest cart, allow operations */
-        if (!$quoteAddressCustomerId && null === $customerId) {
-            return $quoteAddress;
+        // TODO: GetQuoteAddress::execute should depend only on AddressInterface contract
+        // https://github.com/magento/graphql-ce/issues/550
+        if ($quoteAddress->getQuoteId() !== $cart->getId()) {
+            throw new GraphQlNoSuchEntityException(
+                __('Cart does not contain address with ID "%cart_address_id"', ['cart_address_id' => $quoteAddressId])
+            );
         }
 
-        if ($quoteAddressCustomerId !== $customerId) {
+        if ((int)$quoteAddress->getCustomerId() !== (int)$customerId) {
             throw new GraphQlAuthorizationException(
                 __(
                     'The current user cannot use cart address with ID "%cart_address_id"',
