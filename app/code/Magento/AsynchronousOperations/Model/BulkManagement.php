@@ -5,6 +5,7 @@
  */
 namespace Magento\AsynchronousOperations\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
@@ -13,6 +14,7 @@ use Magento\Framework\MessageQueue\BulkPublisherInterface;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Class BulkManagement
@@ -52,6 +54,11 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
     private $resourceConnection;
 
     /**
+     * @var \Magento\Authorization\Model\UserContextInterface
+     */
+    private $userContext;
+
+    /**
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
@@ -65,6 +72,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
      * @param \Psr\Log\LoggerInterface $logger
+     * @param UserContextInterface $userContext
      */
     public function __construct(
         EntityManager $entityManager,
@@ -73,7 +81,8 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         BulkPublisherInterface $publisher,
         MetadataPool $metadataPool,
         ResourceConnection $resourceConnection,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        UserContextInterface $userContext = null
     ) {
         $this->entityManager = $entityManager;
         $this->bulkSummaryFactory= $bulkSummaryFactory;
@@ -82,6 +91,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         $this->resourceConnection = $resourceConnection;
         $this->publisher = $publisher;
         $this->logger = $logger;
+        $this->userContext = $userContext ?: ObjectManager::getInstance()->get(UserContextInterface::class);
     }
 
     /**
@@ -93,6 +103,10 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
         // save bulk summary and related operations
         $connection->beginTransaction();
+        $userType = $this->userContext->getUserType();
+        if ($userType === null) {
+            $userType = UserContextInterface::USER_TYPE_ADMIN;
+        }
         try {
             /** @var \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface $bulkSummary */
             $bulkSummary = $this->bulkSummaryFactory->create();
@@ -100,6 +114,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
             $bulkSummary->setBulkId($bulkUuid);
             $bulkSummary->setDescription($description);
             $bulkSummary->setUserId($userId);
+            $bulkSummary->setUserType($userType);
             $bulkSummary->setOperationCount((int)$bulkSummary->getOperationCount() + count($operations));
 
             $this->entityManager->save($bulkSummary);

@@ -14,8 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface as ScopeConfig;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Catalog search auto-complete data provider.
  */
 class DataProvider implements DataProviderInterface
 {
@@ -48,6 +47,7 @@ class DataProvider implements DataProviderInterface
     /**
      * @param QueryFactory $queryFactory
      * @param ItemFactory $itemFactory
+     * @param ScopeConfig $scopeConfig
      */
     public function __construct(
         QueryFactory $queryFactory,
@@ -64,7 +64,7 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems()
     {

@@ -15,7 +15,7 @@
             <title value="Customer Checkout"/>
             <description value="Should be able to place an order as a customer."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="#"/>
+            <testCaseId value="MC-5922"/>
             <group value="checkout"/>
         </annotations>
         <before>
@@ -26,10 +26,13 @@
             <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <!--Clear filters-->
+            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingCustomerFilters"/>
+
+            <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="simpleuscustomer" stepKey="deleteCustomer"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
@@ -48,6 +51,8 @@
         <click stepKey="s35" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
         <waitForElement stepKey="s36" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
         <click stepKey="s37" selector="{{CheckoutShippingMethodsSection.next}}" />
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <waitForPageLoad stepKey="s39"/>
         <waitForElement stepKey="s41" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
         <see stepKey="s47" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
@@ -76,6 +81,7 @@
 
         <amOnPage stepKey="s96" url="{{AdminCustomerPage.url}}"/>
         <waitForPageLoad stepKey="s97"/>
+        <waitForElementVisible selector="{{AdminCustomerFiltersSection.filtersButton}}" time="30" stepKey="waitFiltersButton"/>
         <click stepKey="s98" selector="{{AdminCustomerFiltersSection.filtersButton}}"/>
         <fillField stepKey="s99" selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="$$simpleuscustomer.email$$"/>
         <click stepKey="s100" selector="{{AdminCustomerFiltersSection.apply}}"/>
@@ -91,9 +97,7 @@
             <description value="Should be able to place an order as a customer with multiple addresses and tax rates."/>
             <testCaseId value="MAGETWO-93109"/>
             <severity value="AVERAGE"/>
-            <skip>
-                <issueId value="MQE-1187" />
-            </skip>
+            <group value="checkout"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
@@ -165,7 +169,8 @@
         <click stepKey="selectFirstShippingMethod1" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
         <waitForElement stepKey="waitForShippingMethodSelect1" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
         <click stepKey="clickNextOnShippingMethodLoad1" selector="{{CheckoutShippingMethodsSection.next}}" />
-        <waitForPageLoad stepKey="waitForPaymentLoad1"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <waitForElement stepKey="waitForPlaceOrderButton1" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
         <see stepKey="seeBillingAddressIsCorrect1" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_NY.street[0]}}" />
         <click stepKey="clickPlaceOrderButton1" selector="{{CheckoutPaymentSection.placeOrder}}" />
@@ -183,14 +188,81 @@
 
         <click stepKey="changeShippingAddress" selector="{{CheckoutShippingMethodsSection.shipHereButton}}"/>
         <waitForElementNotVisible stepKey="waitForShippingMethodLoaderNotVisible" selector="{{CheckoutShippingMethodsSection.shippingMethodLoader}}" time="30"/>
+        <waitForElementVisible stepKey="waitForShippingMethodRadioToBeVisible" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" time="30"/>
+        <waitForPageLoad stepKey="waitForPageLoad23"/>
         <click stepKey="selectFirstShippingMethod2" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
         <waitForElement stepKey="waitForShippingMethodSelect2" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
         <click stepKey="clickNextOnShippingMethodLoad2" selector="{{CheckoutShippingMethodsSection.next}}" />
-        <waitForPageLoad stepKey="waitForPaymentLoad2"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <waitForElement stepKey="waitForPlaceOrderButton2" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
         <see stepKey="seeBillingAddressIsCorrect2" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{UK_Not_Default_Address.street[0]}}" />
         <click stepKey="clickPlaceOrderButton2" selector="{{CheckoutPaymentSection.placeOrder}}" />
         <waitForPageLoad stepKey="waitForOrderSuccessPage2"/>
         <see stepKey="seeSuccessMessage2" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
+    </test>
+    <test name="StorefrontCustomerCheckoutTestWithRestrictedCountriesForPayment">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout flow if payment solutions are not available"/>
+            <title value="Checkout via Customer Checkout with restricted countries for payment"/>
+            <description value="Should be able to place an order as a Customer with restricted countries for payment."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-42653"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 1" />
+            <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry GB" />
+            <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
+        </before>
+        <after>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 0" />
+            <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry ''" />
+        </after>
+        <!-- Login as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$simpleuscustomer$$" />
+        </actionGroup>
+
+        <!-- Add product to cart -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
+
+        <!-- Go to checkout page -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="customerGoToCheckoutFromMinicart" />
+
+        <!-- Select address -->
+        <click stepKey="selectAddress" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
+        <waitForElement stepKey="waitNextButton" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
+        <click stepKey="clickNextButton" selector="{{CheckoutShippingMethodsSection.next}}" />
+        <waitForPageLoad stepKey="waitBillingForm"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <dontsee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
+
+        <!-- Fill UK Address and verify that payment available and checkout successful -->
+        <click selector="{{CheckoutHeaderSection.shippingMethodStep}}" stepKey="goToShipping" />
+        <click selector="{{CheckoutShippingSection.newAddressButton}}" stepKey="fillNewAddress" />
+        <actionGroup ref="LoggedInUserCheckoutAddNewShippingSectionWithoutRegionActionGroup" stepKey="customerCheckoutFillingShippingSectionUK">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="UK_Not_Default_Address" />
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="customerSelectCheckMoneyOrderPayment" />
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
     </test>
 </tests>

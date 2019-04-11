@@ -212,7 +212,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testIsVatValidationEnabled($store, $result)
     {
         $this->scopeConfig->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VAT_VALIDATION_ENABLED,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -242,7 +242,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testHasValidateOnEachTransaction($store, $result)
     {
         $this->scopeConfig->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VIV_ON_EACH_TRANSACTION,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -297,7 +297,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testIsDisableAutoGroupAssignDefaultValue()
     {
         $this->scopeConfig->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -309,7 +309,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testIsVatAttributeVisible()
     {
         $this->scopeConfig->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VAT_FRONTEND_VISIBILITY,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -413,32 +413,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ['fax', true],
             ['invalid_code', false]
         ];
-    }
-
-    /**
-     * Test is required filed by attribute code
-     *
-     * @param string $attributeCode
-     * @param bool $isMetadataExists
-     * @dataProvider isAttributeRequiredDataProvider
-     * @covers \Magento\Customer\Helper\Address::isAttributeRequired()
-     * @return void
-     */
-    public function testIsAttributeRequired($attributeCode, $isMetadataExists)
-    {
-        $attributeMetadata = null;
-        if ($isMetadataExists) {
-            $attributeMetadata = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
-                ->getMockForAbstractClass();
-            $attributeMetadata->expects($this->once())
-                ->method('isRequired')
-                ->willReturn(true);
-        }
-        $this->addressMetadataService->expects($this->once())
-            ->method('getAttributeMetadata')
-            ->with($attributeCode)
-            ->willReturn($attributeMetadata);
-        $this->assertEquals($isMetadataExists, $this->helper->isAttributeRequired($attributeCode));
     }
 
     /**

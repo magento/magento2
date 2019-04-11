@@ -12,8 +12,6 @@ use Magento\Framework\Search\RequestInterface;
  * Request checker for advanced search.
  *
  * Checks advanced search query whether required to collect all attributes for entity.
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
  */
 class AdvancedSearch implements RequestCheckerInterface
 {
@@ -31,7 +29,7 @@ class AdvancedSearch implements RequestCheckerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isApplicable(RequestInterface $request)
     {

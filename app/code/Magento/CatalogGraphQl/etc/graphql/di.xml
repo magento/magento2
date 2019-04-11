@@ -38,11 +38,15 @@
                 </item>
                 <item name="customizable_options" xsi:type="array">
                     <item name="field" xsi:type="string">CustomizableFieldOption</item>
+                    <item name="date" xsi:type="string">CustomizableDateOption</item>
                     <item name="date_time" xsi:type="string">CustomizableDateOption</item>
+                    <item name="time" xsi:type="string">CustomizableDateOption</item>
                     <item name="file" xsi:type="string">CustomizableFileOption</item>
                     <item name="area" xsi:type="string">CustomizableAreaOption</item>
                     <item name="drop_down" xsi:type="string">CustomizableDropDownOption</item>
+                    <item name="multiple" xsi:type="string">CustomizableMultipleOption</item>
                     <item name="radio" xsi:type="string">CustomizableRadioOption</item>
+                    <item name="checkbox" xsi:type="string">CustomizableCheckboxOption</item>
                 </item>
             </argument>
         </arguments>
@@ -74,4 +78,6 @@
             </argument>
         </arguments>
     </virtualType>
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match"
+                type="Magento\CatalogGraphQl\Model\Search\Adapter\Mysql\Query\Builder\Match" />
 </config>

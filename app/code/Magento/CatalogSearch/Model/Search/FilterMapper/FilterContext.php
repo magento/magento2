@@ -15,8 +15,8 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
  * Its responsibility is to choose appropriate strategy to apply passed filter to the Select
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class FilterContext implements FilterStrategyInterface
 {

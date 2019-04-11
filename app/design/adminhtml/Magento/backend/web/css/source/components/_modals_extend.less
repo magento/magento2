@@ -146,13 +146,13 @@
     }
 
     .action-close {
-        padding: @modal-popup__padding;
+        padding: @modal-popup__padding - 2;
 
         &:active,
         &:focus {
             background: transparent;
-            padding-right: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
-            padding-top: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+            padding-right: @modal-popup__padding - 2;
+            padding-top: @modal-popup__padding - 2;
         }
     }
 }

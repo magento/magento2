@@ -80,12 +80,14 @@ class InputParamsResolver
 
     /**
      * Process and resolve input parameters
+     *
      * Return array with validated input params
      * or throw \Exception if at least one request entity params is not valid
      *
      * @return array
      * @throws \Magento\Framework\Exception\InputException if no value is provided for required parameters
      * @throws \Magento\Framework\Webapi\Exception
+     * @throws \Magento\Framework\Exception\AuthorizationException
      */
     public function resolve()
     {
@@ -120,7 +122,10 @@ class InputParamsResolver
     }
 
     /**
-     * Convert the input array from key-value format to a list of parameters suitable for the specified class / method.
+     * Resolve parameters for service
+     *
+     * Convert the input array from key-value format to a list of parameters
+     * suitable for the specified class / method.
      *
      * Instead of \Magento\Webapi\Controller\Rest\InputParamsResolver
      * we don't need to merge body params with url params and use only body params

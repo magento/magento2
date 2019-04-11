@@ -77,7 +77,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      *
      * @var string
      */
-    protected $_defaultCgiGatewayUrl = 'http://www.ups.com:80/using/services/rave/qcostcgi.cgi';
+    protected $_defaultCgiGatewayUrl = 'https://www.ups.com/using/services/rave/qcostcgi.cgi';
 
     /**
      * Test urls for shipment
@@ -330,6 +330,14 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         // For UPS, Guam state of the USA will be represented by Guam country
         if ($destCountry == self::USA_COUNTRY_ID && $request->getDestRegionCode() == self::GUAM_REGION_CODE) {
             $destCountry = self::GUAM_COUNTRY_ID;
+        }
+
+        // For UPS, Las Palmas and Santa Cruz de Tenerife will be represented by Canary Islands country
+        if ($destCountry === 'ES' &&
+            ($request->getDestRegionCode() === 'Las Palmas'
+                || $request->getDestRegionCode() === 'Santa Cruz de Tenerife')
+        ) {
+            $destCountry = 'IC';
         }
 
         $country = $this->_countryFactory->create()->load($destCountry);
@@ -1700,6 +1708,7 @@ XMLAuth;
 
     /**
      * Get delivery confirmation level based on origin/destination
+     *
      * Return null if delivery confirmation is not acceptable
      *
      * @param string|null $countyDestination

@@ -23,13 +23,13 @@
         <column xsi:type="int" name="warning_value" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="WarningValue for sequence"/>
         <column xsi:type="boolean" name="is_active" nullable="false" default="false" comment="isActive flag"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="profile_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_SEQUENCE_PROFILE_META_ID_SALES_SEQUENCE_META_META_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_SEQUENCE_PROFILE_META_ID_SALES_SEQUENCE_META_META_ID"
                     table="sales_sequence_profile" column="meta_id" referenceTable="sales_sequence_meta"
                     referenceColumn="meta_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="SALES_SEQUENCE_PROFILE_META_ID_PREFIX_SUFFIX">
+        <constraint xsi:type="unique" referenceId="SALES_SEQUENCE_PROFILE_META_ID_PREFIX_SUFFIX">
             <column name="meta_id"/>
             <column name="prefix"/>
             <column name="suffix"/>
@@ -41,11 +41,11 @@
         <column xsi:type="varchar" name="entity_type" nullable="false" length="32" comment="Prefix"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Store Id"/>
-        <column xsi:type="varchar" name="sequence_table" nullable="false" length="32" comment="table for sequence"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <column xsi:type="varchar" name="sequence_table" nullable="false" length="64" comment="table for sequence"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="meta_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="SALES_SEQUENCE_META_ENTITY_TYPE_STORE_ID">
+        <constraint xsi:type="unique" referenceId="SALES_SEQUENCE_META_ENTITY_TYPE_STORE_ID">
             <column name="entity_type"/>
             <column name="store_id"/>
         </constraint>

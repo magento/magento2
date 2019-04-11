@@ -7,7 +7,6 @@
 define([
     'jquery',
     'underscore',
-    'mage/utils/wrapper',
     'Magento_Checkout/js/view/payment/default',
     'Magento_Braintree/js/view/payment/adapter',
     'Magento_Checkout/js/model/quote',
@@ -19,7 +18,6 @@ define([
 ], function (
     $,
     _,
-    wrapper,
     Component,
     Braintree,
     quote,
@@ -102,6 +100,12 @@ define([
             quote.totals.subscribe(function () {
                 if (self.grandTotalAmount !== quote.totals()['base_grand_total']) {
                     self.grandTotalAmount = quote.totals()['base_grand_total'];
+                }
+            });
+
+            quote.shippingAddress.subscribe(function () {
+                if (self.isActive()) {
+                    self.reInitPayPal();
                 }
             });
 
@@ -222,9 +226,8 @@ define([
 
         /**
          * Re-init PayPal Auth Flow
-         * @param {Function} callback - Optional callback
          */
-        reInitPayPal: function (callback) {
+        reInitPayPal: function () {
             if (Braintree.checkout) {
                 Braintree.checkout.teardown(function () {
                     Braintree.checkout = null;
@@ -234,17 +237,6 @@ define([
             this.disableButton();
             this.clientConfig.paypal.amount = this.grandTotalAmount;
             this.clientConfig.paypal.shippingAddressOverride = this.getShippingAddress();
-
-            if (callback) {
-                this.clientConfig.onReady = wrapper.wrap(
-                    this.clientConfig.onReady,
-                    function (original, checkout) {
-                        this.clientConfig.onReady = original;
-                        original(checkout);
-                        callback();
-                    }.bind(this)
-                );
-            }
 
             Braintree.setConfig(this.clientConfig);
             Braintree.setup();
@@ -428,19 +420,17 @@ define([
          * Triggers when customer click "Continue to PayPal" button
          */
         payWithPayPal: function () {
-            this.reInitPayPal(function () {
-                if (!additionalValidators.validate()) {
-                    return;
-                }
+            if (!additionalValidators.validate()) {
+                return;
+            }
 
-                try {
-                    Braintree.checkout.paypal.initAuthFlow();
-                } catch (e) {
-                    this.messageContainer.addErrorMessage({
-                        message: $t('Payment ' + this.getTitle() + ' can\'t be initialized.')
-                    });
-                }
-            }.bind(this));
+            try {
+                Braintree.checkout.paypal.initAuthFlow();
+            } catch (e) {
+                this.messageContainer.addErrorMessage({
+                    message: $t('Payment ' + this.getTitle() + ' can\'t be initialized.')
+                });
+            }
         },
 
         /**

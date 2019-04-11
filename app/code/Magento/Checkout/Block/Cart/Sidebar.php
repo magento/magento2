@@ -82,11 +82,14 @@ class Sidebar extends AbstractCart
             'baseUrl' => $this->getBaseUrl(),
             'minicartMaxItemsVisible' => $this->getMiniCartMaxItemsCount(),
             'websiteId' => $this->_storeManager->getStore()->getWebsiteId(),
-            'maxItemsToDisplay' => $this->getMaxItemsToDisplay()
+            'maxItemsToDisplay' => $this->getMaxItemsToDisplay(),
+            'storeId' => $this->_storeManager->getStore()->getId()
         ];
     }
 
     /**
+     * Get serialized config
+     *
      * @return string
      * @since 100.2.0
      */
@@ -96,6 +99,8 @@ class Sidebar extends AbstractCart
     }
 
     /**
+     * Get image html template
+     *
      * @return string
      */
     public function getImageHtmlTemplate()
@@ -130,6 +135,7 @@ class Sidebar extends AbstractCart
      *
      * @return string
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getUpdateItemQtyUrl()
     {
@@ -141,6 +147,7 @@ class Sidebar extends AbstractCart
      *
      * @return string
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getRemoveItemUrl()
     {
@@ -210,6 +217,7 @@ class Sidebar extends AbstractCart
 
     /**
      * Returns maximum cart items to display
+     *
      * This setting regulates how many items will be displayed in minicart
      *
      * @return int

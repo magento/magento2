@@ -18,16 +18,16 @@
                 identity="false" default="0" comment="Default Group Id"/>
         <column xsi:type="smallint" name="is_default" padding="5" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Defines Is Website Default"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="website_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="STORE_WEBSITE_CODE">
+        <constraint xsi:type="unique" referenceId="STORE_WEBSITE_CODE">
             <column name="code"/>
         </constraint>
-        <index name="STORE_WEBSITE_SORT_ORDER" indexType="btree">
+        <index referenceId="STORE_WEBSITE_SORT_ORDER" indexType="btree">
             <column name="sort_order"/>
         </index>
-        <index name="STORE_WEBSITE_DEFAULT_GROUP_ID" indexType="btree">
+        <index referenceId="STORE_WEBSITE_DEFAULT_GROUP_ID" indexType="btree">
             <column name="default_group_id"/>
         </index>
     </table>
@@ -42,18 +42,18 @@
         <column xsi:type="smallint" name="default_store_id" padding="5" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Default Store Id"/>
         <column xsi:type="varchar" name="code" nullable="true" length="32" comment="Store group unique code"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="group_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="STORE_GROUP_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID" table="store_group"
+        <constraint xsi:type="foreign" referenceId="STORE_GROUP_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID" table="store_group"
                     column="website_id" referenceTable="store_website" referenceColumn="website_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="STORE_GROUP_CODE">
+        <constraint xsi:type="unique" referenceId="STORE_GROUP_CODE">
             <column name="code"/>
         </constraint>
-        <index name="STORE_GROUP_WEBSITE_ID" indexType="btree">
+        <index referenceId="STORE_GROUP_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
-        <index name="STORE_GROUP_DEFAULT_STORE_ID" indexType="btree">
+        <index referenceId="STORE_GROUP_DEFAULT_STORE_ID" indexType="btree">
             <column name="default_store_id"/>
         </index>
     </table>
@@ -70,24 +70,24 @@
                 default="0" comment="Store Sort Order"/>
         <column xsi:type="smallint" name="is_active" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Store Activity"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="store_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="STORE_GROUP_ID_STORE_GROUP_GROUP_ID" table="store" column="group_id"
+        <constraint xsi:type="foreign" referenceId="STORE_GROUP_ID_STORE_GROUP_GROUP_ID" table="store" column="group_id"
                     referenceTable="store_group" referenceColumn="group_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="STORE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID" table="store"
+        <constraint xsi:type="foreign" referenceId="STORE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID" table="store"
                     column="website_id" referenceTable="store_website" referenceColumn="website_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="STORE_CODE">
+        <constraint xsi:type="unique" referenceId="STORE_CODE">
             <column name="code"/>
         </constraint>
-        <index name="STORE_WEBSITE_ID" indexType="btree">
+        <index referenceId="STORE_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
-        <index name="STORE_IS_ACTIVE_SORT_ORDER" indexType="btree">
+        <index referenceId="STORE_IS_ACTIVE_SORT_ORDER" indexType="btree">
             <column name="is_active"/>
             <column name="sort_order"/>
         </index>
-        <index name="STORE_GROUP_ID" indexType="btree">
+        <index referenceId="STORE_GROUP_ID" indexType="btree">
             <column name="group_id"/>
         </index>
     </table>

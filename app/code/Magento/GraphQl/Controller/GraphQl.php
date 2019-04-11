@@ -17,6 +17,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\Response;
+use Magento\Framework\GraphQl\Query\Fields as QueryFields;
 
 /**
  * Front controller for web API GraphQL area.
@@ -61,6 +62,11 @@ class GraphQl implements FrontControllerInterface
     private $requestProcessor;
 
     /**
+     * @var QueryFields
+     */
+    private $queryFields;
+
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
@@ -68,6 +74,7 @@ class GraphQl implements FrontControllerInterface
      * @param \Magento\Framework\GraphQl\Exception\ExceptionFormatter $graphQlError
      * @param \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $resolverContext
      * @param HttpRequestProcessor $requestProcessor
+     * @param QueryFields $queryFields
      */
     public function __construct(
         Response $response,
@@ -76,7 +83,8 @@ class GraphQl implements FrontControllerInterface
         QueryProcessor $queryProcessor,
         ExceptionFormatter $graphQlError,
         ContextInterface $resolverContext,
-        HttpRequestProcessor $requestProcessor
+        HttpRequestProcessor $requestProcessor,
+        QueryFields $queryFields
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -85,6 +93,7 @@ class GraphQl implements FrontControllerInterface
         $this->graphQlError = $graphQlError;
         $this->resolverContext = $resolverContext;
         $this->requestProcessor = $requestProcessor;
+        $this->queryFields = $queryFields;
     }
 
     /**
@@ -100,10 +109,17 @@ class GraphQl implements FrontControllerInterface
             /** @var Http $request */
             $this->requestProcessor->processHeaders($request);
             $data = $this->jsonSerializer->unserialize($request->getContent());
+
+            $query = isset($data['query']) ? $data['query'] : '';
+            $variables = isset($data['variables']) ? $data['variables'] : null;
+            // We have to extract queried field names to avoid instantiation of non necessary fields in webonyx schema
+            // Temporal coupling is required for performance optimization
+            $this->queryFields->setQuery($query, $variables);
             $schema = $this->schemaGenerator->generate();
+
             $result = $this->queryProcessor->process(
                 $schema,
-                isset($data['query']) ? $data['query'] : '',
+                $query,
                 $this->resolverContext,
                 isset($data['variables']) ? $data['variables'] : []
             );

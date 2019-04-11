@@ -363,7 +363,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         if ($request->getDestPostcode()) {
             $r->setDestPostal($request->getDestPostcode());
-        } else {
         }
 
         if ($request->getDestCity()) {
@@ -986,6 +985,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Return FeDex currency ISO code by Magento Base Currency Code
      *
      * @return string 3-digit currency code
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getCurrencyCode()
     {
@@ -1008,7 +1008,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         ];
         $currencyCode = $this->_storeManager->getStore()->getBaseCurrencyCode();
 
-        return isset($codes[$currencyCode]) ? $codes[$currencyCode] : $currencyCode;
+        return $codes[$currencyCode] ?? $currencyCode;
     }
 
     /**
@@ -1438,6 +1438,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
+     * Return Tracking Number
+     *
      * @param array|object $trackingIds
      * @return string
      */
@@ -1452,10 +1454,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
-     * For multi package shipments. Delete requested shipments if the current shipment
-     * request is failed
+     * For multi package shipments. Delete requested shipments if the current shipment request is failed
      *
      * @param array $data
+     *
      * @return bool
      */
     public function rollBack($data)
@@ -1475,6 +1477,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Return container types of carrier
      *
      * @param \Magento\Framework\DataObject|null $params
+     *
      * @return array|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -1542,6 +1545,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Return delivery confirmation types of carrier
      *
      * @param \Magento\Framework\DataObject|null $params
+     *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -1552,6 +1556,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * Recursive replace sensitive fields in debug data by the mask
+     *
      * @param string $data
      * @return string
      */
@@ -1569,6 +1574,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * Parse track details response from Fedex
+     *
      * @param \stdClass $trackInfo
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -1639,6 +1645,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * Parse delivery datetime from tracking details
+     *
      * @param \stdClass $trackInfo
      * @return \Datetime|null
      */
@@ -1655,8 +1662,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
-     * Get delivery address details in string representation
-     * Return City, State, Country Code
+     * Get delivery address details in string representation Return City, State, Country Code
      *
      * @param \stdClass $address
      * @return \Magento\Framework\Phrase|string
@@ -1718,6 +1724,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * Append error message to rate result instance
+     *
      * @param string $trackingValue
      * @param string $errorMessage
      */
@@ -1759,8 +1766,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
-     * Defines payment type by request.
-     * Two values are available: RECIPIENT or SENDER.
+     * Defines payment type by request. Two values are available: RECIPIENT or SENDER.
      *
      * @param DataObject $request
      * @return string

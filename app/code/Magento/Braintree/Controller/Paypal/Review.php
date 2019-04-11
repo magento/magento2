@@ -12,11 +12,13 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Class Review
  */
-class Review extends AbstractAction
+class Review extends AbstractAction implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var QuoteUpdater
@@ -60,7 +62,7 @@ class Review extends AbstractAction
         try {
             $this->validateQuote($quote);
 
-            if ($this->validateRequestData($requestData)) {
+            if ($requestData && $this->validateRequestData($requestData)) {
                 $this->quoteUpdater->execute(
                     $requestData['nonce'],
                     $requestData['details'],
@@ -91,6 +93,8 @@ class Review extends AbstractAction
     }
 
     /**
+     * Validate request data
+     *
      * @param array $requestData
      * @return boolean
      */

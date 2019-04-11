@@ -318,7 +318,7 @@ class Dom
         libxml_set_external_entity_loader([self::$urnResolver, 'registerEntityLoader']);
         $errors = [];
         try {
-            $result = $dom->schemaValidate($schema);
+            $result = $dom->schemaValidate($schema, LIBXML_SCHEMA_CREATE);
             if (!$result) {
                 $errors = self::getXmlErrors($errorFormat);
             }

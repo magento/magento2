@@ -712,7 +712,6 @@ return [
         'Magento\Sales\Block\Reorder\Sidebar',
         '\Magento\Sales\CustomerData\LastOrderedItems::SIDEBAR_ORDER_LIMIT',
     ],
-    ['ENTITY', 'Magento\Framework\App\Config\ValueInterface'],
     ['XML_PATH_ALLOW_CURRENCIES_INSTALLED', 'Magento\Framework\Locale\CurrencyInterface'],
     [
         'DEFAULT_CURRENCY',

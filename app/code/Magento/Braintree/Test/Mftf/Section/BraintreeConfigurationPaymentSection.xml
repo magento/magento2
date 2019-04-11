@@ -10,6 +10,7 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <section name="BraintreeConfigurationPaymentSection">
         <element name="creditCart" type="radio" selector="#braintree"/>
+        <element name="paymentMethodContainer" type="block" selector=".payment-method-braintree"/>
         <element name="paymentMethod" type="radio" selector="//div[@class='payment-group']//input[contains(@id, 'braintree_cc_vault_')]"/>
         <element name="cartFrame" type="iframe" selector="braintree-hosted-field-number"/>
         <element name="monthFrame" type="iframe" selector="braintree-hosted-field-expirationMonth"/>
