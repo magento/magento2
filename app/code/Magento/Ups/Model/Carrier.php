@@ -473,7 +473,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             '47_rate_chart' => $rowRequest->getPickup(),
             '48_container' => $rowRequest->getContainer(),
             '49_residential' => $rowRequest->getDestType(),
-            'weight_std' => strtolower($rowRequest->getUnitMeasure()),
+            'weight_std' => strtolower((string)$rowRequest->getUnitMeasure()),
         ];
         $params['47_rate_chart'] = $params['47_rate_chart']['label'];
 
@@ -537,7 +537,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $priceArr = [];
         if (strlen(trim($response)) > 0) {
             $rRows = explode("\n", $response);
-            $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
+            $allowedMethods = explode(",", (string)$this->getConfigData('allowed_methods'));
             foreach ($rRows as $rRow) {
                 $row = explode('%', $rRow);
                 switch (substr($row[0], -1)) {
