@@ -6,6 +6,7 @@
 
 namespace Magento\ProductAlert\Controller\Add;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\ProductAlert\Controller\Add as AddController;
 use Magento\Framework\App\Action\Context;
@@ -19,7 +20,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Controller for notifying about stock.
  */
-class Stock extends AddController implements HttpPostActionInterface
+class Stock extends AddController implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface

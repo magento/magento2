@@ -6,6 +6,7 @@
 
 namespace Magento\ProductAlert\Controller\Add;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\ProductAlert\Controller\Add as AddController;
 use Magento\Framework\App\Action\Context;
@@ -20,7 +21,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Controller for notifying about price.
  */
-class Price extends AddController implements HttpPostActionInterface
+class Price extends AddController implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
