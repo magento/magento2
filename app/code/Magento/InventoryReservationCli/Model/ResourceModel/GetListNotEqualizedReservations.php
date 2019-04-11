@@ -9,6 +9,9 @@ namespace Magento\InventoryReservationCli\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 
+/**
+ * Load a list of uncompensated reservations.
+ */
 class GetListNotEqualizedReservations
 {
     /**
@@ -25,6 +28,11 @@ class GetListNotEqualizedReservations
         $this->resourceConnection = $resourceConnection;
     }
 
+    /**
+     * Load a list of uncompensated reservations.
+     *
+     * @return array
+     */
     public function execute(): array
     {
         $connection = $this->resourceConnection->getConnection();

@@ -13,6 +13,9 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 
+/**
+ * Get list of orders in any of the final states (Complete, Closed, Canceled).
+ */
 class GetOrdersInFinalState
 {
     /**
@@ -38,6 +41,8 @@ class GetOrdersInFinalState
     }
 
     /**
+     * Get list of orders in any of the final states (Complete, Closed, Canceled).
+     *
      * @param array $orderIds
      * @return OrderInterface[]
      */

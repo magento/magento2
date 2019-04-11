@@ -10,6 +10,9 @@ namespace Magento\InventoryReservationCli\Model;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\InventoryReservationCli\Model\ResourceModel\GetReservationsList;
 
+/**
+ * Get list of reservations for Order entity.
+ */
 class GetOrdersWithNotCompensatedReservations
 {
     /**
@@ -35,6 +38,8 @@ class GetOrdersWithNotCompensatedReservations
     }
 
     /**
+     * Get list of reservations for Order entity.
+     *
      * @return array
      */
     public function execute(): array

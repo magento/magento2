@@ -16,6 +16,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Outputs a list of uncompensated reservations linked to the orders in final state (Completed, Closed, Canceled).
+ *
+ * This command may be used to simplify migrations from Magento versions without new Inventory or to track down
+ * incorrect behavior of customizations.
+ */
 class ShowInconsistenciesInCompletedOrders extends Command
 {
     /**
@@ -40,6 +46,9 @@ class ShowInconsistenciesInCompletedOrders extends Command
         parent::__construct();
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function configure()
     {
         $this
@@ -51,6 +60,8 @@ class ShowInconsistenciesInCompletedOrders extends Command
     }
 
     /**
+     * Format output
+     *
      * @param OutputInterface $output
      * @param array $itemsNotCompensated
      */
@@ -80,6 +91,8 @@ class ShowInconsistenciesInCompletedOrders extends Command
     }
 
     /**
+     * Output without formatting
+     *
      * @param OutputInterface $output
      * @param array $itemsNotCompensated
      */
@@ -101,6 +114,8 @@ class ShowInconsistenciesInCompletedOrders extends Command
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int

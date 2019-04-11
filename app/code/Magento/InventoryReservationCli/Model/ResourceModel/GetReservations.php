@@ -9,6 +9,9 @@ namespace Magento\InventoryReservationCli\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 
+/**
+ * Load a list of reservations by id.
+ */
 class GetReservations
 {
     /**
@@ -26,6 +29,8 @@ class GetReservations
     }
 
     /**
+     * Load a list of reservations by id.
+     *
      * @param array $reservationIds
      * @return array
      */
