@@ -60,8 +60,8 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      */
     public function open($filename)
     {
-        if (filesize($filename) === 0) {
-            throw new \InvalidArgumentException("Wrong file size: '{$filename}'.");
+        if (!$filename || filesize($filename) === 0) {
+            throw new \InvalidArgumentException('Wrong file');
         }
         $this->_fileName = $filename;
         $this->_reset();
