@@ -91,7 +91,7 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
     public function contentForTranslateDataProvider()
     {
         return [
-            [
+            'previousError' => [
                 'setTranslateProp = function (el, original) {
             var location = $(el).prop(\'tagName\').toLowerCase(),
                 translated = $.mage.__(original),
@@ -121,60 +121,49 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
             setText(el, translationData.shown);
         },'
             ],
-            [
-                <<<EOT
+            'checkTranslationWithWhiteSpaces' => [
+                <<<i18n
                 title: $.mage.__(
                     'Original value for Magento_Store module'
                 ),
-EOT
-                ,
-                <<<EOT
-                title: 'Translated value for Magento_Store module in en_AU',
-EOT
-            ],
-            [
-                <<<EOT
                 title: \$t(
                     'Original value for Magento_Store module'
                 );
-EOT
+i18n
                 ,
-                <<<EOT
+                <<<i18n
+                title: 'Translated value for Magento_Store module in en_AU',
                 title: 'Translated value for Magento_Store module in en_AU';
-EOT
+i18n
             ],
-            [
-                <<<EOT
+            'checkTranslationWithReplace' => [
+                <<<i18n
                 $.mage.__('The maximum you may purchase is %1.').replace('%1', params.maxAllowed);
-EOT
-                ,
-                <<<EOT
-                'The maximum you may purchase is %1.'.replace('%1', params.maxAllowed);
-EOT
-            ],
-            [
-                <<<EOT
-                \$t("text double quote");
-                \$t('text "some');
-                \$t('Payment ' + this.getTitle() + ' can\'t be initialized')
                 \$t('The maximum you may purchase is %1.').replace('%1', params.maxAllowed);
-                \$t(
-                    'Set unique country-state combinations within the same fixed product tax. ' +
-                    'Verify the combinations and try again.'
-                )
-EOT
+i18n
                 ,
-                <<<EOT
-                'text double quote';
-                'text "some';
-                \$t('Payment ' + this.getTitle() + ' can\'t be initialized')
+                <<<i18n
                 'The maximum you may purchase is %1.'.replace('%1', params.maxAllowed);
+                'The maximum you may purchase is %1.'.replace('%1', params.maxAllowed);
+i18n
+            ],
+            'checkAvoidingMatching' => [
+                <<<i18n
+                \$t('Payment ' + this.getTitle() + ' can\'t be initialized')
                 \$t(
                     'Set unique country-state combinations within the same fixed product tax. ' +
                     'Verify the combinations and try again.'
                 )
-EOT
-            ],
+i18n
+                ,
+                <<<i18n
+                \$t('Payment ' + this.getTitle() + ' can\'t be initialized')
+                \$t(
+                    'Set unique country-state combinations within the same fixed product tax. ' +
+                    'Verify the combinations and try again.'
+                )
+i18n
+            ]
         ];
     }
 }

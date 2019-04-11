@@ -428,7 +428,7 @@ define([
                 Braintree.checkout.paypal.initAuthFlow();
             } catch (e) {
                 this.messageContainer.addErrorMessage({
-                    message: $t('Payment {title} can\'t be initialized').replace('{title}', this.getTitle())
+                    message: $t('Payment ' + this.getTitle() + ' can\'t be initialized.')
                 });
             }
         },
