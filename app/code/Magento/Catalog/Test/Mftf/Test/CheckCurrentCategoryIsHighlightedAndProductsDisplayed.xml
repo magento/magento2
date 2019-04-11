@@ -8,11 +8,11 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="CheckCategoriesFunctionality">
+    <test name="CheckCurrentCategoryIsHighlightedAndProductsDisplayed">
         <annotations>
             <features value="Catalog"/>
-            <title value="Check that categories functionality work correct"/>
-            <description value="Check that categories functionality work correct"/>
+            <title value="Сheck that current category is highlighted and all products displayed for it"/>
+            <description value="Сheck that current category is highlighted and all products displayed for it"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-98028"/>
             <useCaseId value="MAGETWO-98748"/>
