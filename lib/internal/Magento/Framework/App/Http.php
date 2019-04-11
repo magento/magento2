@@ -132,6 +132,7 @@ class Http implements \Magento\Framework\AppInterface
 
         $frontendConfig = $this->_configLoader->load($areaCode);
         $this->_objectManager->configure($frontendConfig);
+
         /** @var  \Magento\Framework\Interception\ExtendableConfigInterface $interceptionConfig */
         $interceptionConfig = $this->_objectManager->get(\Magento\Framework\Interception\Config\Config::class);
         if ($interceptionConfig instanceof \Magento\Framework\Interception\ExtendableConfigInterface) {
