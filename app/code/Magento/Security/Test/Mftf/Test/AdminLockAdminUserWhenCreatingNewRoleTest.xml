@@ -27,36 +27,46 @@
             <magentoCLI command="admin:user:unlock {{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="unlockAdminUser"/>
         </after>
         <!-- Perform add new role 6 specified number of times. -->
-        <actionGroup ref="AdminCreateRoleRequiredFieldsActionGroup" stepKey="failedSaveRoleFirstAttempt">
+        <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="openCreateRolePage"/>
+
+        <actionGroup ref="AdminFillRoleRequiredFieldsActionGroup" stepKey="fillFieldFirstAttempt">
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
-            <argument name="messageSelector" value="{{AdminMessagesSection.error}}" />
-            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
         </actionGroup>
-        <actionGroup ref="AdminCreateRoleRequiredFieldsActionGroup" stepKey="failedSaveRoleSecondAttempt">
+        <actionGroup ref="AssertSaveRoleActionGroup" stepKey="saveRoleFirstAttempt"/>
+        <actionGroup ref="AssertMessageOnBackendActionGroup" stepKey="checkFirstSaveRoleError"/>
+        
+        <actionGroup ref="AdminFillRoleRequiredFieldsActionGroup" stepKey="fillFieldSecondAttempt">
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
-            <argument name="messageSelector" value="{{AdminMessagesSection.error}}" />
-            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
         </actionGroup>
-        <actionGroup ref="AdminCreateRoleRequiredFieldsActionGroup" stepKey="failedSaveRoleThirdAttempt">
+        <actionGroup ref="AssertSaveRoleActionGroup" stepKey="saveRoleSecondAttempt"/>
+        <actionGroup ref="AssertMessageOnBackendActionGroup" stepKey="checkSecondSaveRoleError"/>
+
+        <actionGroup ref="AdminFillRoleRequiredFieldsActionGroup" stepKey="fillFieldThirdAttempt">
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
-            <argument name="messageSelector" value="{{AdminMessagesSection.error}}" />
-            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
         </actionGroup>
-        <actionGroup ref="AdminCreateRoleRequiredFieldsActionGroup" stepKey="failedSaveRoleFourthAttempt">
+        <actionGroup ref="AssertSaveRoleActionGroup" stepKey="saveRoleThirdAttempt"/>
+        <actionGroup ref="AssertMessageOnBackendActionGroup" stepKey="checkThirdSaveRoleError"/>
+
+        <actionGroup ref="AdminFillRoleRequiredFieldsActionGroup" stepKey="fillFieldFourthAttempt">
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
-            <argument name="messageSelector" value="{{AdminMessagesSection.error}}" />
-            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
         </actionGroup>
-        <actionGroup ref="AdminCreateRoleRequiredFieldsActionGroup" stepKey="failedSaveRoleFifthAttempt">
+        <actionGroup ref="AssertSaveRoleActionGroup" stepKey="saveRoleFourthAttempt"/>
+        <actionGroup ref="AssertMessageOnBackendActionGroup" stepKey="checkFourthSaveRoleError"/>
+
+        <actionGroup ref="AdminFillRoleRequiredFieldsActionGroup" stepKey="fillFieldFifthAttempt">
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
-            <argument name="messageSelector" value="{{AdminMessagesSection.error}}" />
-            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
         </actionGroup>
-        <actionGroup ref="AdminCreateRoleRequiredFieldsActionGroup" stepKey="failedSaveRoleSixthAttempt">
+        <actionGroup ref="AssertSaveRoleActionGroup" stepKey="saveRoleFifthAttempt"/>
+        <actionGroup ref="AssertMessageOnBackendActionGroup" stepKey="checkFifthSaveRoleError"/>
+
+        <actionGroup ref="AdminFillRoleRequiredFieldsActionGroup" stepKey="fillFieldSixthAttempt">
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
-            <argument name="messageSelector" value="{{AdminLoginFormSection.error}}" />
-            <argument name="message" value="Your account is temporarily disabled. Please try again later." />
         </actionGroup>
+        <actionGroup ref="AssertSaveRoleActionGroup" stepKey="saveRoleSixthAttempt"/>
+        <actionGroup ref="AssertAdminNotSuccessLoginActionGroup" stepKey="checkFifthError">
+            <argument name="message" value="Your account is temporarily disabled. Please try again later."/>
+        </actionGroup>
+
         <!-- Try to login as admin and check error -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsLockedAdmin"/>
         <actionGroup ref="AssertAdminNotSuccessLoginActionGroup" stepKey="checkLoginError"/>
