@@ -27,6 +27,7 @@
             <createData entity="SimpleProduct2" stepKey="createSecondProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <updateData createDataKey="createFirstProduct" entity="ProductWithFieldOptions" stepKey="updateProductCustomOptions" />
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -37,18 +38,6 @@
             </actionGroup>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
-
-        <!--Go to product page -->
-        <amOnPage url="{{AdminProductEditPage.url($$createFirstProduct.id$$)}}" stepKey="goToProductEditPage"/>
-        <actionGroup ref="AddProductCustomOption" stepKey="addFirstCustomOption">
-            <argument name="option" value="ProductOptionField"/>
-            <argument name="optionIndex" value="0"/>
-        </actionGroup>
-        <actionGroup ref="AddProductCustomOption" stepKey="addSecondCustomOption">
-            <argument name="option" value="ProductOptionField2"/>
-            <argument name="optionIndex" value="1"/>
-        </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
 
         <!--Change second product sku to first product sku-->
         <amOnPage url="{{AdminProductEditPage.url($$createSecondProduct.id$$)}}" stepKey="goToSecondProductEditPage"/>

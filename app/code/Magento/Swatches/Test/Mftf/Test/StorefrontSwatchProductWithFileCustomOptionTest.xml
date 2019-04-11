@@ -52,7 +52,6 @@
         <!--Add custom option to configurable product-->
         <actionGroup ref="AddProductCustomOptionFile" stepKey="addCustomOptionToProduct">
             <argument name="option" value="ProductOptionFile"/>
-            <argument name="optionIndex" value="0"/>
         </actionGroup>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
 
