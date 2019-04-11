@@ -35,6 +35,10 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="ApiSimpleProductWithSpecCharInName" type="product" extends="ApiSimpleProduct">
+        <data key="name">Pursuit Lumaflex&#38;trade; Tone Band</data>
+        <data key="sku" unique="suffix">x&#38;trade;</data>
+    </entity>
     <entity name="ApiSimpleProductWithCustomPrice" type="product" extends="ApiSimpleProduct">
         <data key="price">100</data>
     </entity>
@@ -162,6 +166,28 @@
         <data key="urlKey" unique="suffix">testurlkey</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="SimpleProductDisabled" type="product">
+        <data key="sku" unique="suffix">simple_product_disabled</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">Simple Product Disabled</data>
+        <data key="price">123.00</data>
+        <data key="visibility">4</data>
+        <data key="status">2</data>
+        <data key="quantity">1001</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
+    <entity name="SimpleProductNotVisibleIndividually" type="product">
+        <data key="sku" unique="suffix">simple_product_not_visible_individually</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">Simple Product Not Visible Individually</data>
+        <data key="price">123.00</data>
+        <data key="visibility">1</data>
+        <data key="status">1</data>
+        <data key="quantity">1000</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
     <entity name="NewSimpleProduct" type="product">
         <data key="price">321.00</data>
@@ -428,9 +454,23 @@
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionRadiobuttonWithTwoFixedOptions</requiredEntity>
     </entity>
+    <entity name="productWithCustomOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionDropDown2</requiredEntity>
+    </entity>
+    <entity name="productWithFixedOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionRadioButton2</requiredEntity>
+    </entity>
     <entity name="productWithOptions2" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
+    </entity>
+    <entity name="productWithDropdownOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionValueDropdown</requiredEntity>
     </entity>
     <entity name="ProductWithTextFieldAndAreaOptions" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
@@ -985,6 +1025,10 @@
         <data key="is_in_stock">1</data>
         <data key="tax_class_id">2</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithTwoOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionMultiSelect</requiredEntity>
     </entity>
     <entity name="SimpleProductWithOption" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
