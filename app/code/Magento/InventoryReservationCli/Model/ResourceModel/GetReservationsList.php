@@ -9,6 +9,9 @@ namespace Magento\InventoryReservationCli\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 
+/**
+ * Load reservations from database.
+ */
 class GetReservationsList
 {
     /**
@@ -26,6 +29,8 @@ class GetReservationsList
     }
 
     /**
+     * Load reservations from database.
+     *
      * @return array
      */
     public function execute(): array
@@ -33,9 +38,9 @@ class GetReservationsList
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('inventory_reservation');
 
-        $qry = $connection
+        $query = $connection
             ->select()
             ->from($tableName);
-        return $connection->fetchAll($qry);
+        return $connection->fetchAll($query);
     }
 }
