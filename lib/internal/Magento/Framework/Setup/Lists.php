@@ -99,10 +99,14 @@ class Lists
             }
             $language = \Locale::getPrimaryLanguage($locale);
             $country = \Locale::getRegion($locale);
+            $script = \Locale::getScript($locale);
             if (!$languages[$language] || !$countries[$country]) {
                 continue;
             }
-            $list[$locale] = $languages[$language] . ' (' . $countries[$country] . ')';
+            if ($script !== '') {
+                $script = \Locale::getDisplayScript($locale) . ', ';
+            }
+            $list[$locale] = $languages[$language] . ' (' . $script . $countries[$country] . ')';
         }
         asort($list);
         return $list;
