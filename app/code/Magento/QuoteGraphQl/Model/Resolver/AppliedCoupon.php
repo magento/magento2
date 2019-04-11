@@ -11,12 +11,27 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Quote\Api\CouponManagementInterface;
 
 /**
  * @inheritdoc
  */
 class AppliedCoupon implements ResolverInterface
 {
+    /**
+     * @var CouponManagementInterface
+     */
+    private $couponManagement;
+
+    /**
+     * @param CouponManagementInterface $couponManagement
+     */
+    public function __construct(
+        CouponManagementInterface $couponManagement
+    ) {
+        $this->couponManagement = $couponManagement;
+    }
+
     /**
      * @inheritdoc
      */
@@ -26,9 +41,9 @@ class AppliedCoupon implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
         $cart = $value['model'];
+        $cartId = $cart->getId();
 
-        $appliedCoupon = $cart->getCouponCode();
-
+        $appliedCoupon = $this->couponManagement->get($cartId);
         return $appliedCoupon ? ['code' => $appliedCoupon] : null;
     }
 }
