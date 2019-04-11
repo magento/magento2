@@ -172,7 +172,8 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     foreach ($storeIds as $storeId) {
                         if ($object->getPriceType() == 'fixed') {
                             $storeCurrency = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
-                            $rate = $this->_currencyFactory->create()->load($websiteBaseCurrency)->getRate($storeCurrency);
+                            $rate = $this->_currencyFactory->create()->load($websiteBaseCurrency)
+                                ->getRate($storeCurrency);
                             if (!$rate) {
                                 $rate = 1;
                             }
