@@ -46,6 +46,8 @@
         <element name="conditionSelect" type="select" selector="select[name='rule[conditions][1][new_child]']"/>
         <element name="targetEllipsis" type="input" selector="//ul[contains(@id, 'conditions')]//a[.='...']"/>
         <element name="ruleFieldByIndex" type="input" selector="[id='conditions__{{index}}__value']" parameterized="true"/>
+        <element name="addNewCondition" type="button" selector="//ul[@id = 'conditions__{{nestedIndex}}__children']/li/span[contains(@class, 'rule-param-new-child')]" parameterized="true" timeout="30"/>
+        <element name="conditionSelectDropdown" type="select" selector="select[name='rule[conditions][{{nestedIndex}}][new_child]']" parameterized="true"/>
         <element name="selectCountryDropdown" type="select" selector="(//*[contains(@value,'country_id')]/..//select)[last()]"/>
 
         <!--Conditions checker -->
