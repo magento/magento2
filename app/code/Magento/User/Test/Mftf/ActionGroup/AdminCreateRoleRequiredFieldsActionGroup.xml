@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateRoleRequiredFieldsActionGroup">
+        <arguments>
+        <argument name="roleName" type="string" defaultValue="{{adminRole.name}}"/>
+        <argument name="currentAdminPassword" type="string" defaultValue="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <argument name="message" type="string" defaultValue="You saved the role." />
+        <argument name="messageSelector" type="string" defaultValue="{{AdminMessagesSection.success}}" />
+        </arguments>
+
+        <!-- Open Admin New Role Page -->
+        <amOnPage url="{{AdminEditRolePage.url}}" stepKey="amOnNewAdminRolePage"/>
+        <waitForPageLoad stepKey="waitForNewAdminRolePageLoad"/>
+
+        <!-- Fill required fields -->
+        <fillField selector="{{AdminCreateRoleSection.name}}" userInput="{{roleName}}" stepKey="fillRoleName"/>
+        <fillField selector="{{AdminCreateRoleSection.password}}" userInput="{{currentAdminPassword}}" stepKey="fillCurrentUserPassword"/>
+        <click selector="{{AdminCreateRoleSection.save}}" stepKey="saveNewRole"/>
+        <waitForPageLoad stepKey="waitForSaveResultLoad"/>
+
+        <see userInput="{{message}}" selector="{{messageSelector}}" stepKey="verifyMessage" />
+    </actionGroup>
+</actionGroups>
