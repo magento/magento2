@@ -241,4 +241,20 @@
         <data key="apply">Percent of product price discount</data>
         <data key="discountAmount">50</data>
     </entity>
+
+    <entity name="RetailerCartPriceRule" type="SalesRule">
+        <data key="name" unique="suffix">Cart Price Rule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'Retailer'</data>
+        <data key="apply">Percent of product price discount</data>
+        <data key="discountAmount">50</data>
+    </entity>
+
+    <entity name="SegmentCartPriceRule" type="SalesRule">
+        <data key="name" unique="suffix">Cart Price Rule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'General'</data>
+        <data key="apply">Percent of product price discount</data>
+        <data key="discountAmount">50</data>
+    </entity>
 </entities>
