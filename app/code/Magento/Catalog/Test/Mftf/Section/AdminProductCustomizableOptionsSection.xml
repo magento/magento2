@@ -26,22 +26,13 @@
         <element name="lastOptionTypeParent" type="block" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__action-multiselect-text')]" />
         <!-- var 1 represents the option type that you want to select, i.e "radio buttons" -->
         <element name="optionType" type="block" selector="//*[@data-index='custom_options']//label[text()='{{var1}}'][ancestor::*[contains(@class, '_active')]]" parameterized="true" />
-        <element name="optionPrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//input[contains(@name,'price')]"/>
-        <element name="optionPriceType" type="select" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//select[contains(@name,'price_type')]"/>
-        <element name="optionFileExtensions" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//input[contains(@name,'file_extension')]"/>
-        <element name="optionSku" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//input[contains(@name,'sku')]"/>
+        <element name="optionPrice" type="input" selector="[data-index='custom_options'] [data-index='options'] tbody tr:nth-last-of-type(1) input[name*='price']"/>
+        <element name="optionPriceType" type="select" selector="[data-index='custom_options'] [data-index='options'] tbody tr:nth-last-of-type(1) input[name*='price_type']"/>
+        <element name="optionFileExtensions" type="input" selector="[data-index='custom_options'] [data-index='options'] tbody tr:nth-last-of-type(1) input[name*='file_extension']"/>
+        <element name="optionSku" type="input" selector="[data-index='custom_options'] [data-index='options'] tbody tr:nth-last-of-type(1) input[name*='sku']"/>
         <element name="optionTitleInputByIndex" type="input" selector="input[name='product[options][{{index}}][title]']" parameterized="true"/>
-        <element name="importOptions" type="button" selector="button[data-index='button_import']" timeout="30"/>
+        <element name="importOptions" type="button" selector="[data-index='custom_options'] [data-index='button_import']" timeout="30"/>
         <element name="optionPriceByIndex" type="input" selector="input[name='product[options][{{index}}][price]']" parameterized="true"/>
         <element name="optionSkuByIndex" type="input" selector="input[name='product[options][{{index}}][sku]']" parameterized="true"/>
-    </section>
-    <section name="AdminProductImportOptionsSection">
-        <element name="selectProductTitle" type="text" selector="//h1[contains(text(), 'Select Product')]"/>
-        <element name="filterButton" type="button" selector="button[data-action='grid-filter-expand']" timeout="30"/>
-        <element name="nameField" type="input" selector="input[name='name']"/>
-        <element name="applyFiltersButton" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
-        <element name="resetFiltersButton" type="button" selector="button[data-action='grid-filter-reset']" timeout="30"/>
-        <element name="firstRowItemCheckbox" type="input" selector="input[data-action='select-row']"/>
-        <element name="importButton" type="button" selector="//button[contains(@class, 'action-primary')]/span[contains(text(), 'Import')]" timeout="30"/>
     </section>
 </sections>

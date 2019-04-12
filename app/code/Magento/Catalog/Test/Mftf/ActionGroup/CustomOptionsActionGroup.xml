@@ -31,14 +31,14 @@
             <argument name="productName" type="string"/>
         </arguments>
         <click selector="{{AdminProductCustomizableOptionsSection.importOptions}}" stepKey="clickImportOptions"/>
-        <waitForElementVisible selector="{{AdminProductImportOptionsSection.selectProductTitle}}" stepKey="waitForTitleVisible"/>
-        <conditionalClick selector="{{AdminProductImportOptionsSection.resetFiltersButton}}" dependentSelector="{{AdminProductImportOptionsSection.resetFiltersButton}}" visible="true" stepKey="clickResetFilters"/>
-        <click selector="{{AdminProductImportOptionsSection.filterButton}}" stepKey="clickFilterButton"/>
-        <waitForElementVisible selector="{{AdminProductImportOptionsSection.nameField}}" stepKey="waitForNameField"/>
-        <fillField selector="{{AdminProductImportOptionsSection.nameField}}" userInput="{{productName}}" stepKey="fillProductName"/>
-        <click selector="{{AdminProductImportOptionsSection.applyFiltersButton}}" stepKey="clickApplyFilters"/>
-        <checkOption selector="{{AdminProductImportOptionsSection.firstRowItemCheckbox}}"  stepKey="checkProductCheckbox"/>
-        <click selector="{{AdminProductImportOptionsSection.importButton}}" stepKey="clickImport"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsImportModalSection.selectProductTitle}}" stepKey="waitForTitleVisible"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickResetFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickFilterButton"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsImportModalSection.nameField}}" stepKey="waitForNameField"/>
+        <fillField selector="{{AdminProductCustomizableOptionsImportModalSection.nameField}}" userInput="{{productName}}" stepKey="fillProductName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <checkOption selector="{{AdminDataGridTableSection.rowCheckbox('1')}}"  stepKey="checkProductCheckbox"/>
+        <click selector="{{AdminProductCustomizableOptionsImportModalSection.importButton}}" stepKey="clickImport"/>
     </actionGroup>
     <actionGroup name="CheckCustomizableOptionImport">
         <arguments>
@@ -53,3 +53,4 @@
         <assertEquals expected="{{option.title}}" expectedType="string" actual="$grabOptionSku" stepKey="assertOptionSku"/>
     </actionGroup>
 </actionGroups>
+
