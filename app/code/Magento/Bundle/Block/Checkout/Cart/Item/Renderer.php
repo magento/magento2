@@ -69,6 +69,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
 
     /**
      * Overloaded method for getting list of bundle options
+     *
      * Caches result in quote item, because it can be used in cart 'recent view' and on same page in cart checkout
      *
      * @return array
