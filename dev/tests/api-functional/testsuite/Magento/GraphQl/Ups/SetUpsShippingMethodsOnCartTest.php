@@ -142,6 +142,6 @@ QUERY;
         $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
 
-        return $this->graphQlQuery($query, [], '', $headerMap);
+        return $this->graphQlMutation($query, [], '', $headerMap);
     }
 }
