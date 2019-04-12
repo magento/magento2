@@ -226,7 +226,7 @@ class PlaceOrderTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
      */
-    public function testPlaceOrderOfAnotherCustomerCart()
+    public function testPlaceOrderOfCustomerCart()
     {
         $reservedOrderId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
