@@ -64,12 +64,10 @@ class ShowInconsistenciesInCompletedOrders extends Command
      *
      * @param OutputInterface $output
      * @param array $itemsNotCompensated
+     * @param array $orders
      */
-    private function prettyOutput(OutputInterface $output, array $itemsNotCompensated): void
+    private function prettyOutput(OutputInterface $output, array $itemsNotCompensated, array $orders): void
     {
-        /** @var OrderInterface[] $orders */
-        $orders = $this->getOrderInFinalState->execute(array_keys($itemsNotCompensated));
-
         $output->writeln('<comment>Inconsistencies found on following entries:</comment>');
 
         /** @var Order $order */
@@ -95,12 +93,10 @@ class ShowInconsistenciesInCompletedOrders extends Command
      *
      * @param OutputInterface $output
      * @param array $itemsNotCompensated
+     * @param array $orders
      */
-    private function rawOutput(OutputInterface $output, array $itemsNotCompensated): void
+    private function rawOutput(OutputInterface $output, array $itemsNotCompensated, array $orders): void
     {
-        /** @var OrderInterface[] $orders */
-        $orders = $this->getOrderInFinalState->execute(array_keys($itemsNotCompensated));
-
         /** @var Order $order */
         foreach($orders as $order) {
             $inconsistentSkus = $itemsNotCompensated[$order->getId()];
@@ -125,15 +121,18 @@ class ShowInconsistenciesInCompletedOrders extends Command
         /** @var array $itemsNotCompensated */
         $itemsNotCompensated = $this->getOrdersWithNotCompensatedReservations->execute();
 
-        if (empty($itemsNotCompensated)) {
+        /** @var OrderInterface[] $orders */
+        $orders = $this->getOrderInFinalState->execute(array_keys($itemsNotCompensated));
+
+        if (empty($orders)) {
             $output->writeln('<info>No order inconsistencies were found</info>');
             return 0;
         }
 
         if ($input->getOption('raw')) {
-            $this->rawOutput($output, $itemsNotCompensated);
+            $this->rawOutput($output, $itemsNotCompensated, $orders);
         } else {
-            $this->prettyOutput($output, $itemsNotCompensated);
+            $this->prettyOutput($output, $itemsNotCompensated, $orders);
         }
         return -1;
     }
