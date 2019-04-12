@@ -8,6 +8,9 @@
 
 namespace Magento\Catalog\Test\Unit\Block\Product;
 
+/**
+ * Class ViewTest
+ */
 class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -25,6 +28,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     protected $registryMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -36,6 +42,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testShouldRenderQuantity()
     {
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -61,6 +70,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(false, $this->view->shouldRenderQuantity());
     }
 
+    /**
+     * @return void
+     */
     public function testGetIdentities()
     {
         $productTags = ['cat_p_1'];
