@@ -56,7 +56,7 @@ class Curl implements \Magento\Analytics\Model\Connector\Http\ClientInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function request($method, $url, array $body = [], array $headers = [], $version = '1.1')
     {

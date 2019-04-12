@@ -78,7 +78,7 @@ class DefaultItem extends AbstractItem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function doGetItemData()
     {

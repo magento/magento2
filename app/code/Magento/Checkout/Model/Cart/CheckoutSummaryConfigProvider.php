@@ -39,7 +39,7 @@ class CheckoutSummaryConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {

@@ -34,7 +34,7 @@ class AttributeManagement implements ProductMediaAttributeManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList($attributeSetName)
     {

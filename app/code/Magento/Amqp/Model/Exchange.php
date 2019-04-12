@@ -11,7 +11,7 @@ use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  *
  * @deprecated 100.2.0
  */

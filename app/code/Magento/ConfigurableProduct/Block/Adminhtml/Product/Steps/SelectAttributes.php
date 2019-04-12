@@ -76,7 +76,7 @@ class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCaption()
     {

@@ -41,7 +41,7 @@ class Filters implements ObserverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function update(UiComponentInterface $component)

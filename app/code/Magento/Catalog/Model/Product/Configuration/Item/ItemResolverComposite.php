@@ -11,7 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class ItemResolverComposite implements ItemResolverInterface
 {
@@ -30,7 +30,7 @@ class ItemResolverComposite implements ItemResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFinalProduct(ItemInterface $item) : ProductInterface
     {

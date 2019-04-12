@@ -111,7 +111,7 @@ class ValidateTest extends AttributeTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModel()
     {

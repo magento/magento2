@@ -49,7 +49,7 @@ class EnvironmentPlaceholder implements PreProcessorInterface
      * Method extracts environment variables.
      * If environment variable is matching the desired rule - it's being used as value.
      *
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.2
      */
     public function process(array $config)

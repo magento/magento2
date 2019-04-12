@@ -18,7 +18,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class AddSearchKeyConditionToCollection implements AddFilterToCollectionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

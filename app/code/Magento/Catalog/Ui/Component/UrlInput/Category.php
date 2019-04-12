@@ -28,7 +28,7 @@ class Category implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig(): array
     {

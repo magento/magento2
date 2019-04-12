@@ -14,7 +14,7 @@ use Magento\Framework\Bulk\BulkSummaryInterface;
 class NotificationActions extends Column
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepareDataSource(array $dataSource)
     {

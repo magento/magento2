@@ -31,7 +31,7 @@ class LinkedProductSelectBuilderComposite implements LinkedProductSelectBuilderI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build($productId)
     {

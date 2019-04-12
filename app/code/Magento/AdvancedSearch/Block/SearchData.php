@@ -53,7 +53,7 @@ abstract class SearchData extends Template implements SearchDataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems()
     {
@@ -61,7 +61,7 @@ abstract class SearchData extends Template implements SearchDataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isShowResultsCount()
     {
@@ -69,7 +69,7 @@ abstract class SearchData extends Template implements SearchDataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLink($queryText)
     {
@@ -77,7 +77,7 @@ abstract class SearchData extends Template implements SearchDataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTitle()
     {

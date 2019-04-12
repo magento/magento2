@@ -251,7 +251,7 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

@@ -84,7 +84,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionTypeExtensionInterface|null
      */
@@ -94,7 +94,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionTypeExtensionInterface $extensionAttributes
      * @return $this

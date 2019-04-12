@@ -13,7 +13,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 class Quantity extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($value)
     {

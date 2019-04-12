@@ -14,7 +14,7 @@ class DefaultAdditional extends \Magento\Backend\Block\Widget\Form\Generic imple
     \Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional\AdditionalInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createFromConfiguration(array $configuration)
     {

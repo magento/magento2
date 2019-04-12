@@ -17,7 +17,7 @@ class ProductWebsiteLink extends \Magento\Framework\Api\AbstractSimpleObject imp
     /**#@-*/
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSku()
     {
@@ -25,7 +25,7 @@ class ProductWebsiteLink extends \Magento\Framework\Api\AbstractSimpleObject imp
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getWebsiteId()
     {
@@ -42,7 +42,7 @@ class ProductWebsiteLink extends \Magento\Framework\Api\AbstractSimpleObject imp
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWebsiteId($websiteId)
     {

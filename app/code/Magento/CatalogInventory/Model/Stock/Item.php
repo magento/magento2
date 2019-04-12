@@ -819,7 +819,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface|null
      */
@@ -829,7 +829,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface $extensionAttributes
      * @return $this

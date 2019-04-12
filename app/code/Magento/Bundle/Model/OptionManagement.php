@@ -34,7 +34,7 @@ class OptionManagement implements \Magento\Bundle\Api\ProductOptionManagementInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Bundle\Api\Data\OptionInterface $option)
     {

@@ -152,7 +152,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function correctItemsQty(array $items, $websiteId, $operator)
     {

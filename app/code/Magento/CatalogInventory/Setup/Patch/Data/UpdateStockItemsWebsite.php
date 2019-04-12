@@ -58,7 +58,7 @@ class UpdateStockItemsWebsite implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -71,7 +71,7 @@ class UpdateStockItemsWebsite implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -81,7 +81,7 @@ class UpdateStockItemsWebsite implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -89,7 +89,7 @@ class UpdateStockItemsWebsite implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

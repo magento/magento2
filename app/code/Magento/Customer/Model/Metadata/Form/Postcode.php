@@ -82,7 +82,7 @@ class Postcode extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function extractValue(\Magento\Framework\App\RequestInterface $request)
     {
@@ -90,7 +90,7 @@ class Postcode extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function compactValue($value)
     {
@@ -98,7 +98,7 @@ class Postcode extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function restoreValue($value)
     {
@@ -106,7 +106,7 @@ class Postcode extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function outputValue($format = ElementFactory::OUTPUT_FORMAT_TEXT)
     {

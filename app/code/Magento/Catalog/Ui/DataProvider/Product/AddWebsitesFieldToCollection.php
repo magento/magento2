@@ -17,7 +17,7 @@ use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
 class AddWebsitesFieldToCollection implements AddFieldToCollectionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addField(Collection $collection, $field, $alias = null)
     {

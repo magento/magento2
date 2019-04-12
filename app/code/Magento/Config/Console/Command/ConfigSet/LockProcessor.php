@@ -19,7 +19,7 @@ use Magento\Framework\Stdlib\ArrayManager;
  * This processor saves the value of configuration into app/etc/env.php
  * and locks it for editing in Admin interface.
  *
- * {@inheritdoc}
+ * @inheritdoc
  */
 class LockProcessor implements ConfigSetProcessorInterface
 {
@@ -80,7 +80,7 @@ class LockProcessor implements ConfigSetProcessorInterface
      * Processes lock flow of config:set command.
      * Requires read access to filesystem.
      *
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process($path, $value, $scope, $scopeCode)
     {

@@ -47,7 +47,7 @@ class ProductDataProvider extends AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function getData()
@@ -61,7 +61,7 @@ class ProductDataProvider extends AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function getMeta()

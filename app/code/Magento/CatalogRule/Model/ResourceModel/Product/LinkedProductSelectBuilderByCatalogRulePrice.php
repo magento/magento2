@@ -77,7 +77,7 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build($productId)
     {

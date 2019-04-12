@@ -186,7 +186,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.2.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)

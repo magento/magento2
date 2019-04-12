@@ -33,7 +33,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -41,7 +41,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {

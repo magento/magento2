@@ -15,7 +15,7 @@ namespace Magento\Backend\Console\Command;
 class CacheFlushCommand extends AbstractCacheTypeManageCommand
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -37,7 +37,7 @@ class CacheFlushCommand extends AbstractCacheTypeManageCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getDisplayMessage()
     {

@@ -35,7 +35,7 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isActive($scope = null)
     {
@@ -43,7 +43,7 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isDevAllowed($scope = null)
     {

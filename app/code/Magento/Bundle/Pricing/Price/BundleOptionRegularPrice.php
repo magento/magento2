@@ -52,7 +52,7 @@ class BundleOptionRegularPrice extends AbstractPrice implements BundleOptionPric
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValue()
     {

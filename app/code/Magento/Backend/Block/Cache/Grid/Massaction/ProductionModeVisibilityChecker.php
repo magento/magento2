@@ -27,7 +27,7 @@ class ProductionModeVisibilityChecker implements VisibilityCheckerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isVisible()
     {

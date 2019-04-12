@@ -15,7 +15,7 @@ use Magento\Ui\Component\Container;
 class BundleCustomOptions extends AbstractModifier
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -87,7 +87,7 @@ class BundleCustomOptions extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {

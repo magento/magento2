@@ -14,7 +14,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Related;
 class CrossSellDataProvider extends AbstractDataProvider
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     protected function getLinkType()

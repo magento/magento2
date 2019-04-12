@@ -195,7 +195,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface|null
      */
@@ -205,7 +205,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes
      * @return $this

@@ -13,7 +13,7 @@ use Magento\Framework\App\RequestInterface;
 class Multiselect extends Select
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function extractValue(RequestInterface $request)
     {
@@ -25,7 +25,7 @@ class Multiselect extends Select
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function compactValue($value)
     {
@@ -40,7 +40,7 @@ class Multiselect extends Select
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function outputValue($format = ElementFactory::OUTPUT_FORMAT_TEXT)
     {

@@ -48,7 +48,7 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {

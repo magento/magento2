@@ -45,7 +45,7 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareCollection()
     {
@@ -71,7 +71,7 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
@@ -128,7 +128,7 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRowUrl($row)
     {

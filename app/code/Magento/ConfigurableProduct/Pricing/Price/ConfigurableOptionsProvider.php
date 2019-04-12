@@ -44,7 +44,7 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getProducts(ProductInterface $product)
     {

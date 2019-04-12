@@ -96,7 +96,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {

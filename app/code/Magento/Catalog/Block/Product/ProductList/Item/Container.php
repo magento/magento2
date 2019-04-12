@@ -16,7 +16,7 @@ use Magento\Catalog\Block\Product\AwareInterface as ProductAwareInterface;
 class Container extends Block
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.1
      */
     public function getChildHtml($alias = '', $useCache = false)

@@ -29,7 +29,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const CONFIG_PATH_BACKEND_FRONTNAME = 'backend/frontName';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptions()
     {
@@ -44,7 +44,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
@@ -63,7 +63,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {

@@ -67,7 +67,7 @@ class Composite extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -87,7 +87,7 @@ class Composite extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

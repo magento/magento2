@@ -20,7 +20,7 @@ use Magento\Framework\Stdlib\ArrayUtils;
  * Processes data from specific section of configuration.
  * Do not physically imports data into database, but invokes backend models of configs.
  *
- * {@inheritdoc}
+ * @inheritdoc
  * @see \Magento\Deploy\Console\Command\App\ConfigImport\Importer
  * @api
  * @since 100.2.0
@@ -102,7 +102,7 @@ class Importer implements ImporterInterface
      * Invokes saving of configurations when data was not imported before
      * or current value is different from previously imported.
      *
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.2.0
      */
     public function import(array $data)

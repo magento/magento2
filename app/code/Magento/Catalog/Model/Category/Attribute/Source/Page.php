@@ -32,7 +32,7 @@ class Page extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAllOptions()
     {

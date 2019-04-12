@@ -76,7 +76,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -84,7 +84,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface $extensionAttributes

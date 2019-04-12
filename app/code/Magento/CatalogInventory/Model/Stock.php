@@ -125,7 +125,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\CatalogInventory\Api\Data\StockExtensionInterface|null
      */
@@ -135,7 +135,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\CatalogInventory\Api\Data\StockExtensionInterface $extensionAttributes
      * @return $this

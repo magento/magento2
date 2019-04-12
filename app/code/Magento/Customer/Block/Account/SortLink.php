@@ -12,7 +12,7 @@ namespace Magento\Customer\Block\Account;
 class SortLink extends \Magento\Framework\View\Element\Html\Link\Current implements SortLinkInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSortOrder()
     {

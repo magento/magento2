@@ -25,7 +25,7 @@ class ProductManagement implements ProductManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCount($status = null)
     {

@@ -23,7 +23,7 @@ class Management implements \Magento\Catalog\Api\ProductAttributeManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function assign($attributeSetId, $attributeGroupId, $attributeCode, $sortOrder)
     {
@@ -37,7 +37,7 @@ class Management implements \Magento\Catalog\Api\ProductAttributeManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function unassign($attributeSetId, $attributeCode)
     {
@@ -45,7 +45,7 @@ class Management implements \Magento\Catalog\Api\ProductAttributeManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAttributes($attributeSetId)
     {

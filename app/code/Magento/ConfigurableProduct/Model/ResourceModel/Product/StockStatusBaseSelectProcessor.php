@@ -41,7 +41,7 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(Select $select)
     {

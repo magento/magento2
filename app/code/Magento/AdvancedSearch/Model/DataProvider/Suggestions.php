@@ -11,7 +11,7 @@ use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 class Suggestions implements SuggestedQueriesInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isResultsCountEnabled()
     {
@@ -19,7 +19,7 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems(QueryInterface $query)
     {

@@ -128,7 +128,7 @@ class Preprocessor implements PreprocessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(FilterInterface $filter, $isNegation, $query)
     {

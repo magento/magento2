@@ -16,7 +16,7 @@ class ConfigurableQty extends AbstractModifier
     const CODE_QTY_CONTAINER = 'quantity_and_stock_status_qty';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -24,7 +24,7 @@ class ConfigurableQty extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {

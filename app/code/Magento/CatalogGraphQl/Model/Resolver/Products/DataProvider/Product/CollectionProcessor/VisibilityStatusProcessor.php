@@ -14,12 +14,12 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 /**
  * Join visibility and status tables to product collection
  *
- * {@inheritdoc}
+ * @inheritdoc
  */
 class VisibilityStatusProcessor implements CollectionProcessorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(
         Collection $collection,

@@ -42,7 +42,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(Data\RuleInterface $rule)
     {
@@ -64,7 +64,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($ruleId)
     {
@@ -85,7 +85,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(Data\RuleInterface $rule)
     {
@@ -101,7 +101,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($ruleId)
     {

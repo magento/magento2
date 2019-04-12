@@ -28,7 +28,7 @@ class CustomerMetadataManagement implements CustomerMetadataManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canBeSearchableInGrid(AttributeMetadataInterface $attribute)
     {
@@ -37,7 +37,7 @@ class CustomerMetadataManagement implements CustomerMetadataManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canBeFilterableInGrid(AttributeMetadataInterface $attribute)
     {

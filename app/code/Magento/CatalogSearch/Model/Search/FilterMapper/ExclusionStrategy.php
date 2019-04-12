@@ -99,7 +99,7 @@ class ExclusionStrategy implements FilterStrategyInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function apply(
         \Magento\Framework\Search\Request\FilterInterface $filter,

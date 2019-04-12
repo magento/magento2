@@ -27,7 +27,7 @@ class Product implements \Magento\Ui\Model\UrlInput\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig(): array
     {

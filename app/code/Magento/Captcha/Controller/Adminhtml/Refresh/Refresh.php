@@ -37,7 +37,7 @@ class Refresh extends \Magento\Backend\App\Action
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {

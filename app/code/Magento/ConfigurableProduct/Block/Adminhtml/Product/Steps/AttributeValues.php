@@ -14,7 +14,7 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps;
 class AttributeValues extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCaption()
     {

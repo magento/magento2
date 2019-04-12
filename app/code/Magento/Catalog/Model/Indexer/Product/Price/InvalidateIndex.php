@@ -30,7 +30,7 @@ class InvalidateIndex implements UpdateIndexInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function update(GroupInterface $group, $isGroupNew)

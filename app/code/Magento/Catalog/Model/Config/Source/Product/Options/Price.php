@@ -30,7 +30,7 @@ class Price implements ProductPriceOptionsInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @codeCoverageIgnore
      */

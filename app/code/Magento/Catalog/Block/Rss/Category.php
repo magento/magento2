@@ -97,7 +97,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRssData()
     {
@@ -207,7 +207,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAllowed()
     {
@@ -257,7 +257,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAuthRequired()
     {

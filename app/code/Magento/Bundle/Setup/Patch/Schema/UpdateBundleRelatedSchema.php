@@ -33,7 +33,7 @@ class UpdateBundleRelatedSchema implements SchemaPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -134,7 +134,7 @@ class UpdateBundleRelatedSchema implements SchemaPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -142,7 +142,7 @@ class UpdateBundleRelatedSchema implements SchemaPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -150,7 +150,7 @@ class UpdateBundleRelatedSchema implements SchemaPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

@@ -637,7 +637,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $_logger;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected $masterAttributeCode = 'sku';
 

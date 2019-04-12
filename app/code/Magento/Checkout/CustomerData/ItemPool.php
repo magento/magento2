@@ -55,7 +55,7 @@ class ItemPool implements ItemPoolInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getItemData(Item $item)

@@ -14,7 +14,7 @@ use Magento\Catalog\Api\Data\BasePriceInterface;
 class BasePrice extends \Magento\Framework\Model\AbstractExtensibleModel implements BasePriceInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPrice($price)
     {
@@ -22,7 +22,7 @@ class BasePrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPrice()
     {
@@ -30,7 +30,7 @@ class BasePrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreId($storeId)
     {
@@ -38,7 +38,7 @@ class BasePrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStoreId()
     {
@@ -46,7 +46,7 @@ class BasePrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSku($sku)
     {
@@ -54,7 +54,7 @@ class BasePrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSku()
     {
@@ -62,7 +62,7 @@ class BasePrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -70,7 +70,7 @@ class BasePrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(\Magento\Catalog\Api\Data\BasePriceExtensionInterface $extensionAttributes)
     {

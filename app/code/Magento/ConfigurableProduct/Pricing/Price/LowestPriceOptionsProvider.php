@@ -62,7 +62,7 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getProducts(ProductInterface $product)
     {

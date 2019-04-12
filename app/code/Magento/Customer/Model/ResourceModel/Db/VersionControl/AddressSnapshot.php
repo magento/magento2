@@ -11,7 +11,7 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 class AddressSnapshot extends Snapshot
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isModified(DataObject $entity)
     {

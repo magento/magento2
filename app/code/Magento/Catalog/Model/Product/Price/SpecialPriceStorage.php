@@ -76,7 +76,7 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get(array $skus)
     {
@@ -102,7 +102,7 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update(array $prices)
     {
@@ -113,7 +113,7 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(array $prices)
     {

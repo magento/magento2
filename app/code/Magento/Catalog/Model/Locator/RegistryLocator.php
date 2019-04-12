@@ -40,7 +40,7 @@ class RegistryLocator implements LocatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws NotFoundException
      */
     public function getProduct()
@@ -57,7 +57,7 @@ class RegistryLocator implements LocatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws NotFoundException
      */
     public function getStore()
@@ -74,7 +74,7 @@ class RegistryLocator implements LocatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getWebsiteIds()
     {
@@ -82,7 +82,7 @@ class RegistryLocator implements LocatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBaseCurrencyCode()
     {

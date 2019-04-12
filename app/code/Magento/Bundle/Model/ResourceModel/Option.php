@@ -180,7 +180,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValidationRulesBeforeSave()
     {
@@ -200,7 +200,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

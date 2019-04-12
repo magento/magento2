@@ -13,7 +13,7 @@ use Magento\Catalog\Block\Adminhtml\Product\Attribute\Button\Cancel;
 class CancelTest extends GenericTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModel()
     {

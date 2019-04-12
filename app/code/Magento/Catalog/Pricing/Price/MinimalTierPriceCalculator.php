@@ -29,7 +29,7 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
     }
 
     /**
-     * Get raw value of "as low as" as a minimal among tier prices{@inheritdoc}
+     * Get raw value of "as low as" as a minimal among tier prices@inheritdoc
      *
      * @param SaleableInterface $saleableItem
      * @return float|null
@@ -51,7 +51,7 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
     }
 
     /**
-     * Return calculated amount object that keeps "as low as" value{@inheritdoc}
+     * Return calculated amount object that keeps "as low as" value@inheritdoc
      *
      * @param SaleableInterface $saleableItem
      * @return AmountInterface|null

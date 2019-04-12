@@ -43,7 +43,7 @@ class ImageEntryConverter implements EntryConverterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMediaEntryType()
     {

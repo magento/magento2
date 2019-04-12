@@ -6,7 +6,7 @@
 namespace Magento\Amqp\Model;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  *
  * @deprecated 100.2.0
  */

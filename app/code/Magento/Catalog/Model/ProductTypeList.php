@@ -46,7 +46,7 @@ class ProductTypeList implements ProductTypeListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getProductTypes()
     {

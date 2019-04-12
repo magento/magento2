@@ -13,7 +13,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Related\CrossSellDataProvider;
 class CrossSellDataProviderTest extends AbstractDataProviderTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModel()
     {

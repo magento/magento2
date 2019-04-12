@@ -33,7 +33,7 @@ class EnableSegmentation implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -73,7 +73,7 @@ class EnableSegmentation implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -81,7 +81,7 @@ class EnableSegmentation implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

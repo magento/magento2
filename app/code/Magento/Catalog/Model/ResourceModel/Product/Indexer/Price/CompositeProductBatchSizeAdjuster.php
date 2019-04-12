@@ -25,7 +25,7 @@ class CompositeProductBatchSizeAdjuster implements CompositeProductBatchSizeAdju
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function adjust($batchSize)
     {

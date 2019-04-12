@@ -16,7 +16,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     \Magento\Eav\Api\Data\AttributeDefaultValueInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAttributeCode()
     {
@@ -24,7 +24,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFrontendInput()
     {
@@ -32,7 +32,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getInputFilter()
     {
@@ -40,7 +40,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStoreLabel()
     {
@@ -48,7 +48,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValidationRules()
     {
@@ -56,7 +56,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMultilineCount()
     {
@@ -64,7 +64,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isVisible()
     {
@@ -72,7 +72,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isRequired()
     {
@@ -80,7 +80,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDataModel()
     {
@@ -88,7 +88,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptions()
     {
@@ -96,7 +96,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFrontendClass()
     {
@@ -104,7 +104,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isUserDefined()
     {
@@ -112,7 +112,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSortOrder()
     {
@@ -120,7 +120,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFrontendLabel()
     {
@@ -128,7 +128,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getNote()
     {
@@ -136,7 +136,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isSystem()
     {
@@ -144,7 +144,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBackendType()
     {

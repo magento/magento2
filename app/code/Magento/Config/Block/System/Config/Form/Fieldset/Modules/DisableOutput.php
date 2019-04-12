@@ -63,7 +63,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @deprecated 100.2.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
      * version. Module output can still be enabled/disabled in configuration files. However, this functionality should
      * not be used in future development. Module design should explicitly state dependencies to avoid requiring output

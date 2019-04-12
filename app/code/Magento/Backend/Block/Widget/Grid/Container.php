@@ -76,7 +76,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {
@@ -168,7 +168,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getHeaderCssClass()
     {

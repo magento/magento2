@@ -52,7 +52,7 @@ class TierPriceStorageTest extends \PHPUnit\Framework\TestCase
     private $tierPriceStorage;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

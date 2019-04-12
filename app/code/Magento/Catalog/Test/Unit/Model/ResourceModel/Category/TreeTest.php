@@ -41,7 +41,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     protected $metadataPoolMock;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

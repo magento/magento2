@@ -32,7 +32,7 @@ class UpdateClassAliases implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -51,7 +51,7 @@ class UpdateClassAliases implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -59,7 +59,7 @@ class UpdateClassAliases implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -67,7 +67,7 @@ class UpdateClassAliases implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

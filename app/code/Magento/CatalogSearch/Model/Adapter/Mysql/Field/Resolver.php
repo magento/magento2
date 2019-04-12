@@ -39,7 +39,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(array $fields)
     {

@@ -64,7 +64,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -73,7 +73,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

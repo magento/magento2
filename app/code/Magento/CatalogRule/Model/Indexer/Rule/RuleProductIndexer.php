@@ -10,7 +10,7 @@ use Magento\CatalogRule\Model\Indexer\AbstractIndexer;
 class RuleProductIndexer extends AbstractIndexer
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -21,7 +21,7 @@ class RuleProductIndexer extends AbstractIndexer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

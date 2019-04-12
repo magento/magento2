@@ -40,7 +40,7 @@ class MassAction extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepare() : void
     {
@@ -64,7 +64,7 @@ class MassAction extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getComponentName() : string
     {

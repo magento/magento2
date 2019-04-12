@@ -13,7 +13,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Related\RelatedDataProvider;
 class RelatedDataProviderTest extends AbstractDataProviderTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModel()
     {

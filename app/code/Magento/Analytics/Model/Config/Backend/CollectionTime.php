@@ -55,9 +55,9 @@ class CollectionTime extends Value
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
-     * {@inheritdoc}. Set schedule setting for cron.
+     * @inheritdoc. Set schedule setting for cron.
      *
      * @return Value
      */

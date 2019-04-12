@@ -33,7 +33,7 @@ class JsLayoutDataProviderPool implements JsLayoutDataProviderPoolInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData()
     {

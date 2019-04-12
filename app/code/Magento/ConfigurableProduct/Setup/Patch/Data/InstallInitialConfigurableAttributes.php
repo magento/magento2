@@ -43,7 +43,7 @@ class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -81,7 +81,7 @@ class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -89,7 +89,7 @@ class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -97,7 +97,7 @@ class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

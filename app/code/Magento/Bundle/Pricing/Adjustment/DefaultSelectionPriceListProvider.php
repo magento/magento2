@@ -35,7 +35,7 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPriceList(Product $bundleProduct, $searchMin, $useRegularPrice)
     {

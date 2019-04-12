@@ -44,7 +44,7 @@ class CronInstallCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -56,7 +56,7 @@ class CronInstallCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

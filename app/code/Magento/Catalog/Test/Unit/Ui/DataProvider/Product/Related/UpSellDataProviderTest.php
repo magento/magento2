@@ -13,7 +13,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Related\UpSellDataProvider;
 class UpSellDataProviderTest extends AbstractDataProviderTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModel()
     {

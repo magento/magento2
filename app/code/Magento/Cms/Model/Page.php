@@ -538,7 +538,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function beforeSave()

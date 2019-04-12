@@ -43,7 +43,7 @@ class DisallowUsingHtmlForProductName implements DataPatchInterface, PatchVersio
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -59,7 +59,7 @@ class DisallowUsingHtmlForProductName implements DataPatchInterface, PatchVersio
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -69,7 +69,7 @@ class DisallowUsingHtmlForProductName implements DataPatchInterface, PatchVersio
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -77,7 +77,7 @@ class DisallowUsingHtmlForProductName implements DataPatchInterface, PatchVersio
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

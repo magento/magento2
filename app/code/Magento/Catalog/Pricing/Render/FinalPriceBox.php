@@ -186,7 +186,7 @@ class FinalPriceBox extends BasePriceBox
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return array
      */

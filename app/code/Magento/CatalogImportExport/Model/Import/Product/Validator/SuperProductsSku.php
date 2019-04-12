@@ -25,7 +25,7 @@ class SuperProductsSku extends AbstractImportValidator implements RowValidatorIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($value)
     {

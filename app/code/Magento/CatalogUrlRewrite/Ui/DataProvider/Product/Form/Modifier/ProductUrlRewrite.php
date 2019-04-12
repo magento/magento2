@@ -53,7 +53,7 @@ class ProductUrlRewrite extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -65,7 +65,7 @@ class ProductUrlRewrite extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {

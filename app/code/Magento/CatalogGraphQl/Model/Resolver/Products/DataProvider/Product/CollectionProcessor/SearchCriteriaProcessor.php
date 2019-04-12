@@ -15,7 +15,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface as SearchC
 /**
  * Apply search criteria data to passed in collection.
  *
- * {@inheritdoc}
+ * @inheritdoc
  */
 class SearchCriteriaProcessor implements CollectionProcessorInterface
 {
@@ -33,7 +33,7 @@ class SearchCriteriaProcessor implements CollectionProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(
         Collection $collection,

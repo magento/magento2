@@ -41,7 +41,7 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCatalogPrice(
         \Magento\Catalog\Model\Product $product,

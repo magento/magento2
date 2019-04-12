@@ -31,7 +31,7 @@ class OptionTypeList implements \Magento\Bundle\Api\ProductOptionTypeListInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems()
     {

@@ -139,7 +139,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.1.0
      */
     public function afterDeleteCommit()

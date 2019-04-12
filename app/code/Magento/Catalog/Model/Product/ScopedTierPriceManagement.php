@@ -59,7 +59,7 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function add($sku, ProductTierPriceInterface $tierPrice)
     {
@@ -135,7 +135,7 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function remove($sku, ProductTierPriceInterface $tierPrice)
     {
@@ -150,7 +150,7 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList($sku, $customerGroupId)
     {

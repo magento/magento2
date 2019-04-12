@@ -25,7 +25,7 @@ class Radio extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCondition()
     {

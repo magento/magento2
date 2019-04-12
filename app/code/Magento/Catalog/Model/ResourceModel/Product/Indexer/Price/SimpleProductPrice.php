@@ -62,7 +62,7 @@ class SimpleProductPrice implements DimensionalIndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function executeByDimensions(array $dimensions, \Traversable $entityIds)
     {

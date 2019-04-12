@@ -10,12 +10,12 @@ namespace Magento\CatalogGraphQl\Model;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class CatalogProductTypeResolver implements TypeResolverInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolveType(array $data) : string
     {

@@ -16,7 +16,7 @@ class PageLayoutFilterTest extends PageLayoutTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptionsDataProvider()
     {

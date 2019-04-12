@@ -43,7 +43,7 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -54,7 +54,7 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($attributeCode)
     {
@@ -65,7 +65,7 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)

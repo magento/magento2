@@ -31,7 +31,7 @@ class GuestTotalsInformationManagement implements \Magento\Checkout\Api\GuestTot
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function calculate(
         $cartId,

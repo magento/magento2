@@ -12,7 +12,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 class DbStorage extends BaseDbStorage
 {
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     protected function prepareSelect(array $data)
     {

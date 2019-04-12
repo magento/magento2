@@ -56,7 +56,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _initSelect()
     {

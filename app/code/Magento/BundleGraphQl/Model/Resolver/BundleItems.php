@@ -54,7 +54,7 @@ class BundleItems implements ResolverInterface
     /**
      * Fetch and format bundle option items.
      *
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {

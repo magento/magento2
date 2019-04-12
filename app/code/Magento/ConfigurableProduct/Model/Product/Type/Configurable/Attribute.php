@@ -86,7 +86,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLabel()
     {
@@ -144,7 +144,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getAttributeId()
@@ -153,7 +153,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getPosition()
@@ -162,7 +162,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getIsUseDefault()
@@ -171,7 +171,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getValues()
@@ -227,7 +227,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface|null
      */
@@ -237,7 +237,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface $extensionAttributes
      * @return $this
@@ -249,7 +249,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getProductId()
     {
@@ -257,7 +257,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setProductId($value)
     {

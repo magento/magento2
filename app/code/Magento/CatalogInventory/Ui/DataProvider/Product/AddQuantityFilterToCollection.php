@@ -15,7 +15,7 @@ use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 class AddQuantityFilterToCollection implements AddFilterToCollectionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addFilter(Collection $collection, $field, $condition = null)
     {

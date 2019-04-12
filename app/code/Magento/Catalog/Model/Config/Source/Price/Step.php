@@ -11,7 +11,7 @@ use Magento\Framework\Option\ArrayInterface;
 class Step implements ArrayInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @codeCoverageIgnore
      */

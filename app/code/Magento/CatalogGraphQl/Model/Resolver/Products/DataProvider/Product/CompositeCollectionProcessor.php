@@ -11,7 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class CompositeCollectionProcessor implements CollectionProcessorInterface
 {
@@ -29,7 +29,7 @@ class CompositeCollectionProcessor implements CollectionProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(
         Collection $collection,

@@ -113,7 +113,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
     abstract protected function getLinkType();
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function getCollection()

@@ -43,7 +43,7 @@ class AddCustomerUpdatedAtAttribute implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -64,7 +64,7 @@ class AddCustomerUpdatedAtAttribute implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -74,7 +74,7 @@ class AddCustomerUpdatedAtAttribute implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -82,7 +82,7 @@ class AddCustomerUpdatedAtAttribute implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

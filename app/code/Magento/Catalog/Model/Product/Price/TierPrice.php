@@ -14,7 +14,7 @@ use Magento\Catalog\Api\Data\TierPriceInterface;
 class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel implements TierPriceInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPrice($price)
     {
@@ -22,7 +22,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPrice()
     {
@@ -30,7 +30,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPriceType($type)
     {
@@ -38,7 +38,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPriceType()
     {
@@ -46,7 +46,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWebsiteId($websiteId)
     {
@@ -54,7 +54,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getWebsiteId()
     {
@@ -62,7 +62,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSku($sku)
     {
@@ -70,7 +70,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSku()
     {
@@ -78,7 +78,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerGroup($group)
     {
@@ -86,7 +86,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCustomerGroup()
     {
@@ -94,7 +94,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQuantity($quantity)
     {
@@ -102,7 +102,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQuantity()
     {
@@ -110,7 +110,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -118,7 +118,7 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(\Magento\Catalog\Api\Data\TierPriceExtensionInterface $extensionAttributes)
     {

@@ -37,7 +37,7 @@ class CacheFlushCommandTest extends AbstractCacheManageCommandTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExpectedExecutionOutput(array $types)
     {

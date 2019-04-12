@@ -46,7 +46,7 @@ class Category extends \Magento\Framework\App\Config\Value
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function afterSave()
     {

@@ -102,7 +102,7 @@ class AdvancedPricingTest extends AbstractModifierTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function createModel()
     {

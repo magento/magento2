@@ -44,7 +44,7 @@ class UpdateProductMetaDescription implements DataPatchInterface, PatchVersionIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -61,7 +61,7 @@ class UpdateProductMetaDescription implements DataPatchInterface, PatchVersionIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -71,7 +71,7 @@ class UpdateProductMetaDescription implements DataPatchInterface, PatchVersionIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -79,7 +79,7 @@ class UpdateProductMetaDescription implements DataPatchInterface, PatchVersionIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

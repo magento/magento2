@@ -88,7 +88,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUrl()
     {
@@ -96,7 +96,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContentType()
     {
@@ -104,7 +104,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPath()
     {
@@ -112,7 +112,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSourceFile()
     {
@@ -131,7 +131,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContent()
     {
@@ -139,7 +139,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFilePath()
     {
@@ -147,7 +147,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @return ContextInterface
      */
     public function getContext()
@@ -156,7 +156,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getModule()
     {

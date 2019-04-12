@@ -29,7 +29,7 @@ class CompositeConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {

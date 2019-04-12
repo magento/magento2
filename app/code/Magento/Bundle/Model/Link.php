@@ -28,7 +28,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**#@-*/
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getId()
     {
@@ -36,7 +36,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setId($id)
     {
@@ -44,7 +44,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSku()
     {
@@ -52,7 +52,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptionId()
     {
@@ -60,7 +60,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQty()
     {
@@ -68,7 +68,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPosition()
     {
@@ -76,7 +76,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsDefault()
     {
@@ -84,7 +84,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPrice()
     {
@@ -92,7 +92,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPriceType()
     {
@@ -100,7 +100,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCanChangeQuantity()
     {
@@ -196,7 +196,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Bundle\Api\Data\LinkExtensionInterface|null
      */
@@ -206,7 +206,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Bundle\Api\Data\LinkExtensionInterface $extensionAttributes
      * @return $this

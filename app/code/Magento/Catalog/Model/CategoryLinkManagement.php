@@ -56,7 +56,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAssignedProducts($categoryId)
     {

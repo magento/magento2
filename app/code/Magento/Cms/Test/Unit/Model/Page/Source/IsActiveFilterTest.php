@@ -8,7 +8,7 @@ namespace Magento\Cms\Test\Unit\Model\Page\Source;
 class IsActiveFilterTest extends IsActiveTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getSourceClassName()
     {
@@ -16,7 +16,7 @@ class IsActiveFilterTest extends IsActiveTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAvailableStatusesDataProvider()
     {

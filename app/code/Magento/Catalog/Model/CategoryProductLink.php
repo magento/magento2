@@ -21,7 +21,7 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
     /**#@-*/
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSku()
     {
@@ -29,7 +29,7 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPosition()
     {
@@ -37,7 +37,7 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCategoryId()
     {
@@ -74,7 +74,7 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Catalog\Api\Data\CategoryProductLinkExtensionInterface|null
      */
@@ -84,7 +84,7 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Api\Data\CategoryProductLinkExtensionInterface $extensionAttributes
      * @return $this

@@ -46,7 +46,7 @@ class ProductFieldset implements \Magento\Framework\Indexer\FieldsetInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addDynamicData(array $data)
     {

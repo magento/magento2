@@ -408,7 +408,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @return string
      */
     public function getMainTable()

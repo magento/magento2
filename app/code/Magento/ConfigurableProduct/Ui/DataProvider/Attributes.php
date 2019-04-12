@@ -43,7 +43,7 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData()
     {

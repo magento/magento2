@@ -13,7 +13,7 @@ use Magento\Catalog\Block\Adminhtml\Product\Attribute\Button\Save;
 class SaveTest extends GenericTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModel()
     {

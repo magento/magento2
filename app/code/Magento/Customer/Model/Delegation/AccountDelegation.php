@@ -13,7 +13,7 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class AccountDelegation implements AccountDelegationInterface
 {
@@ -40,7 +40,7 @@ class AccountDelegation implements AccountDelegationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createRedirectForNew(
         CustomerInterface $customer,

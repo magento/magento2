@@ -37,7 +37,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convertToBuyRequest(ProductOptionInterface $productOption)
     {
@@ -76,7 +76,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convertToProductOption(DataObject $request)
     {

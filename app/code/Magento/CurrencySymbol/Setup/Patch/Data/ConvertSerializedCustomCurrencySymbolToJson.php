@@ -52,7 +52,7 @@ class ConvertSerializedCustomCurrencySymbolToJson implements DataPatchInterface,
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -75,7 +75,7 @@ class ConvertSerializedCustomCurrencySymbolToJson implements DataPatchInterface,
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -83,7 +83,7 @@ class ConvertSerializedCustomCurrencySymbolToJson implements DataPatchInterface,
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -91,7 +91,7 @@ class ConvertSerializedCustomCurrencySymbolToJson implements DataPatchInterface,
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

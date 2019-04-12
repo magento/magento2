@@ -63,7 +63,7 @@ class UpgradeWidgetData implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -135,7 +135,7 @@ class UpgradeWidgetData implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -145,7 +145,7 @@ class UpgradeWidgetData implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -153,7 +153,7 @@ class UpgradeWidgetData implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

@@ -62,7 +62,7 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
     private $storeGroupFactory;
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

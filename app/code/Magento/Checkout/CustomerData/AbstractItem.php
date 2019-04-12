@@ -21,7 +21,7 @@ abstract class AbstractItem implements ItemInterface
     protected $item;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItemData(Item $item)
     {

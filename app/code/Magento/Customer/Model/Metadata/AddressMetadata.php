@@ -46,7 +46,7 @@ class AddressMetadata implements AddressMetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAttributes($formCode)
     {
@@ -66,7 +66,7 @@ class AddressMetadata implements AddressMetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAttributeMetadata($attributeCode)
     {
@@ -92,7 +92,7 @@ class AddressMetadata implements AddressMetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAllAttributesMetadata()
     {
@@ -116,7 +116,7 @@ class AddressMetadata implements AddressMetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCustomAttributesMetadata($dataObjectClassName = AddressMetadataInterface::DATA_INTERFACE_NAME)
     {

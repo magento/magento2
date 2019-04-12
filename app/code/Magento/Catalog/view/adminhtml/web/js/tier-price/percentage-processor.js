@@ -24,7 +24,7 @@ define([
         },
 
         /**
-         * {@inheritdoc}
+         * @inheritdoc
          */
         initialize: function () {
             this._super();
@@ -40,7 +40,7 @@ define([
         },
 
         /**
-         * {@inheritdoc}
+         * @inheritdoc
          */
         initObservable: function () {
             return this._super()

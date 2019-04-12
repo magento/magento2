@@ -22,7 +22,7 @@ class ProductType extends \Magento\Framework\Api\AbstractExtensibleObject implem
     /**#@-*/
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
@@ -30,7 +30,7 @@ class ProductType extends \Magento\Framework\Api\AbstractExtensibleObject implem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLabel()
     {
@@ -60,7 +60,7 @@ class ProductType extends \Magento\Framework\Api\AbstractExtensibleObject implem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Catalog\Api\Data\ProductTypeExtensionInterface|null
      */
@@ -70,7 +70,7 @@ class ProductType extends \Magento\Framework\Api\AbstractExtensibleObject implem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Api\Data\ProductTypeExtensionInterface $extensionAttributes
      * @return $this

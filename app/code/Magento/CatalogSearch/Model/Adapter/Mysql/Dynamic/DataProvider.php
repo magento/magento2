@@ -108,7 +108,7 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRange()
     {
@@ -116,7 +116,7 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAggregations(\Magento\Framework\Search\Dynamic\EntityStorage $entityStorage)
     {
@@ -157,7 +157,7 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getInterval(
         BucketInterface $bucket,
@@ -170,7 +170,7 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAggregation(
         BucketInterface $bucket,
@@ -199,7 +199,7 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepareData($range, array $dbRanges)
     {

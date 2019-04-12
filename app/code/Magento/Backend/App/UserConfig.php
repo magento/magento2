@@ -83,7 +83,7 @@ class UserConfig implements AppInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function catchException(Bootstrap $bootstrap, \Exception $exception)
     {

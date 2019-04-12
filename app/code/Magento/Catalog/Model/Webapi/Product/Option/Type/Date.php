@@ -13,7 +13,7 @@ use Magento\Framework\Stdlib\DateTime;
 class Date extends \Magento\Catalog\Model\Product\Option\Type\Date
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateUserValue($values)
     {

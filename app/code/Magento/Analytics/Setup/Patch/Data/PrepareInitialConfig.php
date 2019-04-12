@@ -34,7 +34,7 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -67,7 +67,7 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -75,7 +75,7 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -83,7 +83,7 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

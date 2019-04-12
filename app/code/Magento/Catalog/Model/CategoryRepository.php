@@ -70,7 +70,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
@@ -125,7 +125,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($categoryId, $storeId = null)
     {
@@ -146,7 +146,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
@@ -167,7 +167,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteByIdentifier($categoryId)
     {

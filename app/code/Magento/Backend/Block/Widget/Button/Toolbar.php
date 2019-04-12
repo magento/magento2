@@ -11,7 +11,7 @@ use Magento\Framework\View\LayoutInterface;
 class Toolbar implements ToolbarInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function pushButtons(
         \Magento\Framework\View\Element\AbstractBlock $context,

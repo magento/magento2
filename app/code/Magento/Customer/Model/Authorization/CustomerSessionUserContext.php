@@ -31,7 +31,7 @@ class CustomerSessionUserContext implements UserContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUserId()
     {
@@ -39,7 +39,7 @@ class CustomerSessionUserContext implements UserContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUserType()
     {

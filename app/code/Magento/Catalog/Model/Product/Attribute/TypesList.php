@@ -39,7 +39,7 @@ class TypesList implements \Magento\Catalog\Api\ProductAttributeTypesListInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems()
     {

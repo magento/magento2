@@ -31,7 +31,7 @@ class CustomizableOptionTypeResolver implements TypeResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function resolveType(array $data) : string
     {

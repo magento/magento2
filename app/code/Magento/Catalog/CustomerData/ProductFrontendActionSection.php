@@ -59,7 +59,7 @@ class ProductFrontendActionSection implements SectionSourceInterface
     /**
      * Post Process collection data in order to eject all customer sensitive information
      *
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {

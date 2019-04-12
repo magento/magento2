@@ -59,7 +59,7 @@ class Redirect extends \Magento\Framework\Controller\Result\Redirect
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function render(HttpResponseInterface $response)
     {

@@ -83,7 +83,7 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build($productId)
     {

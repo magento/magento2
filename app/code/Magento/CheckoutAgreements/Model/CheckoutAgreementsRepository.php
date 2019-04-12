@@ -108,7 +108,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\CheckoutAgreements\Api\Data\AgreementInterface[] Array of checkout agreement data objects.
      */
@@ -121,7 +121,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\CheckoutAgreements\Api\Data\AgreementInterface $data, $storeId = null)
     {
@@ -145,7 +145,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\CheckoutAgreements\Api\Data\AgreementInterface $data)
     {
@@ -160,7 +160,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($id)
     {
@@ -170,7 +170,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($id, $storeId = null)
     {

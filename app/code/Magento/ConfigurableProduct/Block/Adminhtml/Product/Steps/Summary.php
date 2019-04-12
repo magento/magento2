@@ -12,7 +12,7 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps;
 class Summary extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCaption()
     {

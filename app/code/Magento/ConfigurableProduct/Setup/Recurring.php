@@ -40,7 +40,7 @@ class Recurring implements InstallSchemaInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

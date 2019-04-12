@@ -13,7 +13,7 @@ use Magento\Ui\Component\Control\Container;
 class Save extends Generic
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getButtonData()
     {

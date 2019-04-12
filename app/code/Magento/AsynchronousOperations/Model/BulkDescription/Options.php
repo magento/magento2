@@ -36,7 +36,7 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

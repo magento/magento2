@@ -30,7 +30,7 @@ class Type implements \Magento\Framework\Option\ArrayInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

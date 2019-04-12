@@ -33,7 +33,7 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
     private $productMock;
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

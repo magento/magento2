@@ -39,7 +39,7 @@ class Full implements ActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function executeFull()
     {
@@ -52,7 +52,7 @@ class Full implements ActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function executeList(array $ids)
     {
@@ -67,7 +67,7 @@ class Full implements ActionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function executeRow($id)
     {

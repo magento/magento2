@@ -14,7 +14,7 @@ use Magento\Catalog\Api\Data\CostInterface;
 class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements CostInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCost($cost)
     {
@@ -22,7 +22,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCost()
     {
@@ -30,7 +30,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreId($storeId)
     {
@@ -38,7 +38,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStoreId()
     {
@@ -46,7 +46,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSku($sku)
     {
@@ -54,7 +54,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSku()
     {
@@ -62,7 +62,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -70,7 +70,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(\Magento\Catalog\Api\Data\CostExtensionInterface $extensionAttributes)
     {

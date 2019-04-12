@@ -37,7 +37,7 @@ class ScheduleDesignUpdate extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -47,7 +47,7 @@ class ScheduleDesignUpdate extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyData(array $data)

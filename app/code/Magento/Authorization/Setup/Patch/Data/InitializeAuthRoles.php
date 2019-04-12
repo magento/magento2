@@ -43,7 +43,7 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -108,7 +108,7 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -116,7 +116,7 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -124,7 +124,7 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

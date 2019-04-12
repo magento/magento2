@@ -13,7 +13,7 @@ use Magento\Catalog\Model\Product\Type;
 class ImagesTest extends AbstractModifierTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function createModel()
     {
@@ -44,7 +44,7 @@ class ImagesTest extends AbstractModifierTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getSampleData()
     {

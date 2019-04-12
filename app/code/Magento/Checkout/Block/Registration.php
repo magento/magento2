@@ -95,7 +95,7 @@ class Registration extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toHtml()
     {

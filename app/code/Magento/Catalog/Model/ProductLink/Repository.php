@@ -109,7 +109,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Catalog\Api\Data\ProductLinkInterface $entity)
     {
@@ -186,7 +186,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Catalog\Api\Data\ProductLinkInterface $entity)
     {
@@ -219,7 +219,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($sku, $type, $linkedProductSku)
     {

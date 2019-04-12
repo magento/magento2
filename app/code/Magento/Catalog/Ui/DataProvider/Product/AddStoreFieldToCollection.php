@@ -33,7 +33,7 @@ class AddStoreFieldToCollection implements AddFilterToCollectionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addFilter(Collection $collection, $field, $condition = null)
     {

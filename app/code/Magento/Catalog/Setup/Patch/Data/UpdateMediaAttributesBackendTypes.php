@@ -43,7 +43,7 @@ class UpdateMediaAttributesBackendTypes implements DataPatchInterface, PatchVers
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -66,7 +66,7 @@ class UpdateMediaAttributesBackendTypes implements DataPatchInterface, PatchVers
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -76,7 +76,7 @@ class UpdateMediaAttributesBackendTypes implements DataPatchInterface, PatchVers
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -84,7 +84,7 @@ class UpdateMediaAttributesBackendTypes implements DataPatchInterface, PatchVers
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

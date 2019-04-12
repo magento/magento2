@@ -66,7 +66,7 @@ class DataProductUrlRewriteDatabaseMap implements DatabaseMapInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData($categoryId, $key)
     {
@@ -119,7 +119,7 @@ class DataProductUrlRewriteDatabaseMap implements DatabaseMapInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function destroyTableAdapter($categoryId)
     {

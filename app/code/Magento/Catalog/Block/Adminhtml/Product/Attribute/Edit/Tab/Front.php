@@ -58,7 +58,7 @@ class Front extends Generic
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

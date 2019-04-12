@@ -88,7 +88,7 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build($productId)
     {

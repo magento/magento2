@@ -86,7 +86,7 @@ class ConfiguredPriceBox extends FinalPriceBox
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPriceType($priceCode)
     {

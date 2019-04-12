@@ -59,7 +59,7 @@ class CronCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -86,7 +86,7 @@ class CronCommand extends Command
     /**
      * Runs cron jobs if cron is not disabled in Magento configurations
      *
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

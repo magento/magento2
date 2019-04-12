@@ -25,7 +25,7 @@ class OptionManagement implements \Magento\Catalog\Api\CategoryAttributeOptionMa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getItems($attributeCode)

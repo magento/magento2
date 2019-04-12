@@ -28,7 +28,7 @@ class DirectoryData implements SectionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {

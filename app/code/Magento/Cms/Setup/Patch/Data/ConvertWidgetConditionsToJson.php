@@ -65,7 +65,7 @@ class ConvertWidgetConditionsToJson implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -131,7 +131,7 @@ class ConvertWidgetConditionsToJson implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -141,7 +141,7 @@ class ConvertWidgetConditionsToJson implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -149,7 +149,7 @@ class ConvertWidgetConditionsToJson implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

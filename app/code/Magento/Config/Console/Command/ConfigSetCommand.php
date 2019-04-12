@@ -139,7 +139,7 @@ class ConfigSetCommand extends Command
     /**
      * Creates and run appropriate processor, depending on input options.
      *
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)

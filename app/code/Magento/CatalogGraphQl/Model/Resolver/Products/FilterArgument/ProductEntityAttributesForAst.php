@@ -40,7 +40,7 @@ class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getEntityAttributes() : array
     {

@@ -38,7 +38,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function calculate(
         $cartId,

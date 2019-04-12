@@ -149,7 +149,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRowUrl($row)
     {

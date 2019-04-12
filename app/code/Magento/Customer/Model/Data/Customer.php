@@ -39,7 +39,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getCustomAttributesCodes()
     {
@@ -489,7 +489,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Customer\Api\Data\CustomerExtensionInterface|null
      */
@@ -499,7 +499,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Customer\Api\Data\CustomerExtensionInterface $extensionAttributes
      * @return $this

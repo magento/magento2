@@ -245,7 +245,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCacheLifetime()
     {
@@ -266,7 +266,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAuthRequired()
     {

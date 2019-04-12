@@ -97,7 +97,7 @@ class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Customer\Api\Data\GroupExtensionInterface|null
      */
@@ -107,7 +107,7 @@ class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Customer\Api\Data\GroupExtensionInterface $extensionAttributes
      * @return $this

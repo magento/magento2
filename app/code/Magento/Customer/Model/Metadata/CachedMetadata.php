@@ -46,7 +46,7 @@ class CachedMetadata implements MetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAttributes($formCode)
     {
@@ -60,7 +60,7 @@ class CachedMetadata implements MetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAttributeMetadata($attributeCode)
     {
@@ -74,7 +74,7 @@ class CachedMetadata implements MetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAllAttributesMetadata()
     {
@@ -88,7 +88,7 @@ class CachedMetadata implements MetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {

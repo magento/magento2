@@ -20,7 +20,7 @@ class Block extends AbstractProduct implements ProductAwareInterface
     private $product;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setProduct(ProductInterface $product)
     {
@@ -29,7 +29,7 @@ class Block extends AbstractProduct implements ProductAwareInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getProduct()
     {

@@ -42,7 +42,7 @@ class RowSizeEstimator implements IndexTableRowSizeEstimatorInterface
      *  b) amount of store groups
      *  c) memory amount per each index row in DB table
      *
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function estimateRowSize()
     {

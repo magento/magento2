@@ -10,7 +10,7 @@ use \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 class Scopes implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

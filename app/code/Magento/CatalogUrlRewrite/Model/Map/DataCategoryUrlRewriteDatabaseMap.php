@@ -110,7 +110,7 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function destroyTableAdapter($categoryId)
     {

@@ -31,7 +31,7 @@ class Repository extends \Magento\Catalog\Ui\Component\Listing\Attribute\Abstrac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function buildSearchCriteria()
     {

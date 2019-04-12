@@ -45,7 +45,7 @@ class RetryButton implements ButtonProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getButtonData()
     {

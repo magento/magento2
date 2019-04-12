@@ -8,7 +8,7 @@ namespace Magento\Customer\Model\Address;
 class CustomAttributeList implements CustomAttributeListInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAttributes()
     {

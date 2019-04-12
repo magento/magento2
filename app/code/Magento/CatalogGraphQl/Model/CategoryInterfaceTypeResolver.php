@@ -11,12 +11,12 @@ use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class CategoryInterfaceTypeResolver implements \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws GraphQlInputException
      */
     public function resolveType(array $data) : string

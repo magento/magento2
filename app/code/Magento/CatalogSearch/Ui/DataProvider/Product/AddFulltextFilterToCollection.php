@@ -30,7 +30,7 @@ class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

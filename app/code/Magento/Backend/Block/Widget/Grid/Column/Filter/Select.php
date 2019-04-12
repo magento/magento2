@@ -15,7 +15,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getOptions()
     {
@@ -61,7 +61,7 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getHtml()
     {
@@ -86,7 +86,7 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCondition()
     {

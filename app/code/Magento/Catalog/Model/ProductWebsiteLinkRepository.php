@@ -27,7 +27,7 @@ class ProductWebsiteLinkRepository implements \Magento\Catalog\Api\ProductWebsit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(ProductWebsiteLinkInterface $productWebsiteLink)
     {
@@ -52,7 +52,7 @@ class ProductWebsiteLinkRepository implements \Magento\Catalog\Api\ProductWebsit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(ProductWebsiteLinkInterface $productLink)
     {
@@ -60,7 +60,7 @@ class ProductWebsiteLinkRepository implements \Magento\Catalog\Api\ProductWebsit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($sku, $websiteId)
     {

@@ -44,7 +44,7 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function generateVariation(ProductInterface $product, $options)
     {
@@ -54,7 +54,7 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCount($status = null)
     {

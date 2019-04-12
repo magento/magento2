@@ -60,7 +60,7 @@ class TierPriceValidatorTest extends \PHPUnit\Framework\TestCase
     private $tierPrice;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

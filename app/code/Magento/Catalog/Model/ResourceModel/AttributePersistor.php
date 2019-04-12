@@ -24,7 +24,7 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
     private $conditionBuilder;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct(
         FormatInterface $localeFormat,
@@ -51,7 +51,7 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function buildUpdateConditions(
         AbstractAttribute $attribute,
@@ -72,7 +72,7 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function buildInsertConditions(
         AbstractAttribute $attribute,
@@ -92,7 +92,7 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function buildDeleteConditions(
         AbstractAttribute $attribute,

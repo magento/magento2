@@ -20,7 +20,7 @@ class CategoryLink extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**#@-*/
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPosition()
     {
@@ -28,7 +28,7 @@ class CategoryLink extends \Magento\Framework\Api\AbstractExtensibleObject imple
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCategoryId()
     {
@@ -56,7 +56,7 @@ class CategoryLink extends \Magento\Framework\Api\AbstractExtensibleObject imple
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Catalog\Api\Data\CategoryLinkExtensionInterface|null
      */
@@ -66,7 +66,7 @@ class CategoryLink extends \Magento\Framework\Api\AbstractExtensibleObject imple
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Api\Data\CategoryLinkExtensionInterface $extensionAttributes
      * @return $this

@@ -13,7 +13,7 @@ class SectionConfigConverter implements \Magento\Framework\Config\ConverterInter
     const INVALIDATE_ALL_SECTIONS_MARKER = '*';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convert($source)
     {

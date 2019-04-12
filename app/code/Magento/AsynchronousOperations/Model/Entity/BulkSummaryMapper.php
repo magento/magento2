@@ -37,7 +37,7 @@ class BulkSummaryMapper implements MapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function entityToDatabase($entityType, $data)
     {
@@ -55,7 +55,7 @@ class BulkSummaryMapper implements MapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function databaseToEntity($entityType, $data)

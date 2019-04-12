@@ -10,7 +10,7 @@ use Magento\Checkout\Model\Layout\AbstractTotalsProcessor;
 class TotalsProcessor extends AbstractTotalsProcessor implements LayoutProcessorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process($jsLayout)
     {

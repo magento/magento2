@@ -45,7 +45,7 @@ class NotificationAboutFailedSubscription implements MessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isDisplayed()
     {
@@ -53,7 +53,7 @@ class NotificationAboutFailedSubscription implements MessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getText()
     {

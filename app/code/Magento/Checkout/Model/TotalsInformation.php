@@ -14,7 +14,7 @@ use Magento\Checkout\Api\Data\TotalsInformationInterface;
 class TotalsInformation extends AbstractExtensibleModel implements TotalsInformationInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAddress()
     {
@@ -22,7 +22,7 @@ class TotalsInformation extends AbstractExtensibleModel implements TotalsInforma
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setAddress(\Magento\Quote\Api\Data\AddressInterface $address)
     {
@@ -30,7 +30,7 @@ class TotalsInformation extends AbstractExtensibleModel implements TotalsInforma
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getShippingMethodCode()
     {
@@ -38,7 +38,7 @@ class TotalsInformation extends AbstractExtensibleModel implements TotalsInforma
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingMethodCode($code)
     {
@@ -46,7 +46,7 @@ class TotalsInformation extends AbstractExtensibleModel implements TotalsInforma
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getShippingCarrierCode()
     {
@@ -54,7 +54,7 @@ class TotalsInformation extends AbstractExtensibleModel implements TotalsInforma
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingCarrierCode($code)
     {
@@ -62,7 +62,7 @@ class TotalsInformation extends AbstractExtensibleModel implements TotalsInforma
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -70,7 +70,7 @@ class TotalsInformation extends AbstractExtensibleModel implements TotalsInforma
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\Checkout\Api\Data\TotalsInformationExtensionInterface $extensionAttributes

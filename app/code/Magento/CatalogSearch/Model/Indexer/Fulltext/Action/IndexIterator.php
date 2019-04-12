@@ -138,7 +138,7 @@ class IndexIterator implements \Iterator
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      *
      * @deprecated 100.1.6 Since class is deprecated
      * @since 100.0.3
@@ -149,7 +149,7 @@ class IndexIterator implements \Iterator
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      *
      * @deprecated 100.1.6 Since class is deprecated
      * @since 100.0.3
@@ -248,7 +248,7 @@ class IndexIterator implements \Iterator
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      *
      * @deprecated 100.1.6 Since class is deprecated
      * @since 100.0.3
@@ -259,7 +259,7 @@ class IndexIterator implements \Iterator
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      *
      * @deprecated 100.1.6 Since class is deprecated
      * @since 100.0.3
@@ -270,7 +270,7 @@ class IndexIterator implements \Iterator
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      *
      * @deprecated 100.1.6 Since class is deprecated
      * @since 100.0.3

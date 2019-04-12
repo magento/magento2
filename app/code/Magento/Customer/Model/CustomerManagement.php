@@ -24,7 +24,7 @@ class CustomerManagement implements CustomerManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCount()
     {

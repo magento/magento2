@@ -48,7 +48,7 @@ class IndexSwitcher implements IndexSwitcherInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws IndexTableNotExistException
      */
     public function switchIndex(array $dimensions)

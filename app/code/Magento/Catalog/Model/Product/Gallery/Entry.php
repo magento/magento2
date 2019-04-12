@@ -171,7 +171,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return ProductAttributeMediaGalleryEntryExtensionInterface|null
      */
@@ -181,7 +181,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param ProductAttributeMediaGalleryEntryExtensionInterface $extensionAttributes
      * @return $this

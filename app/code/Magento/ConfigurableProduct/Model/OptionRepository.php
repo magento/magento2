@@ -112,7 +112,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($sku, $id)
     {
@@ -131,7 +131,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList($sku)
     {
@@ -141,7 +141,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(OptionInterface $option)
     {
@@ -167,7 +167,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($sku, $id)
     {
@@ -184,7 +184,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save($sku, OptionInterface $option)

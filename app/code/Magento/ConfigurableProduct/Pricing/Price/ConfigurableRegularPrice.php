@@ -73,7 +73,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValue()
     {
@@ -85,7 +85,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAmount()
     {
@@ -93,7 +93,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMaxRegularAmount()
     {
@@ -121,7 +121,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMinRegularAmount()
     {

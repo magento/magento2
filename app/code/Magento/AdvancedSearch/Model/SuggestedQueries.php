@@ -51,7 +51,7 @@ class SuggestedQueries implements SuggestedQueriesInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isResultsCountEnabled()
     {
@@ -59,7 +59,7 @@ class SuggestedQueries implements SuggestedQueriesInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems(QueryInterface $query)
     {

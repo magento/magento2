@@ -169,7 +169,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Catalog\Api\Data\ProductLinkExtensionInterface|null
      */
@@ -184,7 +184,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionInterface $extensionAttributes
      * @return $this

@@ -78,7 +78,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     //@codeCoverageIgnoreStart
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLabel()
     {
@@ -86,7 +86,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCode()
     {
@@ -116,7 +116,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Bundle\Api\Data\OptionTypeExtensionInterface|null
      */
@@ -126,7 +126,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Bundle\Api\Data\OptionTypeExtensionInterface $extensionAttributes
      * @return $this

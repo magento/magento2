@@ -67,7 +67,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConditionsInstance()
     {
@@ -75,7 +75,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionsInstance()
     {

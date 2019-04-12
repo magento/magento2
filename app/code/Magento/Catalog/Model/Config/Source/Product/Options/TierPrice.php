@@ -13,7 +13,7 @@ use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 class TierPrice implements ProductPriceOptionsInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @codeCoverageIgnore
      */

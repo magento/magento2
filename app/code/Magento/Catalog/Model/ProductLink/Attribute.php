@@ -21,7 +21,7 @@ class Attribute extends \Magento\Framework\Api\AbstractExtensibleObject implemen
     /**#@-*/
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCode()
     {
@@ -29,7 +29,7 @@ class Attribute extends \Magento\Framework\Api\AbstractExtensibleObject implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getType()
     {
@@ -59,7 +59,7 @@ class Attribute extends \Magento\Framework\Api\AbstractExtensibleObject implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Catalog\Api\Data\ProductLinkAttributeExtensionInterface|null
      */
@@ -69,7 +69,7 @@ class Attribute extends \Magento\Framework\Api\AbstractExtensibleObject implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Api\Data\ProductLinkAttributeExtensionInterface $extensionAttributes
      * @return $this

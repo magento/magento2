@@ -54,7 +54,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -352,7 +352,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -360,7 +360,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -368,7 +368,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

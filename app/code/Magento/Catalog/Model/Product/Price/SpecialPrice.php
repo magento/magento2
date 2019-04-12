@@ -14,7 +14,7 @@ use Magento\Catalog\Api\Data\SpecialPriceInterface;
 class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel implements SpecialPriceInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPrice($price)
     {
@@ -22,7 +22,7 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPrice()
     {
@@ -30,7 +30,7 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreId($storeId)
     {
@@ -38,7 +38,7 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStoreId()
     {
@@ -46,7 +46,7 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSku($sku)
     {
@@ -54,7 +54,7 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSku()
     {
@@ -62,7 +62,7 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPriceFrom($datetime)
     {
@@ -70,7 +70,7 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPriceFrom()
     {
@@ -78,7 +78,7 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPriceTo($datetime)
     {
@@ -86,7 +86,7 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPriceTo()
     {
@@ -94,7 +94,7 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -102,7 +102,7 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\SpecialPriceExtensionInterface $extensionAttributes

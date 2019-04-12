@@ -18,7 +18,7 @@ define([
         },
 
         /**
-         * {@inheritdoc}
+         * @inheritdoc
          */
         initialize: function () {
             this._super();

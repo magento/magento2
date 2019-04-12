@@ -13,7 +13,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Catalog\Api\Data\ProductAttributeTypeInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValue()
     {
@@ -21,7 +21,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLabel()
     {
@@ -51,7 +51,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Catalog\Api\Data\ProductAttributeTypeExtensionInterface|null
      */
@@ -61,7 +61,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Api\Data\ProductAttributeTypeExtensionInterface $extensionAttributes
      * @return $this

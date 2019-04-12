@@ -82,7 +82,7 @@ class FlatTest extends \PHPUnit\Framework\TestCase
     private $storeManagerMock;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

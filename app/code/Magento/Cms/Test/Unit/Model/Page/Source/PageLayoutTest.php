@@ -33,7 +33,7 @@ class PageLayoutTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

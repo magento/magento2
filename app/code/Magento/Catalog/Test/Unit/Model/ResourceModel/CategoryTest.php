@@ -98,7 +98,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     private $indexerProcessorMock;
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

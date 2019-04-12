@@ -28,7 +28,7 @@ class CacheStatusCommandTest extends AbstractCacheCommandTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExpectedExecutionOutput(array $types)
     {

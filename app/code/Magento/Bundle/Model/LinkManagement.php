@@ -82,7 +82,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getChildren($productSku, $optionId = null)
     {
@@ -105,7 +105,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addChildByProductSku($sku, $optionId, \Magento\Bundle\Api\Data\LinkInterface $linkedProduct)
     {
@@ -115,7 +115,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -214,7 +214,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addChild(
@@ -294,7 +294,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function removeChild($sku, $optionId, $childSku)
     {

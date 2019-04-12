@@ -103,7 +103,7 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -408,7 +408,7 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -418,7 +418,7 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -426,7 +426,7 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

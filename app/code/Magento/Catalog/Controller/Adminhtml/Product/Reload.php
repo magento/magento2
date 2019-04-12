@@ -14,7 +14,7 @@ use Magento\Framework\Controller\ResultFactory;
 class Reload extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {

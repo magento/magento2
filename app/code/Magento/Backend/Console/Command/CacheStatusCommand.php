@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CacheStatusCommand extends AbstractCacheCommand
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -28,7 +28,7 @@ class CacheStatusCommand extends AbstractCacheCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

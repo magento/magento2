@@ -15,7 +15,7 @@ namespace Magento\Customer\Block\Account;
 class Delimiter extends \Magento\Framework\View\Element\Template implements SortLinkInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.2.0
      */
     public function getSortOrder()

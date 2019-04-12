@@ -80,7 +80,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _initSelect()
     {
@@ -98,7 +98,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _afterLoad()
     {
@@ -110,7 +110,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addFieldToFilter($field, $condition = null)
     {
@@ -133,7 +133,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSelectCountSql()
     {

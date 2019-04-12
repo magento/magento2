@@ -33,7 +33,7 @@ class CronRemoveCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -44,7 +44,7 @@ class CronRemoveCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

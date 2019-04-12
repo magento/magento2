@@ -43,7 +43,7 @@ class SetNewResourceModelsPaths implements DataPatchInterface, PatchVersionInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -89,7 +89,7 @@ class SetNewResourceModelsPaths implements DataPatchInterface, PatchVersionInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -99,7 +99,7 @@ class SetNewResourceModelsPaths implements DataPatchInterface, PatchVersionInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -107,7 +107,7 @@ class SetNewResourceModelsPaths implements DataPatchInterface, PatchVersionInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

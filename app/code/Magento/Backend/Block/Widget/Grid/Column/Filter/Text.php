@@ -15,7 +15,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 class Text extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getHtml()
     {

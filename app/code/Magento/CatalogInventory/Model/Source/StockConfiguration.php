@@ -27,7 +27,7 @@ class StockConfiguration implements ValueSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValue($name)
     {

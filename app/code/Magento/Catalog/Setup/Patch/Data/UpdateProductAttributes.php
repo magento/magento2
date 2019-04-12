@@ -43,7 +43,7 @@ class UpdateProductAttributes implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
@@ -239,7 +239,7 @@ class UpdateProductAttributes implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -249,7 +249,7 @@ class UpdateProductAttributes implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -257,7 +257,7 @@ class UpdateProductAttributes implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

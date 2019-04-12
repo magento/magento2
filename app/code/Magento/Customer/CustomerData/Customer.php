@@ -37,7 +37,7 @@ class Customer implements SectionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {

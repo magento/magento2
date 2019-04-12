@@ -13,7 +13,7 @@ namespace Magento\Catalog\Model\Category\Attribute\Source;
 class Mode extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getAllOptions()

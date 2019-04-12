@@ -16,7 +16,7 @@ class ConfigurableItemOptionValue extends AbstractExtensibleModel implements Con
     //@codeCoverageIgnoreStart
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptionId()
     {
@@ -24,7 +24,7 @@ class ConfigurableItemOptionValue extends AbstractExtensibleModel implements Con
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOptionId($value)
     {
@@ -32,7 +32,7 @@ class ConfigurableItemOptionValue extends AbstractExtensibleModel implements Con
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptionValue()
     {
@@ -40,7 +40,7 @@ class ConfigurableItemOptionValue extends AbstractExtensibleModel implements Con
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOptionValue($value)
     {

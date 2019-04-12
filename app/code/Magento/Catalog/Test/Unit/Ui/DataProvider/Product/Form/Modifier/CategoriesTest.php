@@ -82,7 +82,7 @@ class CategoriesTest extends AbstractModifierTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function createModel()
     {

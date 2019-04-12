@@ -35,7 +35,7 @@ class Block implements OptionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

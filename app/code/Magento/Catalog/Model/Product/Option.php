@@ -345,7 +345,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @since 101.0.0
      */
@@ -555,7 +555,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -826,7 +826,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface|null
      */
@@ -882,7 +882,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
      * @return $this

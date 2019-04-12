@@ -90,7 +90,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get(array $skus)
     {
@@ -111,7 +111,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update(array $prices)
     {
@@ -136,7 +136,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(array $skus)
     {

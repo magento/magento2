@@ -7,7 +7,7 @@
 namespace Magento\CheckoutAgreements\Model;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class CheckoutAgreementsList implements \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface
 {
@@ -44,7 +44,7 @@ class CheckoutAgreementsList implements \Magento\CheckoutAgreements\Api\Checkout
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria) : array
     {

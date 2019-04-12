@@ -31,7 +31,7 @@ class EnableDirectiveParsing implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -50,7 +50,7 @@ class EnableDirectiveParsing implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -58,7 +58,7 @@ class EnableDirectiveParsing implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

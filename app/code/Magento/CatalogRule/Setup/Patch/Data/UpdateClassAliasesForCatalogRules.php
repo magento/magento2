@@ -32,7 +32,7 @@ class UpdateClassAliasesForCatalogRules implements DataPatchInterface, PatchVers
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -55,7 +55,7 @@ class UpdateClassAliasesForCatalogRules implements DataPatchInterface, PatchVers
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -63,7 +63,7 @@ class UpdateClassAliasesForCatalogRules implements DataPatchInterface, PatchVers
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -71,7 +71,7 @@ class UpdateClassAliasesForCatalogRules implements DataPatchInterface, PatchVers
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

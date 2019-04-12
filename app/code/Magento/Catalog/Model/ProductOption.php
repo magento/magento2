@@ -11,7 +11,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 class ProductOption extends AbstractExtensibleModel implements ProductOptionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -19,7 +19,7 @@ class ProductOption extends AbstractExtensibleModel implements ProductOptionInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductOptionExtensionInterface $extensionAttributes

@@ -43,7 +43,7 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Eav\Api\Data\AttributeGroupInterface $group)
     {
@@ -51,7 +51,7 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -59,7 +59,7 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($groupId)
     {
@@ -75,7 +75,7 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($groupId)
     {
@@ -86,7 +86,7 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Eav\Api\Data\AttributeGroupInterface $group)
     {

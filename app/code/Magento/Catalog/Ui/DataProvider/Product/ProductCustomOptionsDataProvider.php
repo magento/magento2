@@ -83,7 +83,7 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function getData()

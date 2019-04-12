@@ -9,12 +9,12 @@ namespace Magento\Catalog\Model\Product\Price;
 use Magento\Catalog\Api\Data\PriceUpdateResultInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class PriceUpdateResult extends \Magento\Framework\Model\AbstractExtensibleModel implements PriceUpdateResultInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMessage()
     {
@@ -22,7 +22,7 @@ class PriceUpdateResult extends \Magento\Framework\Model\AbstractExtensibleModel
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setMessage($message)
     {
@@ -30,7 +30,7 @@ class PriceUpdateResult extends \Magento\Framework\Model\AbstractExtensibleModel
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getParameters()
     {
@@ -38,7 +38,7 @@ class PriceUpdateResult extends \Magento\Framework\Model\AbstractExtensibleModel
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setParameters(array $parameters)
     {
@@ -46,7 +46,7 @@ class PriceUpdateResult extends \Magento\Framework\Model\AbstractExtensibleModel
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -54,7 +54,7 @@ class PriceUpdateResult extends \Magento\Framework\Model\AbstractExtensibleModel
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\PriceUpdateResultExtensionInterface $extensionAttributes

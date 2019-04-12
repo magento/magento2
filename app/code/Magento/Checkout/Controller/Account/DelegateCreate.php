@@ -44,7 +44,7 @@ class DelegateCreate extends Action implements HttpGetActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {

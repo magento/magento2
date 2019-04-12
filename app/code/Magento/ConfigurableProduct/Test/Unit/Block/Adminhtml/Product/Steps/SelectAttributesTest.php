@@ -46,7 +46,7 @@ class SelectAttributesTest extends \PHPUnit\Framework\TestCase
     private $urlBuilderMock;
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

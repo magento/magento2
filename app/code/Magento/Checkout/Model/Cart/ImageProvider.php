@@ -44,7 +44,7 @@ class ImageProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getImages($cartId)
     {

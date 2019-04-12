@@ -32,7 +32,7 @@ class SynchronizeWebsiteAttributesOnStoreChange implements ObserverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute(Observer $observer)
     {

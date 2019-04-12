@@ -23,7 +23,7 @@ class OptionValue extends \Magento\Framework\Model\AbstractExtensibleModel imple
     //@codeCoverageIgnoreStart
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValueIndex()
     {
@@ -40,7 +40,7 @@ class OptionValue extends \Magento\Framework\Model\AbstractExtensibleModel imple
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\ConfigurableProduct\Api\Data\OptionValueExtensionInterface|null
      */
@@ -50,7 +50,7 @@ class OptionValue extends \Magento\Framework\Model\AbstractExtensibleModel imple
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\ConfigurableProduct\Api\Data\OptionValueExtensionInterface $extensionAttributes
      * @return $this

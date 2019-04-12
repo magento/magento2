@@ -54,7 +54,7 @@ class Options implements ResolverInterface
     /**
      * Fetch and format configurable variants.
      *
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {

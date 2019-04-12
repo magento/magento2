@@ -44,7 +44,7 @@ class InitialSnapshotConfigSource implements ConfigSourceInterface
      * Retrieves previously imported configuration.
      * Snapshots are stored in flags.
      *
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.2.0
      */
     public function get($path = '')

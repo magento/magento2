@@ -41,7 +41,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSeverities($severity = null)
     {
@@ -63,7 +63,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function loadLatestNotice()
     {
@@ -73,7 +73,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getNoticeStatus()
     {

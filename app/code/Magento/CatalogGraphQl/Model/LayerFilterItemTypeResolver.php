@@ -15,7 +15,7 @@ use \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 class LayerFilterItemTypeResolver implements TypeResolverInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolveType(array $data) : string
     {

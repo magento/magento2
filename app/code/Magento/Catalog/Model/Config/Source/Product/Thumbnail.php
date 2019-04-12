@@ -16,7 +16,7 @@ class Thumbnail implements \Magento\Framework\Option\ArrayInterface
     const OPTION_USE_OWN_IMAGE = 'itself';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @codeCoverageIgnore
      */

@@ -24,7 +24,7 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($value)
     {

@@ -21,7 +21,7 @@ class Type extends \Magento\Framework\Api\AbstractExtensibleObject implements Pr
     /**#@-*/
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCode()
     {
@@ -29,7 +29,7 @@ class Type extends \Magento\Framework\Api\AbstractExtensibleObject implements Pr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
@@ -59,7 +59,7 @@ class Type extends \Magento\Framework\Api\AbstractExtensibleObject implements Pr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Catalog\Api\Data\ProductLinkTypeExtensionInterface|null
      */
@@ -69,7 +69,7 @@ class Type extends \Magento\Framework\Api\AbstractExtensibleObject implements Pr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Api\Data\ProductLinkTypeExtensionInterface $extensionAttributes
      * @return $this

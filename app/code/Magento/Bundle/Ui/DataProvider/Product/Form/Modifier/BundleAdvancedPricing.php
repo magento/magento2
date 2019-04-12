@@ -34,7 +34,7 @@ class BundleAdvancedPricing extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -63,7 +63,7 @@ class BundleAdvancedPricing extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {

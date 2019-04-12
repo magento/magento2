@@ -39,7 +39,7 @@ abstract class AbstractPrice extends AbstractImportValidator implements RowValid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function init($context)
     {

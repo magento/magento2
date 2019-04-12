@@ -51,7 +51,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPath()
     {
@@ -59,7 +59,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBaseUrl()
     {

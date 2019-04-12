@@ -27,7 +27,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isEnabled()
     {
@@ -38,7 +38,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function emailTemplate()
     {
@@ -49,7 +49,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function emailSender()
     {
@@ -60,7 +60,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function emailRecipient()
     {

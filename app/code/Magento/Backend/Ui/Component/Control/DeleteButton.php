@@ -83,7 +83,7 @@ class DeleteButton implements ButtonProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getButtonData()
     {

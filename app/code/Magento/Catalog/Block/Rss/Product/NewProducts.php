@@ -64,7 +64,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAllowed()
     {
@@ -72,7 +72,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRssData()
     {
@@ -177,7 +177,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCacheLifetime()
     {
@@ -199,7 +199,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAuthRequired()
     {

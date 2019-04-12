@@ -11,7 +11,7 @@ define([
 
     return Abstract.extend({
         /**
-         * {@inheritdoc}
+         * @inheritdoc
          */
         setInitialValue: function () {
             this._super();
@@ -22,7 +22,7 @@ define([
         },
 
         /**
-         * {@inheritdoc}
+         * @inheritdoc
          */
         initObservable: function () {
             this._super();

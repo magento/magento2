@@ -15,7 +15,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 class TierPriceType extends \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function init($context)
     {

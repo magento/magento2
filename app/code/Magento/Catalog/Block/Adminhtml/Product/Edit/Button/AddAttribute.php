@@ -11,7 +11,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Button;
 class AddAttribute extends Generic
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getButtonData()
     {

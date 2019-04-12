@@ -10,7 +10,7 @@ namespace Magento\Cms\Model;
 class WysiwygDefaultConfig implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig(\Magento\Framework\DataObject $config) : \Magento\Framework\DataObject
     {

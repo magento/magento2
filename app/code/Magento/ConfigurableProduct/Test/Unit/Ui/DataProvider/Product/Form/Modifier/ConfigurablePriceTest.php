@@ -11,7 +11,7 @@ use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Configurab
 class ConfigurablePriceTest extends AbstractModifierTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function createModel()
     {

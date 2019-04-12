@@ -36,7 +36,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLinkedItemsByType($sku, $type)
     {
@@ -63,7 +63,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setProductLinks($sku, array $items)
     {

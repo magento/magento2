@@ -11,7 +11,7 @@ class ValidationRule extends \Magento\Framework\Api\AbstractSimpleObject impleme
     \Magento\Customer\Api\Data\ValidationRuleInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
@@ -19,7 +19,7 @@ class ValidationRule extends \Magento\Framework\Api\AbstractSimpleObject impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValue()
     {

@@ -66,7 +66,7 @@ class TemporaryTableStrategy implements \Magento\Framework\Indexer\Table\Strateg
     }
 
     /**
-     * Create temporary index table based on memory table{@inheritdoc}
+     * Create temporary index table based on memory table@inheritdoc
      *
      * @param string $tablePrefix
      * @return string

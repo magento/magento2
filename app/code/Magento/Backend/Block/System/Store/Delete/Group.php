@@ -13,7 +13,7 @@ namespace Magento\Backend\Block\System\Store\Delete;
 class Group extends \Magento\Backend\Block\Template
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {

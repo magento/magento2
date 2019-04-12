@@ -26,7 +26,7 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

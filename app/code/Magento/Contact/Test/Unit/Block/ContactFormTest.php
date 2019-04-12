@@ -26,7 +26,7 @@ class ContactFormTest extends \PHPUnit\Framework\TestCase
     protected $urlBuilderMock;
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

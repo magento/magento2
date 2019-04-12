@@ -28,7 +28,7 @@ class AddressMetadataManagement implements AddressMetadataManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canBeSearchableInGrid(AttributeMetadataInterface $attribute)
     {
@@ -37,7 +37,7 @@ class AddressMetadataManagement implements AddressMetadataManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canBeFilterableInGrid(AttributeMetadataInterface $attribute)
     {

@@ -42,7 +42,7 @@ class SetManagement implements \Magento\Catalog\Api\AttributeSetManagementInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function create(\Magento\Eav\Api\Data\AttributeSetInterface $attributeSet, $skeletonId)
     {

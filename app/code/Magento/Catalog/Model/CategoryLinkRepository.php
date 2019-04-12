@@ -34,7 +34,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink)
     {
@@ -60,7 +60,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink)
     {
@@ -68,7 +68,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteByIds($categoryId, $sku)
     {

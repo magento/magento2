@@ -40,7 +40,7 @@ class Wizard extends Action implements HttpPostActionInterface, HttpGetActionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {

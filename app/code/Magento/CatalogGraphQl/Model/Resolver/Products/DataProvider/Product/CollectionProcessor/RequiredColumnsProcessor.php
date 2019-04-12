@@ -14,12 +14,12 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 /**
  * Add attributes required for every GraphQL product resolution process.
  *
- * {@inheritdoc}
+ * @inheritdoc
  */
 class RequiredColumnsProcessor implements CollectionProcessorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(
         Collection $collection,

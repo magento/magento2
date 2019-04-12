@@ -11,7 +11,7 @@ namespace Magento\Cms\Model\Page\Source;
 class PageLayoutFilter extends PageLayout
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

@@ -34,7 +34,7 @@ class ConfigurableProductHandlerTest extends \PHPUnit\Framework\TestCase
     private $ruleMock;
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

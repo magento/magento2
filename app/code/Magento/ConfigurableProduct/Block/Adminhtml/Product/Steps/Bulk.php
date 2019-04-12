@@ -55,7 +55,7 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCaption()
     {

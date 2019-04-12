@@ -31,7 +31,7 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function saveAddressInformation(
         $cartId,

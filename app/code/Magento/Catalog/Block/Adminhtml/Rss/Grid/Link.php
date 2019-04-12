@@ -35,7 +35,7 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {

@@ -43,7 +43,7 @@ class UpdateDefaultAttributeValue implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -53,7 +53,7 @@ class UpdateDefaultAttributeValue implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -63,7 +63,7 @@ class UpdateDefaultAttributeValue implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -71,7 +71,7 @@ class UpdateDefaultAttributeValue implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

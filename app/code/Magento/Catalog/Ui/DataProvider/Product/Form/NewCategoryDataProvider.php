@@ -47,7 +47,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function getData()
@@ -70,7 +70,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function getMeta()

@@ -11,7 +11,7 @@ use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 class CartTotalsProcessor extends AbstractTotalsProcessor implements LayoutProcessorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process($jsLayout)
     {

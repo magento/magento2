@@ -19,7 +19,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {

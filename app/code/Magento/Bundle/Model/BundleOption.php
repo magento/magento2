@@ -19,7 +19,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     /**#@-*/
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getOptionId()
@@ -28,7 +28,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getOptionQty()
@@ -37,7 +37,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getOptionSelections()
@@ -46,7 +46,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function setOptionId($optionId)
@@ -55,7 +55,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function setOptionQty($optionQty)
@@ -64,7 +64,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function setOptionSelections(array $optionSelections)
@@ -73,7 +73,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getExtensionAttributes()
@@ -82,7 +82,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function setExtensionAttributes(\Magento\Bundle\Api\Data\BundleOptionExtensionInterface $extensionAttributes)

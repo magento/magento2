@@ -48,7 +48,7 @@ class GeneralTest extends AbstractModifierTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function createModel()
     {

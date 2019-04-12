@@ -40,7 +40,7 @@ class CompareProducts implements SectionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {

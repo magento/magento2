@@ -39,7 +39,7 @@ class Filters implements ObserverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update(UiComponentInterface $component)
     {

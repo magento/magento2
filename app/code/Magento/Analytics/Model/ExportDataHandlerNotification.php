@@ -31,7 +31,7 @@ class ExportDataHandlerNotification implements ExportDataHandlerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * Execute notification command.
      *
      * @return bool

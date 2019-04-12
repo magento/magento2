@@ -43,7 +43,7 @@ class ChangePriceAttributeDefaultScope implements DataPatchInterface, PatchVersi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -73,7 +73,7 @@ class ChangePriceAttributeDefaultScope implements DataPatchInterface, PatchVersi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -83,7 +83,7 @@ class ChangePriceAttributeDefaultScope implements DataPatchInterface, PatchVersi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -91,7 +91,7 @@ class ChangePriceAttributeDefaultScope implements DataPatchInterface, PatchVersi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

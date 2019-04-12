@@ -11,7 +11,7 @@ namespace Magento\Cms\Model\Page\Source;
 class IsActiveFilter extends IsActive
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

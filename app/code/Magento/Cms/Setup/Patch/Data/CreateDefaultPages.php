@@ -41,7 +41,7 @@ class CreateDefaultPages implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
@@ -376,7 +376,7 @@ EOD;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -384,7 +384,7 @@ EOD;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -392,7 +392,7 @@ EOD;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

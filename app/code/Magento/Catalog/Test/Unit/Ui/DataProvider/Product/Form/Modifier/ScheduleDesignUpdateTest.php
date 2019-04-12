@@ -13,7 +13,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\ScheduleDesignUpdate;
 class ScheduleDesignUpdateTest extends AbstractModifierTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function createModel()
     {

@@ -72,7 +72,7 @@ class Range extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCondition()
     {

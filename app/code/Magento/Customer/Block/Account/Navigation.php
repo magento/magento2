@@ -19,7 +19,7 @@ use \Magento\Customer\Block\Account\SortLinkInterface;
 class Navigation extends Links
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.2.0
      */
     public function getLinks()

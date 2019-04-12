@@ -163,7 +163,7 @@ class SaveTest extends AttributeTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModel()
     {

@@ -79,7 +79,7 @@ class MassPublisher implements PublisherInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function publish($topicName, $data)
     {

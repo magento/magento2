@@ -27,7 +27,7 @@ class InvalidSkuProcessorTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

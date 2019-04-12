@@ -14,12 +14,12 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 /**
  * Adds passed in attributes to product collection results
  *
- * {@inheritdoc}
+ * @inheritdoc
  */
 class AttributeProcessor implements CollectionProcessorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(
         Collection $collection,

@@ -54,7 +54,7 @@ class ReportWriter implements ReportWriterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function write(WriteInterface $directory, $path)
     {

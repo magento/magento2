@@ -49,7 +49,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -74,7 +74,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -84,7 +84,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -92,7 +92,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

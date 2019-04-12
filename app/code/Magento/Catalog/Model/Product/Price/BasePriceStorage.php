@@ -103,7 +103,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get(array $skus)
     {
@@ -128,7 +128,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update(array $prices)
     {

@@ -83,7 +83,7 @@ define([
         },
 
         /**
-        * {@inheritdoc}
+        * @inheritdoc
         */
         processingAddChild: function (ctx, index, prop) {
             var recordIds = _.map(this.recordData(), function (rec) {

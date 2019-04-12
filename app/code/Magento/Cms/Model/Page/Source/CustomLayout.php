@@ -11,7 +11,7 @@ namespace Magento\Cms\Model\Page\Source;
 class CustomLayout extends PageLayout
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

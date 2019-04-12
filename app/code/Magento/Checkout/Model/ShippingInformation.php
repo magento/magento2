@@ -14,7 +14,7 @@ use Magento\Checkout\Api\Data\ShippingInformationInterface;
 class ShippingInformation extends AbstractExtensibleModel implements ShippingInformationInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getShippingAddress()
     {
@@ -22,7 +22,7 @@ class ShippingInformation extends AbstractExtensibleModel implements ShippingInf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingAddress(\Magento\Quote\Api\Data\AddressInterface $address)
     {
@@ -30,7 +30,7 @@ class ShippingInformation extends AbstractExtensibleModel implements ShippingInf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBillingAddress()
     {
@@ -38,7 +38,7 @@ class ShippingInformation extends AbstractExtensibleModel implements ShippingInf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBillingAddress(\Magento\Quote\Api\Data\AddressInterface $address)
     {
@@ -46,7 +46,7 @@ class ShippingInformation extends AbstractExtensibleModel implements ShippingInf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getShippingMethodCode()
     {
@@ -54,7 +54,7 @@ class ShippingInformation extends AbstractExtensibleModel implements ShippingInf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingMethodCode($code)
     {
@@ -62,7 +62,7 @@ class ShippingInformation extends AbstractExtensibleModel implements ShippingInf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getShippingCarrierCode()
     {
@@ -70,7 +70,7 @@ class ShippingInformation extends AbstractExtensibleModel implements ShippingInf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingCarrierCode($code)
     {
@@ -78,7 +78,7 @@ class ShippingInformation extends AbstractExtensibleModel implements ShippingInf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -86,7 +86,7 @@ class ShippingInformation extends AbstractExtensibleModel implements ShippingInf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\Checkout\Api\Data\ShippingInformationExtensionInterface $extensionAttributes

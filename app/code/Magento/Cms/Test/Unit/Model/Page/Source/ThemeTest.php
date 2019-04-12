@@ -27,7 +27,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

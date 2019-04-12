@@ -14,7 +14,7 @@ class ValidationResults extends \Magento\Framework\Api\AbstractSimpleObject impl
     \Magento\Customer\Api\Data\ValidationResultsInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid()
     {
@@ -22,7 +22,7 @@ class ValidationResults extends \Magento\Framework\Api\AbstractSimpleObject impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMessages()
     {

@@ -16,7 +16,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     protected $productFactory;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected $elementName = 'parameters';
 

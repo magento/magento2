@@ -106,7 +106,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -118,7 +118,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFormatArray($addressAttributes = null)
     {
@@ -133,7 +133,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)

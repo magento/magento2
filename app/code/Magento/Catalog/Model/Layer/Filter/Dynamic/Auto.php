@@ -83,7 +83,7 @@ class Auto implements AlgorithmInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItemsData(array $intervals = [], $additionalRequestData = '')
     {

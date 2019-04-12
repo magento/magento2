@@ -74,7 +74,7 @@ class UrlRewriteHandlerTest extends \PHPUnit\Framework\TestCase
     private $serializerMock;
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

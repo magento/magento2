@@ -60,7 +60,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function apply(

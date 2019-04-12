@@ -14,7 +14,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
 class WysiwygConfigDataProcessor implements WysiwygConfigDataProcessorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {

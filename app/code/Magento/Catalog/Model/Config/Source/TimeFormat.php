@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Config\Source;
 class TimeFormat implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @codeCoverageIgnore
      */

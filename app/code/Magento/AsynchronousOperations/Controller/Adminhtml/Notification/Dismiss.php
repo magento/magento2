@@ -43,7 +43,7 @@ class Dismiss extends Action
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {

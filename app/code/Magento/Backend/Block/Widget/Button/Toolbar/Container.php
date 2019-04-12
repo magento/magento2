@@ -33,7 +33,7 @@ class Container extends \Magento\Framework\View\Element\AbstractBlock
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _toHtml()
     {

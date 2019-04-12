@@ -76,7 +76,7 @@ class Region extends \Magento\Framework\Api\AbstractExtensibleObject implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Customer\Api\Data\RegionExtensionInterface|null
      */
@@ -86,7 +86,7 @@ class Region extends \Magento\Framework\Api\AbstractExtensibleObject implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Customer\Api\Data\RegionExtensionInterface $extensionAttributes
      * @return $this

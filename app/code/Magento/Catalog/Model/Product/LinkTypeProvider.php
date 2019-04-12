@@ -62,7 +62,7 @@ class LinkTypeProvider implements \Magento\Catalog\Api\ProductLinkTypeListInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems()
     {
@@ -78,7 +78,7 @@ class LinkTypeProvider implements \Magento\Catalog\Api\ProductLinkTypeListInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItemAttributes($type)
     {

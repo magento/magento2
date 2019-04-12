@@ -44,7 +44,7 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {

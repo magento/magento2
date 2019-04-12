@@ -20,7 +20,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     const END_OF_DAY_IN_SECONDS = 86399;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValue($index = null)
     {

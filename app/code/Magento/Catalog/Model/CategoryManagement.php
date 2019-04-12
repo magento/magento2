@@ -47,7 +47,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTree($rootCategoryId = null, $depth = null)
     {
@@ -99,7 +99,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function move($categoryId, $parentId, $afterId = null)
     {
@@ -127,7 +127,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCount()
     {

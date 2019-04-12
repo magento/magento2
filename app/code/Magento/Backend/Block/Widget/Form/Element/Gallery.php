@@ -63,7 +63,7 @@ class Gallery extends \Magento\Backend\Block\Template implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {

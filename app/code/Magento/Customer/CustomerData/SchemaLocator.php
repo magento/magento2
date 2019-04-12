@@ -25,7 +25,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSchema()
     {
@@ -33,7 +33,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPerFileSchema()
     {

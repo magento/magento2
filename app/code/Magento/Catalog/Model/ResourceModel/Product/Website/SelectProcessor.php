@@ -50,7 +50,7 @@ class SelectProcessor implements BaseSelectProcessorInterface
     /**
      * Joins website-product relation table to filter products that are only in current website
      *
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(Select $select)
     {

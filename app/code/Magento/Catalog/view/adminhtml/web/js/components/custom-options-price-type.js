@@ -12,7 +12,7 @@ define([
 
     return Select.extend({
         /**
-         * {@inheritdoc}
+         * @inheritdoc
          */
         onUpdate: function () {
             this._super();
@@ -21,7 +21,7 @@ define([
         },
 
         /**
-         * {@inheritdoc}
+         * @inheritdoc
          */
         setInitialValue: function () {
             this._super();

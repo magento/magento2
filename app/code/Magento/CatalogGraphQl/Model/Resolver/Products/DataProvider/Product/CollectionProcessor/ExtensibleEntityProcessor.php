@@ -15,7 +15,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 /**
  * Add necessary joins for extensible entities.
  *
- * {@inheritdoc}
+ * @inheritdoc
  */
 class ExtensibleEntityProcessor implements CollectionProcessorInterface
 {

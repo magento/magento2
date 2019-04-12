@@ -54,7 +54,7 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -67,7 +67,7 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -77,7 +77,7 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -85,7 +85,7 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

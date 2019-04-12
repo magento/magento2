@@ -142,7 +142,7 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRowUrl($row)
     {

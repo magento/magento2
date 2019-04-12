@@ -128,7 +128,7 @@ class Price implements DimensionalIndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @param array $dimensions
      * @param \Traversable $entityIds
      * @throws \Exception

@@ -13,7 +13,7 @@ use Magento\Framework\App\RequestInterface;
 class Select extends AbstractData
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function extractValue(RequestInterface $request)
     {
@@ -21,7 +21,7 @@ class Select extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateValue($value)
     {
@@ -50,7 +50,7 @@ class Select extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function compactValue($value)
     {
@@ -58,7 +58,7 @@ class Select extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function restoreValue($value)
     {

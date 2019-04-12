@@ -41,7 +41,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function init($context)
     {

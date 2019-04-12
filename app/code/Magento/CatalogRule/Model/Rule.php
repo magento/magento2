@@ -433,7 +433,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateData(DataObject $dataObject)
     {
@@ -582,7 +582,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return $this
      */
@@ -613,7 +613,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return $this
      */
@@ -675,7 +675,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     //@codeCoverageIgnoreStart
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRuleId()
     {
@@ -683,7 +683,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRuleId($ruleId)
     {
@@ -691,7 +691,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
@@ -699,7 +699,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setName($name)
     {
@@ -707,7 +707,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDescription()
     {
@@ -715,7 +715,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDescription($description)
     {
@@ -723,7 +723,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsActive()
     {
@@ -731,7 +731,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIsActive($isActive)
     {
@@ -739,7 +739,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRuleCondition()
     {
@@ -747,7 +747,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRuleCondition($condition)
     {
@@ -758,7 +758,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStopRulesProcessing()
     {
@@ -766,7 +766,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStopRulesProcessing($isStopProcessing)
     {
@@ -774,7 +774,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSortOrder()
     {
@@ -782,7 +782,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSortOrder($sortOrder)
     {
@@ -790,7 +790,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSimpleAction()
     {
@@ -798,7 +798,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSimpleAction($action)
     {
@@ -806,7 +806,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDiscountAmount()
     {
@@ -814,7 +814,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountAmount($amount)
     {
@@ -838,7 +838,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\CatalogRule\Api\Data\RuleExtensionInterface|null
      */
@@ -848,7 +848,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\CatalogRule\Api\Data\RuleExtensionInterface $extensionAttributes
      * @return $this

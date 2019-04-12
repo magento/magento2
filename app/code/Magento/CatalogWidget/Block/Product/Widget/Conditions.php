@@ -77,7 +77,7 @@ class Conditions extends Template implements RendererInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -95,7 +95,7 @@ class Conditions extends Template implements RendererInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function render(AbstractElement $element)
     {

@@ -31,7 +31,7 @@ class TypeList implements \Magento\Catalog\Api\ProductCustomOptionTypeListInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems()
     {

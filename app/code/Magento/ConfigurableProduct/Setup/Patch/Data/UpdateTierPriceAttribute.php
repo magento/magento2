@@ -44,7 +44,7 @@ class UpdateTierPriceAttribute implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -67,7 +67,7 @@ class UpdateTierPriceAttribute implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -77,7 +77,7 @@ class UpdateTierPriceAttribute implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}\
+     * @inheritdoc\
      */
     public static function getVersion()
     {
@@ -85,7 +85,7 @@ class UpdateTierPriceAttribute implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

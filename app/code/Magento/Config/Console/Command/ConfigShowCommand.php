@@ -136,7 +136,7 @@ class ConfigShowCommand extends Command
      * Shows error message if configuration for given path doesn't exist
      * or scope/scope-code doesn't pass validation.
      *
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)

@@ -85,7 +85,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $variationPricesMock;
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

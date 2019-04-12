@@ -10,7 +10,7 @@ use Magento\CatalogRule\Model\Indexer\AbstractIndexer;
 class ProductRuleIndexer extends AbstractIndexer
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function doExecuteList($ids)
     {
@@ -19,7 +19,7 @@ class ProductRuleIndexer extends AbstractIndexer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function doExecuteRow($id)
     {

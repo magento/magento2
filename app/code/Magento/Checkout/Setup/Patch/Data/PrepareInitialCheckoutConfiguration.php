@@ -49,7 +49,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -826,7 +826,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -834,7 +834,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -842,7 +842,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

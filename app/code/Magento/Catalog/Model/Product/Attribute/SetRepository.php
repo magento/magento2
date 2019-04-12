@@ -49,7 +49,7 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Eav\Api\Data\AttributeSetInterface $attributeSet)
     {
@@ -58,7 +58,7 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -84,7 +84,7 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($attributeSetId)
     {
@@ -94,7 +94,7 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Eav\Api\Data\AttributeSetInterface $attributeSet)
     {
@@ -103,7 +103,7 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($attributeSetId)
     {

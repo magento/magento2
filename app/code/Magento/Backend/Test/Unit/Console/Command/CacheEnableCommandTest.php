@@ -43,7 +43,7 @@ class CacheEnableCommandTest extends AbstractCacheSetCommandTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExpectedExecutionOutput(array $enabled)
     {

@@ -16,7 +16,7 @@ use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusReso
 /**
  * Add stock filtering if configuration requires it.
  *
- * {@inheritdoc}
+ * @inheritdoc
  */
 class StockProcessor implements CollectionProcessorInterface
 {
@@ -41,7 +41,7 @@ class StockProcessor implements CollectionProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(
         Collection $collection,

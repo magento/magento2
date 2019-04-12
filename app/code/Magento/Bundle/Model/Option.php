@@ -140,7 +140,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     //@codeCoverageIgnoreStart
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptionId()
     {
@@ -148,7 +148,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTitle()
     {
@@ -156,7 +156,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRequired()
     {
@@ -164,7 +164,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getType()
     {
@@ -172,7 +172,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPosition()
     {
@@ -180,7 +180,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSku()
     {
@@ -188,7 +188,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getProductLinks()
     {
@@ -273,7 +273,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Bundle\Api\Data\OptionExtensionInterface|null
      */
@@ -283,7 +283,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Bundle\Api\Data\OptionExtensionInterface $extensionAttributes
      * @return $this

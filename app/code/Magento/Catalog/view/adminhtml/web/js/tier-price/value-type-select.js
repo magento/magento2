@@ -16,7 +16,7 @@ define([
         },
 
         /**
-         * {@inheritdoc}
+         * @inheritdoc
          */
         initialize: function () {
             this._super()
@@ -24,7 +24,7 @@ define([
         },
 
         /**
-         * {@inheritdoc}
+         * @inheritdoc
          */
         setInitialValue: function () {
             this.initialValue = this.getInitialValue();
@@ -39,7 +39,7 @@ define([
         },
 
         /**
-         * {@inheritdoc}
+         * @inheritdoc
          */
         prepareForm: function () {
             var elements = this.getElementsByPrices(),
