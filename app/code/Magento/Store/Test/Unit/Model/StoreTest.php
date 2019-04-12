@@ -667,7 +667,8 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             'unsecure request, no secure base url registered' => [false, 443, false, true, null],
             'unsecure request, not using registered port' => [false, 80],
             'unsecure request, using registered port, not using secure in frontend' => [false, 443, false, false],
-            'unsecure request, no secure base url registered, not using secure in frontend' => [false, 443, false, false, null],
+            'unsecure request, no secure base url registered, not using secure in frontend' =>
+                [false, 443, false, false, null],
             'unsecure request, not using registered port, not using secure in frontend' => [false, 80, false, false],
         ];
     }
