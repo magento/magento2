@@ -84,7 +84,6 @@ define([
             if (formElement.validation() &&
                 formElement.validation('isValid')
             ) {
-                this.isLoading(true);
                 loginAction(loginData);
             }
 

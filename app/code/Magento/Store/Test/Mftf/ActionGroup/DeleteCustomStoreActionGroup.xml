@@ -13,11 +13,12 @@
             <argument name="storeGroupName" defaultValue="customStoreGroup.name"/>
         </arguments>
         <amOnPage stepKey="amOnAdminSystemStorePage"  url="{{AdminSystemStorePage.url}}"/>
-        <click stepKey="resetSearchFilter" selector="{{AdminStoresGridSection.resetButton}}"/>
-        <fillField stepKey="fillSearchStoreGroupField" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="{{storeGroupName}}"/>
-        <click stepKey="clickSearchButton" selector="{{AdminStoresGridSection.searchButton}}"/>
-        <see stepKey="verifyThatCorrectStoreGroupFound" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="{{storeGroupName}}"/>
-        <click stepKey="clickEditExistingStoreRow" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}"/>
+        <conditionalClick stepKey="resetSearchFilter" selector="{{AdminStoresGridFilterSection.clearAll}}" dependentSelector="{{AdminStoresGridFilterSection.clearAll}}" visible="true"/>
+        <click selector="{{AdminStoresGridFilterSection.filters}}" stepKey="openStoresFilters"/>
+        <fillField stepKey="fillSearchStoreGroupField" selector="{{AdminStoresGridFilterSection.storeFilter}}" userInput="{{storeGroupName}}"/>
+        <click stepKey="clickSearchButton" selector="{{AdminStoresGridFilterSection.applyFilters}}"/>
+        <see stepKey="verifyThatCorrectStoreGroupFound" selector="{{AdminStoresGridSection.storeInFirstRow}}" userInput="{{storeGroupName}}"/>
+        <click stepKey="clickEditExistingStoreRow" selector="{{AdminStoresGridSection.storeInFirstRow}}"/>
         <waitForPageLoad stepKey="waitForStoreToLoad"/>
         <click stepKey="clickDeleteStoreGroupButtonOnEditStorePage" selector="{{AdminStoresMainActionsSection.deleteButton}}"/>
         <selectOption stepKey="setCreateDbBackupToNo" selector="{{AdminStoresDeleteStoreGroupSection.createDbBackup}}" userInput="No"/>

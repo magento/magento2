@@ -124,7 +124,12 @@ class Cryptographer
      */
     private function validateCipherMethod($cipherMethod)
     {
-        $methods = openssl_get_cipher_methods();
+        $methods = array_map(
+            'strtolower',
+            openssl_get_cipher_methods()
+        );
+        $cipherMethod = strtolower($cipherMethod);
+
         return (false !== array_search($cipherMethod, $methods));
     }
 }

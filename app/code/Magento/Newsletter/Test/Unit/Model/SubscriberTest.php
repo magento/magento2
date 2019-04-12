@@ -209,8 +209,15 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(Subscriber::STATUS_NOT_ACTIVE, $this->subscriber->subscribe($email));
     }
 
+    /**
+     * Update status with Confirmation Status - required.
+     *
+     * @return void
+     */
     public function testUpdateSubscription()
     {
+        $websiteId = 1;
+        $storeId = 2;
         $customerId = 1;
         $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMock();
@@ -223,7 +230,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 [
                     'subscriber_id' => 1,
-                    'subscriber_status' => Subscriber::STATUS_SUBSCRIBED
+                    'subscriber_status' => Subscriber::STATUS_SUBSCRIBED,
                 ]
             );
         $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
@@ -232,20 +239,25 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             ->method('getConfirmationStatus')
             ->with($customerId)
             ->willReturn('account_confirmation_required');
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
+        $customerDataMock->expects($this->exactly(2))->method('getStoreId')->willReturn($storeId);
+        $customerDataMock->expects($this->exactly(2))->method('getWebsiteId')->willReturn(null);
+        $customerDataMock->expects($this->exactly(2))->method('setWebsiteId')->with($websiteId)->willReturnSelf();
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
 
         $storeModel = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->setMethods(['getId', 'getWebsiteId'])
             ->getMock();
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($storeModel);
+        $storeModel->expects($this->exactly(2))->method('getWebsiteId')->willReturn($websiteId);
+        $data = $this->subscriber->updateSubscription($customerId);
 
-        $this->assertEquals($this->subscriber, $this->subscriber->updateSubscription($customerId));
+        $this->assertEquals(Subscriber::STATUS_SUBSCRIBED, $data->getSubscriberStatus());
     }
 
     public function testUnsubscribeCustomerById()
     {
+        $storeId = 2;
         $customerId = 1;
         $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMock();
@@ -263,7 +275,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             );
         $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
         $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
+        $customerDataMock->expects($this->exactly(2))->method('getStoreId')->willReturn($storeId);
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
         $this->sendEmailCheck();
 
@@ -272,6 +284,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
 
     public function testSubscribeCustomerById()
     {
+        $storeId = 2;
         $customerId = 1;
         $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMock();
@@ -289,7 +302,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             );
         $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
         $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
+        $customerDataMock->expects($this->exactly(2))->method('getStoreId')->willReturn($storeId);
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
         $this->sendEmailCheck();
 
@@ -298,6 +311,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
 
     public function testSubscribeCustomerById1()
     {
+        $storeId = 2;
         $customerId = 1;
         $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMock();
@@ -315,7 +329,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             );
         $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
         $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
+        $customerDataMock->expects($this->exactly(2))->method('getStoreId')->willReturn($storeId);
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
         $this->sendEmailCheck();
         $this->customerAccountManagement->expects($this->once())
@@ -329,6 +343,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
 
     public function testSubscribeCustomerByIdAfterConfirmation()
     {
+        $storeId = 2;
         $customerId = 1;
         $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMock();
@@ -346,7 +361,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             );
         $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
         $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
+        $customerDataMock->expects($this->exactly(2))->method('getStoreId')->willReturn($storeId);
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
         $this->sendEmailCheck();
         $this->customerAccountManagement->expects($this->never())->method('getConfirmationStatus');

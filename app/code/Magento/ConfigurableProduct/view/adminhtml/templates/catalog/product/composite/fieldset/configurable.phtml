@@ -20,9 +20,8 @@
     <div class="product-options">
         <div class="field admin__field _required required">
             <?php foreach ($_attributes as $_attribute): ?>
-                <label class="label admin__field-label"><?php
-                    /* @escapeNotVerified */ echo $_attribute->getProductAttribute()
-                        ->getStoreLabel($_product->getStoreId());
+                <label class="label admin__field-label"><?=
+                    $block->escapeHtml($_attribute->getProductAttribute()->getStoreLabel($_product->getStoreId()))
                     ?></label>
                 <div class="control admin__field-control <?php
                     if ($_attribute->getDecoratedIsLast()):

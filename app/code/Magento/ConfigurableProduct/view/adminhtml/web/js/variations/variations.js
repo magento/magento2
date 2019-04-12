@@ -383,7 +383,11 @@ define([
          * Chose action for the form save button
          */
         saveFormHandler: function () {
-            this.serializeData();
+            this.formElement().validate();
+
+            if (this.formElement().source.get('params.invalid') === false) {
+                this.serializeData();
+            }
 
             if (this.checkForNewAttributes()) {
                 this.formSaveParams = arguments;

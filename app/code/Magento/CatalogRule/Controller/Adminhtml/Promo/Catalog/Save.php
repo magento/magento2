@@ -60,6 +60,17 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                     ['request' => $this->getRequest()]
                 );
                 $data = $this->getRequest()->getPostValue();
+
+                $filterValues = ['from_date' => $this->_dateFilter];
+                if ($this->getRequest()->getParam('to_date')) {
+                    $filterValues['to_date'] = $this->_dateFilter;
+                }
+                $inputFilter = new \Zend_Filter_Input(
+                    $filterValues,
+                    [],
+                    $data
+                );
+                $data = $inputFilter->getUnescaped();
                 $id = $this->getRequest()->getParam('rule_id');
                 if ($id) {
                     $model = $ruleRepository->get($id);

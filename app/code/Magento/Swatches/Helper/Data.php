@@ -6,6 +6,7 @@
 
 namespace Magento\Swatches\Helper;
 
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Image;
@@ -248,17 +249,14 @@ class Data
         $this->addFilterByParent($productCollection, $parentId);
 
         $configurableAttributes = $this->getAttributesFromConfigurable($parentProduct);
-        $allAttributesArray = [];
+
+        $resultAttributesToFilter = [];
         foreach ($configurableAttributes as $attribute) {
-            if (!empty($attribute['default_value'])) {
-                $allAttributesArray[$attribute['attribute_code']] = $attribute['default_value'];
+            $attributeCode = $attribute->getData('attribute_code');
+            if (array_key_exists($attributeCode, $attributes)) {
+                $resultAttributesToFilter[$attributeCode] = $attributes[$attributeCode];
             }
         }
-
-        $resultAttributesToFilter = array_merge(
-            $attributes,
-            array_diff_key($allAttributesArray, $attributes)
-        );
 
         $this->addFilterByAttributes($productCollection, $resultAttributesToFilter);
 
@@ -311,35 +309,65 @@ class Data
      * ]
      * @param ModelProduct $product
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getProductMediaGallery(ModelProduct $product)
+    public function getProductMediaGallery(ModelProduct $product): array
     {
         $baseImage = null;
         $gallery = [];
 
         $mediaGallery = $product->getMediaGalleryEntries();
+        /** @var ProductAttributeMediaGalleryEntryInterface $mediaEntry */
         foreach ($mediaGallery as $mediaEntry) {
             if ($mediaEntry->isDisabled()) {
                 continue;
             }
 
-            if (in_array('image', $mediaEntry->getTypes(), true)) {
-                $baseImage = $mediaEntry->getFile();
+            if (!$baseImage || $this->isMainImage($mediaEntry)) {
+                $baseImage = $mediaEntry;
             } elseif (!$baseImage) {
                 $baseImage = $mediaEntry->getFile();
             }
 
-            $gallery[$mediaEntry->getId()] = $this->getAllSizeImages($product, $mediaEntry->getFile());
+            $gallery[$mediaEntry->getId()] = $this->collectImageData($product, $mediaEntry);
         }
 
         if (!$baseImage) {
             return [];
         }
 
-        $resultGallery = $this->getAllSizeImages($product, $baseImage);
+        $resultGallery = $this->collectImageData($product, $baseImage);
         $resultGallery['gallery'] = $gallery;
 
         return $resultGallery;
+    }
+
+    /**
+     * Checks if image is main image in gallery
+     *
+     * @param ProductAttributeMediaGalleryEntryInterface $mediaEntry
+     * @return bool
+     */
+    private function isMainImage(ProductAttributeMediaGalleryEntryInterface $mediaEntry): bool
+    {
+        return in_array('image', $mediaEntry->getTypes(), true);
+    }
+
+    /**
+     * Returns image data for swatches
+     *
+     * @param ModelProduct $product
+     * @param ProductAttributeMediaGalleryEntryInterface $mediaEntry
+     * @return array
+     */
+    private function collectImageData(
+        ModelProduct $product,
+        ProductAttributeMediaGalleryEntryInterface $mediaEntry
+    ): array {
+        $image = $this->getAllSizeImages($product, $mediaEntry->getFile());
+        $image[ProductAttributeMediaGalleryEntryInterface::POSITION] = $mediaEntry->getPosition();
+        $image['isMain'] = $this->isMainImage($mediaEntry);
+        return $image;
     }
 
     /**

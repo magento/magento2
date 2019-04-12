@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckShoppingCartBehaviorAfterSessionExpiredTest">
+        <annotations>
+            <features value="Persistent"/>
+            <stories value="MAGETWO-86549 - Unusual behavior with the persistent shopping cart after the session is expired"/>
+            <title value="Checking behavior with the persistent shopping cart after the session is expired"/>
+            <description value="Checking behavior with the persistent shopping cart after the session is expired"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96637"/>
+            <group value="persistent"/>
+        </annotations>
+        <before>
+            <!--Enable Persistence-->
+            <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
+            <!--Create product and customer-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!--Roll back configuration-->
+            <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
+            <!--Delete product and customer-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+        <!--Login as a Customer-->
+        <actionGroup ref="CustomerLoginOnStorefront" stepKey="loginToStorefrontAccount">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add simple product to cart -->
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <!--Reset cookies and refresh the page-->
+        <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
+        <reloadPage stepKey="reloadPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!--Check product exists in cart-->
+        <see userInput="$$createProduct.name$$" stepKey="ProductExistsInCart"/>
+    </test>
+</tests>

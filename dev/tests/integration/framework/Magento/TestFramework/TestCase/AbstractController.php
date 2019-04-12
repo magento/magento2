@@ -9,9 +9,13 @@
  */
 namespace Magento\TestFramework\TestCase;
 
+use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\Controller\Result\MessagePlugin;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Response\Http as HttpResponse;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -68,6 +72,9 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
         $this->_objectManager->removeSharedInstance(\Magento\Framework\App\RequestInterface::class);
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown()
     {
         $this->_request = null;
@@ -96,14 +103,23 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
      */
     public function dispatch($uri)
     {
-        $this->getRequest()->setRequestUri($uri);
+        /** @var HttpRequest $request */
+        $request = $this->getRequest();
+        $request->setRequestUri($uri);
+        if ($request->isPost()
+            && !array_key_exists('form_key', $request->getPost())
+        ) {
+            /** @var FormKey $formKey */
+            $formKey = $this->_objectManager->get(FormKey::class);
+            $request->setPostValue('form_key', $formKey->getFormKey());
+        }
         $this->_getBootstrap()->runApp();
     }
 
     /**
      * Request getter
      *
-     * @return \Magento\Framework\App\RequestInterface
+     * @return \Magento\Framework\App\RequestInterface|HttpRequest
      */
     public function getRequest()
     {
@@ -116,7 +132,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * Response getter
      *
-     * @return \Magento\Framework\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface|HttpResponse
      */
     public function getResponse()
     {
@@ -201,13 +217,21 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
         $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
         $this->_assertSessionErrors = false;
-
+        /** @var MessageInterface[]|string[] $messageObjects */
         $messages = $this->getMessages($messageType, $messageManagerClass);
+        /** @var string[] $messages */
+        $messagesFiltered = array_map(
+            function ($message) {
+                /** @var MessageInterface|string $message */
+                return ($message instanceof MessageInterface) ? $message->toString() : $message;
+            },
+            $messages
+        );
 
         $this->assertThat(
-            $messages,
+            $messagesFiltered,
             $constraint,
-            'Session messages do not meet expectations ' . var_export($messages, true)
+            'Session messages do not meet expectations ' . var_export($messagesFiltered, true)
         );
     }
 

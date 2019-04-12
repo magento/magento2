@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AssociatedProductToConfigurableOutOfStockTest">
+        <annotations>
+            <features value="CatalogInventory"/>
+            <stories value="MAGETWO-73528: Out of stock associated products to configurable are not full page cache cleaned"/>
+            <title value="Checking out of stock associated products to configurable after checkout - full page cache cleaned"/>
+            <description value="After last configurable product was ordered it becomes out of stock"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96031"/>
+            <group value="CatalogInventory"/>
+        </annotations>
+
+        <before>
+            <!--Create Configurable product-->
+            <actionGroup ref="AdminCreateConfigurableProductChildQty1ActionGroup" stepKey="createConfigurableProduct">
+                <argument name="productName" value="ApiConfigurableProduct"/>
+            </actionGroup>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer">
+                <field key="group_id">1</field>
+            </createData>
+            <!--Update index mode, reindex, flush cache-->
+            <magentoCLI command="indexer:set-mode schedule" stepKey="setScheduleIndexMode"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindexBefore"/>
+            <magentoCLI command="cache:flush" stepKey="cacheFlushBefore"/>
+        </before>
+
+        <after>
+            <!--Delete configurable product-->
+            <deleteData createDataKey="createConfigProductCreateConfigurableProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1CreateConfigurableProduct" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct" stepKey="deleteConfigProductAttribute"/>
+            <!--Delete customer-->
+            <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
+            <!--Update index mode, reindex, flush cache-->
+            <magentoCLI command="indexer:set-mode realtime" stepKey="setRealTimeIndexMode"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindexAfter"/>
+            <magentoCLI command="cache:flush" stepKey="cacheFlushAfter"/>
+        </after>
+
+        <!-- Login as a customer -->
+        <actionGroup ref="CustomerLoginOnStorefront" stepKey="signUpNewUser">
+            <argument name="customer" value="$$createSimpleUsCustomer$$"/>
+        </actionGroup>
+
+        <!-- Go to configurable product page -->
+        <amOnPage url="{{StorefrontProductPage.url('apiconfigurableproduct')}}" stepKey="goToConfigurableProductPage"/>
+
+        <!-- Order product with single quantity -->
+        <selectOption userInput="$$createConfigProductAttributeOption1CreateConfigurableProduct.option[store_labels][1][label]$$"
+                      selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttributeCreateConfigurableProduct.attribute_id$$)}}"
+                      stepKey="configProductFillOption"
+        />
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectShippingMehod"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+
+        <!--Run cron to reindex products-->
+        <magentoCLI command="cron:run --group='index'" stepKey="runCron"/>
+        <magentoCLI command="cron:run --group='index'" stepKey="runCron1"/>
+
+        <!-- Go to configurable product page -->
+        <amOnPage url="{{StorefrontProductPage.url('apiconfigurableproduct')}}" stepKey="goToConfigurableProductPage1"/>
+
+        <!-- Assert that ordered product with single quantity is not available for order -->
+        <dontSee userInput="$$createConfigProductAttributeOption1CreateConfigurableProduct.option[store_labels][1][label]$$"
+                 selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttributeCreateConfigurableProduct.attribute_id$$)}}"
+                 stepKey="assertOptionNotAvailable"
+        />
+
+        <!-- Logout customer on Storefront-->
+        <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="customerLogoutStorefront"/>
+    </test>
+</tests>

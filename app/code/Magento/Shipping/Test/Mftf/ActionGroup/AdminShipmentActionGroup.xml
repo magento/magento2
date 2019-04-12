@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="VerifyBasicShipmentInformation">
+        <arguments>
+            <argument name="customer"/>
+            <argument name="shippingAddress"/>
+            <argument name="billingAddress"/>
+            <argument name="customerGroup" defaultValue="GeneralCustomerGroup"/>
+        </arguments>
+        <see selector="{{AdminShipmentOrderAndAccountInformationSection.customerName}}" userInput="{{customer.firstname}}" stepKey="seeCustomerName"/>
+        <see selector="{{AdminShipmentOrderAndAccountInformationSection.customerEmail}}" userInput="{{customer.email}}" stepKey="seeCustomerEmail"/>
+        <see selector="{{AdminShipmentOrderAndAccountInformationSection.customerGroup}}" userInput="{{customerGroup.code}}" stepKey="seeCustomerGroup"/>
+        <see selector="{{AdminShipmentAddressInformationSection.billingAddress}}" userInput="{{billingAddress.street[0]}}" stepKey="seeBillingAddressStreet"/>
+        <see selector="{{AdminShipmentAddressInformationSection.billingAddress}}" userInput="{{billingAddress.city}}" stepKey="seeBillingAddressCity"/>
+        <see selector="{{AdminShipmentAddressInformationSection.billingAddress}}" userInput="{{billingAddress.country}}" stepKey="seeBillingAddressCountry"/>
+        <see selector="{{AdminShipmentAddressInformationSection.billingAddress}}" userInput="{{billingAddress.postcode}}" stepKey="seeBillingAddressPostcode"/>
+        <see selector="{{AdminShipmentAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.street[0]}}" stepKey="seeShippingAddressStreet"/>
+        <see selector="{{AdminShipmentAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.city}}" stepKey="seeShippingAddressCity"/>
+        <see selector="{{AdminShipmentAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.country}}" stepKey="seeShippingAddressCountry"/>
+        <see selector="{{AdminShipmentAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.postcode}}" stepKey="seeShippingAddressPostcode"/>
+    </actionGroup>
+
+    <actionGroup name="SeeProductInShipmentItems">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <seeElement selector="{{AdminShipmentItemsSection.productColumn(product.name)}}" stepKey="seeProductInShipmentItemsGrid"/>
+    </actionGroup>
+
+    <actionGroup name="StartCreateShipmentFromOrderPage">
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
+        <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeNewShipmentUrl"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Shipment" stepKey="seeNewShipmentPageTitle"/>
+    </actionGroup>
+
+    <actionGroup name="SubmitShipment">
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url('$grabOrderId')}}" stepKey="seeViewOrderPageShipping"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess"/>
+    </actionGroup>
+</actionGroups>

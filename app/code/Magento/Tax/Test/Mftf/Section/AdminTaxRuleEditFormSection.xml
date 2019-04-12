@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminTaxRuleEditFormSection">
+        <element name="ruleName" type="input" selector="#edit_form #code"/>
+        <element name="selectTaxRate" type="select" selector="//*[@id='tax_rate']/following-sibling::section[contains(@class, 'mselect-list')]//span[text()='{{taxRate}}']" parameterized="true" timeout="30"/>
+        <element name="additionalSettings" type="button" selector="#details-summarybase_fieldset"/>
+        <element name="selectProductTaxClass" type="select" selector="//*[@id='tax_product_class']/following-sibling::section[contains(@class, 'mselect-list')]//span[text()='{{taxClass}}']" parameterized="true" timeout="30"/>
+    </section>
+</sections>

@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="SampleBraintreeConfig" type="braintree_config_state">
         <requiredEntity type="title">SampleTitle</requiredEntity>
         <requiredEntity type="payment_action">SamplePaymentAction</requiredEntity>
@@ -71,6 +71,13 @@
         <data key="value"/>
     </entity>
 
+    <entity name="DefaultBraintreeWithPaypalConfig" extends="DefaultBraintreeConfig">
+        <requiredEntity type="active_braintree_paypal">DefaultActiveBraintreePaypal</requiredEntity>
+    </entity>
+    <entity name="DefaultActiveBraintreePaypal" type="active_braintree_paypal">
+        <data key="value">0</data>
+    </entity>
+
     <entity name="SandboxBraintreeConfig" type="braintree_config_state">
         <requiredEntity type="title">EnabledTitle</requiredEntity>
         <requiredEntity type="payment_action">AuthorizePaymentAction</requiredEntity>
@@ -106,6 +113,13 @@
         <data key="value">Magneto</data>
     </entity>
 
+    <entity name="SandboxBraintreeWithPaypalConfig" extends="SandboxBraintreeConfig">
+        <requiredEntity type="active_braintree_paypal">EnableActiveBraintreePaypal</requiredEntity>
+    </entity>
+    <entity name="EnableActiveBraintreePaypal" type="active_braintree_paypal">
+        <data key="value">1</data>
+    </entity>
+
     <entity name="BraintreeCard" type="creditCard">
         <data key="cc_type">MasterCard</data>
         <data key="card_number">5105105105105100</data>
@@ -113,5 +127,4 @@
         <data key="exp_year">20</data>
         <data key="cvv">113</data>
     </entity>
-
 </entities>

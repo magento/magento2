@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="setColorPickerValueByHex">
+        <arguments>
+            <argument name="nthColorPicker" type="string" defaultValue="1"/>
+            <argument name="hexColor" type="string" defaultValue="e74c3c"/>
+        </arguments>
+        <!-- This 6x backspace stuff is some magic that is necessary to interact with this field correctly -->
+        <pressKey selector="{{AdminColorPickerSection.hexByIndex(nthColorPicker)}}"
+                  parameterArray="[\Facebook\WebDriver\WebDriverKeys::BACKSPACE,\Facebook\WebDriver\WebDriverKeys::BACKSPACE,
+                  \Facebook\WebDriver\WebDriverKeys::BACKSPACE,\Facebook\WebDriver\WebDriverKeys::BACKSPACE,
+                  \Facebook\WebDriver\WebDriverKeys::BACKSPACE,\Facebook\WebDriver\WebDriverKeys::BACKSPACE,'{{hexColor}}']" stepKey="fillHex"/>
+        <click selector="{{AdminColorPickerSection.submitByIndex(nthColorPicker)}}" stepKey="submitColor"/>
+    </actionGroup>
+    <actionGroup name="openSwatchMenuByIndex">
+        <arguments>
+            <argument name="index" type="string" defaultValue="0"/>
+        </arguments>
+        <!-- I had to use executeJS to perform the click to get around the use of CSS ::before and ::after -->
+        <executeJS function="jQuery('#swatch_window_option_option_{{index}}').click()" stepKey="clickSwatch"/>
+    </actionGroup>
+</actionGroups>

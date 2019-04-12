@@ -98,8 +98,8 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
-     * @param CartExtensionFactory|null $cartExtensionFactory,
-     * @param ShippingAssignmentFactory|null $shippingAssignmentFactory,
+     * @param CartExtensionFactory|null $cartExtensionFactory
+     * @param ShippingAssignmentFactory|null $shippingAssignmentFactory
      * @param ShippingFactory|null $shippingFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -148,6 +148,10 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
         if (!$address->getCustomerAddressId()) {
             $address->setCustomerAddressId(null);
+        }
+
+        if ($billingAddress && !$billingAddress->getCustomerAddressId()) {
+            $billingAddress->setCustomerAddressId(null);
         }
 
         if (!$address->getCountryId()) {
@@ -203,6 +207,8 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     }
 
     /**
+     * Prepare shipping assignment.
+     *
      * @param CartInterface $quote
      * @param AddressInterface $address
      * @param string $method

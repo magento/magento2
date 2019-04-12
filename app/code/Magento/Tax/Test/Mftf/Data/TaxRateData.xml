@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="TexasTaxRate" type="taxRate">
+        <data key="code" unique="suffix">USTEXAS</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_region_id">57</data>
+        <data key="region_name">TX</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">1</data>
+    </entity>
+    <entity name="AustinTaxRate" type="taxRate">
+        <data key="code" unique="suffix">USTEXASAUSTIN</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_region_id">57</data>
+        <data key="region_name">TX</data>
+        <data key="tax_postcode">78729</data>
+        <data key="rate">5</data>
+    </entity>
+</entities>

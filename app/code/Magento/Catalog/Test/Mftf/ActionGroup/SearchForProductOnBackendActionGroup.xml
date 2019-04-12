@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SearchForProductOnBackendActionGroup">
         <arguments>
             <argument name="product" defaultValue="product"/>
@@ -18,5 +18,12 @@
         <conditionalClick selector="{{AdminProductFiltersSection.clearFiltersButton}}" dependentSelector="{{AdminProductFiltersSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
         <fillField stepKey="fillSkuFieldOnFiltersSection"  userInput="{{product.sku}}" selector="{{AdminProductFiltersSection.SkuInput}}"/>
         <click stepKey="clickApplyFiltersButton" selector="{{AdminProductFiltersSection.Apply}}"/>
+    </actionGroup>
+    <actionGroup name="SearchForProductOnBackendByNameActionGroup" extends="SearchForProductOnBackendActionGroup">
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <remove keyForRemoval="fillSkuFieldOnFiltersSection"/>
+        <fillField userInput="{{productName}}" selector="{{AdminProductFiltersSection.NameInput}}" after="cleanFiltersIfTheySet" stepKey="fillNameFieldOnFiltersSection"/>
     </actionGroup>
 </actionGroups>

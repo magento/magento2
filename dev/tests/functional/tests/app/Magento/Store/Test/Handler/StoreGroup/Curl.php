@@ -49,23 +49,30 @@ class Curl extends AbstractCurl implements StoreGroupInterface
      */
     protected function getStoreGroupIdByGroupName($storeName)
     {
-        //Set pager limit to 2000 in order to find created store group by name
-        $url = $_ENV['app_backend_url'] . 'admin/system_store/index/sort/group_title/dir/asc/limit/2000';
+        $url = $_ENV['app_backend_url'] . 'mui/index/render/';
+        $data = [
+            'namespace' => 'store_listing',
+            'filters' => [
+                'placeholder' => true,
+                'group_title' => $storeName,
+            ],
+            'paging' => [
+                'pageSize' => 1,
+            ]
+        ];
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write($url, [], CurlInterface::GET);
+
+        $curl->write($url, $data, CurlInterface::POST);
         $response = $curl->read();
+        $curl->close();
 
-        $expectedUrl = '/admin/system_store/editGroup/group_id/';
-        $expectedUrl = preg_quote($expectedUrl);
-        $expectedUrl = str_replace('/', '\/', $expectedUrl);
-        preg_match('/' . $expectedUrl . '([0-9]*)\/(.)*>' . $storeName . '<\/a>/', $response, $matches);
+        preg_match('/store_listing_data_source.+items.+"group_id":"(\d+)"/', $response, $match);
 
-        if (empty($matches)) {
+        if (empty($match)) {
             throw new \Exception('Cannot find store group id');
         }
 
-        return (int)$matches[1];
+        return (int)$match[1];
     }
 
     /**

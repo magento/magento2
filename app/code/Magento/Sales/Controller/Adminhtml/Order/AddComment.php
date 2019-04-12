@@ -9,17 +9,27 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 use Magento\Backend\App\Action;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
+/**
+ * Controller to execute Adding Comments.
+ */
 class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
-     * Authorization level of a basic admin session
+     * Authorization level of a basic admin session.
      *
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_Sales::comment';
 
     /**
-     * Add order comment action
+     * ACL resource needed to send comment email notification.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_SALES_EMAIL_RESOURCE = 'Magento_Sales::emails';
+
+    /**
+     * Add order comment action.
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
@@ -33,8 +43,12 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
                     throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a comment.'));
                 }
 
-                $notify = isset($data['is_customer_notified']) ? $data['is_customer_notified'] : false;
-                $visible = isset($data['is_visible_on_front']) ? $data['is_visible_on_front'] : false;
+                $notify = $data['is_customer_notified'] ?? false;
+                $visible = $data['is_visible_on_front'] ?? false;
+
+                if ($notify && !$this->_authorization->isAllowed(self::ADMIN_SALES_EMAIL_RESOURCE)) {
+                    $notify = false;
+                }
 
                 $history = $order->addStatusHistoryComment($data['comment'], $data['status']);
                 $history->setIsVisibleOnFront($visible);
@@ -59,9 +73,11 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
             if (is_array($response)) {
                 $resultJson = $this->resultJsonFactory->create();
                 $resultJson->setData($response);
+
                 return $resultJson;
             }
         }
+
         return $this->resultRedirectFactory->create()->setPath('sales/*/');
     }
 }

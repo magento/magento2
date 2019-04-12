@@ -71,7 +71,7 @@
             <argument name="website" value="SecondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct1">
-            <argument name="website" value="SecondWebsite"/>
+            <argument name="website" value="{{SecondWebsite.name}}"/>
         </actionGroup>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct2">
@@ -84,7 +84,7 @@
             <argument name="website" value="SecondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct2">
-            <argument name="website" value="SecondWebsite"/>
+            <argument name="website" value="{{SecondWebsite.name}}"/>
         </actionGroup>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct3">
@@ -97,7 +97,7 @@
             <argument name="website" value="SecondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct3">
-            <argument name="website" value="SecondWebsite"/>
+            <argument name="website" value="{{SecondWebsite.name}}"/>
         </actionGroup>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct4">
@@ -110,8 +110,11 @@
             <argument name="website" value="SecondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct4">
-            <argument name="website" value="SecondWebsite"/>
+            <argument name="website" value="{{SecondWebsite.name}}"/>
         </actionGroup>
+
+        <!--Flush cache-->
+        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductsIndexPageToLoad"/>
@@ -155,10 +158,9 @@
         <!--Create new order-->
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="startToCreateNewOrder">
             <argument name="customer" value="$$createCustomer$$"/>
+            <argument name="storeView" value="SecondStoreUnique"/>
         </actionGroup>
-        <click selector="{{AdminOrderFormSelectWebsiteSection.website(SecondStoreUnique.name)}}" stepKey="selectStore"/>
-        <waitForPageLoad stepKey="waitForPageOpened"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+
         <click  selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProduct"/>
         <waitForPageLoad stepKey="waitForProductsOpened"/>
         <!--TEST CASE #1-->
@@ -328,12 +330,11 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <createData entity="DefaultConfigCatalogPrice" stepKey="resetPriceScopeConfiguration"/>
-
-            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
-                <argument name="websiteName" value="{{SecondWebsite.name}}"/>
-            </actionGroup>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="ship"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
+                <argument name="websiteName" value="{{SecondWebsite.name}}"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

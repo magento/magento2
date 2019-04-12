@@ -1,0 +1,19 @@
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerAccountNewAddressSection">
+        <element name="firstName" type="button" selector="input[name*='address'][name*='new'][name*='firstname']"/>
+        <element name="lastName" type="button" selector="input[name*='address'][name*='new'][name*='lastname']"/>
+        <element name="street" type="button" selector="input[name*='new'][name*='street']"/>
+        <element name="city" type="input" selector="input[name*='new'][name*='city']"/>
+        <element name="country" type="select" selector="select[name*='address'][name*='new'][name*='country']" timeout="10"/>
+        <element name="regionId" type="select" selector="select[name*='address'][name*='new'][name*='region_id']"/>
+        <element name="zip" type="input" selector="input[name*='address'][name*='new'][name*='postcode']"/>
+        <element name="phone" type="text" selector="input[name*='address'][name*='new'][name*='telephone']" />
+    </section>
+</sections>

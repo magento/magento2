@@ -105,7 +105,8 @@ class PostTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
-        $this->request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParam']);
+        $this->request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParam', 'isPost']);
+        $this->request->expects($this->any())->method('isPost')->willReturn(true);
         $this->response = $this->createPartialMock(\Magento\Framework\App\Response\Http::class, ['setRedirect']);
         $this->formKeyValidator = $this->createPartialMock(
             \Magento\Framework\Data\Form\FormKey\Validator::class,
@@ -215,12 +216,12 @@ class PostTest extends \PHPUnit\Framework\TestCase
         $this->reviewSession->expects($this->any())->method('getFormData')
             ->with(true)
             ->willReturn($reviewData);
-        $this->request->expects($this->at(0))->method('getParam')
-            ->with('category', false)
-            ->willReturn(false);
-        $this->request->expects($this->at(1))->method('getParam')
-            ->with('id')
-            ->willReturn(1);
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                ['category', false, false],
+                ['id', null, 1],
+            ]
+        );
         $product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
             ['__wakeup', 'isVisibleInCatalog', 'isVisibleInSiteVisibility', 'getId', 'getWebsiteIds']

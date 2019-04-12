@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="_defaultProduct" type="product">
         <data key="sku" unique="suffix">testSku</data>
         <data key="type_id">simple</data>
@@ -85,6 +85,7 @@
         <data key="attribute_set_id">4</data>
         <data key="name" unique="suffix">SimpleProduct2</data>
         <data key="price">300.00</data>
+        <data key="quantity">200</data>
         <data key="visibility">4</data>
         <data key="status">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
@@ -112,6 +113,17 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attributes">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+    <entity name="SimpleTwo" type="product2">
+        <data key="sku" unique="suffix">SimpleTwo</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">1.23</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductUrlKey</requiredEntity>
+    </entity>
     <entity name="SimpleOption" type="product2">
         <data key="sku" unique="suffix">SimpleOne</data>
         <data key="type_id">simple</data>
@@ -122,6 +134,9 @@
         <data key="status">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="SetProductVisibilityHidden" type="product2">
+        <data key="visibility">1</data>
     </entity>
     <entity name="ProductImage" type="uploadImage">
         <data key="title" unique="suffix">Image1</data>
@@ -245,9 +260,26 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+    <entity name="ApiSimpleTwoHidden" type="product2">
+        <data key="sku" unique="suffix">api-simple-product-two</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">1</data>
+        <data key="name" unique="suffix">Api Simple Product Two</data>
+        <data key="price">234.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product-two</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
     <entity name="ProductWithOptions2" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
+    </entity>
+    <entity name="ProductWithFileOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
     </entity>
     <entity name="SimpleProductWithCustomAttributeSet" type="product">
         <data key="sku" unique="suffix">testSku</data>
@@ -262,5 +294,16 @@
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleSingleQty" extends="ApiSimpleOne">
+        <data key="quantity">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
+    </entity>
+    <entity name="GetProduct2" type="product2">
+        <var key="sku" entityKey="sku" entityType="product2"/>
+    </entity>
+    <entity name="ApiSimpleWithQty100" extends="ApiSimpleOne">
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
     </entity>
 </entities>

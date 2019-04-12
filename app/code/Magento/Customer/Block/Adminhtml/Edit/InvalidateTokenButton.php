@@ -25,7 +25,8 @@ class InvalidateTokenButton extends GenericButton implements ButtonProviderInter
             $data = [
                 'label' => __('Force Sign-In'),
                 'class' => 'invalidate-token',
-                'on_click' => 'deleteConfirm("' . $deleteConfirmMsg . '", "' . $this->getInvalidateTokenUrl() . '")',
+                'on_click' => 'deleteConfirm("' . $deleteConfirmMsg . '", "' . $this->getInvalidateTokenUrl() .
+                '", {data: {}})',
                 'sort_order' => 65,
             ];
         }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoWhenCartRuleDeletedTest">
+        <annotations>
+            <stories value="MAGETWO-95722: Cannot create credit memo if the used in the order cart rule is deleted"/>
+            <title value="Checking creating of credit memo"/>
+            <description value="Verify Credit Memo created if the used in the order cart rule is deleted"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-97232"/>
+            <group value="sales"/>
+            <skip>
+                <issueId value="MAGETWO-97825"/>
+            </skip>
+        </annotations>
+        <before>
+            <!--Create product with category-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Login as admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Clear filters-->
+            <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridPage"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearOrdersFilters"/>
+            <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceRulePage"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearCartPriceRuleFilters"/>
+            <!--Delete product and category-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!--Log Out-->
+            <actionGroup ref="logout" stepKey="logOut"/>
+        </after>
+        <!--Create Cart Price Rule with a specific coupon-->
+        <actionGroup ref="AdminCreateCartPriceRuleSpecificCouponActionGroup" stepKey="createCartPriceRule">
+            <argument name="rule" value="TestSalesRule"/>
+            <argument name="userPerCoupon" value="99"/>
+        </actionGroup>
+        <!--Go to Storefront. Add product to cart-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="goToProductPage"/>
+        <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="addProductToCardAndApplyCartRule">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="couponCode" value="{{_defaultCoupon.code}}"/>
+        </actionGroup>
+        <!--Proceed to checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutPage"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customerVar" value="Simple_US_Customer"/>
+            <argument name="customerAddressVar" value="US_Address_TX"/>
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+        <!--Select Check/Money payment-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <!--Place order-->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!--Open Order-->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById1">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow1"/>
+        <!--Create and Submit Invoice-->
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="createInvoice"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+        <!--Delete the cart price rule -->
+        <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+            <argument name="ruleName" value="{{TestSalesRule.name}}"/>
+        </actionGroup>
+        <!--Open Order-->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById2">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow2"/>
+        <!--Create Credit Memo-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreateCreditMemo"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
+        <!--Make sure that Credit memo was created successfully-->
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo." stepKey="seeCreditMemoSuccess"/>
+    </test>
+</tests>

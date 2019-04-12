@@ -27,3 +27,22 @@
         width: 50%;
     }
 }
+
+.page-create-order {
+    .order-details {
+        &:not(.order-details-existing-customer) {
+            .order-account-information {
+                .field-email {
+                    margin-left: -30px;
+                }
+                /**
+                 * @codingStandardsIgnoreStart
+                 */
+                .field-group_id {
+                    margin-right: 30px;
+                }
+                // @codingStandardsIgnoreEnd
+            }
+        }
+    }
+}

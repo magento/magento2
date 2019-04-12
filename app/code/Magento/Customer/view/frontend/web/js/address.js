@@ -6,9 +6,10 @@
 define([
     'jquery',
     'Magento_Ui/js/modal/confirm',
+    'mage/dataPost',
     'jquery/ui',
     'mage/translate'
-], function ($, confirm) {
+], function ($, confirm, dataPost) {
     'use strict';
 
     $.widget('mage.address', {
@@ -53,7 +54,8 @@ define([
          * @return {Boolean}
          */
         _deleteAddress: function (e) {
-            var self = this;
+            var self = this,
+                addressId;
 
             confirm({
                 content: this.options.deleteConfirmMessage,
@@ -62,12 +64,17 @@ define([
                     /** @inheritdoc */
                     confirm: function () {
                         if (typeof $(e.target).parent().data('address') !== 'undefined') {
-                            window.location = self.options.deleteUrlPrefix + $(e.target).parent().data('address') +
-                                '/form_key/' + $.mage.cookies.get('form_key');
+                            addressId = $(e.target).parent().data('address');
                         } else {
-                            window.location = self.options.deleteUrlPrefix + $(e.target).data('address') +
-                                '/form_key/' + $.mage.cookies.get('form_key');
+                            addressId = $(e.target).data('address');
                         }
+
+                        dataPost().postData({
+                            action: self.options.deleteUrlPrefix + addressId,
+                            data: {
+                                'form_key': $.mage.cookies.get('form_key')
+                            }
+                        });
                     }
                 }
             });

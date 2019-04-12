@@ -199,7 +199,7 @@
 
     //  Checkout address (create shipping address)
     .field.street {
-        .field.additional {
+        .field {
             .label {
                 &:extend(.abs-visually-hidden all);
             }
@@ -371,7 +371,7 @@
         .fieldset {
             > .field {
                 > .control {
-                    width: 55%;
+                    width: 80%;
                 }
             }
         }
@@ -402,7 +402,8 @@
     .form.password.reset,
     .form.send.confirmation,
     .form.password.forget,
-    .form.create.account {
+    .form.create.account,
+    .form.form-orders-search {
         min-width: 600px;
         width: 50%;
     }
@@ -416,6 +417,12 @@
 
         .column.main {
             width: 77.7%;
+        }
+
+        .sidebar-main {
+            .block {
+                margin-bottom: 0;
+            }
         }
     }
 
@@ -528,10 +535,17 @@
         .column.main,
         .sidebar-additional {
             margin: 0;
+            padding: 0;
         }
 
         .data.table {
             &:extend(.abs-table-striped-mobile all);
+        }
+
+        .sidebar-main {
+            .account-nav {
+                margin-bottom: 0;
+            }
         }
     }
 }
@@ -550,8 +564,8 @@
     }
 
     .account {
-        .page.messages {
-            margin-bottom: @indent__xl;
+        .messages {
+            margin-bottom: 0;
         }
 
         .column.main {

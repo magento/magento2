@@ -888,7 +888,10 @@ class Store extends AbstractExtensibleModel implements
         if (in_array($code, $this->getAvailableCurrencyCodes())) {
             $this->_getSession()->setCurrencyCode($code);
 
-            $defaultCode = $this->_storeManager->getWebsite()->getDefaultStore()->getDefaultCurrency()->getCode();
+            $defaultCode = ($this->_storeManager->getStore() !== null)
+                ? $this->_storeManager->getStore()->getDefaultCurrency()->getCode()
+                : $this->_storeManager->getWebsite()->getDefaultStore()->getDefaultCurrency()->getCode();
+
             $this->_httpContext->setValue(Context::CONTEXT_CURRENCY, $code, $defaultCode);
         }
         return $this;
@@ -1328,12 +1331,14 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Return Store Path
+     *
      * @return string
      */
     public function getStorePath()
     {
         $parsedUrl = parse_url($this->getBaseUrl());
-        return isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';
+        return $parsedUrl['path'] ?? '/';
     }
 
     /**

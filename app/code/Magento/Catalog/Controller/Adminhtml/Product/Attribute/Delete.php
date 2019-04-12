@@ -6,13 +6,20 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Framework\Exception\NotFoundException;
+
 class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         $id = $this->getRequest()->getParam('attribute_id');
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {

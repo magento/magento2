@@ -25,4 +25,87 @@
         <click selector="{{AttributePropertiesSection.save}}" stepKey="saveAttribute"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the product attribute." stepKey="successMessage"/>
     </actionGroup>
+    <actionGroup name="navigateToProductAttributeByCode">
+        <arguments>
+            <argument name="attributeCode" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributesPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <fillField selector="{{AdminProductAttributeGridSection.filterByAttributeCode}}" userInput="{{attributeCode}}" stepKey="fillFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeGridSection.attributeCode(attributeCode)}}" stepKey="clickRowToEdit"/>
+        <waitForPageLoad stepKey="waitForColorAttributePageLoad"/>
+    </actionGroup>
+    <!--Save product attribute and see success message-->
+    <actionGroup name="SaveProductAttribute">
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveAttribute"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product attribute." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+    <actionGroup name="deleteProductAttribute">
+        <arguments>
+            <argument name="ProductAttribute"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <waitForPageLoad stepKey="waitForAttributeGridPageLoad"/>
+        <fillField selector="{{AdminProductAttributeGridSection.gridFilterAttributeCode}}"
+                   userInput="{{ProductAttribute.attribute_code}}" stepKey="setAttributeCode"/>
+        <click selector="{{AdminProductAttributeGridSection.search}}" stepKey="searchForAttributeFromTheGrid"/>
+        <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="clickOnAttributeRow"/>
+        <waitForPageLoad stepKey="waitForAttributeEditPageLoad" />
+        <click selector="{{AttributePropertiesSection.deleteAttribute}}" stepKey="deleteAttribute"/>
+        <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForDeleteConfirmation"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to do this?" stepKey="seeConfirmationMessage"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDeleteAttribute"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterDeleteAttribute"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the product attribute." stepKey="seeDeleteSuccessMessage"/>
+    </actionGroup>
+    <actionGroup name="navigateToCreatedProductAttribute">
+        <arguments>
+            <argument name="productAttribute"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <waitForPageLoad stepKey="waitForAttributesGridPageLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <waitForPageLoad stepKey="waitForAttributesGridPageLoad1"/>
+        <fillField selector="{{AdminProductAttributeGridSection.gridFilterAttributeCode}}"
+                   userInput="{{productAttribute.attribute_code}}" stepKey="setAttributeCode"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="searchForAttributeFromTheGrid"/>
+        <click selector="{{AdminDataGridTableSection.row('1')}}" stepKey="clickOnAttributeRow"/>
+        <waitForPageLoad stepKey="waitForAttributePageLoad" />
+    </actionGroup>
+    <actionGroup name="StartCreateProductAttribute">
+        <arguments>
+            <argument name="attributeCode" type="string"/>
+            <argument name="attributeType" type="string" defaultValue="select"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeNewPage.url}}" stepKey="goToNewProductAttributePage"/>
+        <fillField selector="{{AttributePropertiesSection.defaultLabel}}" userInput="{{attributeCode}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.inputType}}" userInput="{{attributeType}}" stepKey="selectInputType"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="waitForElementVisible"/>
+    </actionGroup>
+    <actionGroup name="AddOptionToProductAttribute">
+        <arguments>
+            <argument name="optionName" type="string"/>
+            <argument name="optionNumber" type="string"/>
+        </arguments>
+        <click selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="clickAddOption"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.optionAdminValue('optionNumber')}}" time="30" stepKey="waitForOptionRow"/>
+        <fillField selector="{{AdminNewAttributePanelSection.optionAdminValue('optionNumber')}}" userInput="{{optionName}}" stepKey="fillAdminLabel"/>
+    </actionGroup>
+    <actionGroup name="SetScopeToProductAttribute">
+        <arguments>
+            <argument name="scope" type="string" defaultValue="1"/>
+        </arguments>
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.scope}}" userInput="{{scope}}" stepKey="selectGlobalScope"/>
+    </actionGroup>
+    <actionGroup name="SetUseInLayeredNavigationToProductAttribute">
+        <arguments>
+            <argument name="useInLayeredNavigation" type="string" defaultValue="1"/>
+        </arguments>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{StorefrontPropertiesSection.storefrontPropertiesTab}}" stepKey="goToStorefrontProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="{{useInLayeredNavigation}}" stepKey="selectUseInLayeredNavigation"/>
+    </actionGroup>
 </actionGroups>

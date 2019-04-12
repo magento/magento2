@@ -11,7 +11,7 @@
     <actionGroup name="AssignAttributeToGroup">
         <arguments>
             <argument name="group" type="string"/>
-            <argument name="attribute" type="string"/>
+            <argument name="attribute"/>
         </arguments>
         <conditionalClick selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender(group)}}" dependentSelector="{{AdminProductAttributeSetEditSection.attributeGroupCollapsed(group)}}" visible="true" stepKey="extendGroup"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
@@ -33,5 +33,25 @@
     <actionGroup name="SaveAttributeSet">
         <click selector="{{AdminProductAttributeSetActionSection.save}}" stepKey="clickSave"/>
         <see userInput="You saved the attribute set" selector="{{AdminMessagesSection.success}}" stepKey="successMessage"/>
+    </actionGroup>
+    <actionGroup name="CreateAttributeSet">
+        <arguments>
+            <argument name="attributeSetName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
+        <click selector="{{AdminProductAttributeSetGridSection.addAttributeSetBtn}}" stepKey="clickAddAttributeSet"/>
+        <fillField selector="{{AdminProductAttributeSetSection.name}}" userInput="{{attributeSetName}}" stepKey="fillName"/>
+        <selectOption selector="{{AdminProductAttributeSetSection.basedOn}}" userInput="Default" stepKey="changeOption"/>
+        <click selector="{{AdminProductAttributeSetSection.save}}" stepKey="clickSaveAttributeSet"/>
+        <see userInput="You saved the attribute set" selector="{{AdminMessagesSection.success}}" stepKey="successMessage"/>
+    </actionGroup>
+    <actionGroup name="AssignProductToAttributeSet">
+        <arguments>
+            <argument name="attributeSetName" type="string"/>
+        </arguments>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{attributeSetName}}" stepKey="searchForAttrSet"/>
+        <waitForAjaxLoad stepKey="waitForLoad"/>
     </actionGroup>
 </actionGroups>

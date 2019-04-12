@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
@@ -13,7 +14,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
- * Class MassAssignGroup
+ * Class to execute MassAssignGroup action.
  */
 class MassAssignGroup extends AbstractMassAction
 {
@@ -39,7 +40,7 @@ class MassAssignGroup extends AbstractMassAction
     }
 
     /**
-     * Customer mass assign group action
+     * Customer mass assign group action.
      *
      * @param AbstractCollection $collection
      * @return \Magento\Backend\Model\View\Result\Redirect
@@ -51,6 +52,8 @@ class MassAssignGroup extends AbstractMassAction
             // Verify customer exists
             $customer = $this->customerRepository->getById($customerId);
             $customer->setGroupId($this->getRequest()->getParam('group'));
+            // No need to validate customer and customer address during assigning customer to the group
+            $this->setIgnoreValidationFlag($customer);
             $this->customerRepository->save($customer);
             $customersUpdated++;
         }
@@ -63,5 +66,16 @@ class MassAssignGroup extends AbstractMassAction
         $resultRedirect->setPath($this->getComponentRefererUrl());
 
         return $resultRedirect;
+    }
+
+    /**
+     * Set ignore_validation_flag to skip unnecessary address and customer validation.
+     *
+     * @param CustomerInterface $customer
+     * @return void
+     */
+    private function setIgnoreValidationFlag(CustomerInterface $customer)
+    {
+        $customer->setData('ignore_validation_flag', true);
     }
 }

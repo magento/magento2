@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminTierPriceNotAvailableForProductOptionsWithoutTierPriceTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product details on storefront"/>
+            <title value="Check that 'trie price' block not available for simple product from options without 'trie price'"/>
+            <description value="Check that 'trie price' block not available for simple product from options without 'trie price'"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-13789"/>
+            <useCaseId value="MAGETWO-96457"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create Configurable product-->
+            <actionGroup ref="AdminCreateApiConfigurableProductActionGroup" stepKey="createConfigurableProduct"/>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createConfigProductCreateConfigurableProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1CreateConfigurableProduct" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct" stepKey="deleteConfigProductAttribute"/>
+
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!--Go to storefront product page an check price box css-->
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProductCreateConfigurableProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption1CreateConfigurableProduct.value$$" stepKey="selectOption"/>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productPriceBox}}" userInput="class" stepKey="grabGrabPriceClass"/>
+        <assertContains actual="$grabGrabPriceClass" expected="price-box price-final_price" expectedType="string" stepKey="assertEquals"/>
+    </test>
+</tests>

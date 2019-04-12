@@ -14,7 +14,7 @@ define([
     'Magento_Checkout/js/model/totals',
     'jquery',
     'mage/translate'
-], function (ko, Component, quote, totals, $) {
+], function (ko, Component, quote, totals, $, $t) {
     'use strict';
 
     var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal,
@@ -24,7 +24,7 @@ define([
     return Component.extend({
         defaults: {
             isTaxDisplayedInGrandTotal: isTaxDisplayedInGrandTotal,
-            notCalculatedMessage: $.mage.__('Not yet calculated'),
+            notCalculatedMessage: $t('Not yet calculated'),
             template: 'Magento_Tax/checkout/summary/tax'
         },
         totals: quote.getTotals(),

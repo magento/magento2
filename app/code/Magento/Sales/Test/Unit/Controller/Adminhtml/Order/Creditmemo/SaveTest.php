@@ -77,6 +77,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->_responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->_responseMock->headersSentThrowsException = false;
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->_requestMock->expects($this->any())->method('isPost')->willReturn(true);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $constructArguments = $objectManager->getConstructArguments(\Magento\Backend\Model\Session::class,
             ['storage' => new \Magento\Framework\Session\Storage()]
@@ -197,9 +198,11 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         );
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(null));
 
-        $creditmemoMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo::class, ['load', 'getGrandTotal', 'getAllowZeroGrandTotal', '__wakeup']);
-        $creditmemoMock->expects($this->once())->method('getGrandTotal')->will($this->returnValue('0'));
-        $creditmemoMock->expects($this->once())->method('getAllowZeroGrandTotal')->will($this->returnValue(false));
+        $creditmemoMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Creditmemo::class,
+            ['load', 'isValidGrandTotal', '__wakeup']
+        );
+        $creditmemoMock->expects($this->once())->method('isValidGrandTotal')->willReturn(false);
         $this->memoLoaderMock->expects(
             $this->once()
         )->method(
@@ -228,7 +231,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
      */
     protected function _setSaveActionExpectationForMageCoreException($data, $errorMessage)
     {
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($errorMessage));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($this->equalTo($errorMessage));
         $this->_sessionMock->expects($this->once())->method('setFormData')->with($this->equalTo($data));
     }
 }

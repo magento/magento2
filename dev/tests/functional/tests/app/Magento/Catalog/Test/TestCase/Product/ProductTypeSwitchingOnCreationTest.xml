@@ -58,7 +58,6 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately" />
         </variation>
         <variation name="ProductTypeSwitchingOnCreationTestVariation7">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="createProduct" xsi:type="string">virtual</data>
             <data name="product" xsi:type="string">downloadableProduct::default</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />

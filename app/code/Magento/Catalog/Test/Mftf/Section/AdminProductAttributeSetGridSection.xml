@@ -14,5 +14,6 @@
         <element name="applyFilterButton" type="button" selector="#setGrid [data-action='grid-filter-apply']" timeout="30"/>
         <element name="attributeSetRowByIndex" type="block" selector="#setGrid_table tbody tr:nth-of-type({{var1}})" parameterized="true"/>
         <element name="addAttributeSetBtn" type="button" selector="button.add-set" timeout="30"/>
+        <element name="deleteOptionByName" type="button" selector="//*[contains(@value, '{{arg}}')]/../following-sibling::td[contains(@class, 'delete')]/button" parameterized="true"/>
     </section>
 </sections>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCustomerWithWebsiteAndStoreViewActionGroup">
+        <arguments>
+            <argument name="customer"/>
+            <argument name="address"/>
+            <argument name="websiteName" type="string"/>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersPage"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}" stepKey="addNewCustomer"/>
+        <selectOption selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{websiteName}}" stepKey="selectWebSite"/>
+        <fillField selector="{{AdminCustomerAccountInformationSection.firstName}}" userInput="{{customer.firstname}}" stepKey="fillFirstName"/>
+        <fillField selector="{{AdminCustomerAccountInformationSection.lastName}}" userInput="{{customer.lastname}}" stepKey="fillLastName"/>
+        <fillField selector="{{AdminCustomerAccountInformationSection.email}}" userInput="{{customer.email}}" stepKey="fillEmail"/>
+        <selectOption selector="{{AdminCustomerAccountInformationSection.storeView}}" userInput="{{storeViewName}}" stepKey="selectStoreView"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfThePage"/>
+        <click selector="{{AdminCustomerAccountInformationSection.addressesButton}}" stepKey="goToAddresses"/>
+        <waitForPageLoad stepKey="waitForAddresses"/>
+        <click selector="{{AdminCustomerEditAddressesSection.addNewAddress}}" stepKey="clickOnAddNewAddress"/>
+        <waitForPageLoad stepKey="waitForAddressFields"/>
+        <click selector="{{AdminCustomerEditAddressesSection.defaultBillingAddress}}" stepKey="tickBillingAddress"/>
+        <click selector="{{AdminCustomerEditAddressesSection.defaultShippingAddress}}" stepKey="tickShippingAddress"/>
+        <fillField selector="{{AdminCustomerEditAddressesSection.firstName}}" userInput="{{address.firstname}}" stepKey="fillFirstNameForAddress"/>
+        <fillField selector="{{AdminCustomerEditAddressesSection.lastName}}" userInput="{{address.lastname}}" stepKey="fillLastNameForAddress"/>
+        <fillField selector="{{AdminCustomerEditAddressesSection.streetAddress}}" userInput="{{address.street[0]}}" stepKey="fillStreetAddress"/>
+        <fillField selector="{{AdminCustomerEditAddressesSection.city}}" userInput="{{address.city}}" stepKey="fillCity"/>
+        <selectOption selector="{{AdminCustomerEditAddressesSection.country}}" userInput="{{address.country}}" stepKey="selectCountry"/>
+        <selectOption selector="{{AdminCustomerEditAddressesSection.state}}" userInput="{{address.state}}" stepKey="selectState"/>
+        <fillField selector="{{AdminCustomerEditAddressesSection.zip}}" userInput="{{address.postcode}}" stepKey="fillZip"/>
+        <fillField selector="{{AdminCustomerEditAddressesSection.phoneNumber}}" userInput="{{address.telephone}}" stepKey="fillPhoneNumber"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="save"/>
+        <see userInput="You saved the customer." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

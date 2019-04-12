@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateNewCmsPageActionGroup">
+        <arguments>
+            <argument name="cmsPage" defaultValue="_defaultCmsPage"/>
+        </arguments>
+        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnCMSNewPage"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{cmsPage.title}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{cmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the page." stepKey="seeSaveSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="CreateNewPageWithWidgetWithCategoryCondition" extends="CreateNewCmsPageActionGroup">
+        <arguments>
+            <argument name="categoryId" type="string"/>
+            <argument name="conditionOperator" type="string" defaultValue="is"/>
+            <argument name="widgetType" type="string" defaultValue="Catalog Products List"/>
+        </arguments>
+        <click selector="{{CmsNewPagePageContentSection.header}}" after="fillFieldUrlKey" stepKey="clickExpandContent"/>
+        <click selector="{{CmsNewPagePageActionsSection.insertWidgetButton}}" after="clickExpandContent" stepKey="clickInsertWidgetButton"/>
+
+        <selectOption selector="{{AdminNewWidgetSection.widgetTypeDropDown}}" userInput="{{widgetType}}" after="clickInsertWidgetButton" stepKey="selectCatalogProductListOption"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.addNewCondition}}" after="selectCatalogProductListOption" stepKey="waitForConditionsElementBecomeAvailable"/>
+
+        <click selector="{{AdminNewWidgetSection.addNewCondition}}" after="waitForConditionsElementBecomeAvailable" stepKey="clickToAddCondition"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.selectCondition}}" after="clickToAddCondition" stepKey="waitForSelectBoxOpened"/>
+
+        <selectOption selector="{{AdminNewWidgetSection.selectCondition}}" userInput="Category" after="waitForSelectBoxOpened" stepKey="selectCategoryCondition"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.ruleParameter}}" after="selectCategoryCondition" stepKey="seeConditionsAdded"/>
+
+        <click selector="{{AdminNewWidgetSection.conditionOperator}}" after="seeConditionsAdded" stepKey="clickToConditionIs"/>
+        <selectOption selector="{{AdminNewWidgetSection.conditionOperatorSelect('1')}}" after="clickToConditionIs" userInput="{{conditionOperator}}" stepKey="selectOperator"/>
+
+        <click selector="{{AdminNewWidgetSection.ruleParameter}}" after="selectOperator" stepKey="clickAddConditionItem"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.setRuleParameter}}" after="clickAddConditionItem" stepKey="waitForConditionFieldOpened"/>
+
+        <fillField selector="{{AdminNewWidgetSection.setRuleParameter}}" userInput="{{categoryId}}" after="waitForConditionFieldOpened" stepKey="setCategoryId"/>
+        <click selector="{{AdminNewWidgetSection.insertWidget}}" after="setCategoryId" stepKey="clickInsertWidget"/>
+        <waitForElementVisible selector="{{AdminMainActionsSection.save}}" after="clickInsertWidget" stepKey="waitForInsertWidgetSaved"/>
+    </actionGroup>
+</actionGroups>

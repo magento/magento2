@@ -142,4 +142,17 @@
     <entity name="EmptyField" type="taxPostCodeEmpty">
         <data key="value"/>
     </entity>
+    <!--Tax Class for Shipping-->
+    <entity name="TaxClassForShippingConfig" type="tax_config_state">
+        <requiredEntity type="shipping_tax_class">ShippingTaxClassTaxableGoods</requiredEntity>
+    </entity>
+    <entity name="DefaultTaxClassForShippingConfig" type="tax_config_state">
+        <requiredEntity type="shipping_tax_class">ShippingTaxClassNone</requiredEntity>
+    </entity>
+    <entity name="ShippingTaxClassNone" type="shipping_tax_class">
+        <data key="value">0</data>
+    </entity>
+    <entity name="ShippingTaxClassTaxableGoods" type="shipping_tax_class">
+        <data key="value">2</data>
+    </entity>
 </entities>

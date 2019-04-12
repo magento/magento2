@@ -50,12 +50,12 @@ class UpdateItemQty extends Action
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      */
     public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item_id');
-        $itemQty = (int)$this->getRequest()->getParam('item_qty');
+        $itemQty = $this->getRequest()->getParam('item_qty');
 
         try {
             $this->sidebar->checkQuoteItem($itemId);

@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Cancel order that is in pending status-->
     <actionGroup name="cancelPendingOrder">
         <click selector="{{AdminOrderDetailsMainActionsSection.cancel}}" stepKey="clickCancelOrder"/>
@@ -16,6 +16,12 @@
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Canceled" stepKey="seeOrderStatusCanceled"/>
+    </actionGroup>
+
+    <!--Cancel order that is in processing status-->
+    <actionGroup name="CancelProcessingOrder" extends="cancelPendingOrder">
+        <remove keyForRemoval="seeOrderStatusCanceled"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" after="seeCancelSuccessMessage" userInput="{{CONST.orderStatusComplete}}" stepKey="seeOrderStatusComplete"/>
     </actionGroup>
 
     <!--Navigate to create order page (New Order -> Create New Customer)-->
@@ -60,30 +66,39 @@
     <actionGroup name="navigateToNewOrderPageExistingCustomer">
         <arguments>
             <argument name="customer"/>
+            <argument name="storeView" defaultValue="_defaultStore"/>
         </arguments>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
         <waitForPageLoad stepKey="waitForIndexPageLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
         <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewOrder"/>
         <waitForPageLoad stepKey="waitForCustomerGridLoad"/>
+        <!--Clear grid filters-->
+        <conditionalClick selector="{{AdminOrderCustomersGridSection.resetButton}}" dependentSelector="{{AdminOrderCustomersGridSection.resetButton}}" visible="true" stepKey="clearExistingCustomerFilters"/>
+        <waitForPageLoad stepKey="waitPageLoadAfterFilterReset"/>
         <fillField userInput="{{customer.email}}" selector="{{AdminOrderCustomersGridSection.emailFilter}}" stepKey="filterEmail"/>
         <click selector="{{AdminOrderCustomersGridSection.searchButton}}" stepKey="applyFilter"/>
         <waitForPageLoad stepKey="waitForFilteredCustomerGridLoad"/>
         <click selector="{{AdminOrderCustomersGridSection.firstRow}}" stepKey="clickOnCustomer"/>
-        <waitForPageLoad stepKey="waitForCreateOrderPageLoad" />
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoad"/>
+        <!-- Select store view if appears -->
+        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoadAfterStoreSelect"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
     </actionGroup>
     <!--Add a simple product to order-->
     <actionGroup name="addSimpleProductToOrder">
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
+            <argument name="quantity" type="string" defaultValue="1"/>
         </arguments>
+        <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductVisible"/>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilter"/>
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
         <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
-        <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="1" stepKey="fillProductQty"/>
+        <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="{{quantity}}" stepKey="fillProductQty"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
@@ -122,6 +137,35 @@
         <fillField selector="{{AdminOrderFormConfigureProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover"/>
     </actionGroup>
+    <!--Add bundle product to order -->
+    <actionGroup name="addBundleProductToOrder">
+        <arguments>
+            <argument name="product"/>
+            <argument name="quantity" type="string" defaultValue="1"/>
+        </arguments>
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterBundle"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchBundle"/>
+        <scrollToTopOfPage stepKey="scrollToTop1"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectBundleProduct"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForMask"/>
+        <waitForElementVisible selector="{{AdminOrderFormBundleProductSection.quantity}}" stepKey="waitForBundleOptionLoad"/>
+        <fillField selector="{{AdminOrderFormBundleProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
+        <scrollToTopOfPage stepKey="scrollToTop2"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+    </actionGroup>
+    <!--Add bundle product to order and check product price in the grid-->
+    <actionGroup name="addBundleProductToOrderAndCheckPriceInGrid" extends="addBundleProductToOrder">
+        <arguments>
+            <argument name="price" type="string"/>
+        </arguments>
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.rowPrice('1')}}" stepKey="grabProductPriceFromGrid" after="clickOk"/>
+        <assertEquals stepKey="assertProductPriceInGrid" message="Bundle product price in grid should be equal {{price}}" after="grabProductPriceFromGrid">
+            <expectedResult type="string">{{price}}</expectedResult>
+            <actualResult type="variable">grabProductPriceFromGrid</actualResult>
+        </assertEquals>
+    </actionGroup>
     <!--Fill customer billing address-->
     <actionGroup name="fillOrderCustomerInformation">
         <arguments>
@@ -136,6 +180,51 @@
         <selectOption selector="{{AdminOrderFormBillingAddressSection.state}}" userInput="{{address.state}}" stepKey="fillState"/>
         <fillField selector="{{AdminOrderFormBillingAddressSection.postalCode}}" userInput="{{address.postcode}}" stepKey="fillPostalCode"/>
         <fillField selector="{{AdminOrderFormBillingAddressSection.phone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
+    </actionGroup>
+    <!--Check customer billing address fields-->
+    <actionGroup name="CheckOrderCustomerBillingInformation">
+        <arguments>
+            <argument name="customer"/>
+            <argument name="address"/>
+        </arguments>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.firstName}}" userInput="{{customer.firstname}}" stepKey="checkFirstName"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.lastName}}" userInput="{{customer.lastname}}" stepKey="checkLastName"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.streetLine1}}" userInput="{{address.street[0]}}" stepKey="checkStreet"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.city}}" userInput="{{address.city}}" stepKey="checkCity"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.country}}" userInput="{{address.country_id}}" stepKey="checkCountry"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.state}}" userInput="{{address.state}}" stepKey="checkState"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.postalCode}}" userInput="{{address.postcode}}" stepKey="checkPostCode"/>
+        <seeInField selector="{{AdminOrderFormBillingAddressSection.phone}}" userInput="{{address.telephone}}" stepKey="checkTelephone"/>
+    </actionGroup>
+    <!--Fill customer shipping address-->
+    <actionGroup name="FillOrderCustomerShippingInformation">
+        <arguments>
+            <argument name="customer"/>
+            <argument name="address"/>
+        </arguments>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.firstName}}" userInput="{{customer.firstname}}" stepKey="fillFirstName"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.lastName}}" userInput="{{customer.lastname}}" stepKey="fillLastName"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.streetLine1}}" userInput="{{address.street[0]}}" stepKey="fillStreetLine1"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.city}}" userInput="{{address.city}}" stepKey="fillCity"/>
+        <selectOption selector="{{AdminOrderFormShippingAddressSection.country}}" userInput="{{address.country_id}}" stepKey="fillCountry"/>
+        <selectOption selector="{{AdminOrderFormShippingAddressSection.state}}" userInput="{{address.state}}" stepKey="fillState"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.postalCode}}" userInput="{{address.postcode}}" stepKey="fillPostalCode"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.phone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
+    </actionGroup>
+    <!--Check customer shipping address fields-->
+    <actionGroup name="CheckOrderCustomerShippingInformation">
+        <arguments>
+            <argument name="customer"/>
+            <argument name="address"/>
+        </arguments>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.firstName}}" userInput="{{customer.firstname}}" stepKey="checkFirstName"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.lastName}}" userInput="{{customer.lastname}}" stepKey="checkLastName"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.streetLine1}}" userInput="{{address.street[0]}}" stepKey="checkStreet"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.city}}" userInput="{{address.city}}" stepKey="checkCity"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.country}}" userInput="{{address.country_id}}" stepKey="checkCountry"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.state}}" userInput="{{address.state}}" stepKey="checkState"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.postalCode}}" userInput="{{address.postcode}}" stepKey="checkPostCode"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.phone}}" userInput="{{address.telephone}}" stepKey="checkTelephone"/>
     </actionGroup>
     <!--Select flat rate shipping method-->
     <actionGroup name="orderSelectFlatRateShipping">
@@ -165,6 +254,15 @@
         <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty"/>
     </actionGroup>
 
+    <!--Select free shipping method-->
+    <actionGroup name="orderSelectFreeShipping">
+        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
+        <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="waitForShippingOptions"/>
+        <selectOption selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" userInput="freeshipping_freeshipping" stepKey="checkFreeShipping"/>
+    </actionGroup>
+
     <!--Check that customer information is correct in order-->
     <actionGroup name="verifyBasicOrderInformation">
         <arguments>
@@ -192,5 +290,17 @@
             <argument name="product"/>
         </arguments>
         <see selector="{{AdminOrderItemsOrderedSection.productSkuColumn}}" userInput="{{product.sku}}" stepKey="seeSkuInItemsOrdered"/>
+    </actionGroup>
+
+    <!--Select Check Money payment method-->
+    <actionGroup name="SelectCheckMoneyPaymentMethod">
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" dependentSelector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" visible="true" stepKey="checkCheckMoneyOption"/>
+    </actionGroup>
+    <!--Submit order-->
+    <actionGroup name="SubmitOrderActionGroup">
+        <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="clickSubmitOrder"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." stepKey="seeOrderSuccessMessage"/>
     </actionGroup>
 </actionGroups>

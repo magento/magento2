@@ -8,6 +8,9 @@ namespace Magento\CatalogUrlRewrite\Model;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
 
+/**
+ * Class for generation category url_path.
+ */
 class CategoryUrlPathGenerator
 {
     /**
@@ -58,12 +61,13 @@ class CategoryUrlPathGenerator
     }
 
     /**
-     * Build category URL path
+     * Build category URL path.
      *
      * @param \Magento\Catalog\Api\Data\CategoryInterface|\Magento\Framework\Model\AbstractModel $category
+     * @param null|\Magento\Catalog\Api\Data\CategoryInterface|\Magento\Framework\Model\AbstractModel $parentCategory
      * @return string
      */
-    public function getUrlPath($category)
+    public function getUrlPath($category, $parentCategory = null)
     {
         if (in_array($category->getParentId(), [Category::ROOT_CATEGORY_ID, Category::TREE_ROOT_ID])) {
             return '';
@@ -77,15 +81,18 @@ class CategoryUrlPathGenerator
             return $category->getUrlPath();
         }
         if ($this->isNeedToGenerateUrlPathForParent($category)) {
-            $parentPath = $this->getUrlPath(
-                $this->categoryRepository->get($category->getParentId(), $category->getStoreId())
-            );
+            $parentCategory = $parentCategory ??
+                $this->categoryRepository->get($category->getParentId(), $category->getStoreId());
+            $parentPath = $this->getUrlPath($parentCategory);
             $path = $parentPath === '' ? $path : $parentPath . '/' . $path;
         }
+
         return $path;
     }
 
     /**
+     * Define whether we should generate URL path for parent.
+     *
      * @param \Magento\Catalog\Model\Category $category
      * @return bool
      */

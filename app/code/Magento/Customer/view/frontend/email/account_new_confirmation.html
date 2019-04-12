@@ -9,7 +9,9 @@
 "var this.getUrl($store, 'customer/account/confirm/', [_query:[id:$customer.id, key:$customer.confirmation, back_url:$back_url]])":"Account Confirmation URL",
 "var this.getUrl($store, 'customer/account/')":"Customer Account URL",
 "var customer.email":"Customer Email",
-"var customer.name":"Customer Name"
+"var customer.name":"Customer Name",
+"var extensions":"Extensions",
+"var url":"Url"
 } @-->
 
 {{template config_path="design/email/header_template"}}
@@ -23,7 +25,7 @@
             <table class="inner-wrapper" border="0" cellspacing="0" cellpadding="0" align="center">
                 <tr>
                     <td align="center">
-                        <a href="{{var this.getUrl($store,'customer/account/confirm/',[_query:[id:$customer.id,key:$customer.confirmation,back_url:$back_url],_nosid:1])}}" target="_blank">{{trans "Confirm Your Account"}}</a>
+                        <a href="{{var this.getUrl($store,$url,[_query:[id:$customer.id,key:$customer.confirmation,extensions:$extensions,back_url:$back_url],_nosid:1])}}" target="_blank">{{trans "Confirm Your Account"}}</a>
                     </td>
                 </tr>
             </table>

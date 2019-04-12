@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CreateConfigurationsWithVisualSwatch">
         <arguments>
             <argument name="attribute" defaultValue="VisualSwatchAttribute"/>
@@ -58,5 +58,14 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
         <click selector="{{AdminChooseAffectedAttributeSetSection.confirm}}" stepKey="clickOnConfirmInPopup"/>
         <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSaveProductMessage"/>
+    </actionGroup>
+    <actionGroup name="CreateConfigurationsWithVisualSwatchVisibleOnStorefront" extends="CreateConfigurationsWithVisualSwatch">
+        <click selector="{{AdminNewAttributePanelSection.storefrontPropertiesTab}}" after="fillDefaultStoreLabel2" stepKey="expandStorefrontPropertiesTab"/>
+        <selectOption selector="{{AdminNewAttributePanelSection.useInSearch}}" userInput="1" after="expandStorefrontPropertiesTab" stepKey="enableUseInSearch"/>
+        <selectOption selector="{{AdminNewAttributePanelSection.visibleInAdvancedSearch}}" userInput="1" after="enableUseInSearch" stepKey="enableVisibleInAdvancedSearch"/>
+        <selectOption selector="{{AdminNewAttributePanelSection.comparableOnStorefront}}" userInput="1" after="enableVisibleInAdvancedSearch" stepKey="enableComparableOnStorefront"/>
+        <selectOption selector="{{AdminNewAttributePanelSection.useInLayeredNavigation}}" userInput="1" after="enableComparableOnStorefront" stepKey="enableUseInLayeredNavigation"/>
+        <selectOption selector="{{AdminNewAttributePanelSection.visibleOnCatalogPagesOnStorefront}}" userInput="1" after="enableUseInLayeredNavigation" stepKey="enableVisibleOnCatalogPagesOnStorefront"/>
+        <selectOption selector="{{AdminNewAttributePanelSection.useInProductListing}}" userInput="1" after="enableVisibleOnCatalogPagesOnStorefront" stepKey="enableUseInProductListing"/>
     </actionGroup>
 </actionGroups>

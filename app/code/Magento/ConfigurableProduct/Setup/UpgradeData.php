@@ -7,11 +7,11 @@ namespace Magento\ConfigurableProduct\Setup;
 
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Upgrade Data script
@@ -47,19 +47,25 @@ class UpgradeData implements UpgradeDataInterface
 
         if (version_compare($context->getVersion(), '2.2.0') < 0) {
             $relatedProductTypes = $this->getRelatedProductTypes('tier_price', $eavSetup);
-            $key = array_search(Configurable::TYPE_CODE, $relatedProductTypes);
-            if ($key !== false) {
-                unset($relatedProductTypes[$key]);
-                $this->updateRelatedProductTypes('tier_price', $relatedProductTypes, $eavSetup);
+            if (!empty($relatedProductTypes)) {
+                $key = array_search(Configurable::TYPE_CODE, $relatedProductTypes);
+                if ($key !== false) {
+                    unset($relatedProductTypes[$key]);
+                    $this->updateRelatedProductTypes('tier_price', $relatedProductTypes, $eavSetup);
+                }
             }
         }
 
         if (version_compare($context->getVersion(), '2.2.1') < 0) {
             $relatedProductTypes = $this->getRelatedProductTypes('manufacturer', $eavSetup);
-            if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
+            if (!empty($relatedProductTypes) && !in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
                 $relatedProductTypes[] = Configurable::TYPE_CODE;
                 $this->updateRelatedProductTypes('manufacturer', $relatedProductTypes, $eavSetup);
             }
+        }
+
+        if (version_compare($context->getVersion(), '2.2.2', '<')) {
+            $this->upgradeQuoteItemPrice($setup);
         }
 
         $setup->endSetup();
@@ -74,10 +80,17 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function getRelatedProductTypes(string $attributeId, EavSetup $eavSetup)
     {
-        return explode(
-            ',',
-            $eavSetup->getAttribute(Product::ENTITY, $attributeId, 'apply_to')
-        );
+        if ($attribute = $eavSetup->getAttribute(
+            Product::ENTITY,
+            $attributeId,
+            'apply_to'
+        )) {
+            return explode(
+                ',',
+                $attribute
+            );
+        }
+        return [];
     }
 
     /**
@@ -96,5 +109,33 @@ class UpgradeData implements UpgradeDataInterface
             'apply_to',
             implode(',', $relatedProductTypes)
         );
+    }
+
+    /**
+     * Update 'price' value for quote items without price of configurable products subproducts.
+     *
+     * @param ModuleDataSetupInterface $setup
+     */
+    private function upgradeQuoteItemPrice(ModuleDataSetupInterface $setup)
+    {
+        $connectionName = 'checkout';
+        $connection = $setup->getConnection($connectionName);
+        $quoteItemTable = $setup->getTable('quote_item', $connectionName);
+
+        $select = $connection->select();
+        $select->joinLeft(
+            ['qi2' => $quoteItemTable],
+            'qi1.parent_item_id = qi2.item_id',
+            ['price']
+        )->where(
+            'qi1.price = 0'
+            . ' AND qi1.parent_item_id IS NOT NULL'
+            . ' AND qi2.product_type = "' . Configurable::TYPE_CODE . '"'
+        );
+        $updateQuoteItem = $connection->updateFromSelect(
+            $select,
+            ['qi1' => $quoteItemTable]
+        );
+        $connection->query($updateQuoteItem);
     }
 }
