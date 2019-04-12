@@ -11,7 +11,12 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\ResourceModel\Order\Item\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Sales\Api\Data\OrderItemSearchResultInterface;
 
 /**
  * Test class for \Magento\Sales\Model\Order
@@ -87,6 +92,16 @@ class OrderTest extends \PHPUnit\Framework\TestCase
      */
     private $timezone;
 
+    /**
+     * @var OrderItemRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $itemRepository;
+
+    /**
+     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $searchCriteriaBuilder;
+
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -117,8 +132,6 @@ class OrderTest extends \PHPUnit\Framework\TestCase
                 'getQuoteItemId',
                 'getLockedDoInvoice',
                 'getProductId',
-                'getQtyRefunded',
-                'getQtyInvoiced',
             ]);
         $this->salesOrderCollectionMock = $this->getMockBuilder(
             \Magento\Sales\Model\ResourceModel\Order\Collection::class
@@ -146,6 +159,15 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->eventManager = $this->createMock(\Magento\Framework\Event\Manager::class);
         $context = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
         $context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventManager);
+
+        $this->itemRepository = $this->getMockBuilder(OrderItemRepositoryInterface::class)
+            ->setMethods(['getList'])
+            ->disableOriginalConstructor()->getMockForAbstractClass();
+
+        $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
+            ->setMethods(['addFilter', 'create'])
+            ->disableOriginalConstructor()->getMockForAbstractClass();
+
         $this->order = $helper->getObject(
             \Magento\Sales\Model\Order::class,
             [
@@ -159,37 +181,80 @@ class OrderTest extends \PHPUnit\Framework\TestCase
                 'productListFactory' => $this->productCollectionFactoryMock,
                 'localeResolver' => $this->localeResolver,
                 'timezone' => $this->timezone,
+                'itemRepository' => $this->itemRepository,
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilder
             ]
         );
     }
 
+    /**
+     * Test testGetItems method.
+     */
+    public function testGetItems()
+    {
+        $orderItems = [$this->item];
+
+        $this->searchCriteriaBuilder->expects($this->once())->method('addFilter')->willReturnSelf();
+
+        $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
+            ->disableOriginalConstructor()->getMockForAbstractClass();
+        $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteria);
+
+        $itemsCollection = $this->getMockBuilder(OrderItemSearchResultInterface::class)
+            ->setMethods(['getItems'])
+            ->disableOriginalConstructor()->getMockForAbstractClass();
+        $itemsCollection->expects($this->once())->method('getItems')->willReturn($orderItems);
+        $this->itemRepository->expects($this->once())->method('getList')->willReturn($itemsCollection);
+
+        $this->assertEquals($orderItems, $this->order->getItems());
+    }
+
+    /**
+     * Prepare order item mock.
+     *
+     * @param int $orderId
+     * @return void
+     */
+    private function prepareOrderItem(int $orderId = 0)
+    {
+        $this->order->setData(
+            \Magento\Sales\Api\Data\OrderInterface::ITEMS,
+            [
+                $orderId => $this->item
+            ]
+        );
+    }
+
+    /**
+     * Test GetItemById method.
+     *
+     * @return void
+     */
     public function testGetItemById()
     {
         $realOrderItemId = 1;
         $fakeOrderItemId = 2;
 
-        $orderItem = $this->createMock(\Magento\Sales\Model\Order\Item::class);
+        $this->prepareOrderItem($realOrderItemId);
 
-        $this->order->setData(
-            \Magento\Sales\Api\Data\OrderInterface::ITEMS,
-            [
-                $realOrderItemId => $orderItem
-            ]
-        );
-
-        $this->assertEquals($orderItem, $this->order->getItemById($realOrderItemId));
+        $this->assertEquals($this->item, $this->order->getItemById($realOrderItemId));
         $this->assertEquals(null, $this->order->getItemById($fakeOrderItemId));
     }
 
     /**
+     * Test GetItemByQuoteItemId method.
+     *
      * @param int|null $gettingQuoteItemId
      * @param int|null $quoteItemId
      * @param string|null $result
      *
      * @dataProvider dataProviderGetItemByQuoteItemId
+     * @return void
      */
     public function testGetItemByQuoteItemId($gettingQuoteItemId, $quoteItemId, $result)
     {
+        $this->prepareOrderItem();
+
         $this->item->expects($this->any())
             ->method('getQuoteItemId')
             ->willReturn($gettingQuoteItemId);
@@ -214,14 +279,19 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test getAllVisibleItems method.
+     *
      * @param bool $isDeleted
      * @param int|null $parentItemId
      * @param array $result
      *
      * @dataProvider dataProviderGetAllVisibleItems
+     * @return void
      */
     public function testGetAllVisibleItems($isDeleted, $parentItemId, array $result)
     {
+        $this->prepareOrderItem();
+
         $this->item->expects($this->once())
             ->method('isDeleted')
             ->willReturn($isDeleted);
@@ -265,8 +335,15 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->order->canCancel());
     }
 
+    /**
+     * Test CanInvoice method.
+     *
+     * @return void
+     */
     public function testCanInvoice()
     {
+        $this->prepareOrderItem();
+
         $this->item->expects($this->any())
             ->method('getQtyToInvoice')
             ->willReturn(42);
@@ -306,8 +383,15 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->order->canInvoice());
     }
 
+    /**
+     * Test CanNotInvoice method when invoice is locked.
+     *
+     * @return void
+     */
     public function testCanNotInvoiceWhenLockedInvoice()
     {
+        $this->prepareOrderItem();
+
         $this->item->expects($this->any())
             ->method('getQtyToInvoice')
             ->willReturn(42);
@@ -317,8 +401,15 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->order->canInvoice());
     }
 
+    /**
+     * Test CanNotInvoice method when didn't have qty to invoice.
+     *
+     * @return void
+     */
     public function testCanNotInvoiceWhenDidNotHaveQtyToInvoice()
     {
+        $this->prepareOrderItem();
+
         $this->item->expects($this->any())
             ->method('getQtyToInvoice')
             ->willReturn(0);
@@ -331,29 +422,16 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     public function testCanCreditMemo()
     {
         $totalPaid = 10;
+        $this->prepareOrderItem();
         $this->order->setTotalPaid($totalPaid);
         $this->priceCurrency->expects($this->once())->method('round')->with($totalPaid)->willReturnArgument(0);
         $this->assertTrue($this->order->canCreditmemo());
     }
 
-    /**
-     * Test canCreditMemo method when grand total and paid total are zero.
-     *
-     * @return void
-     */
-    public function testCanCreditMemoForZeroTotal()
-    {
-        $grandTotal = 0;
-        $totalPaid = 0;
-        $totalRefunded = 0;
-        $this->order->setGrandTotal($grandTotal);
-        $this->order->setTotalPaid($totalPaid);
-        $this->assertFalse($this->order->canCreditmemoForZeroTotal($totalRefunded));
-    }
-
     public function testCanNotCreditMemoWithTotalNull()
     {
         $totalPaid = 0;
+        $this->prepareOrderItem();
         $this->order->setTotalPaid($totalPaid);
         $this->priceCurrency->expects($this->once())->method('round')->with($totalPaid)->willReturnArgument(0);
         $this->assertFalse($this->order->canCreditmemo());
@@ -365,6 +443,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $adjustmentNegative = 10;
         $totalRefunded = 90;
 
+        $this->prepareOrderItem();
         $this->order->setTotalPaid($totalPaid);
         $this->order->setTotalRefunded($totalRefunded);
         $this->order->setAdjustmentNegative($adjustmentNegative);
@@ -379,6 +458,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $adjustmentNegative = 9;
         $totalRefunded = 90;
 
+        $this->prepareOrderItem();
         $this->order->setTotalPaid($totalPaid);
         $this->order->setTotalRefunded($totalRefunded);
         $this->order->setAdjustmentNegative($adjustmentNegative);
@@ -603,8 +683,15 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->order->canCancel());
     }
 
+    /**
+     * Test CanCancelAllInvoiced method.
+     *
+     * @return void
+     */
     public function testCanCancelAllInvoiced()
     {
+        $this->prepareOrderItem();
+
         $paymentMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Payment::class)
             ->disableOriginalConstructor()
             ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo', '__wakeUp'])
@@ -638,163 +725,6 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->item->expects($this->any())
             ->method('getQtyToInvoice')
             ->willReturn(0);
-        $this->item->expects($this->any())
-            ->method('getQtyRefunded')
-            ->willReturn(0);
-        $this->item->expects($this->any())
-            ->method('getQtyInvoiced')
-            ->willReturn(1);
-
-        $this->assertFalse($this->order->canCancel());
-    }
-
-    public function testCanCancelAllRefunded()
-    {
-        $paymentMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Payment::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo', '__wakeUp'])
-            ->getMock();
-        $paymentMock->expects($this->any())
-            ->method('canReviewPayment')
-            ->will($this->returnValue(false));
-        $paymentMock->expects($this->any())
-            ->method('canFetchTransactionInfo')
-            ->will($this->returnValue(false));
-        $collectionMock = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Item\Collection::class,
-            ['getItems', 'setOrderFilter']
-        );
-        $this->orderItemCollectionFactoryMock->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->any())
-            ->method('setOrderFilter')
-            ->willReturnSelf();
-        $this->preparePaymentMock($paymentMock);
-
-        $this->prepareItemMock(0);
-
-        $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD, false);
-        $this->order->setState(\Magento\Sales\Model\Order::STATE_NEW);
-
-        $this->item->expects($this->any())
-            ->method('isDeleted')
-            ->willReturn(false);
-        $this->item->expects($this->any())
-            ->method('getQtyToInvoice')
-            ->willReturn(0);
-        $this->item->expects($this->any())
-            ->method('getQtyRefunded')
-            ->willReturn(10);
-        $this->item->expects($this->any())
-            ->method('getQtyInvoiced')
-            ->willReturn(10);
-
-        $this->assertTrue($this->order->canCancel());
-    }
-
-    /**
-     * Test that order can be canceled if some items were partially invoiced with certain qty
-     * and then refunded for this qty.
-     * Sample:
-     * - ordered qty = 20
-     * - invoiced = 10
-     * - refunded = 10
-     */
-    public function testCanCancelPartiallyInvoicedAndRefunded()
-    {
-        $paymentMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Payment::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo', '__wakeUp'])
-            ->getMock();
-        $paymentMock->expects($this->any())
-            ->method('canReviewPayment')
-            ->will($this->returnValue(false));
-        $paymentMock->expects($this->any())
-            ->method('canFetchTransactionInfo')
-            ->will($this->returnValue(false));
-        $collectionMock = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Item\Collection::class,
-            ['getItems', 'setOrderFilter']
-        );
-        $this->orderItemCollectionFactoryMock->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->any())
-            ->method('setOrderFilter')
-            ->willReturnSelf();
-        $this->preparePaymentMock($paymentMock);
-
-        $this->prepareItemMock(0);
-
-        $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD, false);
-        $this->order->setState(\Magento\Sales\Model\Order::STATE_NEW);
-
-        $this->item->expects($this->any())
-            ->method('isDeleted')
-            ->willReturn(false);
-        $this->item->expects($this->any())
-            ->method('getQtyToInvoice')
-            ->willReturn(10);
-        $this->item->expects($this->any())
-            ->method('getQtyRefunded')
-            ->willReturn(10);
-        $this->item->expects($this->any())
-            ->method('getQtyInvoiced')
-            ->willReturn(10);
-
-        $this->assertTrue($this->order->canCancel());
-    }
-
-    /**
-     * Test that order CAN NOT be canceled if some items were partially invoiced with certain qty
-     * and then refunded for less than that qty.
-     * Sample:
-     * - ordered qty = 10
-     * - invoiced = 10
-     * - refunded = 5
-     */
-    public function testCanCancelPartiallyInvoicedAndNotFullyRefunded()
-    {
-        $paymentMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Payment::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo', '__wakeUp'])
-            ->getMock();
-        $paymentMock->expects($this->any())
-            ->method('canReviewPayment')
-            ->will($this->returnValue(false));
-        $paymentMock->expects($this->any())
-            ->method('canFetchTransactionInfo')
-            ->will($this->returnValue(false));
-        $collectionMock = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Item\Collection::class,
-            ['getItems', 'setOrderFilter']
-        );
-        $this->orderItemCollectionFactoryMock->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->any())
-            ->method('setOrderFilter')
-            ->willReturnSelf();
-        $this->preparePaymentMock($paymentMock);
-
-        $this->prepareItemMock(0);
-
-        $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD, false);
-        $this->order->setState(\Magento\Sales\Model\Order::STATE_NEW);
-
-        $this->item->expects($this->any())
-            ->method('isDeleted')
-            ->willReturn(false);
-        $this->item->expects($this->any())
-            ->method('getQtyToInvoice')
-            ->willReturn(0);
-        $this->item->expects($this->any())
-            ->method('getQtyRefunded')
-            ->willReturn(5);
-        $this->item->expects($this->any())
-            ->method('getQtyInvoiced')
-            ->willReturn(10);
 
         $this->assertFalse($this->order->canCancel());
     }
@@ -821,11 +751,16 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test CanCancelActionFlag method.
+     *
      * @param bool $cancelActionFlag
      * @dataProvider dataProviderActionFlag
+     * @return void
      */
     public function testCanCancelActionFlag($cancelActionFlag)
     {
+        $this->prepareOrderItem();
+
         $paymentMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Payment::class)
             ->disableOriginalConstructor()
             ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo', '__wakeUp'])
@@ -1258,9 +1193,6 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->order->getCreatedAtFormatted(\IntlDateFormatter::SHORT);
     }
 
-    /**
-     * @return array
-     */
     public function notInvoicingStatesProvider()
     {
         return [
@@ -1270,9 +1202,6 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return array
-     */
     public function canNotCreditMemoStatesProvider()
     {
         return [

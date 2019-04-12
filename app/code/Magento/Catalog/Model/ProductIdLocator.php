@@ -38,22 +38,42 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
     private $idsBySku = [];
 
     /**
+     * Batch size to iterate collection
+     *
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
-     * @param string $limitIdsBySkuValues
+     * @param string $idsLimit
+     * @param int $batchSize defines how many items can be processed by one iteration
      */
     public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
-        $idsLimit
+        $idsLimit,
+        int $batchSize = 5000
     ) {
         $this->metadataPool = $metadataPool;
         $this->collectionFactory = $collectionFactory;
         $this->idsLimit = (int)$idsLimit;
+        $this->batchSize = $batchSize;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * Load product items by provided products SKUs.
+     * Products collection will be iterated by pages with the $this->batchSize as a page size (for a cases when to many
+     * products SKUs were provided in parameters.
+     * Loaded products will be chached in the $this->idsBySku variable, but in the end of the method these storage will
+     * be truncated to $idsLimit quantity.
+     * As a result array with the products data will be returned with the following scheme:
+     * $data['product_sku']['link_field_value' => 'product_type']
+     *
+     * @throws \Exception
      */
     public function retrieveProductIdsBySkus(array $skus)
     {
@@ -72,8 +92,16 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
             $linkField = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
                 ->getLinkField();
 
-            foreach ($collection as $item) {
-                $this->idsBySku[strtolower(trim($item->getSku()))][$item->getData($linkField)] = $item->getTypeId();
+            $collection->setPageSize($this->batchSize);
+            $pages = $collection->getLastPageNumber();
+            for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
+                $collection->setCurPage($currentPage);
+                foreach ($collection->getItems() as $item) {
+                    $sku = strtolower(trim($item->getSku()));
+                    $itemIdentifier = $item->getData($linkField);
+                    $this->idsBySku[$sku][$itemIdentifier] = $item->getTypeId();
+                }
+                $collection->clear();
             }
         }
 

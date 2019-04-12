@@ -5,14 +5,14 @@
 <h2>Welcome</h2>
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting-edge, feature-rich eCommerce solution that gets results.
 
-## Magento system requirements
-[Magento system requirements](https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements2.html).
+## Magento System Requirements
+[Magento System Requirements](https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements.html).
 
 ## Install Magento
 
-*	[Installation guide](https://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html).
+*	[Installation Guide](https://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html).
 
-<h2>Contributing to the Magento 2 code base</h2>
+<h2>Contributing to the Magento 2 Code Base</h2>
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
 
 To learn about how to make a contribution, click [here][1].
@@ -39,17 +39,17 @@ Magento is thankful for any contribution that can improve our code base, documen
     <img src="https://raw.githubusercontent.com/wiki/magento/magento2/images/contributors.png"/>
 </a>
 
-<h3>Labels applied by the Magento team</h3>
-We apply labels to public Pull Requests and Issues to help other participants retrieve additional information about current progress, component assignments, Magento release lines, and much more. 
-Please review the <a href="https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#labels">Code Contributions guide</a> for detailed information on labels used in Magento 2 repositories.
+### Labels Applied by the Magento Team
+We apply labels to public Pull Requests and Issues to help other participants retrieve additional information about current progress, component assignments, Magento release lines, and much more.
+Please review the [Code Contributions guide](https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#labels) for detailed information on labels used in Magento 2 repositories.
 
-<h2>Reporting security issues</h2>
+## Reporting Security Issues
 
-To report security vulnerabilities in Magento software or web sites, please create a Bugcrowd researcher account <a href="https://bugcrowd.com/magento">there</a> to submit and follow-up your issue. Learn more about reporting security issues <a href="https://magento.com/security/reporting-magento-security-issue">here</a>.
+To report security vulnerabilities in Magento software or web sites, please create a Bugcrowd researcher account [there](https://bugcrowd.com/magento) to submit and follow-up your issue. Learn more about reporting security issues [here](https://magento.com/security/reporting-magento-security-issue).
 
-Stay up-to-date on the latest security news and patches for Magento by signing up for <a href="https://magento.com/security/sign-up">Security Alert Notifications</a>.
+Stay up-to-date on the latest security news and patches for Magento by signing up for [Security Alert Notifications](https://magento.com/security/sign-up).
 
-<h2>License</h2>
+## License
 
 Each Magento source file included in this distribution is licensed under OSL 3.0 or the Magento Enterprise Edition (MEE) license.
 
@@ -59,3 +59,13 @@ Please see [LICENSE.txt](https://github.com/magento/magento2/blob/2.3-develop/LI
 Subject to Licensee's payment of fees and compliance with the terms and conditions of the MEE License, the MEE License supersedes the OSL 3.0 license for each source file.
 Please see LICENSE_EE.txt for the full text of the MEE License or visit https://magento.com/legal/terms/enterprise.
 
+## Community Engineering Slack
+
+To connect with Magento and the Community, join us on the [Magento Community Engineering Slack](https://magentocommeng.slack.com). If you are interested in joining Slack, or a specific channel, send us request at [engcom@adobe.com](mailto:engcom@adobe.com) or [self signup](https://tinyurl.com/engcom-slack).
+
+
+We have channels for each project. These channels are recommended for new members:
+
+- [general](https://magentocommeng.slack.com/messages/C4YS78WE6): Open chat for introductions and Magento 2 questions
+- [github](https://magentocommeng.slack.com/messages/C7KB93M32): Support for GitHub issues, pull requests, and processes
+- [public-backlog](https://magentocommeng.slack.com/messages/CCV3J3RV5): Discussions of the Magento 2 backlog
