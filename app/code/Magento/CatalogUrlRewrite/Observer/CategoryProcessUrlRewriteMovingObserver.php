@@ -74,8 +74,8 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
         UrlRewriteBunchReplacer $urlRewriteBunchReplacer,
         DatabaseMapPool $databaseMapPool,
         $dataUrlRewriteClassNames = [
-        DataCategoryUrlRewriteDatabaseMap::class,
-        DataProductUrlRewriteDatabaseMap::class
+            DataCategoryUrlRewriteDatabaseMap::class,
+            DataProductUrlRewriteDatabaseMap::class
         ]
     ) {
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
@@ -105,8 +105,12 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
             $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category, true);
             $this->urlRewriteHandler->deleteCategoryRewritesForChildren($category);
             $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
-            $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
-            $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
+
+            if ($this->isCategoryRewritesEnabled($category->getStoreId())) {
+                $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
+                $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
+            }
+
             //frees memory for maps that are self-initialized in multiple classes that were called by the generators
             $this->resetUrlRewritesDataMaps($category);
         }
@@ -123,5 +127,21 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
         foreach ($this->dataUrlRewriteClassNames as $className) {
             $this->databaseMapPool->resetMap($className, $category->getEntityId());
         }
+    }
+
+
+    /**
+     * Check config value of generate_rewrites_on_save
+     *
+     * @param int $storeId
+     * @return bool
+     */
+    private function isCategoryRewritesEnabled($storeId)
+    {
+        return (bool)$this->scopeConfig->getValue(
+            'catalog/seo/generate_rewrites_on_save',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 }
