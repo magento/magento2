@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginWithCaptchaTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="Admin login + Captcha"/>
+            <title value="Captcha on Admin login form"/>
+            <description value="Test creation for admin login with captcha."/>
+            <testCaseId value="MC-14012" />
+            <severity value="MAJOR"/>
+            <group value="captcha"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set {{AdminCaptchaLength3ConfigData.path}} {{AdminCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength" />
+            <magentoCLI command="config:set {{AdminCaptchaSymbols1ConfigData.path}} {{AdminCaptchaSymbols1ConfigData.value}}" stepKey="setCaptchaSymbols" />
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{AdminCaptchaDefaultLengthConfigData.path}} {{AdminCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength" />
+            <magentoCLI command="config:set {{AdminCaptchaDefaultSymbolsConfigData.path}} {{AdminCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+        </after>
+        
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminWithWrongCredentialsFirstAttempt">
+            <argument name="adminUser" value="AdminUserWrongCredentials" />
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeFirstLoginErrorMessage" />
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminWithWrongCredentialsSecondAttempt">
+            <argument name="adminUser" value="AdminUserWrongCredentials" />
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeSecondLoginErrorMessage" />
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminWithWrongCredentialsThirdAttempt">
+            <argument name="adminUser" value="AdminUserWrongCredentials" />
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeThirdLoginErrorMessage" />
+
+        <!-- Check captcha visibility on admin login page  -->
+        <actionGroup ref="AssertCaptchaVisibleOnAdminLoginFormActionGroup" stepKey="assertCaptchaVisible" />
+
+        <!-- Submit form with incorrect captcha -->
+        <actionGroup ref="AdminLoginWithCaptchaActionGroup" stepKey="loginAsAdminWithIncorrectCaptcha">
+            <argument name="adminUser" value="DefaultAdminUser" />
+            <argument name="captcha" value="{{WrongCaptcha.value}}" />
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeIncorrectCaptchaErrorMessage">
+            <argument name="message" value="Incorrect CAPTCHA." />
+        </actionGroup>
+        <actionGroup ref="AssertCaptchaVisibleOnAdminLoginFormActionGroup" stepKey="assertCaptchaVisibleAfterIncorrectCaptcha" />
+
+        <actionGroup ref="AdminLoginWithCaptchaActionGroup" stepKey="loginAsAdminWithCorrectCaptcha">
+            <argument name="adminUser" value="DefaultAdminUser" />
+            <argument name="captcha" value="{{PreconfiguredCaptcha.value}}" />
+        </actionGroup>
+        <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="verifyAdminLoggedIn" />
+    </test>
+</tests>
