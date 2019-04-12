@@ -128,6 +128,34 @@ class MetaTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->meta, $this->resource->loadByEntityTypeAndStore($entityType, $storeId));
     }
 
+    public function testGetIdsByStore()
+    {
+        $metaTableName = 'sequence_meta';
+        $metaIdFieldName = 'meta_id';
+        $storeId = 1;
+        $metaIds = [1, 2];
+        $this->resourceMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+        $this->resourceMock->expects($this->once())
+            ->method('getTableName')
+            ->willReturn($metaTableName);
+        $this->connectionMock->expects($this->any())->method('select')->willReturn($this->select);
+        $this->select->expects($this->at(0))
+            ->method('from')
+            ->with($metaTableName, [$metaIdFieldName])
+            ->willReturn($this->select);
+        $this->select->expects($this->at(1))
+            ->method('where')
+            ->with('store_id = :store_id')
+            ->willReturn($this->select);
+        $this->connectionMock->expects($this->once())
+            ->method('fetchCol')
+            ->with($this->select, ['store_id' => $storeId])
+            ->willReturn($metaIds);
+        $this->assertEquals($metaIds, $this->resource->getIdsByStore($storeId));
+    }
+
     /**
      * @param $metaData
      */

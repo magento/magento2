@@ -129,4 +129,32 @@ class ProfileTest extends \PHPUnit\Framework\TestCase
         $this->profile->expects($this->at(1))->method('setData')->with($profileData);
         $this->assertEquals($this->profile, $this->resource->loadActiveProfile($metaId));
     }
+
+    public function testGetProfileIdsByMetadataIds()
+    {
+        $profileTableName = 'sequence_profile';
+        $profileIdFieldName = 'profile_id';
+        $metadataIds = [1, 2];
+        $profileIds = [10, 11];
+        $this->resourceMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+        $this->resourceMock->expects($this->once())
+            ->method('getTableName')
+            ->willReturn($profileTableName);
+        $this->connectionMock->expects($this->any())->method('select')->willReturn($this->select);
+        $this->select->expects($this->at(0))
+            ->method('from')
+            ->with($profileTableName, [$profileIdFieldName])
+            ->willReturn($this->select);
+        $this->select->expects($this->at(1))
+            ->method('where')
+            ->with('meta_id IN (?)', $metadataIds)
+            ->willReturn($this->select);
+        $this->connectionMock->expects($this->once())
+            ->method('fetchCol')
+            ->with($this->select)
+            ->willReturn($profileIds);
+        $this->assertEquals($profileIds, $this->resource->getProfileIdsByMetadataIds($metadataIds));
+    }
 }
