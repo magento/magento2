@@ -1528,6 +1528,7 @@ XMLAuth;
             $shippingLabelContent = (string)$response->ShipmentResults->PackageResults->LabelImage->GraphicImage;
             $trackingNumber = (string)$response->ShipmentResults->PackageResults->TrackingNumber;
 
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $result->setShippingLabelContent(base64_decode($shippingLabelContent));
             $result->setTrackingNumber($trackingNumber);
         }
