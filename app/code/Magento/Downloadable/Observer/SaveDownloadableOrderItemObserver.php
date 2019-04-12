@@ -9,6 +9,8 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
+ * Saves data from order to purchased links.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveDownloadableOrderItemObserver implements ObserverInterface
@@ -159,7 +161,7 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
                             \Magento\Sales\Model\Order\Item::STATUS_PENDING == $orderStatusToEnableItem ?
                             \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_AVAILABLE :
                             \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PENDING
-                       )->setCreatedAt(
+                        )->setCreatedAt(
                             $orderItem->getCreatedAt()
                         )->setUpdatedAt(
                             $orderItem->getUpdatedAt()
@@ -173,6 +175,8 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
     }
 
     /**
+     * Create purchased model.
+     *
      * @return \Magento\Downloadable\Model\Link\Purchased
      */
     protected function _createPurchasedModel()
@@ -181,6 +185,8 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
     }
 
     /**
+     * Create product model.
+     *
      * @return \Magento\Catalog\Model\Product
      */
     protected function _createProductModel()
@@ -189,6 +195,8 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
     }
 
     /**
+     * Create purchased item model.
+     *
      * @return \Magento\Downloadable\Model\Link\Purchased\Item
      */
     protected function _createPurchasedItemModel()
@@ -197,6 +205,8 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
     }
 
     /**
+     * Create items collection.
+     *
      * @return \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection
      */
     protected function _createItemsCollection()
