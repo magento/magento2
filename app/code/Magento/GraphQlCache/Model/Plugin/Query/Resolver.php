@@ -56,7 +56,7 @@ class Resolver
         array $args = null
     ) {
         /** Only if array @see \Magento\Framework\GraphQl\Query\Resolver\Value */
-        if (is_array($resolvedValue)) {
+        if (is_array($resolvedValue) && !empty($field->getCache())) {
             $this->cacheableQueryHandler->handleCacheFromResolverResponse($resolvedValue, $field);
         } elseif ($resolvedValue instanceof \Magento\Framework\GraphQl\Query\Resolver\Value) {
             $resolvedValue->then(function () use ($resolvedValue, $field) {

@@ -55,6 +55,7 @@ class Page
         $renderedContent = $this->widgetFilter->filter($page->getContent());
 
         $pageData = [
+            PageInterface::PAGE_ID => $page->getId(),
             'url_key' => $page->getIdentifier(),
             PageInterface::TITLE => $page->getTitle(),
             PageInterface::CONTENT => $renderedContent,
