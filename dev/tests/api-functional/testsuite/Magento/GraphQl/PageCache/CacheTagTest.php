@@ -10,6 +10,7 @@ namespace Magento\GraphQl\PageCache;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Deploy\Model\Mode;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\App\State;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -18,16 +19,18 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class CacheTagTest extends GraphQlAbstract
 {
     /**
-     * @var \Magento\Framework\App\State
-     */
-    protected $state;
-
-    /**
-     * Tests various use cases for built-in cache for graphql query
+     * Tests if Magento cache tags and debug headers for products are generated properly
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
      */
     public function testCacheTagsAndCacheDebugHeaderFromResponse()
     {
+        $this->markTestSkipped(
+            'This test will stay skipped until DEVOPS-4924 is resolved'
+        );
+        /** @var State $state */
+        $state = Bootstrap::getObjectManager()->get(State::class);
+        $state->setMode(State::MODE_DEVELOPER);
+
         $productSku='simple2';
         $query
             = <<<QUERY
@@ -42,6 +45,7 @@ class CacheTagTest extends GraphQlAbstract
            }
        }
 QUERY;
+
 
         /** cache-debug should be a MISS when product is queried for first time */
        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($query, [], '', []);
@@ -60,7 +64,7 @@ QUERY;
         /** update the price attribute for the product in test */
         $product->setPrice(15);
         $product->save();
-        /** cache-debug header value should be a MISS after product attribute update */
+        /** Cache invalidation happens and cache-debug header value is a MISS after product update */
         $responseMissHeaders = $this->graphQlQueryForHttpHeaders($query, [], '', []);
         preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseMissHeaders, $matchesMiss);
         $this->assertEquals('MISS', rtrim($matchesMiss[1],"\r"));
@@ -82,6 +86,9 @@ QUERY;
      */
     public function testCacheTagFromResponseHeaderForCategoriesWithProduct()
     {
+        $this->markTestSkipped(
+            'This test will stay skipped until DEVOPS-4924 is resolved'
+        );
         $productSku = 'simple333';
         $categoryId ='333';
         $query
