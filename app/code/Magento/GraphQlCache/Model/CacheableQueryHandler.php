@@ -64,21 +64,16 @@ class CacheableQueryHandler
 
         $cacheTags = [];
         if ($cacheTag && $this->request->isGet()) {
+            $cacheTags[] = $cacheTag;
             if (!empty($cacheIdentityResolverClass)) {
                 $cacheIdentityResolver = $this->identityResolverPool->get($cacheIdentityResolverClass);
                 $cacheTagIds = $cacheIdentityResolver->getIdentifiers($resolvedValue);
                 if (!empty($cacheTagIds)) {
-                    $cacheTags = array_map(
-                        function ($id) use ($cacheTag) {
-                            return $cacheTag . '_' . $id;
-                        },
-                        $cacheTagIds
-                    );
+                    foreach ($cacheTagIds as $cacheTagId) {
+                        $cacheTags[] = $cacheTag . '_' . $cacheTagId;
+                    }
                 }
-            } else {
-                $cacheTags[] = $cacheTag;
             }
-
             $this->cacheableQuery->addCacheTags($cacheTags);
         }
         $this->setCacheValidity($cacheable);
