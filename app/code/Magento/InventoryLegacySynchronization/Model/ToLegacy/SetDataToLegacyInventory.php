@@ -14,6 +14,7 @@ use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkus;
+use Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer;
 use Magento\InventoryLegacySynchronization\Model\GetLegacyStockItemsByProductIds;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryLegacySynchronization\Model\ResourceModel\UpdateLegacyStockItemsData;
@@ -54,9 +55,15 @@ class SetDataToLegacyInventory
     private $updateLegacyStockItemsData;
 
     /**
+     * @var SourceItemIndexer
+     */
+    private $sourceItemIndexer;
+
+    /**
      * @param UpdateLegacyStockItemsData $updateLegacyStockItemsData
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param GetLegacyStockItemsByProductIds $getLegacyStockItemsByProductIds
+     * @param SourceItemIndexer $sourceItemIndexer
      * @param StockStateProviderInterface $stockStateProvider
      * @param Processor $indexerProcessor
      * @param ProductResourceModel $productResourceModel
@@ -66,6 +73,7 @@ class SetDataToLegacyInventory
         UpdateLegacyStockItemsData $updateLegacyStockItemsData,
         DefaultSourceProviderInterface $defaultSourceProvider,
         GetLegacyStockItemsByProductIds $getLegacyStockItemsByProductIds,
+        SourceItemIndexer $sourceItemIndexer,
         StockStateProviderInterface $stockStateProvider,
         Processor $indexerProcessor,
         ProductResourceModel $productResourceModel
@@ -76,6 +84,7 @@ class SetDataToLegacyInventory
         $this->productResourceModel = $productResourceModel;
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->updateLegacyStockItemsData = $updateLegacyStockItemsData;
+        $this->sourceItemIndexer = $sourceItemIndexer;
     }
 
     /**
@@ -141,6 +150,7 @@ class SetDataToLegacyInventory
 
         if (!empty($productIds)) {
             $this->indexerProcessor->reindexList($productIds);
+            $this->sourceItemIndexer->executeList(array_column($sourceItemsData, 'source_item_id'));
         }
     }
 }
