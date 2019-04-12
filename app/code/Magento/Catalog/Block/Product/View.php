@@ -169,8 +169,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     }
 
     /**
-     * Get JSON encoded configuration array which can be used for JS dynamic
-     * price calculation depending on product options
+     * Get JSON encoded configuration which can be used for JS dynamic price calculation depending on product options
      *
      * @return string
      */
@@ -262,6 +261,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
 
     /**
      * Get default qty - either as preconfigured, or as 1.
+     *
      * Also restricts it by minimal qty.
      *
      * @param null|\Magento\Catalog\Model\Product $product
