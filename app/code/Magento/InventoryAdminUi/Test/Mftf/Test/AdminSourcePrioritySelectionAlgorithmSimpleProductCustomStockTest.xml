@@ -134,9 +134,7 @@
         <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$highPrioritySource.source[source_code]$$)}}" stepKey="selectHighPrioritySource"/>
         <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="doneSelectHighPrioritySource"/>
 
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$lowPrioritySource.source[source_code]$$" stepKey="checkLowPrioritySourceCode"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$lowPrioritySource.source[name]$$" stepKey="checkLowPrioritySourceName"/>
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$highPrioritySource.source[source_code]$$" stepKey="checkHighPrioritySourceCode"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$highPrioritySource.source[name]$$" stepKey="checkHighPrioritySourceName"/>
 
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleProduct.quantity}}" stepKey="fillSourceQtyFieldForLowPrioritySource"/>
