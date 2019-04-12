@@ -124,7 +124,6 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
         }
 
         foreach (array_keys($postItems) as $customerId) {
-            $postItems[$customerId]['gender'] = isset($postItems[$customerId]['gender']) ? $postItems[$customerId]['gender'] : '';
             $this->setCustomer($this->customerRepository->getById($customerId));
             $currentCustomer = clone $this->getCustomer();
 
@@ -220,6 +219,10 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
     protected function saveCustomer(CustomerInterface $customer)
     {
         try {
+            $postItems = $this->getRequest()->getParam('items', []);
+            if (!empty($postItems[$customer->getId()]) && !array_key_exists('gender', $postItems[$customer->getId()])) {
+                $customer->setGender('');
+            }
             $this->customerRepository->save($customer);
         } catch (\Magento\Framework\Exception\InputException $e) {
             $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
