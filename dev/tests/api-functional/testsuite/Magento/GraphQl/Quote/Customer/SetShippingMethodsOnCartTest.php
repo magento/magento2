@@ -67,7 +67,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $carrierCode,
             $quoteAddressId
         );
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('setShippingMethodsOnCart', $response);
         self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
@@ -106,7 +106,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $carrierCode,
             $quoteAddressId
         );
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('setShippingMethodsOnCart', $response);
         self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
@@ -157,7 +157,7 @@ mutation {
 }
 QUERY;
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -305,7 +305,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -334,7 +334,7 @@ QUERY;
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -363,7 +363,7 @@ QUERY;
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
     }
 
     /**
@@ -391,7 +391,7 @@ QUERY;
         $this->expectExceptionMessage(
             "Cart does not contain address with ID \"{$anotherQuoteAddressId}\""
         );
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**

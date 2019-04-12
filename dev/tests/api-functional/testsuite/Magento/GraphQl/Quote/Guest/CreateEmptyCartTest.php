@@ -63,7 +63,7 @@ class CreateEmptyCartTest extends GraphQlAbstract
     public function testCreateEmptyCart()
     {
         $query = $this->getQuery();
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('createEmptyCart', $response);
         self::assertNotEmpty($response['createEmptyCart']);
@@ -83,7 +83,7 @@ class CreateEmptyCartTest extends GraphQlAbstract
     {
         $query = $this->getQuery();
         $headerMap = ['Store' => 'fixture_second_store'];
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $response = $this->graphQlMutation($query, [], '', $headerMap);
 
         self::assertArrayHasKey('createEmptyCart', $response);
         self::assertNotEmpty($response['createEmptyCart']);
