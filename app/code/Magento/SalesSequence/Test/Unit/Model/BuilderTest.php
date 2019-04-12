@@ -5,6 +5,8 @@
  */
 namespace Magento\SalesSequence\Test\Unit\Model;
 
+use Magento\SalesSequence\Model\ResourceModel\Profile as ResourceProfile;
+
 /**
  * Class BuilderTest
  */
@@ -19,6 +21,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\SalesSequence\Model\ResourceModel\Meta | \PHPUnit_Framework_MockObject_MockObject
      */
     private $resourceSequenceMeta;
+
+    /**
+     * @var ResourceProfile | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceSequenceProfile;
 
     /**
      * @var \Magento\SalesSequence\Model\Meta | \PHPUnit_Framework_MockObject_MockObject
@@ -68,7 +75,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         );
         $this->resourceSequenceMeta = $this->createPartialMock(
             \Magento\SalesSequence\Model\ResourceModel\Meta::class,
-            ['loadByEntityTypeAndStore', 'save', 'createSequence']
+            ['loadByEntityTypeAndStore', 'save', 'createSequence', 'getIdsByStore', 'load', 'delete']
+        );
+        $this->resourceSequenceProfile = $this->createPartialMock(
+            ResourceProfile::class,
+            ['getProfileIdsByMetadataIds']
         );
         $this->meta = $this->createPartialMock(
             \Magento\SalesSequence\Model\Meta::class,
@@ -87,9 +98,6 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
         $this->profileFactory->expects($this->any())->method('create')->willReturn($this->profile);
-        $this->resourceMock->expects($this->atLeastOnce())
-            ->method('getTableName')
-            ->willReturn('sequence_lalalka_1');
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->sequenceBuilder = $helper->getObject(
@@ -99,7 +107,8 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
                 'metaFactory' => $this->metaFactory,
                 'profileFactory' => $this->profileFactory,
                 'appResource' => $this->resourceMock,
-                'ddlSequence' => $this->sequence
+                'ddlSequence' => $this->sequence,
+                'resourceProfile' => $this->resourceSequenceProfile
             ]
         );
     }
@@ -108,6 +117,9 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     {
         $entityType = 'lalalka';
         $storeId = 1;
+        $this->resourceMock->expects($this->atLeastOnce())
+            ->method('getTableName')
+            ->willReturn('sequence_lalalka_1');
         $this->resourceSequenceMeta->expects($this->once())
             ->method('loadByEntityTypeAndStore')
             ->with($entityType, $storeId)
@@ -138,6 +150,9 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $step = 1;
         $maxValue = 120000;
         $warningValue = 110000;
+        $this->resourceMock->expects($this->atLeastOnce())
+            ->method('getTableName')
+            ->willReturn('sequence_lalalka_1');
         $this->resourceSequenceMeta->expects($this->once())
             ->method('loadByEntityTypeAndStore')
             ->with($entityType, $storeId)
@@ -180,6 +195,43 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ->setMaxValue($maxValue)
             ->setWarningValue($warningValue)
             ->create();
+    }
+
+    public function testDeleteByStoreId()
+    {
+        $storeId = 1;
+        $metadataIds = [1, 2];
+        $profileIds = [10, 11];
+        $tableName = 'sales_sequence_profile';
+        $this->resourceSequenceMeta->expects($this->once())
+            ->method('getIdsByStore')
+            ->with($storeId)
+            ->willReturn($metadataIds);
+        $this->resourceSequenceProfile->expects($this->once())
+            ->method('getProfileIdsByMetadataIds')
+            ->with($metadataIds)
+            ->willReturn($profileIds);
+        $this->resourceMock->expects($this->once())
+            ->method('getTableName')
+            ->with($tableName)
+            ->willReturn($tableName);
+        $this->resourceMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+        $this->connectionMock->expects($this->once())
+            ->method('delete')
+            ->with($tableName, ['profile_id IN (?)' => $profileIds])
+            ->willReturn(2);
+        $this->resourceSequenceMeta->expects($this->any())
+            ->method('load')
+            ->willReturn($this->meta);
+        $this->connectionMock->expects($this->any())
+            ->method('dropTable')
+            ->willReturn(true);
+        $this->resourceSequenceMeta->expects($this->any())
+            ->method('delete')
+            ->willReturn($this->resourceSequenceMeta);
+        $this->sequenceBuilder->deleteByStoreId($storeId);
     }
 
     /**
