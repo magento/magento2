@@ -5,10 +5,12 @@
  */
 namespace Magento\SalesSequence\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
 use Magento\Framework\Webapi\Exception;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
+use Magento\SalesSequence\Model\ResourceModel\Profile as ResourceProfile;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -84,12 +86,18 @@ class Builder
     protected $logger;
 
     /**
+     * @var ResourceProfile
+     */
+    private $resourceProfile;
+
+    /**
      * @param ResourceMetadata $resourceMetadata
      * @param MetaFactory $metaFactory
      * @param ProfileFactory $profileFactory
      * @param AppResource $appResource
      * @param DdlSequence $ddlSequence
      * @param Logger $logger
+     * @param ResourceProfile|null $resourceProfile
      */
     public function __construct(
         ResourceMetadata $resourceMetadata,
@@ -97,7 +105,8 @@ class Builder
         ProfileFactory $profileFactory,
         AppResource $appResource,
         DdlSequence $ddlSequence,
-        Logger $logger
+        Logger $logger,
+        ResourceProfile $resourceProfile = null
     ) {
         $this->resourceMetadata = $resourceMetadata;
         $this->metaFactory = $metaFactory;
@@ -105,6 +114,7 @@ class Builder
         $this->appResource = $appResource;
         $this->ddlSequence = $ddlSequence;
         $this->logger = $logger;
+        $this->resourceProfile = $resourceProfile ?: ObjectManager::getInstance()->get(ResourceProfile::class);
         $this->data = array_flip($this->pattern);
     }
 
@@ -263,5 +273,37 @@ class Builder
             throw $e;
         }
         $this->data = array_flip($this->pattern);
+    }
+
+    /**
+     * Deletes all sequence linked entites
+     *
+     * @param $storeId
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function deleteByStoreId($storeId)
+    {
+        $metadataIds = $this->resourceMetadata->getIdsByStore($storeId);
+        $profileIds = $this->resourceProfile->getProfileIdsByMetadataIds($metadataIds);
+
+        $this->appResource->getConnection()->delete(
+            $this->appResource->getTableName('sales_sequence_profile'),
+            ['profile_id IN (?)' => $profileIds]
+        );
+
+        foreach ($metadataIds as $metadataId) {
+            $metadata = $this->metaFactory->create();
+            $this->resourceMetadata->load($metadata, $metadataId);
+            if (!$metadata->getId()) {
+                continue;
+            }
+
+            $this->appResource->getConnection()->dropTable(
+                $metadata->getSequenceTable()
+            );
+            $this->resourceMetadata->delete($metadata);
+        }
     }
 }

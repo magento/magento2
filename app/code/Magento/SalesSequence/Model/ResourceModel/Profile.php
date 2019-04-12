@@ -76,4 +76,20 @@ class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         return $profile;
     }
+
+    /**
+     * Get profile ids by metadata ids
+     * @param int[] $metadataIds
+     * @return int[]
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getProfileIdsByMetadataIds(array $metadataIds)
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from($this->getMainTable(), ['profile_id'])
+            ->where('meta_id IN (?)', $metadataIds);
+
+        return $connection->fetchCol($select);
+    }
 }

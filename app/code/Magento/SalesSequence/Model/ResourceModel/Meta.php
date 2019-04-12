@@ -93,6 +93,27 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Retrieves Metadata Ids by store id
+     *
+     * @param int $storeId
+     * @return int[]
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getIdsByStore($storeId)
+    {
+        $connection = $this->getConnection();
+        $bind = ['store_id' => $storeId];
+        $select = $connection->select()->from(
+            $this->getMainTable(),
+            [$this->getIdFieldName()]
+        )->where(
+            'store_id = :store_id'
+        );
+
+        return $connection->fetchCol($select, $bind);
+    }
+
+    /**
      * Using for load sequence profile and setting it into metadata
      *
      * @param \Magento\Framework\Model\AbstractModel $object
