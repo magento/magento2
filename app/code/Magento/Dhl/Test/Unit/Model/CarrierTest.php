@@ -9,12 +9,14 @@ namespace Magento\Dhl\Test\Unit\Model;
 use Magento\Dhl\Model\Carrier;
 use Magento\Dhl\Model\Validator\XmlValidator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
@@ -85,6 +87,16 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     private $logger;
 
     /**
+     * @var DateTime|MockObject
+     */
+    private $coreDateMock;
+
+    /**
+     * @var ProductMetadataInterface
+     */
+    private $productMetadataMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -109,23 +121,39 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
+        $this->coreDateMock = $this->getMockBuilder(DateTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->coreDateMock->method('date')
+            ->willReturn('currentTime');
+
+        $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productMetadataMock->method('getName')
+            ->willReturn('Software_Product_Name_30_Char_123456789');
+        $this->productMetadataMock->method('getVersion')
+            ->willReturn('10Char_Ver123456789');
+
         $this->model = $this->objectManager->getObject(
             Carrier::class,
             [
                 'scopeConfig' => $this->scope,
-                'xmlSecurity' => new Security(),
+                'rateErrorFactory' => $this->errorFactory,
                 'logger' => $this->logger,
+                'xmlSecurity' => new Security(),
                 'xmlElFactory' => $this->getXmlFactory(),
                 'rateFactory' => $this->getRateFactory(),
-                'rateErrorFactory' => $this->errorFactory,
                 'rateMethodFactory' => $this->getRateMethodFactory(),
-                'httpClientFactory' => $this->getHttpClientFactory(),
-                'readFactory' => $this->getReadFactory(),
-                'storeManager' => $this->getStoreManager(),
-                'configReader' => $this->getConfigReader(),
                 'carrierHelper' => $this->getCarrierHelper(),
+                'configReader' => $this->getConfigReader(),
+                'storeManager' => $this->getStoreManager(),
+                'readFactory' => $this->getReadFactory(),
+                'httpClientFactory' => $this->getHttpClientFactory(),
                 'data' => ['id' => 'dhl', 'store' => '1'],
-                'xmlValidator' => $this->xmlValidator
+                'xmlValidator' => $this->xmlValidator,
+                'coreDate' => $this->coreDateMock,
+                'productMetadata' => $this->productMetadataMock
             ]
         );
     }
@@ -242,6 +270,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->httpResponse->method('getBody')
             ->willReturn($responseXml);
 
+        $this->coreDateMock->method('date')
+            ->willReturnCallback(function () {
+                return date(\DATE_RFC3339);
+            });
+
         $request = $this->objectManager->getObject(RateRequest::class, $requestData);
 
         $reflectionClass = new \ReflectionObject($this->httpClient);
@@ -300,12 +333,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \ReflectionException
      */
-    public function testRequestToShipment(
-        string $origCountryId,
-        string $expectedRegionCode,
-        string $destCountryId,
-        bool $dutiable
-    ) {
+    public function testRequestToShipment(string $origCountryId, string $expectedRegionCode, string $destCountryId)
+    {
         $scopeConfigValueMap = [
             ['carriers/dhl/account', 'store', null, '1234567890'],
             ['carriers/dhl/gateway_url', 'store', null, 'https://xmlpi-ea.dhl.com/XMLShippingServlet'],
@@ -337,8 +366,14 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $requestXml = $rawPostData->getValue($this->httpClient);
         $requestElement = new Element($requestXml);
 
+        $messageReference = $requestElement->Request->ServiceHeader->MessageReference->__toString();
+        $this->assertStringStartsWith('MAGE_SHIP_', $messageReference);
+        $this->assertGreaterThanOrEqual(28, strlen($messageReference));
+        $this->assertLessThanOrEqual(32, strlen($messageReference));
+        $requestElement->Request->ServiceHeader->MessageReference = 'MAGE_SHIP_28TO32_Char_CHECKED';
+
         $this->assertXmlStringEqualsXmlString(
-            $this->getExpectedRequestXml($origCountryId, $destCountryId, $expectedRegionCode, $dutiable)->asXML(),
+            $this->getExpectedRequestXml($origCountryId, $destCountryId, $expectedRegionCode)->asXML(),
             $requestElement->asXML()
         );
     }
@@ -421,25 +456,23 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @param string $destCountryId
      * @return Element
      */
-    private function getExpectedRequestXml(
-        string $origCountryId,
-        string $destCountryId,
-        string $regionCode,
-        bool $dutiable
-    ) {
-        $requestXmlPath = $regionCode === "EU"
-            ? ($dutiable ? '/_files/euregion_dutiable_shipment_request.xml' : '/_files/euregion_shipment_request.xml')
-            : '/_files/apregion_shipment_request.xml';
+    private function getExpectedRequestXml(string $origCountryId, string $destCountryId, string $regionCode)
+    {
+        $requestXmlPath = $origCountryId == $destCountryId
+            ? '/_files/domestic_shipment_request.xml'
+            : '/_files/shipment_request.xml';
 
-        $requestElement = new Element(file_get_contents(__DIR__ . $requestXmlPath));
+        $expectedRequestElement = new Element(file_get_contents(__DIR__ . $requestXmlPath));
 
-        $requestElement->Consignee->CountryCode = $destCountryId;
-        $requestElement->Consignee->CountryName = $this->getCountryName($destCountryId);
+        $expectedRequestElement->Consignee->CountryCode = $destCountryId;
+        $expectedRequestElement->Consignee->CountryName = $this->getCountryName($destCountryId);
 
-        $requestElement->Shipper->CountryCode = $origCountryId;
-        $requestElement->Shipper->CountryName = $this->getCountryName($origCountryId);
+        $expectedRequestElement->Shipper->CountryCode = $origCountryId;
+        $expectedRequestElement->Shipper->CountryName = $this->getCountryName($origCountryId);
 
-        return $requestElement;
+        $expectedRequestElement->RegionCode = $regionCode;
+
+        return $expectedRequestElement;
     }
 
     /**
@@ -451,7 +484,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     private function getCountryName($countryCode)
     {
         $countryNames = [
-            'US' => 'United States Of America',
+            'US' => 'United States of America',
             'SG' => 'Singapore',
             'GB' => 'United Kingdom',
             'DE' => 'Germany',
@@ -468,13 +501,13 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'GB', 'EU', 'US', 1
+                'GB', 'EU', 'US'
             ],
             [
-                'SG', 'AP', 'US', 0
+                'SG', 'AP', 'US'
             ],
             [
-                'DE', 'EU', 'DE', 0
+                'DE', 'EU', 'DE'
             ]
         ];
     }
@@ -496,7 +529,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function dhlProductsDataProvider() : array
+    public function dhlProductsDataProvider(): array
     {
         return [
             'doc' => [
@@ -522,7 +555,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                     'S' => 'Same day',
                     'T' => 'Express 12:00',
                     'X' => 'Express envelope',
-                ]
+                ],
             ],
             'non-doc' => [
                 'docType' => Carrier::DHL_CONTENT_TYPE_NON_DOC,
@@ -540,8 +573,115 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                     'M' => 'Express 10:30',
                     'V' => 'Europack',
                     'Y' => 'Express 12:00',
-                ]
-            ]
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Tests that the built MessageReference string is of the appropriate format.
+     *
+     * @dataProvider buildMessageReferenceDataProvider
+     * @param $servicePrefix
+     * @throws \ReflectionException
+     */
+    public function testBuildMessageReference($servicePrefix)
+    {
+        $method = new \ReflectionMethod($this->model, 'buildMessageReference');
+        $method->setAccessible(true);
+
+        $messageReference = $method->invoke($this->model, $servicePrefix);
+        $this->assertGreaterThanOrEqual(28, strlen($messageReference));
+        $this->assertLessThanOrEqual(32, strlen($messageReference));
+    }
+
+    /**
+     * Build message reference data provider
+     *
+     * @return array
+     */
+    public function buildMessageReferenceDataProvider()
+    {
+        return [
+            'quote_prefix' => ['QUOT'],
+            'shipval_prefix' => ['SHIP'],
+            'tracking_prefix' => ['TRCK']
+        ];
+    }
+
+    /**
+     * Tests that an exception is thrown when an invalid service prefix is provided.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Invalid service prefix
+     */
+    public function testBuildMessageReferenceInvalidPrefix()
+    {
+        $method = new \ReflectionMethod($this->model, 'buildMessageReference');
+        $method->setAccessible(true);
+
+        $method->invoke($this->model, 'INVALID');
+    }
+
+    /**
+     * Tests that the built software name string is of the appropriate format.
+     *
+     * @dataProvider buildSoftwareNameDataProvider
+     * @param $productName
+     * @throws \ReflectionException
+     */
+    public function testBuildSoftwareName($productName)
+    {
+        $method = new \ReflectionMethod($this->model, 'buildSoftwareName');
+        $method->setAccessible(true);
+
+        $this->productMetadataMock->method('getName')->willReturn($productName);
+
+        $softwareName = $method->invoke($this->model);
+        $this->assertLessThanOrEqual(30, strlen($softwareName));
+    }
+
+    /**
+     * Data provider for testBuildSoftwareName
+     *
+     * @return array
+     */
+    public function buildSoftwareNameDataProvider()
+    {
+        return [
+            'valid_length' => ['Magento'],
+            'exceeds_length' => ['Product_Name_Longer_Than_30_Char']
+        ];
+    }
+
+    /**
+     * Tests that the built software version string is of the appropriate format.
+     *
+     * @dataProvider buildSoftwareVersionProvider
+     * @param $productVersion
+     * @throws \ReflectionException
+     */
+    public function testBuildSoftwareVersion($productVersion)
+    {
+        $method = new \ReflectionMethod($this->model, 'buildSoftwareVersion');
+        $method->setAccessible(true);
+
+        $this->productMetadataMock->method('getVersion')->willReturn($productVersion);
+
+        $softwareVersion = $method->invoke($this->model);
+        $this->assertLessThanOrEqual(10, strlen($softwareVersion));
+    }
+
+    /**
+     * Data provider for testBuildSoftwareVersion
+     *
+     * @return array
+     */
+    public function buildSoftwareVersionProvider()
+    {
+        return [
+            'valid_length' => ['2.3.1'],
+            'exceeds_length' => ['dev-MC-1000']
         ];
     }
 
@@ -691,7 +831,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $carrierHelper = $this->objectManager->getObject(
             CarrierHelper::class,
             [
-                'localeResolver' => $localeResolver
+                'localeResolver' => $localeResolver,
             ]
         );
 
