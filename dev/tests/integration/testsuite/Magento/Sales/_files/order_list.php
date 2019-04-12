@@ -9,6 +9,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Sales\Model\Order\Payment;
 
+// phpcs:ignore Magento2.Security.IncludeFile
 require 'order.php';
 /** @var Order $order */
 /** @var  Order\Payment $payment */
