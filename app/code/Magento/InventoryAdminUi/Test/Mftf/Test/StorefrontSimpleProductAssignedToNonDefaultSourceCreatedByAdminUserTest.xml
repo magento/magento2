@@ -55,7 +55,6 @@
         </actionGroup>
         <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$createCustomSource.source[source_code]$$)}}" stepKey="clickOnCheckboxOnProductPage"/>
         <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDoneOnProductPage"/>
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createCustomSource.source[source_code]$$" stepKey="seeSourceIdInGridOnProductPage"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createCustomSource.source[name]$$" stepKey="seeSourceNameInGridOnProductPage"/>
 
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillSourceQtyFieldOnProductPage"/>
