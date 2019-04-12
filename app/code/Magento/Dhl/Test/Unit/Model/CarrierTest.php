@@ -582,10 +582,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * Tests that the built MessageReference string is of the appropriate format.
      *
      * @dataProvider buildMessageReferenceDataProvider
-     * @param $servicePrefix
-     * @throws \ReflectionException
+     * @param string $servicePrefix
+     *
+     * @return void
      */
-    public function testBuildMessageReference($servicePrefix)
+    public function testBuildMessageReference(string $servicePrefix)
     {
         $method = new \ReflectionMethod($this->model, 'buildMessageReference');
         $method->setAccessible(true);
@@ -600,12 +601,12 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function buildMessageReferenceDataProvider()
+    public function buildMessageReferenceDataProvider(): array
     {
         return [
             'quote_prefix' => ['QUOT'],
             'shipval_prefix' => ['SHIP'],
-            'tracking_prefix' => ['TRCK']
+            'tracking_prefix' => ['TRCK'],
         ];
     }
 
@@ -614,6 +615,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid service prefix
+     *
+     * @return void
      */
     public function testBuildMessageReferenceInvalidPrefix()
     {
@@ -627,10 +630,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * Tests that the built software name string is of the appropriate format.
      *
      * @dataProvider buildSoftwareNameDataProvider
-     * @param $productName
-     * @throws \ReflectionException
+     * @param string $productName
+     *
+     * @return void
      */
-    public function testBuildSoftwareName($productName)
+    public function testBuildSoftwareName(string $productName)
     {
         $method = new \ReflectionMethod($this->model, 'buildSoftwareName');
         $method->setAccessible(true);
@@ -646,11 +650,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function buildSoftwareNameDataProvider()
+    public function buildSoftwareNameDataProvider(): array
     {
         return [
             'valid_length' => ['Magento'],
-            'exceeds_length' => ['Product_Name_Longer_Than_30_Char']
+            'exceeds_length' => ['Product_Name_Longer_Than_30_Char'],
         ];
     }
 
@@ -658,10 +662,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * Tests that the built software version string is of the appropriate format.
      *
      * @dataProvider buildSoftwareVersionProvider
-     * @param $productVersion
-     * @throws \ReflectionException
+     * @param string $productVersion
+     *
+     * @return void
      */
-    public function testBuildSoftwareVersion($productVersion)
+    public function testBuildSoftwareVersion(string $productVersion)
     {
         $method = new \ReflectionMethod($this->model, 'buildSoftwareVersion');
         $method->setAccessible(true);
@@ -677,11 +682,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function buildSoftwareVersionProvider()
+    public function buildSoftwareVersionProvider(): array
     {
         return [
             'valid_length' => ['2.3.1'],
-            'exceeds_length' => ['dev-MC-1000']
+            'exceeds_length' => ['dev-MC-1000'],
         ];
     }
 

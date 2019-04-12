@@ -19,7 +19,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Dhl\Model\Carrier
+     * @var Carrier
      */
     private $dhlCarrier;
 
@@ -40,7 +40,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->dhlCarrier = $objectManager->create(
-            \Magento\Dhl\Model\Carrier::class,
+            Carrier::class,
             ['httpClientFactory' => $this->getHttpClientFactory()]
         );
     }
