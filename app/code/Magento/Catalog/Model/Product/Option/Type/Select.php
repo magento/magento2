@@ -10,6 +10,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Catalog product option select type
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
