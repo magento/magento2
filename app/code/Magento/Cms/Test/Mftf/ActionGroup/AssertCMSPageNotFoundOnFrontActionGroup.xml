@@ -11,8 +11,8 @@
         <arguments>
             <argument name="identifier" type="string"/>
         </arguments>
-        <amOnPage url="{{StorefrontHomePage.url}}/{{identifier}}" stepKey="amOnFirstPageOnFrontend"/>
-        <waitForPageLoad stepKey="waitForFirstPageLoadOnFrontend"/>
-        <see userInput="Whoops, our bad..." stepKey="seePageErrorForFirstPage"/>
+        <amOnPage url="{{StorefrontHomePage.url}}/{{identifier}}" stepKey="amOnPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForPageLoadOnStorefront"/>
+        <see userInput="Whoops, our bad..." stepKey="seePageErrorNotFound"/>
     </actionGroup>
 </actionGroups>

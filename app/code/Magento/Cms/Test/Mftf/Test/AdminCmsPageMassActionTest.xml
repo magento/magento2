@@ -27,22 +27,22 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Go to Grid page-->
-        <actionGroup ref="AdminNavigateToCMSPageGrid" stepKey="navigateToCMSPageGrid"/>
+        <actionGroup ref="AdminCMSPageNavigateToGrid" stepKey="navigateToCMSPageGrid"/>
         <!--Select pages in Grid-->
-        <actionGroup ref="AdminSelectCMSPageInGrid" stepKey="selectFirstCMSPage">
+        <actionGroup ref="AdminCMSPageSelectInGrid" stepKey="selectFirstCMSPage">
             <argument name="identifier" value="$$firstCMSPage.identifier$$"/>
         </actionGroup>
-        <actionGroup ref="AdminSelectCMSPageInGrid" stepKey="selectSecondCMSPage">
+        <actionGroup ref="AdminCMSPageSelectInGrid" stepKey="selectSecondCMSPage">
             <argument name="identifier" value="$$secondCMSPage.identifier$$"/>
         </actionGroup>
         <!-- Disable Pages-->
         <actionGroup ref="AdminCMSPageMassActionDisable" stepKey="disablePages"/>
         <!--Verify pages in Grid-->
-        <actionGroup ref="AssertCMSPageInGrid" stepKey="verifyFirstPageinGrid">
-            <argument name="identifier" value="$$firstCMSPage.identifier$$$$"/>
+        <actionGroup ref="AssertCMSPageInGrid" stepKey="verifyFirstPageInGrid">
+            <argument name="identifier" value="$$firstCMSPage.identifier$$"/>
         </actionGroup>
-        <actionGroup ref="AssertCMSPageInGrid" stepKey="verifySecondPageinGrid">
-            <argument name="identifier" value="$$secondCMSPage.identifier$$$$"/>
+        <actionGroup ref="AssertCMSPageInGrid" stepKey="verifySecondPageInGrid">
+            <argument name="identifier" value="$$secondCMSPage.identifier$$"/>
         </actionGroup>
         <!--Verify Pages are disabled on Frontend-->
         <actionGroup ref="AssertCMSPageNotFoundOnFront" stepKey="checkFirstPageNotFoundOnFront">
