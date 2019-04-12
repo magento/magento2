@@ -32,7 +32,7 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
     ?>
 </span>
 
-<?php if (!$block->isProductList() && $block->hasSpecialPrice()): ?>
+<?php if (!$block->isProductList()): ?>
     <span class="old-price sly-old-price no-display">
         <?php /* @escapeNotVerified */ echo $block->renderAmount($priceModel->getAmount(), [
             'display_label'     => __('Regular Price'),
