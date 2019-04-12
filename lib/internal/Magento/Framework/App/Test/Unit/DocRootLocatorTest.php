@@ -8,6 +8,9 @@ namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\DocRootLocator;
 
+/**
+ * Test for Magento\Framework\App\DocRootLocator class.
+ */
 class DocRootLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
