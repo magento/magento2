@@ -705,6 +705,7 @@ class AccountManagement implements AccountManagementInterface
         if ($this->sessionManager->isSessionExists()) {
             //delete old session and move data to the new session
             //use this instead of $this->sessionManager->regenerateId because last one doesn't delete old session
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             session_regenerate_id(true);
         }
         $this->customerRepository->save($customer);
