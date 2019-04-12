@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
-use Magento\GraphQl\Model\IdentityResolverInterface;
+use Magento\Framework\GraphQl\Query\IdentityResolverInterface;
 
 /**
  * Identity for resolved products
@@ -20,7 +20,7 @@ class IdentityResolver implements IdentityResolverInterface
      * @param array $resolvedData
      * @return array
      */
-    public function getIdentifiers(array $resolvedData) : array
+    public function getIdentifiers(array $resolvedData): array
     {
         $ids = [];
         $items = $resolvedData['items'] ?? [];

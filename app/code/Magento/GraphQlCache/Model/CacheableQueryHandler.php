@@ -9,7 +9,6 @@ namespace Magento\GraphQlCache\Model;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Handler of collecting tagging on cache.
@@ -30,23 +29,23 @@ class CacheableQueryHandler
     private $request;
 
     /**
-     * @var ObjectManagerInterface
+     * @var IdentityResolverPool
      */
-    private $objectManager;
+    private $identityResolverPool;
 
     /**
      * @param CacheableQuery $cacheableQuery
      * @param RequestInterface $request
-     * @param ObjectManagerInterface $objectManager
+     * @param IdentityResolverPool $identityResolverPool
      */
     public function __construct(
         CacheableQuery $cacheableQuery,
         RequestInterface $request,
-        ObjectManagerInterface $objectManager
+        IdentityResolverPool $identityResolverPool
     ) {
         $this->cacheableQuery = $cacheableQuery;
         $this->request = $request;
-        $this->objectManager = $objectManager;
+        $this->identityResolverPool = $identityResolverPool;
     }
 
     /**
@@ -59,23 +58,28 @@ class CacheableQueryHandler
     public function handleCacheFromResolverResponse(array $resolvedValue, Field $field) : void
     {
         $cache = $field->getCache();
-        $cacheIdentityResolverClass = $cache['cacheIdentityResolver'] ?? null;
+        $cacheIdentityResolverClass = $cache['cacheIdentityResolver'] ?? '';
         $cacheable = $cache['cacheable'] ?? true;
-        $cacheTag = $cache['cache_tag'] ?? null;
+        $cacheTag = $cache['cacheTag'] ?? null;
 
-        if ($cacheTag && $cacheIdentityResolverClass && $this->request->isGet()) {
-            $cacheIdentityResolver = $this->objectManager->get($cacheIdentityResolverClass);
-            $cacheTagIds = $cacheIdentityResolver->getIdentifiers($resolvedValue);
-
-            if (!empty($cacheTagIds)) {
-                $cacheTags = array_map(
-                    function ($id) use ($cacheTag) {
-                        return $cacheTag . '_' . $id;
-                    },
-                    $cacheTagIds
-                );
-                $this->cacheableQuery->addCacheTags($cacheTags);
+        $cacheTags = [];
+        if ($cacheTag && $this->request->isGet()) {
+            if (!empty($cacheIdentityResolverClass)) {
+                $cacheIdentityResolver = $this->identityResolverPool->get($cacheIdentityResolverClass);
+                $cacheTagIds = $cacheIdentityResolver->getIdentifiers($resolvedValue);
+                if (!empty($cacheTagIds)) {
+                    $cacheTags = array_map(
+                        function ($id) use ($cacheTag) {
+                            return $cacheTag . '_' . $id;
+                        },
+                        $cacheTagIds
+                    );
+                }
+            } else {
+                $cacheTags[] = $cacheTag;
             }
+
+            $this->cacheableQuery->addCacheTags($cacheTags);
         }
         $this->setCacheValidity($cacheable);
     }

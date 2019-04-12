@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CmsGraphQl\Model\Resolver\Page;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\GraphQl\Model\IdentityResolverInterface;
+use Magento\Framework\GraphQl\Query\IdentityResolverInterface;
 
 /**
  * Identity for resolved CMS page
