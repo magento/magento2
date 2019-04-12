@@ -7,9 +7,9 @@ namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Render;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
-use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface;
 use Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as TypeConfigurable;
 
 class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
 {
@@ -34,11 +34,6 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
     private $rendererPool;
 
     /**
-     * @var LowestPriceOptionsProviderInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $lowestPriceOptionsProvider;
-
-    /**
      * @var FinalPriceBox
      */
     private $model;
@@ -60,9 +55,6 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->lowestPriceOptionsProvider = $this->getMockBuilder(LowestPriceOptionsProviderInterface::class)
-            ->getMockForAbstractClass();
-
         $this->model = (new ObjectManager($this))->getObject(
             FinalPriceBox::class,
             [
@@ -70,7 +62,6 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
                 'saleableItem' => $this->saleableItem,
                 'price' => $this->price,
                 'rendererPool' => $this->rendererPool,
-                'lowestPriceOptionsProvider' => $this->lowestPriceOptionsProvider,
             ]
         );
     }
@@ -119,10 +110,18 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
             ->method('getPriceInfo')
             ->willReturn($priceInfoMock);
 
-        $this->lowestPriceOptionsProvider->expects($this->once())
-            ->method('getProducts')
+        $typeInstance = $this->getMockBuilder(TypeConfigurable::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $typeInstance->expects($this->once())
+            ->method('getUsedProducts')
             ->with($this->saleableItem)
             ->willReturn([$productMock]);
+
+        $this->saleableItem->expects($this->once())
+            ->method('getTypeInstance')
+            ->willReturn($typeInstance);
 
         $this->assertEquals($expected, $this->model->hasSpecialPrice());
     }

@@ -21,6 +21,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
 {
     /**
      * @var LowestPriceOptionsProviderInterface
+     * @deprecated
      */
     private $lowestPriceOptionsProvider;
 
@@ -56,6 +57,9 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
             $salableResolver,
             $minimalPriceCalculator
         );
+        /**
+        * @deprecated. Use product type implementation instead.
+        */
         $this->lowestPriceOptionsProvider = $lowestPriceOptionsProvider ?:
             ObjectManager::getInstance()->get(LowestPriceOptionsProviderInterface::class);
     }
@@ -68,7 +72,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
     public function hasSpecialPrice()
     {
         $product = $this->getSaleableItem();
-        foreach ($this->lowestPriceOptionsProvider->getProducts($product) as $subProduct) {
+        foreach ($product->getTypeInstance()->getUsedProducts($product) as $subProduct) {
             $regularPrice = $subProduct->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue();
             $finalPrice = $subProduct->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
             if ($finalPrice < $regularPrice) {
