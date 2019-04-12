@@ -15,20 +15,4 @@
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_duplicatedCMSPage.identifier}}" stepKey="fillFieldUrlKey"/>
     </actionGroup>
-    <actionGroup name="SetCMSPageDisabled">
-        <seeElement selector="{{CmsNewPagePageBasicFieldsSection.isActive('1')}}" stepKey="seePageIsEnabled" />
-        <click selector="{{CmsNewPagePageBasicFieldsSection.isActiveLabel}}" stepKey="setPageDisabled"/>
-    </actionGroup>
-    <actionGroup name="SetCMSPageEnabled">
-        <seeElement selector="{{CmsNewPagePageBasicFieldsSection.isActive('0')}}" stepKey="seePageIsDisabled" />
-        <click selector="{{CmsNewPagePageBasicFieldsSection.isActiveLabel}}" stepKey="setPageEnabled"/>
-    </actionGroup>
-    <actionGroup name="SelectCMSPageStoreView">
-        <arguments>
-            <argument name="storeViewName" type="string"/>
-        </arguments>
-        <click selector="{{CmsNewPagePiwSection.header}}" stepKey="clickPageInWebsites"/>
-        <waitForElementVisible selector="{{CmsNewPagePiwSection.selectStoreView(storeViewName)}}" stepKey="waitForStoreGridReload"/>
-        <clickWithLeftButton selector="{{CmsNewPagePiwSection.selectStoreView(storeViewName)}}" stepKey="clickStoreView"/>
-    </actionGroup>
 </actionGroups>

@@ -23,18 +23,6 @@
         <executeJS function="(el = document.querySelector('[name=\'identifier\']')) &amp;&amp; el['se' + 'tAt' + 'tribute']('data-value', el.value.split('-')[0]);" stepKey="setAttribute" />
         <seeElement selector="{{CmsNewPagePageBasicFieldsSection.duplicatedURLKey(_duplicatedCMSPage.title)}}" stepKey="see"/>
     </actionGroup>
-    <actionGroup name="AssertCMSPageStoreId">
-        <arguments>
-            <argument name="storeId" type="string"/>
-        </arguments>
-        <click selector="{{CmsNewPagePiwSection.header}}" stepKey="clickPageInWebsites"/>
-        <waitForElementVisible selector="{{CmsNewPagePiwSection.storeIdDropdown}}" stepKey="waitForStoresSectionReload"/>
-        <grabValueFrom selector="{{CmsNewPagePiwSection.storeIdDropdown}}"  stepKey="grabValueFromStoreView"/>
-        <assertEquals stepKey="assertTitle" message="pass">
-            <expectedResult type="string">{{storeId}}</expectedResult>
-            <actualResult type="variable">grabValueFromStoreView</actualResult>
-        </assertEquals>
-    </actionGroup>
     <actionGroup name="AssertStoreFrontCMSPage">
         <arguments>
             <argument name="cmsTitle" type="string"/>
