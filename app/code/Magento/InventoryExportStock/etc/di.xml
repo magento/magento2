@@ -15,7 +15,25 @@
                 type="Magento\InventoryExportStock\Model\ExportStockData"/>
     <type name="Magento\InventoryExportStock\Model\ExportStockData">
         <arguments>
+           <argument name="processor"
+                     xsi:type="const">Magento\InventoryExportStock\Model\ExportStockProcessor\StockIndexDumpProcessor::PROCESSOR_TYPE</argument>
+<!--            <argument name="processor"-->
+<!--                      xsi:type="const">Magento\InventoryExportStock\Model\ExportStockProcessor\PreciseStockProcessor::PROCESSOR_TYPE</argument>-->
+        </arguments>
+    </type>
+    <type name="Magento\InventoryExportStock\Model\GetQtyForNotManageStock">
+        <arguments>
             <argument name="qtyForNotManageStock" xsi:type="number">1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryExportStock\Model\ExportStockProcessor\StockExportProcessorPool">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="stock_dump"
+                      xsi:type="object">Magento\InventoryExportStock\Model\ExportStockProcessor\StockIndexDumpProcessor</item>
+                <item name="precise"
+                      xsi:type="object">Magento\InventoryExportStock\Model\ExportStockProcessor\PreciseStockProcessor</item>
+            </argument>
         </arguments>
     </type>
 </config>
