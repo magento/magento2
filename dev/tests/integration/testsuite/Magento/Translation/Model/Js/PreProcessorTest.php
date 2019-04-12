@@ -43,7 +43,7 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
         $objectManager->addSharedInstance($viewFileSystem, FileSystem::class);
         $translator = $objectManager->create(Translate::class);
         $objectManager->addSharedInstance($translator, Translate::class);
-        $areaList = $objectManager->create(AreaList::class);
+        $areaList = $this->getMockBuilder(AreaList::class)->disableOriginalConstructor()->getMock();
         $this->origRenderer = Phrase::getRenderer();
         Phrase::setRenderer(
             $objectManager->get(RendererInterface::class)
@@ -162,6 +162,19 @@ i18n
                     'Set unique country-state combinations within the same fixed product tax. ' +
                     'Verify the combinations and try again.'
                 )
+i18n
+            ],
+            'checkAvoidMatchingPhtml' => [
+                <<<i18n
+                globalMessageList.addErrorMessage({
+                        message: \$t(<?= /* @noEscape */ json_encode(\$params['error_msg'])?>)
+                    });
+i18n
+                ,
+                <<<i18n
+                globalMessageList.addErrorMessage({
+                        message: \$t(<?= /* @noEscape */ json_encode(\$params['error_msg'])?>)
+                    });
 i18n
             ]
         ];
