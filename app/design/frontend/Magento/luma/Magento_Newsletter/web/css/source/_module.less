@@ -85,10 +85,11 @@
 //
 //  Tablet
 //  _____________________________________________
+
 @media only screen and (max-width: @screen__m) {
-  .footer .block.newsletter {
-    width: 42%;
-  }
+    .footer .block.newsletter {
+        width: 42%;
+    }
 }
 
 //
@@ -96,9 +97,9 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-  .footer .block {
+    .footer .block {
         &.newsletter {
-          width: 100%;
+            width: 100%;
             input {
                 font-size: 12px;
                 padding-left: 30px;
