@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="FreeShippingMethodWithMinimumOrderAmount90" type="free_shipping_config_state">
+        <requiredEntity type="active">Active</requiredEntity>
+        <requiredEntity type="free_shipping_subtotal">Price</requiredEntity>
+    </entity>
+    <entity name="Active" type="active">
+        <data key="value">1</data>
+    </entity>
+    <entity name="Price" type="free_shipping_subtotal">
+        <data key="value">90</data>
+    </entity>
+
+    <entity name="ResetFreeShippingMethodWithMinimumOrderAmount90" type="free_shipping_config_state">
+        <requiredEntity type="free_shipping_subtotal">DefaultPrice</requiredEntity>
+        <requiredEntity type="active">DefaultActive</requiredEntity>
+    </entity>
+    <entity name="DefaultPrice" type="free_shipping_subtotal">
+        <data key="value">0</data>
+    </entity>
+    <entity name="DefaultActive" type="active">
+        <requiredEntity type="active_inherit">DefaultFreeShipping</requiredEntity>
+    </entity>
+    <entity name="DefaultFreeShipping" type="active_inherit">
+        <data key="value">0</data>
+    </entity>
+</entities>

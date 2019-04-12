@@ -604,12 +604,13 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      * @param \Exception $e
      * @throws \Exception
+     * @return void
      */
     private function rollbackAddresses(
         QuoteEntity $quote,
         \Magento\Sales\Api\Data\OrderInterface $order,
         \Exception $e
-    ): void {
+    ) {
         try {
             if (!empty($this->addressesToSync)) {
                 foreach ($this->addressesToSync as $addressId) {
