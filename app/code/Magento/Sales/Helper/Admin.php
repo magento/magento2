@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Sales\Helper;
 
 use Magento\Framework\App\ObjectManager;
-use Symfony\Component\DomCrawler\CrawlerFactory;
 
 /**
  * Sales admin helper.
@@ -36,9 +35,9 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     protected $escaper;
 
     /**
-     * @var CrawlerFactory
+     * @var \DOMDocumentFactory
      */
-    private $crawlerFactory;
+    private $domDocumentFactory;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
@@ -46,7 +45,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Escaper $escaper
-     * @param CrawlerFactory|null $crawlerFactory
+     * @param \DOMDocumentFactory|null $domDocumentFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -54,13 +53,14 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Escaper $escaper,
-        CrawlerFactory $crawlerFactory = null
+        \DOMDocumentFactory $domDocumentFactory
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->_storeManager = $storeManager;
         $this->_salesConfig = $salesConfig;
         $this->escaper = $escaper;
-        $this->crawlerFactory = $crawlerFactory ?: ObjectManager::getInstance()->get(CrawlerFactory::class);
+        $this->domDocumentFactory = $domDocumentFactory
+            ?: ObjectManager::getInstance()->get(\DOMDocumentFactory::class);
         parent::__construct($context);
     }
 
@@ -161,13 +161,18 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     public function escapeHtmlWithLinks($data, $allowedTags = null)
     {
         if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
-            $crawler = $this->crawlerFactory->create(
-                [
-                    'node' => '<html><body>' . $data . '</body></html>',
-                ]
+            $wrapperElementId = uniqid();
+            $domDocument = $this->domDocumentFactory->create();
+
+            $internalErrors = libxml_use_internal_errors(true);
+
+            $domDocument->loadHTML(
+                '<html><body id="' . $wrapperElementId . '">' . $data . '</body></html>'
             );
 
-            $linkTags = $crawler->filter('a');
+            libxml_use_internal_errors($internalErrors);
+
+            $linkTags = $domDocument->getElementsByTagName('a');
 
             foreach ($linkTags as $linkNode) {
                 $linkAttributes = [];
@@ -186,7 +191,9 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
                 }
             }
 
-            $data = mb_convert_encoding($crawler->filter('body')->html(), 'UTF-8', 'HTML-ENTITIES');
+            $result = mb_convert_encoding($domDocument->saveHTML(), 'UTF-8', 'HTML-ENTITIES');
+            preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
+            $data = !empty($matches) ? $matches[1] : '';
         }
 
         return $this->escaper->escapeHtml($data, $allowedTags);
@@ -202,9 +209,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     {
         if ($url) {
             //Revert the sprintf escaping
-            //phpcs:disable
             $urlScheme = parse_url($url, PHP_URL_SCHEME);
-            //phpcs:enable
             $urlScheme = $urlScheme ? strtolower($urlScheme) : '';
             if ($urlScheme !== 'http' && $urlScheme !== 'https') {
                 $url = null;
