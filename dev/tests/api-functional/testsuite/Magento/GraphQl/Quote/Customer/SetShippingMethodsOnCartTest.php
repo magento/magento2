@@ -452,7 +452,7 @@ QUERY;
             $carrierCode,
             $quoteAddressId
         );
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**

@@ -43,7 +43,7 @@ class AddProductToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = $this->getQuery($maskedQuoteId, $sku, $qty);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -62,7 +62,7 @@ class AddProductToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = $this->getQuery($maskedQuoteId, $sku, $qty);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -78,7 +78,7 @@ class AddProductToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = $this->getQuery($maskedQuoteId, $sku, $qty);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**

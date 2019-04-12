@@ -403,7 +403,7 @@ QUERY;
             $carrierCode,
             $quoteAddressId
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**

@@ -86,7 +86,7 @@ mutation {
 }
 QUERY;
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('items', $response['addVirtualProductsToCart']['cart']);
         self::assertCount(1, $response['addVirtualProductsToCart']['cart']);
@@ -148,7 +148,7 @@ QUERY;
             'The product\'s required option(s) weren\'t entered. Make sure the options are entered and try again.'
         );
 
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
