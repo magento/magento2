@@ -60,12 +60,10 @@ class CacheableQueryHandler
     {
         $cache = $field->getCache();
         $cacheIdentityResolverClass = $cache['cacheIdentityResolver'] ?? null;
-        $cacheable = $cache['cacheable'];
+        $cacheable = $cache['cacheable'] ?? true;
         $cacheTag = $cache['cache_tag'] ?? null;
 
-        if (false === $cacheable) {
-            $this->setCacheValidity(false);
-        } elseif ($cacheTag && $cacheIdentityResolverClass && $this->request->isGet()) {
+        if ($cacheTag && $cacheIdentityResolverClass && $this->request->isGet()) {
             $cacheIdentityResolver = $this->objectManager->get($cacheIdentityResolverClass);
             $cacheTagIds = $cacheIdentityResolver->getIdentifiers($resolvedValue);
 
@@ -78,8 +76,8 @@ class CacheableQueryHandler
                 );
                 $this->cacheableQuery->addCacheTags($cacheTags);
             }
-            $this->setCacheValidity(true);
         }
+        $this->setCacheValidity($cacheable);
     }
 
     /**

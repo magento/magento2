@@ -11,7 +11,7 @@ use Magento\GraphQl\Model\IdentityResolverInterface;
 /**
  * Identity for resolved category
  */
-class IdentityResolver implements IdentityResolverInterface
+class CategoryTreeIdentityResolver implements IdentityResolverInterface
 {
     /**
      * Get category ID from resolved data
