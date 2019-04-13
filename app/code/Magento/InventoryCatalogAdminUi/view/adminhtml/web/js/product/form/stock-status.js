@@ -11,7 +11,7 @@ define([
     return Select.extend({
         defaults: {
             links: {
-                value: false
+                linkedValue: false
             }
         },
 

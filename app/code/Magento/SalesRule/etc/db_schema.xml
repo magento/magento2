@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="salesrule" resource="default" engine="innodb" comment="Salesrule">
         <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
         <column xsi:type="text" name="description" nullable="true" comment="Description"/>
         <column xsi:type="date" name="from_date" comment="From"/>
@@ -60,7 +60,7 @@
         <column xsi:type="int" name="coupon_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Coupon Id"/>
         <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Rule Id"/>
+                comment="Rule ID"/>
         <column xsi:type="varchar" name="code" nullable="true" length="255" comment="Code"/>
         <column xsi:type="int" name="usage_limit" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Usage Limit"/>
@@ -117,7 +117,7 @@
         <column xsi:type="int" name="rule_customer_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Rule Customer Id"/>
         <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
-                comment="Rule Id"/>
+                comment="Rule ID"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Customer Id"/>
         <column xsi:type="smallint" name="times_used" padding="5" unsigned="true" nullable="false" identity="false"
@@ -143,7 +143,7 @@
         <column xsi:type="int" name="label_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Label Id"/>
         <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Rule Id"/>
+                comment="Rule ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Store Id"/>
         <column xsi:type="varchar" name="label" nullable="true" length="255" comment="Label"/>
@@ -163,7 +163,8 @@
         </index>
     </table>
     <table name="salesrule_product_attribute" resource="default" engine="innodb" comment="Salesrule Product Attribute">
-        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Rule ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Website Id"/>
         <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"
@@ -207,17 +208,17 @@
         <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
         <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Coupon Uses"/>
-        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Subtotal Amount"/>
         <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Discount Amount"/>
-        <column xsi:type="decimal" name="total_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Amount"/>
-        <column xsi:type="decimal" name="subtotal_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="subtotal_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Subtotal Amount Actual"/>
         <column xsi:type="decimal" name="discount_amount_actual" scale="4" precision="12" unsigned="false"
                 nullable="false" default="0" comment="Discount Amount Actual"/>
-        <column xsi:type="decimal" name="total_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Amount Actual"/>
         <column xsi:type="varchar" name="rule_name" nullable="true" length="255" comment="Rule Name"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -249,17 +250,17 @@
         <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
         <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Coupon Uses"/>
-        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Subtotal Amount"/>
         <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Discount Amount"/>
-        <column xsi:type="decimal" name="total_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Amount"/>
-        <column xsi:type="decimal" name="subtotal_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="subtotal_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Subtotal Amount Actual"/>
         <column xsi:type="decimal" name="discount_amount_actual" scale="4" precision="12" unsigned="false"
                 nullable="false" default="0" comment="Discount Amount Actual"/>
-        <column xsi:type="decimal" name="total_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Amount Actual"/>
         <column xsi:type="varchar" name="rule_name" nullable="true" length="255" comment="Rule Name"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -291,11 +292,11 @@
         <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
         <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Coupon Uses"/>
-        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Subtotal Amount"/>
         <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Discount Amount"/>
-        <column xsi:type="decimal" name="total_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Amount"/>
         <column xsi:type="varchar" name="rule_name" nullable="true" length="255" comment="Rule Name"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -318,7 +319,8 @@
         </index>
     </table>
     <table name="salesrule_website" resource="default" engine="innodb" comment="Sales Rules To Websites Relations">
-        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Rule ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Website Id"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -336,7 +338,8 @@
     </table>
     <table name="salesrule_customer_group" resource="default" engine="innodb"
            comment="Sales Rules To Customer Groups Relations">
-        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Rule ID"/>
         <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Customer Group Id"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

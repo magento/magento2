@@ -23,12 +23,12 @@ class StoreConfigResolver implements ResolverInterface
     private $storeConfigDataProvider;
 
     /**
-     * @param StoreConfigDataProvider $storeConfigDataProvider
+     * @param StoreConfigDataProvider $storeConfigsDataProvider
      */
     public function __construct(
-        StoreConfigDataProvider $storeConfigDataProvider
+        StoreConfigDataProvider $storeConfigsDataProvider
     ) {
-        $this->storeConfigDataProvider = $storeConfigDataProvider;
+        $this->storeConfigDataProvider = $storeConfigsDataProvider;
     }
 
     /**
@@ -41,8 +41,6 @@ class StoreConfigResolver implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-
-        $storeConfigData = $this->storeConfigDataProvider->getStoreConfig();
-        return $storeConfigData;
+        return $this->storeConfigDataProvider->getStoreConfigData();
     }
 }

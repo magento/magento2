@@ -69,9 +69,16 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * Allowed extensions
      *
-     * @var string
+     * @var array
      */
     private $allowedExtensions;
+
+    /**
+     * Allowed mime types
+     *
+     * @var array
+     */
+    private $allowedMimeTypes;
 
     protected function setUp()
     {
@@ -97,6 +104,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         $this->baseTmpPath = 'base/tmp/';
         $this->basePath =  'base/real/';
         $this->allowedExtensions = ['.jpg'];
+        $this->allowedMimeTypes = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
 
         $this->imageUploader =
             new \Magento\Catalog\Model\ImageUploader(
@@ -107,7 +115,8 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
                 $this->loggerMock,
                 $this->baseTmpPath,
                 $this->basePath,
-                $this->allowedExtensions
+                $this->allowedExtensions,
+                $this->allowedMimeTypes
             );
     }
 

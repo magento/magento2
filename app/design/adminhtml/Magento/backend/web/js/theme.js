@@ -599,7 +599,7 @@ define('js/theme', [
 ], function ($, keyboardHandler) {
     'use strict';
 
-    /* @TODO refactor collapsable as widget and avoid logic binding with such a general selectors */
+    /* @TODO refactor collapsible as widget and avoid logic binding with such a general selectors */
     $('.collapse').collapsable();
 
     $.each($('.entry-edit'), function (i, entry) {

@@ -61,5 +61,58 @@
     <!-- Test listeners -->
     <listeners>
         <listener class="Magento\TestFramework\Event\PhpUnit"/>
+        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+            <arguments>
+                <string>var/allure-results</string> <!-- XML files output folder -->
+                <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
+                <array> <!-- A list of custom annotations to ignore (optional) -->
+                    <element key="codingStandardsIgnoreStart">
+                        <string>codingStandardsIgnoreStart</string>
+                    </element>
+                    <element key="codingStandardsIgnoreEnd">
+                        <string>codingStandardsIgnoreEnd</string>
+                    </element>
+                    <element key="expectedExceptionMessageRegExp">
+                        <string>expectedExceptionMessageRegExp</string>
+                    </element>
+                    <element key="magentoAdminConfigFixture">
+                        <string>magentoAdminConfigFixture</string>
+                    </element>
+                    <element key="magentoAppArea">
+                        <string>magentoAppArea</string>
+                    </element>
+                    <element key="magentoAppIsolation">
+                        <string>magentoAppIsolation</string>
+                    </element>
+                    <element key="magentoCache">
+                        <string>magentoCache</string>
+                    </element>
+                    <element key="magentoComponentsDir">
+                        <string>magentoComponentsDir</string>
+                    </element>
+                    <element key="magentoConfigFixture">
+                        <string>magentoConfigFixture</string>
+                    </element>
+                    <element key="magentoDataFixture">
+                        <string>magentoDataFixture</string>
+                    </element>
+                    <element key="magentoDataFixtureBeforeTransaction">
+                        <string>magentoDataFixtureBeforeTransaction</string>
+                    </element>
+                    <element key="magentoDbIsolation">
+                        <string>magentoDbIsolation</string>
+                    </element>
+                    <element key="magentoIndexerDimensionMode">
+                        <string>magentoIndexerDimensionMode</string>
+                    </element>
+                    <element key="magentoApiDataFixture">
+                        <string>magentoApiDataFixture</string>
+                    </element>
+                    <element key="Override">
+                        <string>Override</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
     </listeners>
 </phpunit>

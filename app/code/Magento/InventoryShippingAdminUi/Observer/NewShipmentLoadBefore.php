@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShippingAdminUi\Observer;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryShippingAdminUi\Model\IsOrderSourceManageable;
 use Magento\InventoryShippingAdminUi\Model\IsWebsiteInMultiSourceMode;
-use Magento\Sales\Model\OrderRepository;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\InventoryShippingAdminUi\Model\IsOrderSourceManageable;
 
 /**
  * Redirect to source selection page
@@ -23,7 +23,7 @@ use Magento\Sales\Model\OrderRepository;
 class NewShipmentLoadBefore implements ObserverInterface
 {
     /**
-     * @var OrderRepository
+     * @var OrderRepositoryInterface
      */
     private $orderRepository;
 
@@ -43,13 +43,13 @@ class NewShipmentLoadBefore implements ObserverInterface
     private $orderSourceManageable;
 
     /**
-     * @param OrderRepository $orderRepository
+     * @param OrderRepositoryInterface $orderRepository
      * @param IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode
      * @param RedirectInterface $redirect
      * @param IsOrderSourceManageable $isOrderSourceManageable
      */
     public function __construct(
-        OrderRepository $orderRepository,
+        OrderRepositoryInterface $orderRepository,
         IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode,
         RedirectInterface $redirect,
         IsOrderSourceManageable $isOrderSourceManageable = null

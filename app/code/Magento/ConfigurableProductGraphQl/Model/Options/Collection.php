@@ -124,6 +124,8 @@ class Collection
             $this->attributeMap[$productId][$attribute->getId()]['attribute_code']
                 = $attribute->getProductAttribute()->getAttributeCode();
             $this->attributeMap[$productId][$attribute->getId()]['values'] = $attributeData['options'];
+            $this->attributeMap[$productId][$attribute->getId()]['label']
+                = $attribute->getProductAttribute()->getStoreLabel();
         }
 
         return $this->attributeMap;

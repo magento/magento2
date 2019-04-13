@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="EnableZeroSubtotalCheckoutConfigState" dataType="zero_subtotal_checkout_config_state" type="create" auth="adminFormKey" url="/admin/system_config/save/section/payment/" method="POST">
+        <object key="groups" dataType="zero_subtotal_checkout_config_state">
+            <object key="free" dataType="zero_subtotal_checkout_config_state">
+                <object key="fields" dataType="zero_subtotal_checkout_config_state">
+                    <object key="active" dataType="active">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="order_status" dataType="order_status">
+                        <field key="value">string</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+
+    <operation name="DisablePaymentMethodsSettingConfig" dataType="use_system_value_config_state" type="create" auth="adminFormKey" url="/admin/system_config/save/section/payment/" method="POST">
+        <object key="groups" dataType="use_system_value_config_state">
+            <object key="free" dataType="use_system_value_config_state">
+                <object key="fields" dataType="use_system_value_config_state">
+                    <object key="active" dataType="use_system_value_config_state">
+                        <object key="inherit" dataType="zeroSubEnable">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="order_status" dataType="use_system_value_config_state">
+                        <object key="inherit" dataType="zeroSubOrderStatus">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+
+</operations>
+

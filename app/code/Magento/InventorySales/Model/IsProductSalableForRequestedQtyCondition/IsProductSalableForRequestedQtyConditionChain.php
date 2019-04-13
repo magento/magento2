@@ -121,7 +121,7 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
 
             if (!$condition['object'] instanceof IsProductSalableForRequestedQtyInterface) {
                 throw new LocalizedException(
-                    __('Condition have to implement IsProductSalableForRequestedQtyInterface.')
+                    __('Condition has to implement IsProductSalableForRequestedQtyInterface.')
                 );
             }
         }

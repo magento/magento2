@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogImportExport\Test\TestCase\ExportProductsTest" summary="Export products">
         <variation name="ExportProductsTestVariation4" summary="Export bundle products" ticketId="MAGETWO-30602">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="exportData" xsi:type="string">default</data>
             <data name="products/0" xsi:type="array">
                 <item name="fixture" xsi:type="string">bundleProduct</item>

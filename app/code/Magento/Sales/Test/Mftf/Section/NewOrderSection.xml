@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="NewOrderSection">
+        <element name="createNewOrder" type="button" selector="#add"/>
+        <element name="customer" type="button" selector="//td[contains(text(), 'Abgar')]"/>
+        <element name="addProducts" type="button" selector="#add_products"/>
+        <element name="chooseProduct" type="button" selector="//td[contains(text(),'ProductTest')]"/>
+        <element name="addSelectedProduct" type="button" selector="//button[@title='Add Selected Product(s) to Order']"/>
+        <element name="openAddresses" type="button" selector="#order-billing_address_customer_address_id"/>
+        <element name="chooseAddress" type="button" selector="//select[@id='order-billing_address_customer_address_id']//option[contains(text(), 'Abgar')]"/>
+        <element name="state" type="button" selector="#order-billing_address_region"/>
+        <element name="openShippingMethods" type="button" selector="//a[@class='action-default']"/>
+        <element name="shippingMethod" type="button" selector="//label[@class='admin__field-label' and @for='s_method_flatrate_flatrate']"/>
+        <element name="creditCardBraintree" type="button" selector="#p_method_braintree"/>
+        <element name="openCardTypes" type="button" selector="#braintree_cc_type"/>
+        <element name="masterCard" type="button" selector="//option[contains(text(), 'MasterCard')]"/>
+        <element name="cardFrame" type="iframe" selector="braintree-hosted-field-number"/>
+        <element name="monthFrame" type="iframe" selector="braintree-hosted-field-expirationMonth"/>
+        <element name="yearFrame" type="iframe" selector="braintree-hosted-field-expirationYear"/>
+        <element name="cvvFrame" type="iframe" selector="braintree-hosted-field-cvv"/>
+        <element name="creditCardNumber" type="input" selector="#credit-card-number"/>
+        <element name="expirationMonth" type="input" selector="#expiration-month"/>
+        <element name="expirationYear" type="input" selector="#expiration-year"/>
+        <element name="cvv" type="input" selector="#cvv"/>
+        <element name="submitOrder" type="input" selector="#submit_order_top_button"/>
+        <element name="successMessage" type="input" selector="#messages"/>
+    </section>
+</sections>

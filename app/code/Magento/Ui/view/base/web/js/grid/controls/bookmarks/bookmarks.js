@@ -382,7 +382,7 @@ define([
          * Checks if specified view is in editing state.
          *
          * @param {String} index - Index of a view to be checked.
-         * @returns {Bollean}
+         * @returns {Boolean}
          */
         isEditing: function (index) {
             return this.editing === index;
