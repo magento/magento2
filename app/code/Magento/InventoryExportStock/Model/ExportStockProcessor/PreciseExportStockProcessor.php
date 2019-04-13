@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryExportStock\Model\ExportStockProcessor;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForSkuInterface;
 use Magento\InventoryExportStock\Model\GetQtyForNotManageStock;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
@@ -16,10 +18,8 @@ use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 /**
  * Class Provides precise method of getting stock data
  */
-class PreciseStockProcessor implements ExportStockProcessorInterface
+class PreciseExportStockProcessor
 {
-    public const PROCESSOR_TYPE = 'precise';
-
     /**
      * @var IsSourceItemManagementAllowedForSkuInterface
      */
@@ -31,24 +31,32 @@ class PreciseStockProcessor implements ExportStockProcessorInterface
     private $getProductSalableQty;
 
     /**
+     * @var GetStockItemConfigurationInterface
+     */
+    private $getStockItemConfiguration;
+
+    /**
      * @var GetQtyForNotManageStock
      */
     private $getQtyForNotManageStock;
 
     /**
-     * PreciseStockProcessor constructor
+     * PreciseExportStockProcessor constructor
      *
      * @param IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku
-     * @param GetQtyForNotManageStock $getQtyForNotManageStock
      * @param GetProductSalableQtyInterface $getProductSalableQty
+     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
+     * @param GetQtyForNotManageStock $getQtyForNotManageStock
      */
     public function __construct(
         IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku,
-        GetQtyForNotManageStock $getQtyForNotManageStock,
-        GetProductSalableQtyInterface $getProductSalableQty
+        GetProductSalableQtyInterface $getProductSalableQty,
+        GetStockItemConfigurationInterface $getStockItemConfiguration,
+        GetQtyForNotManageStock $getQtyForNotManageStock
     ) {
         $this->isSourceItemManagementAllowedForSku = $isSourceItemManagementAllowedForSku;
         $this->getProductSalableQty = $getProductSalableQty;
+        $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->getQtyForNotManageStock = $getQtyForNotManageStock;
     }
 
@@ -63,14 +71,15 @@ class PreciseStockProcessor implements ExportStockProcessorInterface
      */
     public function execute(array $products, int $stockId): array
     {
-        $qtyForNotManageStock = $this->getQtyForNotManageStock->execute();
+        $skus = $this->getProductSkus($products);
         $items = [];
-        foreach ($products as $product) {
-            $sku = $product->getSku();
-            if ($this->isSourceItemManagementAllowedForSku->execute($sku)) {
-                $qty = $this->getProductSalableQty->execute($sku, $stockId) ?: $qtyForNotManageStock;
-            } else {
+        foreach ($skus as $sku) {
+            if (!$this->getStockItemConfiguration->execute($sku, $stockId)->isManageStock()) {
+                $qty = $this->getQtyForNotManageStock->execute();
+            } elseif (!$this->isSourceItemManagementAllowedForSku->execute($sku)) {
                 $qty = null;
+            } else {
+                $qty = $this->getProductSalableQty->execute($sku, $stockId);
             }
 
             $items[] = [
@@ -80,5 +89,22 @@ class PreciseStockProcessor implements ExportStockProcessorInterface
         }
 
         return $items;
+    }
+
+    /**
+     * Extracts product skus from $product array
+     *
+     * @param array $products
+     * @return array
+     */
+    private function getProductSkus(array $products): array
+    {
+        $skus = [];
+        /** @var ProductInterface $product */
+        foreach ($products as $product) {
+            $skus[] = $product->getSku();
+        }
+
+        return $skus;
     }
 }

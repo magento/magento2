@@ -7,8 +7,14 @@
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
-    <route url="/V1/inventory/export-stock-data" method="GET">
-        <service class="Magento\InventoryExportStockApi\Api\ExportStockDataInterface" method="execute"/>
+    <route url="/V1/inventory/export-stock-salable-qty" method="GET">
+        <service class="Magento\InventoryExportStockApi\Api\ExportStockSalableQtyInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::stock"/>
+        </resources>
+    </route>
+    <route url="/V1/inventory/dump-stock-index-data" method="GET">
+        <service class="Magento\InventoryExportStockApi\Api\ExportStockIndexDataInterface" method="execute"/>
         <resources>
             <resource ref="Magento_InventoryApi::stock"/>
         </resources>

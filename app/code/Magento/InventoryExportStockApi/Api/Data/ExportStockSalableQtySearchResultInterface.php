@@ -10,10 +10,10 @@ namespace Magento\InventoryExportStockApi\Api\Data;
 use Magento\Framework\Api\SearchResultsInterface;
 
 /**
- * Interface for ExportStockDataSearchResult
+ * Interface for ExportStockSalableQtySearchResult
  * @api
  */
-interface ExportStockDataSearchResultInterface extends SearchResultsInterface
+interface ExportStockSalableQtySearchResultInterface extends SearchResultsInterface
 {
     /**
      * Get stock data array

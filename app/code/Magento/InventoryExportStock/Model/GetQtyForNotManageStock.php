@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryExportStock\Model;
 
 /**
- * Class Provides qty for not manage stock from di configuration
+ * Class GetQtyForNotManageStock provides qtyForNotManageStock from di configuration
  */
 class GetQtyForNotManageStock
 {
@@ -29,7 +29,7 @@ class GetQtyForNotManageStock
     }
 
     /**
-     * Provides qty for not manage stock from di configuration
+     * Provides qtyForNotManageStock from di configuration
      *
      * @return int
      */

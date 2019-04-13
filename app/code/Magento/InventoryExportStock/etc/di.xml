@@ -7,33 +7,20 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\InventoryExportStockApi\Api\Data\ExportStockDataSearchResultInterface"
-                type="Magento\InventoryExportStock\Model\ExportStockDataSearchResult" />
-    <preference for="Magento\InventoryExportStockApi\Api\Data\ProductStockDataInterface"
-                type="Magento\InventoryExportStock\Model\ProductStockData"/>
-    <preference for="Magento\InventoryExportStockApi\Api\ExportStockDataInterface"
-                type="Magento\InventoryExportStock\Model\ExportStockData"/>
-    <type name="Magento\InventoryExportStock\Model\ExportStockData">
+    <preference for="Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterface"
+                type="Magento\InventoryExportStock\Model\ExportStockSalableQtySearchResult"/>
+    <preference for="Magento\InventoryExportStockApi\Api\ExportStockSalableQtyInterface"
+                type="Magento\InventoryExportStock\Model\ExportStockSalableQty"/>
+    <preference for="Magento\InventoryExportStockApi\Api\ExportStockIndexDataInterface"
+                type="Magento\InventoryExportStock\Model\ExportStockIndexData"/>
+    <type name="Magento\InventoryExportStock\Model\ExportStockProcessor\PreciseExportStockProcessor">
         <arguments>
-           <argument name="processor"
-                     xsi:type="const">Magento\InventoryExportStock\Model\ExportStockProcessor\StockIndexDumpProcessor::PROCESSOR_TYPE</argument>
-<!--            <argument name="processor"-->
-<!--                      xsi:type="const">Magento\InventoryExportStock\Model\ExportStockProcessor\PreciseStockProcessor::PROCESSOR_TYPE</argument>-->
+            <argument name="qtyForNotManageStock" xsi:type="number">1</argument>
         </arguments>
     </type>
     <type name="Magento\InventoryExportStock\Model\GetQtyForNotManageStock">
         <arguments>
             <argument name="qtyForNotManageStock" xsi:type="number">1</argument>
-        </arguments>
-    </type>
-    <type name="Magento\InventoryExportStock\Model\ExportStockProcessor\StockExportProcessorPool">
-        <arguments>
-            <argument name="processors" xsi:type="array">
-                <item name="stock_dump"
-                      xsi:type="object">Magento\InventoryExportStock\Model\ExportStockProcessor\StockIndexDumpProcessor</item>
-                <item name="precise"
-                      xsi:type="object">Magento\InventoryExportStock\Model\ExportStockProcessor\PreciseStockProcessor</item>
-            </argument>
         </arguments>
     </type>
 </config>
