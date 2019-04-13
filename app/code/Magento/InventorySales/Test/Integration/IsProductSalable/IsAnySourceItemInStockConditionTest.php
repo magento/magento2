@@ -15,7 +15,7 @@ use Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceItemInStoc
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class IsAnySourceInStockConditionTest extends TestCase
+class IsAnySourceItemInStockConditionTest extends TestCase
 {
     /**
      * @var IsAnySourceItemInStockCondition
