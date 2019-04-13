@@ -671,6 +671,35 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
+     */
+    public function testProductFilterNfinset()
+    {
+        $productSku = 'search_product_1';
+
+        $query = <<<QUERY
+       {
+           products(filter: {sku: {nfinset: ["$productSku"]}})
+           {
+               items {
+                   id
+                  name
+                  sku
+               }
+           }
+       }
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $this->assertNotEquals($response['products']['items'][0]['sku'], $productSku);
+    }
+
+    /**
      * @param ProductInterface $product
      * @param array $actualResponse
      */
