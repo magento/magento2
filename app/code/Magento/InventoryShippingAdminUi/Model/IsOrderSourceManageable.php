@@ -7,11 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShippingAdminUi\Model;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
+use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventoryConfiguration\Model\GetStockItemConfiguration;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
@@ -21,12 +20,12 @@ use Magento\Sales\Api\Data\OrderInterface;
 class IsOrderSourceManageable
 {
     /**
-     * @var ProductRepositoryInterface
+     * @var GetSkuFromOrderItemInterface
      */
-    private $productRepository;
+    private $getSkuFromOrderItem;
 
     /**
-     * @var GetStockItemConfiguration
+     * @var GetStockItemConfigurationInterface
      */
     private $getStockItemConfiguration;
 
@@ -41,18 +40,18 @@ class IsOrderSourceManageable
     private $isSourceItemManagementAllowedForProductType;
 
     /**
-     * @param ProductRepositoryInterface $productRepository
-     * @param GetStockItemConfiguration $getStockItemConfiguration
+     * @param GetSkuFromOrderItemInterface $productRepository
+     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      * @param StockRepositoryInterface $stockRepository
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
-        GetStockItemConfiguration $getStockItemConfiguration,
+        GetSkuFromOrderItemInterface $productRepository,
+        GetStockItemConfigurationInterface $getStockItemConfiguration,
         StockRepositoryInterface $stockRepository,
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
     ) {
-        $this->productRepository = $productRepository;
+        $this->getSkuFromOrderItem = $productRepository;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->stockRepository = $stockRepository;
         $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
@@ -73,14 +72,10 @@ class IsOrderSourceManageable
                 continue;
             }
 
-            $productId = $orderItem->getProductId();
-            /** @var Product $product */
-            $product = $this->productRepository->getById($productId);
-
             /** @var StockInterface $stock */
             foreach ($stocks as $stock) {
                 $inventoryConfiguration = $this->getStockItemConfiguration->execute(
-                    $product->getSku(),
+                    $this->getSkuFromOrderItem->execute($orderItem),
                     $stock->getStockId()
                 );
 
