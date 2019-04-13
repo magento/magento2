@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Test\Integration\IsProductSalable;
+namespace Magento\InventorySales\Test\Integration\IsProductSalableForRequestedQty;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceItemInStockCondition;
+use Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsAnySourceItemInStockCondition;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -69,6 +69,6 @@ class IsAnySourceItemInStockConditionTest extends TestCase
         $legacyStockItem->setBackorders(1);
         $legacyStockItem->setUseConfigBackorders(0);
         $this->stockItemRepository->save($legacyStockItem);
-        $this->assertFalse($this->isAnySourceInStockCondition->execute('SKU-1', 10));
+        $this->assertFalse($this->isAnySourceInStockCondition->execute('SKU-1', 10, 1)->isSalable());
     }
 }
