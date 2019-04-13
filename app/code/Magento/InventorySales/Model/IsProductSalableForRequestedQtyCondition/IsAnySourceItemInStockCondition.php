@@ -11,13 +11,13 @@ use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterfaceFactory;
-use Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceInStockCondition
+use Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceItemInStockCondition
     as IsAnySourceInStockConditionCondition;
 
 /**
  * @inheritdoc
  */
-class IsAnySourceInStockCondition implements IsProductSalableForRequestedQtyInterface
+class IsAnySourceItemInStockCondition implements IsProductSalableForRequestedQtyInterface
 {
     /**
      * @var IsAnySourceInStockConditionCondition
@@ -35,7 +35,6 @@ class IsAnySourceInStockCondition implements IsProductSalableForRequestedQtyInte
     private $productSalableResultFactory;
 
     /**
-     * IsAnySourceInStockCondition constructor.
      * @param IsAnySourceInStockConditionCondition $isAnySourceInStockCondition
      * @param ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory
      * @param ProductSalableResultInterfaceFactory $productSalableResultFactory
@@ -57,17 +56,17 @@ class IsAnySourceInStockCondition implements IsProductSalableForRequestedQtyInte
      */
     public function execute(string $sku, int $stockId, float $requestedQty): ProductSalableResultInterface
     {
+        $errors = [];
         $isValid = $this->isAnySourceInStockCondition->execute($sku, $stockId);
         if (!$isValid) {
             $errors = [
                 $this->productSalabilityErrorFactory->create([
-                    'code' => 'stock_item_is_any_source_in_stock-no_sources_in_stock',
-                    'message' => __('There is no sources in stock')
+                    'code' => 'stock_item_is_any_source_in_stock-no_source_items_in_stock',
+                    'message' => __('There are no source items with in stock status')
                 ])
             ];
-            return $this->productSalableResultFactory->create(['errors' => $errors]);
         }
 
-        return $this->productSalableResultFactory->create(['errors' => []]);
+        return $this->productSalableResultFactory->create(['errors' => $errors]);
     }
 }

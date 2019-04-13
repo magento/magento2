@@ -11,14 +11,14 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceInStockCondition;
+use Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceItemInStockCondition;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 class IsAnySourceInStockConditionTest extends TestCase
 {
     /**
-     * @var IsAnySourceInStockCondition
+     * @var IsAnySourceItemInStockCondition
      */
     private $isAnySourceInStockCondition;
 
@@ -41,7 +41,7 @@ class IsAnySourceInStockConditionTest extends TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->isAnySourceInStockCondition = $objectManager->get(
-            IsAnySourceInStockCondition::class
+            IsAnySourceItemInStockCondition::class
         );
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
         $this->stockItemCriteriaFactory = $objectManager->get(StockItemCriteriaInterfaceFactory::class);

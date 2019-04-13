@@ -15,7 +15,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 /**
  * @inheritdoc
  */
-class IsAnySourceInStockCondition implements IsProductSalableInterface
+class IsAnySourceItemInStockCondition implements IsProductSalableInterface
 {
     /**
      * @var SourceItemRepositoryInterface
@@ -28,7 +28,6 @@ class IsAnySourceInStockCondition implements IsProductSalableInterface
     private $searchCriteriaBuilder;
 
     /**
-     * IsAnySourceInStockCondition constructor.
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */

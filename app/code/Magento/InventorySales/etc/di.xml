@@ -61,7 +61,7 @@
                 </item>
                 <item name="stock_item_is_any_source_in_stock" xsi:type="array">
                     <item name="required" xsi:type="boolean">true</item>
-                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceInStockCondition</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceItemInStockCondition</item>
                 </item>
                 <item name="back_order" xsi:type="array">
                     <item name="sort_order" xsi:type="number">10</item>
@@ -90,7 +90,7 @@
                 </item>
                 <item name="stock_item_is_any_source_in_stock" xsi:type="array">
                     <item name="required" xsi:type="boolean">true</item>
-                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsAnySourceInStockCondition</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsAnySourceItemInStockCondition</item>
                 </item>
                 <item name="back_order" xsi:type="array">
                     <item name="sort_order" xsi:type="number">10</item>
