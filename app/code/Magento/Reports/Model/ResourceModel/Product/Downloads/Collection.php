@@ -103,7 +103,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @return \Magento\Framework\DB\Select
      */
-    public function getSelectCountSql() {
+    public function getSelectCountSql() 
+    {
         $countSelect = parent::getSelectCountSql();
         $countSelect->reset(\Zend\Db\Sql\Select::GROUP);
         return $countSelect;
