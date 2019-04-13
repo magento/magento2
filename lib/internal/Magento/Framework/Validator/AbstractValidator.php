@@ -25,7 +25,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
     /**
      * Array of validation failure messages
      *
-     * @var array
+     * @var string[]
      */
     protected $_messages = [];
 
@@ -127,6 +127,6 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      */
     protected function _addMessages(array $messages)
     {
-        $this->_messages = array_merge_recursive($this->_messages, $messages);
+        $this->_messages = array_merge($this->_messages, $messages);
     }
 }
