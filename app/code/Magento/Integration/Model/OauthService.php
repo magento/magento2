@@ -150,6 +150,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
                 unset($existingToken);
             }
         } catch (\Exception $e) {
+            return false;
         }
         if (!isset($existingToken)) {
             $consumer = $this->_consumerFactory->create()->load($consumerId);
