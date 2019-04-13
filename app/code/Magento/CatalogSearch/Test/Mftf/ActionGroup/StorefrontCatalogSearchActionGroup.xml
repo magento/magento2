@@ -11,12 +11,12 @@
     <!-- Quick search the phrase and check if the result page contains correct information -->
     <actionGroup name="StorefrontCheckQuickSearchActionGroup">
         <arguments>
-            <argument name="phrase"/>
+            <argument name="phrase" />
         </arguments>
-        <submitForm selector="#search_mini_form" parameterArray="['q' => '{{phrase}}']" stepKey="fillQuickSearch" />
+        <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{phrase}}]" stepKey="fillQuickSearch" />
         <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
-        <seeInTitle userInput="Search results for: '{{phrase}}'" stepKey="assertQuickSearchTitle"/>
         <dontSeeInCurrentUrl url="form_key=" stepKey="checkUrlFormKey"/>
+        <seeInTitle userInput="Search results for: '{{phrase}}'" stepKey="assertQuickSearchTitle"/>
         <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
     </actionGroup>
 
@@ -48,7 +48,7 @@
     <!-- Go to store's advanced catalog search page -->
     <actionGroup name="GoToStoreViewAdvancedCatalogSearchActionGroup">
         <amOnPage url="{{StorefrontCatalogSearchAdvancedFormPage.url}}" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForPageLoad time="90" stepKey="waitForPageLoad"/>
     </actionGroup>
 
     <!-- Storefront advanced catalog search by product name -->
@@ -115,5 +115,10 @@
         <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.Description}}" userInput="{{description}}" stepKey="fillDescription"/>
         <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="clickSubmit"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!-- Asserts that search results do not contain any results-->
+    <actionGroup name="StorefrontCheckSearchIsEmpty">
+        <see stepKey="checkEmpty" selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="Your search returned no results"/>
     </actionGroup>
 </actionGroups>

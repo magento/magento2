@@ -22,7 +22,7 @@ interface SourceSelectionResultInterface extends \Magento\Framework\Api\Extensib
     /**
      * @return bool
      */
-    public function isShippable() : bool;
+    public function isShippable(): bool;
 
     /**
      * Retrieve existing extension attributes object

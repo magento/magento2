@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
+    <publisher topic="async.V1.inventory.bulk-product-source-assign.POST">
+        <connection name="amqp" exchange="magento" disabled="false" />
+    </publisher>
+    <publisher topic="async.V1.inventory.bulk-product-source-unassign.POST">
+        <connection name="amqp" exchange="magento" disabled="false" />
+    </publisher>
+    <publisher topic="async.V1.inventory.bulk-product-source-transfer.POST">
+        <connection name="amqp" exchange="magento" disabled="false" />
+    </publisher>
+</config>

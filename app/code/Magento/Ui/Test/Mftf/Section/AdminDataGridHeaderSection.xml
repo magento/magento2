@@ -25,5 +25,7 @@
         <!--Visible columns management-->
         <element name="columnsToggle" type="button" selector="div.admin__data-grid-action-columns button[data-bind='toggleCollapsible']" timeout="30"/>
         <element name="columnCheckbox" type="checkbox" selector="//div[contains(@class,'admin__data-grid-action-columns')]//div[contains(@class, 'admin__field-option')]//label[text() = '{{column}}']/preceding-sibling::input" parameterized="true"/>
+        <element name="perPage" type="select" selector="#product_attributes_listing.product_attributes_listing.listing_top.listing_paging_sizes"/>
+        <element name="attributeName" type="input" selector="//div[text()='{{arg}}']/../preceding-sibling::td//input" parameterized="true"/>
     </section>
 </sections>

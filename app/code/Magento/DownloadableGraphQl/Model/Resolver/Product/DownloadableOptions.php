@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\DownloadableGraphQl\Model\Resolver\Product;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\Data as DownloadableHelper;
@@ -20,9 +21,9 @@ use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * Format for downloadable product types
+ * @inheritdoc
  *
- * {@inheritdoc}
+ * Format for downloadable product types
  */
 class DownloadableOptions implements ResolverInterface
 {
@@ -65,9 +66,17 @@ class DownloadableOptions implements ResolverInterface
     }
 
     /**
+     * @inheritdoc
+     *
      * Add downloadable options to configurable types
      *
-     * {@inheritdoc}
+     * @param \Magento\Framework\GraphQl\Config\Element\Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @throws \Exception
+     * @return null|array
      */
     public function resolve(
         Field $field,
@@ -77,7 +86,7 @@ class DownloadableOptions implements ResolverInterface
         array $args = null
     ) {
         if (!isset($value['model'])) {
-            throw new GraphQlInputException(__('"model" value should be specified'));
+            throw new LocalizedException(__('"model" value should be specified'));
         }
 
         /** @var Product $product */

@@ -168,8 +168,8 @@ class AnnotationFormatValidator
     ) : void {
         $tokens = $phpcsFile->getTokens();
         $longPtr = $phpcsFile->findNext($emptyTypeTokens, $shortPtrEnd + 1, $commentEndPtr - 1, true);
-        if (strtolower($tokens[$longPtr]['content']) === '{@inheritdoc}') {
-            $error = '{@inheritdoc} imports only short description, annotation must have long description';
+        if (strtolower($tokens[$longPtr]['content']) === '@inheritdoc') {
+            $error = '@inheritdoc imports only short description, annotation must have long description';
             $phpcsFile->addFixableError($error, $longPtr, 'MethodAnnotation');
         }
         if ($longPtr !== false && $tokens[$longPtr]['code'] === T_DOC_COMMENT_STRING) {
@@ -301,8 +301,8 @@ class AnnotationFormatValidator
                 $this->validateShortDescriptionFormat(
                     $phpcsFile,
                     (int) $shortPtr,
-                    $commentStartPtr,
-                    $commentEndPtr,
+                    (int)$commentStartPtr,
+                    (int)$commentEndPtr,
                     $emptyTypeTokens
                 );
             }

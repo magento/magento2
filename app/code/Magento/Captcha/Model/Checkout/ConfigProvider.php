@@ -5,6 +5,9 @@
  */
 namespace Magento\Captcha\Model\Checkout;
 
+/**
+ * Configuration provider for Captcha rendering.
+ */
 class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
 {
     /**
@@ -38,7 +41,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {
@@ -49,7 +52,8 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
                 'imageHeight' => $this->getImageHeight($formId),
                 'imageSrc' => $this->getImageSrc($formId),
                 'refreshUrl' => $this->getRefreshUrl(),
-                'isRequired' => $this->isRequired($formId)
+                'isRequired' => $this->isRequired($formId),
+                'timestamp' => time()
             ];
         }
         return $config;

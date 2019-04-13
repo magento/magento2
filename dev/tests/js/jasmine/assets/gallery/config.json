@@ -59,8 +59,7 @@
         "arrows": "false",
         "thumbwidth": "90",
         "thumbheight": "90",
-        "ratio": "1",
-        "allowfullscreen": true
+        "ratio": "1"
     },
     "fullscreen": {
         "nav": false

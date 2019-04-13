@@ -85,8 +85,9 @@ class ProcessSourceItemsObserver implements ObserverInterface
     private function processSourceItems(array $sourceItems, string $productSku)
     {
         foreach ($sourceItems as $key => $sourceItem) {
+            $sourceItems[$key][SourceItemInterface::QUANTITY] = $sourceItems[$key]['quantity_per_source'];
+
             if (!isset($sourceItem[SourceItemInterface::STATUS])) {
-                $sourceItems[$key][SourceItemInterface::QUANTITY] = $sourceItems[$key]['quantity_per_source'];
                 $sourceItems[$key][SourceItemInterface::STATUS]
                     = $sourceItems[$key][SourceItemInterface::QUANTITY] > 0 ? 1 : 0;
             }

@@ -33,7 +33,6 @@ atlassian*
 /.php_cs
 /.php_cs.cache
 /grunt-config.json
-/dev/tools/grunt/configs/local-themes.js
 /pub/media/*.*
 !/pub/media/.htaccess
 /pub/media/attribute/*
@@ -49,6 +48,8 @@ atlassian*
 /pub/media/import/*
 !/pub/media/import/.htaccess
 /pub/media/logo/*
+/pub/media/custom_options/*
+!/pub/media/custom_options/.htaccess
 /pub/media/theme/*
 /pub/media/theme_customization/*
 !/pub/media/theme_customization/.htaccess

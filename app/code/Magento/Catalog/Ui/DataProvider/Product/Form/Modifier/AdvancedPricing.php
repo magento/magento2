@@ -139,7 +139,8 @@ class AdvancedPricing extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -158,7 +159,8 @@ class AdvancedPricing extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -381,11 +383,15 @@ class AdvancedPricing extends AbstractModifier
             );
 
             $advancedPricingButton['arguments']['data']['config'] = [
+                'dataScope' => 'advanced_pricing_button',
                 'displayAsLink' => true,
                 'formElement' => Container::NAME,
                 'componentType' => Container::NAME,
                 'component' => 'Magento_Ui/js/form/components/button',
                 'template' => 'ui/form/components/button/container',
+                'imports' => [
+                    'childError' => $this->scopeName . '.advanced_pricing_modal.advanced-pricing:error',
+                ],
                 'actions' => [
                     [
                         'targetName' => $this->scopeName . '.advanced_pricing_modal',
