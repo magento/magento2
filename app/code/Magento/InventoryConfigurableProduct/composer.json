@@ -13,9 +13,6 @@
         "magento/module-sales": "*",
         "magento/module-configurable-product": "*"
     },
-    "suggest": {
-        "magento/module-configurable-product": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
