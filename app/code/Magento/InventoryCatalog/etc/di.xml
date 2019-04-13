@@ -25,6 +25,9 @@
     <type name="Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter">
         <plugin name="change_select_for_price_modifier" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\Indexer\ModifySelectInProductPriceIndexFilter"/>
     </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
+        <plugin name="priceIndexUpdater" disabled="true"/>
+    </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
         <plugin name="adapt_add_stock_data_to_collection"
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddStockDataToCollectionPlugin"/>
@@ -66,11 +69,6 @@
             <argument name="tableNameSourceItem" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::TABLE_NAME_SOURCE_ITEM</argument>
         </arguments>
     </type>
-    <type name="Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem">
-        <arguments>
-            <argument name="sourceItemsSave" xsi:type="object">Magento\Inventory\Model\SourceItem\Command\SourceItemsSaveWithoutLegacySynchronization</argument>
-        </arguments>
-    </type>
     <type name="Magento\Inventory\Model\SourceItem\Command\SourceItemsSaveWithoutLegacySynchronization">
         <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save" disabled="true"/>
     </type>
@@ -80,7 +78,6 @@
         <plugin name="adapt_get_product_stock_status" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusPlugin"/>
         <plugin name="adapt_get_product_stock_status_by_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusBySkuPlugin"/>
     </type>
-
     <!-- Mass Source Assignment -->
     <preference for="Magento\InventoryCatalogApi\Api\BulkSourceAssignInterface"
                 type="Magento\InventoryCatalog\Model\BulkSourceAssign"/>
@@ -88,6 +85,10 @@
                 type="Magento\InventoryCatalog\Model\BulkSourceUnassign"/>
     <preference for="Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface"
                 type="Magento\InventoryCatalog\Model\BulkInventoryTransfer"/>
+    <preference for="Magento\InventoryCatalogApi\Api\BulkPartialInventoryTransferInterface"
+                type="Magento\InventoryCatalog\Model\BulkPartialInventoryTransfer"/>
+    <preference for="Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface"
+                type="Magento\InventoryCatalog\Model\PartialInventoryTransferItem"/>
 
     <type name="Magento\InventoryCatalog\Model\BulkInventoryTransfer">
         <arguments>
@@ -135,6 +136,17 @@
             </argument>
         </arguments>
     </type>
+    <type name="\Magento\InventoryCatalogApi\Model\PartialInventoryTransferValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="sources"
+                      xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\PartialTransferSourceValidator</item>
+                <item name="items"
+                      xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\PartialTransferItemsValidator</item>
+            </argument>
+        </arguments>
+    </type>
+
     <!-- Negative Min Quantity Threshold for Backorders -->
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter">
         <plugin name="allow_negative_min_qty"
