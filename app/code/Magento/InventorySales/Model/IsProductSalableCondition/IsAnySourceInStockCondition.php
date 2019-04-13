@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\IsProductSalableCondition;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
-use Magento\InventoryApi\Api\GetSourceItemsBySkuInterface;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
@@ -17,17 +18,26 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 class IsAnySourceInStockCondition implements IsProductSalableInterface
 {
     /**
-     * @var GetSourceItemsBySkuInterface
+     * @var SourceItemRepositoryInterface
      */
-    private $getSourceItemsBySku;
+    private $sourceItemRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * IsAnySourceInStockCondition constructor.
-     * @param GetSourceItemsBySkuInterface $getSourceItemsBySku
+     * @param SourceItemRepositoryInterface $sourceItemRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
-    public function __construct(GetSourceItemsBySkuInterface $getSourceItemsBySku)
-    {
-        $this->getSourceItemsBySku = $getSourceItemsBySku;
+    public function __construct(
+        SourceItemRepositoryInterface $sourceItemRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder
+    ) {
+        $this->sourceItemRepository = $sourceItemRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -37,13 +47,13 @@ class IsAnySourceInStockCondition implements IsProductSalableInterface
      */
     public function execute(string $sku, int $stockId): bool
     {
-        $sourceItems = $this->getSourceItemsBySku->execute($sku);
-        foreach ($sourceItems as $sourceItem) {
-            if ($sourceItem->getStatus() === SourceItemInterface::STATUS_IN_STOCK) {
-                return true;
-            }
-        }
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(SourceItemInterface::SKU, $sku)
+            ->addFilter(SourceItemInterface::STATUS, SourceItemInterface::STATUS_IN_STOCK)
+            ->create();
 
-        return false;
+        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
+
+        return (bool)count($sourceItems);
     }
 }
