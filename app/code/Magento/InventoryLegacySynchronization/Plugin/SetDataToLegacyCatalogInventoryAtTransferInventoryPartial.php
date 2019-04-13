@@ -15,7 +15,7 @@ use Magento\InventoryCatalogApi\Api\Data\PartialInventoryTransferItemInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryLegacySynchronization\Model\Synchronize;
 
-class SetDataToLegacyCatalogInventoryAtBulkPartialInventoryTransfer
+class SetDataToLegacyCatalogInventoryAtTransferInventoryPartial
 {
     /**
      * @var Synchronize
