@@ -11,16 +11,16 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\InventorySales\Model\IsProductSalableCondition\IsProductSalableConditionChain;
+use Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceInStockCondition;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class IsProductSalableConditionChainTest extends TestCase
+class IsAnySourceInStockConditionTest extends TestCase
 {
     /**
-     * @var IsProductSalableConditionChain
+     * @var IsAnySourceInStockCondition
      */
-    private $isProductSalableConditionChain;
+    private $isAnySourceInStockCondition;
 
     /**
      * @var ProductRepositoryInterface
@@ -40,8 +40,8 @@ class IsProductSalableConditionChainTest extends TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->isProductSalableConditionChain = $objectManager->get(
-            IsProductSalableConditionChain::class
+        $this->isAnySourceInStockCondition = $objectManager->get(
+            IsAnySourceInStockCondition::class
         );
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
         $this->stockItemCriteriaFactory = $objectManager->get(StockItemCriteriaInterfaceFactory::class);
@@ -69,6 +69,6 @@ class IsProductSalableConditionChainTest extends TestCase
         $legacyStockItem->setBackorders(1);
         $legacyStockItem->setUseConfigBackorders(0);
         $this->stockItemRepository->save($legacyStockItem);
-        $this->assertFalse($this->isProductSalableConditionChain->execute('SKU-1', 10));
+        $this->assertFalse($this->isAnySourceInStockCondition->execute('SKU-1', 10));
     }
 }
