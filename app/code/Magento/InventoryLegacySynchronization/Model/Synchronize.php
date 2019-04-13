@@ -121,7 +121,7 @@ class Synchronize
                 ]
             ];
 
-            /** @var \Magento\AsynchronousOperations\Api\Data\OperationInterface $asyncOperation */
+            /** @var OperationInterface $asyncOperation */
             $asyncOperation = $this->operationInterfaceFactory->create($data);
             $asyncOperations[] = $asyncOperation;
         }
