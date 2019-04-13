@@ -10,4 +10,7 @@
                 type="Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCart"/>
     <preference for="Magento\QuoteGraphQl\Model\Cart\SetShippingMethodsOnCartInterface"
                 type="Magento\QuoteGraphQl\Model\Cart\SetShippingMethodsOnCart"/>
+    <type name="Magento\Quote\Model\QuoteIdMask">
+        <plugin name="mask_already_set_exception" type="Magento\QuoteGraphQl\Plugin\MaskAlreadySetException"/>
+    </type>
 </config>
