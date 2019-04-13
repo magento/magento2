@@ -97,4 +97,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
         return $this;
     }
+    
+    /**
+     * Get SQL for get record count without left JOINs and group 
+     *
+     * @return \Magento\Framework\DB\Select
+     */
+    public function getSelectCountSql() 
+    {
+        $countSelect = parent::getSelectCountSql();
+        $countSelect->reset(\Zend\Db\Sql\Select::GROUP);
+        return $countSelect;
+    }
 }
