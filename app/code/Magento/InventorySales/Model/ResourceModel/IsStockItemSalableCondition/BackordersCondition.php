@@ -9,6 +9,7 @@ namespace Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\DB\Select;
+use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 
 /**
  * Condition for backorders configuration.
@@ -35,11 +36,16 @@ class BackordersCondition implements GetIsStockItemSalableConditionInterface
     public function execute(Select $select): string
     {
         $globalBackorders = (int)$this->configuration->getBackorders();
+        $itemBackordersCondition = 'legacy_stock_item.backorders <> ' . StockItemConfigurationInterface::BACKORDERS_NO;
+        $useDefaultBackorders = 'legacy_stock_item.use_config_backorders';
+        $itemMinQty = 'legacy_stock_item.min_qty';
 
-        $condition = (1 === $globalBackorders)
-            ? 'legacy_stock_item.use_config_backorders = 1'
-            : 'legacy_stock_item.use_config_backorders = 0 AND legacy_stock_item.backorders = 1';
-        $condition .= ' AND (legacy_stock_item.min_qty >= 0 OR legacy_stock_item.qty > legacy_stock_item.min_qty)';
+        $condition = $globalBackorders === StockItemConfigurationInterface::BACKORDERS_NO
+            ? $useDefaultBackorders . ' = ' . StockItemConfigurationInterface::BACKORDERS_NO . ' AND ' .
+            $itemBackordersCondition
+            : $useDefaultBackorders . ' = ' . StockItemConfigurationInterface::BACKORDERS_YES_NONOTIFY .
+            ' OR ' . $itemBackordersCondition;
+        $condition .= " AND ($itemMinQty >= 0 OR legacy_stock_item.qty > $itemMinQty)";
 
         return $condition;
     }
