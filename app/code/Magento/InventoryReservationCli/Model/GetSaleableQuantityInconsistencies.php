@@ -7,8 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservationCli\Model;
 
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\InventoryReservationCli\Model\ResourceModel\GetReservationsList;
+use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\AddCompletedOrdersToUnresolved;
+use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\AddExistingReservations;
+use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\AddExpectedReservations;
+use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\Collector;
+use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\CollectorFactory;
+use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\RemoveReservationsWithoutRelevantOrder;
+use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\RemoveResolvedReservations;
 
 /**
  * Filter orders for missing initial reservation
@@ -16,88 +21,72 @@ use Magento\InventoryReservationCli\Model\ResourceModel\GetReservationsList;
 class GetSaleableQuantityInconsistencies
 {
     /**
-     * @var GetReservationsList
+     * @var CollectorFactory
      */
-    private $getReservationsList;
+    private $collectorFactory;
 
     /**
-     * @var SerializerInterface
+     * @var AddExpectedReservations
      */
-    private $serialize;
+    private $addExpectedReservations;
 
     /**
-     * @var GetOrdersInNotFinalState
+     * @var AddExistingReservations
      */
-    private $getOrdersInNotFinalState;
+    private $addExistingReservations;
 
     /**
-     * @param GetReservationsList $getReservationsList
-     * @param SerializerInterface $serialize
-     * @param GetOrdersInNotFinalState $getOrdersInNotFinalState
+     * @var RemoveResolvedReservations
+     */
+    private $removeResolvedReservations;
+
+    /**
+     * @var AddCompletedOrdersToUnresolved
+     */
+    private $addCompletedOrdersToUnresolved;
+
+    /**
+     * @var RemoveReservationsWithoutRelevantOrder
+     */
+    private $removeReservationsWithoutRelevantOrder;
+
+    /**
+     * @param CollectorFactory $collectorFactory
+     * @param AddExpectedReservations $addExpectedReservations
+     * @param AddExistingReservations $addExistingReservations
+     * @param RemoveResolvedReservations $removeResolvedReservations
+     * @param AddCompletedOrdersToUnresolved $addCompletedOrdersToUnresolved
+     * @param RemoveReservationsWithoutRelevantOrder $removeReservationsWithoutRelevantOrder
      */
     public function __construct(
-        GetReservationsList $getReservationsList,
-        SerializerInterface $serialize,
-        GetOrdersInNotFinalState $getOrdersInNotFinalState
+        CollectorFactory $collectorFactory,
+        AddExpectedReservations $addExpectedReservations,
+        AddExistingReservations $addExistingReservations,
+        RemoveResolvedReservations $removeResolvedReservations,
+        AddCompletedOrdersToUnresolved $addCompletedOrdersToUnresolved,
+        RemoveReservationsWithoutRelevantOrder $removeReservationsWithoutRelevantOrder
     ) {
-        $this->getReservationsList = $getReservationsList;
-        $this->serialize = $serialize;
-        $this->getOrdersInNotFinalState = $getOrdersInNotFinalState;
+        $this->collectorFactory = $collectorFactory;
+        $this->addExpectedReservations = $addExpectedReservations;
+        $this->addExistingReservations = $addExistingReservations;
+        $this->removeResolvedReservations = $removeResolvedReservations;
+        $this->addCompletedOrdersToUnresolved = $addCompletedOrdersToUnresolved;
+        $this->removeReservationsWithoutRelevantOrder = $removeReservationsWithoutRelevantOrder;
     }
 
     /**
-     * @return array
+     * Filter orders for missing initial reservation
+     * @return SaleableQuantityInconsistency[]
      */
     public function execute(): array
     {
-        $reservationList = $this->getReservationsList->execute();
-        $expectedReservations = $this->getExpectedReservations();
-
-        $result = [];
-        foreach ($reservationList as $reservation) {
-            /** @var array $metadata */
-            $metadata = $this->serialize->unserialize($reservation['metadata']);
-            $objectId = $metadata['object_id'];
-            $sku = $reservation['sku'];
-            $orderType = $metadata['object_type'];
-
-            if ($orderType !== 'order') {
-                continue;
-            }
-
-            if (!isset($result[$objectId])) {
-                $result[$objectId] = [];
-            }
-            if (!isset($result[$objectId][$sku])) {
-                $result[$objectId][$sku] = 0.0;
-            }
-
-            $result[$objectId][$sku] += (float) $reservation['quantity'];
-        }
-
-        foreach ($result as &$entry) {
-            $entry = array_filter($entry);
-        }
-
-        return array_filter($result);
-    }
-
-    private function getExpectedReservations()
-    {
-        $incompleteOrders = $this->getOrdersInNotFinalState->execute();
-
-        $result = [];
-        foreach ($incompleteOrders as $order) {
-            $entityId = $order->getEntityId();
-            $list[$entityId] = [
-                'increment_id' => $order->getIncrementId(),
-                'skus' => []
-            ];
-            foreach ($order->getItems() as $item) {
-                $list[$entityId]['skus'][$item->getSku()] = (float)$item->getQtyOrdered();
-            }
-        }
-
-        return $list;
+        /** @var Collector $collector */
+        $collector = $this->collectorFactory->create();
+        $this->addExpectedReservations->execute($collector);
+        $this->addExistingReservations->execute($collector);
+        $this->removeResolvedReservations->execute($collector);
+        $this->addCompletedOrdersToUnresolved->execute($collector);
+        $this->removeReservationsWithoutRelevantOrder->execute($collector);
+        return $collector->getInconsistencies();
     }
 }
