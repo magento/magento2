@@ -55,6 +55,47 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
+     *
+     * @param string $methodCode
+     * @param string $methodLabel
+     * @dataProvider availableForCartShippingMethods
+     */
+    public function testSetAvailableUpsShippingMethodOnCart(string $methodCode, string $methodLabel)
+    {
+        $quoteReservedId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
+        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
+
+        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
+        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
+        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+
+        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
+
+        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
+
+        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
+
+        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(
+            self::CARRIER_LABEL . ' - ' . $methodLabel,
+            $shippingAddress['selected_shipping_method']['label']
+        );
+    }
+
+    /**
      * Set "Next Day Air Early AM" UPS shipping method
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
@@ -239,9 +280,55 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertEquals($addressesInformation[0]['selected_shipping_method'], $expectedResult);
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/Ups/_files/enable_ups_shipping_method.php
+     *
+     * @param string $carrierMethodCode
+     * @param string $carrierMethodLabel
+     * @dataProvider notAvailableForCartShippingMethods
+     */
+    public function testSetNotAvailableForCartUpsShippingMethod(string $carrierMethodCode, string $carrierMethodLabel)
+    {
+        $quoteReservedId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
+        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
 
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $shippingAddressId,
+            self::CARRIER_CODE,
+            $carrierMethodCode
+        );
 
+        $this->expectExceptionMessage(
+            "GraphQL response contains errors: Carrier with such method not found: " . self::CARRIER_CODE . ", " . $carrierMethodCode
+        );
 
+        $response = $this->sendRequestWithToken($query);
+
+        $addressesInformation = $response['setShippingMethodsOnCart']['cart']['shipping_addresses'];
+        $expectedResult = [
+            'carrier_code' => self::CARRIER_CODE,
+            'method_code' => $carrierMethodCode,
+            'label' => self::CARRIER_LABEL . ' - ' . $carrierMethodLabel,
+        ];
+        self::assertEquals($addressesInformation[0]['selected_shipping_method'], $expectedResult);
+    }
+
+    /**
+     * @return array
+     */
+    public function availableForCartShippingMethods(): array
+    {
+        $shippingMethods = ['1DM', '1DA', '2DA', '3DS', 'GND'];
+
+        return $this->filterShippingMethodsByCodes($shippingMethods);
+    }
 
     /**
      * @return array
@@ -251,6 +338,21 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
         $shippingMethods = ['1DML', '1DAL', '1DAPI', '1DP', '1DPL', '2DM', '2DML', '2DAL', 'GNDCOM', 'GNDRES', 'STD', 'XPR', 'WXS', 'XPRL', 'XDM', 'XDML', 'XPD'];
 
         return $this->filterShippingMethodsByCodes($shippingMethods);
+    }
+
+    /**
+     * @param array $filter
+     * @return array
+     */
+    private function filterShippingMethodsByCodes(array $filter):array
+    {
+        $result = [];
+        foreach ($this->getAllUpsShippingMethods() as $shippingMethod) {
+            if (in_array($shippingMethod[0], $filter)) {
+                $result[] = $shippingMethod;
+            }
+        }
+        return $result;
     }
 
     private function getAllUpsShippingMethods():array
@@ -334,6 +436,6 @@ QUERY;
         $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
 
-        return $this->graphQlMutation($query, [], '', $headerMap);
+        return $this->graphQlQuery($query, [], '', $headerMap);
     }
 }
