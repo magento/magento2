@@ -54,10 +54,35 @@ class GetOrdersWithMissingInitialReservations
             $objectId = $metadata['object_id'];
             $eventType = $metadata['event_type'];
 
-            if ($eventType == 'order_placed' && in_array($objectId, array_keys($entityIdAndSkuList))) {
-                unset($entityIdAndSkuList[$objectId]);
+            if ($eventType === 'order_placed' && in_array($objectId, array_keys($entityIdAndSkuList))) {
+                $entityIdAndSkuList = $this->filterReservedSkus((int)$objectId, $entityIdAndSkuList, $reservation);
             }
         }
+
+        $entityIdAndSkuList = array_filter($entityIdAndSkuList, function ($order) {
+            return !empty($order['skus']);
+        });
+
+        return $entityIdAndSkuList;
+    }
+
+    /**
+     * @param int $objectId
+     * @param array $entityIdAndSkuList
+     * @param array $reservation
+     * @return array
+     */
+    private function filterReservedSkus(int $objectId, array $entityIdAndSkuList, array $reservation): array
+    {
+        $reservedSku = $reservation['sku'];
+        if (!in_array($reservedSku, array_keys($entityIdAndSkuList[$objectId]['skus']))) {
+            return $entityIdAndSkuList;
+        }
+
+        $reservedQuantity = $reservation['quantity'];
+        $entityIdAndSkuList[$objectId]['skus'][$reservedSku] += (float)$reservedQuantity;
+
+        $entityIdAndSkuList[$objectId]['skus'] = array_filter($entityIdAndSkuList[$objectId]['skus']);
 
         return $entityIdAndSkuList;
     }
