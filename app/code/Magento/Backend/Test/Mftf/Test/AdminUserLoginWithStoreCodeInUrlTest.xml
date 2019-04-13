@@ -17,13 +17,13 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set web/url/use_store 1" stepKey="addStoreCodeToUrl"/>
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
         </before>
         <after>
-            <magentoCLI command="config:set web/url/use_store 0" stepKey="addStoreCodeToUrlDisable"/>
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
         </after>
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-        <see userInput="Dashboard" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeDashboardTitle"/>
+        <actionGroup ref="AdminAssertDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>
     </test>
 </tests>

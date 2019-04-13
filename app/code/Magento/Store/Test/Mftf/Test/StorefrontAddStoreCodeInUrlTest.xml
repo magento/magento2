@@ -17,16 +17,13 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set web/url/use_store 1" stepKey="addStoreCodeToUrl"/>
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
         </before>
         <after>
-            <magentoCLI command="config:set web/url/use_store 0" stepKey="addStoreCodeToUrlDisable"/>
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
         </after>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="gotToHomePage"/>
-        <waitForPageLoad stepKey="waitForHomePageLoaded1"/>
-        <click selector="{{StorefrontHeaderSection.logoLink}}" stepKey="clickOnLogo"/>
-        <waitForPageLoad stepKey="waitForHomePageLoaded2"/>
-        <seeInCurrentUrl url="{{StorefrontHomePage.url}}{{_defaultStore.code}}" stepKey="seeStoreCodeInURL"/>
+        <actionGroup ref="StorefrontClickOnHeaderLogoActionGroup" stepKey="clickOnStorefrontHeaderLogo"/>
+        <actionGroup ref="StorefrontAssertStoreCodeInUrlActionGroup" stepKey="seeStoreCodeInUrl"/>
     </test>
 </tests>
