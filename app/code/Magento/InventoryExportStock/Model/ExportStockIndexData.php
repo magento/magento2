@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryExportStock\Model;
 
-use Magento\InventoryExportStock\Model\ResourceModel\GetStockIndexDump;
+use Exception;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\InventoryExportStock\Model\ResourceModel\StockIndexDumpProcessor;
 use Magento\InventoryExportStockApi\Api\ExportStockIndexDataInterface;
-use Zend_Db_Select_Exception;
 
 /**
  * Class ExportStockIndexData
@@ -17,19 +18,19 @@ use Zend_Db_Select_Exception;
 class ExportStockIndexData implements ExportStockIndexDataInterface
 {
     /**
-     * @var GetStockIndexDump
+     * @var StockIndexDumpProcessor
      */
-    private $getStockIndexDump;
+    private $stockIndexDumpProcessor;
 
     /**
      * ExportStockIndexData constructor
      *
-     * @param GetStockIndexDump $getStockIndexDump
+     * @param StockIndexDumpProcessor $stockIndexDumpProcessor
      */
     public function __construct(
-        GetStockIndexDump $getStockIndexDump
+        StockIndexDumpProcessor $stockIndexDumpProcessor
     ) {
-        $this->getStockIndexDump = $getStockIndexDump;
+        $this->stockIndexDumpProcessor = $stockIndexDumpProcessor;
     }
 
     /**
@@ -37,11 +38,17 @@ class ExportStockIndexData implements ExportStockIndexDataInterface
      *
      * @param int $stockId
      * @return array
-     * @throws Zend_Db_Select_Exception
+     * @throws LocalizedException
      */
     public function execute(
         int $stockId
     ): array {
-        return $this->getStockIndexDump->execute($stockId);
+        try {
+            $items = $this->stockIndexDumpProcessor->execute($stockId);
+        } catch (Exception $e) {
+            throw new LocalizedException(__($e->getMessage()));
+        }
+
+        return $items;
     }
 }

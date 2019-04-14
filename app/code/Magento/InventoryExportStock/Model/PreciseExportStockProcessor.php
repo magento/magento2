@@ -5,14 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryExportStock\Model\ExportStockProcessor;
+namespace Magento\InventoryExportStock\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForSkuInterface;
-use Magento\InventoryExportStock\Model\GetQtyForNotManageStock;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 
 /**

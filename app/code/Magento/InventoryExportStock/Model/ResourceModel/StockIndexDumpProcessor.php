@@ -19,7 +19,7 @@ use Zend_Db_Select_Exception;
 /**
  * Class GetStockIndexDump provides sku and qty of products dumping them from stock index table
  */
-class GetStockIndexDump
+class StockIndexDumpProcessor
 {
     /**
      * @var StockIndexTableNameResolverInterface
@@ -59,7 +59,6 @@ class GetStockIndexDump
         ResourceConnection $resourceConnection,
         ManageStockCondition $manageStockCondition,
         GetQtyForNotManageStock $getQtyForNotManageStock
-
     ) {
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->resourceConnection = $resourceConnection;
@@ -96,6 +95,7 @@ class GetStockIndexDump
     {
         $stockIndexTableName = $this->resourceConnection
             ->getTableName($this->stockIndexTableNameResolver->execute($stockId));
+
         return $this->connection->select()
             ->from(
                 $stockIndexTableName,
