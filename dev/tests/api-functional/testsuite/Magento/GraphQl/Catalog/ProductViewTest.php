@@ -691,11 +691,6 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-
-        /**
-         * @var ProductRepositoryInterface $productRepository
-         */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $this->assertNotEquals($response['products']['items'][0]['sku'], $productSku);
     }
 
