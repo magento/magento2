@@ -54,12 +54,12 @@
             <argument name="rowIndex" type="string"/>
         </arguments>
         <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitFormReload"/>
+        <waitForPageLoad time="30" stepKey="waitFormReload"/>
         <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByIndex(rowIndex)}}"/>
         <click stepKey="clickOnDelete" selector="{{AdminExportAttributeSection.delete(rowIndex)}}" after="clickSelectBtn"/>
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmDelete"/>
-        <waitForPageLoad stepKey="waitForExportDataDeleted" />
+        <waitForElementVisible selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="waitDataGridEmptyMessageAppears"/>
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
     </actionGroup>
 </actionGroups>
