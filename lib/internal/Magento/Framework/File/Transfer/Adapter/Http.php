@@ -106,7 +106,7 @@ class Http
      * @param array $options
      * @param string $filepath
      */
-    protected function prepareResponse($options, string $filepath): void
+    private function prepareResponse($options, string $filepath): void
     {
         $mimeType = $this->mime->getMimeType($filepath);
         if (is_array($options) && isset($options['headers']) && $options['headers'] instanceof \Zend\Http\Headers) {
