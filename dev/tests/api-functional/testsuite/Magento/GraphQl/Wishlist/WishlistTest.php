@@ -94,6 +94,36 @@ QUERY;
     }
 
     /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage The current user cannot perform operations on wishlist
+     */
+    public function testGetGuestWishlist()
+    {
+        $query =
+            <<<QUERY
+{
+  wishlist {
+    items_count
+    name
+    sharing_code
+    updated_at
+    items {
+      id
+      qty
+      description
+      added_at
+      product {
+        sku
+        name
+      }
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * @param string $email
      * @param string $password
      * @return array

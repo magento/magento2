@@ -2546,7 +2546,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         $rowNum,
                         $rowData[self::COL_NAME],
                         $message,
-                        ProcessingError::ERROR_LEVEL_NOT_CRITICAL
+                        $errorLevel
                     )
                         ->getErrorAggregator()
                         ->addRowToSkip($rowNum);

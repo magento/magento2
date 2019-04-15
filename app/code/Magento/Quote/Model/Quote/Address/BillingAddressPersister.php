@@ -12,6 +12,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Customer\Api\AddressRepositoryInterface;
 
+/**
+ * Saves billing address for quotes.
+ */
 class BillingAddressPersister
 {
     /**
@@ -37,6 +40,8 @@ class BillingAddressPersister
     }
 
     /**
+     * Save address for billing.
+     *
      * @param CartInterface $quote
      * @param AddressInterface $address
      * @param bool $useForShipping
@@ -47,7 +52,7 @@ class BillingAddressPersister
     public function save(CartInterface $quote, AddressInterface $address, $useForShipping = false)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $this->addressValidator->validate($address);
+        $this->addressValidator->validateForCart($quote, $address);
         $customerAddressId = $address->getCustomerAddressId();
         $shippingAddress = null;
         $addressData = [];

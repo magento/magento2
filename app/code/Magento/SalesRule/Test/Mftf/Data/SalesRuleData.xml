@@ -189,4 +189,8 @@
         <data key="uses_per_coupon">10</data>
         <data key="simple_free_shipping">1</data>
     </entity>
+
+    <entity name="SalesRuleNoCouponWithFixedDiscount" extends="ApiCartRule">
+        <data key="simple_action">by_fixed</data>
+    </entity>
 </entities>
