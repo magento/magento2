@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App\PageCache;
 
+use Magento\Framework\App\State as AppState;
+
 /**
  * Builtin cache processor
  */
@@ -53,6 +55,11 @@ class Kernel
     private $httpFactory;
 
     /**
+     * @var AppState
+     */
+    private $state;
+
+    /**
      * @param Cache $cache
      * @param Identifier $identifier
      * @param \Magento\Framework\App\Request\Http $request
@@ -60,6 +67,7 @@ class Kernel
      * @param \Magento\Framework\App\Http\ContextFactory|null $contextFactory
      * @param \Magento\Framework\App\Response\HttpFactory|null $httpFactory
      * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
+     * @param AppState|null $state
      */
     public function __construct(
         \Magento\Framework\App\PageCache\Cache $cache,
@@ -68,7 +76,8 @@ class Kernel
         \Magento\Framework\App\Http\Context $context = null,
         \Magento\Framework\App\Http\ContextFactory $contextFactory = null,
         \Magento\Framework\App\Response\HttpFactory $httpFactory = null,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null,
+        AppState $state = null
     ) {
         $this->cache = $cache;
         $this->identifier = $identifier;
@@ -100,6 +109,14 @@ class Kernel
         } else {
             $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Framework\Serialize\SerializerInterface::class
+            );
+        }
+
+        if ($state) {
+            $this->state = $state;
+        } else {
+            $this->state = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                AppState::class
             );
         }
     }
@@ -144,7 +161,9 @@ class Kernel
                 $tags = $tagsHeader ? explode(',', $tagsHeader->getFieldValue()) : [];
 
                 $response->clearHeader('Set-Cookie');
-                $response->clearHeader('X-Magento-Tags');
+                if ($this->state->getMode() != AppState::MODE_DEVELOPER) {
+                    $response->clearHeader('X-Magento-Tags');
+                }
                 if (!headers_sent()) {
                     header_remove('Set-Cookie');
                 }

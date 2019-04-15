@@ -94,7 +94,7 @@ QUERY;
         $nonExistingStoreCode = "non_existent_store";
         $headerMapInvalidStoreCode = ['Store' => $nonExistingStoreCode];
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Store code non_existent_store does not exist');
+        $this->expectExceptionMessage('The store that was requested wasn\'t found. Verify the store and try again.');
         $this->graphQlQuery($query, [], '', $headerMapInvalidStoreCode);
     }
 }
