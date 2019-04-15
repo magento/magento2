@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
@@ -313,7 +315,7 @@ class Categories extends AbstractModifier
      */
     protected function getCategoriesTree($filter = null)
     {
-        $storeId = $this->locator->getStore()->getId();
+        $storeId = (int) $this->locator->getStore()->getId();
 
         $cachedCategoriesTree = $this->getCacheManager()
             ->load($this->getCategoriesTreeCacheId($storeId, (string) $filter));
@@ -345,7 +347,7 @@ class Categories extends AbstractModifier
      * @param string $filter
      * @return string
      */
-    private function getCategoriesTreeCacheId($storeId, $filter = '')
+    private function getCategoriesTreeCacheId(int $storeId, string $filter = '') : string
     {
         return self::CATEGORY_TREE_ID
             . '_' . (string) $storeId
@@ -360,7 +362,7 @@ class Categories extends AbstractModifier
      * @return array
      * @throws LocalizedException
      */
-    private function retrieveShownCategoriesIds($storeId, $filter = '')
+    private function retrieveShownCategoriesIds(int $storeId, string $filter = '') : array
     {
         /* @var $matchingNamesCollection \Magento\Catalog\Model\ResourceModel\Category\Collection */
         $matchingNamesCollection = $this->categoryCollectionFactory->create();
@@ -396,7 +398,7 @@ class Categories extends AbstractModifier
      * @return array
      * @throws LocalizedException
      */
-    private function retrieveCategoriesTree($storeId, array $shownCategoriesIds = [])
+    private function retrieveCategoriesTree(int $storeId, array $shownCategoriesIds) : array
     {
         /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
         $collection = $this->categoryCollectionFactory->create();
