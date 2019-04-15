@@ -20,6 +20,7 @@
         <element name="guestLastName" type="input" selector=".billing-address-form input[name*='lastname']"/>
         <element name="guestStreet" type="input" selector=".billing-address-form input[name*='street[0]']"/>
         <element name="guestCity" type="input" selector=".billing-address-form input[name*='city']"/>
+        <element name="guestCountry" type="select" selector=".billing-address-form select[name*='country_id']"/>
         <element name="guestRegion" type="select" selector=".billing-address-form select[name*='region_id']"/>
         <element name="guestPostcode" type="input" selector=".billing-address-form input[name*='postcode']"/>
         <element name="guestTelephone" type="input" selector=".billing-address-form input[name*='telephone']"/>
