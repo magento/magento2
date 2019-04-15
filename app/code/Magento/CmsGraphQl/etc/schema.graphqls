@@ -13,10 +13,10 @@ type StoreConfig @doc(description: "The type contains information about a store 
 type Query {
     cmsPage (
         id: Int @doc(description: "Id of the CMS page")
-    ): CmsPage @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Page") @doc(description: "The CMS page query returns information about a CMS page") @cache(cache_tag: "cms_p", cacheIdentityResolver: "Magento\\CmsGraphQl\\Model\\Resolver\\Page\\IdentityResolver")
+    ): CmsPage @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Page") @doc(description: "The CMS page query returns information about a CMS page") @cache(cacheTag: "cms_p", cacheIdentityResolver: "Magento\\CmsGraphQl\\Model\\Resolver\\Page\\IdentityResolver")
     cmsBlocks (
         identifiers: [String] @doc(description: "Identifiers of the CMS blocks")
-    ): CmsBlocks @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Blocks") @doc(description: "The CMS block query returns information about CMS blocks") @cache(cache_tag: "cms_b", cacheIdentityResolver: "Magento\\CmsGraphQl\\Model\\Resolver\\Block\\IdentityResolver")
+    ): CmsBlocks @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Blocks") @doc(description: "The CMS block query returns information about CMS blocks") @cache(cacheTag: "cms_b", cacheIdentityResolver: "Magento\\CmsGraphQl\\Model\\Resolver\\Block\\IdentityResolver")
 }
 
 type CmsPage @doc(description: "CMS page defines all CMS page information") {

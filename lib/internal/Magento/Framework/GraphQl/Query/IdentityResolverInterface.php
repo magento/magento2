@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Model;
+namespace Magento\Framework\GraphQl\Query;
 
 interface IdentityResolverInterface
 {

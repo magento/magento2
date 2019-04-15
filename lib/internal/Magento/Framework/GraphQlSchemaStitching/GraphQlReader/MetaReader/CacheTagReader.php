@@ -24,10 +24,10 @@ class CacheTagReader
         foreach ($directives as $directive) {
             if ($directive->name->value == 'cache') {
                 foreach ($directive->arguments as $directiveArgument) {
-                    if ($directiveArgument->name->value == 'cache_tag') {
+                    if ($directiveArgument->name->value == 'cacheTag') {
                         $argMap = array_merge(
                             $argMap,
-                            ["cache_tag" => $directiveArgument->value->value]
+                            ["cacheTag" => $directiveArgument->value->value]
                         );
                     }
                     if ($directiveArgument->name->value == 'cacheable') {
