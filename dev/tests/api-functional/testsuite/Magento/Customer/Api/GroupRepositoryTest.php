@@ -56,22 +56,6 @@ class GroupRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * Execute per test cleanup.
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-    }
-
-    /**
-     * Cleaning up the extra groups that might have been created as part of the testing.
-     */
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-    }
-
-    /**
      * Verify the retrieval of a customer group by Id.
      *
      * @param array $testGroup The group data for the group being retrieved.
@@ -874,7 +858,7 @@ class GroupRepositoryTest extends WebapiAbstract
         return [
             ['tax_class_id', 3, []],
             ['tax_class_id', 0, null],
-            ['code', md5(mt_rand(0, 10000000000) . time()), null],
+            ['code', hash("sha256", random_int(0, 10000000000) . time()), null],
             [
                 'id',
                 0,
