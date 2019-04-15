@@ -277,24 +277,24 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
 
         $this->addSitemapItem(new DataObject(
             [
-                'changefreq' => $this->_escaper->escapeHtml($helper->getCategoryChangefreq($storeId)),
-                'priority' => $this->_escaper->escapeHtml($helper->getCategoryPriority($storeId)),
+                'changefreq' => $helper->getCategoryChangefreq($storeId),
+                'priority' => $helper->getCategoryPriority($storeId),
                 'collection' => $this->_categoryFactory->create()->getCollection($storeId),
             ]
         ));
 
         $this->addSitemapItem(new DataObject(
             [
-                'changefreq' => $this->_escaper->escapeHtml($helper->getProductChangefreq($storeId)),
-                'priority' => $this->_escaper->escapeHtml($helper->getProductPriority($storeId)),
+                'changefreq' => $helper->getProductChangefreq($storeId),
+                'priority' => $helper->getProductPriority($storeId),
                 'collection' => $this->_productFactory->create()->getCollection($storeId),
             ]
         ));
 
         $this->addSitemapItem(new DataObject(
             [
-                'changefreq' => $this->_escaper->escapeHtml($helper->getPageChangefreq($storeId)),
-                'priority' => $this->_escaper->escapeHtml($helper->getPagePriority($storeId)),
+                'changefreq' => $helper->getPageChangefreq($storeId),
+                'priority' => $helper->getPagePriority($storeId),
                 'collection' => $this->_cmsFactory->create()->getCollection($storeId),
             ]
         ));
@@ -510,10 +510,10 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             $row .= '<lastmod>' . $this->_getFormattedLastmodDate($lastmod) . '</lastmod>';
         }
         if ($changefreq) {
-            $row .= '<changefreq>' . $changefreq . '</changefreq>';
+            $row .= '<changefreq>' . $this->_escaper->escapeHtml($changefreq) . '</changefreq>';
         }
         if ($priority) {
-            $row .= sprintf('<priority>%.1f</priority>', $priority);
+            $row .= sprintf('<priority>%.1f</priority>', $this->_escaper->escapeHtml($priority));
         }
         if ($images) {
             // Add Images to sitemap
