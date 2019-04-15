@@ -328,6 +328,7 @@ class Storage extends \Magento\Framework\DataObject
             $item->setName($item->getBasename());
             $item->setShortName($this->_cmsWysiwygImages->getShortFilename($item->getBasename()));
             $item->setUrl($this->_cmsWysiwygImages->getCurrentUrl() . $item->getBasename());
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $item->setSize(filesize($item->getFilename()));
             $item->setMimeType(\mime_content_type($item->getFilename()));
 
@@ -338,6 +339,7 @@ class Storage extends \Magento\Framework\DataObject
                     $thumbUrl = $this->_backendUrl->getUrl('cms/*/thumbnail', ['file' => $item->getId()]);
                 }
 
+                // phpcs:ignore Generic.PHP.NoSilencedErrors
                 $size = @getimagesize($item->getFilename());
 
                 if (is_array($size)) {
@@ -413,6 +415,7 @@ class Storage extends \Magento\Framework\DataObject
                 'id' => $this->_cmsWysiwygImages->convertPathToId($newPath),
             ];
             return $result;
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot create a new directory.'));
         }
@@ -439,6 +442,7 @@ class Storage extends \Magento\Framework\DataObject
             $this->_deleteByPath($path);
             $path = $this->getThumbnailRoot() . $this->_getRelativePathToRoot($path);
             $this->_deleteByPath($path);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot delete directory %1.', $this->_getRelativePathToRoot($path))
@@ -601,6 +605,7 @@ class Storage extends \Magento\Framework\DataObject
         $image->open($source);
         $image->keepAspectRatio($keepRatio);
         $image->resize($this->_resizeParameters['width'], $this->_resizeParameters['height']);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $dest = $targetDir . '/' . pathinfo($source, PATHINFO_BASENAME);
         $image->save($dest);
         if ($this->_directory->isFile($this->_directory->getRelativePath($dest))) {
@@ -636,6 +641,7 @@ class Storage extends \Magento\Framework\DataObject
         $thumbnailDir = $this->getThumbnailRoot();
 
         if ($filePath && strpos($filePath, $mediaRootDir) === 0) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $thumbnailDir .= dirname(substr($filePath, strlen($mediaRootDir)));
         }
 
@@ -686,6 +692,7 @@ class Storage extends \Magento\Framework\DataObject
         if (!$this->hasData('_image_extensions')) {
             $this->setData('_image_extensions', $this->getAllowedExtensions('image'));
         }
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         return in_array($ext, $this->_getData('_image_extensions'));
     }
