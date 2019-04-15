@@ -29,7 +29,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  * | XDM       | Worldwide Express Plus
  * | XPD       | Worldwide Expedited
  *
- * Current class does not cover these UPS shipping methods (depends on sandbox settings)
+ * Current class does not cover these UPS shipping methods (depends on address and sandbox settings)
  *
  * | Code      | Label
  * --------------------------------------
@@ -81,25 +81,26 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
         $objectManager = Bootstrap::getObjectManager();
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->getQuoteShippingAddressIdByReservedQuoteId = $objectManager->get(GetQuoteShippingAddressIdByReservedQuoteId::class);
+        $this->getQuoteShippingAddressIdByReservedQuoteId = $objectManager->get(
+            GetQuoteShippingAddressIdByReservedQuoteId::class
+        );
     }
 
     /**
-     * Set "Next Day Air Early AM" UPS shipping method
-     *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
+     *
+     * @dataProvider dataProviderShippingMethods
+     * @param string $methodCode
+     * @param string $methodLabel
      */
-    public function testSetNextDayAirEarlyAmUpsShippingMethod()
+    public function testSetUpsShippingMethod(string $methodCode, string $methodLabel)
     {
         $quoteReservedId = 'test_quote';
-        $methodCode = '1DM';
-        $methodLabel = 'Next Day Air Early AM';
-
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
         $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
 
@@ -128,193 +129,34 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * Set "Next Day Air" UPS shipping method
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
+     * @return array
      */
-    public function testSetNextDayAirUpsShippingMethod()
+    public function dataProviderShippingMethods(): array
     {
-        $quoteReservedId = 'test_quote';
-        $methodCode = '1DA';
-        $methodLabel = 'Next Day Air';
-
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
-        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
-
-        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
-        $response = $this->sendRequestWithToken($query);
-
-        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
-        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
-        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-
-        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
-
-        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
-
-        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
-
-        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(
-            self::CARRIER_LABEL . ' - ' . $methodLabel,
-            $shippingAddress['selected_shipping_method']['label']
-        );
+        return [
+            'Next Day Air Early AM' => ['1DM', 'Next Day Air Early AM'],
+            'Next Day Air' => ['1DA', 'Next Day Air'],
+            '2nd Day Air' => ['2DA', '2nd Day Air'],
+            '3 Day Select' => ['3DS', '3 Day Select'],
+            'Ground' => ['GND', 'Ground'],
+        ];
     }
 
     /**
-     * Set "2nd Day Air" UPS shipping method
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
-     */
-    public function testSet2ndDayAirUpsShippingMethod()
-    {
-        $quoteReservedId = 'test_quote';
-        $methodCode = '2DA';
-        $methodLabel = '2nd Day Air';
-
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
-        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
-
-        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
-        $response = $this->sendRequestWithToken($query);
-
-        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
-        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
-        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-
-        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
-
-        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
-
-        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
-
-        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(
-            self::CARRIER_LABEL . ' - ' . $methodLabel,
-            $shippingAddress['selected_shipping_method']['label']
-        );
-    }
-
-    /**
-     * Set "3 Day Select" UPS shipping method
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
-     */
-    public function testSet3DaySelectUpsShippingMethod()
-    {
-        $quoteReservedId = 'test_quote';
-        $methodCode = '3DS';
-        $methodLabel = '3 Day Select';
-
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
-        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
-
-        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
-        $response = $this->sendRequestWithToken($query);
-
-        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
-        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
-        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-
-        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
-
-        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
-
-        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
-
-        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(
-            self::CARRIER_LABEL . ' - ' . $methodLabel,
-            $shippingAddress['selected_shipping_method']['label']
-        );
-    }
-
-    /**
-     * Set "Ground" UPS shipping method
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
-     */
-    public function testSetGroundUpsShippingMethod()
-    {
-        $quoteReservedId = 'test_quote';
-        $methodCode = 'GND';
-        $methodLabel = 'Ground';
-
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
-        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
-
-        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
-        $response = $this->sendRequestWithToken($query);
-
-        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
-        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
-        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-
-        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
-
-        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
-
-        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
-
-        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(
-            self::CARRIER_LABEL . ' - ' . $methodLabel,
-            $shippingAddress['selected_shipping_method']['label']
-        );
-    }
-
-    /**
-     * Set "Canada Standard" UPS shipping method
-     *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
      * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
+     *
+     * @dataProvider dataProviderShippingMethodsBasedOnCanadaAddress
+     * @param string $methodCode
+     * @param string $methodLabel
      */
-    public function testSetCanadaStandardUpsShippingMethod()
+    public function testSetUpsShippingMethodBasedOnCanadaAddress(string $methodCode, string $methodLabel)
     {
         $quoteReservedId = 'test_quote';
-        $methodCode = 'STD';
-        $methodLabel = 'Canada Standard';
-
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
         $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
 
@@ -343,175 +185,16 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * Set "Worldwide Express" UPS shipping method
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
+     * @return array
      */
-    public function testSetWorldwideExpressUpsShippingMethod()
+    public function dataProviderShippingMethodsBasedOnCanadaAddress(): array
     {
-        $quoteReservedId = 'test_quote';
-        $methodCode = 'XPR';
-        $methodLabel = 'Worldwide Express';
-
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
-        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
-
-        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
-        $response = $this->sendRequestWithToken($query);
-
-        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
-        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
-        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-
-        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
-
-        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
-
-        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
-
-        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(
-            self::CARRIER_LABEL . ' - ' . $methodLabel,
-            $shippingAddress['selected_shipping_method']['label']
-        );
-    }
-
-    /**
-     * Set "Worldwide Express Saver" UPS shipping method
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
-     */
-    public function testSetWorldwideExpressSaverUpsShippingMethod()
-    {
-        $quoteReservedId = 'test_quote';
-        $methodCode = 'WXS';
-        $methodLabel = 'Worldwide Express Saver';
-
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
-        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
-
-        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
-        $response = $this->sendRequestWithToken($query);
-
-        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
-        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
-        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-
-        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
-
-        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
-
-        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
-
-        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(
-            self::CARRIER_LABEL . ' - ' . $methodLabel,
-            $shippingAddress['selected_shipping_method']['label']
-        );
-    }
-
-    /**
-     * Set "Worldwide Express Plus" UPS shipping method
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
-     */
-    public function testSetWorldwideExpressPlusUpsShippingMethod()
-    {
-        $quoteReservedId = 'test_quote';
-        $methodCode = 'XDM';
-        $methodLabel = 'Worldwide Express Plus';
-
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
-        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
-
-        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
-        $response = $this->sendRequestWithToken($query);
-
-        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
-        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
-        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-
-        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
-
-        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
-
-        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
-
-        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(
-            self::CARRIER_LABEL . ' - ' . $methodLabel,
-            $shippingAddress['selected_shipping_method']['label']
-        );
-    }
-
-    /**
-     * Set "Worldwide Expedited" UPS shipping method
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
-     */
-    public function testSetWorldwideExpeditedUpsShippingMethod()
-    {
-        $quoteReservedId = 'test_quote';
-        $methodCode = 'XPD';
-        $methodLabel = 'Worldwide Expedited';
-
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
-        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
-
-        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
-        $response = $this->sendRequestWithToken($query);
-
-        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
-        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
-        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-
-        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
-
-        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
-
-        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
-
-        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(
-            self::CARRIER_LABEL . ' - ' . $methodLabel,
-            $shippingAddress['selected_shipping_method']['label']
-        );
+        return [
+            'Canada Standard' => ['STD', 'Canada Standard'],
+            'Worldwide Express' => ['XPR', 'Worldwide Express'],
+            'Worldwide Express Saver' => ['WXS', 'Worldwide Express Saver'],
+            'Worldwide Express Plus' => ['XDM', 'Worldwide Express Plus'],
+        ];
     }
 
     /**
