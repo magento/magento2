@@ -129,6 +129,19 @@ input PaymentMethodInput {
     purchase_order_number: String @doc(description:"Purchase order number")
 }
 
+type CartPrices {
+    grand_total: Money
+    subtotal_including_tax: Money
+    subtotal_excluding_tax: Money
+    subtotal_with_discount_excluding_tax: Money
+    applied_taxes: [CartTaxItem]
+}
+
+type CartTaxItem {
+    amount: Money!
+    label: String!
+}
+
 type SetPaymentMethodOnCartOutput {
     cart: Cart!
 }
@@ -160,6 +173,7 @@ type Cart {
     billing_address: CartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
     available_payment_methods: [AvailablePaymentMethod]  @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
     selected_payment_method: SelectedPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SelectedPaymentMethod")
+    prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices")
 }
 
 type CartAddress {
