@@ -40,6 +40,8 @@ class Page
     }
 
     /**
+     * Get the page data
+     *
      * @param int $pageId
      * @return array
      * @throws NoSuchEntityException
