@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <createData entity="MsiCustomer1" stepKey="createCustomer1"/>
+            <createData entity="Msi_US_Customer" stepKey="createCustomer1"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
             <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="FullSource2" stepKey="createSource2"/>
@@ -46,11 +46,6 @@
             </createData>
 
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-
-            <actionGroup ref="AdminUpdateCustomerGroupByEmailActionGroup" stepKey="updateCustomerGroup1">
-                <argument name="emailAddress" value="$createCustomer1.customer[email]$"/>
-                <argument name="customerGroup" value="General"/>
-            </actionGroup>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>

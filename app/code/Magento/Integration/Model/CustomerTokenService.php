@@ -14,7 +14,11 @@ use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory as TokenCollectionFactory;
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Event\ManagerInterface;
 
+/**
+ * @inheritdoc
+ */
 class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServiceInterface
 {
     /**
@@ -23,6 +27,11 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      * @var TokenModelFactory
      */
     private $tokenModelFactory;
+
+    /**
+     * @var Magento\Framework\Event\ManagerInterface
+     */
+    private $eventManager;
 
     /**
      * Customer Account Service
@@ -55,21 +64,25 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      * @param AccountManagementInterface $accountManagement
      * @param TokenCollectionFactory $tokenModelCollectionFactory
      * @param \Magento\Integration\Model\CredentialsValidator $validatorHelper
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
         TokenModelFactory $tokenModelFactory,
         AccountManagementInterface $accountManagement,
         TokenCollectionFactory $tokenModelCollectionFactory,
-        CredentialsValidator $validatorHelper
+        CredentialsValidator $validatorHelper,
+        ManagerInterface $eventManager = null
     ) {
         $this->tokenModelFactory = $tokenModelFactory;
         $this->accountManagement = $accountManagement;
         $this->tokenModelCollectionFactory = $tokenModelCollectionFactory;
         $this->validatorHelper = $validatorHelper;
+        $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(ManagerInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createCustomerAccessToken($username, $password)
     {
@@ -86,6 +99,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
                 )
             );
         }
+        $this->eventManager->dispatch('customer_login', ['customer' => $customerDataObject]);
         $this->getRequestThrottler()->resetAuthenticationFailuresCount($username, RequestThrottler::USER_TYPE_CUSTOMER);
         return $this->tokenModelFactory->create()->createCustomerToken($customerDataObject->getId())->getToken();
     }

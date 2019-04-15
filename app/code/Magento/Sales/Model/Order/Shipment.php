@@ -354,7 +354,14 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     public function getTracksCollection()
     {
         if ($this->tracksCollection === null) {
-            $this->tracksCollection = $this->_trackCollectionFactory->create()->setShipmentFilter($this->getId());
+            $this->tracksCollection = $this->_trackCollectionFactory->create();
+
+            $id = $this->getId() ?: 0;
+            $this->tracksCollection->setShipmentFilter($id);
+
+            foreach ($this->tracksCollection as $item) {
+                $item->setShipment($this);
+            }
         }
 
         return $this->tracksCollection;
@@ -400,18 +407,19 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      */
     public function addTrack(\Magento\Sales\Model\Order\Shipment\Track $track)
     {
-        $track->setShipment(
-            $this
-        )->setParentId(
-            $this->getId()
-        )->setOrderId(
-            $this->getOrderId()
-        )->setStoreId(
-            $this->getStoreId()
-        );
+        $track->setShipment($this)
+            ->setParentId($this->getId())
+            ->setOrderId($this->getOrderId())
+            ->setStoreId($this->getStoreId());
+
         if (!$track->getId()) {
             $this->getTracksCollection()->addItem($track);
         }
+
+        $tracks = $this->getTracks();
+        // as it's a new track entity, the collection doesn't contain it
+        $tracks[] = $track;
+        $this->setTracks($tracks);
 
         /**
          * Track saving is implemented in _afterSave()
@@ -582,14 +590,15 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     /**
      * Returns tracks
      *
-     * @return \Magento\Sales\Api\Data\ShipmentTrackInterface[]
+     * @return \Magento\Sales\Api\Data\ShipmentTrackInterface[]|null
      */
     public function getTracks()
     {
+        if (!$this->getId()) {
+            return $this->getData(ShipmentInterface::TRACKS);
+        }
+
         if ($this->getData(ShipmentInterface::TRACKS) === null) {
-            foreach ($this->getTracksCollection() as $item) {
-                $item->setShipment($this);
-            }
             $this->setData(ShipmentInterface::TRACKS, $this->getTracksCollection()->getItems());
         }
         return $this->getData(ShipmentInterface::TRACKS);

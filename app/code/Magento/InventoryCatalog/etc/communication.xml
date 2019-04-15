@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
+    <topic name="async.V1.inventory.bulk-product-source-assign.POST" is_synchronous="false" schema="Magento\InventoryCatalogApi\Api\BulkSourceAssignInterface::execute">
+        <handler name="async" type="Magento\InventoryCatalogApi\Api\BulkSourceAssignInterface" method="execute" />
+    </topic>
+    <topic name="async.V1.inventory.bulk-product-source-unassign.POST" is_synchronous="false" schema="Magento\InventoryCatalogApi\Api\BulkSourceUnassignInterface::execute" >
+        <handler name="async" type="Magento\InventoryCatalogApi\Api\BulkSourceUnassignInterface" method="execute" />
+    </topic>
+    <topic name="async.V1.inventory.bulk-product-source-transfer.POST" is_synchronous="false" schema="Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface::execute" >
+        <handler name="async" type="Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface" method="execute" />
+    </topic>
+</config>

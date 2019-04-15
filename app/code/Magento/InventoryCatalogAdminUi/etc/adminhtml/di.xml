@@ -39,6 +39,14 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\InventoryCatalogAdminUi\Ui\DataProvider\Product\Listing\Modifier\QuantityPerSource">
+        <arguments>
+            <!-- @deprecated parameter isSourceItemManagementAllowedForProductType has been deprecated and not in use now -->
+            <argument name="isSourceItemManagementAllowedForProductType" xsi:type="null"/>
+            <!-- @deprecated parameter getSourceItemsBySku has been deprecated and not in use now -->
+            <argument name="getSourceItemsBySku" xsi:type="null"/>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\Product\Copier">
         <plugin name="copy_source_items" type="Magento\InventoryCatalogAdminUi\Plugin\Catalog\CopySourceItemsPlugin"/>
     </type>

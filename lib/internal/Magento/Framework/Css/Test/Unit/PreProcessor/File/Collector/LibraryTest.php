@@ -129,8 +129,8 @@ class LibraryTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider getFilesDataProvider
      *
-     * @param $libraryFiles array Files in lib directory
-     * @param $themeFiles array Files in theme
+     * @param array $libraryFiles Files in lib directory
+     * @param array $themeFiles Files in theme
      * *
      * @return void
      */

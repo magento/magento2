@@ -141,8 +141,8 @@
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.name}}" stepKey="seeProductNameInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.sku}}" stepKey="seeProductSkuInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.price}}" stepKey="seeProductPriceInGrid"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource.source[name]$$ (97)" stepKey="seeProductQuantityInGrid"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock.stock[name]$$ : 95" stepKey="seeProductSalableQuantityInGrid"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource.source[name]$$: 97" stepKey="seeProductQuantityInGrid"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock.stock[name]$$: 95" stepKey="seeProductSalableQuantityInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Enabled" stepKey="seeProductStatusInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Main Website" stepKey="seeProductWebsiteInGrid"/>
     </test>

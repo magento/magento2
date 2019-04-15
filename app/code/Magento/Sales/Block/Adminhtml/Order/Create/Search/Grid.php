@@ -5,12 +5,17 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Search;
 
+use Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\DataProvider\ProductCollection
+    as ProductCollectionDataProvider;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Adminhtml sales order create search products block
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -43,6 +48,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_productFactory;
 
     /**
+     * @var ProductCollectionDataProvider $productCollectionProvider
+     */
+    private $productCollectionProvider;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -50,6 +60,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param array $data
+     * @param ProductCollectionDataProvider|null $productCollectionProvider
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -58,12 +69,15 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\Config $salesConfig,
-        array $data = []
+        array $data = [],
+        ProductCollectionDataProvider $productCollectionProvider = null
     ) {
         $this->_productFactory = $productFactory;
         $this->_catalogConfig = $catalogConfig;
         $this->_sessionQuote = $sessionQuote;
         $this->_salesConfig = $salesConfig;
+        $this->productCollectionProvider = $productCollectionProvider
+            ?: ObjectManager::getInstance()->get(ProductCollectionDataProvider::class);
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -140,20 +154,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
+
         $attributes = $this->_catalogConfig->getProductAttributes();
+        $store = $this->getStore();
+
         /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
-        $collection = $this->_productFactory->create()->getCollection();
-        $collection->setStore(
-            $this->getStore()
-        )->addAttributeToSelect(
+        $collection = $this->productCollectionProvider->getCollectionForStore($store);
+        $collection->addAttributeToSelect(
             $attributes
-        )->addAttributeToSelect(
-            'sku'
-        )->addStoreFilter()->addAttributeToFilter(
+        );
+        $collection->addAttributeToFilter(
             'type_id',
             $this->_salesConfig->getAvailableProductTypes()
-        )->addAttributeToSelect(
-            'gift_message_available'
         );
 
         $this->setCollection($collection);

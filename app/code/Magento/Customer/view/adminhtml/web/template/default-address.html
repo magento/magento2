@@ -1,0 +1,47 @@
+<div data-bind="attr: {class: contentClass}">
+    <div data-bind="attr: {class: 'fieldset-wrapper address-information ' + defaultAddressClass}">
+        <address>
+            <div class="address_caption">
+                <text args="title"/>
+                <each args="data: elems, as: 'element'">
+                    <render if="hasTemplate()"/>
+                </each>
+            </div>
+            <div class="address_details" ifnot="_.isEmpty($data.address)">
+                <text args="address.prefix" if="address.prefix"/>
+                <text args="address.firstname"/>
+                <text args="address.middlename" if="address.middlename"/>
+                <text args="address.lastname"/>
+                <text args="address.suffix" if="address.suffix"/>
+                <br/>
+                <if args="address.company">
+                    <text args="address.company"/>
+                    <br/>
+                </if>
+                <if args="address.street">
+                    <text args="address.street" if="_.isString(address.street)"/>
+                    <text args="_.values(address.street).filter(value => _.isString(value)).join(', ')"
+                          ifnot="_.isString(address.street)"/>
+                    <br/>
+                </if>
+                <text args="address.city + ', '" if="address.city"/>
+                <text args="address.region + ', '" if="address.region"/>
+                <if args="address.postcode">
+                    <text args="address.postcode"/>
+                    <br/>
+                </if>
+                <text args="address.country"/>
+                <if args="address.telephone">
+                    <br/>T: <a attr="href: 'tel:' + address.telephone" text="address.telephone"/>
+                </if>
+                <if args="address.fax">
+                    <br/>F: <text args="address.fax"/>
+                </if>
+                <if args="address.vat_id">
+                    <br/>VAT: <text args="address.vat_id"/>
+                </if>
+            </div>
+            <translate args="notExistsMessage" if="_.isEmpty($data.address)"/>
+        </address>
+    </div>
+</div>

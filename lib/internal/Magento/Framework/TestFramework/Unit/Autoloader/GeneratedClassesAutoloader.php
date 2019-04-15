@@ -65,7 +65,7 @@ class GeneratedClassesAutoloader
                     include $classSourceFile;
                     return true;
                 }
-            };
+            }
         }
 
         return false;

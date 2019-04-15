@@ -159,13 +159,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->getRequest()->getParam('ret', false) == 'pending') {
-            $this->buttonList->update('back', 'onclick', 'setLocation(\'' . $this->getUrl('catalog/*/pending') . '\')');
+            $this->buttonList->update('back', 'onclick', 'setLocation(\'' . $this->getUrl('review/*/pending') . '\')');
             $this->buttonList->update(
                 'delete',
                 'onclick',
                 'deleteConfirm(' . '\'' . __(
                     'Are you sure you want to do this?'
-                ) . '\' ' . '\'' . $this->getUrl(
+                ) . '\', ' . '\'' . $this->getUrl(
                     '*/*/delete',
                     [$this->_objectId => $this->getRequest()->getParam($this->_objectId), 'ret' => 'pending']
                 ) . '\'' . ')'

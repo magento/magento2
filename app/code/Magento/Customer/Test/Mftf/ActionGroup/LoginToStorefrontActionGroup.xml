@@ -11,9 +11,12 @@
         <arguments>
             <argument name="Customer"/>
         </arguments>
-        <amOnPage stepKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>
-        <fillField  stepKey="fillEmail" userInput="{{Customer.email}}" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
-        <fillField  stepKey="fillPassword" userInput="{{Customer.password}}" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
-        <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+        <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
+        <waitForPageLoad time="30" stepKey="waitPageFullyLoaded"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="waitFormAppears"/>
+        <fillField userInput="{{Customer.email}}" selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="fillEmail"/>
+        <fillField userInput="{{Customer.password}}" selector="{{StorefrontCustomerSignInFormSection.passwordField}}" stepKey="fillPassword"/>
+        <click selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="clickSignInAccountButton"/>
+        <waitForPageLoad stepKey="waitForCustomerLoggedIn" />
     </actionGroup>
 </actionGroups>

@@ -31,6 +31,8 @@ class AddIsInStockFieldToCollection
     }
 
     /**
+     * Modify "is in stock" collection filter to support non-default sources.
+     *
      * @param Collection $collection
      * @param int $stockId
      * @return void

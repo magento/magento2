@@ -8,12 +8,11 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Plugin\InventorySalesApi\StockResolver;
 
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\GetStockBySalesChannelInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
-use Magento\InventorySalesApi\Api\StockResolverInterface;
-use Magento\InventoryApi\Api\StockRepositoryInterface;
 
 /**
  * Adapt Stock resolver to admin website

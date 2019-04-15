@@ -58,6 +58,9 @@
         <!-- Select shipping -->
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
 
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="SelectCheckMoneyPaymentMethod" stepKey="selectCheckMoneyPayment"/>
+
         <!--Verify totals on Order page-->
         <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeOrderSubTotal" after="selectFlatRateShipping"/>
         <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="${{AdminOrderSimpleProduct.shipping}}" stepKey="seeOrderShipping" after="seeOrderSubTotal"/>

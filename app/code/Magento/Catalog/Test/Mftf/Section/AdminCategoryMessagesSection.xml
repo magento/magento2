@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCategoryMessagesSection">
         <element name="SuccessMessage" type="text" selector=".message-success"/>
+        <element name="errorMessage" type="text" selector="//div[@class='message message-error error']"/>
     </section>
 </sections>

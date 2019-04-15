@@ -65,4 +65,25 @@
         <data key="is_default">false</data>
         <data key="sort_order">0</data>
     </entity>
+    <entity name="ProductAttributeOption7" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">Green</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">3</data>
+        <requiredEntity type="StoreLabel">Option7Store0</requiredEntity>
+        <requiredEntity type="StoreLabel">Option8Store1</requiredEntity>
+    </entity>
+    <entity name="ProductAttributeOption8" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">Red</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">3</data>
+        <requiredEntity type="StoreLabel">Option9Store0</requiredEntity>
+        <requiredEntity type="StoreLabel">Option10Store1</requiredEntity>
+    </entity>
+    <entity name="ProductAttributeOption8" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">White</data>
+        <data key="value" unique="suffix">white</data>
+    </entity>
 </entities>

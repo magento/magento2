@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
-use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization\SetDataToLegacyCatalogInventory;

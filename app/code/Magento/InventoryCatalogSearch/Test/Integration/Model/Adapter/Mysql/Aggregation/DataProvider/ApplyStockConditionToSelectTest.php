@@ -89,9 +89,9 @@ class ApplyStockConditionToSelectTest extends TestCase
     public function executeDataProvider(): array
     {
         return [
-            ['store_for_eu_website', 2],
+            ['store_for_eu_website', 3],
             ['store_for_us_website', 1],
-            ['store_for_global_website', 3],
+            ['store_for_global_website', 4],
         ];
     }
 

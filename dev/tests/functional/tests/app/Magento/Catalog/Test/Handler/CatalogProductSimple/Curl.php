@@ -411,7 +411,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             : ['is_in_stock' => 'In Stock'];
 
         if (!isset($quantityAndStockStatus['is_in_stock'])) {
-            $qty = isset($quantityAndStockStatus['qty']) ? intval($quantityAndStockStatus['qty']) : null;
+            $qty = isset($quantityAndStockStatus['qty']) ? (int)$quantityAndStockStatus['qty'] : null;
             $quantityAndStockStatus['is_in_stock'] = 0 === $qty ? 'Out of Stock' : 'In Stock';
         }
 
