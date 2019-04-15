@@ -7,6 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Set condition for Customer Segment-->
     <actionGroup name="SetCartAttributeConditionWithSegmentForCartPriceRuleActionGroup">
         <arguments>
             <argument name="attributeName" type="string"/>
