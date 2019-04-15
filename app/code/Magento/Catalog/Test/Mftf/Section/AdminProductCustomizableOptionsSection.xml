@@ -27,7 +27,7 @@
         <!-- var 1 represents the option type that you want to select, i.e "radio buttons" -->
         <element name="optionType" type="block" selector="//*[@data-index='custom_options']//label[text()='{{var1}}'][ancestor::*[contains(@class, '_active')]]" parameterized="true" />
         <element name="optionPrice" type="input" selector="[data-index='custom_options'] [data-index='options'] tbody tr:nth-last-of-type(1) input[name*='price']"/>
-        <element name="optionPriceType" type="select" selector="[data-index='custom_options'] [data-index='options'] tbody tr:nth-last-of-type(1) input[name*='price_type']"/>
+        <element name="optionPriceType" type="select" selector="[data-index='custom_options'] [data-index='options'] tbody tr:nth-last-of-type(1) select[name*='price_type']"/>
         <element name="optionFileExtensions" type="input" selector="[data-index='custom_options'] [data-index='options'] tbody tr:nth-last-of-type(1) input[name*='file_extension']"/>
         <element name="optionSku" type="input" selector="[data-index='custom_options'] [data-index='options'] tbody tr:nth-last-of-type(1) input[name*='sku']"/>
         <element name="optionTitleInputByIndex" type="input" selector="input[name='product[options][{{index}}][title]']" parameterized="true"/>
