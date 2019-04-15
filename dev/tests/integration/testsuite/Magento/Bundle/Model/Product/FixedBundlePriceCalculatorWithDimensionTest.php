@@ -10,7 +10,7 @@ use \Magento\Bundle\Api\Data\LinkInterface;
 
 /**
  * @magentoDbIsolation disabled
- * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
+ * @--magentoIndexerDimensionMode catalog_product_price website_and_customer_group
  * @group indexer_dimension
  * @magentoAppArea frontend
  */
@@ -26,6 +26,9 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
      */
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
+        $this->markTestSkipped(
+            'Skipped because of MAGETWO-99136'
+        );
         $this->prepareFixture($strategyModifiers, 'bundle_product');
         $bundleProduct = $this->productRepository->get('bundle_product', false, null, true);
 
@@ -65,6 +68,9 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
      */
     public function testPriceForFixedBundleInWebsiteScope(array $strategyModifiers, array $expectedResults)
     {
+        $this->markTestSkipped(
+            'Skipped because of MAGETWO-99136'
+        );
         $this->prepareFixture($strategyModifiers, 'bundle_product');
         $bundleProduct = $this->productRepository->get('bundle_product', false, null, true);
 
