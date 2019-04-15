@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForSkuInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 
@@ -73,12 +74,10 @@ class PreciseExportStockProcessor
         $skus = $this->getProductSkus($products);
         $items = [];
         foreach ($skus as $sku) {
-            if (!$this->getStockItemConfiguration->execute($sku, $stockId)->isManageStock()) {
-                $qty = $this->getQtyForNotManageStock->execute();
-            } elseif (!$this->isSourceItemManagementAllowedForSku->execute($sku)) {
-                $qty = null;
-            } else {
-                $qty = $this->getProductSalableQty->execute($sku, $stockId);
+            try {
+                $qty = $this->getProductSalableQtyByStock($sku, $stockId);
+            } catch (SkuIsNotAssignedToStockException $e) {
+                $qty = 0.00;
             }
 
             $items[] = [
@@ -105,5 +104,27 @@ class PreciseExportStockProcessor
         }
 
         return $skus;
+    }
+
+    /**
+     * Provides qty by stock and sku
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @return float
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws SkuIsNotAssignedToStockException
+     */
+    private function getProductSalableQtyByStock(string $sku, int $stockId): ?float
+    {
+        if (!$this->getStockItemConfiguration->execute($sku, $stockId)->isManageStock()) {
+            return (float)$this->getQtyForNotManageStock->execute();
+        }
+        if (!$this->isSourceItemManagementAllowedForSku->execute($sku)) {
+            return null;
+        }
+
+        return $this->getProductSalableQty->execute($sku, $stockId);
     }
 }

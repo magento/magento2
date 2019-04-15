@@ -14,6 +14,8 @@ use Magento\Framework\Api\SearchResultsInterface;
 use Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterface;
 use Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterfaceFactory;
 use Magento\InventoryExportStockApi\Api\ExportStockSalableQtyInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Api\StockResolverInterface;
 
 /**
  * Class ExportStockSalableQty provides product stock information by search criteria
@@ -34,6 +36,10 @@ class ExportStockSalableQty implements ExportStockSalableQtyInterface
      * @var PreciseExportStockProcessor
      */
     private $preciseExportStockProcessor;
+    /**
+     * @var StockResolverInterface
+     */
+    private $stockResolver;
 
     /**
      * ExportStockSalableQty constructor
@@ -41,15 +47,18 @@ class ExportStockSalableQty implements ExportStockSalableQtyInterface
      * @param ProductRepositoryInterface $productRepository
      * @param ExportStockSalableQtySearchResultInterfaceFactory $exportStockSalableQtySearchResultFactory
      * @param PreciseExportStockProcessor $preciseExportStockProcessor
+     * @param StockResolverInterface $stockResolver
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         ExportStockSalableQtySearchResultInterfaceFactory $exportStockSalableQtySearchResultFactory,
-        PreciseExportStockProcessor $preciseExportStockProcessor
+        PreciseExportStockProcessor $preciseExportStockProcessor,
+        StockResolverInterface $stockResolver
     ) {
         $this->productRepository = $productRepository;
         $this->exportStockSalableQtySearchResultFactory = $exportStockSalableQtySearchResultFactory;
         $this->preciseExportStockProcessor = $preciseExportStockProcessor;
+        $this->stockResolver = $stockResolver;
     }
 
     /**
@@ -59,10 +68,13 @@ class ExportStockSalableQty implements ExportStockSalableQtyInterface
      */
     public function execute(
         SearchCriteriaInterface $searchCriteria,
-        int $stockId
+        string $websiteCode
     ): ExportStockSalableQtySearchResultInterface {
+        $stockId = $this->stockResolver
+            ->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
         $productSearchResult = $this->getProducts($searchCriteria);
-        $items = $this->preciseExportStockProcessor->execute($productSearchResult->getItems(), $stockId);
+        $items = $this->preciseExportStockProcessor
+            ->execute($productSearchResult->getItems(), $stockId);
         /** @var ExportStockSalableQtySearchResultInterface $searchResult */
         $searchResult = $this->exportStockSalableQtySearchResultFactory->create();
         $searchResult->setSearchCriteria($productSearchResult->getSearchCriteria());
