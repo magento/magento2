@@ -13,8 +13,8 @@
             <xs:complexContent>
                 <xs:extension base="routeType">
                     <xs:sequence>
-                        <xs:element name="service" type="serviceType" minOccurs="0"/>
-                        <xs:element name="resources" type="resourcesType" minOccurs="0"/>
+                        <xs:element name="service" type="serviceType"/>
+                        <xs:element name="resources" type="resourcesType"/>
                         <xs:element name="data" type="dataType" minOccurs="0"/>
                     </xs:sequence>
                 </xs:extension>
