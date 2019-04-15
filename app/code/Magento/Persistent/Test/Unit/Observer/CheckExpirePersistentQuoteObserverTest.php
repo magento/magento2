@@ -1,12 +1,16 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
+use Magento\Quote\Model\Quote;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -55,6 +59,11 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
     private $requestMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Quote
+     */
+    private $quoteMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -83,6 +92,10 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             $this->checkoutSessionMock,
             $this->requestMock
         );
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+        ->setMethods(['getCustomerIsGuest', 'getIsPersistent'])
+        ->disableOriginalConstructor()
+        ->getMock();
     }
 
     public function testExecuteWhenCanNotApplyPersistentData()
@@ -133,6 +146,11 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $this->persistentHelperMock->expects($this->once())->method('isEnabled')->willReturn(true);
         $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(false);
+        $this->checkoutSessionMock
+            ->method('getQuote')
+            ->willReturn($this->quoteMock);
+        $this->quoteMock->method('getCustomerIsGuest')->willReturn(true);
+        $this->quoteMock->method('getIsPersistent')->willReturn(true);
         $this->customerSessionMock
             ->expects($this->atLeastOnce())
             ->method('isLoggedIn')
