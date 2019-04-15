@@ -10,7 +10,6 @@ use \Magento\Theme\Model\Theme\Source\Theme;
 class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @true
      * @return void
      * @covers \Magento\Theme\Model\Theme\Source\Theme::__construct
      * @covers \Magento\Theme\Model\Theme\Source\Theme::getAllOptions

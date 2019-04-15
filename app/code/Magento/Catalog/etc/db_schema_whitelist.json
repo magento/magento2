@@ -484,7 +484,8 @@
         "index": {
             "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_STORE_ID": true,
             "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_ENTITY_ID": true,
-            "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_VALUE_ID": true
+            "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_VALUE_ID": true,
+            "CAT_PRD_ENTT_MDA_GLR_VAL_ENTT_ID_VAL_ID_STORE_ID": true
         },
         "constraint": {
             "PRIMARY": true,

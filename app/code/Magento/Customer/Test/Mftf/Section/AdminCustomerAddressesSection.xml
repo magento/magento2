@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerAddressesSection">
+        <element name="addNewAddress" type="button" selector="//span[text()='Add New Address']"/>
+        <element name="defaultBillingAddress" type="button" selector="div[data-index=default_billing] .admin__actions-switch-label"/>
+        <element name="defaultBillingAddressCheckBox" type="input" selector="//div[@class='admin__field-control']//input[@name='default_billing']"/>
+        <element name="defaultShippingAddress" type="button" selector="div[data-index=default_shipping] .admin__actions-switch-label"/>
+        <element name="defaultShippingAddressCheckBox" type="input" selector="//div[@class='admin__field-control']//input[@name='default_shipping']"/>
+        <element name="firstNameForAddress" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'firstname')]"/>
+        <element name="lastNameForAddress" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'lastname')]"/>
+        <element name="streetAddress" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'street')]"/>
+        <element name="city" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'city')]"/>
+        <element name="company" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'company')]"/>
+        <element name="region" type="select" selector="//div[@class='admin__field-control']//select[@name='region_id']"/>
+        <element name="regionId" type="select" selector="//div[@class='admin__field-control']//select[@name='region_id']//option[@data-title='{{regionName}}']" parameterized="true"/>
+        <element name="country" type="select" selector="//div[@class='admin__field-control']//select[contains(@name, 'country_id')]"/>
+        <element name="countryId" type="input" selector="//div[@class='admin__field-control']//select[contains(@name, 'country_id')]//option[@value='{{countryName}}']" parameterized="true"/>
+        <element name="state" type="select" selector="//div[@class='admin__field-control']//select[contains(@name, 'region_id')]"/>
+        <element name="zip" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'postcode')]"/>
+        <element name="phoneNumber" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'telephone')]"/>
+        <element name="saveAddress" type="button" selector="//button[@title='Save']"/>
+        <element name="customerAddressRow" type="input" selector="//tbody//tr//td//div[contains(., '{{var1}}')]" parameterized="true"/>
+        <element name="deleteButton" type="button" selector="//button[@id='delete']"/>
+        <element name="ok" type="button" selector="//button[@data-role='action']//span[text()='OK']"/>
+        <element name="streetRequiredMessage" type="text" selector="//input[@name='street[0]']/../label[contains(.,'This is a required field.')]"/>
+        <element name="cityRequiredMessage" type="text" selector="//input[@name='city']/../label[contains(.,'This is a required field.')]"/>
+        <element name="countryRequiredMessage" type="text" selector="//select[@name='country_id']/../label[contains(.,'This is a required field.')]"/>
+        <element name="postcodeRequiredMessage" type="text" selector="//input[@name='postcode']/../label[contains(.,'This is a required field.')]"/>
+        <element name="phoneNumberRequiredMessage" type="text" selector="//input[@name='telephone']/../label[contains(.,'This is a required field.')]"/>
+    </section>
+</sections>

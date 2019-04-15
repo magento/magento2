@@ -182,24 +182,16 @@ define([
             });
         }
         editForm.on('beforeSubmit', function () {
-            var optionsValues = [],
-                optionContainer = optionPanel.find('table tbody');
+            var optionContainer = optionPanel.find('table tbody'),
+                optionsValues;
 
             if (optionPanel.hasClass(activePanelClass)) {
-                optionContainer.find('input')
-                    .each(function () {
-                        if (this.disabled) {
-                            return;
-                        }
-
-                        if (this.type === 'checkbox' || this.type === 'radio') {
-                            if (this.checked) {
-                                optionsValues.push(this.name + '=' + jQuery(this).val());
-                            }
-                        } else {
-                            optionsValues.push(this.name + '=' + jQuery(this).val());
-                        }
-                    });
+                optionsValues = jQuery.map(
+                    optionContainer.find('tr'),
+                    function (row) {
+                        return jQuery(row).find('input, select, textarea').serialize();
+                    }
+                );
                 jQuery('<input>')
                     .attr({
                         type: 'hidden',

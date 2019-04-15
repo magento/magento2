@@ -143,6 +143,7 @@ abstract class AbstractData
 
     /**
      * Set scope visibility
+     *
      * Search value only in scope or search value in scope and global
      *
      * @param bool $flag
@@ -296,7 +297,7 @@ abstract class AbstractData
      * Validate value by attribute input validation rule
      *
      * @param string $value
-     * @return string|true
+     * @return array|true
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -311,9 +312,13 @@ abstract class AbstractData
 
         if (!empty($validateRules['input_validation'])) {
             $label = $this->getAttribute()->getStoreLabel();
+            $allowWhiteSpace = false;
             switch ($validateRules['input_validation']) {
+                case 'alphanum-with-spaces':
+                    $allowWhiteSpace = true;
+                    // Continue to alphanumeric validation
                 case 'alphanumeric':
-                    $validator = new \Zend_Validate_Alnum(true);
+                    $validator = new \Zend_Validate_Alnum($allowWhiteSpace);
                     $validator->setMessage(__('"%1" invalid type entered.', $label), \Zend_Validate_Alnum::INVALID);
                     $validator->setMessage(
                         __('"%1" contains non-alphabetic or non-numeric characters.', $label),

@@ -30,12 +30,11 @@
                         <span id="map-popup-price" class="actual-price"></span>
                     </div>
                 </div>
-                <form action="" method="POST" id="product_addtocart_form_from_popup" class="map-form-addtocart">
-                    <input type="hidden" name="product" class="product_id" value="" id="map-popup-product-id"/>
+                <form action="" method="POST" class="map-form-addtocart">
+                    <input type="hidden" name="product" class="product_id" value="" />
                     <button type="button"
                             title="<?= $block->escapeHtml(__('Add to Cart')) ?>"
-                            class="action tocart primary"
-                            id="map-popup-button">
+                            class="action tocart primary">
                         <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
                     </button>
                     <div class="additional-addtocart-box">

@@ -57,13 +57,14 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('customer_orders_grid');
-        $this->setDefaultSort('created_at', 'desc');
+        $this->setDefaultSort('created_at');
+        $this->setDefaultDir('desc');
         $this->setUseAjax(true);
     }
 
@@ -102,7 +103,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
@@ -123,7 +124,8 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Order Total'),
                 'index' => 'grand_total',
                 'type' => 'currency',
-                'currency' => 'order_currency_code'
+                'currency' => 'order_currency_code',
+                'rate'  => 1
             ]
         );
 
@@ -162,7 +164,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGridUrl()
     {

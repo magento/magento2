@@ -19,7 +19,7 @@
         </xs:sequence>
 
         <xs:attribute name="indexType" type="indexType" />
-        <xs:attribute name="name" type="nameType" />
+        <xs:attribute name="referenceId" type="referenceIdType" use="required" />
         <xs:attribute name="disabled" type="xs:boolean" />
     </xs:complexType>
 

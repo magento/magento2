@@ -211,7 +211,8 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
             'prices' => [
                 'histogram' => [
                     'field' => $fieldName,
-                    'interval' => $range,
+                    'interval' => (float)$range,
+                    'min_doc_count' => 1,
                 ],
             ],
         ];

@@ -59,6 +59,7 @@
                 <item name="totalsSortOrder" xsi:type="object">Magento\Checkout\Block\Checkout\TotalsProcessor</item>
                 <item name="directoryData" xsi:type="object">Magento\Checkout\Block\Checkout\DirectoryDataProcessor</item>
             </argument>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\JsonHexTag</argument>
         </arguments>
     </type>
     <type name="Magento\Checkout\Block\Cart\Totals">
@@ -94,5 +95,8 @@
                 </item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="clear_addresses_after_product_delete" type="Magento\Checkout\Plugin\Model\Quote\ResetQuoteAddresses"/>
     </type>
 </config>

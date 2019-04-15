@@ -50,7 +50,7 @@ class LoginUserOnBackendStep implements TestStepInterface
      *
      * @var BrowserInterface
      */
-    private $browser;
+    protected $browser;
 
     /**
      * Array of error messages on admin login form.
@@ -108,8 +108,6 @@ class LoginUserOnBackendStep implements TestStepInterface
                 }
             }
         }
-
-        $this->dashboard->getSystemMessageDialog()->closePopup();
     }
 
     /**

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\BundleGraphQl\Model\Resolver;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\BundleGraphQl\Model\Resolver\Links\Collection;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -47,7 +47,7 @@ class BundleItemLinks implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         if (!isset($value['option_id']) || !isset($value['parent_id'])) {
-            throw new GraphQlInputException(__('"option_id" and "parent_id" values should be specified'));
+            throw new LocalizedException(__('"option_id" and "parent_id" values should be specified'));
         }
 
         $this->linkCollection->addIdFilters((int)$value['option_id'], (int)$value['parent_id']);

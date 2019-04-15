@@ -24,8 +24,6 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * @param string $name
-     * @param string $primaryFieldName
-     * @param string $requestFieldName
      * @param Reporting $reporting
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param RequestInterface $request
@@ -61,7 +59,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData()
     {

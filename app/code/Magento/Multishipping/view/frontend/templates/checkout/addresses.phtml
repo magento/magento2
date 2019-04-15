@@ -17,17 +17,6 @@
 <form id="checkout_multishipping_form"
       data-mage-init='{
           "multiShipping":{},
-          "validation":{},
-          "cartUpdate": {
-               "validationURL": "/multishipping/checkout/checkItems",
-               "eventName": "updateMulticartItemQty"
-          }}'
-      action="<?= $block->escapeUrl($block->getPostActionUrl()) ?>"
-      method="post"
-      class="multicheckout address form">
-<form id="checkout_multishipping_form"
-      data-mage-init='{
-          "multiShipping":{},
           "cartUpdate": {
                "validationURL": "/multishipping/checkout/checkItems",
                "eventName": "updateMulticartItemQty"

@@ -7,10 +7,32 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="Countries" type="countryArray">
         <array key="country">
             <item>Bahamas</item>
+        </array>
+    </entity>
+    <entity name="DefaultCountriesWithRequiredRegions" type="countryArray">
+        <array key="country">
+            <item>Australia</item>
+            <item>Brazil</item>
+            <item>Canada</item>
+            <item>Croatia</item>
+            <item>Estonia</item>
+            <item>India</item>
+            <item>Latvia</item>
+            <item>Lithuania</item>
+            <item>Romania</item>
+            <item>Spain</item>
+            <item>Switzerland</item>
+            <item>United States</item>
+            <item>Australia</item>
+        </array>
+    </entity>
+    <entity name="CustomCountryWithRequiredRegion" type="countryArray">
+        <array key="country">
+            <item>United Kingdom</item>
         </array>
     </entity>
 </entities>

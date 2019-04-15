@@ -451,7 +451,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Load report by unique key (accoutn + report date)
+     * Load report by unique key (account + report date)
      *
      * @return $this
      */

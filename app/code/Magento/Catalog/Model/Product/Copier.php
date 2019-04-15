@@ -83,7 +83,7 @@ class Copier
                 ? $matches[1] . '-' . ($matches[2] + 1)
                 : $urlKey . '-1';
             $duplicate->setUrlKey($urlKey);
-            $duplicate->setData(Product::URL_PATH, null);
+            $duplicate->setData('url_path', null);
             try {
                 $duplicate->save();
                 $isDuplicateSaved = true;
