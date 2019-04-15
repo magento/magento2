@@ -4,11 +4,12 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+
 namespace Magento\SalesSequence\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\SalesSequence\Model\Builder;
+use Magento\SalesSequence\Model\Sequence\DeleteByStore;
 
 /**
  * Class SequenceRemovalObserver
@@ -16,17 +17,17 @@ use Magento\SalesSequence\Model\Builder;
 class SequenceRemovalObserver implements ObserverInterface
 {
     /**
-     * @var Builder
+     * @var DeleteByStore
      */
-    private $sequenceBuilder;
+    private $deleteByStore;
 
     /**
-     * @param Builder $sequenceBuilder
+     * @param DeleteByStore $deleteByStore
      */
     public function __construct(
-        Builder $sequenceBuilder
+        DeleteByStore $deleteByStore
     ) {
-        $this->sequenceBuilder = $sequenceBuilder;
+        $this->deleteByStore = $deleteByStore;
     }
 
     /**
@@ -36,8 +37,7 @@ class SequenceRemovalObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        $storeId = $observer->getData('store')->getId();
-        $this->sequenceBuilder->deleteByStoreId($storeId);
+        $this->deleteByStore->execute($observer->getData('store'));
 
         return $this;
     }
