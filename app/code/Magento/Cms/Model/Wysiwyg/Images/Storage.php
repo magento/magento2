@@ -430,12 +430,19 @@ class Storage extends \Magento\Framework\DataObject
         if ($this->_coreFileStorageDb->checkDbUsage()) {
             $this->_directoryDatabaseFactory->create()->deleteDirectory($path);
         }
+        if (!$this->isPathAllowed($path, $this->getConditionsForExcludeDirs())) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot delete directory %1.', $this->_getRelativePathToRoot($path))
+            );
+        }
         try {
             $this->_deleteByPath($path);
             $path = $this->getThumbnailRoot() . $this->_getRelativePathToRoot($path);
             $this->_deleteByPath($path);
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot delete directory %1.', $path));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot delete directory %1.', $this->_getRelativePathToRoot($path))
+            );
         }
     }
 
@@ -489,6 +496,11 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function uploadFile($targetPath, $type = null)
     {
+        if (!$this->isPathAllowed($targetPath, $this->getConditionsForExcludeDirs())) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We can\'t upload the file to current folder right now. Please try another folder.')
+            );
+        }
         /** @var \Magento\MediaStorage\Model\File\Uploader $uploader */
         $uploader = $this->_uploaderFactory->create(['fileId' => 'image']);
         $allowed = $this->getAllowedExtensions($type);
@@ -783,5 +795,30 @@ class Storage extends \Magento\Framework\DataObject
         }
 
         return $allowed;
+    }
+
+    /**
+     * Check if path is not in excluded dirs.
+     *
+     * @param string $path
+     * @param array $conditions
+     * @return bool
+     */
+    private function isPathAllowed($path, array $conditions): bool
+    {
+        $isAllowed = true;
+        $regExp = $conditions['reg_exp'] ? '~' . implode('|', array_keys($conditions['reg_exp'])) . '~i' : null;
+        $storageRoot = $this->_cmsWysiwygImages->getStorageRoot();
+        $storageRootLength = strlen($storageRoot);
+
+        $mediaSubPathname = substr($path, $storageRootLength);
+        $rootChildParts = explode('/', '/' . ltrim($mediaSubPathname, '/'));
+
+        if (array_key_exists($rootChildParts[1], $conditions['plain'])
+            || ($regExp && preg_match($regExp, $path))) {
+            $isAllowed = false;
+        }
+
+        return $isAllowed;
     }
 }
