@@ -46,6 +46,9 @@ class GraphQlCacheControllerTest extends \Magento\TestFramework\Indexer\TestCase
     private $response;
 
 
+    /**
+     * @inheritdoc
+     */
     public static function setUpBeforeClass()
     {
         $db = Bootstrap::getInstance()->getBootstrap()
@@ -59,6 +62,9 @@ class GraphQlCacheControllerTest extends \Magento\TestFramework\Indexer\TestCase
         parent::setUpBeforeClass();
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -66,8 +72,7 @@ class GraphQlCacheControllerTest extends \Magento\TestFramework\Indexer\TestCase
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
         $this->metadataPool = $this->objectManager->get(MetadataPool::class);
         $this->request = $this->objectManager->get(Http::class);
-        $this->response = $this->objectManager->get(\Magento\Framework\App\Response\Http::class);
-
+       // $this->response = $this->objectManager->get(\Magento\Framework\App\Response\Http::class);
     }
 
     /**
@@ -108,15 +113,54 @@ QUERY;
         /** @var  $registry \Magento\Framework\Registry */
         $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
         $registry->register('use_page_cache_plugin', true, true);
-        $result->renderResult($this->response);        //
+        $result->renderResult($response);
         $this->assertEquals('MISS', $this->response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $this->response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['cat_p', 'cat_p_' . $product->getId(), 'FPC'];
+        foreach (array_keys($actualCacheTags) as $key) {
+            $this->assertEquals($expectedCacheTags[$key], $actualCacheTags[$key]);
+        }
+    }
+
+    /**
+     * Test cache tags and debug header for category and querying only for category
+     *
+     * @magentoCache all enabled
+     * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     *
+     */
+    public function testDispatchForCacheDebugHeadersAndCacheTagsForCategory(): void
+    {
+        $categoryId ='333';
+        $query
+            = <<<QUERY
+        {
+            category(id: $categoryId) {
+            id
+            name
+            url_key
+            description
+            product_count
+           }
+       }
+QUERY;
+        $this->request->setPathInfo('/graphql');
+        $this->request->setMethod('GET');
+        $this->request->setQueryValue('query', $query);
+        /** @var \Magento\Framework\Controller\Result\Json $result */
+        $result = $this->graphql->dispatch($this->request);
+        /** @var \Magento\Framework\App\Response\Http $response */
+        $response = $this->objectManager->get(\Magento\Framework\App\Response\Http::class);
+        /** @var  $registry \Magento\Framework\Registry */
+        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
+        $registry->register('use_page_cache_plugin', true, true);
+        $result->renderResult($response);
+        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
+        $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
+        $expectedCacheTags = ['cat_c','cat_c_' . $categoryId,'FPC'];
         foreach (array_keys($actualCacheTags) as $key) {
             $this->assertEquals($expectedCacheTags[$key], $actualCacheTags[$key]
             );
         }
     }
 }
-
-
