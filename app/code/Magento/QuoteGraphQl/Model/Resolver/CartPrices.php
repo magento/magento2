@@ -11,13 +11,14 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\TotalsCollector;
 
 /**
  * @inheritdoc
  */
-class Totals implements ResolverInterface
+class CartPrices implements ResolverInterface
 {
     /**
      * @var TotalsCollector
@@ -68,10 +69,11 @@ class Totals implements ResolverInterface
      */
     private function getAppliedTaxes(Total $total, string $currency): array
     {
+        $appliedTaxesData = [];
         $appliedTaxes = $total->getAppliedTaxes();
 
         if (count($appliedTaxes) === 0) {
-            return [];
+            return $appliedTaxesData;
         }
 
         foreach ($appliedTaxes as $appliedTax) {
@@ -80,7 +82,6 @@ class Totals implements ResolverInterface
                 'amount' => ['value' => $appliedTax['amount'], 'currency' => $currency]
             ];
         }
-
         return $appliedTaxesData;
     }
 }

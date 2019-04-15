@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -19,26 +17,17 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class CartTotalsTest extends GraphQlAbstract
 {
     /**
-     * @var QuoteResource
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteResource;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
-     * @var QuoteFactory
+     * @inheritdoc
      */
-    private $quoteFactory;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
@@ -52,8 +41,8 @@ class CartTotalsTest extends GraphQlAbstract
      */
     public function testGetCartTotalsWithTaxApplied()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_quote');
-        $query = $this->getCartTotalsGraphqlQuery($maskedQuoteId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('prices', $response['cart']);
@@ -79,8 +68,8 @@ class CartTotalsTest extends GraphQlAbstract
      */
     public function testGetTotalsWithNoTaxApplied()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_quote');
-        $query = $this->getCartTotalsGraphqlQuery($maskedQuoteId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
 
         $pricesResponse = $response['cart']['prices'];
@@ -102,8 +91,8 @@ class CartTotalsTest extends GraphQlAbstract
      */
     public function testGetCartTotalsWithNoAddressSet()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReversedQuoteId('test_quote');
-        $query = $this->getCartTotalsGraphqlQuery($maskedQuoteId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
 
         $pricesResponse = $response['cart']['prices'];
@@ -115,12 +104,34 @@ class CartTotalsTest extends GraphQlAbstract
     }
 
     /**
+     * _security
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/apply_tax_for_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     */
+    public function testGetSelectedShippingMethodFromCustomerCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $this->expectExceptionMessage(
+            "The current user cannot perform operations on cart \"$maskedQuoteId\""
+        );
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * Generates GraphQl query for retrieving cart totals
      *
      * @param string $maskedQuoteId
      * @return string
      */
-    private function getCartTotalsGraphqlQuery(string $maskedQuoteId): string
+    private function getQuery(string $maskedQuoteId): string
     {
         return <<<QUERY
 {
@@ -153,17 +164,5 @@ class CartTotalsTest extends GraphQlAbstract
   }
 }
 QUERY;
-    }
-
-    /**
-     * @param string $reversedQuoteId
-     * @return string
-     */
-    private function getMaskedQuoteIdByReversedQuoteId(string $reversedQuoteId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedQuoteId, 'reserved_order_id');
-
-        return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
 }
