@@ -15,6 +15,7 @@ use Zend\Stdlib\Parameters;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Security.Superglobal
  */
 class StoreTest extends \PHPUnit\Framework\TestCase
 {
@@ -408,7 +409,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public static function saveValidationDataProvider()
+    public function saveValidationDataProvider()
     {
         return [
             'empty store name' => [['name' => '']],
