@@ -4,7 +4,7 @@ To get detailed information about changes in Magento 2.3.0, see the [Release Not
 
 2.1.0
 =============
-To get detailed information about changes in Magento 2.1.0, please visit [Magento Community Edition (CE) Release Notes](http://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.0CE.html "Magento Community Edition (CE) Release Notes")
+To get detailed information about changes in Magento 2.1.0, please visit [Magento Community Edition (CE) Release Notes](https://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.0CE.html "Magento Community Edition (CE) Release Notes")
 
 2.0.0
 =============
