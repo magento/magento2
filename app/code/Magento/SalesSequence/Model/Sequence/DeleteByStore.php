@@ -22,7 +22,7 @@ class DeleteByStore
     /**
      * @var resourceMetadata
      */
-    protected $resourceMetadata;
+    private $resourceMetadata;
 
     /**
      * @var ResourceProfile
@@ -32,12 +32,12 @@ class DeleteByStore
     /**
      * @var MetaFactory
      */
-    protected $metaFactory;
+    private $metaFactory;
 
     /**
      * @var AppResource
      */
-    protected $appResource;
+    private $appResource;
 
     /**
      * @param ResourceMetadata $resourceMetadata
