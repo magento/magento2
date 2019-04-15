@@ -28,16 +28,18 @@
         <arguments>
             <argument name="couponCode" type="string"/>
         </arguments>
-        <waitForElement selector="{{AdminCartPriceRuleDiscountSection.discountTab}}" time="30" stepKey="waitForCouponHeader" />
-        <conditionalClick selector="{{AdminCartPriceRuleDiscountSection.discountTab}}" dependentSelector="{{AdminCartPriceRuleDiscountSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader" />
-        <waitForElementVisible selector="{{AdminCartPriceRuleDiscountSection.couponInput}}" stepKey="waitForCouponField" />
-        <fillField userInput="{{couponCode}}" selector="{{AdminCartPriceRuleDiscountSection.couponInput}}" stepKey="fillCouponField"/>
-        <click selector="{{AdminCartPriceRuleDiscountSection.applyCodeBtn}}" stepKey="clickApplyButton"/>
+        <waitForElementVisible selector="{{StorefrontDiscountSection.discountTab}}" time="30" stepKey="waitForCouponHeader" />
+        <conditionalClick selector="{{StorefrontDiscountSection.discountTab}}" dependentSelector="{{StorefrontDiscountSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader" />
+        <waitForElementVisible selector="{{StorefrontDiscountSection.couponInput}}" stepKey="waitForCouponField" />
+        <fillField userInput="{{couponCode}}" selector="{{StorefrontDiscountSection.couponInput}}" stepKey="fillCouponField"/>
+        <click selector="{{StorefrontDiscountSection.applyCodeBtn}}" stepKey="clickApplyButton"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.successMessage}}" stepKey="waitForSuccessMessage" />
         <see userInput='You used coupon code "{{couponCode}}".' selector="{{StorefrontMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
     </actionGroup>
 
     <!-- Apply Sales Rule Coupon to the cart -->
     <actionGroup name="StorefrontTryingToApplyCouponActionGroup" extends="StorefrontApplyCouponActionGroup">
+        <remove keyForRemoval="waitForSuccessMessage"/>
         <remove keyForRemoval="seeSuccessMessage"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.error}}" stepKey="waitError"/>
         <see selector="{{StorefrontMessagesSection.error}}" userInput='The coupon code "{{couponCode}}" is not valid.'
@@ -46,10 +48,21 @@
 
     <!-- Cancel Sales Rule Coupon applied to the cart -->
     <actionGroup name="StorefrontCancelCouponActionGroup">
-        <waitForElement selector="{{AdminCartPriceRuleDiscountSection.discountTab}}" time="30" stepKey="waitForCouponHeader" />
-        <conditionalClick selector="{{AdminCartPriceRuleDiscountSection.discountTab}}" dependentSelector="{{AdminCartPriceRuleDiscountSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader" />
-        <waitForElementVisible selector="{{AdminCartPriceRuleDiscountSection.couponInput}}" stepKey="waitForCouponField" />
-        <click selector="{{AdminCartPriceRuleDiscountSection.cancelButton}}" stepKey="clickCancelButton"/>
+        <waitForElementVisible selector="{{StorefrontDiscountSection.discountTab}}" time="30" stepKey="waitForCouponHeader" />
+        <conditionalClick selector="{{StorefrontDiscountSection.discountTab}}" dependentSelector="{{AdminCartPriceRuleDiscountSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader" />
+        <waitForElementVisible selector="{{StorefrontDiscountSection.couponInput}}" stepKey="waitForCouponField" />
+        <click selector="{{StorefrontDiscountSection.cancelCoupon}}" stepKey="clickCancelButton"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
         <see userInput="You canceled the coupon code." selector="{{StorefrontMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontApplyCouponOnCheckoutActionGroup" extends="StorefrontApplyCouponActionGroup">
+        <arguments>
+            <argument name="successMessage" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontDiscountSection.discountInput}}" stepKey="waitForCouponField"/>
+        <fillField userInput="{{couponCode}}" selector="{{StorefrontDiscountSection.discountInput}}" stepKey="fillCouponField"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.successMessage}}" stepKey="waitForSuccessMessage" />
+        <see userInput='{{successMessage}}' selector="{{StorefrontMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>
