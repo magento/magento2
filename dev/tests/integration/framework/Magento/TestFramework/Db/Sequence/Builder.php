@@ -6,13 +6,12 @@
 namespace Magento\TestFramework\Db\Sequence;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Webapi\Exception;
+use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
-use Magento\Framework\Webapi\Exception;
-use Magento\SalesSequence\Model\MetaFactory;
 use Magento\SalesSequence\Model\ProfileFactory;
-use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
-use Magento\SalesSequence\Model\ResourceModel\Profile as ResourceProfile;
+use Magento\SalesSequence\Model\MetaFactory;
 
 /**
  * Class Builder
@@ -71,11 +70,6 @@ class Builder extends \Magento\SalesSequence\Model\Builder
     ];
 
     /**
-     * @var ResourceProfile
-     */
-    protected $resourceProfile;
-
-    /**
      * Concrete data of sequence
      *
      * @var array
@@ -88,22 +82,19 @@ class Builder extends \Magento\SalesSequence\Model\Builder
      * @param ProfileFactory $profileFactory
      * @param AppResource $appResource
      * @param DdlSequence $ddlSequence
-     * @param ResourceProfile $resourceProfile
      */
     public function __construct(
         ResourceMetadata $resourceMetadata,
         MetaFactory $metaFactory,
         ProfileFactory $profileFactory,
         AppResource $appResource,
-        DdlSequence $ddlSequence,
-        ResourceProfile $resourceProfile
+        DdlSequence $ddlSequence
     ) {
         $this->resourceMetadata = $resourceMetadata;
         $this->metaFactory = $metaFactory;
         $this->profileFactory = $profileFactory;
         $this->appResource = $appResource;
         $this->ddlSequence = $ddlSequence;
-        $this->resourceProfile = $resourceProfile;
         $this->data = array_flip($this->pattern);
     }
 
@@ -271,34 +262,5 @@ class Builder extends \Magento\SalesSequence\Model\Builder
             throw $e;
         }
         $this->data = array_flip($this->pattern);
-    }
-
-    /**
-     * Deletes all sequence linked entites
-     *
-     * @param $storeId
-     *
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function deleteByStoreId($storeId)
-    {
-        $metadataIds = $this->resourceMetadata->getIdsByStore($storeId);
-        $profileIds = $this->resourceProfile->getProfileIdsByMetadataIds($metadataIds);
-
-        $this->appResource->getConnection()->delete(
-            $this->appResource->getTableName('sales_sequence_profile'),
-            ['profile_id IN (?)' => $profileIds]
-        );
-
-        foreach ($metadataIds as $metadataId) {
-            $metadata = $this->metaFactory->create();
-            $this->resourceMetadata->load($metadata, $metadataId);
-            if (!$metadata->getId()) {
-                continue;
-            }
-
-            $this->resourceMetadata->delete($metadata);
-        }
     }
 }
