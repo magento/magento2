@@ -48,7 +48,7 @@
         <waitForPageLoad stepKey="waitForPageLoad10" />
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview" />
         <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
-        <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe" />
+        <actionGroup ref="SwitchToPreviewIframeActionGroup" stepKey="switchToIframe"/>
         <waitForText userInput="Home page" stepKey="waitForPageLoad9"/>
         <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
         <closeTab stepKey="closeTab"/>
