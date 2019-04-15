@@ -69,7 +69,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
 
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
@@ -94,7 +94,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
 
         self::expectExceptionMessage("Guest email for cart is missing. Please enter");
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -111,7 +111,7 @@ class PlaceOrderTest extends GraphQlAbstract
             'Unable to place order: A server error stopped your order from being placed. ' .
             'Please try to place your order again'
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -129,7 +129,7 @@ class PlaceOrderTest extends GraphQlAbstract
         self::expectExceptionMessage(
             'Unable to place order: Some addresses can\'t be used due to the configurations for specific countries'
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -148,7 +148,7 @@ class PlaceOrderTest extends GraphQlAbstract
         self::expectExceptionMessage(
             'Unable to place order: The shipping method is missing. Select the shipping method and try again'
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -169,7 +169,7 @@ class PlaceOrderTest extends GraphQlAbstract
         self::expectExceptionMessageRegExp(
             '/Unable to place order: Please check the billing address information*/'
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -189,7 +189,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
 
         self::expectExceptionMessage('Unable to place order: Enter a valid payment method and try again');
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -210,7 +210,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
 
         self::expectExceptionMessage('Unable to place order: Some of the products are out of stock');
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -233,7 +233,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
 
         self::expectExceptionMessageRegExp('/The current user cannot perform operations on cart*/');
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
