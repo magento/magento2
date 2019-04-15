@@ -53,7 +53,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
      * @param bool $dataHasChangedFor
      * @return void
      */
-    public function testExecute($dataHasChangedFor)
+    public function testExecute(bool $dataHasChangedFor)
     {
         $this->optionMock->expects($this->any())->method('getOptionId')->willReturn(5);
         $this->entity->expects($this->once())->method('getOptions')->willReturn([$this->optionMock]);

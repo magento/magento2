@@ -10,7 +10,7 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductCustomizableOptionsImportModalSection">
         <element name="selectProductTitle" type="text" selector="//aside[contains(@class, '_show')]//h1[normalize-space(text())='Select Product']"/>
-        <element name="nameField" type="input" selector="input[name='name']"/>
+        <element name="nameFilter" type="input" selector="//aside[contains(@class, '_show')]//input[@name='name']"/>
         <element name="importButton" type="button" selector="//aside[contains(@class, '_show')]//button[contains(@class, 'action-primary') and normalize-space(.)='Import']" timeout="30"/>
     </section>
 </sections>
