@@ -39225,7 +39225,7 @@ if (name == null) {
             <stringProp name="ThreadGroup.delay"/>
         <stringProp name="TestPlan.comments">mpaf/tool/fragments/_system/thread_group.jmx</stringProp></ThreadGroup>
         <hashTree>
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get List of Products by category_id" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Get List of Products by category_id" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -39250,7 +39250,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Get List of Products by category_id");
+                vars.put("testLabel", "GraphQL Get List of Products by category_id");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -39347,7 +39347,7 @@ vars.putObject("category", categories[number]);
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get Simple Product Details by product_url_key" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Get Simple Product Details by product_url_key" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -39372,7 +39372,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Get Simple Product Details by product_url_key");
+                vars.put("testLabel", "GraphQL Get Simple Product Details by product_url_key");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -39471,7 +39471,7 @@ vars.put("product_sku", product.get("sku"));
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get Simple Product Details by name" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Get Simple Product Details by name" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -39496,7 +39496,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Get Simple Product Details by name");
+                vars.put("testLabel", "GraphQL Get Simple Product Details by name");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -39595,7 +39595,7 @@ vars.put("product_sku", product.get("sku"));
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get Configurable Product Detail by product_url_key" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Get Configurable Product Detail by product_url_key" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -39620,7 +39620,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Get Configurable Product Detail by product_url_key");
+                vars.put("testLabel", "GraphQL Get Configurable Product Detail by product_url_key");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -39719,7 +39719,7 @@ vars.put("product_sku", product.get("sku"));
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get Configurable Product Detail by name" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Get Configurable Product Detail by name" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -39744,7 +39744,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Get Configurable Product Detail by name");
+                vars.put("testLabel", "GraphQL Get Configurable Product Detail by name");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -39843,7 +39843,7 @@ vars.put("product_sku", product.get("sku"));
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get Product Search by text and category_id" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Get Product Search by text and category_id" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -39868,7 +39868,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Get Product Search by text and category_id");
+                vars.put("testLabel", "GraphQL Get Product Search by text and category_id");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -39986,7 +39986,7 @@ if (totalCount == null) {
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get Category List by category_id" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Get Category List by category_id" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -40011,7 +40011,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Get Category List by category_id");
+                vars.put("testLabel", "GraphQL Get Category List by category_id");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -40134,7 +40134,7 @@ function assertCategoryChildren(category, response) {
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get Url Info by url_key" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Get Url Info by url_key" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -40159,7 +40159,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Get Url Info by url_key");
+                vars.put("testLabel", "GraphQL Get Url Info by url_key");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -40257,7 +40257,7 @@ vars.putObject("category", categories[number]);
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get Cms Page by id" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Get Cms Page by id" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -40282,7 +40282,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Get Cms Page by id");
+                vars.put("testLabel", "GraphQL Get Cms Page by id");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -40377,7 +40377,7 @@ vars.put("cms_page_id", cmsPages[number].id);
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get Navigation Menu by category_id" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Get Navigation Menu by category_id" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -40402,7 +40402,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Get Navigation Menu by category_id");
+                vars.put("testLabel", "GraphQL Get Navigation Menu by category_id");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -40499,7 +40499,7 @@ vars.putObject("category", categories[number]);
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Create Empty Cart" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Create Empty Cart" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -40524,7 +40524,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Create Empty Cart");
+                vars.put("testLabel", "GraphQL Create Empty Cart");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -40611,7 +40611,7 @@ vars.putObject("randomIntGenerator", random);
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Get Empty Cart" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Get Empty Cart" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -40636,7 +40636,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Get Empty Cart");
+                vars.put("testLabel", "GraphQL Get Empty Cart");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -40762,7 +40762,7 @@ vars.putObject("randomIntGenerator", random);
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Set Shipping Address On Cart" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Set Shipping Address On Cart" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -40787,7 +40787,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Set Shipping Address On Cart");
+                vars.put("testLabel", "GraphQL Set Shipping Address On Cart");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -40952,7 +40952,7 @@ vars.putObject("randomIntGenerator", random);
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Set Billing Address On Cart" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Set Billing Address On Cart" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -40977,7 +40977,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Set Billing Address On Cart");
+                vars.put("testLabel", "GraphQL Set Billing Address On Cart");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -41142,7 +41142,7 @@ vars.putObject("randomIntGenerator", random);
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Add Simple Product To Cart" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Add Simple Product To Cart" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -41167,7 +41167,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Add Simple Product To Cart");
+                vars.put("testLabel", "GraphQL Add Simple Product To Cart");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -41314,7 +41314,7 @@ vars.put("product_sku", product.get("sku"));
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Add Configurable Product To Cart" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Add Configurable Product To Cart" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -41339,7 +41339,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Add Configurable Product To Cart");
+                vars.put("testLabel", "GraphQL Add Configurable Product To Cart");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -41534,7 +41534,7 @@ vars.put("product_sku", product.get("sku"));
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Update Simple Product Qty In Cart" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Update Simple Product Qty In Cart" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -41559,7 +41559,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Update Simple Product Qty In Cart");
+                vars.put("testLabel", "GraphQL Update Simple Product Qty In Cart");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -41792,7 +41792,7 @@ vars.put("product_sku", product.get("sku"));
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Update Configurable Product Qty In Cart" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Update Configurable Product Qty In Cart" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -41817,7 +41817,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Update Configurable Product Qty In Cart");
+                vars.put("testLabel", "GraphQL Update Configurable Product Qty In Cart");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -42098,7 +42098,7 @@ vars.put("product_sku", product.get("sku"));
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Remove Simple Product From Cart" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Remove Simple Product From Cart" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -42123,7 +42123,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Remove Simple Product From Cart");
+                vars.put("testLabel", "GraphQL Remove Simple Product From Cart");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -42356,7 +42356,7 @@ vars.put("product_sku", product.get("sku"));
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Remove Configurable Product From Cart" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Remove Configurable Product From Cart" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -42381,7 +42381,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Remove Configurable Product From Cart");
+                vars.put("testLabel", "GraphQL Remove Configurable Product From Cart");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
@@ -42662,7 +42662,7 @@ vars.put("product_sku", product.get("sku"));
   </hashTree>
 
   
-    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Checkout By Guest" enabled="true">
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="GraphQL Checkout By Guest" enabled="true">
       <intProp name="ThroughputController.style">1</intProp>
       <boolProp name="ThroughputController.perThread">false</boolProp>
       <intProp name="ThroughputController.maxThroughput">1</intProp>
@@ -42687,7 +42687,7 @@ if (testLabel
         <hashTree/>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
             <stringProp name="BeanShellSampler.query">
-                vars.put("testLabel", "Checkout By Guest");
+                vars.put("testLabel", "GraphQL Checkout By Guest");
             </stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
