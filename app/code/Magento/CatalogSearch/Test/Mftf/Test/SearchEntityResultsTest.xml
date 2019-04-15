@@ -107,6 +107,9 @@
             <testCaseId value="MC-14794"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-15827"/>
+            </skip>
         </annotations>
         <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,2); return ret;" stepKey="getFirstTwoLetters" before="searchStorefront"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
