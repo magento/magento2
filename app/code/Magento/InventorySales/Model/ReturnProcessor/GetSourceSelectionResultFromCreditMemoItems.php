@@ -85,12 +85,10 @@ class GetSourceSelectionResultFromCreditMemoItems
             $backQty = ($processedQty > 0) ? $item->getQuantity() - $processedQty : $item->getQuantity();
             $qtyBackToSource = ($backQty > 0) ? $item->getQuantity() - $backQty : $item->getQuantity();
 
-            if ($qtyBackToSource > 0) {
-                $requestItems[] = $this->itemRequestFactory->create([
-                    'sku' => $sku,
-                    'qty' => (float)$qtyBackToSource
-                ]);
-            }
+            $requestItems[] = $this->itemRequestFactory->create([
+                'sku' => $sku,
+                'qty' => (float)$qtyBackToSource
+            ]);
         }
 
         $inventoryRequest = $this->getInventoryRequestFromOrder->execute((int)$order->getEntityId(), $requestItems);
