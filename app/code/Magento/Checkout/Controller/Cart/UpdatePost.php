@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -95,7 +94,7 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
      */
     public function execute()
     {
-        if (!$this->getRequest()->isPost() || !$this->_formKeyValidator->validate($this->getRequest())) {
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
             return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
 

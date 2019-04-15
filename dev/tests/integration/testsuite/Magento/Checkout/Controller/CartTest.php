@@ -240,7 +240,6 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'update_cart_action' => 'update_qty',
             'form_key' => $formKey->getFormKey(),
         ];
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         /** @var $customerSession \Magento\Customer\Model\Session */
         $customerSession = $this->_objectManager->create(\Magento\Customer\Model\Session::class);
