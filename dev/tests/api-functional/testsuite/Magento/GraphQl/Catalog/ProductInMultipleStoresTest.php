@@ -10,10 +10,14 @@ namespace Magento\GraphQl\Catalog;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Class ProductInMultipleStoresTest
+ */
 class ProductInMultipleStoresTest extends GraphQlAbstract
 {
 
     /**
+     * Test a product from a specific and a default store
      *
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
