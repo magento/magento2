@@ -218,6 +218,14 @@ class Session extends \Magento\Framework\Session\SessionManager
                         $quote = $this->quoteRepository->getActive($this->getQuoteId());
                     }
 
+                    $customerId = $this->_customer
+                        ? $this->_customer->getId()
+                        : $this->_customerSession->getCustomerId();
+                    if ($quote->getData('customer_id') && (int)$quote->getData('customer_id') !== (int)$customerId) {
+                        $quote = $this->quoteFactory->create();
+                        throw new \Magento\Framework\Exception\NoSuchEntityException();
+                    }
+
                     /**
                      * If current currency code of quote is not equal current currency code of store,
                      * need recalculate totals of quote. It is possible if customer use currency switcher or
