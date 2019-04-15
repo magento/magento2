@@ -40,6 +40,7 @@ class FormTest extends AbstractController
     public function testViewOrderAsLoggedIn()
     {
         $this->login(1);
+        $this->getRequest()->setMethod(Request::METHOD_POST);
         $this->dispatch('sales/guest/view/');
         $this->assertRedirect($this->stringContains('sales/order/history/'));
     }
