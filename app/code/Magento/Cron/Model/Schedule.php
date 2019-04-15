@@ -188,12 +188,15 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         } elseif (strpos($expr, '-') !== false) {
             // handle range
             $e = explode('-', $expr);
-            if (sizeof($e) !== 2) {
+            if (count($e) !== 2) {
                 throw new CronException(__('Invalid cron expression, expecting \'from-to\' structure: %1', $expr));
             }
 
             $from = $this->getNumeric($e[0]);
             $to = $this->getNumeric($e[1]);
+            if ($mod !== 1) {
+                $offset = $from;
+            }
         } elseif ($mod !== 1) {
             $offset = $this->getNumeric($expr);
             $from = 0;
@@ -208,7 +211,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             throw new CronException(__('Invalid cron expression: %1', $expr));
         }
 
-        return $num >= $from && $num <= $to && ($num + $offset) % $mod === 0;
+        return $num >= $from && $num <= $to && ($num - $offset) % $mod === 0;
     }
 
     /**
