@@ -24,6 +24,11 @@ class SaleableQuantityInconsistency
      */
     private $objectId;
 
+    /**+
+     * @var int
+     */
+    private $stockId;
+
     /**
      * List of SKUs and quantity
      * @var array
@@ -88,5 +93,21 @@ class SaleableQuantityInconsistency
     public function setItems(array $items): void
     {
         $this->items = $items;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStockId(): int
+    {
+        return $this->stockId;
+    }
+
+    /**
+     * @param int $stockId
+     */
+    public function setStockId(int $stockId): void
+    {
+        $this->stockId = $stockId;
     }
 }

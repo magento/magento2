@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservationCli\Command;
 
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryReservationCli\Model\GetSaleableQuantityInconsistencies;
 use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
+use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterCompleteOrders;
+use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterIncompleteOrders;
 use Magento\Sales\Model\Order;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,12 +19,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Outputs a list of uncompensated reservations linked to the orders in final state (Completed, Closed, Canceled).
+ * Outputs a list of uncompensated reservations linked to the orders
  *
  * This command may be used to simplify migrations from Magento versions without new Inventory or to track down
  * incorrect behavior of customizations.
  */
-class ShowSaleableQuantityInconsistencies extends Command
+class ShowInconsistencies extends Command
 {
     /**
      * @var GetSaleableQuantityInconsistencies
@@ -29,13 +32,29 @@ class ShowSaleableQuantityInconsistencies extends Command
     private $getSaleableQuantityInconsistencies;
 
     /**
+     * @var FilterCompleteOrders
+     */
+    private $filterCompleteOrders;
+
+    /**
+     * @var FilterIncompleteOrders
+     */
+    private $filterIncompleteOrders;
+
+    /**
      * @param GetSaleableQuantityInconsistencies $getSaleableQuantityInconsistencies
+     * @param FilterCompleteOrders $filterCompleteOrders
+     * @param FilterIncompleteOrders $filterIncompleteOrders
      */
     public function __construct(
-        GetSaleableQuantityInconsistencies $getSaleableQuantityInconsistencies
+        GetSaleableQuantityInconsistencies $getSaleableQuantityInconsistencies,
+        FilterCompleteOrders $filterCompleteOrders,
+        FilterIncompleteOrders $filterIncompleteOrders
     ) {
         parent::__construct();
         $this->getSaleableQuantityInconsistencies = $getSaleableQuantityInconsistencies;
+        $this->filterCompleteOrders = $filterCompleteOrders;
+        $this->filterIncompleteOrders = $filterIncompleteOrders;
     }
 
     /**
@@ -47,10 +66,16 @@ class ShowSaleableQuantityInconsistencies extends Command
             ->setName('inventory:reservation:list-inconsistencies')
             ->setDescription('Show all orders and products with saleable quantity inconsistencies')
             ->addOption(
-                'filter',
-                'f',
-                InputOption::VALUE_REQUIRED,
-                'Filter for complete or incomplete orders'
+                'complete-orders',
+                'c',
+                InputOption::VALUE_NONE,
+                'Show only inconsistencies for complete orders'
+            )
+            ->addOption(
+                'incomplete-orders',
+                'i',
+                InputOption::VALUE_NONE,
+                'Show only inconsistencies for incomplete orders'
             )
             ->addOption(
                 'raw',
@@ -70,7 +95,7 @@ class ShowSaleableQuantityInconsistencies extends Command
      */
     private function prettyOutput(OutputInterface $output, array $inconsistencies): void
     {
-        $output->writeln('<comment>Inconsistencies found on following entries:</comment>');
+        $output->writeln('<info>Inconsistencies found on following entries:</info>');
 
         /** @var Order $order */
         foreach ($inconsistencies as $inconsistency) {
@@ -119,10 +144,17 @@ class ShowSaleableQuantityInconsistencies extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
+     * @throws ValidationException
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $inconsistencies = $this->getSaleableQuantityInconsistencies->execute();
+
+        if ($input->getOption('complete-orders')) {
+            $inconsistencies = $this->filterCompleteOrders->execute($inconsistencies);
+        } elseif ($input->getOption('incomplete-orders')) {
+            $inconsistencies = $this->filterIncompleteOrders->execute($inconsistencies);
+        }
 
         if (empty($inconsistencies)) {
             $output->writeln('<info>No order inconsistencies were found</info>');
@@ -134,6 +166,7 @@ class ShowSaleableQuantityInconsistencies extends Command
         } else {
             $this->prettyOutput($output, $inconsistencies);
         }
+
         return -1;
     }
 }

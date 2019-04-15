@@ -10,7 +10,10 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="inventory_saleable_quantity_inconsistency" xsi:type="object">
-                    Magento\InventoryReservationCli\Command\ShowSaleableQuantityInconsistencies
+                    Magento\InventoryReservationCli\Command\ShowInconsistencies
+                </item>
+                <item name="inventory_saleable_quantity_compensations" xsi:type="object">
+                    Magento\InventoryReservationCli\Command\CreateCompensations
                 </item>
             </argument>
         </arguments>

@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
 
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
 use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistencyFactory;
+use Magento\InventoryReservationsApi\Model\ReservationInterface;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**
@@ -19,7 +22,7 @@ class Collector
     /**
      * @var SaleableQuantityInconsistency[]
      */
-    private $inconsistencies = [];
+    private $items = [];
 
     /**
      * @var \Magento\InventoryReservationCli\Model\SaleableQuantityInconsistencyFactory
@@ -27,48 +30,79 @@ class Collector
     private $saleableQuantityInconsistencyFactory;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @var StockByWebsiteIdResolverInterface
+     */
+    private $stockByWebsiteIdResolver;
+
+    /**
      * @param SaleableQuantityInconsistencyFactory $saleableQuantityInconsistencyFactory
+     * @param SerializerInterface $serializer
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      */
     public function __construct(
-        SaleableQuantityInconsistencyFactory $saleableQuantityInconsistencyFactory
+        SaleableQuantityInconsistencyFactory $saleableQuantityInconsistencyFactory,
+        SerializerInterface $serializer,
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
     ) {
         $this->saleableQuantityInconsistencyFactory = $saleableQuantityInconsistencyFactory;
+        $this->serializer = $serializer;
+        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
     }
 
     /**
-     * @param int $objectId
-     * @param string $sku
-     * @param float $quantity
-     * @param OrderInterface|null $order
+     * @param ReservationInterface $reservation
      */
-    public function add(int $objectId, string $sku, float $quantity, ?OrderInterface $order = null): void
+    public function addReservation(ReservationInterface $reservation): void
     {
-        if (!isset($this->inconsistencies[$objectId])) {
-            $this->inconsistencies[$objectId] = $this->saleableQuantityInconsistencyFactory->create();
+        $metadata = $this->serializer->unserialize($reservation->getMetadata());
+        $objectId = $metadata['object_id'];
+        $stockId = $reservation->getStockId();
+        $key = $objectId . '-' . $stockId;
+
+        if (!isset($this->items[$key])) {
+            $this->items[$key] = $this->saleableQuantityInconsistencyFactory->create();
         }
 
-        $this->inconsistencies[$objectId]->setObjectId($objectId);
+        $this->items[$key]->setObjectId((int)$objectId);
+        $this->items[$key]->setStockId((int)$stockId);
+        $this->items[$key]->addItemQty($reservation->getSku(), $reservation->getQuantity());
+    }
 
-        if ($order) {
-            $this->inconsistencies[$objectId]->setOrder($order);
+    /**
+     * @param OrderInterface $order
+     */
+    public function addOrder(OrderInterface $order): void
+    {
+        $objectId = $order->getEntityId();
+        $websiteId = (int)$order->getStore()->getWebsiteId();
+        $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
+        $key = $objectId . '-' . $stockId;
+
+        if (!isset($this->items[$key])) {
+            $this->items[$key] = $this->saleableQuantityInconsistencyFactory->create();
         }
 
-        $this->inconsistencies[$objectId]->addItemQty($sku, $quantity);
+        $this->items[$key]->setOrder($order);
     }
 
     /**
      * @return SaleableQuantityInconsistency[]
      */
-    public function getInconsistencies(): array
+    public function getItems(): array
     {
-        return $this->inconsistencies;
+        return $this->items;
     }
 
     /**
-     * @param SaleableQuantityInconsistency[] $inconsistencies
+     * @param SaleableQuantityInconsistency[] $items
      */
-    public function setInconsistencies(array $inconsistencies)
+    public function setItems(array $items): void
     {
-        $this->inconsistencies = $inconsistencies;
+        $this->items = $items;
     }
 }

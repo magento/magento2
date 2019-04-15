@@ -12,23 +12,24 @@ use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
 /**
  * Remove all compensated reservations
  */
-class RemoveResolvedReservations
+class FilterUnresolvedReservations
 {
     /**
      * Remove all compensated reservations
-     * @param Collector $collector
+     * @param SaleableQuantityInconsistency[] $inconsistencies
+     * @return SaleableQuantityInconsistency[]
      */
-    public function execute(Collector $collector): void
+    public function execute(array $inconsistencies): array
     {
-        foreach ($collector->getInconsistencies() as $inconsistency) {
+        foreach ($inconsistencies as $inconsistency) {
             $inconsistency->setItems(array_filter($inconsistency->getItems()));
         }
 
-        $collector->setInconsistencies(array_filter(
-            $collector->getInconsistencies(),
+        return array_filter(
+            $inconsistencies,
             function (SaleableQuantityInconsistency $inconsistency) {
                 return count($inconsistency->getItems()) > 0;
             }
-        ));
+        );
     }
 }

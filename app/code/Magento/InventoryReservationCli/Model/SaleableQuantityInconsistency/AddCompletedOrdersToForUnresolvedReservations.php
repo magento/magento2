@@ -12,7 +12,7 @@ use Magento\InventoryReservationCli\Model\GetOrdersInFinalState;
 /**
  * Match completed orders with unresolved reservations
  */
-class AddCompletedOrdersToUnresolved
+class AddCompletedOrdersToForUnresolvedReservations
 {
     /**
      * @var GetOrdersInFinalState
@@ -34,7 +34,7 @@ class AddCompletedOrdersToUnresolved
      */
     public function execute(Collector $collector): void
     {
-        $inconsistencies = $collector->getInconsistencies();
+        $inconsistencies = $collector->getItems();
 
         $orderIds = [];
         foreach ($inconsistencies as $inconsistency) {
@@ -42,11 +42,9 @@ class AddCompletedOrdersToUnresolved
         }
 
         foreach ($this->getOrdersInFinalState->execute($orderIds) as $order) {
-            if (isset($inconsistencies[$order->getEntityId()])) {
-                $inconsistencies[$order->getEntityId()]->setOrder($order);
-            }
+            $collector->addOrder($order);
         }
 
-        $collector->setInconsistencies($inconsistencies);
+        $collector->setItems($inconsistencies);
     }
 }

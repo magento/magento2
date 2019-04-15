@@ -10,21 +10,23 @@ namespace Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
 use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
 
 /**
- * Remove all entries without order
+ * Remove all reservations without matching order
  */
-class RemoveReservationsWithoutRelevantOrder
+class FilterExistingOrders
 {
     /**
-     * Remove all entries without order
-     * @param Collector $collector
+     * Remove all reservations without matching order
+     *
+     * @param SaleableQuantityInconsistency[] $inconsistencies
+     * @return SaleableQuantityInconsistency[]
      */
-    public function execute(Collector $collector): void
+    public function execute(array $inconsistencies): array
     {
-        $collector->setInconsistencies(array_filter(
-            $collector->getInconsistencies(),
+        return array_filter(
+            $inconsistencies,
             function (SaleableQuantityInconsistency $inconsistency) {
                 return (bool)$inconsistency->getOrder();
             }
-        ));
+        );
     }
 }
