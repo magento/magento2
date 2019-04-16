@@ -10,5 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerAccountMainSection">
         <element name="pageTitle" type="text" selector="#maincontent .column.main [data-ui-id='page-title-wrapper']" />
+        <element name="messageByType" type="block" selector="#maincontent .message-{{messageType}}" parameterized="true" />
     </section>
 </sections>
