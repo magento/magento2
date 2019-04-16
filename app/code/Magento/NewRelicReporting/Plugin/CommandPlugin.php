@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\NewRelicReporting\Plugin;
 
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
+use Symfony\Component\Console\Command\Command;
 
+/**
+ * Describe NewRelic commands plugin.
+ */
 class CommandPlugin
 {
     /**
@@ -32,7 +37,14 @@ class CommandPlugin
         $this->newRelicWrapper = $newRelicWrapper;
     }
 
-    public function beforeRun(\Symfony\Component\Console\Command\Command $command, ...$args)
+    /**
+     * Set NewRelic Transaction name before running command.
+     *
+     * @param Command $command
+     * @param array $args
+     * @return array
+     */
+    public function beforeRun(Command $command, ...$args)
     {
         $this->newRelicWrapper->setTransactionName(
             sprintf('CLI %s', $command->getName())
