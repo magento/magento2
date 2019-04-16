@@ -26,6 +26,11 @@ class Format implements \Magento\Framework\Locale\FormatInterface
     protected $currencyFactory;
 
     /**
+     * @var array
+     */
+    private $groupSeparatorByLocale = [];
+
+    /**
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param ResolverInterface $localeResolver
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -81,7 +86,13 @@ class Format implements \Magento\Framework\Locale\FormatInterface
                 $value = str_replace(',', '', $value);
             }
         } elseif ($separatorComa !== false) {
-            $value = str_replace(',', '.', $value);
+            $locale = $this->_localeResolver->getLocale();
+            $groupSeparator = $this->retrieveLocaleGroupSeparator($locale);
+            if ($groupSeparator === ',') {
+                $value = str_replace(',', '', $value);
+            } else {
+                $value = str_replace(',', '.', $value);
+            }
         }
 
         return (float)$value;
@@ -148,5 +159,23 @@ class Format implements \Magento\Framework\Locale\FormatInterface
         ];
 
         return $result;
+    }
+
+    /**
+     * Retrieve group separator symbol by locale
+     *
+     * @param $locale string
+     * @return string
+     */
+    private function retrieveLocaleGroupSeparator(string $locale): string
+    {
+        if (!array_key_exists($locale, $this->groupSeparatorByLocale)) {
+            $formatter = new \NumberFormatter($locale, \NumberFormatter::DECIMAL);
+            $this->groupSeparatorByLocale[$locale] = $formatter->getSymbol(
+                \NumberFormatter::GROUPING_SEPARATOR_SYMBOL
+            );
+        }
+
+        return $this->groupSeparatorByLocale[$locale];
     }
 }
