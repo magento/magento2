@@ -65,24 +65,35 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
     public function processHeaderValue(string $headerValue) : void
     {
         try {
-            /** @var \Magento\Store\Model\Store $defaultStore */
-            $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
-            /** @var \Magento\Store\Model\Store $currentStore */
-            $currentStore = $this->storeManager->getStore();
-
             if (!empty($headerValue)) {
                 $headerCurrency = strtoupper(ltrim(rtrim($headerValue)));
-                if (in_array($headerCurrency, $currentStore->getAvailableCurrencyCodes())) {
+                /** @var \Magento\Store\Model\Store $currentStore */
+                $currentStore = $this->storeManager->getStore();
+                if (in_array($headerCurrency, $currentStore->getAvailableCurrencyCodes(true))) {
                     $currentStore->setCurrentCurrencyCode($headerCurrency);
+                } else {
+                    /** @var \Magento\Store\Model\Store $store */
+                    $store = $this->storeManager->getStore() ?? $this->storeManager->getDefaultStoreView();
+                    //skip store not found exception as it will be handled in graphql validation
+                    $this->logger->warning(__('Currency not allowed for store %1', [$store->getCode()]));
+                    $this->httpContext->setValue(
+                        HttpContext::CONTEXT_CURRENCY,
+                        $headerCurrency,
+                        $store->getCurrentCurrency()->getCode()
+                    );
                 }
             } else {
                 if ($this->session->getCurrencyCode()) {
+                    /** @var \Magento\Store\Model\Store $currentStore */
+                    $currentStore = $this->storeManager->getStore() ?? $this->storeManager->getDefaultStoreView();
                     $currentStore->setCurrentCurrencyCode($this->session->getCurrencyCode());
                 } else {
+                    /** @var \Magento\Store\Model\Store $store */
+                    $store = $this->storeManager->getStore() ?? $this->storeManager->getDefaultStoreView();
                     $this->httpContext->setValue(
                         HttpContext::CONTEXT_CURRENCY,
-                        $defaultStore->getCurrentCurrencyCode(),
-                        $defaultStore->getDefaultCurrencyCode()
+                        $store->getCurrentCurrency()->getCode(),
+                        $store->getCurrentCurrency()->getCode()
                     );
                 }
             }

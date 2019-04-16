@@ -46,7 +46,7 @@ class CurrencyValidator implements HttpRequestValidatorInterface
                 $headerCurrency = strtoupper(ltrim(rtrim($headerValue)));
                 /** @var \Magento\Store\Model\Store $currentStore */
                 $currentStore = $this->storeManager->getStore();
-                if (!in_array($headerCurrency, $currentStore->getAvailableCurrencyCodes())) {
+                if (!in_array($headerCurrency, $currentStore->getAvailableCurrencyCodes(true))) {
                     throw new GraphQlInputException(
                         __('Currency not allowed for store %1', [$currentStore->getCode()])
                     );
