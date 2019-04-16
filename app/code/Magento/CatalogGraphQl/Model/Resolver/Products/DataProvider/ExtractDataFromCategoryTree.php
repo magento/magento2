@@ -9,6 +9,8 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
 use Magento\CatalogGraphQl\Model\Category\Hydrator;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Catalog\Model\Category;
 
 /**
  * Extract data from category tree
@@ -51,6 +53,9 @@ class ExtractDataFromCategoryTree
         while ($iterator->valid()) {
             /** @var CategoryInterface $category */
             $category = $iterator->current();
+            if ($category->getIsActive() == false && $category->getId() != Category::TREE_ROOT_ID) {
+                throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
+            }
             $iterator->next();
             $pathElements = explode("/", $category->getPath());
             if (empty($tree)) {
