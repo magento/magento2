@@ -12,6 +12,7 @@
                 name: 'use_default[' + $data.index + ']',
                 'data-form-part': $data.ns
            "
-           ko-checked="isUseDefault">
+           ko-checked="isUseDefault"
+           ko-disabled="$data.serviceDisabled">
     <label translate="'Use Default Value'" attr="for: $data.uid + '_default'" class="admin__field-label"></label>
 </div>

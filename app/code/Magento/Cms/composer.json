@@ -12,7 +12,8 @@
         "magento/module-ui": "100.1.*",
         "magento/module-variable": "100.1.*",
         "magento/module-media-storage": "100.1.*",
-        "magento/framework": "100.1.*"
+        "magento/framework": "100.1.*",
+        "magento/module-authorization": "*"
     },
     "suggest": {
         "magento/module-cms-sample-data": "Sample Data version:100.1.*"

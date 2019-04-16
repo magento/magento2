@@ -13,6 +13,7 @@ namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category as CategoryEntity;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -983,7 +984,7 @@ class Category extends AbstractResource
         if ($afterCategoryId) {
             $select = $connection->select()->from($table, 'position')->where('entity_id = :entity_id');
             $position = $connection->fetchOne($select, ['entity_id' => $afterCategoryId]);
-            $position += 1;
+            $position++;
         } else {
             $position = 1;
         }
@@ -1075,5 +1076,20 @@ class Category extends AbstractResource
                 ->get(\Magento\Catalog\Model\ResourceModel\Category\AggregateCount::class);
         }
         return $this->aggregateCount;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @param CategoryEntity|\Magento\Framework\DataObject $object
+     */
+    public function validate($object)
+    {
+        $isValid = parent::validate($object);
+        if ($isValid !== true) {
+            return $isValid;
+        }
+
+        return true;
     }
 }
