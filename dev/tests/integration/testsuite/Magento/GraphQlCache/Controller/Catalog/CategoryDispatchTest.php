@@ -13,7 +13,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Tests cache debug headers and cache tag validation for a simple product query
+ * Tests cache debug headers and cache tag validation for a simple category query
  *
  * @magentoAppArea graphql
  * @magentoDbIsolation disabled
@@ -100,6 +100,7 @@ QUERY;
         $response = $this->objectManager->get(\Magento\Framework\App\Response\Http::class);
         /** @var  $registry \Magento\Framework\Registry */
         $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
+        $registry->register('use_page_cache_plugin', true, true);
         $result->renderResult($response);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());

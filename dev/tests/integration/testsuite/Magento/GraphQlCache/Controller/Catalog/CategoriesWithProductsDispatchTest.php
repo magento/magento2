@@ -15,7 +15,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Tests cache debug headers and cache tag validation for a simple product query
+ * Tests cache debug headers and cache tag validation for a category with product query
  *
  * @magentoAppArea graphql
  * @magentoDbIsolation disabled
