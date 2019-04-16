@@ -97,7 +97,9 @@ class GraphQlCacheControllerTest extends \Magento\TestFramework\Indexer\TestCase
                    id
                    name
                    sku
-                   description
+                   description {
+                   html
+                   }
                }
            }
        }
@@ -114,8 +116,8 @@ QUERY;
         $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
         $registry->register('use_page_cache_plugin', true, true);
         $result->renderResult($response);
-        $this->assertEquals('MISS', $this->response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $actualCacheTags = explode(',', $this->response->getHeader('X-Magento-Tags')->getFieldValue());
+        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
+        $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['cat_p', 'cat_p_' . $product->getId(), 'FPC'];
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
@@ -169,7 +171,7 @@ QUERY;
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      *
      */
-    public function testDispatchForCacheHeadersAndCacheTagsForCategoryWtihProducts(): void
+    public function testDispatchForCacheHeadersAndCacheTagsForCategoryWithProducts(): void
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -231,4 +233,3 @@ QUERY;
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 }
-
