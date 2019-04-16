@@ -691,7 +691,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        $this->assertNotEquals($response['products']['items'][0]['sku'], $productSku);
+        $this->assertNotContains($productSku, array_column($response['products']['items'], 'sku'));
     }
 
     /**
