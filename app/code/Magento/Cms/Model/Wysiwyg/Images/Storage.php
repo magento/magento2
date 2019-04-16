@@ -424,7 +424,7 @@ class Storage extends \Magento\Framework\DataObject
     /**
      * Recursively delete directory from storage
      *
-     * @param string $path Target dir
+     * @param string $path Absolute path to target directory
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -493,7 +493,7 @@ class Storage extends \Magento\Framework\DataObject
     /**
      * Upload and resize new file
      *
-     * @param string $targetPath Target directory
+     * @param string $targetPath Absolute path to target directory
      * @param string $type Type of storage, e.g. image, media etc.
      * @return array File info Array
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -807,8 +807,8 @@ class Storage extends \Magento\Framework\DataObject
     /**
      * Check if path is not in excluded dirs.
      *
-     * @param string $path
-     * @param array $conditions
+     * @param string $path Absolute path
+     * @param array $conditions Exclude conditions
      * @return bool
      */
     private function isPathAllowed($path, array $conditions): bool
