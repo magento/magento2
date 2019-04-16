@@ -164,7 +164,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
     /**
      * Retrieve group separator symbol by locale
      *
-     * @param $locale string
+     * @param string $locale
      * @return string
      */
     private function retrieveLocaleGroupSeparator(string $locale): string

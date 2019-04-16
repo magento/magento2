@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Locale\Test\Unit;
 
+/**
+ * Tests class for Number locale format
+ */
 class FormatTest extends \PHPUnit\Framework\TestCase
 {
     /**
