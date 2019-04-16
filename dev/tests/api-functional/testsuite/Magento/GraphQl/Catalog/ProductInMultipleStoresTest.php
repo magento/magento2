@@ -15,7 +15,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class ProductInMultipleStoresTest extends GraphQlAbstract
 {
-
     /**
      * Test a product from a specific and a default store
      *

@@ -44,7 +44,6 @@ class CacheTagTest extends GraphQlAbstract
        }
 QUERY;
 
-
         /** cache-debug should be a MISS when product is queried for first time */
         $responseMissHeaders = $this->graphQlQueryForHttpHeaders($query, [], '', []);
         preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseMissHeaders, $matchesMiss);
