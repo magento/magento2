@@ -57,7 +57,8 @@ class CouponCodesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD)
      */
     public function execute()
@@ -101,9 +102,12 @@ class CouponCodesFixture extends Fixture
     }
 
     /**
+     * Generate Coupon Codes
+     *
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param \Magento\SalesRule\Model\CouponFactory $couponCodeFactory
      * @param array $categoriesArray
+     *
      * @return void
      */
     public function generateCouponCodes($ruleFactory, $couponCodeFactory, $categoriesArray)
@@ -145,7 +149,7 @@ class CouponCodesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -153,7 +157,7 @@ class CouponCodesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {
