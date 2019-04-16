@@ -319,8 +319,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             $resourceCollection,
             $data
         );
-        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
-        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        $this->userContext = $userContext ?: ObjectManager::getInstance()->get(UserContextInterface::class);
+        $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**

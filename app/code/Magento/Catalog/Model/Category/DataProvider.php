@@ -159,7 +159,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->storeManager = $storeManager;
         $this->request = $request;
         $this->categoryFactory = $categoryFactory;
-        $this->auth = $auth ?? \Magento\Framework\App\ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        $this->auth = $auth ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AuthorizationInterface::class);
 
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta = $this->prepareMeta($this->meta);
