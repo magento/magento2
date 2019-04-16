@@ -149,10 +149,12 @@ class Cache implements ConfigOptionsListInterface
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData     = new ConfigData(ConfigFilePool::APP_ENV);
+
+        $currentCacheId = $deploymentConfig->get(self::CONFIG_PATH_CACHE_ID_PREFIX);
         if (isset($options[self::INPUT_KEY_CACHE_ID_PREFIX])) {
             $configData->set(self::CONFIG_PATH_CACHE_ID_PREFIX, $options[self::INPUT_KEY_CACHE_ID_PREFIX]);
-        } else {
+        } elseif ($currentCacheId == null) {
             $configData->set(self::CONFIG_PATH_CACHE_ID_PREFIX, $this->generateCachePrefix());
         }
 
