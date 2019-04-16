@@ -40,7 +40,7 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
 
         $this->assertArrayHasKey('setGuestEmailOnCart', $response);
         $this->assertArrayHasKey('cart', $response['setGuestEmailOnCart']);
-        $this->assertEquals($email, $response['setGuestEmailOnCart']['cart']['guest_email']);
+        $this->assertEquals($email, $response['setGuestEmailOnCart']['cart']['email']);
     }
 
     /**
@@ -65,16 +65,14 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      *
      * @dataProvider incorrectEmailDataProvider
-     * @param string $maskedQuoteId
      * @param string $email
      * @param string $exceptionMessage
      */
     public function testSetGuestEmailOnCartWithIncorrectEmail(
-        string $maskedQuoteId,
         string $email,
         string $exceptionMessage
     ) {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($maskedQuoteId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = $this->getQuery($maskedQuoteId, $email);
         $this->expectExceptionMessage($exceptionMessage);
@@ -87,8 +85,8 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
     public function incorrectEmailDataProvider(): array
     {
         return [
-            'wrong_email' => ['test_quote', 'some', 'Invalid email format'],
-            'no_email' => ['test_quote', '', 'Required parameter "email" is missing'],
+            'wrong_email' => ['some', 'Invalid email format'],
+            'no_email' => ['', 'Required parameter "email" is missing'],
         ];
     }
 
@@ -134,7 +132,7 @@ mutation {
     email: "$email"
   }) {
     cart {
-      guest_email
+      email
     }
   }
 }

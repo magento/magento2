@@ -83,7 +83,7 @@ mutation {
     email: "$email"
   }) {
     cart {
-      guest_email
+      email
     }
   }
 }

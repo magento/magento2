@@ -33,15 +33,23 @@ class SetGuestEmailOnCart implements ResolverInterface
     private $getCartForUser;
 
     /**
+     * @var EmailAddressValidator
+     */
+    private $emailValidator;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param CartRepositoryInterface $cartRepository
+     * @param EmailAddressValidator $emailValidator
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        EmailAddressValidator $emailValidator
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartRepository = $cartRepository;
+        $this->emailValidator = $emailValidator;
     }
 
     /**
@@ -58,11 +66,10 @@ class SetGuestEmailOnCart implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "email" is missing'));
         }
 
-        $guestEmail = $args['input']['email'];
-
-        if (!\Zend_Validate::is($guestEmail, EmailAddressValidator::class)) {
+        if (false === $this->emailValidator->isValid($args['input']['email'])) {
             throw new GraphQlInputException(__('Invalid email format'));
         }
+        $email = $args['input']['email'];
 
         $currentUserId = $context->getUserId();
 
@@ -71,7 +78,7 @@ class SetGuestEmailOnCart implements ResolverInterface
         }
 
         $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId);
-        $cart->setCustomerEmail($guestEmail);
+        $cart->setCustomerEmail($email);
 
         try {
             $this->cartRepository->save($cart);
