@@ -17,7 +17,7 @@ use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 /**
  * @inheritdoc
  */
-class GuestEmail implements ResolverInterface
+class CartEmail implements ResolverInterface
 {
     /**
      * @var GetCartForUser
