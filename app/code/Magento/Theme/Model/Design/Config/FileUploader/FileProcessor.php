@@ -18,6 +18,8 @@ use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
+ * Design file processor.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FileProcessor
