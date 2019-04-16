@@ -277,9 +277,7 @@ class Collect
                 $changes = array_diff($module, $changeTest);
                 $changesCleanArray = $this->getCleanChangesArray($changes);
 
-                if (count($changesCleanArray) > 0 ||
-                    ($this->moduleManager->isOutputEnabled($changeTest['name']) &&
-                        $module['setup_version'] != null)) {
+                if (!empty($changesCleanArray)) {
                     $data = [
                         'entity_id' => $changeTest['entity_id'],
                         'name' => $changeTest['name'],
