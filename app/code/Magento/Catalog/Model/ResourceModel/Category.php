@@ -15,7 +15,6 @@ use Magento\Catalog\Model\Indexer\Category\Product\Processor;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
-use Magento\Catalog\Model\Category as CategoryEntity;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -1125,20 +1124,5 @@ class Category extends AbstractResource
                 ->get(\Magento\Catalog\Model\ResourceModel\Category\AggregateCount::class);
         }
         return $this->aggregateCount;
-    }
-
-    /**
-     * @inheritDoc
-     *
-     * @param CategoryEntity|object $object
-     */
-    public function validate($object)
-    {
-        $isValid = parent::validate($object);
-        if ($isValid !== true) {
-            return $isValid;
-        }
-
-        return true;
     }
 }

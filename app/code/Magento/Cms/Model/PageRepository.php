@@ -137,10 +137,8 @@ class PageRepository implements PageRepositoryInterface
         try {
             //Validate changing of design.
             $userType = $this->userContext->getUserType();
-            if ((
-                    $userType === UserContextInterface::USER_TYPE_ADMIN
-                    || $userType === UserContextInterface::USER_TYPE_INTEGRATION
-                )
+            if (($userType === UserContextInterface::USER_TYPE_ADMIN
+                    || $userType === UserContextInterface::USER_TYPE_INTEGRATION)
                 && !$this->authorization->isAllowed('Magento_Cms::save_design')
             ) {
                 if (!$page->getId()) {
@@ -149,11 +147,11 @@ class PageRepository implements PageRepositoryInterface
                     $page->setCustomTheme(null);
                     $page->setCustomLayoutUpdateXml(null);
                 } else {
-                    $savedPage = $this->getById($page->getId());
-                    $page->setLayoutUpdateXml($savedPage->getLayoutUpdateXml());
-                    $page->setPageLayout($savedPage->getPageLayout());
-                    $page->setCustomTheme($savedPage->getCustomTheme());
-                    $page->setCustomLayoutUpdateXml($savedPage->getCustomLayoutUpdateXml());
+                    $savedPageData = $page->getOrigData();
+                    $page->setLayoutUpdateXml($savedPageData['layout_update_xml']);
+                    $page->setPageLayout($savedPageData['page_layout']);
+                    $page->setCustomTheme($savedPageData['custom_theme']);
+                    $page->setCustomLayoutUpdateXml($savedPageData['custom_layout_update_xml']);
                 }
             }
 

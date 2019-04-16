@@ -885,10 +885,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
         //Validate changing of design.
         $userType = $this->userContext->getUserType();
-        if ((
-                $userType === UserContextInterface::USER_TYPE_ADMIN
-                || $userType === UserContextInterface::USER_TYPE_INTEGRATION
-            )
+        if (($userType === UserContextInterface::USER_TYPE_ADMIN
+                || $userType === UserContextInterface::USER_TYPE_INTEGRATION)
             && !$this->authorization->isAllowed('Magento_Catalog::edit_product_design')
         ) {
             $this->setData('custom_design', $this->getOrigData('custom_design'));
