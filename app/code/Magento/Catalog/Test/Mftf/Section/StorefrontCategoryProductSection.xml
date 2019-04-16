@@ -24,6 +24,6 @@
         <element name="productPriceOld" type="text" selector="//span[@data-price-type='oldPrice']//span[@class='price'][contains(., '{{var1}}')]" parameterized="true"/>
         <element name="productPriceLabel" type="text" selector="//span[@class='price-label'][contains(text(),'{{var1}}')]" parameterized="true"/>
         <element name="productPriceLinkAfterLabel" type="text" selector="//span[@class='price-label'][contains(text(),'{{var1}}')]/following::span[contains(text(), '{{var2}}')]" parameterized="true"/>
-        <element name="ProductStockUnavailable" type="text" selector="//*[text()='Out of stock']"/>
+        <element name="productStockUnavailable" type="text" selector=".product-item-actions .stock.unavailable"/>
     </section>
 </sections>

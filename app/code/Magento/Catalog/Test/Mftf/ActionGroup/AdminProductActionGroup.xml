@@ -248,15 +248,14 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
 
-    <actionGroup name="AdminAssignProductToCategory">
+    <actionGroup name="AdminAssignProductToCategory" extends="AdminProductAssignCategory">
         <arguments>
             <argument name="productId" type="string"/>
             <argument name="categoryName" type="string"/>
         </arguments>
-        <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="amOnPage"/>
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{categoryName}}]" stepKey="selectCategory"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveProductMessage"/>
+        <amOnPage url="{{AdminProductEditPage.url(productId)}}" before="searchAndSelectCategory" stepKey="amOnPage"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" after="searchAndSelectCategory" stepKey="clickOnSaveButton"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." after="clickOnSaveButton" stepKey="seeSaveProductMessage"/>
     </actionGroup>
 
     <actionGroup name="AdminChangeProductAttributeSet">
@@ -269,7 +268,7 @@
         <waitForElementVisible selector="{{AdminProductFormSection.attributeSetFilterResultByName(attributeSet.attribute_set_name)}}" stepKey="waitForNewAttributeSetIsShown"/>
         <click selector="{{AdminProductFormSection.attributeSetFilterResultByName(attributeSet.attribute_set_name)}}" stepKey="selectAttributeSet"/>
     </actionGroup>
-    <actionGroup name="SetCategoryByName">
+    <actionGroup name="AdminProductAssignCategory">
         <arguments>
             <argument name="categoryName" type="string"/>
         </arguments>
