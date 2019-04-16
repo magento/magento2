@@ -17,7 +17,6 @@ use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterCo
 use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterIncompleteOrders;
 use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
 use Magento\InventoryReservationsApi\Model\ReservationInterface;
-use Magento\Sales\Model\Order;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -124,7 +123,6 @@ class CreateCompensations extends Command
     {
         $output->writeln('<info>Following reservations were created:</info>');
 
-        /** @var Order $order */
         foreach ($compensations as $reservation) {
             $output->writeln(
                 sprintf(
@@ -145,7 +143,6 @@ class CreateCompensations extends Command
      */
     private function rawOutput(OutputInterface $output, array $compensations): void
     {
-        /** @var Order $order */
         foreach ($compensations as $reservation) {
             $output->writeln(
                 sprintf(
