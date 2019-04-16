@@ -79,7 +79,7 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
                     $this->httpContext->setValue(
                         HttpContext::CONTEXT_CURRENCY,
                         $headerCurrency,
-                        $store->getCurrentCurrency()->getCode()
+                        $store->getDefaultCurrency()->getCode()
                     );
                 }
             } else {
@@ -93,7 +93,7 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
                     $this->httpContext->setValue(
                         HttpContext::CONTEXT_CURRENCY,
                         $store->getCurrentCurrency()->getCode(),
-                        $store->getCurrentCurrency()->getCode()
+                        $store->getDefaultCurrency()->getCode()
                     );
                 }
             }
