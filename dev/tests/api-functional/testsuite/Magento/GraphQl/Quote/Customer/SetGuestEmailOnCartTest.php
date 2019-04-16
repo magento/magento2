@@ -35,17 +35,36 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage The request is not allowed for logged in customers
      */
     public function testSetGuestEmailOnCartForLoggedInCustomer()
     {
-        $reservedOrderId = 'test_order_1';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $email = 'some@user.com';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
 
-        $query = $this->getSetGuestEmailOnCartMutation($maskedQuoteId, $email);
-        $this->expectExceptionMessage('The request is not allowed for logged in customers');
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $query = $this->getQuery($maskedQuoteId, $email);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * _security
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage The request is not allowed for logged in customers
+     */
+    public function testSetGuestEmailOnGuestCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $email = 'some@user.com';
+
+        $query = $this->getQuery($maskedQuoteId, $email);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -55,12 +74,12 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
      * @param string $email
      * @return string
      */
-    private function getSetGuestEmailOnCartMutation(string $maskedQuoteId, string $email): string
+    private function getQuery(string $maskedQuoteId, string $email): string
     {
         return <<<QUERY
 mutation {
   setGuestEmailOnCart(input: {
-    cart_id:"$maskedQuoteId"
+    cart_id: "$maskedQuoteId"
     email: "$email"
   }) {
     cart {

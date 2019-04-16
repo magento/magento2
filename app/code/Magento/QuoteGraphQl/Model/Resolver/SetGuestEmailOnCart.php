@@ -82,7 +82,6 @@ class SetGuestEmailOnCart implements ResolverInterface
         return [
             'cart' => [
                 'model' => $cart,
-                'guest_email' => $guestEmail
             ],
         ];
     }

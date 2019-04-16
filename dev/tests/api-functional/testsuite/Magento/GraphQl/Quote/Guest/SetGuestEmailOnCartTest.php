@@ -28,16 +28,15 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Quote/_files/empty_quote.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      */
     public function testSetGuestEmailOnCart()
     {
-        $reservedOrderId = 'reserved_order_id';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $email = 'some@user.com';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
 
-        $query = $this->getSetGuestEmailOnCartMutation($maskedQuoteId, $email);
-        $response = $this->graphQlQuery($query);
+        $query = $this->getQuery($maskedQuoteId, $email);
+        $response = $this->graphQlMutation($query);
 
         $this->assertArrayHasKey('setGuestEmailOnCart', $response);
         $this->assertArrayHasKey('cart', $response['setGuestEmailOnCart']);
@@ -45,35 +44,78 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Quote/_files/empty_quote.php
-     * @dataProvider incorrectInputDataProvider
-     * @param string|null $maskedQuoteId
+     * _security
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     */
+    public function testSetGuestEmailOnCustomerCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $email = 'some@user.com';
+
+        $query = $this->getQuery($maskedQuoteId, $email);
+
+        $this->expectExceptionMessage(
+            "The current user cannot perform operations on cart \"$maskedQuoteId\""
+        );
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     *
+     * @dataProvider incorrectEmailDataProvider
+     * @param string $maskedQuoteId
      * @param string $email
      * @param string $exceptionMessage
      */
-    public function testSetGuestEmailOnCartWithIncorrectInputData(
-        ?string $maskedQuoteId,
+    public function testSetGuestEmailOnCartWithIncorrectEmail(
+        string $maskedQuoteId,
         string $email,
         string $exceptionMessage
     ) {
-        if (null === $maskedQuoteId) { // Generate ID in case if no provided by data provider
-            $reservedOrderId = 'reserved_order_id';
-            $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
-        }
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($maskedQuoteId);
 
-        $query = $this->getSetGuestEmailOnCartMutation($maskedQuoteId, $email);
+        $query = $this->getQuery($maskedQuoteId, $email);
         $this->expectExceptionMessage($exceptionMessage);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
-    public function incorrectInputDataProvider(): array
+    /**
+     * @return array
+     */
+    public function incorrectEmailDataProvider(): array
     {
         return [
-            'wrong_email' => [null, 'some', 'Invalid email format'],
-            'no_email' => [null, '', 'Required parameter "email" is missing'],
-            'wrong_quote_id' =>  ['xxx', 'some@user.com', 'Could not find a cart with ID "xxx"'],
-            'no_quote_id' =>  ['', 'some@user.com', 'Required parameter "cart_id" is missing']
+            'wrong_email' => ['test_quote', 'some', 'Invalid email format'],
+            'no_email' => ['test_quote', '', 'Required parameter "email" is missing'],
         ];
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testSetGuestEmailOnNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $email = 'some@user.com';
+
+        $query = $this->getQuery($maskedQuoteId, $email);
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testSetGuestEmailWithEmptyCartId()
+    {
+        $maskedQuoteId = '';
+        $email = 'some@user.com';
+
+        $query = $this->getQuery($maskedQuoteId, $email);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -83,12 +125,12 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
      * @param string $email
      * @return string
      */
-    private function getSetGuestEmailOnCartMutation(string $maskedQuoteId, string $email): string
+    private function getQuery(string $maskedQuoteId, string $email): string
     {
         return <<<QUERY
 mutation {
   setGuestEmailOnCart(input: {
-    cart_id:"$maskedQuoteId"
+    cart_id: "$maskedQuoteId"
     email: "$email"
   }) {
     cart {
