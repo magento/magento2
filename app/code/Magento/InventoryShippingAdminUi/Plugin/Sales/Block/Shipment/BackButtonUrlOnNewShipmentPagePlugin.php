@@ -7,13 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShippingAdminUi\Plugin\Sales\Block\Shipment;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\InventoryShippingAdminUi\Model\IsOrderSourceManageable;
 use Magento\Shipping\Block\Adminhtml\Create;
 use Magento\InventoryShippingAdminUi\Model\IsWebsiteInMultiSourceMode;
 
 /**
- * Class BackButtonUrlOnNewShipmentPagePlugin
+ *  Modify back button URL on the shipment page in multi source mode
  */
 class BackButtonUrlOnNewShipmentPagePlugin
 {
@@ -33,11 +32,10 @@ class BackButtonUrlOnNewShipmentPagePlugin
      */
     public function __construct(
         IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode,
-        IsOrderSourceManageable $isOrderSourceManageable = null
+        IsOrderSourceManageable $isOrderSourceManageable
     ) {
         $this->isWebsiteInMultiSourceMode = $isWebsiteInMultiSourceMode;
-        $this->isOrderSourceManageable = $isOrderSourceManageable ??
-            ObjectManager::getInstance()->get(IsOrderSourceManageable::class);
+        $this->isOrderSourceManageable = $isOrderSourceManageable;
     }
 
     /**
