@@ -132,7 +132,8 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
         $configData = $this->configList->createConfig($options, $this->deploymentConfigMock);
 
         $this->assertEquals($expectedConfigData, $configData->getData());
-        /**
+    
+    /**
      * testCreateConfigWithRedis
      */
     public function testCreateConfigWithFileCache()
