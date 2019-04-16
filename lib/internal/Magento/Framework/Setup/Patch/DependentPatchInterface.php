@@ -6,7 +6,7 @@
 namespace Magento\Framework\Setup\Patch;
 
 /**
- * Each patch can have dependecies, that should be applied before such patch
+ * Each patch can have dependencies, that should be applied before such patch
  *
  *            /  Patch2 --- Patch3
  *          /
