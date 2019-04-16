@@ -15,6 +15,10 @@ use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Quote\Api\GuestCartRepositoryInterface;
+use Magento\Framework\Math\Random as RandomDataGenerator;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Test for empty cart creation mutation for customer
@@ -56,6 +60,11 @@ class CreateEmptyCartTest extends GraphQlAbstract
      */
     private $maskedQuoteId;
 
+    /**
+     * @var RandomDataGenerator
+     */
+    private $randomDataGenerator;
+
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -65,10 +74,14 @@ class CreateEmptyCartTest extends GraphQlAbstract
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->maskedQuoteIdToQuoteId = $objectManager->get(MaskedQuoteIdToQuoteIdInterface::class);
         $this->quoteIdMaskFactory = $objectManager->get(QuoteIdMaskFactory::class);
+        $this->randomDataGenerator = $objectManager->get(RandomDataGenerator::class);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @throws AuthenticationException
+     * @throws NoSuchEntityException
      */
     public function testCreateEmptyCart()
     {
@@ -84,6 +97,29 @@ class CreateEmptyCartTest extends GraphQlAbstract
         self::assertNotNull($guestCart->getId());
         self::assertEquals(1, $guestCart->getCustomer()->getId());
         self::assertEquals('default', $guestCart->getStore()->getCode());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    public function testCreateEmptyCartWithCartId()
+    {
+        $uniqueHash = $this->randomDataGenerator->getUniqueHash();
+
+        $query = $this->getQueryWithCartId('cart_id : "' . $uniqueHash . '"');
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
+
+        self::assertArrayHasKey('createEmptyCart', $response);
+        self::assertNotEmpty($response['createEmptyCart']);
+
+        $guestCart = $this->guestCartRepository->get($response['createEmptyCart']);
+        $this->maskedQuoteId = $response['createEmptyCart'];
+
+        self::assertNotNull($guestCart->getId());
+        self::assertEquals(1, $guestCart->getCustomer()->getId());
     }
 
     /**
@@ -111,6 +147,24 @@ class CreateEmptyCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @dataProvider dataProviderValidateCreateEmptyCartWithSpecifiedCartId
+     * @param string $input
+     * @param string $message
+     * @throws \Exception
+     */
+    public function testValidateCreateEmptyCartWithSpecifiedCartId(string $input, string $message)
+    {
+        $input = str_replace('provide_non_unique_id', $this->addEmptyCartWithCartId(), $input);
+        $input = str_replace('provide_hash_with_prefix', $this->randomDataGenerator->getUniqueHash('prefix'), $input);
+
+        $query = $this->getQueryWithCartId($input);
+
+        $this->expectExceptionMessage($message);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
+    }
+
+    /**
      * @return string
      */
     private function getQuery(): string
@@ -123,9 +177,27 @@ QUERY;
     }
 
     /**
+     * @param string $input
+     * @return string
+     */
+    private function getQueryWithCartId(string $input): string
+    {
+        return <<<QUERY
+mutation {
+ createEmptyCart(
+   input : {
+     {$input}
+   }
+ )
+}
+QUERY;
+    }
+
+    /**
      * @param string $username
      * @param string $password
      * @return array
+     * @throws AuthenticationException
      */
     private function getHeaderMapWithCustomerToken(
         string $username = 'customer@example.com',
@@ -150,5 +222,38 @@ QUERY;
                 ->delete();
         }
         parent::tearDown();
+    }
+
+    /**
+     * Return masked id for created empty cart.
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @return mixed
+     * @throws LocalizedException
+     */
+    private function addEmptyCartWithCartId()
+    {
+        $uniqueHash = $this->randomDataGenerator->getUniqueHash();
+        $query = $this->getQueryWithCartId('cart_id : "' . $uniqueHash . '"');
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
+
+        return $response['createEmptyCart'];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderValidateCreateEmptyCartWithSpecifiedCartId(): array
+    {
+        return [
+            'cart_id_unique_checking' => [
+                'cart_id: "provide_non_unique_id"',
+                'Specified parameter "cart_id" is non unique.'
+            ],
+            'cart_id_length_checking' => [
+                'cart_id: "provide_hash_with_prefix"',
+                '"cart_id" length have to be less than or equal to 32.'
+            ],
+        ];
     }
 }

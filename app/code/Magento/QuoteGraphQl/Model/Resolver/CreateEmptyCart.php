@@ -73,11 +73,11 @@ class CreateEmptyCart implements ResolverInterface
             $maskedQuoteId = $args['input']['cart_id'];
 
             if ($quoteIdMask->load($maskedQuoteId, 'masked_id') && $quoteIdMask->getQuoteId()) {
-                throw new GraphQlAlreadyExistsException(__('Specified "cart_id" already exists'));
+                throw new GraphQlAlreadyExistsException(__('Specified parameter "cart_id" is non unique.'));
             }
 
-            if (strlen($maskedQuoteId) > 32) {
-                throw new GraphQlInputException(__('Specified "cart_id" max size is 32'));
+            if (mb_strlen($maskedQuoteId) > 32) {
+                throw new GraphQlInputException(__('"cart_id" length have to be less than or equal to 32.'));
             }
         }
 
