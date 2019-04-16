@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Reports\Model\ResourceModel\Product\Downloads;
+
 /**
  * Product Downloads Report collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Reports\Model\ResourceModel\Product\Downloads;
-
-/**
+ *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -97,13 +97,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
         return $this;
     }
-    
+
     /**
-     * Get SQL for get record count without left JOINs and group 
-     *
-     * @return \Magento\Framework\DB\Select
+     * @inheritDoc
      */
-    public function getSelectCountSql() 
+    public function getSelectCountSql()
     {
         $countSelect = parent::getSelectCountSql();
         $countSelect->reset(\Zend\Db\Sql\Select::GROUP);
