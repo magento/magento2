@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddress;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -29,11 +28,6 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
     private $getCustomer;
 
     /**
-     * @var GetCustomerAddress
-     */
-    private $getCustomerAddress;
-
-    /**
      * @var AssignShippingAddressToCart
      */
     private $assignShippingAddressToCart;
@@ -41,18 +35,15 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
     /**
      * @param QuoteAddressFactory $quoteAddressFactory
      * @param GetCustomer $getCustomer
-     * @param GetCustomerAddress $getCustomerAddress
      * @param AssignShippingAddressToCart $assignShippingAddressToCart
      */
     public function __construct(
         QuoteAddressFactory $quoteAddressFactory,
         GetCustomer $getCustomer,
-        GetCustomerAddress $getCustomerAddress,
         AssignShippingAddressToCart $assignShippingAddressToCart
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
         $this->getCustomer = $getCustomer;
-        $this->getCustomerAddress = $getCustomerAddress;
         $this->assignShippingAddressToCart = $assignShippingAddressToCart;
     }
 
@@ -86,8 +77,10 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             $shippingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
         } else {
             $customer = $this->getCustomer->execute($context);
-            $customerAddress = $this->getCustomerAddress->execute((int)$customerAddressId, (int)$customer->getId());
-            $shippingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress($customerAddress);
+            $shippingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress(
+                (int)$customerAddressId,
+                (int)$customer->getId()
+            );
         }
 
         $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
