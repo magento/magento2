@@ -50,12 +50,11 @@ class BackButtonUrlOnNewShipmentPagePlugin
     public function afterGetBackUrl(Create $subject, $result)
     {
         $shipment = $subject->getShipment();
-        $order = $shipment->getOrder();
-        if (empty($shipment) || !$this->isOrderSourceManageable->execute($order)) {
+        if (empty($shipment) || !$this->isOrderSourceManageable->execute($shipment->getOrder())) {
             return $result;
         }
 
-        $websiteId = (int)$order->getStore()->getWebsiteId();
+        $websiteId = (int)$shipment->getOrder()->getStore()->getWebsiteId();
         if ($this->isWebsiteInMultiSourceMode->execute($websiteId)) {
             return $subject->getUrl(
                 'inventoryshipping/SourceSelection/index',
