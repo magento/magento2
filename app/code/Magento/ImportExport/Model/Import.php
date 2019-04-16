@@ -45,6 +45,7 @@ use Psr\Log\LoggerInterface;
  * @method self setEntity() setEntity(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 class Import extends AbstractModel
@@ -367,6 +368,7 @@ class Import extends AbstractModel
      *
      * @param AbstractAttribute|Attribute $attribute
      * @return string
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getAttributeType(AbstractAttribute $attribute)
     {
@@ -548,6 +550,7 @@ class Import extends AbstractModel
         $uploader->skipDbProcessing(true);
         $fileName = $this->random->getRandomString(32) . '.' . $uploader->getFileExtension();
         $result = $uploader->save($this->getWorkingDir(), $fileName);
+        // phpcs:disable Magento2.Functions.DiscouragedFunction.Discouraged
         $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
 
         $uploadedFile = $result['path'] . $result['file'];
@@ -583,7 +586,6 @@ class Import extends AbstractModel
      * Move uploaded file and provide source instance.
      *
      * @return Import\AbstractSource
-     * @throws FileSystemException
      * @throws LocalizedException
      */
     public function uploadFileAndGetSource()
@@ -679,6 +681,7 @@ class Import extends AbstractModel
                 if (!$indexer->isScheduled()) {
                     $indexer->invalidate();
                 }
+                // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -798,6 +801,7 @@ class Import extends AbstractModel
             } elseif ($extension !== null) {
                 $fileName = $entity . $extension;
             } else {
+                // phpcs:disable Magento2.Functions.DiscouragedFunction.Discouraged
                 $fileName = basename($sourceFileRelative);
             }
             $copyName = $this->localeDate->gmtTimestamp() . '_' . $fileName;
