@@ -19,5 +19,6 @@
         <element name="productQuantity" type="input" selector="//a[contains(text(), '{{productName}}')]/ancestor::div[@class='product-item-info']//input[@class='input-text qty']" parameterized="true"/>
         <element name="productUpdateWishList" type="button" selector=".column.main .actions-toolbar .action.update" timeout="30"/>
         <element name="productAddAllToCart" type="button" selector=".column.main .actions-toolbar .action.tocart" timeout="30"/>
+        <element name="productQtyError" type="text" selector="//li[.//a[contains(text(), '{{productName}}')]]//div[@class='mage-error']" parameterized="true" timeout="30"/>
     </section>
 </sections>
