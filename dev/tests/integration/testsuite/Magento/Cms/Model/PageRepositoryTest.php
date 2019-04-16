@@ -24,7 +24,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
      *
      * @var PageRepositoryInterface
      */
-    private $repo;
+    private $repository;
 
     /**
      * @var Auth
@@ -53,7 +53,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->repo = Bootstrap::getObjectManager()->create(PageRepositoryInterface::class);
+        $this->repository = Bootstrap::getObjectManager()->create(PageRepositoryInterface::class);
         $this->auth = Bootstrap::getObjectManager()->get(Auth::class);
         $this->criteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
@@ -61,7 +61,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function tearDown()
     {
@@ -90,14 +90,14 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->aclBuilder->getAcl()->deny(null, 'Magento_Cms::save_design');
 
         $page->setCustomTheme('test');
-        $page = $this->repo->save($page);
+        $page = $this->repository->save($page);
         $this->assertNotEquals('test', $page->getCustomTheme());
 
         //Admin has access to page' design.
         $this->aclBuilder->getAcl()->allow(null, ['Magento_Cms::save', 'Magento_Cms::save_design']);
 
         $page->setCustomTheme('test');
-        $page = $this->repo->save($page);
+        $page = $this->repository->save($page);
         $this->assertEquals('test', $page->getCustomTheme());
     }
 }

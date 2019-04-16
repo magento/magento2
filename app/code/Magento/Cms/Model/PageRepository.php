@@ -130,10 +130,8 @@ class PageRepository implements PageRepositoryInterface
         try {
             //Validate changing of design.
             $userType = $this->userContext->getUserType();
-            if ((
-                    $userType === UserContextInterface::USER_TYPE_ADMIN
-                    || $userType === UserContextInterface::USER_TYPE_INTEGRATION
-                )
+            if (($userType === UserContextInterface::USER_TYPE_ADMIN
+                    || $userType === UserContextInterface::USER_TYPE_INTEGRATION)
                 && !$this->authorization->isAllowed('Magento_Cms::save_design')
             ) {
                 if (!$page->getId()) {

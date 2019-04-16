@@ -101,7 +101,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getMeta()
     {

@@ -22,7 +22,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
      *
      * @var CategoryRepositoryInterface
      */
-    private $repo;
+    private $repository;
 
     /**
      * @var Auth
@@ -41,13 +41,13 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->repo = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
+        $this->repository = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
         $this->auth = Bootstrap::getObjectManager()->get(Auth::class);
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function tearDown()
     {
@@ -66,14 +66,14 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveDesign()
     {
-        $category = $this->repo->get(333);
+        $category = $this->repository->get(333);
         $this->auth->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
 
         //Admin doesn't have access to category's design.
         $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_category_design');
 
         $category->setCustomAttribute('custom_design', 2);
-        $category = $this->repo->save($category);
+        $category = $this->repository->save($category);
         $this->assertEmpty($category->getCustomAttribute('custom_design'));
 
         //Admin has access to category' design.
@@ -81,7 +81,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
             ->allow(null, ['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']);
 
         $category->setCustomAttribute('custom_design', 2);
-        $category = $this->repo->save($category);
+        $category = $this->repository->save($category);
         $this->assertNotEmpty($category->getCustomAttribute('custom_design'));
         $this->assertEquals(2, $category->getCustomAttribute('custom_design')->getValue());
     }

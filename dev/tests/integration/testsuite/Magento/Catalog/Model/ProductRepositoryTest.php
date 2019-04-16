@@ -48,7 +48,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function tearDown()
     {
