@@ -12,6 +12,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
@@ -47,12 +48,12 @@ class GraphQl implements FrontControllerInterface
     private $queryProcessor;
 
     /**
-     * @var \Magento\Framework\GraphQl\Exception\ExceptionFormatter
+     * @var ExceptionFormatter
      */
     private $graphQlError;
 
     /**
-     * @var \Magento\Framework\GraphQl\Query\Resolver\ContextInterface
+     * @var ContextInterface
      */
     private $resolverContext;
 
@@ -71,8 +72,8 @@ class GraphQl implements FrontControllerInterface
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
      * @param QueryProcessor $queryProcessor
-     * @param \Magento\Framework\GraphQl\Exception\ExceptionFormatter $graphQlError
-     * @param \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $resolverContext
+     * @param ExceptionFormatter $graphQlError
+     * @param ContextInterface $resolverContext
      * @param HttpRequestProcessor $requestProcessor
      * @param QueryFields $queryFields
      */
@@ -107,12 +108,14 @@ class GraphQl implements FrontControllerInterface
         $statusCode = 200;
         try {
             /** @var Http $request */
+            $this->requestProcessor->validateRequest($request);
             $this->requestProcessor->processHeaders($request);
-            $data = $this->jsonSerializer->unserialize($request->getContent());
 
-            $query = isset($data['query']) ? $data['query'] : '';
-            $variables = isset($data['variables']) ? $data['variables'] : null;
-            // We have to extract queried field names to avoid instantiation of non necessary fields in webonyx schema
+            $data = $this->getDataFromRequest($request);
+            $query = $data['query'] ?? '';
+            $variables = $data['variables'] ?? null;
+
+            // We must extract queried field names to avoid instantiation of unnecessary fields in webonyx schema
             // Temporal coupling is required for performance optimization
             $this->queryFields->setQuery($query, $variables);
             $schema = $this->schemaGenerator->generate();
@@ -121,7 +124,7 @@ class GraphQl implements FrontControllerInterface
                 $schema,
                 $query,
                 $this->resolverContext,
-                isset($data['variables']) ? $data['variables'] : []
+                $data['variables'] ?? []
             );
         } catch (\Exception $error) {
             $result['errors'] = isset($result) && isset($result['errors']) ? $result['errors'] : [];
@@ -133,5 +136,27 @@ class GraphQl implements FrontControllerInterface
             'application/json'
         )->setHttpResponseCode($statusCode);
         return $this->response;
+    }
+
+    /**
+     * Get data from request body or query string
+     *
+     * @param RequestInterface $request
+     * @return array
+     */
+    private function getDataFromRequest(RequestInterface $request) : array
+    {
+        /** @var Http $request */
+        if ($request->isPost()) {
+            $data = $this->jsonSerializer->unserialize($request->getContent());
+        } elseif ($request->isGet()) {
+            $data = $request->getParams();
+            $data['variables'] = isset($data['variables']) ?
+                $this->jsonSerializer->unserialize($data['variables']) : null;
+        } else {
+            return [];
+        }
+
+        return $data;
     }
 }
