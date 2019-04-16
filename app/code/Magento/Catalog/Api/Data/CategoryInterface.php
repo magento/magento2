@@ -74,7 +74,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get category name
      *
-     * @return string
+     * @return string|null
      */
     public function getName();
 
