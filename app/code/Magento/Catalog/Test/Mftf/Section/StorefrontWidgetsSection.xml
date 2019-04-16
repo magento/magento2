@@ -9,8 +9,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontWidgetsSection">
-        <element name="widgetRecentlyViewedProductsGrid" type="block" selector=".block.widget.block-viewed-products-grid" timeout="30"/>
-        <element name="widgetRecentlyComparedProductsGrid" type="block" selector=".block.widget.block-compared-products-grid" timeout="30"/>
-        <element name="widgetRecentlyOrderedProductsGrid" type="block" selector=".block.block-reorder" timeout="30"/>
+        <element name="widgetRecentlyViewedProductsGrid" type="block" selector=".block.widget.block-viewed-products-grid"/>
+        <element name="widgetRecentlyComparedProductsGrid" type="block" selector=".block.widget.block-compared-products-grid"/>
+        <element name="widgetRecentlyOrderedProductsGrid" type="block" selector=".block.block-reorder"/>
     </section>
 </sections>
