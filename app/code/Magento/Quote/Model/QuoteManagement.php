@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
@@ -249,6 +250,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $storeId = $this->storeManager->getStore()->getStoreId();
         $quote = $this->createCustomerCart($customerId, $storeId);
 
+        $this->_prepareCustomerQuote($quote);
+
         try {
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
@@ -281,6 +284,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             throw new StateException(
                 __("The customer can't be assigned to the cart because the customer already has an active cart.")
             );
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
         }
 
@@ -559,7 +563,14 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         if ($shipping && !$shipping->getSameAsBilling()
             && (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())
         ) {
-            $shippingAddress = $shipping->exportCustomerAddress();
+            if ($shipping->getQuoteId()) {
+                $shippingAddress = $shipping->exportCustomerAddress();
+            } else {
+                $defaultShipping = $this->customerRepository->getById($customer->getId())->getDefaultShipping();
+                if ($defaultShipping) {
+                    $shippingAddress = $this->addressRepository->getById($defaultShipping);
+                }
+            }
             if (!$hasDefaultShipping) {
                 //Make provided address as default shipping address
                 $shippingAddress->setIsDefaultShipping(true);
@@ -579,7 +590,14 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         }
 
         if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
-            $billingAddress = $billing->exportCustomerAddress();
+            if ($billing->getQuoteId()) {
+                $billingAddress = $billing->exportCustomerAddress();
+            } else {
+                $defaultBilling = $this->customerRepository->getById($customer->getId())->getDefaultBilling();
+                if ($defaultBilling) {
+                    $billingAddress = $this->addressRepository->getById($defaultBilling);
+                }
+            }
             if (!$hasDefaultBilling) {
                 //Make provided address as default shipping address
                 if (!$hasDefaultShipping) {
@@ -627,12 +645,13 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                     'exception' => $e,
                 ]
             );
+        // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $consecutiveException) {
             $message = sprintf(
                 "An exception occurred on 'sales_model_service_quote_submit_failure' event: %s",
                 $consecutiveException->getMessage()
             );
-
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($message, 0, $e);
         }
     }

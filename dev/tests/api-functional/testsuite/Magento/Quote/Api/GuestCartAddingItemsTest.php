@@ -18,8 +18,6 @@ class GuestCartAddingItemsTest extends WebapiAbstract
     const SERVICE_NAME = 'quoteGuestCartManagementV1';
     const RESOURCE_PATH = '/V1/guest-carts/';
 
-    protected $createdQuotes = [];
-
     /**
      * @var \Magento\TestFramework\ObjectManager
      */
