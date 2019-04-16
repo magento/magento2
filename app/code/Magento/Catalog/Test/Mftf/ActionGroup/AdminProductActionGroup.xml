@@ -269,4 +269,10 @@
         <waitForElementVisible selector="{{AdminProductFormSection.attributeSetFilterResultByName(attributeSet.attribute_set_name)}}" stepKey="waitForNewAttributeSetIsShown"/>
         <click selector="{{AdminProductFormSection.attributeSetFilterResultByName(attributeSet.attribute_set_name)}}" stepKey="selectAttributeSet"/>
     </actionGroup>
+    <actionGroup name="SetCategoryByName">
+        <arguments>
+            <argument name="categoryName" type="string"/>
+        </arguments>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{categoryName}}]" stepKey="searchAndSelectCategory"/>
+    </actionGroup>
 </actionGroups>
