@@ -26,8 +26,8 @@ class IdentityResolver implements IdentityResolverInterface
         $ids = [];
         $items = $resolvedData['items'] ?? [];
         foreach ($items as $item) {
-            if (is_array($item) && !empty($item[BlockInterface::IDENTIFIER])) {
-                $ids[] = $item[BlockInterface::IDENTIFIER ];
+            if (is_array($item) && !empty($item[BlockInterface::BLOCK_ID])) {
+                $ids[] = $item[BlockInterface::BLOCK_ID];
             }
         }
 
