@@ -9,9 +9,8 @@
         "magento/module-inventory-catalog-api": "*",
         "magento/module-inventory-indexer": "*",
         "magento/module-store": "*",
-        "magento/module-catalog-inventory": "*"
-    },
-    "suggest": {
+        "magento/module-catalog-inventory": "*",
+        "magento/module-sales": "*",
         "magento/module-configurable-product": "*"
     },
     "type": "magento2-module",
