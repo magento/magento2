@@ -193,6 +193,7 @@
         "magento/module-page-cache": "*",
         "magento/module-payment": "*",
         "magento/module-paypal": "*",
+        "magento/module-paypal-captcha": "*",
         "magento/module-persistent": "*",
         "magento/module-product-alert": "*",
         "magento/module-product-video": "*",
