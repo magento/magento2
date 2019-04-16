@@ -1,11 +1,8 @@
 <?php
 /**
- *
- * Copyright © 2019 ebizmarts. All rights reserved.
- * See LICENSE.txt for license details.
- *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
