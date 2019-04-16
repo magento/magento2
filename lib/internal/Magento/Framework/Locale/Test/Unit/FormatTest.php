@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Locale\Test\Unit;
 
+/**
+ * Tests class for Number locale format
+ */
 class FormatTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -84,21 +87,26 @@ class FormatTest extends \PHPUnit\Framework\TestCase
      */
     public function getPriceFormatDataProvider()
     {
+        $swissGroupSymbol = INTL_ICU_VERSION >= 59.1 ? '’' : '\'';
         return [
             ['en_US', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
             ['de_DE', ['decimalSymbol' => ',', 'groupSymbol' => '.']],
-            ['de_CH', ['decimalSymbol' => '.', 'groupSymbol' => '\'']],
+            ['de_CH', ['decimalSymbol' => '.', 'groupSymbol' => $swissGroupSymbol]],
             ['uk_UA', ['decimalSymbol' => ',', 'groupSymbol' => ' ']]
         ];
     }
 
     /**
-     * @param float | null $expected
      * @param string|float|int $value
+     * @param float | null $expected
+     * @param string $locale
      * @dataProvider provideNumbers
      */
-    public function testGetNumber($value, $expected)
+    public function testGetNumber(string $value, float $expected, string $locale = null)
     {
+        if ($locale !== null) {
+            $this->localeResolver->method('getLocale')->willReturn($locale);
+        }
         $this->assertEquals($expected, $this->formatModel->getNumber($value));
     }
 
@@ -113,11 +121,15 @@ class FormatTest extends \PHPUnit\Framework\TestCase
             ['12343', 12343],
             ['-9456km', -9456],
             ['0', 0],
-            ['2 054,10', 2054.1],
-            ['2046,45', 2046.45],
+            ['2 054,10', 205410, 'en_US'],
+            ['2 054,10', 2054.1, 'de_DE'],
+            ['2046,45', 204645, 'en_US'],
+            ['2046,45', 2046.45, 'de_DE'],
             ['2 054.52', 2054.52],
-            ['2,46 GB', 2.46],
+            ['2,46 GB', 246, 'en_US'],
+            ['2,46 GB', 2.46, 'de_DE'],
             ['2,054.00', 2054],
+            ['2,000', 2000, 'ja_JP'],
         ];
     }
 }
