@@ -28,4 +28,10 @@
         <click selector="{{CmsNewPageHierarchySection.header}}" stepKey="clickHierarchy"/>
         <click selector="{{CmsNewPageHierarchySection.selectHierarchy(selectHierarchyOpt)}}" stepKey="clickPageCheckBoxes"/>
     </actionGroup>
+    <actionGroup name="CreateNewPageWithAllValuesAndContent" extends="CreateNewPageWithAllValues">
+        <arguments>
+            <argument name="pageContent" type="string"/>
+        </arguments>
+        <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{pageContent}}" stepKey="fillContentField" after="fillFieldContentHeading"/>
+    </actionGroup>
 </actionGroups>
