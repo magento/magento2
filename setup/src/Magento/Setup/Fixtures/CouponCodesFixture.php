@@ -20,7 +20,7 @@ class CouponCodesFixture extends Fixture
     /**
      * @var int
      */
-    protected $priority = 130;
+    protected $priority = 129;
 
     /**
      * @var int
