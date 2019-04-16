@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Quote\Model;
 
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -24,6 +25,8 @@ use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory as QuoteCollection
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
+ * Quote repository.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuoteRepository implements CartRepositoryInterface
@@ -125,7 +128,7 @@ class QuoteRepository implements CartRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($cartId, array $sharedStoreIds = [])
     {
@@ -138,7 +141,7 @@ class QuoteRepository implements CartRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getForCustomer($customerId, array $sharedStoreIds = [])
     {
@@ -152,7 +155,7 @@ class QuoteRepository implements CartRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActive($cartId, array $sharedStoreIds = [])
     {
@@ -164,7 +167,7 @@ class QuoteRepository implements CartRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActiveForCustomer($customerId, array $sharedStoreIds = [])
     {
@@ -176,7 +179,7 @@ class QuoteRepository implements CartRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(CartInterface $quote)
     {
@@ -196,7 +199,7 @@ class QuoteRepository implements CartRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(CartInterface $quote)
     {
@@ -232,7 +235,7 @@ class QuoteRepository implements CartRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -277,6 +280,7 @@ class QuoteRepository implements CartRepositoryInterface
 
     /**
      * Get new SaveHandler dependency for application code.
+     *
      * @return SaveHandler
      * @deprecated 100.1.0
      */
@@ -289,6 +293,8 @@ class QuoteRepository implements CartRepositoryInterface
     }
 
     /**
+     * Get load handler instance.
+     *
      * @return LoadHandler
      * @deprecated 100.1.0
      */
