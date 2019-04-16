@@ -49,8 +49,9 @@ class BackButtonUrlOnNewShipmentPagePlugin
      */
     public function afterGetBackUrl(Create $subject, $result)
     {
-        $order = $subject->getShipment()->getOrder();
-        if (empty($subject->getShipment()) || !$this->isOrderSourceManageable->execute($order)) {
+        $shipment = $subject->getShipment();
+        $order = $shipment->getOrder();
+        if (empty($shipment) || !$this->isOrderSourceManageable->execute($order)) {
             return $result;
         }
 
@@ -59,7 +60,7 @@ class BackButtonUrlOnNewShipmentPagePlugin
             return $subject->getUrl(
                 'inventoryshipping/SourceSelection/index',
                 [
-                    'order_id' => $subject->getShipment() ? $subject->getShipment()->getOrderId() : null
+                    'order_id' => $shipment ? $shipment->getOrderId() : null
                 ]
             );
         }
