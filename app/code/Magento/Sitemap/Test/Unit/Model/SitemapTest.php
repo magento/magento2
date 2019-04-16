@@ -87,7 +87,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
     private $configReaderMock;
 
     /**
-     * Set helper mocks, create resource model mock
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -162,7 +162,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
      * Check not exists sitemap path validation
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please create the specified folder "" before saving the sitemap.
+     * @expectedExceptionMessage Please create the specified folder "/" before saving the sitemap.
      */
     public function testPathNotExists()
     {
@@ -598,6 +598,9 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
+
+        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+
         $constructArguments = $objectManager->getConstructArguments(
             Sitemap::class,
             [
@@ -609,6 +612,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                 'filesystem' => $this->filesystemMock,
                 'itemProvider' => $this->itemProviderMock,
                 'configReader' => $this->configReaderMock,
+                'escaper' => $escaper,
             ]
         );
         $constructArguments['resource'] = null;
