@@ -97,6 +97,7 @@ class PageDataProvider
         $pageData = [
             'url_key' => $page->getIdentifier(),
             PageInterface::PAGE_ID => $page->getId(),
+            PageInterface::IDENTIFIER => $page->getIdentifier(),
             PageInterface::TITLE => $page->getTitle(),
             PageInterface::CONTENT => $renderedContent,
             PageInterface::CONTENT_HEADING => $page->getContentHeading(),

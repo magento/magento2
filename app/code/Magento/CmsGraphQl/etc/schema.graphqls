@@ -22,6 +22,7 @@ type Query {
 
 type CmsPage @doc(description: "CMS page defines all CMS page information") {
     page_id: Int @doc(description: "Entity ID of CMS page")
+    identifier: String @doc(description: "Identifier of the CMS page")
     url_key: String @doc(description: "URL key of CMS page")
     title: String @doc(description: "CMS page title")
     content: String @doc(description: "CMS page content")
