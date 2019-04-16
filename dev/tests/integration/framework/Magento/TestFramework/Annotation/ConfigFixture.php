@@ -10,6 +10,7 @@
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Handler which works with magentoConfigFixture annotations
@@ -48,6 +49,19 @@ class ConfigFixture
      */
     protected function _getConfigValue($configPath, $scopeCode = null)
     {
+        return $this->getConfigScopedValue($configPath, $scopeCode);
+    }
+
+    /**
+     * Retrieve scoped configuration node value
+     *
+     * @param string $configPath
+     * @param string|bool|null $scopeCode
+     * @param string $scopeType
+     * @return string
+     */
+    private function getConfigScopedValue($configPath, $scopeCode = null, $scopeType = ScopeInterface::SCOPE_STORE)
+    {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $result = null;
         if ($scopeCode !== false) {
@@ -55,7 +69,7 @@ class ConfigFixture
             $scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
             $result = $scopeConfig->getValue(
                 $configPath,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $scopeType,
                 $scopeCode
             );
         }
@@ -71,8 +85,21 @@ class ConfigFixture
      */
     protected function _setConfigValue($configPath, $value, $storeCode = false)
     {
+        $this->setConfigScopedValue($configPath, $value, $storeCode);
+    }
+
+    /**
+     * Assign scoped configuration node value
+     *
+     * @param string $configPath
+     * @param string $value
+     * @param string|bool|null $scopeCode
+     * @param string $scopeType
+     */
+    private function setConfigScopedValue($configPath, $value, $scopeCode = false, $scopeType = ScopeInterface::SCOPE_STORE)
+    {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        if ($storeCode === false) {
+        if ($scopeCode === false) {
             if (strpos($configPath, 'default/') === 0) {
                 $configPath = substr($configPath, 8);
                 $objectManager->get(
@@ -89,8 +116,8 @@ class ConfigFixture
             )->setValue(
                 $configPath,
                 $value,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeCode
+                $scopeType,
+                $scopeCode
             );
         }
     }
@@ -113,17 +140,24 @@ class ConfigFixture
                 $storeCode = $matches[0] != 'current' ? $matches[0] : null;
                 $parts = preg_split('/\s+/', $configPathAndValue, 3);
                 list($configScope, $configPath, $requiredValue) = $parts + ['', '', ''];
-                $originalValue = $this->_getConfigValue($configPath, $storeCode);
+                $originalValue = $this->getConfigScopedValue($configPath, $storeCode);
                 $this->_storeConfigValues[$storeCode][$configPath] = $originalValue;
-                $this->_setConfigValue($configPath, $requiredValue, $storeCode);
+                $this->setConfigScopedValue($configPath, $requiredValue, $storeCode);
             } else {
                 /* Global config value */
                 list($configPath, $requiredValue) = preg_split('/\s+/', $configPathAndValue, 2);
-
-                $originalValue = $this->_getConfigValue($configPath);
+                if (preg_match('/^websites\/(.+?)\/(.+)/', $configPath, $matches)) {
+                    list(, $scopeCode, $configPath) = $matches;
+                    $scopeType = ScopeInterface::SCOPE_WEBSITE;
+                } else {
+                    $scopeCode = false;
+                    $scopeType = ScopeInterface::SCOPE_STORE;
+                }
+                $originalValue = $this->getConfigScopedValue($configPath, $scopeCode, $scopeType);
                 $this->_globalConfigValues[$configPath] = $originalValue;
 
-                $this->_setConfigValue($configPath, $requiredValue);
+
+                $this->setConfigScopedValue($configPath, $requiredValue, $scopeCode, $scopeType);
             }
         }
     }
