@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Controller;
+namespace Magento\GraphQlCache\Controller\Catalog;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -15,14 +15,13 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Tests cache debug headers and cache tag validation for a simple product query
+ * Tests cache debug headers and cache tag validation for a category with product query
  *
  * @magentoAppArea graphql
  * @magentoDbIsolation disabled
- * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GraphQlCacheControllerTest extends \Magento\TestFramework\Indexer\TestCase
+class CategoriesWithProductsDispatchTest extends \Magento\TestFramework\Indexer\TestCase
 {
     const CONTENT_TYPE = 'application/json';
 
@@ -43,7 +42,6 @@ class GraphQlCacheControllerTest extends \Magento\TestFramework\Indexer\TestCase
 
     /** @var \Magento\Framework\App\Response\Http */
     private $response;
-
 
     /**
      * @inheritdoc
@@ -71,97 +69,6 @@ class GraphQlCacheControllerTest extends \Magento\TestFramework\Indexer\TestCase
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
         $this->metadataPool = $this->objectManager->get(MetadataPool::class);
         $this->request = $this->objectManager->get(Http::class);
-       // $this->response = $this->objectManager->get(\Magento\Framework\App\Response\Http::class);
-    }
-
-    /**
-     * Test request is dispatched and response is checked for debug headers and cache tags
-     *
-     * @magentoCache all enabled
-     * @return void
-     */
-    public function testDispatchWithGetForCacheDebugHeadersAndCacheTagsForProducts(): void
-    {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-
-        /** @var ProductInterface $product */
-        $product = $productRepository->get('simple1');
-
-        $query
-            = <<<QUERY
- {
-           products(filter: {sku: {eq: "simple1"}})
-           {
-               items {
-                   id
-                   name
-                   sku
-                   description {
-                   html
-                   }
-               }
-           }
-       }
-QUERY;
-
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('GET');
-        $this->request->setQueryValue('query', $query);
-        /** @var \Magento\Framework\Controller\Result\Json $result */
-        $result = $this->graphql->dispatch($this->request);
-        /** @var \Magento\Framework\App\Response\Http $response */
-        $response = $this->objectManager->get(\Magento\Framework\App\Response\Http::class);
-        /** @var  $registry \Magento\Framework\Registry */
-        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
-        $registry->register('use_page_cache_plugin', true, true);
-        $result->renderResult($response);
-        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
-        $expectedCacheTags = ['cat_p', 'cat_p_' . $product->getId(), 'FPC'];
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
-    }
-
-    /**
-     * Test cache tags and debug header for category and querying only for category
-     *
-     * @magentoCache all enabled
-     * @magentoDataFixture Magento/Catalog/_files/category_product.php
-     *
-     */
-    public function testDispatchForCacheDebugHeadersAndCacheTagsForCategory(): void
-    {
-        $categoryId ='333';
-        $query
-            = <<<QUERY
-        {
-            category(id: $categoryId) {
-            id
-            name
-            url_key
-            description
-            product_count
-           }
-       }
-QUERY;
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('GET');
-        $this->request->setQueryValue('query', $query);
-        /** @var \Magento\Framework\Controller\Result\Json $result */
-        $result = $this->graphql->dispatch($this->request);
-        /** @var \Magento\Framework\App\Response\Http $response */
-        $response = $this->objectManager->get(\Magento\Framework\App\Response\Http::class);
-        /** @var  $registry \Magento\Framework\Registry */
-        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
-        $registry->register('use_page_cache_plugin', true, true);
-        $result->renderResult($response);
-        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
-        $expectedCacheTags = ['cat_c','cat_c_' . $categoryId,'FPC'];
-        foreach (array_keys($actualCacheTags) as $key) {
-            $this->assertEquals($expectedCacheTags[$key], $actualCacheTags[$key]
-            );
-        }
     }
 
     /**
@@ -171,7 +78,7 @@ QUERY;
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      *
      */
-    public function testDispatchForCacheHeadersAndCacheTagsForCategoryWithProducts(): void
+    public function testDispatchForCacheHeadersAndCacheTagsForCategoryWtihProducts(): void
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -233,3 +140,4 @@ QUERY;
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 }
+
