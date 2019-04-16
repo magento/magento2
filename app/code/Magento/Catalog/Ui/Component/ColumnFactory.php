@@ -73,6 +73,7 @@ class ColumnFactory
             'filter' => ($attribute->getIsFilterableInGrid() || array_key_exists($columnName, $filterModifiers))
                 ? $this->getFilterType($attribute->getFrontendInput())
                 : null,
+            '__disableTmpl' => true,
         ], $config);
 
         if ($attribute->usesSource()) {

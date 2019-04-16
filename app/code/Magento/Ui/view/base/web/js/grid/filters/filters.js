@@ -272,6 +272,7 @@ define([
             }
 
             filter = utils.extend({}, filters.base, filter);
+            filter.__disableTmpl = {label : true};
 
             return utils.template(filter, {
                 filters: this,
