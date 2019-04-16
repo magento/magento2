@@ -289,9 +289,12 @@ class TableBuilder
 
                 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
                 foreach ($columnsList as $columnName => $attribute) {
-                    $countTableName = 't' . $iterationNum++;
+                    $countTableName = 't' . ($iterationNum++);
                     $joinCondition = sprintf(
-                        'e.%3$s = %1$s.%3$s AND %1$s.attribute_id = %2$d AND (%1$s.store_id = %4$d OR %1$s.store_id = 0)',
+                        'e.%3$s = %1$s.%3$s' .
+                        ' AND %1$s.attribute_id = %2$d' .
+                        ' AND (%1$s.store_id = %4$d' .
+                        ' OR %1$s.store_id = 0)',
                         $countTableName,
                         $attribute->getId(),
                         $metadata->getLinkField(),
