@@ -140,6 +140,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $configData = $this->configOptionsList->createConfig([], $this->deploymentConfigMock);
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
+    
     /**
      * testCreateConfigCacheRedis
      */
@@ -162,6 +163,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
+    
     public function testValidateWithValidInput()
     {
         $options = [
