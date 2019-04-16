@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CmsGraphQl\Model\Resolver;
 
-use Magento\CmsGraphQl\Model\Resolver\DataProvider\Page as PageDataProvider;
+use Magento\CmsGraphQl\Model\Resolver\DataProvider\PageDataProvider as PageDataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
