@@ -475,10 +475,12 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {
     }
+    //phpcs:enable
 
     /**
      * @inheritdoc
@@ -488,6 +490,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         //clear cached associated links
         $product->unsetData($this->_keyAssociatedProducts);
         if ($product->hasData('product_options') && !empty($product->getData('product_options'))) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Custom options for grouped product type are not supported');
         }
         return parent::beforeSave($product);
