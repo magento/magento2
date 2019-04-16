@@ -5,11 +5,13 @@
  */
 namespace Magento\Framework\View\Test\Unit\Asset\MergeStrategy;
 
-use Magento\Framework\Filesystem\Directory\WriteInterface;
-use \Magento\Framework\View\Asset\MergeStrategy\Direct;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\View\Asset\MergeStrategy\Direct;
 
+/**
+ * Test for Magento\Framework\View\Asset\MergeStrategy\Direct.
+ */
 class DirectTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -69,7 +71,8 @@ class DirectTest extends \PHPUnit\Framework\TestCase
             ->method('getUniqueHash')
             ->willReturn($uniqId);
         $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result' . $uniqId, '');
-        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result' . $uniqId, 'foo/result', $this->staticDir);
+        $this->tmpDir->expects($this->once())->method('renameFile')
+            ->with('foo/result' . $uniqId, 'foo/result', $this->staticDir);
         $this->object->merge([], $this->resultAsset);
     }
 
@@ -83,7 +86,8 @@ class DirectTest extends \PHPUnit\Framework\TestCase
             ->method('getUniqueHash')
             ->willReturn($uniqId);
         $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result' . $uniqId, 'onetwo');
-        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result' . $uniqId, 'foo/result', $this->staticDir);
+        $this->tmpDir->expects($this->once())->method('renameFile')
+            ->with('foo/result' . $uniqId, 'foo/result', $this->staticDir);
         $this->object->merge($assets, $this->resultAsset);
     }
 
@@ -92,7 +96,7 @@ class DirectTest extends \PHPUnit\Framework\TestCase
         $uniqId = '_f929c374767e00712449660ea673f2f5';
         $this->resultAsset->expects($this->exactly(3))
             ->method('getPath')
-            ->will($this->returnValue('foo/result'));
+            ->willReturn('foo/result');
         $this->resultAsset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
         $assets = $this->prepareAssetsToMerge(['one', 'two']);
         $this->cssUrlResolver->expects($this->exactly(2))
@@ -101,13 +105,14 @@ class DirectTest extends \PHPUnit\Framework\TestCase
         $this->cssUrlResolver->expects($this->once())
             ->method('aggregateImportDirectives')
             ->with('12')
-            ->will($this->returnValue('1020'));
+            ->willReturn('1020');
         $this->mathRandomMock->expects($this->once())
             ->method('getUniqueHash')
             ->willReturn($uniqId);
         $this->staticDir->expects($this->never())->method('writeFile');
         $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result' . $uniqId, '1020');
-        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result' . $uniqId, 'foo/result', $this->staticDir);
+        $this->tmpDir->expects($this->once())->method('renameFile')
+            ->with('foo/result' . $uniqId, 'foo/result', $this->staticDir);
         $this->object->merge($assets, $this->resultAsset);
     }
 

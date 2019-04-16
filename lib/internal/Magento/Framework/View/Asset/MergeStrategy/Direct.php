@@ -6,6 +6,8 @@
 namespace Magento\Framework\View\Asset\MergeStrategy;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Math\Random;
 use Magento\Framework\View\Asset;
 
 /**
@@ -31,27 +33,27 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
     private $cssUrlResolver;
 
     /**
-     * @var \Magento\Framework\Math\Random
+     * @var Random
      */
     private $mathRandom;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Url\CssResolver $cssUrlResolver
-     * @param \Magento\Framework\Math\Random|null $mathRandom
+     * @param Random|null $mathRandom
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Url\CssResolver $cssUrlResolver,
-        \Magento\Framework\Math\Random $mathRandom = null
+        Random $mathRandom = null
     ) {
         $this->filesystem = $filesystem;
         $this->cssUrlResolver = $cssUrlResolver;
-        $this->mathRandom = $mathRandom ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Math\Random::class);;
+        $this->mathRandom = $mathRandom ?: ObjectManager::getInstance()->get(Random::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function merge(array $assetsToMerge, Asset\LocalInterface $resultAsset)
     {
@@ -67,10 +69,9 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
     /**
      * Merge files together and modify content if needed
      *
-     * @param \Magento\Framework\View\Asset\MergeableInterface[] $assetsToMerge
-     * @param \Magento\ Framework\View\Asset\LocalInterface $resultAsset
-     * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param array $assetsToMerge
+     * @param Asset\LocalInterface $resultAsset
+     * @return array|string
      */
     private function composeMergedContent(array $assetsToMerge, Asset\LocalInterface $resultAsset)
     {
