@@ -194,6 +194,7 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
             'Worldwide Express' => ['XPR', 'Worldwide Express'],
             'Worldwide Express Saver' => ['WXS', 'Worldwide Express Saver'],
             'Worldwide Express Plus' => ['XDM', 'Worldwide Express Plus'],
+            'Worldwide Expedited' => ['XPD', 'Worldwide Expedited'],
         ];
     }
 
