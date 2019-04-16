@@ -120,6 +120,7 @@ class Cache implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_CACHE_ID_PREFIX,
                 'ID prefix for cache keys'
+            )
         ];
     }
 
