@@ -18,9 +18,8 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Tests cache debug headers and cache tag validation for a simple product query
  *
  * @magentoAppArea graphql
- *
- * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
  * @magentoDbIsolation disabled
+ * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GraphQlCacheControllerTest extends \Magento\TestFramework\Indexer\TestCase
@@ -81,7 +80,7 @@ class GraphQlCacheControllerTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoCache all enabled
      * @return void
      */
-    public function testDispatchWithGetForCacheDebugHeadersAndCacheTags(): void
+    public function testDispatchWithGetForCacheDebugHeadersAndCacheTagsForProducts(): void
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -98,6 +97,7 @@ class GraphQlCacheControllerTest extends \Magento\TestFramework\Indexer\TestCase
                    id
                    name
                    sku
+                   description
                }
            }
        }
@@ -117,9 +117,7 @@ QUERY;
         $this->assertEquals('MISS', $this->response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $this->response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['cat_p', 'cat_p_' . $product->getId(), 'FPC'];
-        foreach (array_keys($actualCacheTags) as $key) {
-            $this->assertEquals($expectedCacheTags[$key], $actualCacheTags[$key]);
-        }
+        $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 
     /**
