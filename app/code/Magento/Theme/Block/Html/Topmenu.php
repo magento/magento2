@@ -232,13 +232,7 @@ class Topmenu extends Template implements IdentityInterface
 
             if ($childLevel === 0 && $outermostClass) {
                 $outermostClassCode = ' class="' . $outermostClass . '" ';
-                $currentClass = $child->getClass();
-
-                if (empty($currentClass)) {
-                    $child->setClass($outermostClass);
-                } else {
-                    $child->setClass($currentClass . ' ' . $outermostClass);
-                }
+                $this->setCurrentClass($child, $outermostClass);
             }
 
             if ($this->shouldAddNewColumn($colBrakes, $counter)) {
@@ -257,7 +251,7 @@ class Topmenu extends Template implements IdentityInterface
             $counter++;
         }
 
-        if (is_array($colBrakes) && count($colBrakes) && $limit) {
+        if (is_array($colBrakes) && !empty($colBrakes) && $limit) {
             $html = '<li class="column"><ul>' . $html . '</ul></li>';
         }
 
@@ -419,13 +413,30 @@ class Topmenu extends Template implements IdentityInterface
     }
 
     /**
-     * @param array $colBrakes
-     * @param $counter
+     * Check if new column should be added.
      *
+     * @param array $colBrakes
+     * @param int $counter
      * @return bool
      */
-    private function shouldAddNewColumn(array $colBrakes, int $counter)
+    private function shouldAddNewColumn(array $colBrakes, int $counter): bool
     {
         return count($colBrakes) && $colBrakes[$counter]['colbrake'];
+    }
+
+    /**
+     * Set current class.
+     *
+     * @param Node $child
+     * @param string $outermostClass
+     */
+    private function setCurrentClass(Node $child, string $outermostClass): void
+    {
+        $currentClass = $child->getClass();
+        if (empty($currentClass)) {
+            $child->setClass($outermostClass);
+        } else {
+            $child->setClass($currentClass . ' ' . $outermostClass);
+        }
     }
 }
