@@ -5,33 +5,21 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Quote;
+namespace Magento\GraphQl\ConfigurableProduct;
 
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 
 /**
- * Add configurable product to cart tests
+ * Add configurable product to cart testcases
  */
 class AddConfigurableProductToCartTest extends GraphQlAbstract
 {
     /**
-     * @var QuoteResource
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteResource;
-
-    /**
-     * @var Quote
-     */
-    private $quote;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
      * @inheritdoc
@@ -39,9 +27,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quote = $objectManager->create(Quote::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
@@ -52,12 +38,11 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
     {
         $variantSku = 'simple_41';
         $qty = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $maskedQuoteId = $this->getMaskedQuoteId();
-
-        $query = $this->getAddConfigurableProductMutationQuery($maskedQuoteId, $variantSku, $qty);
-
+        $query = $this->getQuery($maskedQuoteId, $variantSku, $qty);
         $response = $this->graphQlMutation($query);
+
         $cartItems = $response['addConfigurableProductsToCart']['cart']['items'];
         self::assertEquals($qty, $cartItems[0]['qty']);
         self::assertEquals($variantSku, $cartItems[0]['product']['sku']);
@@ -73,10 +58,9 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
     {
         $variantSku = 'simple_41';
         $qty = 200;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $maskedQuoteId = $this->getMaskedQuoteId();
-        $query = $this->getAddConfigurableProductMutationQuery($maskedQuoteId, $variantSku, $qty);
-
+        $query = $this->getQuery($maskedQuoteId, $variantSku, $qty);
         $this->graphQlMutation($query);
     }
 
@@ -90,35 +74,19 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
     {
         $variantSku = 'simple_1010';
         $qty = 1;
-        $maskedQuoteId = $this->getMaskedQuoteId();
-        $query = $this->getAddConfigurableProductMutationQuery($maskedQuoteId, $variantSku, $qty);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
+        $query = $this->getQuery($maskedQuoteId, $variantSku, $qty);
         $this->graphQlMutation($query);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function getMaskedQuoteId()
-    {
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-        return $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-    }
-
-    /**
      * @param string $maskedQuoteId
-     * @param string $sku
+     * @param string $variantSku
      * @param int $qty
-     *
      * @return string
      */
-    private function getAddConfigurableProductMutationQuery(string $maskedQuoteId, string $variantSku, int $qty): string
+    private function getQuery(string $maskedQuoteId, string $variantSku, int $qty): string
     {
         return <<<QUERY
 mutation {
