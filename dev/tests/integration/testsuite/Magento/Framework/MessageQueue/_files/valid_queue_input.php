@@ -23,7 +23,7 @@ return [
                 "name" => "publisher5.topic",
                 "schema" => [
                     "schema_type" => "object",
-                    "schema_value" => Magento\TestModuleMysqlMq\Model\DataObject::class
+                    "schema_value" => \Magento\TestModuleMysqlMq\Model\DataObject::class
                 ],
                 "response_schema" => [
                     "schema_type" => "object",
