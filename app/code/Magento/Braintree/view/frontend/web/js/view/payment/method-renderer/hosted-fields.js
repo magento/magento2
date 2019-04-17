@@ -155,7 +155,6 @@ define([
          */
         placeOrderClick: function () {
             if (this.validateCardType()) {
-                this.isPlaceOrderActionAllowed(false);
                 $(this.getSelector('submit')).trigger('click');
             }
         },

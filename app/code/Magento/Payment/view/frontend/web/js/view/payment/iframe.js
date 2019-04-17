@@ -114,8 +114,10 @@ define([
          * @override
          */
         placeOrder: function () {
-            if (this.validateHandler() && additionalValidators.validate()) {
-
+            if (this.validateHandler() &&
+                additionalValidators.validate() &&
+                this.isPlaceOrderActionAllowed() === true
+            ) {
                 fullScreenLoader.startLoader();
 
                 this.isPlaceOrderActionAllowed(false);

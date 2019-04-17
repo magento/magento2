@@ -133,7 +133,10 @@ define([
                 event.preventDefault();
             }
 
-            if (this.validate() && additionalValidators.validate()) {
+            if (this.validate() &&
+                additionalValidators.validate() &&
+                this.isPlaceOrderActionAllowed() === true
+            ) {
                 this.isPlaceOrderActionAllowed(false);
 
                 this.getPlaceOrderDeferredObject()
