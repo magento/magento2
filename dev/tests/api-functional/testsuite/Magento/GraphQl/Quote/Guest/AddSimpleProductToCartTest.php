@@ -66,18 +66,17 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a product with SKU "simple_product"
      */
     public function testNonExistentProductToCart()
     {
         $sku = 'simple_product';
         $qty = 1;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
         $query = $this->getQuery($maskedQuoteId, $sku, $qty);
-
-        $this->expectExceptionMessage(
-            "Could not find a product with SKU \"simple_product\""
-        );
-
         $this->graphQlMutation($query);
     }
 

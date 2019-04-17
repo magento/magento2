@@ -28,6 +28,13 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
+    protected function setUp()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+    }
+
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
@@ -49,40 +56,39 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testAddProductToNonExistentCart()
     {
         $sku = 'simple_product';
         $qty = 2;
         $maskedQuoteId = 'non_existent_masked_id';
+
         $query = $this->getQuery($maskedQuoteId, $sku, $qty);
-
-        $this->expectExceptionMessage(
-            "Could not find a cart with ID \"$maskedQuoteId\""
-        );
-
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a product with SKU "simple_product"
      */
     public function testNonExistentProductToCart()
     {
         $sku = 'simple_product';
         $qty = 2;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
         $query = $this->getQuery($maskedQuoteId, $sku, $qty);
-
-        $this->expectExceptionMessage(
-            "Could not find a product with SKU \"simple_product\""
-        );
-
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -102,9 +108,10 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      */
     public function testAddSimpleProductToAnotherCustomerCart()
     {
@@ -120,15 +127,10 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
     }
 
-    protected function setUp()
-    {
-        $objectManager = Bootstrap::getObjectManager();
-        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-    }
-
     /**
      * @param string $maskedQuoteId
+     * @param string $sku
+     * @param int $qty
      * @return string
      */
     private function getQuery(string $maskedQuoteId, string $sku, int $qty): string
@@ -140,8 +142,8 @@ mutation {
     cartItems: [
       {
         data: {
-          qty: $qty
-          sku: "$sku"
+          qty: {$qty}
+          sku: "{$sku}"
         }
       }                
     ]
