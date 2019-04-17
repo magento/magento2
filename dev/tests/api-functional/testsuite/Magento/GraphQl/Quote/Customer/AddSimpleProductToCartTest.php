@@ -54,11 +54,11 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     {
         $sku = 'simple_product';
         $qty = 2;
-        $nonExistentMaskedQuoteId = 'non_existent_masked_id';
-        $query = $this->getQuery($nonExistentMaskedQuoteId, $sku, $qty);
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = $this->getQuery($maskedQuoteId, $sku, $qty);
 
         $this->expectExceptionMessage(
-            "Could not find a cart with ID \"$nonExistentMaskedQuoteId\""
+            "Could not find a cart with ID \"$maskedQuoteId\""
         );
 
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
