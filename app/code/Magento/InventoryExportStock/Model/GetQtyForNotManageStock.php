@@ -13,17 +13,17 @@ namespace Magento\InventoryExportStock\Model;
 class GetQtyForNotManageStock
 {
     /**
-     * @var int
+     * @var float|null
      */
     private $qtyForNotManageStock;
 
     /**
      * GetQtyForNotManageStock constructor
      *
-     * @param int $qtyForNotManageStock
+     * @param float|null $qtyForNotManageStock
      */
     public function __construct(
-        int $qtyForNotManageStock
+        ?float $qtyForNotManageStock
     ) {
         $this->qtyForNotManageStock = $qtyForNotManageStock;
     }
@@ -31,9 +31,9 @@ class GetQtyForNotManageStock
     /**
      * Provides qtyForNotManageStock from di configuration
      *
-     * @return int
+     * @return float|null
      */
-    public function execute(): int
+    public function execute(): ?float
     {
         return $this->qtyForNotManageStock;
     }

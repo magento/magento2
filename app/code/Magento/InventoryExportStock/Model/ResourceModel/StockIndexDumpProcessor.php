@@ -7,14 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\InventoryExportStock\Model\ResourceModel;
 
+use Exception;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryExportStock\Model\GetQtyForNotManageStock;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 use Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\ManageStockCondition;
+use Psr\Log\LoggerInterface;
+use Zend\Db\Sql\Expression;
 use Zend_Db_Expr;
-use Zend_Db_Select_Exception;
 
 /**
  * Class GetStockIndexDump provides sku and qty of products dumping them from stock index table
@@ -45,6 +48,10 @@ class StockIndexDumpProcessor
      * @var GetQtyForNotManageStock
      */
     private $getQtyForNotManageStock;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * GetStockIndexDump constructor
@@ -53,17 +60,20 @@ class StockIndexDumpProcessor
      * @param ResourceConnection $resourceConnection
      * @param ManageStockCondition $manageStockCondition
      * @param GetQtyForNotManageStock $getQtyForNotManageStock
+     * @param LoggerInterface $logger
      */
     public function __construct(
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
         ResourceConnection $resourceConnection,
         ManageStockCondition $manageStockCondition,
-        GetQtyForNotManageStock $getQtyForNotManageStock
+        GetQtyForNotManageStock $getQtyForNotManageStock,
+        LoggerInterface $logger
     ) {
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->resourceConnection = $resourceConnection;
         $this->manageStockCondition = $manageStockCondition;
         $this->getQtyForNotManageStock = $getQtyForNotManageStock;
+        $this->logger = $logger;
     }
 
     /**
@@ -71,16 +81,21 @@ class StockIndexDumpProcessor
      *
      * @param int $stockId
      * @return array
-     * @throws Zend_Db_Select_Exception
+     * @throws LocalizedException
      */
     public function execute(int $stockId): array
     {
         $this->connection = $this->resourceConnection->getConnection();
         $select = $this->connection->select();
-        $select->union([
-            $this->getStockItemSelect($stockId),
-            $this->getStockIndexSelect($stockId)
-        ]);
+        try {
+            $select->union([
+                $this->getStockItemSelect($stockId),
+                $this->getStockIndexSelect($stockId)
+            ]);
+        } catch (Exception $e) {
+            $this->logger->critical($e->getMessage(), $e->getTrace());
+            throw new LocalizedException(_('Something went wrong. Export couldn\'t be executed, See log files for error details'));
+        }
 
         return $this->connection->fetchAll($select);
     }
@@ -101,6 +116,7 @@ class StockIndexDumpProcessor
                 $stockIndexTableName,
                 [
                     'qty' => 'quantity',
+                    'is_salable' => 'is_salable',
                     'sku' => 'sku'
                 ]
             );
@@ -122,7 +138,8 @@ class StockIndexDumpProcessor
 
         $select->from(
             ['legacy_stock_item' => $legacyStockItemTable],
-            new Zend_Db_Expr('"' . $this->getQtyForNotManageStock->execute() . '" as qty')
+            new Expression($this->getQtyForNotManageStock->execute() . ' as qty'),
+            new Expression('1 as is_salable')
         )->join(
             ['product_entity' => $productEntityTable],
             'legacy_stock_item.product_id = product_entity.entity_id',

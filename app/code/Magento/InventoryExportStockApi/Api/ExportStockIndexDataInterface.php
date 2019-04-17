@@ -16,10 +16,10 @@ interface ExportStockIndexDataInterface
     /**
      * Provides stock index export from inventory_stock_% table
      *
-     * @param int $stockId
+     * @param string $websiteCode
      * @return array
      */
     public function execute(
-        int $stockId
+        string $websiteCode
     ): array;
 }

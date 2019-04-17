@@ -13,14 +13,9 @@
                 type="Magento\InventoryExportStock\Model\ExportStockSalableQty"/>
     <preference for="Magento\InventoryExportStockApi\Api\ExportStockIndexDataInterface"
                 type="Magento\InventoryExportStock\Model\ExportStockIndexData"/>
-    <type name="Magento\InventoryExportStock\Model\ExportStockProcessor\PreciseExportStockProcessor">
-        <arguments>
-            <argument name="qtyForNotManageStock" xsi:type="number">1</argument>
-        </arguments>
-    </type>
     <type name="Magento\InventoryExportStock\Model\GetQtyForNotManageStock">
         <arguments>
-            <argument name="qtyForNotManageStock" xsi:type="number">1</argument>
+            <argument name="qtyForNotManageStock" xsi:type="null"/>
         </arguments>
     </type>
 </config>
