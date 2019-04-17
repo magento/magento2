@@ -14,6 +14,9 @@ use Magento\TestFramework\App\State;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Class CacheTagTest
+ */
 class CacheTagTest extends GraphQlAbstract
 {
     /**
