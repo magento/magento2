@@ -10,6 +10,8 @@ namespace Magento\CheckoutAgreementsGraphQl\Model\Resolver\DataProvider;
 use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
 use Magento\CheckoutAgreements\Model\Agreement;
 use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -28,15 +30,23 @@ class CheckoutAgreements
     private $storeManager;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param CollectionFactory $agreementCollectionFactory
      * @param StoreManagerInterface $storeManager
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         CollectionFactory $agreementCollectionFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->agreementCollectionFactory = $agreementCollectionFactory;
         $this->storeManager = $storeManager;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -46,6 +56,9 @@ class CheckoutAgreements
      */
     public function getData(): array
     {
+        if (!$this->scopeConfig->isSetFlag('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE)) {
+            return [];
+        }
         $agreementsCollection = $this->agreementCollectionFactory->create();
         $agreementsCollection->addStoreFilter($this->storeManager->getStore()->getId()); // TODO: store should be get from query context
         $agreementsCollection->addFieldToFilter('is_active', 1);
