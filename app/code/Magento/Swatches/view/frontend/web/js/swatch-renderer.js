@@ -406,7 +406,7 @@ define([
                 if ($widget.options.enableControlLabel) {
                     label +=
                         '<span id="' + controlLabelId + '" class="' + classes.attributeLabelClass + '">' +
-                            item.label +
+                        $('<i></i>').text(item.label).html() +
                         '</span>' +
                         '<span class="' + classes.attributeSelectedOptionLabelClass + '"></span>';
                 }
@@ -414,7 +414,7 @@ define([
                 if ($widget.inProductList) {
                     $widget.productForm.append(input);
                     input = '';
-                    listLabel = 'aria-label="' + item.label + '"';
+                    listLabel = 'aria-label="' + $('<i></i>').text(item.label).html() + '"';
                 } else {
                     listLabel = 'aria-labelledby="' + controlLabelId + '"';
                 }
@@ -516,11 +516,12 @@ define([
 
                 id = this.id;
                 type = parseInt(optionConfig[id].type, 10);
-                value = optionConfig[id].hasOwnProperty('value') ? optionConfig[id].value : '';
+                value = optionConfig[id].hasOwnProperty('value') ?
+                    $('<i></i>').text(optionConfig[id].value).html() : '';
                 thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '';
                 width = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.width : 110;
                 height = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.height : 90;
-                label = this.label ? this.label : '';
+                label = this.label ? $('<i></i>').text(this.label).html() : '';
                 attr =
                     ' id="' + controlId + '-item-' + id + '"' +
                     ' index="' + index + '"' +
@@ -1222,8 +1223,8 @@ define([
         updateBaseImage: function (images, context, isInProductView) {
             var justAnImage = images[0],
                 initialImages = this.options.mediaGalleryInitial,
-                gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
                 imagesToUpdate,
+                gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
                 isInitial;
 
             if (isInProductView) {
