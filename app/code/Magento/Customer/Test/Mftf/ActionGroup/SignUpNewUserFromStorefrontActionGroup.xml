@@ -154,11 +154,4 @@
         <waitForPageLoad stepKey="waitForRegistered" after="clickCreateAccountButton"/>
         <remove keyForRemoval="seeThankYouMessage"/>
     </actionGroup>
-
-    <actionGroup name="SignUpNewCustomerNoAssertions" extends="SignUpNewUserFromStorefrontActionGroup">
-        <remove keyForRemoval="seeThankYouMessage"/>
-        <remove keyForRemoval="seeFirstName"/>
-        <remove keyForRemoval="seeLastName"/>
-        <remove keyForRemoval="seeEmail"/>
-    </actionGroup>
 </actionGroups>

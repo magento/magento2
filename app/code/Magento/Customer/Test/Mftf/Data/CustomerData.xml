@@ -33,9 +33,6 @@
         <data key="disable_auto_group_change">0</data>
         <!--requiredEntity type="extension_attribute">ExtensionAttributeSimple</requiredEntity-->
     </entity>
-    <entity name="CustomerEntityOneNotUniqueEmail" extends="CustomerEntityOne" type="customer">
-        <data key="email">test@email.com</data>
-    </entity>
     <entity name="Simple_US_Customer" type="customer">
         <data key="group_id">1</data>
         <data key="default_billing">true</data>

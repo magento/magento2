@@ -17,16 +17,20 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <createData stepKey="customer" entity="CustomerEntityOneNotUniqueEmail"/>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
         </before>
         <after>
-            <deleteData stepKey="deleteCustomer" createDataKey="customer" />
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
         </after>
 
-        <actionGroup ref="SignUpNewCustomerNoAssertions" stepKey="SignUpNewUser">
-            <argument name="Customer" value="CustomerEntityOneNotUniqueEmail"/>
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="$$customer$$"/>
         </actionGroup>
-        <waitForElementVisible selector="{{StorefrontCustomerMessagesSection.errorMessage}}" stepKey="waitForErrorMessage" />
-        <see stepKey="seeErrorMessage" userInput="There is already an account with this email address." selector="{{StorefrontCustomerMessagesSection.errorMessage}}"/>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeErrorMessage">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="There is already an account with this email address."/>
+        </actionGroup>
     </test>
 </tests>
