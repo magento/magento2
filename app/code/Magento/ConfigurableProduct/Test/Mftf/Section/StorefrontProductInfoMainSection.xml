@@ -18,6 +18,7 @@
         <!-- Parameter is the order number of the attribute on the page (1 is the newest) -->
         <element name="nthAttributeOnPage" type="block" selector="tr:nth-of-type({{numElement}}) .data" parameterized="true"/>
         <element name="stockIndication" type="block" selector=".stock" />
+        <element name="attributeSelectByAttributeID" type="select" selector="//div[@class='fieldset']//div[//span[text()='{{attribute_code}}']]//select" parameterized="true"/>
         <element name="attributeOptionByAttributeID" type="select" selector="//div[@class='fieldset']//div[//span[text()='{{attribute_code}}']]//option[text()='{{optionName}}']" parameterized="true"/>
     </section>
 </sections>
