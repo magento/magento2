@@ -31,9 +31,6 @@ class CacheTagTest extends GraphQlAbstract
         $this->markTestSkipped(
             'This test will stay skipped until DEVOPS-4924 is resolved'
         );
-        /** @var State $state */
-        $state = Bootstrap::getObjectManager()->get(State::class);
-        $state->setMode(State::MODE_DEVELOPER);
 
         $productSku='simple2';
         $query
@@ -51,14 +48,13 @@ class CacheTagTest extends GraphQlAbstract
 QUERY;
 
         /** cache-debug should be a MISS when product is queried for first time */
-        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($query, [], '', []);
-        preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseMissHeaders, $matchesMiss);
-        $this->assertEquals('MISS', rtrim($matchesMiss[1], "\r"));
+        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($query);
+        $this->assertContains('X-Magento-Cache-Debug: MISS', $responseMissHeaders);
 
         /** cache-debug should be a HIT for the second round */
-        $responseHitHeaders = $this->graphQlQueryForHttpHeaders($query, [], '', []);
-        preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseHitHeaders, $matchesHit);
-        $this->assertEquals('HIT', rtrim($matchesHit[1], "\r"));
+        $responseHitHeaders = $this->graphQlQueryForHttpHeaders($query);
+        //preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseHitHeaders, $matchesHit);
+        $this->assertContains('X-Magento-Cache-Debug: HIT', $responseHitHeaders);
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
@@ -68,17 +64,14 @@ QUERY;
         $product->setPrice(15);
         $product->save();
         /** Cache invalidation happens and cache-debug header value is a MISS after product update */
-        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($query, [], '', []);
-        preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseMissHeaders, $matchesMiss);
-        $this->assertEquals('MISS', rtrim($matchesMiss[1], "\r"));
+        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($query);
+        $this->assertContains('X-Magento-Cache-Debug: MISS', $responseMissHeaders);
 
         /** checks if cache tags for products are correctly displayed in the response header */
         preg_match('/X-Magento-Tags: (.*?)\n/', $responseMissHeaders, $headerCacheTags);
         $actualCacheTags = explode(',', rtrim($headerCacheTags[1], "\r"));
         $expectedCacheTags=['cat_p','cat_p_' . $product->getId(),'FPC'];
-        foreach (array_keys($actualCacheTags) as $key) {
-            $this->assertEquals($expectedCacheTags[$key], $actualCacheTags[$key]);
-        }
+        $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 
     /**
@@ -88,9 +81,9 @@ QUERY;
      */
     public function testCacheTagFromResponseHeaderForCategoriesWithProduct()
     {
-        /*$this->markTestSkipped(
+        $this->markTestSkipped(
             'This test will stay skipped until DEVOPS-4924 is resolved'
-        );*/
+        );
         $firstProductSku = 'simple-4';
         $secondProductSku = 'simple-5';
         $categoryId ='10';
@@ -146,11 +139,10 @@ QUERY;
        }
 QUERY;
 
-        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($categoryQuery, $variables, '', []);
+        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($categoryQuery, $variables);
 
         /** cache-debug header value should be a MISS when category is loaded first time */
-        preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseMissHeaders, $matchesMiss);
-        $this->assertEquals('MISS', rtrim($matchesMiss[1], "\r"));
+        $this->assertContains('X-Magento-Cache-Debug: MISS', $responseMissHeaders);
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
@@ -165,31 +157,28 @@ QUERY;
         $expectedCacheTags =
             ['cat_c','cat_c_' . $categoryId,'cat_p','cat_p_' . $firstProduct->getId(),'cat_p_' .$secondProduct->getId(),'FPC'];
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
+
         // Cach-debug header should be a MISS for product 1 during first load
-        $responseHeadersFirstProduct = $this->graphQlQueryForHttpHeaders($product1Query, [], '', []);
-        preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseHeadersFirstProduct, $match);
-        $this->assertEquals('MISS', rtrim($match[1], "\r"));
+        $responseHeadersFirstProduct = $this->graphQlQueryForHttpHeaders($product1Query);
+        $this->assertContains('X-Magento-Cache-Debug: MISS', $responseHeadersFirstProduct);
 
         // Cach-debug header should be a MISS for product 2 during first load
-        $responseHeadersSecondProduct = $this->graphQlQueryForHttpHeaders($product2Query, [], '', []);
-        preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseHeadersSecondProduct, $match);
-        $this->assertEquals('MISS', rtrim($match[1], "\r"));
+        $responseHeadersSecondProduct = $this->graphQlQueryForHttpHeaders($product2Query);
+        $this->assertContains('X-Magento-Cache-Debug: MISS', $responseHeadersSecondProduct);
 
-        /** cache-debug header value should be MISS after  updating product1 and reloading the category */
+        /** cache-debug header value should be MISS after  updating product1 and reloading the Category */
         $firstProduct->setPrice(20);
         $firstProduct->save();
-        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($categoryQuery, $variables, '', []);
+        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($categoryQuery, $variables);
         preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseMissHeaders, $matchesMiss);
         $this->assertEquals('MISS', rtrim($matchesMiss[1], "\r"));
 
         /** cache-debug should be a MISS for product 1 after it is updated - cache invalidation */
-        $responseHeadersForProd1 = $this->graphQlQueryForHttpHeaders($product1Query, [], '', []);
-        preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseHeadersForProd1, $match);
-        $this->assertEquals('MISS', rtrim($match[1], "\r"));
+        $responseHeadersFirstProduct = $this->graphQlQueryForHttpHeaders($product1Query);
+        $this->assertContains('X-Magento-Cache-Debug: MISS', $responseHeadersFirstProduct);
 
-        // Cach-debug header should be a HIT for prod 2 during second load since prod 2 should be fetched from cache
-        $responseHeadersSecondProduct = $this->graphQlQueryForHttpHeaders($product2Query, [], '', []);
-        preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseHeadersSecondProduct, $match);
-        $this->assertEquals('HIT', rtrim($match[1], "\r"));
+        // Cach-debug header should be a HIT for prod 2 during second load since prod 2 is fetched from cache.
+        $responseHeadersSecondProduct = $this->graphQlQueryForHttpHeaders($product2Query);
+        $this->assertContains('X-Magento-Cache-Debug: HIT', $responseHeadersSecondProduct);
     }
 }
