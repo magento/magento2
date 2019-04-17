@@ -7,32 +7,52 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Usps;
 
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\GraphQl\Quote\GetQuoteShippingAddressIdByReservedQuoteId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for setting "USPS" shipping method on cart
+ * Test for setting "USPS" shipping method on cart. Current class covers the next USPS shipping methods:
+ *
+ * | Code      | Label
+ * --------------------------------------
+ * | 1         | Priority Mail
+ * | 2         | Priority Mail Express Hold For Pickup
+ * | 3         | Priority Mail Express
+ * | 6         | Media Mail
+ * | 7         | Library Mail
+ * | 13        | Priority Mail Express Flat Rate Envelope
+ * | 16        | Priority Mail Flat Rate Envelope
+ * | 17        | Priority Mail Medium Flat Rate Box
+ * | 22        | Priority Mail Large Flat Rate Box
+ * | 27        | Priority Mail Express Flat Rate Envelope Hold For Pickup
+ * | 28        | Priority Mail Small Flat Rate Box
+ * | INT_1     | Priority Mail Express International
+ * | INT_2     | Priority Mail International
+ * | INT_8     | Priority Mail International Flat Rate Envelope
+ * | INT_9     | Priority Mail International Medium Flat Rate Box
+ * | INT_10    | Priority Mail Express International Flat Rate Envelope
+ * | INT_11    | Priority Mail International Large Flat Rate Box
+ * | INT_12    | USPS GXG Envelopes
+ * | INT_15    | First-Class Package International Service
+ * | INT_16    | Priority Mail International Small Flat Rate Box
+ * | INT_20    | Priority Mail International Small Flat Rate Envelope
+ *
+ * This class does not cover another USPS shipping methods (they depends on address and sandbox settings)
  */
 class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
 {
     /**
+     * Defines carrier label for "USPS" shipping method
+     */
+    const CARRIER_LABEL = 'United States Postal Service';
+
+    /**
      * Defines carrier code for "USPS" shipping method
      */
     const CARRIER_CODE = 'usps';
-
-    /**
-     * Defines method code for the "Retail Ground" USPS shipping
-     */
-    const CARRIER_METHOD_CODE_GROUND = '4';
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
 
     /**
      * @var CustomerTokenServiceInterface
@@ -40,14 +60,14 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var QuoteResource
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteResource;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
-     * @var QuoteIdToMaskedQuoteIdInterface
+     * @var GetQuoteShippingAddressIdByReservedQuoteId
      */
-    private $quoteIdToMaskedId;
+    private $getQuoteShippingAddressIdByReservedQuoteId;
 
     /**
      * @inheritdoc
@@ -55,42 +75,137 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->getQuoteShippingAddressIdByReservedQuoteId = $objectManager->get(
+            GetQuoteShippingAddressIdByReservedQuoteId::class
+        );
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_weight_to_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/Usps/_files/enable_usps_shipping_method.php
+     * @magentoApiDataFixture Magento/GraphQl/Usps/_files/enable_usps_shipping_method.php
+     *
+     * @dataProvider dataProviderShippingMethods
+     * @param string $methodCode
+     * @param string $methodLabel
      */
-    public function testSetUspsShippingMethod()
+    public function testSetUspsShippingMethod(string $methodCode, string $methodLabel)
     {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_quote', 'reserved_order_id');
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
-        $shippingAddressId = (int)$quote->getShippingAddress()->getId();
+        $quoteReservedId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
+        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
 
-        $query = $this->getAddUspsShippingMethodQuery(
-            $maskedQuoteId,
-            $shippingAddressId,
-            self::CARRIER_CODE,
-            self::CARRIER_METHOD_CODE_GROUND
-        );
-
+        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
         $response = $this->sendRequestWithToken($query);
-        $addressesInformation = $response['setShippingMethodsOnCart']['cart']['shipping_addresses'];
-        $expectedResult = [
-            'carrier_code' => self::CARRIER_CODE,
-            'method_code' => self::CARRIER_METHOD_CODE_GROUND,
-            'label' => 'United States Postal Service - USPS Retail Ground',
+
+        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
+        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
+        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+
+        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
+
+        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
+
+        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
+
+        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(
+            self::CARRIER_LABEL . ' - ' . $methodLabel,
+            $shippingAddress['selected_shipping_method']['label']
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderShippingMethods(): array
+    {
+        return [
+            'Library Mail Parcel' => ['7', 'Library Mail Parcel'],
+            'Media Mail Parcel' => ['6', 'Media Mail Parcel'],
+            'Priority Mail 3-Day Small Flat Rate Box' => ['28', 'Priority Mail 3-Day Small Flat Rate Box'],
+            'Priority Mail 3-Day Flat Rate Envelope' => ['16', 'Priority Mail 3-Day Flat Rate Envelope'],
+            'Priority Mail 3-Day' => ['1', 'Priority Mail 3-Day'],
+            'Priority Mail 3-Day Small Flat Rate Envelope' => ['42', 'Priority Mail 3-Day Small Flat Rate Envelope'],
+            'Priority Mail 3-Day Medium Flat Rate Box' => ['17', 'Priority Mail 3-Day Medium Flat Rate Box'],
+            'Priority Mail 3-Day Large Flat Rate Box' => ['22', 'Priority Mail 3-Day Large Flat Rate Box'],
+            'Priority Mail Express 2-Day Flat Rate Envelope' => ['13', 'Priority Mail Express 2-Day Flat Rate Envelope'],
+            'Priority Mail Express 2-Day Flat Rate Envelope Hold For Pickup' => ['27', 'Priority Mail Express 2-Day Flat Rate Envelope Hold For Pickup'],
+            'Priority Mail Express 2-Day' => ['3', 'Priority Mail Express 2-Day'],
+            'Priority Mail Express 2-Day Hold For Pickup' => ['2', 'Priority Mail Express 2-Day Hold For Pickup'],
         ];
-        self::assertEquals($addressesInformation[0]['selected_shipping_method'], $expectedResult);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_weight_to_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Usps/_files/enable_usps_shipping_method.php
+     *
+     * @dataProvider dataProviderShippingMethodsBasedOnCanadaAddress
+     * @param string $methodCode
+     * @param string $methodLabel
+     */
+    public function testSetUspsShippingMethodBasedOnCanadaAddress(string $methodCode, string $methodLabel)
+    {
+        $quoteReservedId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
+        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
+
+        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
+        $response = $this->sendRequestWithToken($query);
+
+        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
+        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
+        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+
+        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
+
+        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
+
+        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
+
+        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(
+            self::CARRIER_LABEL . ' - ' . $methodLabel,
+            $shippingAddress['selected_shipping_method']['label']
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderShippingMethodsBasedOnCanadaAddress(): array
+    {
+        return [
+            'First-Class Package International Service' => ['INT_15', 'First-Class Package International Service'],
+            'Priority Mail International Small Flat Rate Envelope' => ['INT_20', 'Priority Mail International Small Flat Rate Envelope'],
+            'Priority Mail International Flat Rate Envelope' => ['INT_8', 'Priority Mail International Flat Rate Envelope'],
+            'Priority Mail International Small Flat Rate Box' => ['INT_16', 'Priority Mail International Small Flat Rate Box'],
+            'Priority Mail International' => ['INT_2', 'Priority Mail International'],
+            'Priority Mail Express International Flat Rate Envelope' => ['INT_10', 'Priority Mail Express International Flat Rate Envelope'],
+            'Priority Mail Express International' => ['INT_1', 'Priority Mail Express International'],
+            'Priority Mail International Medium Flat Rate Box' => ['INT_9', 'Priority Mail International Medium Flat Rate Box'],
+            'Priority Mail International Large Flat Rate Box' => ['INT_11', 'Priority Mail International Large Flat Rate Box'],
+            'USPS GXG Envelopes' => ['INT_12', 'USPS GXG Envelopes'],
+        ];
     }
 
     /**
@@ -102,7 +217,7 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $methodCode
      * @return string
      */
-    private function getAddUspsShippingMethodQuery(
+    private function getQuery(
         string $maskedQuoteId,
         int $shippingAddressId,
         string $carrierCode,
@@ -146,6 +261,6 @@ QUERY;
         $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
 
-        return $this->graphQlQuery($query, [], '', $headerMap);
+        return $this->graphQlMutation($query, [], '', $headerMap);
     }
 }
