@@ -8,6 +8,14 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="DefaultAdminUser" type="user">
+        <data key="username">{{_ENV.MAGENTO_ADMIN_USERNAME}}</data>
+        <data key="password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+    </entity>
+    <entity name="AdminUserWrongCredentials">
+        <data key="username" unique="suffix">username_</data>
+        <data key="password" unique="suffix">password_</data>
+    </entity>
     <entity name="admin" type="user">
         <data key="email">admin@magento.com</data>
         <data key="password">admin123</data>
