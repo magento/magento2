@@ -6,18 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\UrlRewrite\Model\UrlFinderInterface" type="Magento\CatalogUrlRewrite\Model\Storage\DbStorage"/>
-
-    <type name="Magento\Catalog\Block\Widget\Link">
-        <arguments>
-            <argument name="urlFinder" xsi:type="object">Magento\UrlRewrite\Model\CompositeUrlFinder</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Catalog\Model\Product\Url">
-        <arguments>
-            <argument name="urlFinder" xsi:type="object">Magento\UrlRewrite\Model\CompositeUrlFinder</argument>
-        </arguments>
-    </type>
+    <preference for="Magento\UrlRewrite\Model\UrlFinderInterface" type="Magento\UrlRewrite\Model\CompositeUrlFinder"/>
     <type name="Magento\Catalog\Model\ResourceModel\Category">
         <plugin name="category_move_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move"/>
         <plugin name="category_delete_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove"/>
