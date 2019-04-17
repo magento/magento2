@@ -16,7 +16,6 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -40,6 +39,8 @@ class CheckoutAgreementsListTest extends GraphQlAbstract
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
+
+        // TODO: remove usage of the Config, use ConfigFixture instead https://github.com/magento/graphql-ce/issues/167
         $this->config = $this->objectManager->get(Config::class);
         $this->saveAgreementConfig(1);
     }
@@ -124,29 +125,17 @@ class CheckoutAgreementsListTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_active_with_html_content.php
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_inactive_with_text_content.php
-     * @magentoApiDataFixture Magento/Store/_files/second_store.php
      */
     public function testDisabledAgreements()
     {
-        $secondStoreCode = 'fixture_second_store';
-        $agreementsName = 'Checkout Agreement (active)';
-
         $query = $this->getQuery();
-        $this->assignAgreementsToStore($secondStoreCode, $agreementsName);
+        $this->saveAgreementConfig(0);
 
-        /** @var StoreManagerInterface $storeManager */
-        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
-        $store = $storeManager->getStore($secondStoreCode);
-        $this->saveAgreementConfig(0, $store);
-
-        $headerMap['Store'] = $secondStoreCode;
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $response = $this->graphQlQuery($query);
 
         $this->assertArrayHasKey('checkoutAgreements', $response);
         $agreements = $response['checkoutAgreements'];
         $this->assertCount(0, $agreements);
-
-        $this->deleteAgreementConfig($store);
     }
 
     /**
@@ -200,31 +189,29 @@ QUERY;
      * @param int $value
      * @param StoreInterface $store
      */
-    private function saveAgreementConfig(int $value, ?StoreInterface $store = null): void
+    private function saveAgreementConfig(int $value): void
     {
-        $scopeId = $store ? $store->getId() : 0;
-        $scope = $store ? ScopeInterface::SCOPE_STORE : ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
         $this->config->saveConfig(
             $this->agreementsXmlConfigPath,
             $value,
-            $scope,
-            $scopeId
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
         );
 
         $this->reinitConfig();
     }
 
     /**
-     * @param StoreInterface $store
+     * Delete config
+     *
+     * @return void
      */
-    private function deleteAgreementConfig(?StoreInterface $store = null): void
+    private function deleteAgreementConfig(): void
     {
-        $scopeId = $store ? $store->getId() : 0;
-        $scope = $store ? ScopeInterface::SCOPE_STORE : ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
         $this->config->deleteConfig(
             $this->agreementsXmlConfigPath,
-            $scope,
-            $scopeId
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
         );
 
         $this->reinitConfig();
