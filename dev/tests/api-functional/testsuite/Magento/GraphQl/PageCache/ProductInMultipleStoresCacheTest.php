@@ -18,6 +18,111 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class ProductInMultipleStoresCacheTest extends GraphQlAbstract
 {
     /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        /** @var \Magento\Store\Model\Store $store */
+        $store =  ObjectManager::getInstance()->get(\Magento\Store\Model\Store::class);
+        $storeCodeFromFixture = 'fixture_second_store';
+
+        /** @var \Magento\Config\Model\ResourceModel\Config $configResource */
+        $configResource = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
+        /** @var \Magento\Config\App\Config\Type\System $config */
+        $config = ObjectManager::getInstance()->get(\Magento\Config\App\Config\Type\System::class);
+
+        $configResource->saveConfig(
+            \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_DEFAULT,
+            'EUR',
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
+            $store->load($storeCodeFromFixture)->getWebsiteId()
+        );
+
+        // allow USD & EUR currency
+        $configResource->saveConfig(
+            \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW,
+            'EUR,USD',
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
+            $store->load($storeCodeFromFixture)->getWebsiteId()
+        );
+
+        // allow USD & EUR currency
+        $configResource->saveConfig(
+            \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW,
+            'EUR,USD'
+        );
+
+        // configuration cache clean is required to reload currency setting
+        $config->clean();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        /** @var \Magento\Config\App\Config\Type\System $config */
+        $config = ObjectManager::getInstance()->get(\Magento\Config\App\Config\Type\System::class);
+        /** @var \Magento\Config\Model\ResourceModel\Config $configResource */
+        $configResource = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
+
+        // restore allow USD currency
+        $configResource->saveConfig(
+            \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW,
+            'USD'
+        );
+
+        // configuration cache clean is required to reload currency setting
+        $config->clean();
+        parent::tearDown();
+    }
+
+    /**
+     * Test a non existing or non existing currency
+     *
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_second_currency.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testProductFromSpecificAndDefaultStoreWithMultiCurrencyNonExisting()
+    {
+        $productSku = 'simple';
+
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "{$productSku}"}})
+    {
+        items {
+            attribute_set_id
+            created_at
+            id
+            name
+            price {
+                minimalPrice {
+                    amount {
+                        value
+                        currency
+                    }
+                }
+            }
+            sku
+            type_id
+            updated_at
+            ... on PhysicalProductInterface {
+                weight
+            }
+        }
+    }
+}
+QUERY;
+
+        //test non existing currency
+        $headerMap = ['Store' => 'default', 'Content-Currency' => 'someNonExistentCurrency'];
+        $this->expectExceptionMessage('GraphQL response contains errors: Currency not allowed for store default');
+        $this->graphQlQuery($query, [], '', $headerMap);
+    }
+
+    /**
      * Test a non existing or non allowed currency
      *
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_second_currency.php
@@ -58,14 +163,11 @@ QUERY;
 
         $storeCodeFromFixture = 'fixture_second_store';
 
-        //test non existing currency
-        $headerMap = ['Store' => 'default', 'Content-Currency' => 'someNonExistentCurrency'];
-        $this->expectExceptionMessage('Currency someNonExistentCurrency not allowed for store default');
-        $this->graphQlQuery($query, [], '', $headerMap);
-
         //test not allowed existing currency
         $headerMap = ['Store' => $storeCodeFromFixture, 'Content-Currency' => 'CAD'];
-        $this->expectExceptionMessage('Currency not allowed for store ' . $storeCodeFromFixture);
+        $this->expectExceptionMessage(
+            "GraphQL response contains errors: Currency not allowed for store {$storeCodeFromFixture}"
+        );
         $this->graphQlQuery($query, [], '', $headerMap);
     }
 
@@ -112,28 +214,6 @@ QUERY;
         $store =  ObjectManager::getInstance()->get(\Magento\Store\Model\Store::class);
         $storeCodeFromFixture = 'fixture_second_store';
         $storeId = $store->load($storeCodeFromFixture)->getStoreId();
-
-        $configResource = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
-
-        $configResource->saveConfig(
-            \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_DEFAULT,
-            'EUR',
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
-            $store->load($storeCodeFromFixture)->getWebsiteId()
-        );
-
-        // allow USD & EUR currency
-        $configResource->saveConfig(
-            \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW,
-            'EUR,USD',
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
-            $store->load($storeCodeFromFixture)->getWebsiteId()
-        );
-
-        /** @var \Magento\Config\App\Config\Type\System $config */
-        $config = ObjectManager::getInstance()->get(\Magento\Config\App\Config\Type\System::class);
-        // configuration cache clean is required to reload currency setting
-        $config->clean();
 
         /** @var \Magento\Catalog\Model\Product $product */
         $product = ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product::class);
@@ -234,7 +314,9 @@ QUERY;
 
         // test cached response store + currency header with non existing currency, and no valid response, no cache
         $headerMap = ['Store' => $storeCodeFromFixture, 'Content-Currency' => 'SOMECURRENCY'];
-        $this->expectExceptionMessage('Currency not allowed for store ' . $storeCodeFromFixture);
+        $this->expectExceptionMessage(
+            "GraphQL response contains errors: Currency not allowed for store {$storeCodeFromFixture}"
+        );
         $this->graphQlQuery($query, [], '', $headerMap);
     }
 }

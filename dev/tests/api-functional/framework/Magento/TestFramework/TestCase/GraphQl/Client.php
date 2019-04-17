@@ -86,7 +86,12 @@ class Client
         ];
         array_filter($requestArray);
 
-        $responseBody = $this->curlClient->get($url, $requestArray, $headers);
+        try {
+            $responseBody = $this->curlClient->get($url, $requestArray, $headers);
+        } catch (\Exception $e) {
+            // if response code > 400 then response is the exception message
+            $responseBody = $e->getMessage();
+        }
         return $this->processResponse($responseBody);
     }
 
