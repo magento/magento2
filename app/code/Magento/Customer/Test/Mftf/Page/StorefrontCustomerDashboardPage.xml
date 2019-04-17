@@ -11,5 +11,7 @@
     <page name="StorefrontCustomerDashboardPage" url="/customer/account/" area="storefront" module="Magento_Customer">
         <section name="StorefrontCustomerDashboardAccountInformationSection" />
         <section name="StorefrontCustomerSidebarSection"/>
+        <section name="StorefrontMinicartSection"/>
+        <section name="StorefrontCustomerFooterSection"/>
     </page>
 </pages>
