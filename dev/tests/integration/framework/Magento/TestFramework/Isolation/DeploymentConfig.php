@@ -40,7 +40,7 @@ class DeploymentConfig
     {
         if (null === $this->reader) {
             $this->reader = Bootstrap::getObjectManager()->get(\Magento\Framework\App\DeploymentConfig\Reader::class);
-            $this->config = $this->reader->load();
+            $this->config = $this->filterIgnoredConfigValues($this->reader->load()); 
         }
     }
 
