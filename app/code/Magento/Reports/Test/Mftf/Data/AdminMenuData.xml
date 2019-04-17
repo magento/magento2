@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminMenuReportsMarketingAbandonedCarts">
+        <data key="pageTitle">Abandoned Carts</data>
+        <data key="title">Abandoned Carts</data>
+        <data key="dataUiId">magento-reports-report-shopcart-abandoned</data>
+    </entity>
+    <entity name="AdminMenuReportsProductsBestsellers">
+        <data key="pageTitle">Bestsellers Report</data>
+        <data key="title">Bestsellers</data>
+        <data key="dataUiId">magento-reports-report-products-bestsellers</data>
+    </entity>
+    <entity name="AdminMenuReportsSalesCoupons">
+        <data key="pageTitle">Coupons Report</data>
+        <data key="title">Coupons</data>
+        <data key="dataUiId">magento-reports-report-salesroot-coupons</data>
+    </entity>
+    <entity name="AdminMenuReportsProductsDownloads">
+        <data key="pageTitle">Downloads Report</data>
+        <data key="title">Downloads</data>
+        <data key="dataUiId">magento-downloadable-report-products-downloads</data>
+    </entity>
+    <entity name="AdminMenuReportsSalesInvoiced">
+        <data key="pageTitle">Invoice Report</data>
+        <data key="title">Invoiced</data>
+        <data key="dataUiId">magento-reports-report-salesroot-invoiced</data>
+    </entity>
+    <entity name="AdminMenuReportsProductsLowStock">
+        <data key="pageTitle">Low Stock Report</data>
+        <data key="title">Low Stock</data>
+        <data key="dataUiId">magento-reports-report-products-lowstock</data>
+    </entity>
+    <entity name="AdminMenuReportsCustomersNew">
+        <data key="pageTitle">New Accounts Report</data>
+        <data key="title">New</data>
+        <data key="dataUiId">magento-reports-report-customers-accounts</data>
+    </entity>
+    <entity name="AdminMenuReportsCustomersOrderCount">
+        <data key="pageTitle">Order Count Report</data>
+        <data key="title">Order Count</data>
+        <data key="dataUiId">magento-reports-report-customers-orders</data>
+    </entity>
+    <entity name="AdminMenuReportsProductsOrdered">
+        <data key="pageTitle">Ordered Products Report</data>
+        <data key="title">Ordered</data>
+        <data key="dataUiId">magento-reports-report-products-sold</data>
+    </entity>
+    <entity name="AdminMenuReportsSalesOrders">
+        <data key="pageTitle">Orders Report</data>
+        <data key="title">Orders</data>
+        <data key="dataUiId">magento-reports-report-salesroot-sales</data>
+    </entity>
+    <entity name="AdminMenuReportsCustomersOrderTotal">
+        <data key="pageTitle">Order Total Report</data>
+        <data key="title">Order Total</data>
+        <data key="dataUiId">magento-reports-report-customers-totals</data>
+    </entity>
+    <entity name="AdminMenuReportsMarketingProductsInCarts">
+        <data key="pageTitle">Products in Carts</data>
+        <data key="title">Products in Cart</data>
+        <data key="dataUiId">magento-reports-report-shopcart-product</data>
+    </entity>
+    <entity name="AdminMenuReportsStatisticsRefreshStatistics">
+        <data key="pageTitle">Refresh Statistics</data>
+        <data key="title">Refresh Statistics</data>
+        <data key="dataUiId">magento-reports-report-statistics-refresh</data>
+    </entity>
+    <entity name="AdminMenuReportsSalesTax">
+        <data key="pageTitle">Tax Report</data>
+        <data key="title">Tax</data>
+        <data key="dataUiId">magento-reports-report-salesroot-tax</data>
+    </entity>
+    <entity name="AdminMenuReportsProductsViews">
+        <data key="pageTitle">Product Views Report</data>
+        <data key="title">Views</data>
+        <data key="dataUiId">magento-reports-report-products-viewed</data>
+    </entity>
+</entities>
