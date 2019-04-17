@@ -52,7 +52,7 @@ class ContentValidator
             || $link->getNumberOfDownloads() < 0) {
             throw new InputException(__('Number of downloads must be a positive integer.'));
         }
-        if (filter_var((int) $link->getSortOrder(), FILTER_VALIDATE_INT) === false
+        if (filter_var($link->getSortOrder(), FILTER_VALIDATE_INT) === false
             || $link->getSortOrder() < 0) {
             throw new InputException(__('Sort order must be a positive integer.'));
         }

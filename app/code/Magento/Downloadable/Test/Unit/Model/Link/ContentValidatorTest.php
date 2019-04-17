@@ -203,9 +203,7 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [-1],
-            [2.71828],
-            ['string'],
-        ];
+            ];
     }
 
     /**
