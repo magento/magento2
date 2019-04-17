@@ -30,6 +30,7 @@
                 </field>
                 <field id="generate_rewrites_on_save" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Generate URL Rewrites for Products on Category Save</label>
+                    <backend_model>Magento\CatalogUrlRewrite\Model\TableCleaner</backend_model>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
