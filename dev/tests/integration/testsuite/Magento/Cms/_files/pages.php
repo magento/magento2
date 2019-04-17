@@ -18,7 +18,6 @@ $page->setTitle('Cms Page 100')
     ->setPageLayout('1column')
     ->save();
 
-
 $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Cms\Model\Page::class);
 $page->setTitle('Cms Page Design Blank')
     ->setIdentifier('page_design_blank')
