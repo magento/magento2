@@ -19,6 +19,9 @@
             <group value="persistent"/>
             <group value="widget"/>
             <group value="catalog_widget"/>
+            <skip>
+                <issueId value="MC-15906"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
