@@ -47,7 +47,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $couponCode = '2?ds5!2d';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('applyCouponToCart', $response);
         self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
@@ -67,12 +67,12 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $couponCode = '2?ds5!2d';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey("applyCouponToCart", $response);
         self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
 
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -89,7 +89,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -106,7 +106,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
         self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -125,7 +125,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
         self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer_two@example.com'));
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer_two@example.com'));
     }
 
     /**
@@ -142,7 +142,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -159,7 +159,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
         self::expectExceptionMessage('Could not find a cart with ID "' . $maskedQuoteId . '"');
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -179,7 +179,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -200,7 +200,7 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -226,7 +226,7 @@ mutation {
 QUERY;
 
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**

@@ -24,6 +24,10 @@
         <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
     </actionGroup>
 
+    <actionGroup name="AdminCreateCartPriceRuleAndStayOnEditActionGroup" extends="AdminCreateCartPriceRuleActionGroup" >
+        <click selector="{{AdminCartPriceRulesFormSection.saveAndContinue}}" stepKey="clickSaveButton"/>
+    </actionGroup>
+
     <actionGroup name="AdminCreateCartPriceRuleWithCouponCode" extends="AdminCreateCartPriceRuleActionGroup">
         <arguments>
             <argument name="couponCode"  defaultValue="_defaultCoupon.code"/>
