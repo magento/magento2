@@ -76,7 +76,7 @@ mutation {
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
@@ -149,7 +149,7 @@ mutation {
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
@@ -203,7 +203,7 @@ QUERY;
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -237,7 +237,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -276,7 +276,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -310,7 +310,25 @@ mutation {
 }
 QUERY;
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderSetWithoutRequiredParameters(): array
+    {
+        return [
+            'missed_billing_address' => [
+                'cart_id: "cart_id_value"',
+                'Field SetBillingAddressOnCartInput.billing_address of required type BillingAddressInput!'
+                . ' was not provided.',
+            ],
+            'missed_cart_id' => [
+                'billing_address: {}',
+                'Required parameter "cart_id" is missing'
+            ]
+        ];
     }
 
     /**
@@ -353,25 +371,7 @@ mutation {
 QUERY;
 
         self::expectExceptionMessage('"Street Address" cannot contain more than 2 lines.');
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderSetWithoutRequiredParameters(): array
-    {
-        return [
-            'missed_billing_address' => [
-                'cart_id: "cart_id_value"',
-                'Field SetBillingAddressOnCartInput.billing_address of required type BillingAddressInput!'
-                . ' was not provided.',
-            ],
-            'missed_cart_id' => [
-                'billing_address: {}',
-                'Required parameter "cart_id" is missing'
-            ]
-        ];
+        $this->graphQlMutation($query);
     }
 
     /**
