@@ -25,6 +25,7 @@ use Magento\Framework\App\ObjectManager;
  * Front controller for web API GraphQL area.
  *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GraphQl implements FrontControllerInterface
 {

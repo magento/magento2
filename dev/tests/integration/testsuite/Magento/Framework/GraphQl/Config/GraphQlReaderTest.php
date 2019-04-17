@@ -35,6 +35,9 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
     /** @var  SerializerInterface */
     private $jsonSerializer;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

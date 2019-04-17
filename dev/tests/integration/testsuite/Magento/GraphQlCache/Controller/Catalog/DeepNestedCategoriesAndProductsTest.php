@@ -41,9 +41,6 @@ class DeepNestedCategoriesAndProductsTest extends \Magento\TestFramework\Indexer
     /** @var Http */
     private $request;
 
-    /** @var \Magento\Framework\App\Response\Http */
-    private $response;
-
     /**
      * @inheritdoc
      */
@@ -165,4 +162,3 @@ QUERY;
         );
     }
 }
-

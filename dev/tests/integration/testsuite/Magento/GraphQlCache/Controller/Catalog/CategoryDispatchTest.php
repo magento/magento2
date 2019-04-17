@@ -38,9 +38,6 @@ class CategoryDispatchTest extends \Magento\TestFramework\Indexer\TestCase
     /** @var Http */
     private $request;
 
-    /** @var \Magento\Framework\App\Response\Http */
-    private $response;
-
     /**
      * @inheritdoc
      */
@@ -110,4 +107,3 @@ QUERY;
         }
     }
 }
-
