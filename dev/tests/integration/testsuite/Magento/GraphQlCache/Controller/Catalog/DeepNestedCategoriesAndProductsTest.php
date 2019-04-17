@@ -10,9 +10,7 @@ namespace Magento\GraphQlCache\Controller\Catalog;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 use Magento\TestFramework\ObjectManager;
 
 /**
@@ -22,21 +20,10 @@ use Magento\TestFramework\ObjectManager;
  * @magentoDbIsolation disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DeepNestedCategoriesAndProductsTest extends \Magento\TestFramework\Indexer\TestCase
+class DeepNestedCategoriesAndProductsTest extends AbstractGraphqlCacheTest
 {
-    const CONTENT_TYPE = 'application/json';
-
-    /** @var \Magento\Framework\ObjectManagerInterface */
-    private $objectManager;
-
-    /** @var GraphQl */
+    /** @var \Magento\GraphQl\Controller\GraphQl */
     private $graphql;
-
-    /** @var SerializerInterface */
-    private $jsonSerializer;
-
-    /** @var MetadataPool */
-    private $metadataPool;
 
     /** @var Http */
     private $request;
@@ -44,28 +31,10 @@ class DeepNestedCategoriesAndProductsTest extends \Magento\TestFramework\Indexer
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass()
-    {
-        $db = Bootstrap::getInstance()->getBootstrap()
-            ->getApplication()
-            ->getDbInstance();
-        if (!$db->isDbDumpExists()) {
-            throw new \LogicException('DB dump does not exist.');
-        }
-        $db->restoreFromDbDump();
-
-        parent::setUpBeforeClass();
-    }
-
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        parent::setUp();
         $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-        $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
-        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
         $this->request = $this->objectManager->get(Http::class);
     }
 
@@ -148,9 +117,6 @@ QUERY;
         $result = $this->graphql->dispatch($this->request);
         /** @var \Magento\Framework\App\Response\Http $response */
         $response = $this->objectManager->get(\Magento\Framework\App\Response\Http::class);
-        /** @var  $registry \Magento\Framework\Registry */
-        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
-        $registry->register('use_page_cache_plugin', true, true);
         $result->renderResult($response);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
