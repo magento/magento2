@@ -21,7 +21,7 @@ use Magento\Framework\App\TemplateTypesInterface;
 <form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_template_preview_form" target="_blank">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?php /* @escapeNotVerified */ echo $block->isTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->isTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
         <input type="hidden" id="preview_id" name="id" value="" />
@@ -87,7 +87,7 @@ require([
             var self = this;
 
             confirm({
-                content: "<?php /* @escapeNotVerified */ echo __('Are you sure that you want to strip all tags?') ?>",
+                content: "<?= $block->escapeJsQuote($block->escapeHtml(__('Are you sure that you want to strip all tags?'))) ?>",
                 actions: {
                     confirm: function(){
                         if(self.isEditor()) {
@@ -141,8 +141,8 @@ require([
             if($F('code').blank() || $F('code')==templateControl.templateName) {
 
                 prompt({
-                    content: '<?php /* @escapeNotVerified */ echo __('Please enter a new template name.') ?>',
-                    value: templateControl.templateName + '<?php /* @escapeNotVerified */ echo __(' Copy') ?>',
+                    content: '<?= $block->escapeJsQuote($block->escapeHtml(__('Please enter a new template name.'))) ?>',
+                    value: templateControl.templateName + '<?= $block->escapeJsQuote(__(' Copy')) ?>',
                     actions: {
                         confirm: function(value) {
                             $('code').value = value;
@@ -176,9 +176,9 @@ require([
 
         preview: function() {
             if (this.typeChange) {
-                $('preview_type').value = <?php /* @escapeNotVerified */ echo TemplateTypesInterface::TYPE_TEXT ?>;
+                $('preview_type').value = <?= $block->escapeJsQuote(TemplateTypesInterface::TYPE_TEXT) ?>;
             } else {
-                $('preview_type').value = <?php /* @escapeNotVerified */ echo $block->getTemplateType() ?>;
+                $('preview_type').value = <?= $block->escapeJsQuote($block->getTemplateType()) ?>;
             }
             if (this.isEditor() && tinyMCE.get(this.id)) {
                 tinyMCE.triggerSave();
@@ -222,7 +222,7 @@ require([
     };
 
     templateControl.init();
-    templateControl.templateName = "<?php /* @escapeNotVerified */ echo $block->getJsTemplateName() ?>";
+    templateControl.templateName = "<?= $block->escapeJsQuote($block->getJsTemplateName()) ?>";
 //]]>
 
 });
