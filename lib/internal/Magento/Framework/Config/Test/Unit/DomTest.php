@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Config\Test\Unit;
 
+/**
+ * Test for \Magento\Framework\Config\Dom class.
+ */
 class DomTest extends \PHPUnit\Framework\TestCase
 {
     /**
