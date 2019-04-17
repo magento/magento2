@@ -32,7 +32,6 @@ class UpdateConfigurableProductEntityTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
