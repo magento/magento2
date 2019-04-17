@@ -10,22 +10,16 @@ namespace Magento\GraphQlCache\Controller\Cms;
 use Magento\Cms\Model\BlockRepository;
 use Magento\Framework\App\Request\Http;
 use Magento\GraphQl\Controller\GraphQl;
-use Magento\TestFramework\ObjectManager;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 
 /**
  * Test caching works for CMS blocks
  *
  * @magentoAppArea graphql
- * @magentoDbIsolation disabled
+ * @magentoCache full_page enabled
  */
-class BlockCacheTest extends \Magento\TestFramework\Indexer\TestCase
+class BlockCacheTest extends AbstractGraphqlCacheTest
 {
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
     /**
      * @var GraphQl
      */
@@ -39,28 +33,11 @@ class BlockCacheTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass()
-    {
-        $db = Bootstrap::getInstance()->getBootstrap()
-            ->getApplication()
-            ->getDbInstance();
-        if (!$db->isDbDumpExists()) {
-            throw new \LogicException('DB dump does not exist.');
-        }
-        $db->restoreFromDbDump();
-
-        parent::setUpBeforeClass();
-    }
-
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
-        $this->objectManager = Bootstrap::getObjectManager();
+        parent::setUp();
         $this->graphqlController = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
         $this->request = $this->objectManager->create(Http::class);
-        $this->enableFullPageCache();
     }
 
     /**
@@ -102,19 +79,5 @@ QUERY;
         foreach ($expectedCacheTags as $expectedCacheTag) {
             $this->assertContains($expectedCacheTag, $actualCacheTags);
         }
-    }
-
-    /**
-     * Enable full page cache so plugins are called
-     */
-    private function enableFullPageCache()
-    {
-        /** @var  $registry \Magento\Framework\Registry */
-        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
-        $registry->register('use_page_cache_plugin', true, true);
-
-        /** @var \Magento\Framework\App\Cache\StateInterface $cacheState */
-        $cacheState = $this->objectManager->get(\Magento\Framework\App\Cache\StateInterface::class);
-        $cacheState->setEnabled(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER, true);
     }
 }
