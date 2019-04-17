@@ -267,3 +267,24 @@ $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
     [10, 11, 12, 13]
 );
+
+/** @var $product \Magento\Catalog\Model\Product */
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
+$product->isObjectNew(true);
+$product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
+    ->setAttributeSetId($defaultAttributeSet)
+    ->setStoreId(1)
+    ->setWebsiteIds([1])
+    ->setName('Simple Product Five')
+    ->setSku('simple-5')
+    ->setPrice(10)
+    ->setWeight(18)
+    ->setStockData(['use_config_manage_stock' => 0])
+    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->save();
+
+$categoryLinkManagement->assignProductToCategories(
+    $product->getSku(),
+    [10, 11, 12, 13]
+);
