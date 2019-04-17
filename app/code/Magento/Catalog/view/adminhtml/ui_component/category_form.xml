@@ -505,7 +505,7 @@
                     <item name="formElement" xsi:type="string">textarea</item>
                     <item name="label" xsi:type="string" translate="true">Layout Update XML</item>
                     <item name="imports" xsi:type="array">
-                        <item name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked || $.data.serviceDisabled</item>
+                        <item name="serviceDisabled" xsi:type="string">${ $.parentName }.custom_use_parent_settings:checked || $.data.serviceDisabled</item>
                     </item>
                 </item>
             </argument>
@@ -520,7 +520,7 @@
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="imports" xsi:type="array">
-                        <item name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked || $.data.serviceDisabled</item>
+                        <item name="serviceDisabled" xsi:type="string">${ $.parentName }.custom_use_parent_settings:checked</item>
                     </item>
                     <item name="valueMap" xsi:type="array">
                         <item name="true" xsi:type="string">1</item>
