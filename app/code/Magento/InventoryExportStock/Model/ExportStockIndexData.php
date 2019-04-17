@@ -68,7 +68,7 @@ class ExportStockIndexData implements ExportStockIndexDataInterface
             $items = $this->stockIndexDumpProcessor->execute($stockId);
         } catch (Exception $e) {
             $this->logger->critical($e->getMessage(), $e->getTrace());
-            throw new LocalizedException(_('Something went wrong. Export couldn\'t be executed, See log files for error details'));
+            throw new LocalizedException(__('Something went wrong. Export couldn\'t be executed, See log files for error details'));
         }
 
         return $items;
