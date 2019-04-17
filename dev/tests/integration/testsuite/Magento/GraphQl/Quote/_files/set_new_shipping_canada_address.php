@@ -26,14 +26,14 @@ $shippingAddressManagement = Bootstrap::getObjectManager()->get(ShippingAddressM
 
 $quoteAddressData = [
     AddressInterface::KEY_TELEPHONE => 3468676,
-    AddressInterface::KEY_POSTCODE => '75477',
-    AddressInterface::KEY_COUNTRY_ID => 'US',
-    AddressInterface::KEY_CITY => 'CityM',
+    AddressInterface::KEY_POSTCODE => 'M4L 1V3',
+    AddressInterface::KEY_COUNTRY_ID => 'CA',
+    AddressInterface::KEY_CITY => 'Toronto',
     AddressInterface::KEY_COMPANY => 'CompanyName',
-    AddressInterface::KEY_STREET => 'Green str, 67',
+    AddressInterface::KEY_STREET => '500 Kingston Rd',
     AddressInterface::KEY_LASTNAME => 'Smith',
     AddressInterface::KEY_FIRSTNAME => 'John',
-    AddressInterface::KEY_REGION_ID => 1,
+    AddressInterface::KEY_REGION_CODE => 'ON',
 ];
 $quoteAddress = $quoteAddressFactory->create();
 $dataObjectHelper->populateWithArray($quoteAddress, $quoteAddressData, AddressInterfaceFactory::class);
