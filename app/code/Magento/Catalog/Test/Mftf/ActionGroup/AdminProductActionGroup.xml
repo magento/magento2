@@ -251,11 +251,11 @@
     <actionGroup name="AdminAssignProductToCategory" extends="AdminProductAssignCategory">
         <arguments>
             <argument name="productId" type="string"/>
-            <argument name="categoryName" type="string"/>
         </arguments>
         <amOnPage url="{{AdminProductEditPage.url(productId)}}" before="searchAndSelectCategory" stepKey="amOnPage"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" after="searchAndSelectCategory" stepKey="clickOnSaveButton"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." after="clickOnSaveButton" stepKey="seeSaveProductMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" after="clickOnSaveButton" stepKey="waitForSaveProductMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." after="waitForSaveProductMessage" stepKey="seeSaveProductMessage"/>
     </actionGroup>
 
     <actionGroup name="AdminChangeProductAttributeSet">
