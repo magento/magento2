@@ -163,7 +163,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Send email.
+     * Sends email to recipients
      *
      * @return $this
      * @throws CoreException
