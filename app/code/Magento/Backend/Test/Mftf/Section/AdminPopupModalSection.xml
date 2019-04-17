@@ -10,5 +10,6 @@
     <section name="AdminPopupModalSection">
         <element name="message" type="text" selector="aside.modal-popup .modal-content .popup-window-content"/>
         <element name="ok" type="button" selector="//span[contains(text(),'Ok')]/ancestor::button"/>
+        <element name="confirm" type="button" selector="//aside[contains(@class, 'modal-popup')]//footer/button[normalize-space(.)='Confirm']" timeout="30"/>
     </section>
 </sections>
