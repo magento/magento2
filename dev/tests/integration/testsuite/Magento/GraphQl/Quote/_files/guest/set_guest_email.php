@@ -20,5 +20,5 @@ $quoteResource = Bootstrap::getObjectManager()->get(QuoteResource::class);
 $quote = $quoteFactory->create();
 $quoteResource->load($quote, 'test_quote', 'reserved_order_id');
 
-$quote->setCustomerEmail('customer@example.com');
+$quote->setCustomerEmail('guest@example.com');
 $cartRepository->save($quote);
