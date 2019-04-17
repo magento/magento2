@@ -40,7 +40,7 @@ abstract class AbstractTotalsProcessor
      */
     public function sortTotals($totals)
     {
-        $configData = $this->scopeConfig->getValue('sales/totals_sort');
+        $configData = $this->scopeConfig->getValue('sales/totals_sort', \Magento\Store\Model\ScopeInterface::SCOPE_STORES);
         foreach ($totals as $code => &$total) {
             //convert JS naming style to config naming style
             $code = str_replace('-', '_', $code);
