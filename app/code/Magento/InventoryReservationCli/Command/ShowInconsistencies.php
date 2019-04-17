@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\InventoryReservationCli\Command;
 
 use Magento\Framework\Validation\ValidationException;
-use Magento\InventoryReservationCli\Model\GetSaleableQuantityInconsistencies;
+use Magento\InventoryReservationCli\Model\GetSaleableQuantityInconsistencies\Proxy as GetSaleableQuantityInconsistencies;
 use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterCompleteOrders;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterIncompleteOrders;
+use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterCompleteOrders\Proxy as FilterCompleteOrders;
+use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterIncompleteOrders\Proxy as FilterIncompleteOrders;
 use Magento\Sales\Model\Order;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
