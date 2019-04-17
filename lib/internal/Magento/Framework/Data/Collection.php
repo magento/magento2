@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
@@ -401,6 +402,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
 
         if ($itemId !== null) {
             if (isset($this->_items[$itemId])) {
+                //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception(
                     'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
                 );
