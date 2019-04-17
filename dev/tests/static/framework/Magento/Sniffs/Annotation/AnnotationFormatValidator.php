@@ -250,6 +250,46 @@ class AnnotationFormatValidator
     }
 
     /**
+     * Validates tag aligning format
+     *
+     * @param File $phpcsFile
+     * @param int $commentStartPtr
+     */
+    public function validateTagAligningFormat(File $phpcsFile, int $commentStartPtr) : void
+    {
+        $tokens = $phpcsFile->getTokens();
+        $noAlignmentPositions = [];
+        $actualPositions = [];
+        $stackPtr = null;
+        foreach ($tokens[$commentStartPtr]['comment_tags'] as $position => $tag) {
+            $content = $tokens[$tag]['content'];
+            if (preg_match('/^@/', $content) && ($tokens[$tag]['line'] === $tokens[$tag + 2]['line'])) {
+                $noAlignmentPositions[] = $tokens[$tag + 1]['column'] + 1;
+                $actualPositions[] = $tokens[$tag + 2]['column'];
+                $stackPtr = $stackPtr ?? $tag;
+            }
+
+        }
+
+        if (!$this->allTagsAligned($actualPositions)
+            && !$this->noneTagsAligned($actualPositions, $noAlignmentPositions)) {
+            $phpcsFile->addFixableError(
+                'Tags visual alignment must be consistent',
+                $stackPtr,
+                'MethodArguments'
+            );
+        }
+    }
+
+    private function allTagsAligned(array $actualPositions) {
+        return count(array_unique($actualPositions)) === 1;
+    }
+
+    private function noneTagsAligned(array $actualPositions, array $noAlignmentPositions) {
+        return $actualPositions === $noAlignmentPositions;
+    }
+
+    /**
      * Validates extra newline before short description
      *
      * @param File $phpcsFile
