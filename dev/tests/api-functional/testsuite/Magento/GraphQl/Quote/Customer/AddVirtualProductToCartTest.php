@@ -56,36 +56,34 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testAddVirtualToNonExistentCart()
     {
         $sku = 'virtual_product';
         $qty = 2;
         $nonExistentMaskedQuoteId = 'non_existent_masked_id';
+
         $query = $this->getQuery($nonExistentMaskedQuoteId, $sku, $qty);
-
-        $this->expectExceptionMessage(
-            "Could not find a cart with ID \"$nonExistentMaskedQuoteId\""
-        );
-
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a product with SKU "virtual_product"
      */
     public function testNonExistentProductToCart()
     {
         $sku = 'virtual_product';
         $qty = 2;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
         $query = $this->getQuery($maskedQuoteId, $sku, $qty);
-
-        $this->expectExceptionMessage(
-            "Could not find a product with SKU \"virtual_product\""
-        );
-
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
