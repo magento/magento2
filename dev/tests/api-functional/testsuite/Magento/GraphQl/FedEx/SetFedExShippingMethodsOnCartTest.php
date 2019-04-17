@@ -7,32 +7,29 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\FedEx;
 
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\GraphQl\Quote\GetQuoteShippingAddressIdByReservedQuoteId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test for setting "FedEx" shipping method on cart
+ * | Code         | Label
+ * --------------------------------------
+ * | FEDEX_GROUND | Ground
  */
 class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
 {
     /**
+     * Defines carrier label for "FedEx" shipping method
+     */
+    const CARRIER_LABEL = 'Federal Express';
+
+    /**
      * Defines carrier code for "FedEx" shipping method
      */
     const CARRIER_CODE = 'fedex';
-
-    /**
-     * Defines method code for the "Ground" FedEx shipping
-     */
-    const CARRIER_METHOD_CODE_GROUND = 'FEDEX_GROUND';
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
 
     /**
      * @var CustomerTokenServiceInterface
@@ -40,14 +37,14 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var QuoteResource
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteResource;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
-     * @var QuoteIdToMaskedQuoteIdInterface
+     * @var GetQuoteShippingAddressIdByReservedQuoteId
      */
-    private $quoteIdToMaskedId;
+    private $getQuoteShippingAddressIdByReservedQuoteId;
 
     /**
      * @inheritdoc
@@ -55,43 +52,64 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->getQuoteShippingAddressIdByReservedQuoteId = $objectManager->get(
+            GetQuoteShippingAddressIdByReservedQuoteId::class
+        );
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_weight_to_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Fedex/_files/enable_fedex_shipping_method.php
+     * @magentoApiDataFixture Magento/GraphQl/FedEx/_files/enable_fedex_shipping_method.php
+     *
+     * @dataProvider dataProviderShippingMethods
+     * @param string $methodCode
+     * @param string $methodLabel
      */
-    public function testSetFedExShippingMethod()
+    public function testSetFedExShippingMethod(string $methodCode, string $methodLabel)
     {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_quote', 'reserved_order_id');
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
-        $shippingAddressId = (int)$quote->getShippingAddress()->getId();
+        $quoteReservedId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
+        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
 
-        $query = $this->getAddFedExShippingMethodQuery(
-            $maskedQuoteId,
-            $shippingAddressId,
-            self::CARRIER_CODE,
-            self::CARRIER_METHOD_CODE_GROUND
-        );
-
+        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
         $response = $this->sendRequestWithToken($query);
-        $addressesInformation = $response['setShippingMethodsOnCart']['cart']['shipping_addresses'];
-        $expectedResult = [
-            'carrier_code' => self::CARRIER_CODE,
-            'method_code' => self::CARRIER_METHOD_CODE_GROUND,
-            'label' => 'Federal Express - Ground',
+
+        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
+        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
+        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+
+        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
+
+        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
+
+        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
+
+        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(
+            self::CARRIER_LABEL . ' - ' . $methodLabel,
+            $shippingAddress['selected_shipping_method']['label']
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderShippingMethods(): array
+    {
+        return [
+            'Ground' => ['FEDEX_GROUND', 'Ground'],
         ];
-        self::assertEquals($addressesInformation[0]['selected_shipping_method'], $expectedResult);
     }
 
     /**
@@ -103,7 +121,7 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $methodCode
      * @return string
      */
-    private function getAddFedExShippingMethodQuery(
+    private function getQuery(
         string $maskedQuoteId,
         int $shippingAddressId,
         string $carrierCode,
@@ -147,6 +165,6 @@ QUERY;
         $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
 
-        return $this->graphQlQuery($query, [], '', $headerMap);
+        return $this->graphQlMutation($query, [], '', $headerMap);
     }
 }
