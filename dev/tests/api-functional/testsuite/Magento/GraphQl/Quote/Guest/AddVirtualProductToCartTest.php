@@ -83,6 +83,7 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * _security
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
@@ -117,8 +118,8 @@ mutation {
       cartItems: [
         {
           data: {
-            qty: $qty
-            sku: "$sku"
+            qty: {$qty}
+            sku: "{$sku}"
           }
         }
       ]

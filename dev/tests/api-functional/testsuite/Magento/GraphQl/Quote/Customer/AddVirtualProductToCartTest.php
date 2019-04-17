@@ -28,6 +28,13 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
+    protected function setUp()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+    }
+
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
@@ -83,6 +90,7 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -102,9 +110,10 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * _security
      * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      */
     public function testAddVirtualProductToAnotherCustomerCart()
     {
@@ -120,15 +129,10 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
         $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
     }
 
-    protected function setUp()
-    {
-        $objectManager = Bootstrap::getObjectManager();
-        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-    }
-
     /**
      * @param string $maskedQuoteId
+     * @param string $sku
+     * @param int $qty
      * @return string
      */
     private function getQuery(string $maskedQuoteId, string $sku, int $qty): string
@@ -140,8 +144,8 @@ mutation {
     cartItems: [
       {
         data: {
-          qty: $qty
-          sku: "$sku"
+          qty: {$qty}
+          sku: "{$sku}"
         }
       }                
     ]
