@@ -58,8 +58,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         parent::__construct($checkoutSession, $scopeConfig, $data);
 
         $this->singleSelectionTypes = $singleSelectionTypes ?: [
-            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN,
-            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO,
+            'drop_down' => \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN,
+            'radio' => \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO,
         ];
     }
 
