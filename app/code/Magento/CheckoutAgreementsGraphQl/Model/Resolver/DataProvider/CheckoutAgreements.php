@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CheckoutAgreementsGraphQl\Model\Resolver\DataProvider;
 
-use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
 use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\CheckoutAgreements\Model\Agreement;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Checkout Agreements data provider
@@ -17,25 +18,25 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 class CheckoutAgreements
 {
     /**
-     * @var SearchCriteriaBuilder
+     * @var CollectionFactory
      */
-    private $searchCriteriaBuilder;
+    private $agreementCollectionFactory;
 
     /**
-     * @var CheckoutAgreementsListInterface
+     * @var StoreManagerInterface
      */
-    private $checkoutAgreementsList;
+    private $storeManager;
 
     /**
-     * @param CheckoutAgreementsListInterface $checkoutAgreementsList
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param CollectionFactory $agreementCollectionFactory
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        CheckoutAgreementsListInterface $checkoutAgreementsList,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        CollectionFactory $agreementCollectionFactory,
+        StoreManagerInterface $storeManager
     ) {
-        $this->checkoutAgreementsList = $checkoutAgreementsList;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->agreementCollectionFactory = $agreementCollectionFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -45,12 +46,13 @@ class CheckoutAgreements
      */
     public function getData(): array
     {
-        $this->searchCriteriaBuilder->addFilter(AgreementInterface::IS_ACTIVE, true);
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $checkoutAgreements = $this->checkoutAgreementsList->getList($searchCriteria);
+        $agreementsCollection = $this->agreementCollectionFactory->create();
+        $agreementsCollection->addStoreFilter($this->storeManager->getStore()->getId()); // TODO: store should be get from query context
+        $agreementsCollection->addFieldToFilter('is_active', 1);
 
         $checkoutAgreementData = [];
-        foreach ($checkoutAgreements as $checkoutAgreement) {
+        /** @var Agreement $checkoutAgreement */
+        foreach ($agreementsCollection->getItems() as $checkoutAgreement) {
             $checkoutAgreementData[] = [
                 AgreementInterface::AGREEMENT_ID => $checkoutAgreement->getAgreementId(),
                 AgreementInterface::CONTENT => $checkoutAgreement->getContent(),

@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    checkoutAgreements: [CheckoutAgreement] @resolver(class: "Magento\\CheckoutAgreementsGraphQl\\Model\\Resolver\\CheckoutAgreements") @doc(description: "The Checkout Agreements query returns information about a Checkout Agreements")
+    checkoutAgreements: [CheckoutAgreement] @resolver(class: "Magento\\CheckoutAgreementsGraphQl\\Model\\Resolver\\CheckoutAgreements") @doc(description: "The Checkout Agreements information")
 }
 
 type CheckoutAgreement @doc(description: "Defines all Checkout Agreement information") {

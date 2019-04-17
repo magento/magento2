@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * CMS page field resolver, used for GraphQL request processing
+ * Checkout Agreements resolver, used for GraphQL request processing
  */
 class CheckoutAgreements implements ResolverInterface
 {

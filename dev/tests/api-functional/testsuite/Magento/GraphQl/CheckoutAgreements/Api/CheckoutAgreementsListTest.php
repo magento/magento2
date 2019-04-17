@@ -7,17 +7,111 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\CheckoutAgreements\Api;
 
+use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
+use Magento\CheckoutAgreements\Model\Agreement as AgreementModel;
+use Magento\CheckoutAgreements\Model\AgreementFactory;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class CheckoutAgreementsListTest extends GraphQlAbstract
 {
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->objectManager = Bootstrap::getObjectManager();
+    }
+
     /**
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_active_with_html_content.php
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_inactive_with_text_content.php
      */
     public function testGetActiveAgreement()
     {
-        $query =
+        $query = $this->getQuery();
+
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey('checkoutAgreements', $response);
+        $agreements = $response['checkoutAgreements'];
+        $this->assertCount(1, $agreements);
+        $this->assertEquals('Checkout Agreement (active)', $agreements[0]['name']);
+        $this->assertEquals('Checkout agreement content: <b>HTML</b>', $agreements[0]['content']);
+        $this->assertEquals('200px', $agreements[0]['content_height']);
+        $this->assertEquals('Checkout agreement checkbox text.', $agreements[0]['checkbox_text']);
+        $this->assertEquals(true, $agreements[0]['is_html']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_active_with_html_content.php
+     * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_inactive_with_text_content.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testGetActiveAgreementOnSecondStore()
+    {
+        $secondStoreCode = 'fixture_second_store';
+        $agreementsName = 'Checkout Agreement (active)';
+
+        $query = $this->getQuery();
+        $this->assignAgreementsToStore($secondStoreCode, $agreementsName);
+
+        $headerMap['Store'] = $secondStoreCode;
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        $this->assertArrayHasKey('checkoutAgreements', $response);
+        $agreements = $response['checkoutAgreements'];
+        $this->assertCount(1, $agreements);
+        $this->assertEquals($agreementsName, $agreements[0]['name']);
+        $this->assertEquals('Checkout agreement content: <b>HTML</b>', $agreements[0]['content']);
+        $this->assertEquals('200px', $agreements[0]['content_height']);
+        $this->assertEquals('Checkout agreement checkbox text.', $agreements[0]['checkbox_text']);
+        $this->assertEquals(true, $agreements[0]['is_html']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_active_with_html_content.php
+     * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_inactive_with_text_content.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testGetActiveAgreementFromSecondStoreOnDefaultStore()
+    {
+        $secondStoreCode = 'fixture_second_store';
+        $agreementsName = 'Checkout Agreement (active)';
+
+        $query = $this->getQuery();
+        $this->assignAgreementsToStore($secondStoreCode, $agreementsName);
+
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey('checkoutAgreements', $response);
+        $agreements = $response['checkoutAgreements'];
+        $this->assertCount(0, $agreements);
+    }
+
+    public function testGetAgreementNotSet()
+    {
+        $query = $this->getQuery();
+
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey('checkoutAgreements', $response);
+        $agreements = $response['checkoutAgreements'];
+        $this->assertCount(0, $agreements);
+    }
+
+    /**
+     * @return string
+     */
+    private function getQuery(): string
+    {
+        return
             <<<QUERY
 {
   checkoutAgreements {
@@ -30,15 +124,25 @@ class CheckoutAgreementsListTest extends GraphQlAbstract
   }
 }
 QUERY;
+    }
 
-        $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('checkoutAgreements', $response);
-        $agreements = $response['checkoutAgreements'];
-        $this->assertEquals(1, count($agreements));
-        $this->assertEquals('Checkout Agreement (active)', $agreements[0]['name']);
-        $this->assertEquals('Checkout agreement content: <b>HTML</b>', $agreements[0]['content']);
-        $this->assertEquals('200px', $agreements[0]['content_height']);
-        $this->assertEquals('Checkout agreement checkbox text.', $agreements[0]['checkbox_text']);
-        $this->assertEquals(true, $agreements[0]['is_html']);
+    /**
+     * @param string $storeCode
+     * @param string $agreementsName
+     * @return void
+     */
+    private function assignAgreementsToStore(string $storeCode, string $agreementsName): void
+    {
+        $agreementsFactory = $this->objectManager->get(AgreementFactory::class);
+        /** @var Agreement $agreementsResource */
+        $agreementsResource = $this->objectManager->get(Agreement::class);
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $store = $storeManager->getStore($storeCode);
+        /** @var AgreementModel $agreements */
+        $agreements = $agreementsFactory->create();
+        $agreementsResource->load($agreements, $agreementsName, AgreementInterface::NAME);
+        $agreements->setData('stores', [$store->getId()]);
+        $agreementsResource->save($agreements);
     }
 }
