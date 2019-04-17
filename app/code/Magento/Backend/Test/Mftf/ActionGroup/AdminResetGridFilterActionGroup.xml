@@ -8,8 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="NavigateToVariablesPage">
-        <amOnPage url="{{AdminVariablesPage.url}}" stepKey="openVariablesGridPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+    <actionGroup name="AdminResetGridFilterActionGroup">
+        <arguments>
+            <argument name="selector" type="string" defaultValue="{{AdminSecondaryGridSection.resetFilters}}"/>
+        </arguments>
+        <click selector="{{selector}}" stepKey="clickResetButton"/>
     </actionGroup>
 </actionGroups>

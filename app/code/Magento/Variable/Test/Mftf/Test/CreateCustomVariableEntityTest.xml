@@ -21,7 +21,15 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
-        <actionGroup ref="AdminCreateCustomVariableActionGroup" stepKey="createCustomVariable"/>
+        <after>
+            <actionGroup ref="AdminResetGridFilterActionGroup" stepKey="resetVariablesGrid"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateToNewVariablePageActionGroup" stepKey="goToNewVariableAdminPage"/>
+        <actionGroup ref="AdminFillFormCustomVariableActionGroup" stepKey="fillInCustomVariableData"/>
+        <actionGroup ref="AdminClickMainButtonActionGroup" stepKey="clickSaveCustomVariable">
+            <argument name="button" value="{{AdminMainActionsSection.save}}"/>
+        </actionGroup>
         <actionGroup ref="AssertMessageActionGroup" stepKey="seeSuccessMessage">
             <argument name="message" value="You saved the custom variable."/>
         </actionGroup>
@@ -33,12 +41,8 @@
             <argument name="field" value="{{AdminVariablesFilterSection.nameFilter}}"/>
             <argument name="value" value="{{customVariable.name}}"/>
         </actionGroup>
-        <actionGroup ref="AssertValueInGridActionGroup" stepKey="seeNewVariableInGrid">
+        <actionGroup ref="AssertValueInAdminGridActionGroup" stepKey="seeNewVariableInGrid">
             <argument name="value" value="{{customVariable.code}}"/>
         </actionGroup>
-        <after>
-            <actionGroup ref="AdminResetFilterActionGroup" stepKey="resetVariablesGrid"/>
-            <actionGroup ref="logout" stepKey="logout"/>
-        </after>
     </test>
 </tests>

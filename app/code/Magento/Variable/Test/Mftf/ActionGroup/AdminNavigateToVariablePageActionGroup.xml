@@ -5,12 +5,13 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertValueInGridActionGroup">
+    <actionGroup name="AdminNavigateToVariablePageActionGroup">
         <arguments>
-            <argument name="value" type="string" />
+            <argument name="code" type="string"/>
         </arguments>
-        <see selector="{{AdminGridTableSection.rowByValue(value)}}" userInput="{{value}}" stepKey="seeValueInGrid"/>
+        <click selector="{{CustomVariableSection.GridCustomVariableCode(code)}}" stepKey="goToCustomVariableEditPage"/>
     </actionGroup>
 </actionGroups>

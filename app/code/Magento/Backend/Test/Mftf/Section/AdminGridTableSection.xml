@@ -10,6 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminGridTableSection">
         <element name="row" type="text" selector="table.data-grid tbody tr[data-role=row]:nth-of-type({{row}})" parameterized="true"/>
-        <element name="rowByValue" type="text" selector="//tr[@data-role='row'] //td[contains(., '{{var}}')]" parameterized="true" timeout="30"/>
+        <element name="rowByValue" type="text" selector="//table[@class='data-grid']//tr[@data-role='row'] //td[contains(., '{{var}}')]" parameterized="true" timeout="30"/>
     </section>
 </sections>
