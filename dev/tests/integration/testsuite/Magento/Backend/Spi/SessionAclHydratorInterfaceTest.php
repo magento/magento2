@@ -13,6 +13,9 @@ use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Acl\Builder as AclBuilder;
 
+/**
+ * Test for session hydrator.
+ */
 class SessionAclHydratorInterfaceTest extends TestCase
 {
     /**

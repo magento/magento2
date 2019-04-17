@@ -17,6 +17,8 @@ use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
  * HTTP Response.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 {

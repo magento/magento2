@@ -23,6 +23,7 @@ use Magento\User\Model\UserFactory;
  * @method \Magento\Backend\Model\Auth\Session setUpdatedAt(int $value)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @todo implement solution that keeps is_first_visit flag in session during redirects
  * @api
  * @since 100.0.2
