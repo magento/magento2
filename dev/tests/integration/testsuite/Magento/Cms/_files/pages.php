@@ -11,8 +11,13 @@ $page->setTitle('Cms Page 100')
     ->setStores([0])
     ->setIsActive(1)
     ->setContent('<h1>Cms Page 100 Title</h1>')
+    ->setContentHeading('<h2>Cms Page 100 Title</h2>')
+    ->setMetaTitle('Cms Meta title for page100')
+    ->setMetaKeywords('Cms Meta Keywords for page100')
+    ->setsetMetaDescription('Cms Meta Description for page100')
     ->setPageLayout('1column')
     ->save();
+
 
 $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Cms\Model\Page::class);
 $page->setTitle('Cms Page Design Blank')
@@ -20,6 +25,10 @@ $page->setTitle('Cms Page Design Blank')
     ->setStores([0])
     ->setIsActive(1)
     ->setContent('<h1>Cms Page Design Blank Title</h1>')
+    ->setContentHeading('<h2>Cms Page Blank Title</h2>')
+    ->setMetaTitle('Cms Meta title for Blank page')
+    ->setMetaKeywords('Cms Meta Keywords for Blank page')
+    ->setsetMetaDescription('Cms Meta Description for Blank page')
     ->setPageLayout('1column')
     ->setCustomTheme('Magento/blank')
     ->save();
