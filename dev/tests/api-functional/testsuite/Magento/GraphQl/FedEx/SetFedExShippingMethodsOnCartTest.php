@@ -15,9 +15,19 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test for setting "FedEx" shipping method on cart
- * | Code         | Label
+ * 
+ * | Code                   | Label
  * --------------------------------------
- * | FEDEX_GROUND | Ground
+ * | FEDEX_GROUND           | Ground
+ * | SMART_POST             | Smart Post
+ * | FEDEX_EXPRESS_SAVER    | Express Saver
+ * | PRIORITY_OVERNIGHT     | Priority Overnight
+ * | FEDEX_2_DAY            | 2 Day
+ * | FIRST_OVERNIGHT        | First Overnight
+ * | INTERNATIONAL_ECONOMY  |International Economy
+ * | INTERNATIONAL_PRIORITY | International Priority
+ *
+ * This class does not cover another FedEx shipping methods (they depends on address and sandbox settings)
  */
 class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
 {
@@ -109,6 +119,66 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
     {
         return [
             'Ground' => ['FEDEX_GROUND', 'Ground'],
+            'Smart Post' => ['SMART_POST', 'Smart Post'],
+            'Express Saver' => ['FEDEX_EXPRESS_SAVER', 'Express Saver'],
+            'Priority Overnight' => ['PRIORITY_OVERNIGHT', 'Priority Overnight'],
+            '2 Day' => ['FEDEX_2_DAY', '2 Day'],
+            'First Overnight' => ['FIRST_OVERNIGHT', 'First Overnight'],
+        ];
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_weight_to_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
+     * @magentoApiDataFixture Magento/GraphQl/FedEx/_files/enable_fedex_shipping_method.php
+     *
+     * @dataProvider dataProviderShippingMethodsBasedOnCanadaAddress
+     * @param string $methodCode
+     * @param string $methodLabel
+     */
+    public function testSetFedExShippingMethodBasedOnCanadaAddress(string $methodCode, string $methodLabel)
+    {
+        $quoteReservedId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($quoteReservedId);
+        $shippingAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute($quoteReservedId);
+
+        $query = $this->getQuery($maskedQuoteId, $shippingAddressId, self::CARRIER_CODE, $methodCode);
+        $response = $this->sendRequestWithToken($query);
+
+        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
+        self::assertArrayHasKey('shipping_addresses', $response['setShippingMethodsOnCart']['cart']);
+        self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+
+        $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
+
+        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(self::CARRIER_CODE, $shippingAddress['selected_shipping_method']['carrier_code']);
+
+        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals($methodCode, $shippingAddress['selected_shipping_method']['method_code']);
+
+        self::assertArrayHasKey('label', $shippingAddress['selected_shipping_method']);
+        self::assertEquals(
+            self::CARRIER_LABEL . ' - ' . $methodLabel,
+            $shippingAddress['selected_shipping_method']['label']
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderShippingMethodsBasedOnCanadaAddress(): array
+    {
+        return [
+            'Ground' => ['FEDEX_GROUND', 'Ground'],
+            'International Economy' => ['INTERNATIONAL_ECONOMY', 'International Economy'],
+            'International Priority' => ['INTERNATIONAL_PRIORITY', 'International Priority'],
         ];
     }
 
