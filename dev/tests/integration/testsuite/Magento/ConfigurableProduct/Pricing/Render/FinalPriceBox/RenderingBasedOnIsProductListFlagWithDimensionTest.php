@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoDbIsolation disabled
- * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
+ * @--magentoIndexerDimensionMode catalog_product_price website_and_customer_group
  * @group indexer_dimension
  * Test price rendering according to is_product_list flag for Configurable product
  */
@@ -82,6 +82,9 @@ class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framew
      */
     public function testRenderingByDefault()
     {
+        $this->markTestSkipped(
+            'Skipped because of MAGETWO-99136'
+        );
         $html = $this->finalPriceBox->toHtml();
         self::assertContains('5.99', $html);
         $this->assertGreaterThanOrEqual(
@@ -117,6 +120,9 @@ class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framew
      */
     public function testRenderingAccordingToIsProductListFlag($flag, $count)
     {
+        $this->markTestSkipped(
+            'Skipped because of MAGETWO-99136'
+        );
         $this->finalPriceBox->setData('is_product_list', $flag);
         $html = $this->finalPriceBox->toHtml();
         self::assertContains('5.99', $html);
