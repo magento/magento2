@@ -126,7 +126,11 @@ input SetPaymentMethodOnCartInput {
 
 input PaymentMethodInput {
     code: String! @doc(description:"Payment method code")
+    additional_data: PaymentMethodAdditionalDataInput @doc(description:"Additional payment data")
     purchase_order_number: String @doc(description:"Purchase order number")
+}
+
+input PaymentMethodAdditionalDataInput {
 }
 
 type SetPaymentMethodOnCartOutput {
@@ -222,7 +226,11 @@ type AvailablePaymentMethod {
 
 type SelectedPaymentMethod {
     code: String @doc(description: "The payment method code")
+    additional_data: SelectedPaymentMethodAdditionalData @doc(description: "Additional payment data")
     purchase_order_number: String @doc(description: "The purchase order number.")
+}
+
+type SelectedPaymentMethodAdditionalData {
 }
 
 enum AdressTypeEnum {

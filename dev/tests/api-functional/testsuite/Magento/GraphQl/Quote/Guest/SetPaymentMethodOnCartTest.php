@@ -57,43 +57,6 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
-     */
-    public function testSetPurchaseOrderPaymentMethodOnCartWithSimpleProduct()
-    {
-        $methodCode = Purchaseorder::PAYMENT_METHOD_PURCHASEORDER_CODE;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-
-        $query = <<<QUERY
-mutation {
-  setPaymentMethodOnCart(input: {
-    cart_id: "{$maskedQuoteId}", 
-    payment_method: {
-      code: "{$methodCode}",
-      purchase_order_number: "123456"
-    }
-  }) {
-    cart {
-      selected_payment_method {
-        code
-      }
-    }
-  }
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
-
-        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
-        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
-        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
      * @expectedException \Exception
      * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
