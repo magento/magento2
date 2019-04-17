@@ -21,16 +21,23 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
-        <actionGroup ref="CreateCustomVariableActionGroup" stepKey="createCustomVariable"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="AdminAssertSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
-        <actionGroup ref="FilterVariablesGridActionGroup" stepKey="filterVariablesGridByNewVariableCode" >
+        <actionGroup ref="AdminCreateCustomVariableActionGroup" stepKey="createCustomVariable"/>
+        <actionGroup ref="AssertMessageActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="You saved the custom variable."/>
+        </actionGroup>
+        <actionGroup ref="AdminFilterGridActionGroup" stepKey="filterVariablesGridByNewVariableCode" >
             <argument name="field" value="{{AdminVariablesFilterSection.codeFilter}}"/>
             <argument name="value" value="{{customVariable.code}}"/>
         </actionGroup>
-        <actionGroup ref="AdminSeeVariableInGridActionGroup" stepKey="seeNewVariableInGrid"/>
+        <actionGroup ref="AdminFilterGridActionGroup" stepKey="filterVariablesGridByNewVariableName" >
+            <argument name="field" value="{{AdminVariablesFilterSection.nameFilter}}"/>
+            <argument name="value" value="{{customVariable.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertValueInGridActionGroup" stepKey="seeNewVariableInGrid">
+            <argument name="value" value="{{customVariable.code}}"/>
+        </actionGroup>
         <after>
-            <actionGroup ref="ResetFilterVariablesGridActionGroup" stepKey="resetVariablesGrid"/>
+            <actionGroup ref="AdminResetFilterActionGroup" stepKey="resetVariablesGrid"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </test>

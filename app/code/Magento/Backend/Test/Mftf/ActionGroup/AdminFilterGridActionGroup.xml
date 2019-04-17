@@ -8,15 +8,13 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="FilterVariablesGridActionGroup">
+    <actionGroup name="AdminFilterGridActionGroup">
         <arguments>
             <argument name="field" type="string"/>
             <argument name="value" type="string"/>
+            <argument name="button" type="string" defaultValue="{{AdminSecondaryGridSection.searchButton}}"/>
         </arguments>
-        <fillField selector="{{field}}" userInput="{{value}}" stepKey="fillVariableAttributeInFilter"/>
-        <click selector="{{AdminVariablesFilterSection.searchButton}}" stepKey="clickSearchButton"/>
-    </actionGroup>
-    <actionGroup name="ResetFilterVariablesGridActionGroup">
-        <click selector="{{AdminVariablesFilterSection.resetFilterButton}}" stepKey="clickResetButton"/>
+        <fillField selector="{{field}}" userInput="{{value}}" stepKey="fillFieldInFilter"/>
+        <click selector="{{button}}" stepKey="clickSearchButton"/>
     </actionGroup>
 </actionGroups>

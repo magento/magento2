@@ -9,7 +9,7 @@
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminVariablesPage" url="/admin/system_variable/index/" area="admin" module="Magento_Variable">
-        <section name="AdminVariableMessagesSection"/>
+        <section name="AdminMessagesSection"/>
         <section name="AdminVariablesFilterSection"/>
         <section name="AdminVariablesGridSection"/>
     </page>

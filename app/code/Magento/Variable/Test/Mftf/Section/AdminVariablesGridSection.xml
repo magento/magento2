@@ -10,6 +10,5 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminVariablesGridSection">
         <element name="variablesGrid" type="text" selector="table[data-role='grid']"/>
-        <element name="rowByValue" type="text" selector="//td[text()[contains(.,'{{var}}')]]" parameterized="true" timeout="30"/>
     </section>
 </sections>
