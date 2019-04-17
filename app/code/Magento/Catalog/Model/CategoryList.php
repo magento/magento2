@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryListInterface;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategorySearchResultsInterface;
 use Magento\Catalog\Api\Data\CategorySearchResultsInterfaceFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
@@ -35,6 +36,11 @@ class CategoryList implements CategoryListInterface
     private $categorySearchResultsFactory;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+    
+    /**
      * @var CollectionProcessorInterface
      */
     private $collectionProcessor;
@@ -43,17 +49,20 @@ class CategoryList implements CategoryListInterface
      * @param CollectionFactory $categoryCollectionFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CategorySearchResultsInterfaceFactory $categorySearchResultsFactory
+     * @param CategoryRepositoryInterface $categoryRepository
      * @param CollectionProcessorInterface $collectionProcessor
      */
     public function __construct(
         CollectionFactory $categoryCollectionFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
         CategorySearchResultsInterfaceFactory $categorySearchResultsFactory,
+        CategoryRepositoryInterface $categoryRepository,
         CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->categorySearchResultsFactory = $categorySearchResultsFactory;
+        $this->categoryRepository = $categoryRepository;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
