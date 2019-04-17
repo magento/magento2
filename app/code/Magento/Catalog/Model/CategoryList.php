@@ -30,8 +30,7 @@ class CategoryList implements CategoryListInterface
     private $extensionAttributesJoinProcessor;
 
     /**
-     * @var CategorySearchResultsInterfaceFac
-     tory
+     * @var CategorySearchResultsInterfaceFactory
      */
     private $categorySearchResultsFactory;
 
