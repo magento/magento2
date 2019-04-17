@@ -16,7 +16,6 @@ use Magento\InventoryExportStock\Model\GetQtyForNotManageStock;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 use Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\ManageStockCondition;
 use Psr\Log\LoggerInterface;
-use Zend\Db\Sql\Expression;
 use Zend_Db_Expr;
 
 /**
@@ -94,7 +93,7 @@ class StockIndexDumpProcessor
             ]);
         } catch (Exception $e) {
             $this->logger->critical($e->getMessage(), $e->getTrace());
-            throw new LocalizedException(_('Something went wrong. Export couldn\'t be executed, See log files for error details'));
+            throw new LocalizedException(__('Something went wrong. Export couldn\'t be executed, See log files for error details'));
         }
 
         return $this->connection->fetchAll($select);
@@ -138,8 +137,8 @@ class StockIndexDumpProcessor
 
         $select->from(
             ['legacy_stock_item' => $legacyStockItemTable],
-            new Expression($this->getQtyForNotManageStock->execute() . ' as qty'),
-            new Expression('1 as is_salable')
+            [new Zend_Db_Expr($this->getQtyForNotManageStock->execute() . ' as qty'),
+            new Zend_Db_Expr('1 as is_salable')]
         )->join(
             ['product_entity' => $productEntityTable],
             'legacy_stock_item.product_id = product_entity.entity_id',
