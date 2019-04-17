@@ -18,40 +18,72 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set customer/captcha/enable 0" stepKey="disableCaptcha"/>
-            <magentoCLI command="config:set customer/password/lockout_failures 5" stepKey="setInvalidAttemptsCount"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaDisableConfigData.path}} {{StorefrontCustomerCaptchaDisableConfigData.value}}" stepKey="disableCaptcha"/>
+            <magentoCLI command="config:set {{StorefrontCustomerLockoutFailures5ConfigData.path}} {{StorefrontCustomerLockoutFailures5ConfigData.value}}" stepKey="setInvalidAttemptsCountConfigTo5"/>
             <createData stepKey="customer" entity="Simple_US_Customer"/>
         </before>
         <after>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaEnableConfigData.path}} {{StorefrontCustomerCaptchaEnableConfigData.value}}" stepKey="enableCaptcha"/>
+            <magentoCLI command="config:set {{StorefrontCustomerLockoutFailuresDefaultConfigData.path}} {{StorefrontCustomerLockoutFailuresDefaultConfigData.value}}" stepKey="revertInvalidAttemptsCountConfig"/>
             <deleteData stepKey="deleteCustomer" createDataKey="customer" />
         </after>
+
+        <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToSignInPage" />
+
         <!-- Perform 5 attempts to log in with invalid credentials -->
-        <actionGroup ref="StorefrontCustomerLoginInvalidCredentialsActionGroup" stepKey="failedLoginAttempt1">
-            <argument name="customerEmail" value="$$customer.email$$"/>
-            <argument name="customerPassword" value="$$customer.password$$"/>
+        <actionGroup ref="StorefrontFillCustomerLoginFormWithWrongPasswordActionGroup" stepKey="fillLoginFormFirstAttempt">
+            <argument name="customer" value="$$customer$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerLoginInvalidCredentialsActionGroup" stepKey="failedLoginAttempt2">
-            <argument name="customerEmail" value="$$customer.email$$"/>
-            <argument name="customerPassword" value="$$customer.password$$"/>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonFirstAttempt"/>
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterFirstAttempt">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerLoginInvalidCredentialsActionGroup" stepKey="failedLoginAttempt3">
-            <argument name="customerEmail" value="$$customer.email$$"/>
-            <argument name="customerPassword" value="$$customer.password$$"/>
+
+        <actionGroup ref="StorefrontFillCustomerLoginFormWithWrongPasswordActionGroup" stepKey="fillLoginFormSecondAttempt">
+            <argument name="customer" value="$$customer$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerLoginInvalidCredentialsActionGroup" stepKey="failedLoginAttempt4">
-            <argument name="customerEmail" value="$$customer.email$$"/>
-            <argument name="customerPassword" value="$$customer.password$$"/>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonSecondAttempt"/>
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterSecondAttempt">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerLoginInvalidCredentialsActionGroup" stepKey="failedLoginAttempt5">
-            <argument name="customerEmail" value="$$customer.email$$"/>
-            <argument name="customerPassword" value="$$customer.password$$"/>
+
+        <actionGroup ref="StorefrontFillCustomerLoginFormWithWrongPasswordActionGroup" stepKey="fillLoginFormThirdAttempt">
+            <argument name="customer" value="$$customer$$"/>
         </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonThirdAttempt"/>
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterThirdAttempt">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontFillCustomerLoginFormWithWrongPasswordActionGroup" stepKey="fillLoginFormFourthAttempt">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonFourthAttempt"/>
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterFourthAttempt">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontFillCustomerLoginFormWithWrongPasswordActionGroup" stepKey="fillLoginFormFifthAttempt">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonFifthAttempt"/>
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterFifthAttempt">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later"/>
+        </actionGroup>
+
         <!-- Make sure that the customer is locked -->
-        <amOnPage stepKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>
-        <fillField  stepKey="fillEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
-        <fillField  stepKey="fillPassword" userInput="$$customer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
-        <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
-        <waitForElementVisible selector="{{StorefrontCustomerLoginMessagesSection.errorMessage}}" stepKey="waitForFailMessage" />
-        <see stepKey="seeErrorMessage" selector="{{StorefrontCustomerLoginMessagesSection.errorMessage}}" userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later."/>
+        <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillLoginFormWithCorrectCredentials">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonWithCorrectCredentials"/>
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeLockoutErrorMessage">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later."/>
+        </actionGroup>
     </test>
 </tests>
