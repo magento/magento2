@@ -18,7 +18,7 @@ $allowedQty = $block->getMinMaxQty();
 <?php endforeach;?>
 <div class="box-tocart">
     <fieldset class="fieldset">
-    <?php if ($item->canHaveQty() && $product->isVisibleInSiteVisibility()): ?>
+    <?php if ($item->canHaveQty() && $product->isVisibleInSiteVisibility() && $product->isSaleable()): ?>
         <div class="field qty">
             <label class="label" for="qty[<?= $block->escapeHtmlAttr($item->getId()) ?>]"><span><?= $block->escapeHtml(__('Qty')) ?></span></label>
             <div class="control">
