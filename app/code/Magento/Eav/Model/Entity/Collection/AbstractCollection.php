@@ -1719,5 +1719,4 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     {
         return $this->removeAttributeToSelect();
     }
-
 }

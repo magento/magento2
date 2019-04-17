@@ -6,7 +6,7 @@
 namespace Magento\Bundle\Model\Product;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/product_with_tier_pricing.php
+ * Class to test bundle prices
  */
 class PriceTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,6 +22,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @magentoDataFixture Magento/Bundle/_files/product_with_tier_pricing.php
+     */
     public function testGetTierPrice()
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
@@ -36,5 +39,51 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(20.0, $this->_model->getTierPrice(3, $product));
         $this->assertEquals(20.0, $this->_model->getTierPrice(4, $product));
         $this->assertEquals(30.0, $this->_model->getTierPrice(5, $product));
+    }
+
+    /**
+     * Test calculation final price for bundle product with tire price in simple product
+     *
+     * @param float $bundleQty
+     * @param float $selectionQty
+     * @param float $finalPrice
+     * @magentoDataFixture Magento/Bundle/_files/product_with_simple_tier_pricing.php
+     * @dataProvider getSelectionFinalTotalPriceWithSimpleTierPriceDataProvider
+     */
+    public function testGetSelectionFinalTotalPriceWithSimpleTierPrice(
+        float $bundleQty,
+        float $selectionQty,
+        float $finalPrice
+    ) {
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $bundleProduct = $productRepository->get('bundle-product');
+        $simpleProduct = $productRepository->get('simple');
+        $simpleProduct->setCustomerGroupId(\Magento\Customer\Model\Group::CUST_GROUP_ALL);
+
+        $this->assertEquals(
+            $finalPrice,
+            $this->_model->getSelectionFinalTotalPrice(
+                $bundleProduct,
+                $simpleProduct,
+                $bundleQty,
+                $selectionQty,
+                false
+            ),
+            'Tier price calculation for Simple product is wrong'
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getSelectionFinalTotalPriceWithSimpleTierPriceDataProvider(): array
+    {
+        return [
+            [1, 1, 10],
+            [2, 1, 8],
+            [5, 1, 5],
+        ];
     }
 }
