@@ -10,6 +10,8 @@
 namespace Magento\Config\Model\Config\Backend\Admin;
 
 /**
+ * Process custom admin url during configuration value save process.
+ *
  * @api
  * @since 100.0.2
  */
