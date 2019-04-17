@@ -8,7 +8,7 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="ModalConfirmationSection">
-        <element name="okButton" type="button" selector="//footer[@class='modal-footer']/button[contains(@class, 'action-accept')]"/>
+    <section name="StorefrontModalConfirmationSection">
+        <element name="okButton" type="button" selector="aside.confirm .modal-footer button.action-accept" timeout="30"/>
     </section>
 </sections>

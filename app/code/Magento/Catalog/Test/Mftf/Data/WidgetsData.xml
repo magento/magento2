@@ -21,6 +21,7 @@
         </array>
         <data key="display_on">All Pages</data>
         <data key="container">Sidebar Additional</data>
+        <data key="products_to_display">5</data>
     </entity>
     <entity name="RecentlyViewedProductsWidget" type="widget">
         <data key="type">Recently Viewed Products</data>
@@ -31,5 +32,6 @@
         </array>
         <data key="display_on">All Pages</data>
         <data key="container">Sidebar Additional</data>
+        <data key="products_to_display">5</data>
     </entity>
 </entities>

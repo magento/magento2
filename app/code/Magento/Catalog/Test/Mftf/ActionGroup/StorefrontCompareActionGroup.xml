@@ -61,11 +61,10 @@
     <actionGroup name="StorefrontClearCompareActionGroup">
         <waitForElementVisible selector="{{StorefrontComparisonSidebarSection.clearAll}}" time="30" stepKey="waitForClearAll"/>
         <click selector="{{StorefrontComparisonSidebarSection.clearAll}}" stepKey="clickClearAll"/>
-        <waitForElementVisible selector="{{ModalConfirmationSection.okButton}}" time="30" stepKey="waitForClearOk"/>
-        <scrollTo selector="{{ModalConfirmationSection.okButton}}" stepKey="scrollToClearOk"/>
-        <click selector="{{ModalConfirmationSection.okButton}}" stepKey="clickClearOk"/>
+        <waitForElementVisible selector="{{StorefrontModalConfirmationSection.okButton}}" stepKey="waitForClearOk"/>
+        <click selector="{{StorefrontModalConfirmationSection.okButton}}" stepKey="clickClearOk"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.successMessage}}"  stepKey="waitAssertMessageCleared"/>
         <see selector="{{StorefrontMessagesSection.successMessage}}" userInput="You cleared the comparison list." stepKey="assertMessageCleared"/>
-        <waitForElement selector="{{StorefrontComparisonSidebarSection.noItemsMessage}}" time="30" stepKey="assertNoItems"/>
+        <waitForElementVisible selector="{{StorefrontComparisonSidebarSection.noItemsMessage}}" stepKey="assertNoItems"/>
     </actionGroup>
 </actionGroups>
