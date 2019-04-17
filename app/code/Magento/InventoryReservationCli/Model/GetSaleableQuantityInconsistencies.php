@@ -14,6 +14,7 @@ use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\AddExpec
 use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\Collector;
 use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\CollectorFactory;
 use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterExistingOrders;
+use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterManagedStockProducts;
 use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterUnresolvedReservations;
 
 /**
@@ -52,12 +53,18 @@ class GetSaleableQuantityInconsistencies
     private $filterUnresolvedReservations;
 
     /**
+     * @var FilterManagedStockProducts
+     */
+    private $filterManagedStockProducts;
+
+    /**
      * @param CollectorFactory $collectorFactory
      * @param AddExpectedReservations $addExpectedReservations
      * @param AddExistingReservations $addExistingReservations
      * @param AddCompletedOrdersToForUnresolvedReservations $addCompletedOrdersToUnresolved
-     * @param FilterExistingOrders $filterExistingOrder
+     * @param FilterExistingOrders $filterExistingOrders
      * @param FilterUnresolvedReservations $filterUnresolvedReservations
+     * @param FilterManagedStockProducts $filterManagedStockProducts
      */
     public function __construct(
         CollectorFactory $collectorFactory,
@@ -65,7 +72,8 @@ class GetSaleableQuantityInconsistencies
         AddExistingReservations $addExistingReservations,
         AddCompletedOrdersToForUnresolvedReservations $addCompletedOrdersToUnresolved,
         FilterExistingOrders $filterExistingOrders,
-        FilterUnresolvedReservations $filterUnresolvedReservations
+        FilterUnresolvedReservations $filterUnresolvedReservations,
+        FilterManagedStockProducts $filterManagedStockProducts
     ) {
         $this->collectorFactory = $collectorFactory;
         $this->addExpectedReservations = $addExpectedReservations;
@@ -73,6 +81,7 @@ class GetSaleableQuantityInconsistencies
         $this->addCompletedOrdersToUnresolved = $addCompletedOrdersToUnresolved;
         $this->filterExistingOrders = $filterExistingOrders;
         $this->filterUnresolvedReservations = $filterUnresolvedReservations;
+        $this->filterManagedStockProducts = $filterManagedStockProducts;
     }
 
     /**
@@ -89,6 +98,7 @@ class GetSaleableQuantityInconsistencies
         $this->addCompletedOrdersToUnresolved->execute($collector);
 
         $items = $collector->getItems();
+        $items = $this->filterManagedStockProducts->execute($items);
         $items = $this->filterUnresolvedReservations->execute($items);
         $items = $this->filterExistingOrders->execute($items);
 

@@ -6,7 +6,8 @@
         "magento/framework": "*",
         "magento/module-sales": "*",
         "magento/module-inventory-reservations-api": "*",
-        "magento/module-inventory-sales-api": "*"
+        "magento/module-inventory-sales-api": "*",
+        "magento/module-inventory-configuration-api": "*"
     },
     "type": "magento2-module",
     "license": [
