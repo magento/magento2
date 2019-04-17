@@ -110,11 +110,13 @@ class Queue implements QueueInterface
         while (true) {
             while ($envelope = $this->dequeue()) {
                 try {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     call_user_func($callback, $envelope);
                 } catch (\Exception $e) {
                     $this->reject($envelope);
                 }
             }
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             sleep($this->interval);
         }
     }
