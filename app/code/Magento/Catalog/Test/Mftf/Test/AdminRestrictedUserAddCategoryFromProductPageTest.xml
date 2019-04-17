@@ -31,15 +31,19 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="resetProductGridToDefaultView" stepKey="resetFiltersIfExist"/>
-            <actionGroup ref="SignOut" stepKey="signOut"/>
+            <actionGroup ref="logout" stepKey="logoutOfUser"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Delete created data-->
             <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
-            <actionGroup ref="AdminDeleteCreatedRoleActionGroup" stepKey="deleteUserRole">
+            <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
+            <waitForPageLoad stepKey="waitForRolesGridLoad" />
+            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
                 <argument name="role" value="adminRole"/>
             </actionGroup>
-            <actionGroup ref="AdminDeleteCreatedUserActionGroup" stepKey="deleteUser">
-                <argument name="user" value="newAdmin"/>
+            <amOnPage url="{{AdminUsersPage.url}}" stepKey="goToAllUsersPage"/>
+            <waitForPageLoad stepKey="waitForUsersGridLoad" />
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
+                <argument name="userName" value="{{admin2.username}}"/>
             </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
@@ -65,14 +69,13 @@
         <comment userInput="Create user and assign role to it" stepKey="commentCreateUser"/>
         <actionGroup ref="AdminCreateUserActionGroup" stepKey="createAdminUser">
             <argument name="role" value="adminRole"/>
-            <argument name="User" value="newAdmin"/>
+            <argument name="User" value="admin2"/>
         </actionGroup>
         <!--Log out of admin and login with newly created user-->
         <comment userInput="Log out of admin and login with newly created user" stepKey="commentLoginWithNewUser"/>
-        <actionGroup ref="SignOut" stepKey="signOut"/>
-        <actionGroup ref="LoginAsAnyUser" stepKey="loginActionGroup">
-            <argument name="uname" value="{{newAdmin.username}}"/>
-            <argument name="passwd" value="{{newAdmin.password}}"/>
+        <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        <actionGroup ref="LoginNewUser" stepKey="loginActionGroup">
+            <argument name="user" value="admin2"/>
         </actionGroup>
         <!--Go to create product page-->
         <comment userInput="Go to create product page" stepKey="commentGoCreateProductPage"/>

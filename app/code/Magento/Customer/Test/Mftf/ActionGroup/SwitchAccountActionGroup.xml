@@ -19,9 +19,12 @@
 
     <!--Login New User-->
     <actionGroup name="LoginNewUser">
+        <arguments>
+            <argument name="user" defaultValue="NewAdmin"/>
+        </arguments>
         <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}" stepKey="navigateToAdmin"/>
-        <fillField userInput="{{NewAdmin.username}}" selector="{{LoginFormSection.username}}" stepKey="fillUsername"/>
-        <fillField userInput="{{NewAdmin.password}}" selector="{{LoginFormSection.password}}" stepKey="fillPassword"/>
+        <fillField userInput="{{user.username}}" selector="{{LoginFormSection.username}}" stepKey="fillUsername"/>
+        <fillField userInput="{{user.password}}" selector="{{LoginFormSection.password}}" stepKey="fillPassword"/>
         <click selector="{{LoginFormSection.signIn}}" stepKey="clickLogin"/>
     </actionGroup>
 </actionGroups>
