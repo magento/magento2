@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Validator;
 
 /**
@@ -25,7 +26,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
     /**
      * Array of validation failure messages
      *
-     * @var string[]
+     * @var array
      */
     protected $_messages = [];
 
@@ -127,6 +128,34 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      */
     protected function _addMessages(array $messages)
     {
-        $this->_messages = array_merge($this->_messages, $messages);
+        $this->_messages = $this->addMessagesRecursive($this->_messages, $messages);
+    }
+
+    /**
+     * @param array $stack
+     * @param array $newMessages
+     * @return array
+     */
+    private function addMessagesRecursive(array $stack, array $newMessages)
+    {
+        foreach ($newMessages as $code => &$message) {
+            if (is_array($message)) {
+                if (!isset($stack[$code])) {
+                    $stack[$code] = [];
+                }
+                $stack[$code] = $this->addMessagesRecursive($stack[$code], $message);
+            } elseif (!in_array($message, $stack)) {
+                if (!isset($stack[$code])) {
+                    $stack[$code] = $message;
+                } elseif (is_numeric($code)) {
+                    $stack[] = $message;
+                } elseif (is_scalar($stack[$code])) {
+                    $stack[$code] = [$stack[$code], $message];
+                } else {
+                    $stack[$code][] = $message;
+                }
+            }
+        }
+        return $stack;
     }
 }

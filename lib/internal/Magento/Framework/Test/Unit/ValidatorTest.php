@@ -166,4 +166,175 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($translator, $fooValidator->getTranslator());
         $this->assertEquals($translator, $this->_validator->getTranslator());
     }
+
+    /**
+     * Test isValid method
+     *
+     * @dataProvider messageMergingDataProvider
+     *
+     * @param mixed $value
+     * @param \Magento\Framework\Validator\ValidatorInterface[] $validators
+     * @param array $expectedMessages
+     */
+    public function testMessageMerging(
+        $value,
+        $validators,
+        $expectedMessages = []
+    ) {
+        foreach ($validators as $validator) {
+            $this->_validator->addValidator($validator);
+        }
+        $this->_validator->isValid($value);
+        $this->assertEquals($expectedMessages, $this->_validator->getMessages());
+    }
+
+
+    /**
+     * Data provider for testDuplicates
+     *
+     * @return array
+     */
+    public function messageMergingDataProvider()
+    {
+        $result = [];
+        $value  = 'test';
+
+        // Case 1. Singel duplicates
+        $validatorA = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorA->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(['foo' => ['Duplicate'], 'bar' => ['Foo message 2']])
+        );
+
+        $validatorB = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorB->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorB->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(['foo' => ['Duplicate'], 'bar' => ['Bar message 2']])
+        );
+
+        $result[] = [
+            $value,
+            [$validatorA, $validatorB],
+            ['foo' => ['Duplicate'], 'bar' => ['Foo message 2', 'Bar message 2']],
+        ];
+
+        // Case 2. Several duplicates
+        $validatorA = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorA->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(['foo' => ['Duplicate 1'], 'bar' => ['Foo message 2', 'Duplicate 2']])
+        );
+
+        $validatorB = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorB->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorB->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(['foo' => ['Duplicate 1'], 'bar' => ['Bar message 2', 'Duplicate 2']])
+        );
+
+        $result[] = [
+            $value,
+            [$validatorA, $validatorB],
+            ['foo' => ['Duplicate 1'], 'bar' => ['Foo message 2', 'Duplicate 2', 'Bar message 2']],
+        ];
+
+        // Case 3. Merging messages to a new array
+        $validatorA = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorA->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(['foo' => 'Foo message 1', 'bar' => ['Foo message 2']])
+        );
+
+        $validatorB = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorB->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorB->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(['foo' => 'Bar message 1', 'bar' => ['Bar message 2']])
+        );
+
+        $result[] = [
+            $value,
+            [$validatorA, $validatorB],
+            ['foo' => ['Foo message 1', 'Bar message 1'], 'bar' => ['Foo message 2', 'Bar message 2']]
+        ];
+
+        // Case 4. Merging several arrays
+        $validatorA = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorA->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(['foo' => ['Foo message 1', 'Foo message 2']])
+        );
+
+        $validatorB = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorB->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorB->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(['foo' => ['Bar message 1']])
+        );
+
+        $result[] = [
+            $value,
+            [$validatorA, $validatorB],
+            ['foo' => ['Foo message 1', 'Foo message 2', 'Bar message 1']],
+        ];
+
+
+        // Case 5. Merging complex arrays
+        $validatorA = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorA->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(['foo' => [['Foo message 1'], 'Foo message 2']])
+        );
+
+        $validatorB = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorB->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorB->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(['foo' => ['Bar message 1']])
+        );
+
+        $result[] = [
+            $value,
+            [$validatorA, $validatorB],
+            ['foo' => [['Foo message 1'], 'Foo message 2', 'Bar message 1']],
+        ];
+
+        return $result;
+    }
 }
