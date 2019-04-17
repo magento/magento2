@@ -77,16 +77,16 @@ QUERY;
     /**
      * Tests if Magento cache tags for categories are generated properly. Also tests the use case for cache invalidation
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
      */
     public function testCacheTagFromResponseHeaderForCategoriesWithProduct()
     {
         $this->markTestSkipped(
             'This test will stay skipped until DEVOPS-4924 is resolved'
         );
-        $firstProductSku = 'simple-4';
-        $secondProductSku = 'simple-5';
-        $categoryId ='10';
+        $firstProductSku = 'simple333';
+        $secondProductSku = 'simple444';
+        $categoryId ='4';
         $categoryQuery
             = <<<'QUERY'
 query GetCategoryQuery($id: Int!, $pageSize: Int!, $currentPage: Int!) {
@@ -107,7 +107,7 @@ query GetCategoryQuery($id: Int!, $pageSize: Int!, $currentPage: Int!) {
     }
 QUERY;
         $variables =[
-            'id' => 10,
+            'id' => 4,
             'pageSize'=> 10,
             'currentPage' => 1
         ];
