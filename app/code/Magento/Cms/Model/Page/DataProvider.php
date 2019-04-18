@@ -33,7 +33,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * @var AuthorizationInterface
      */
-    protected $auth;
+    private $authorization;
 
     /**
      * @param string $name
@@ -43,7 +43,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
-     * @param AuthorizationInterface|null $auth
+     * @param AuthorizationInterface|null $authorization
      */
     public function __construct(
         $name,
@@ -53,12 +53,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         DataPersistorInterface $dataPersistor,
         array $meta = [],
         array $data = [],
-        AuthorizationInterface $auth = null
+        AuthorizationInterface $authorization = null
     ) {
         $this->collection = $pageCollectionFactory->create();
         $this->dataPersistor = $dataPersistor;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
-        $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
         $this->meta = $this->prepareMeta($this->meta);
     }
 
@@ -107,9 +107,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         $meta = parent::getMeta();
 
-        if (!$this->auth->isAllowed('Magento_Cms::save_design')) {
+        if (!$this->authorization->isAllowed('Magento_Cms::save_design')) {
             $designMeta = [
                 'design' => [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'disabled' => true,
+                            ],
+                        ],
+                    ],
+                ],
+                'custom_design_update' => [
                     'arguments' => [
                         'data' => [
                             'config' => [
