@@ -22,7 +22,7 @@ use Magento\Catalog\Helper\Data;
 /**
  * Catalog product custom option resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Value extends AbstractDb
 {
