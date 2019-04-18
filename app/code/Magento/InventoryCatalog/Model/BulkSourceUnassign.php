@@ -9,11 +9,9 @@ namespace Magento\InventoryCatalog\Model;
 
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryCatalogApi\Api\BulkSourceUnassignInterface;
-use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\BulkSourceUnassignValidatorInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\BulkSourceUnassign as BulkSourceUnassignResource;
 use Magento\InventoryIndexer\Indexer\Source\SourceIndexer;
-use Magento\CatalogInventory\Model\Indexer\Stock as LegacyIndexer;
 
 /**
  * @inheritdoc
@@ -36,60 +34,34 @@ class BulkSourceUnassign implements BulkSourceUnassignInterface
     private $sourceIndexer;
 
     /**
-     * @var LegacyIndexer
-     */
-    private $legacyIndexer;
-
-    /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
-
-    /**
-     * @var GetProductIdsBySkus
-     */
-    private $getProductIdsBySkus;
-
-    /**
-     * MassProductSourceAssign constructor.
      * @param BulkSourceUnassignValidatorInterface $unassignValidator
      * @param BulkSourceUnassignResource $bulkSourceUnassign
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param GetProductIdsBySkus $getProductIdsBySkus
+     * @param null $defaultSourceProvider @deprecated
+     * @param null $getProductIdsBySkus @deprecated
      * @param SourceIndexer $sourceIndexer
-     * @param LegacyIndexer $legacyIndexer
+     * @param null $legacyIndexer @deprecated
      * @SuppressWarnings(PHPMD.LongVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         BulkSourceUnassignValidatorInterface $unassignValidator,
         BulkSourceUnassignResource $bulkSourceUnassign,
-        DefaultSourceProviderInterface $defaultSourceProvider,
-        GetProductIdsBySkus $getProductIdsBySkus,
+        $defaultSourceProvider,
+        $getProductIdsBySkus,
         SourceIndexer $sourceIndexer,
-        LegacyIndexer $legacyIndexer
+        $legacyIndexer
     ) {
         $this->unassignValidator = $unassignValidator;
         $this->bulkSourceUnassign = $bulkSourceUnassign;
         $this->sourceIndexer = $sourceIndexer;
-        $this->legacyIndexer = $legacyIndexer;
-        $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->getProductIdsBySkus = $getProductIdsBySkus;
-    }
-
-    /**
-     * Reindex legacy stock (for default source)
-     * @param array $skus
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function reindexLegacy(array $skus): void
-    {
-        $productIds = array_values($this->getProductIdsBySkus->execute($skus));
-        $this->legacyIndexer->executeList($productIds);
     }
 
     /**
      * @inheritdoc
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param array $skus
+     * @param array $sourceCodes
+     * @return int
+     * @throws ValidationException
      */
     public function execute(array $skus, array $sourceCodes): int
     {
@@ -101,10 +73,6 @@ class BulkSourceUnassign implements BulkSourceUnassignInterface
         $res = $this->bulkSourceUnassign->execute($skus, $sourceCodes);
 
         $this->sourceIndexer->executeList($sourceCodes);
-        if (in_array($this->defaultSourceProvider->getCode(), $sourceCodes, true)) {
-            $this->reindexLegacy($skus);
-        }
-
         return $res;
     }
 }

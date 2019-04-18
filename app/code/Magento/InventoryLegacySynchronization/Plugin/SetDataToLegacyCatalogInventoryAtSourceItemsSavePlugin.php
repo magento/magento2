@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\InventoryApi;
+namespace Magento\InventoryLegacySynchronization\Plugin;
 
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization\SetDataToLegacyCatalogInventory;
+use Magento\InventoryLegacySynchronization\Model\Synchronize;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
@@ -35,26 +35,28 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
     private $getProductTypeBySku;
 
     /**
-     * @var SetDataToLegacyCatalogInventory
+     * @var Synchronize|null
      */
-    private $setDataToLegacyCatalogInventory;
+    private $synchronize;
 
     /**
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypeBySku
-     * @param SetDataToLegacyCatalogInventory $setDataToLegacyCatalogInventory
+     * @param Synchronize|null $synchronize
+     * @SuppressWarnings(PHPMD.LongVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         DefaultSourceProviderInterface $defaultSourceProvider,
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypeBySku,
-        SetDataToLegacyCatalogInventory $setDataToLegacyCatalogInventory
+        Synchronize $synchronize
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->getProductTypeBySku = $getProductTypeBySku;
-        $this->setDataToLegacyCatalogInventory = $setDataToLegacyCatalogInventory;
+        $this->synchronize = $synchronize;
     }
 
     /**
@@ -63,31 +65,38 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
      * @param SourceItemInterface[] $sourceItems
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterExecute(SourceItemsSaveInterface $subject, $result, array $sourceItems): void
     {
-        $sourceItemsForSynchronization = [];
+        $sourceItemsData = [];
+        $skus = [];
         foreach ($sourceItems as $sourceItem) {
-            if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
+            $skus[] = $sourceItem->getSku();
+        }
+
+        $productTypes = $this->getProductTypeBySku->execute($skus);
+        $defaultSourceCode = $this->defaultSourceProvider->getCode();
+
+        foreach ($sourceItems as $sourceItem) {
+            if ($sourceItem->getSourceCode() !== $defaultSourceCode) {
                 continue;
             }
 
             $sku = $sourceItem->getSku();
-
-            $productTypes = $this->getProductTypeBySku->execute([$sku]);
-            if (isset($productTypes[$sku])) {
-                $typeId = $productTypes[$sku];
-            } else {
+            if (!isset($productTypes[$sku])) {
                 continue;
             }
+
+            $typeId = $productTypes[$sku];
 
             if (false === $this->isSourceItemsAllowedForProductType->execute($typeId)) {
                 continue;
             }
 
-            $sourceItemsForSynchronization[] = $sourceItem;
+            $sourceItemsData[] = $sourceItem->getData();
         }
 
-        $this->setDataToLegacyCatalogInventory->execute($sourceItemsForSynchronization);
+        $this->synchronize->execute(Synchronize::MSI_TO_LEGACY, $sourceItemsData);
     }
 }
