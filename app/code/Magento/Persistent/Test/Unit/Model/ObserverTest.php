@@ -80,31 +80,18 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testEmulateWelcomeBlock()
+    /**
+     * @return void
+     */
+    public function testEmulateWelcomeBlock(): void
     {
-        $customerId = 1;
-        $customerName = 'Test Customer Name';
-        $welcomeMessage =  __('Welcome, %1!', $customerName);
-        $customerMock = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $welcomeMessage =  __('&nbsp;');
         $block = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
             ->disableOriginalConstructor()
             ->setMethods(['setWelcome'])
             ->getMock();
-        $headerAdditionalBlock = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->persistentSessionMock->expects($this->once())->method('getSession')->willReturn($this->sessionMock);
-        $this->sessionMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
-        $this->customerRepositoryMock
-            ->expects($this->once())
-            ->method('getById')
-            ->with($customerId)->willReturn($customerMock);
-        $this->customerViewHelperMock->expects($this->once())->method('getCustomerName')->willReturn($customerName);
-        $this->layoutMock->expects($this->once())
-            ->method('getBlock')
-            ->with('header.additional')
-            ->willReturn($headerAdditionalBlock);
         $block->expects($this->once())->method('setWelcome')->with($welcomeMessage);
+
         $this->observer->emulateWelcomeBlock($block);
     }
 }

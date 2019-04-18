@@ -19,7 +19,7 @@ class Index implements FactoryInterface
     /**
      * Default index type.
      */
-    const DEFAULT_INDEX_TYPE = "BTREE";
+    const DEFAULT_INDEX_TYPE = "btree";
 
     /**
      * @var ObjectManagerInterface

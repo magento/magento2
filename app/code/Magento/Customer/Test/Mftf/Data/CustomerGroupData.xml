@@ -8,8 +8,19 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="NotLoggedInCustomerGroup" type="customerGroup">
+        <data key="id">0</data>
+        <data key="code">NOT LOGGED IN</data>
+        <data key="tax_class_id">3</data>
+        <data key="tax_class_name">Retail Customer</data>
+    </entity>
     <entity name="GeneralCustomerGroup" type="customerGroup">
         <data key="code">General</data>
+        <data key="tax_class_id">3</data>
+        <data key="tax_class_name">Retail Customer</data>
+    </entity>
+    <entity name="CustomerGroupChange" type="customerGroup">
+        <data key="code" unique="suffix">Group_</data>
         <data key="tax_class_id">3</data>
         <data key="tax_class_name">Retail Customer</data>
     </entity>
@@ -17,5 +28,10 @@
         <array key="group_names">
             <item>General</item>
         </array>
+    </entity>
+    <entity name="CustomCustomerGroup" type="customerGroup">
+        <data key="code" unique="suffix">Group </data>
+        <data key="tax_class_id">3</data>
+        <data key="tax_class_name">Retail Customer</data>
     </entity>
 </entities>

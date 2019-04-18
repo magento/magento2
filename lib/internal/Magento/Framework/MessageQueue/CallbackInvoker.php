@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue;
 /**
  * Class CallbackInvoker to invoke callbacks for consumer classes
  */
-class CallbackInvoker
+class CallbackInvoker implements CallbackInvokerInterface
 {
     /**
      * Run short running process

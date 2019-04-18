@@ -63,7 +63,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnSearch"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeAdminOrderStatus"/>
-        <see selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="Guest" stepKey="seeAdminOrderGuest"/>
+        <see selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="{{CustomerEntityOne.fullname}}"  stepKey="seeAdminOrderGuest"/>
         <see selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeAdminOrderEmail"/>
         <see selector="{{AdminOrderDetailsInformationSection.billingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAdminOrderBillingAddress"/>
         <see selector="{{AdminOrderDetailsInformationSection.shippingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAdminOrderShippingAddress"/>
@@ -128,9 +128,10 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" />
 
         <!-- Fill US Address and verify that no payment available -->
-        <actionGroup ref="GuestCheckoutFillingShippingSectionUnavailablePaymentActionGroup" stepKey="guestCheckoutFillingShippingSection">
+        <actionGroup ref="GuestCheckoutWithSpecificCountryOptionForPaymentMethodActionGroup" stepKey="guestCheckoutFillingShippingSection">
             <argument name="customerVar" value="CustomerEntityOne" />
             <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="paymentMethod" value="Check / Money order"/>
         </actionGroup>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->

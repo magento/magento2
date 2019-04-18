@@ -6,7 +6,17 @@
  */
 namespace Magento\Paypal\Controller\Express\AbstractExpress;
 
-class ShippingOptionsCallback extends \Magento\Paypal\Controller\Express\AbstractExpress
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Paypal\Controller\Express\AbstractExpress;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+
+/**
+ * Returns shipping rates by server-to-server request from PayPal.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ShippingOptionsCallback extends AbstractExpress implements CsrfAwareActionInterface
 {
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
@@ -64,5 +74,22 @@ class ShippingOptionsCallback extends \Magento\Paypal\Controller\Express\Abstrac
         } catch (\Exception $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
     }
 }

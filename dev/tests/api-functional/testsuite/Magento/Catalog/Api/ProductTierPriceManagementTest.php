@@ -49,7 +49,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
     public function getListDataProvider()
     {
         return [
-            [0, 2, 5, 3],
+            [0, 3, 5, 3],
             [1, 0, null, null],
             ['all', 2, 8, 2],
         ];
