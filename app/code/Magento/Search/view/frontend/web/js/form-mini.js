@@ -72,7 +72,6 @@ define([
                 }.bind(this),
                 exit: function () {
                     this.isExpandable = false;
-                    this.element.removeAttr('aria-expanded');
                 }.bind(this)
             });
 
