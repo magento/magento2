@@ -11,6 +11,11 @@ namespace Magento\Framework\Locale;
 class Format implements \Magento\Framework\Locale\FormatInterface
 {
     /**
+     * Japan locale code
+     */
+    private static $japanLocaleCode = 'ja_JP';
+
+    /**
      * @var \Magento\Framework\App\ScopeResolverInterface
      */
     protected $_scopeResolver;
@@ -24,11 +29,6 @@ class Format implements \Magento\Framework\Locale\FormatInterface
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $currencyFactory;
-
-    /**
-     * @var array
-     */
-    private $groupSeparatorByLocale = [];
 
     /**
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
@@ -87,12 +87,15 @@ class Format implements \Magento\Framework\Locale\FormatInterface
             }
         } elseif ($separatorComa !== false) {
             $locale = $this->_localeResolver->getLocale();
-            $groupSeparator = $this->retrieveLocaleGroupSeparator($locale);
-            if ($groupSeparator === ',') {
-                $value = str_replace(',', '', $value);
-            } else {
-                $value = str_replace(',', '.', $value);
-            }
+            /**
+             * It's hard code for Japan locale.
+             * The comma separator uses as group separator: 4,000 saves as 4,000.00
+             */
+            $value = str_replace(
+                ',',
+                $locale === self::$japanLocaleCode ? '' : '.',
+                $value
+            );
         }
 
         return (float)$value;
@@ -159,23 +162,5 @@ class Format implements \Magento\Framework\Locale\FormatInterface
         ];
 
         return $result;
-    }
-
-    /**
-     * Retrieve group separator symbol by locale
-     *
-     * @param string $locale
-     * @return string
-     */
-    private function retrieveLocaleGroupSeparator(string $locale): string
-    {
-        if (!array_key_exists($locale, $this->groupSeparatorByLocale)) {
-            $formatter = new \NumberFormatter($locale, \NumberFormatter::DECIMAL);
-            $this->groupSeparatorByLocale[$locale] = $formatter->getSymbol(
-                \NumberFormatter::GROUPING_SEPARATOR_SYMBOL
-            );
-        }
-
-        return $this->groupSeparatorByLocale[$locale];
     }
 }
