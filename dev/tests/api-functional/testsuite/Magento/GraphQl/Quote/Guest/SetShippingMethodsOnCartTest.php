@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
+use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\GraphQl\Quote\GetQuoteShippingAddressIdByReservedQuoteId;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -58,7 +59,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $carrierCode,
             $quoteAddressId
         );
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('setShippingMethodsOnCart', $response);
         self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
@@ -85,7 +86,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_virtual_product.php
      *
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetShippingMethodOnCartWithSimpleProductAndWithoutAddress()
@@ -101,7 +102,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $carrierCode,
             $quoteAddressId
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -125,7 +126,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
             $carrierCode,
             $quoteAddressId
         );
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('setShippingMethodsOnCart', $response);
         self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
@@ -151,7 +152,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $input
      * @param string $message
      * @dataProvider dataProviderSetShippingMethodWithWrongParameters
-     * @throws \Exception
+     * @throws Exception
      */
     public function testSetShippingMethodWithWrongParameters(string $input, string $message)
     {
@@ -175,7 +176,7 @@ mutation {
 }
 QUERY;
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -270,6 +271,14 @@ QUERY;
                 }]',
                 'Could not find a cart with ID "non_existent_masked_id"'
             ],
+            'disabled_shipping_method' => [
+                'cart_id: "cart_id_value", shipping_methods: [{
+                    cart_address_id: cart_address_id_value
+                    carrier_code: "freeshipping"
+                    method_code: "freeshipping"
+                }]',
+                'Carrier with such method not found: freeshipping, freeshipping'
+            ],
         ];
     }
 
@@ -279,7 +288,7 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage You cannot specify multiple shipping methods.
      */
     public function testSetMultipleShippingMethods()
@@ -314,7 +323,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -325,7 +334,7 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      *
-     * @expectedException \Exception
+     * @expectedException Exception
      */
     public function testSetShippingMethodToCustomerCart()
     {
@@ -343,7 +352,7 @@ QUERY;
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -370,7 +379,31 @@ QUERY;
         $this->expectExceptionMessage(
             "Cart does not contain address with ID \"{$anotherQuoteAddressId}\""
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/quote_with_address.php
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessage The shipping method can't be set for an empty cart. Add an item to cart and try again.
+     */
+    public function testSetShippingMethodOnAnEmptyCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $carrierCode = 'flatrate';
+        $methodCode = 'flatrate';
+        $quoteAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute('test_quote');
+
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $methodCode,
+            $carrierCode,
+            $quoteAddressId
+        );
+        $this->graphQlMutation($query);
     }
 
     /**

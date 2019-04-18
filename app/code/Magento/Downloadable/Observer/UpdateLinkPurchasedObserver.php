@@ -10,7 +10,6 @@ namespace Magento\Downloadable\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
- * Class UpdateLinkPurchasedObserver
  * Assign Downloadable links to customer created after issuing guest order.
  */
 class UpdateLinkPurchasedObserver implements ObserverInterface
@@ -47,9 +46,10 @@ class UpdateLinkPurchasedObserver implements ObserverInterface
     }
 
     /**
-     * re-save order data after order update
+     * Re-save order data after order update.
+     *
      * @param \Magento\Framework\Event\Observer $observer
-     * @return $this|void
+     * @return $this
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
