@@ -543,7 +543,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * Prepare quote for customer order submit
+     * Prepare address for customer quote.
      *
      * @param Quote $quote
      * @return void
@@ -571,22 +571,24 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                     $shippingAddress = $this->addressRepository->getById($defaultShipping);
                 }
             }
-            if (!$hasDefaultShipping) {
-                //Make provided address as default shipping address
-                $shippingAddress->setIsDefaultShipping(true);
-                $hasDefaultShipping = true;
-                if (!$hasDefaultBilling && !$billing->getSaveInAddressBook()) {
-                    $shippingAddress->setIsDefaultBilling(true);
-                    $hasDefaultBilling = true;
+            if (isset($shippingAddress)) {
+                if (!$hasDefaultShipping) {
+                    //Make provided address as default shipping address
+                    $shippingAddress->setIsDefaultShipping(true);
+                    $hasDefaultShipping = true;
+                    if (!$hasDefaultBilling && !$billing->getSaveInAddressBook()) {
+                        $shippingAddress->setIsDefaultBilling(true);
+                        $hasDefaultBilling = true;
+                    }
                 }
+                //save here new customer address
+                $shippingAddress->setCustomerId($quote->getCustomerId());
+                $this->addressRepository->save($shippingAddress);
+                $quote->addCustomerAddress($shippingAddress);
+                $shipping->setCustomerAddressData($shippingAddress);
+                $this->addressesToSync[] = $shippingAddress->getId();
+                $shipping->setCustomerAddressId($shippingAddress->getId());
             }
-            //save here new customer address
-            $shippingAddress->setCustomerId($quote->getCustomerId());
-            $this->addressRepository->save($shippingAddress);
-            $quote->addCustomerAddress($shippingAddress);
-            $shipping->setCustomerAddressData($shippingAddress);
-            $this->addressesToSync[] = $shippingAddress->getId();
-            $shipping->setCustomerAddressId($shippingAddress->getId());
         }
 
         if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
@@ -598,20 +600,22 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                     $billingAddress = $this->addressRepository->getById($defaultBilling);
                 }
             }
-            if (!$hasDefaultBilling) {
-                //Make provided address as default shipping address
-                if (!$hasDefaultShipping) {
+            if (isset($billingAddress)) {
+                if (!$hasDefaultBilling) {
                     //Make provided address as default shipping address
-                    $billingAddress->setIsDefaultShipping(true);
+                    if (!$hasDefaultShipping) {
+                        //Make provided address as default shipping address
+                        $billingAddress->setIsDefaultShipping(true);
+                    }
+                    $billingAddress->setIsDefaultBilling(true);
                 }
-                $billingAddress->setIsDefaultBilling(true);
+                $billingAddress->setCustomerId($quote->getCustomerId());
+                $this->addressRepository->save($billingAddress);
+                $quote->addCustomerAddress($billingAddress);
+                $billing->setCustomerAddressData($billingAddress);
+                $this->addressesToSync[] = $billingAddress->getId();
+                $billing->setCustomerAddressId($billingAddress->getId());
             }
-            $billingAddress->setCustomerId($quote->getCustomerId());
-            $this->addressRepository->save($billingAddress);
-            $quote->addCustomerAddress($billingAddress);
-            $billing->setCustomerAddressData($billingAddress);
-            $this->addressesToSync[] = $billingAddress->getId();
-            $billing->setCustomerAddressId($billingAddress->getId());
         }
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
             $shipping->setIsDefaultBilling(true);

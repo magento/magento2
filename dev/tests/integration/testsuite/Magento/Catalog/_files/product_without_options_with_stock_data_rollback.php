@@ -17,6 +17,7 @@ $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->creat
 try {
     $product = $repository->get('simple', false, null, true);
     $product->delete();
+// phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
     //Entity already deleted
 }
