@@ -40,13 +40,13 @@ class GetQuoteShippingAddressIdByReservedQuoteId
     /**
      * Get quote shipping address id by reserved order id
      *
-     * @param string $reversedOrderId
+     * @param string $reservedOrderId
      * @return int
      */
-    public function execute(string $reversedOrderId): int
+    public function execute(string $reservedOrderId): int
     {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
 
         return (int)$quote->getShippingAddress()->getId();
     }
