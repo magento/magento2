@@ -13,9 +13,9 @@
             <argument name="msrp" type="string" defaultValue="100"/>
         </arguments>
         <amOnPage url="{{AdminProductEditPage.url(product.id)}}" stepKey="goToProductEditPage"/>
-        <waitForPageLoad stepKey="waitForProductEditPageLoad"/>
+        <scrollToTopOfPage stepKey="scrollToTopToSeeAdvancedPricingButton"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.msrp}}" stepKey="waitForMsrpElement"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.msrp}}" stepKey="waitForMsrpElement"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.msrp}}" userInput="{{msrp}}" stepKey="fillMsrpField"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
     </actionGroup>
