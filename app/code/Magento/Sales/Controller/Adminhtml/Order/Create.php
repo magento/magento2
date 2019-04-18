@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Adminhtml sales orders creation process controller
@@ -15,7 +19,7 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class Create extends \Magento\Backend\App\Action
+abstract class Create extends \Magento\Backend\App\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Escaper
@@ -47,7 +51,6 @@ abstract class Create extends \Magento\Backend\App\Action
         ForwardFactory $resultForwardFactory
     ) {
         parent::__construct($context);
-        $productHelper->setSkipSaleableCheck(true);
         $this->escaper = $escaper;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
@@ -362,6 +365,8 @@ abstract class Create extends \Magento\Backend\App\Action
     }
 
     /**
+     * Reload quote
+     *
      * @return $this
      */
     protected function _reloadQuote()
