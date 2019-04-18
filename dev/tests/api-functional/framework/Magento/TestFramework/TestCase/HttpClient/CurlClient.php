@@ -35,7 +35,7 @@ class CurlClient
     /**
      * Perform a HTTP GET request and returns just the response headers
      *
-     * @param $url
+     * @param string $url
      * @param array $data
      * @param array $headers
      * @return mixed
@@ -118,8 +118,10 @@ class CurlClient
     public function invokeApi($url, $additionalCurlOpts, $headers = [])
     {
         // initialize cURL
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $curl = curl_init($url);
         if ($curl === false) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception("Error Initializing cURL for baseUrl: " . $url);
         }
 
@@ -128,28 +130,40 @@ class CurlClient
 
         // add CURL opts
         foreach ($curlOpts as $opt => $val) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             curl_setopt($curl, $opt, $val);
         }
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $response = curl_exec($curl);
         if ($response === false) {
-            throw new \Exception(curl_error($curl));
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $error = curl_error($curl);
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new \Exception($error;
         }
 
         $resp = [];
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
         $resp["header"] = substr($response, 0, $headerSize);
         $resp["body"] = substr($response, $headerSize);
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $resp["meta"] = curl_getinfo($curl);
         if ($resp["meta"] === false) {
-            throw new \Exception(curl_error($curl));
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $error = curl_error($curl);
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new \Exception($error);
         }
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         curl_close($curl);
 
         $meta = $resp["meta"];
         if ($meta && $meta['http_code'] >= 400) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($resp["body"], $meta['http_code']);
         }
 
