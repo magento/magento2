@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMoveStoreToOtherGroupSameWebsiteTest">
+        <annotations>
+            <stories value="Move Store"/>
+            <title value="Move Store To Other Group Same Website and Verify Backend and Frontend"/>
+            <description value="Test log in to Stores and Move Store To Other Group Same Website Test"/>
+            <testCaseId value="MC-14294"/>
+            <severity value="CRITICAL"/>
+            <group value="store"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!-- Create first store -->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createFirstStore">
+                <argument name="website" value="{{_defaultWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStore.name}}"/>
+                <argument name="storeGroupCode" value="{{customStore.code}}"/>
+            </actionGroup>
+            <!-- Create first store view -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFirstStoreView">
+                <argument name="StoreGroup" value="customStore"/>
+                <argument name="customStore" value="storeViewData1"/>
+            </actionGroup>
+            <!-- Create second store -->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStore">
+                <argument name="website" value="{{_defaultWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <!-- Create second store view -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="storeViewData2"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteFirstStore">
+                <argument name="storeGroupName" value="customStore.name"/>
+            </actionGroup>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteSecondStore">
+                <argument name="storeGroupName" value="customStoreGroup.name"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Search created second store view in grid-->
+        <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchCreatedStoreViewInGrid">
+            <argument name="storeViewName" value="{{storeViewData2.name}}"/>
+        </actionGroup>
+        <!--Move created store view to other store keeping website same-->
+        <actionGroup ref="ChangeStoreInStoreViewActionGroup" stepKey="moveStoreView">
+            <argument name="storeDropdown" value="{{customStore.name}}"/>
+        </actionGroup>
+        <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
+        <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
+
+        <!--Search moved store view(from above step) in grid and verify AssertStoreInGrid-->
+        <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchMovedStoreViewInGrid">
+            <argument name="storeViewName" value="{{storeViewData2.name}}"/>
+        </actionGroup>
+
+        <!--Go to store view form page and verify AssertStoreForm-->
+        <actionGroup ref="AssertStoreViewFormActionGroup" stepKey="verifyStoreViewForm">
+            <argument name="storeDropdown" value="{{customStore.name}}"/>
+            <argument name="storeViewName" value="{{storeViewData2.name}}"/>
+            <argument name="storeViewCode" value="{{storeViewData2.code}}"/>
+            <argument name="status" value="Enabled"/>
+        </actionGroup>
+
+        <!--Go to store configuration page and verify AssertStoreBackend-->
+        <actionGroup ref="AssertStoreConfigurationBackendActionGroup" stepKey="verifyValuesOnStoreBackend">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+            <argument name="customStore" value="{{customStore.name}}"/>
+            <argument name="storeView1" value="{{storeViewData1.name}}"/>
+            <argument name="storeView2" value="{{storeViewData2.name}}"/>
+        </actionGroup>
+
+        <!--Go to storefront and verify AssertStoreFrontend-->
+        <actionGroup ref="AssertStoreFrontendActionGroup" stepKey="verifyValuesOnStoreFrontend">
+            <argument name="customStore" value="{{customStore.name}}"/>
+            <argument name="storeView1" value="{{storeViewData1.name}}"/>
+            <argument name="storeView2" value="{{storeViewData2.name}}"/>
+        </actionGroup>
+    </test>
+</tests>
