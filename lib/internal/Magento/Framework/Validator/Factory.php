@@ -52,6 +52,7 @@ class Factory
      * @param ObjectManagerInterface $objectManager
      * @param Reader $moduleReader
      * @param FrontendInterface $cache @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
