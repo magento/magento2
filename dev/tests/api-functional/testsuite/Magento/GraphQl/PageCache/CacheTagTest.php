@@ -17,7 +17,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class CacheTagTest extends GraphQlAbstract
 {
-
     /**
      * @inheritdoc
      */
@@ -87,7 +86,6 @@ QUERY;
         $firstProductSku = 'simple333';
         $secondProductSku = 'simple444';
         $categoryId ='4';
-
         $variables =[
             'id' => $categoryId,
             'pageSize'=> 10,
@@ -118,22 +116,22 @@ QUERY;
                              ];
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
 
-        // Cach-debug header should be a MISS for product 1 on first request
+        // Cache-debug header should be a MISS for product 1 on first request
         $responseHeadersFirstProduct = $this->graphQlQueryForHttpHeaders($product1Query);
         $this->assertContains('X-Magento-Cache-Debug: MISS', $responseHeadersFirstProduct);
 
-        // Cach-debug header should be a MISS for product 2 during first load
+        // Cache-debug header should be a MISS for product 2 during first load
         $responseHeadersSecondProduct = $this->graphQlQueryForHttpHeaders($product2Query);
         $this->assertContains('X-Magento-Cache-Debug: MISS', $responseHeadersSecondProduct);
 
-        /** cache-debug header value should be MISS after  updating product1 and reloading the Category */
+        /** Cache-debug header value should be MISS after  updating product1 and reloading the Category */
         $firstProduct->setPrice(20);
         $firstProduct->save();
         $responseMissHeaders = $this->graphQlQueryForHttpHeaders($categoryQuery, $variables);
         preg_match('/X-Magento-Cache-Debug: (.*?)\n/', $responseMissHeaders, $matchesMiss);
         $this->assertEquals('MISS', rtrim($matchesMiss[1], "\r"));
 
-        /** cache-debug should be a MISS for product 1 after it is updated - cache invalidation */
+        /** Cache-debug should be a MISS for product 1 after it is updated - cache invalidation */
         $responseHeadersFirstProduct = $this->graphQlQueryForHttpHeaders($product1Query);
         $this->assertContains('X-Magento-Cache-Debug: MISS', $responseHeadersFirstProduct);
 
