@@ -209,6 +209,21 @@ class Eav extends AbstractModifier
     private $authorization;
 
     /**
+     * Product design attribute codes.
+     *
+     * @var array
+     */
+    private $designAttributeCodes = [
+        'custom_design',
+        'page_layout',
+        'options_container',
+        'custom_layout_update',
+        'custom_design_from',
+        'custom_design_to',
+        'custom_layout',
+    ];
+
+    /**
      * @param LocatorInterface $locator
      * @param CatalogEavValidationRules $catalogEavValidationRules
      * @param Config $eavConfig
@@ -722,16 +737,7 @@ class Eav extends AbstractModifier
         }
 
         //Checking access to design config.
-        $designAttributeCodes = [
-            'custom_design',
-            'page_layout',
-            'options_container',
-            'custom_layout_update',
-            'custom_design_from',
-            'custom_design_to',
-            'custom_layout',
-        ];
-        if (in_array($attributeCode, $designAttributeCodes, true)) {
+        if (in_array($attributeCode, $this->designAttributeCodes, true)) {
             if (!$this->authorization->isAllowed('Magento_Catalog::edit_product_design')) {
                 $meta = $this->arrayManager->merge(
                     $configPath,
