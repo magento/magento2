@@ -124,7 +124,8 @@ class MethodArgumentsSniff implements Sniff
     private function getMethodParameters(array $paramDefinitions): array
     {
         $paramName = [];
-        for ($i = 0; $i < count($paramDefinitions); $i++) {
+        $paramCount = count($paramDefinitions);
+        for ($i = 0; $i < $paramCount; $i++) {
             if (isset($paramDefinitions[$i]['paramName'])) {
                 $paramName[] = $paramDefinitions[$i]['paramName'];
             }
@@ -371,10 +372,11 @@ class MethodArgumentsSniff implements Sniff
         $parametersCount = count($paramPointers);
         if ($argumentsCount <= $parametersCount && $argumentsCount > 0) {
             $duplicateParameters = [];
-            for ($i = 0; $i < count($paramDefinitions); $i++) {
+            $paramCount = count($paramDefinitions);
+            for ($i = 0; $i < $paramCount; $i++) {
                 if (isset($paramDefinitions[$i]['paramName'])) {
                     $parameterContent = $paramDefinitions[$i]['paramName'];
-                    for ($j = $i + 1; $j < count($paramDefinitions); $j++) {
+                    for ($j = $i + 1; $j < $paramCount; $j++) {
                         if (isset($paramDefinitions[$j]['paramName'])
                             && $parameterContent === $paramDefinitions[$j]['paramName']
                         ) {
@@ -517,7 +519,7 @@ class MethodArgumentsSniff implements Sniff
             $paramPointers
         );
         $tokens = $phpcsFile->getTokens();
-        for ($ptr = 0; $ptr < count($methodArguments); $ptr++) {
+        for ($ptr = 0; $ptr < $argumentCount; $ptr++) {
             if (isset($paramPointers[$ptr])) {
                 $this->validateArgumentNameInParameterAnnotationExists(
                     $stackPtr,
@@ -614,7 +616,8 @@ class MethodArgumentsSniff implements Sniff
         $argumentPositions = [];
         $commentPositions = [];
         $tokens = $phpcsFile->getTokens();
-        for ($ptr = 0; $ptr < count($methodArguments); $ptr++) {
+        $argumentCount = count($methodArguments);
+        for ($ptr = 0; $ptr < $argumentCount; $ptr++) {
             if (isset($paramPointers[$ptr])) {
                 $paramContent = $tokens[$paramPointers[$ptr] + 2]['content'];
                 $paramDefinition = $paramDefinitions[$ptr];
