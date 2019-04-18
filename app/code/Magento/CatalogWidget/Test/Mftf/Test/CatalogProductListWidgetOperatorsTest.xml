@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94479"/>
             <group value="CatalogWidget"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
 
         <before>

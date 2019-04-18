@@ -14,5 +14,6 @@
         <element name="resetFilter" type="button" selector=".action-tertiary[title='Reset Filter']"/>
         <element name="emailInput" type="input" selector="#sales_order_create_customer_grid_filter_email"/>
         <element name="firstRow" type="button" selector="tr:nth-of-type(1)[data-role='row']"/>
+        <element name="resetButton" type="button" selector="#sales_order_create_customer_grid [data-action='grid-filter-reset']" timeout="30"/>
     </section>
 </sections>

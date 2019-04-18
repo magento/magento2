@@ -17,6 +17,8 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
+ * Customer email notification
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailNotification implements EmailNotificationInterface

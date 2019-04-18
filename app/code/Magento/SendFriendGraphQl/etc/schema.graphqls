@@ -2,27 +2,38 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    sendEmailToFriend (input: SendEmailToFriendSenderInput): SendEmailToFriendOutput @resolver(class: "\\Magento\\SendFriendGraphQl\\Model\\Resolver\\SendEmailToFriend") @doc(description:"Recommends Product by Sending Single/Multiple Email")
+    sendEmailToFriend (input: SendEmailToFriendInput): SendEmailToFriendOutput @resolver(class: "\\Magento\\SendFriendGraphQl\\Model\\Resolver\\SendEmailToFriend") @doc(description:"Recommends Product by Sending Single/Multiple Email")
+}
+
+input SendEmailToFriendInput {
+    product_id: Int!
+    sender: SendEmailToFriendSenderInput!
+    recipients: [SendEmailToFriendRecipientInput!]!
 }
 
 input SendEmailToFriendSenderInput {
-   product_id: Int!
-   sender: Sender!
-   recipients: [Recipient!]!
-}
-
-type Sender {
     name: String!
     email: String!
     message: String!
 }
 
-type Recipient {
+input SendEmailToFriendRecipientInput {
     name: String!
     email: String!
 }
 
 type SendEmailToFriendOutput {
-    sender: Sender
-    recipients: [Recipient]
+    sender: SendEmailToFriendSender
+    recipients: [SendEmailToFriendRecipient]
+}
+
+type SendEmailToFriendSender {
+    name: String!
+    email: String!
+    message: String!
+}
+
+type SendEmailToFriendRecipient {
+    name: String!
+    email: String!
 }

@@ -69,6 +69,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     public function testCollectFreeRates()
     {
+        $this->markTestSkipped('Test is blocked by MAGETWO-97467.');
         $rateRequest = Bootstrap::getObjectManager()->get(RateRequestFactory::class)->create();
         $rateRequest->setDestCountryId('US');
         $rateRequest->setDestRegionId('CA');
