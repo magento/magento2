@@ -10,12 +10,12 @@
 
     <type name="Magento\Catalog\Block\Widget\Link">
         <arguments>
-            <argument name="urlFinder" xsi:type="object">Magento\UrlRewrite\Model\CompositeUrlFinder</argument>
+            <argument name="urlFinder" xsi:type="object">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Url">
         <arguments>
-            <argument name="urlFinder" xsi:type="object">Magento\UrlRewrite\Model\CompositeUrlFinder</argument>
+            <argument name="urlFinder" xsi:type="object">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Category">
