@@ -58,6 +58,7 @@ class CustomerSendmailTest extends AbstractController
     }
 
     /**
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
@@ -95,6 +96,7 @@ class CustomerSendmailTest extends AbstractController
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoConfigFixture default_store customer/captcha/forms product_sendtofriend_form
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      */
     public function testWithCaptchaFailed()
     {
@@ -133,7 +135,7 @@ class CustomerSendmailTest extends AbstractController
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoConfigFixture default_store customer/captcha/forms product_sendtofriend_form
-     *
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      */
     public function testWithCaptchaSuccess()
     {
