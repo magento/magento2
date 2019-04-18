@@ -10,6 +10,7 @@ use Magento\Framework\HTTP\PhpEnvironment\Response;
 use Magento\Framework\File\Mime;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\ObjectManager;
+use Zend\Http\Headers;
 
 /**
  * File adapter to send the file to the client.
@@ -114,7 +115,7 @@ class Http
     private function prepareResponse($options, string $filepath): void
     {
         $mimeType = $this->mime->getMimeType($filepath);
-        if (is_array($options) && isset($options['headers']) && $options['headers'] instanceof \Zend\Http\Headers) {
+        if (is_array($options) && isset($options['headers']) && $options['headers'] instanceof Headers) {
             $this->response->setHeaders($options['headers']);
         }
         $this->response->setHeader('Content-length', filesize($filepath));
