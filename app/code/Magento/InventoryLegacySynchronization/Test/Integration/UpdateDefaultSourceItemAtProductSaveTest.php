@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration;
+namespace Magento\InventoryLegacySynchronization\Test\Integration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\InventoryCatalog\Model\GetDefaultSourceItemBySku;
@@ -38,7 +38,7 @@ class UpdateDefaultSourceItemAtProductSaveTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDbIsolation enabled
      */
-    public function testSaveOutOfStockProductNotAssignedToDefaultSource()
+    public function testSaveOutOfStockProductNotAssignedToDefaultSource(): void
     {
         // SKU-3 is out of stock
         $product = $this->productRepository->get('SKU-3');
