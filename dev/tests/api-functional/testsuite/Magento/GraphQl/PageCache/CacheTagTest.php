@@ -10,28 +10,31 @@ namespace Magento\GraphQl\PageCache;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\TestFramework\ObjectManager;
-use Magento\TestFramework\App\State;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
-/**
- * Class CacheTagTest
- */
 /**
  * Test the caching works properly for products and categories
  */
 class CacheTagTest extends GraphQlAbstract
 {
+
     /**
-     * Tests if Magento cache tags and debug headers for products are generated properly
-     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @inheritdoc
      */
-    public function testCacheTagsAndCacheDebugHeaderForProducts()
+    protected function setUp()
     {
         $this->markTestSkipped(
             'This test will stay skipped until DEVOPS-4924 is resolved'
         );
+    }
 
+    /**
+     * Tests if Magento cache tags and debug headers for products are generated properly
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     */
+    public function testCacheTagsAndCacheDebugHeaderForProducts()
+    {
         $productSku='simple2';
         $query
             = <<<QUERY
@@ -75,70 +78,25 @@ QUERY;
     }
 
     /**
-     * Tests if Magento cache tags for categories are generated properly. Also tests the use case for cache invalidation
+     * Tests if X-Magento-Tags for categories are generated properly. Also tests the use case for cache invalidation
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
      */
-    public function testCacheTagFromResponseHeaderForCategoriesWithProduct()
+    public function testCacheTagForCategoriesWithProduct()
     {
-        $this->markTestSkipped(
-            'This test will stay skipped until DEVOPS-4924 is resolved'
-        );
         $firstProductSku = 'simple333';
         $secondProductSku = 'simple444';
         $categoryId ='4';
-        $categoryQuery
-            = <<<'QUERY'
-query GetCategoryQuery($id: Int!, $pageSize: Int!, $currentPage: Int!) {
-        category(id: $id) {
-            id
-            description
-            name
-            product_count
-            products(pageSize: $pageSize, currentPage: $currentPage) {
-                items {
-                    id
-                    name
-                    url_key
-                }
-                total_count
-            }
-        }
-    }
-QUERY;
+
         $variables =[
-            'id' => 4,
+            'id' => $categoryId,
             'pageSize'=> 10,
             'currentPage' => 1
         ];
 
-        $product1Query
-            = <<<QUERY
-       {
-           products(filter: {sku: {eq: "{$firstProductSku}"}})
-           {
-               items {
-                   id
-                   name
-                   sku
-               }
-           }
-       }
-QUERY;
-        $product2Query
-            = <<<QUERY
-       {
-           products(filter: {sku: {eq: "{$secondProductSku}"}})
-           {
-               items {
-                   id
-                   name
-                   sku
-               }
-           }
-       }
-QUERY;
-
+        $product1Query = $this->getProductQuery($firstProductSku);
+        $product2Query =$this->getProductQuery($secondProductSku);
+        $categoryQuery = $this->getCategoryQuery();
         $responseMissHeaders = $this->graphQlQueryForHttpHeaders($categoryQuery, $variables);
 
         /** cache-debug header value should be a MISS when category is loaded first time */
@@ -155,10 +113,12 @@ QUERY;
         preg_match('/X-Magento-Tags: (.*?)\n/', $responseMissHeaders, $headerCacheTags);
         $actualCacheTags = explode(',', rtrim($headerCacheTags[1], "\r"));
         $expectedCacheTags =
-            ['cat_c','cat_c_' . $categoryId,'cat_p','cat_p_' . $firstProduct->getId(),'cat_p_' .$secondProduct->getId(),'FPC'];
+                             ['cat_c','cat_c_' . $categoryId,'cat_p','cat_p_' . $firstProduct->getId(),
+                              'cat_p_' .$secondProduct->getId(),'FPC'
+                             ];
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
 
-        // Cach-debug header should be a MISS for product 1 during first load
+        // Cach-debug header should be a MISS for product 1 on first request
         $responseHeadersFirstProduct = $this->graphQlQueryForHttpHeaders($product1Query);
         $this->assertContains('X-Magento-Cache-Debug: MISS', $responseHeadersFirstProduct);
 
@@ -180,5 +140,57 @@ QUERY;
         // Cach-debug header should be a HIT for prod 2 during second load since prod 2 is fetched from cache.
         $responseHeadersSecondProduct = $this->graphQlQueryForHttpHeaders($product2Query);
         $this->assertContains('X-Magento-Cache-Debug: HIT', $responseHeadersSecondProduct);
+    }
+
+    /**
+     * Get Product query
+     *
+     * @param  string $productSku
+     * @return string
+     */
+    private function getProductQuery(string $productSku): string
+    {
+        $productQuery = <<<QUERY
+       {
+           products(filter: {sku: {eq: "{$productSku}"}})
+           {
+               items {
+                   id
+                   name
+                   sku
+               }
+           }
+       }
+QUERY;
+        return $productQuery;
+    }
+
+    /**
+     * Get category query
+     *
+     * @return string
+     */
+    private function getCategoryQuery(): string
+    {
+        $categoryQueryString = <<<QUERY
+query GetCategoryQuery(\$id: Int!, \$pageSize: Int!, \$currentPage: Int!) {
+        category(id: \$id) {
+            id
+            description
+            name
+            product_count
+            products(pageSize: \$pageSize, currentPage: \$currentPage) {
+                items {
+                    id
+                    name
+                    url_key
+                }
+                total_count
+            }
+        }
+    }
+QUERY;
+
+        return $categoryQueryString;
     }
 }
