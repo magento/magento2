@@ -20,30 +20,32 @@
         </annotations>
 
         <before>
-            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <magentoCLI stepKey="enableGuestCheckoutForDownloadable" command="config:set catalog/downloadable/disable_guest_checkout 0" />
             <createData entity="FullSource1" stepKey="createSource"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock"/>
             <createData entity="SourceStockLinked1" stepKey="linkSourceStock">
                 <requiredEntity createDataKey="createStock"/>
                 <requiredEntity createDataKey="createSource"/>
             </createData>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="MsiDownloadableProduct" stepKey="downloadableProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="downloadableLink1" stepKey="addDownloadableLink">
+                <field key="is_shareable">1</field>
                 <requiredEntity createDataKey="downloadableProduct"/>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductEditPage.url($$downloadableProduct.id$$)}}" stepKey="openProductEditPage" />
             <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignCustomSource">
-                <argument name="sourceCode" value="$$createStock.source_code$$" />
+                <argument name="sourceCode" value="$$createSource.source[source_code]$$" />
             </actionGroup>
-            <!--<scrollTo stepKey="scrollToSources" selector="[data-index='sources']" />-->
             <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillDefaultSourceQtyField"/>
             <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillCustomSourceQtyField"/>
             <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseProduct"/>
         </before>
         <after>
+            <magentoCLI stepKey="disableGuestCheckoutForDownloadable" command="config:set catalog/downloadable/disable_guest_checkout 1" />
             <!-- Assign Sales Channel to Default Stock -->
             <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockGridPage"/>
             <waitForPageLoad time="30" stepKey="waitForStockGridPageLoad"/>
@@ -74,15 +76,15 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
 
         <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{MsiCustomer1.email}}" stepKey="enterEmail"/>
-        <fillField selector="#shipping-new-address-form input[name=firstname]" userInput="{{MsiCustomer1.firstname}}" stepKey="enterFirstName"/>
-        <fillField selector="#shipping-new-address-form input[name=lastname]" userInput="{{MsiCustomer1.lastname}}" stepKey="enterLastName"/>
-        <fillField selector="#shipping-new-address-form input[name='street[0]']" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
-        <fillField selector="#shipping-new-address-form input[name=city]" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
-        <selectOption selector="#shipping-new-address-form select[name=region_id]" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
-        <fillField selector="#shipping-new-address-form input[name=postcode]" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
-        <fillField selector="#shipping-new-address-form input[name=telephone]" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
+        <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="{{MsiCustomer1.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutPaymentSection.guestLastName}}" userInput="{{MsiCustomer1.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutPaymentSection.guestStreet}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutPaymentSection.guestCity}}" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutPaymentSection.guestRegion}}" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutPaymentSection.guestPostcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutPaymentSection.guestTelephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
 
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickUpdate"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
 
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
@@ -107,12 +109,10 @@
             <argument name="filter_value" value="$$downloadableProduct.product[sku]$$"/>
         </actionGroup>
 
-        <see selector="{{AdminGridRow.rowOne}}" userInput="{{colorProductAttribute1.name}}"
-             stepKey="seeProductNameInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="$100.00" stepKey="seeProductPriceInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource.source[name]$$: 100"
              stepKey="seeProductQuantityInGrid"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock.stock[name]$$: 95"
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock.stock[name]$$: 99"
              stepKey="seeProductSalableQuantityInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Enabled" stepKey="seeProductStatusInGrid"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Main Website" stepKey="seeProductWebsiteInGrid"/>
