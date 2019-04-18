@@ -168,9 +168,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test isValid method
+     * Test massages merging
      *
-     * @dataProvider messageMergingDataProvider
+     * @dataProvider simpleMergingDataProvider
+     * @dataProvider arrayMergingDataProvider
+     * @dataProvider duplicatesDataProvider
      *
      * @param mixed $value
      * @param \Magento\Framework\Validator\ValidatorInterface[] $validators
@@ -188,13 +190,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedMessages, $this->_validator->getMessages());
     }
 
-
     /**
-     * Data provider for testDuplicates
+     * Data provider for testMessageMerging
      *
      * @return array
      */
-    public function messageMergingDataProvider()
+    public function duplicatesDataProvider()
     {
         $result = [];
         $value  = 'test';
@@ -253,6 +254,58 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ['foo' => ['Duplicate 1'], 'bar' => ['Foo message 2', 'Duplicate 2', 'Bar message 2']],
         ];
 
+        return $result;
+    }
+
+    /**
+     * Data provider for testMessageMerging
+     *
+     * @return array
+     */
+    public function simpleMergingDataProvider()
+    {
+        $result = [];
+        $value  = 'test';
+
+        $validatorA = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorA->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(['foo' => 'Foo message 1'])
+        );
+
+        $validatorB = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorB->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorB->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(['foo' => 'Bar message 1'])
+        );
+
+        $result[] = [
+            $value,
+            [$validatorA, $validatorB],
+            ['foo' => ['Foo message 1', 'Bar message 1']]
+        ];
+
+        return $result;
+    }
+
+    /**
+     * Data provider for testMessageMerging
+     *
+     * @return array
+     */
+    public function arrayMergingDataProvider()
+    {
+        $result = [];
+        $value  = 'test';
+
         // Case 3. Merging messages to a new array
         $validatorA = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
@@ -306,7 +359,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             [$validatorA, $validatorB],
             ['foo' => ['Foo message 1', 'Foo message 2', 'Bar message 1']],
         ];
-
 
         // Case 5. Merging complex arrays
         $validatorA = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);

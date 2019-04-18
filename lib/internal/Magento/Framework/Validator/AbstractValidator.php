@@ -143,16 +143,20 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
                     $stack[$code] = [];
                 }
                 $stack[$code] = $this->addMessagesRecursive($stack[$code], $message);
-            } elseif (!in_array($message, $stack)) {
+            } elseif (!in_array($message, $stack)) {//skip if duplicate
                 if (!isset($stack[$code])) {
                     $stack[$code] = $message;
-                } elseif (is_numeric($code)) {
-                    $stack[] = $message;
-                } elseif (is_scalar($stack[$code])) {
-                    $stack[$code] = [$stack[$code], $message];
-                } else {
-                    $stack[$code][] = $message;
+                    continue;
                 }
+                if (is_numeric($code)) {
+                    $stack[] = $message;
+                    continue;
+                }
+                if (!is_array($stack[$code])) {
+                    $stack[$code] = [$stack[$code], $message];
+                    continue;
+                }
+                $stack[$code][] = $message;
             }
         }
         return $stack;
