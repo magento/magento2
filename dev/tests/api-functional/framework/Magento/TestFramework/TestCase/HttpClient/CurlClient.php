@@ -140,7 +140,7 @@ class CurlClient
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $error = curl_error($curl);
             // phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new \Exception($error;
+            throw new \Exception($error);
         }
 
         $resp = [];
