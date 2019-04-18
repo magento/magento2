@@ -320,8 +320,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                     $item->setName($product->getName());
                     $item->setPrice($product->getPrice());
                 }
-            } else {
-                $this->removeItemByKey($item->getId());
             }
         }
 
