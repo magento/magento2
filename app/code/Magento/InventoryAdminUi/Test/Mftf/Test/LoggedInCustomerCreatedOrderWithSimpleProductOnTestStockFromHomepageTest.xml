@@ -14,6 +14,8 @@
         </annotations>
 
         <before>
+            <magentoCLI stepKey="enableFreeShipping" command="config:set carriers/freeshipping/active 1" />
+            <magentoCLI stepKey="disableFreeShipping" command="config:set carriers/freeshipping/active 0"/>
             <createData entity="MsiCustomer1" stepKey="createCustomer"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock"/>
             <createData entity="FullSource1" stepKey="createSource"/>
