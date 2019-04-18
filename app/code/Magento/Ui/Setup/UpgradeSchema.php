@@ -23,7 +23,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-        if (version_compare($context->getVersion(), '101.1.2') < 0) {
+        if (version_compare($context->getVersion(), '101.1.3') < 0) {
             $setup->getConnection()->modifyColumn(
                 $setup->getTable('ui_bookmark'), 
                 'created_at', 
