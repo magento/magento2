@@ -107,6 +107,9 @@
             <argument name="attributeData" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
 
+        <!-- Run cron -->
+        <magentoCLI command="cron:run" stepKey="runCron3"/>
+
         <!-- Download product -->
         <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
             <argument name="rowIndex" value="0"/>
