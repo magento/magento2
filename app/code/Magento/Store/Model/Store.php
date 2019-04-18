@@ -726,7 +726,8 @@ class Store extends AbstractExtensibleModel implements
             if ($this->_isCustomEntryPoint()) {
                 $indexFileName = 'index.php';
             } else {
-                $indexFileName = basename($_SERVER['SCRIPT_FILENAME']);
+                $scriptFilename = $this->_request->getServer('SCRIPT_FILENAME');
+                $indexFileName = basename($scriptFilename);
             }
             $url .= $indexFileName . '/';
         }
