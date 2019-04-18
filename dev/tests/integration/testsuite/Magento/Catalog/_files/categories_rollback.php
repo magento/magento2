@@ -14,7 +14,7 @@ $registry->register('isSecureArea', true);
 // Remove products
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-$productsToDelete = ['simple', '12345', 'simple-3', 'simple-4','simple-5'];
+$productsToDelete = ['simple', '12345', 'simple-3', 'simple-4'];
 
 foreach ($productsToDelete as $sku) {
     try {
