@@ -10,6 +10,9 @@ namespace Magento\WebapiAsync\Test\Unit\Controller;
 
 use Magento\Store\Model\Store;
 
+/**
+ * Test for Magento\Webapi\Controller\PathProcessor class.
+ */
 class PathProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Store\Model\StoreManagerInterface */

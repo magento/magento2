@@ -19,7 +19,9 @@ define([
         defaults: {
             template: 'ui/grid/paging/paging',
             totalTmpl: 'ui/grid/paging-total',
+            totalRecords: 0,
             pageSize: 20,
+            pages: 1,
             current: 1,
             selectProvider: 'ns = ${ $.ns }, index = ids',
 
@@ -35,12 +37,18 @@ define([
             imports: {
                 pageSize: '${ $.sizesConfig.name }:value',
                 totalSelected: '${ $.selectProvider }:totalSelected',
-                totalRecords: '${ $.provider }:data.totalRecords'
+                totalRecords: '${ $.provider }:data.totalRecords',
+                filters: '${ $.provider }:params.filters'
             },
 
             exports: {
                 pageSize: '${ $.provider }:params.paging.pageSize',
                 current: '${ $.provider }:params.paging.current'
+            },
+
+            statefull: {
+                pageSize: true,
+                current: true
             },
 
             listens: {
@@ -173,7 +181,9 @@ define([
          * @returns {Paging} Chainable.
          */
         goFirst: function () {
-            this.current = 1;
+            if (!_.isUndefined(this.filters)) {
+                this.current = 1;
+            }
 
             return this;
         },
@@ -219,13 +229,11 @@ define([
         /**
          * Calculates new page cursor based on the
          * previous and current page size values.
-         *
-         * @returns {Number} Updated cursor value.
          */
         updateCursor: function () {
             var cursor  = this.current - 1,
                 size    = this.pageSize,
-                oldSize = this.previousSize,
+                oldSize = _.isUndefined(this.previousSize) ? this.pageSize : this.previousSize,
                 delta   = cursor * (oldSize  - size) / size;
 
             delta = size > oldSize ?

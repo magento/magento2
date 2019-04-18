@@ -66,7 +66,7 @@ mutation {
     }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
         $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
@@ -103,7 +103,7 @@ mutation {
     }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
         $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
@@ -134,7 +134,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -167,7 +167,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -202,7 +202,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -238,7 +238,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     public function tearDown()
