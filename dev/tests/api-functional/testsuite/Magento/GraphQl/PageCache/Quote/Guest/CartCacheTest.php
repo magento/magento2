@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\PageCache\Quote\Guest;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -27,6 +26,7 @@ class CartCacheTest extends GraphQlAbstract
             'This test will stay skipped until DEVOPS-4924 is resolved'
         );
     }
+
     /**
      * Tests that X-Magento-Tags are correct
      */
@@ -52,9 +52,9 @@ class CartCacheTest extends GraphQlAbstract
     /**
      * Create a guest cart which generates a maskedQuoteId
      *
-     * @return mixed
+     * @return string
      */
-    private function createEmptyCart()
+    private function createEmptyCart(): string
     {
         $query =
             <<<QUERY
