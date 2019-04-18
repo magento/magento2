@@ -6,40 +6,45 @@
 
 namespace Magento\Framework\File\Transfer\Adapter;
 
+use Magento\Framework\HTTP\PhpEnvironment\Response;
+use Magento\Framework\File\Mime;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * File adapter to send the file to the client.
  */
 class Http
 {
     /**
-     * @var \Magento\Framework\HTTP\PhpEnvironment\Response
+     * @var Response
      */
     private $response;
 
     /**
-     * @var \Magento\Framework\File\Mime
+     * @var Mime
      */
     private $mime;
 
     /**
-     * @var \Magento\Framework\App\Request\Http
+     * @var HttpRequest
      */
     private $request;
 
     /**
-     * @param \Magento\Framework\HTTP\PhpEnvironment\Response $response
-     * @param \Magento\Framework\File\Mime $mime
-     * @param \Magento\Framework\App\Request\Http|null $request
+     * @param Response $response
+     * @param Mime $mime
+     * @param HttpRequest|null $request
      */
     public function __construct(
-        \Magento\Framework\HTTP\PhpEnvironment\Response $response,
-        \Magento\Framework\File\Mime $mime,
-        \Magento\Framework\App\Request\Http $request = null
+        Response $response,
+        Mime $mime,
+        HttpRequest $request = null
     ) {
         $this->response = $response;
         $this->mime = $mime;
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->request = $request ?: $objectManager->get(\Magento\Framework\App\Request\Http::class);
+        $objectManager = ObjectManager::getInstance();
+        $this->request = $request ?: $objectManager->get(HttpRequest::class);
     }
 
     /**

@@ -73,10 +73,10 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->mime->expects($this->once())
             ->method('getMimeType')
             ->with($file)
-            ->will($this->returnValue($contentType));
+            ->willReturn($contentType);
         $this->request->expects($this->once())
             ->method('isHead')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->expectOutputString(file_get_contents($file));
 
         $this->object->send($file);

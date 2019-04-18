@@ -181,13 +181,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->setUpLaunch();
         $this->frontControllerMock->expects($this->once())
             ->method('dispatch')
-            ->with($this->requestMock)->will(
-                $this->returnCallback(
-                    function () {
-                        // phpcs:ignore Magento2.Exceptions.DirectThrow
-                        throw new \Exception('Message');
-                    }
-                )
+            ->with($this->requestMock)
+            ->willThrowException(
+                new \Exception('Message')
             );
         $this->http->launch();
     }
