@@ -9,8 +9,10 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormRelatedUpSellCrossSellSection">
+        <element name="sectionHeader" type="block" selector=".fieldset-wrapper.admin__collapsible-block-wrapper[data-index='related']"/>
         <element name="AddRelatedProductsButton" type="button" selector="button[data-index='button_related']" timeout="30"/>
         <element name="AddUpSellProductsButton" type="button" selector="button[data-index='button_upsell']" timeout="30"/>
+        <element name="AddCrossSellProductsButton" type="button" selector="button[data-index='button_crosssell']" timeout="30"/>
         <element name="relatedProductSectionText" type="text" selector=".fieldset-wrapper.admin__fieldset-section[data-index='related']"/>
         <element name="upSellProductSectionText" type="text" selector=".fieldset-wrapper.admin__fieldset-section[data-index='upsell']"/>
         <element name="crossSellProductSectionText" type="text" selector=".fieldset-wrapper.admin__fieldset-section[data-index='crosssell']"/>

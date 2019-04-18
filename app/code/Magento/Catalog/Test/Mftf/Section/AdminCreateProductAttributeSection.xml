@@ -23,6 +23,16 @@
         <element name="checkIfTabOpen" selector="//div[@id='advanced_fieldset-wrapper' and not(contains(@class,'opened'))]" type="button"/>
         <element name="useInLayeredNavigation" type="select" selector="#is_filterable"/>
         <element name="addSwatch" type="button" selector="#add_new_swatch_text_option_button"/>
+        <element name="dropdownAddOptions" type="button" selector="#add_new_option_button"/>
+        <!-- Manage Options nth child-->
+        <element name="dropdownNthOptionIsDefault" type="checkbox" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) .input-radio" parameterized="true"/>
+        <element name="dropdownNthOptionAdmin" type="textarea" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) td:nth-child(3) input" parameterized="true"/>
+        <element name="dropdownNthOptionDefaultStoreView" type="textarea" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) td:nth-child(4) input" parameterized="true"/>
+        <element name="dropdownNthOptionDelete" type="button" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) button[title='Delete']" parameterized="true"/>
+    </section>
+    <section name="AttributeDeleteModalSection">
+        <element name="confirm" type="button" selector=".modal-popup.confirm .action-accept"/>
+        <element name="cancel" type="button" selector=".modal-popup.confirm .action-dismiss"/>
     </section>
     <section name="AttributeManageSwatchSection">
         <element name="swatchField" type="input" selector="//th[contains(@class, 'col-swatch')]/span[contains(text(), '{{arg}}')]/ancestor::thead/following-sibling::tbody//input[@placeholder='Swatch']" parameterized="true"/>
@@ -36,6 +46,7 @@
         <element name="StoreFrontPropertiesTab" selector="#product_attribute_tabs_front" type="button"/>
         <element name="EnableWYSIWYG" type="select" selector="#enabled"/>
         <element name="useForPromoRuleConditions" type="select" selector="#is_used_for_promo_rules"/>
+        <element name="StorefrontPropertiesSectionToggle" type="button" selector="#front_fieldset-wrapper"/>
     </section>
     <section name="WYSIWYGProductAttributeSection">
         <element name="ShowHideBtn" type="button" selector="#toggledefault_value_texteditor"/>
@@ -77,10 +88,16 @@
         <element name="AdvancedAttributePropertiesSectionToggle"
                  type="button" selector="#advanced_fieldset-wrapper"/>
         <element name="AttributeCode" type="text" selector="#attribute_code"/>
+        <element name="DefaultValueText" type="textarea" selector="#default_value_text"/>
+        <element name="DefaultValueTextArea" type="textarea" selector="#default_value_textarea"/>
+        <element name="DefaultValueDate" type="textarea" selector="#default_value_date"/>
+        <element name="DefaultValueYesNo" type="textarea" selector="#default_value_yesno"/>
         <element name="Scope" type="select" selector="#is_global"/>
         <element name="UniqueValue" type="select" selector="#is_unique"/>
         <element name="AddToColumnOptions" type="select" selector="#is_used_in_grid"/>
         <element name="UseInFilterOptions" type="select" selector="#is_filterable_in_grid"/>
         <element name="UseInProductListing" type="select" selector="#used_in_product_listing"/>
+        <element name="UseInSearch" type="select" selector="#is_searchable"/>
+        <element name="VisibleInAdvancedSearch" type="select" selector="#is_visible_in_advanced_search"/>
     </section>
 </sections>

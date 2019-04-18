@@ -190,6 +190,11 @@ class InvoiceService implements InvoiceManagementInterface
                 if ($orderItem->getProductType() == Type::TYPE_BUNDLE && !$orderItem->isShipSeparately()) {
                     $qtys[$orderItem->getId()] = $orderItem->getQtyOrdered() - $orderItem->getQtyInvoiced();
                 } else {
+                    $parentItem = $orderItem->getParentItem();
+                    $parentItemId = $parentItem ? $parentItem->getId() : null;
+                    if ($parentItemId && isset($qtys[$parentItemId])) {
+                        $qtys[$orderItem->getId()] = $qtys[$parentItemId];
+                    }
                     continue;
                 }
             }

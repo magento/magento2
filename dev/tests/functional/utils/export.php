@@ -7,7 +7,7 @@ include __DIR__ . '/authenticate.php';
 
 if (!empty($_POST['token']) && !empty($_POST['template'])) {
     if (authenticate(urldecode($_POST['token']))) {
-        $varDir = '../../../../var/';
+        $varDir = '../../../../var/export/';
         $template = urldecode($_POST['template']);
         $fileList = scandir($varDir, SCANDIR_SORT_NONE);
         $files = [];

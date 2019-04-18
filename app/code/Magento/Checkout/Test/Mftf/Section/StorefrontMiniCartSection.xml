@@ -25,6 +25,8 @@
         <element name="deleteMiniCartItem" type="button" selector=".action.delete" timeout="30"/>
         <element name="deleteMiniCartItemByName" type="button" selector="//ol[@id='mini-cart']//div[contains(., '{{var}}')]//a[contains(@class, 'delete')]" parameterized="true"/>
         <element name="miniCartSubtotalField" type="text" selector=".block-minicart .amount span.price"/>
+        <element name="itemQuantityBySku" type="input" selector="#minicart-content-wrapper input[data-cart-item-id='{{productSku}}']" parameterized="true"/>
+        <element name="itemQuantityUpdateBySku" type="button" selector="//div[@id='minicart-content-wrapper']//input[@data-cart-item-id='{{productSku}}']/../button[contains(@class, 'update-cart-item')]" parameterized="true"/>
         <element name="itemQuantity" type="input" selector="//a[text()='{{productName}}']/../..//input[contains(@class,'cart-item-qty')]" parameterized="true"/>
         <element name="itemQuantityUpdate" type="button" selector="//a[text()='{{productName}}']/../..//span[text()='Update']" parameterized="true"/>
         <element name="itemDiscount" type="text" selector="//tr[@class='totals']//td[@class='amount']/span"/>

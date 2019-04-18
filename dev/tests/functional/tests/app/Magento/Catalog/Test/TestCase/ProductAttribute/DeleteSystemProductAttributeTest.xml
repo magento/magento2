@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\DeleteSystemProductAttributeTest" summary="Delete System Product Attribute" ticketId="MAGETWO-24771">
         <variation name="DeleteSystemProductAttributeTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="productAttribute/data/attribute_code" xsi:type="string">news_from_date</data>
             <data name="productAttribute/data/is_user_defined" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertAbsenceDeleteAttributeButton" />

@@ -398,6 +398,17 @@
         &.orders-recent {
             &:extend(.abs-account-table-margin-mobile all);
             &:extend(.abs-no-border-top all);
+            .table-order-items {
+                &.table {
+                    tbody {
+                        > tr {
+                            > td.col {
+                                padding-left: 0;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -561,13 +572,13 @@
             margin: 0 @tab-control__margin-right 0 0;
 
             a {
-                padding: @tab-control__padding-top @tab-control__padding-right;
+                padding: @tab-control__padding-top @indent__base;
             }
 
             strong {
                 border-bottom: 0;
                 margin-bottom: -1px;
-                padding: @tab-control__padding-top @tab-control__padding-right @tab-control__padding-bottom + 1 @tab-control__padding-left;
+                padding: @tab-control__padding-top @indent__base @tab-control__padding-bottom + 1 @indent__base;
             }
         }
     }
@@ -689,6 +700,22 @@
                 &.total {
                     text-align: right;
                 }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) { 
+    .order-links {
+        .item {
+            margin: 0 @tab-control__margin-right 0 0;
+
+            a {
+                padding: @tab-control__padding-top @tab-control__padding-right;
+            }
+
+            strong {
+                padding: @tab-control__padding-top @tab-control__padding-right @tab-control__padding-bottom + 1 @tab-control__padding-left;
             }
         }
     }

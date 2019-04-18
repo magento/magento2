@@ -65,6 +65,10 @@
                 @_icon-font-color-active: false
             );
 
+            &:before { 
+                padding-left : 1px;  
+            }
+
             &:focus {
                 ._keyfocus & {
                     .lib-css(z-index, @checkout-tooltip__hover__z-index);
@@ -169,10 +173,10 @@
         width: 0;
     }
     .field-tooltip .field-tooltip-content::before {
-        border-bottom-color: @color-gray40;
+        .lib-css(border-bottom-color, @checkout-tooltip-content__border-color);
     }
     .field-tooltip .field-tooltip-content::after {
-        border-bottom-color: @color-gray-light01;
+        .lib-css(border-bottom-color, @checkout-tooltip-content__background-color);
         top: 1px;
     }
 }
