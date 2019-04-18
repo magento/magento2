@@ -94,7 +94,8 @@ class Format implements \Magento\Framework\Locale\FormatInterface
             $value = str_replace(
                 ',',
                 $locale === self::JAPAN_LOCALE_CODE ? '' : '.',
-                $value);
+                $value
+            );
         }
 
         return (float)$value;
