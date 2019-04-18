@@ -162,10 +162,6 @@ class CollectTest extends \PHPUnit\Framework\TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->will(
-            $this->returnValue(false)
-        );
-
         $this->assertInternalType(
             'array',
             $this->model->getModuleData()
@@ -256,10 +252,6 @@ class CollectTest extends \PHPUnit\Framework\TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->will(
-            $this->returnValue(true)
-        );
-
         $this->assertInternalType(
             'array',
             $this->model->getModuleData()
@@ -349,10 +341,6 @@ class CollectTest extends \PHPUnit\Framework\TestCase
         $this->moduleListMock->expects($this->any())
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
-
-        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->will(
-            $this->returnValue(true)
-        );
 
         $this->assertInternalType(
             'array',
