@@ -69,6 +69,7 @@ class Kernel
      * @param \Magento\Framework\App\Response\HttpFactory|null $httpFactory
      * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      * @param AppState|null $state
+     * @param \Magento\PageCache\Model\Cache\Type $fullPageCache
      */
     public function __construct(
         \Magento\Framework\App\PageCache\Cache $cache,
@@ -78,7 +79,8 @@ class Kernel
         \Magento\Framework\App\Http\ContextFactory $contextFactory = null,
         \Magento\Framework\App\Response\HttpFactory $httpFactory = null,
         \Magento\Framework\Serialize\SerializerInterface $serializer = null,
-        AppState $state = null
+        AppState $state = null,
+        \Magento\PageCache\Model\Cache\Type $fullPageCache = null
     ) {
         $this->cache = $cache;
         $this->identifier = $identifier;
@@ -94,6 +96,9 @@ class Kernel
             \Magento\Framework\Serialize\SerializerInterface::class
         );
         $this->state = $state ?? ObjectManager::getInstance()->get(AppState::class);
+        $this->fullPageCache = $fullPageCache ?? ObjectManager::getInstance()->get(
+            \Magento\PageCache\Model\Cache\Type::class
+        );
     }
 
     /**
@@ -104,7 +109,7 @@ class Kernel
     public function load()
     {
         if ($this->request->isGet() || $this->request->isHead()) {
-            $responseData = $this->getCache()->load($this->identifier->getValue());
+            $responseData = $this->fullPageCache->load($this->identifier->getValue());
             if (!$responseData) {
                 return false;
             }
@@ -143,7 +148,7 @@ class Kernel
                     header_remove('Set-Cookie');
                 }
 
-                $this->getCache()->save(
+                $this->fullPageCache->save(
                     $this->serializer->serialize($this->getPreparedData($response)),
                     $this->identifier->getValue(),
                     $tags,
@@ -196,20 +201,5 @@ class Kernel
         }
 
         return $response;
-    }
-
-    /**
-     * TODO: Workaround to support backwards compatibility, will rework to use Dependency Injection in MAGETWO-49547
-     *
-     * @return \Magento\PageCache\Model\Cache\Type
-     */
-    private function getCache()
-    {
-        if (!$this->fullPageCache) {
-            $this->fullPageCache = ObjectManager::getInstance()->get(
-                \Magento\PageCache\Model\Cache\Type::class
-            );
-        }
-        return $this->fullPageCache;
     }
 }
