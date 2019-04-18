@@ -139,4 +139,22 @@
         <data key="simple_action">by_percent</data>
         <data key="discount_amount">10</data>
     </entity>
+
+    <!-- DO NOT USE IN OTHER TESTS AS IT WILL BREAK THE EXISTING TESTS -->
+    <entity name="DeleteActiveCatalogPriceRuleWithConditions" type="catalogRule">
+        <data key="name" unique="suffix">Delete Active Catalog Rule with conditions </data>
+        <data key="description">Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+            <item>1</item>
+            <item>2</item>
+            <item>3</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">10</data>
+    </entity>
 </entities>

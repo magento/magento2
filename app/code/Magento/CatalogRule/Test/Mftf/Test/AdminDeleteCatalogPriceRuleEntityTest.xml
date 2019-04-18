@@ -8,11 +8,11 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="DeleteCatalogPriceRuleEntityTest1">
+    <test name="AdminDeleteCatalogPriceRuleEntityFromSimpleProductTest">
         <annotations>
             <stories value="Delete Catalog Price Rule"/>
             <title value="Delete Catalog Price Rule for Simple Product"/>
-            <description value="Assert that Catalog Price Rule is not applied for simple product"/>
+            <description value="Assert that Catalog Price Rule is not applied for simple product."/>
             <testCaseId value="MC-14073"/>
             <severity value="CRITICAL"/>
             <group value="CatalogRule"/>
@@ -26,9 +26,18 @@
                 <requiredEntity createDataKey="createCategory1"/>
             </createData>
 
-            <createData entity="ActiveCatalogPriceRuleWithConditions" stepKey="createCatalogRule1"/>
-
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
+            <waitForPageLoad stepKey="waitForPageToLoad1"/>
+
+            <actionGroup ref="CreateCatalogPriceRuleViaTheUi" stepKey="createCatalogPriceRuleViaTheUi1">
+                <argument name="catalogRule" value="DeleteActiveCatalogPriceRuleWithConditions"/>
+            </actionGroup>
+
+            <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="saveTheCatalogRule"/>
+            <waitForPageLoad stepKey="waitForPageToLoad3"/>
+            <see selector="{{AdminNewCatalogPriceRule.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
@@ -42,7 +51,7 @@
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
         <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule1">
-            <argument name="name" value="$$createCatalogRule1.name$$"/>
+            <argument name="name" value="{{DeleteActiveCatalogPriceRuleWithConditions.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
         </actionGroup>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
@@ -54,6 +63,7 @@
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage1"/>
 
         <!-- reindex -->
+        <magentoCLI command="cache:flush" stepKey="flushCache1"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
 
         <!-- assert that the rule isn't present on the Category page -->
@@ -81,7 +91,7 @@
         <see selector="{{CheckoutCartProductSection.ProductRegularPriceByName($$createProduct1.name$$)}}" userInput="$$createProduct1.price$$" stepKey="seeCorrectProductPriceOnCheckout1"/>
     </test>
 
-    <test name="DeleteCatalogPriceRuleEntityTest2">
+    <test name="AdminDeleteCatalogPriceRuleEntityFromConfigurableProductTest">
         <annotations>
             <stories value="Delete Catalog Price Rule"/>
             <title value="Delete Catalog Price Rule for Configurable Product"/>
@@ -94,7 +104,6 @@
 
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer1"/>
-            <createData entity="ActiveCatalogPriceRuleWithConditions" stepKey="createCatalogRule1"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
 
             <!-- Create the configurable product based on the data in the /data folder -->
@@ -147,6 +156,17 @@
             </createData>
 
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
+            <waitForPageLoad stepKey="waitForPageToLoad1"/>
+
+            <actionGroup ref="CreateCatalogPriceRuleViaTheUi" stepKey="createCatalogPriceRuleViaTheUi1">
+                <argument name="catalogRule" value="DeleteActiveCatalogPriceRuleWithConditions"/>
+            </actionGroup>
+
+            <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="saveTheCatalogRule"/>
+            <waitForPageLoad stepKey="waitForPageToLoad3"/>
+            <see selector="{{AdminNewCatalogPriceRule.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
@@ -163,37 +183,37 @@
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
         <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule1">
-            <argument name="name" value="$$createCatalogRule1.name$$"/>
+            <argument name="name" value="{{DeleteActiveCatalogPriceRuleWithConditions.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
         </actionGroup>
-
-        <!-- assert that the Success message is present after the delete -->
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
 
         <!-- assert that the Grid Empty message is present -->
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage1"/>
 
         <!-- reindex -->
+        <magentoCLI command="cache:flush" stepKey="flushCache1"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
 
         <!-- assert that the rule isn't present on the Category page -->
         <amOnPage url="$$createCategory1.name$$.html" stepKey="goToStorefrontCategoryPage1"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createConfigProduct1.name$$)}}" userInput="$$createConfigChildProduct1.price$$" stepKey="seeRegularPriceText1"/>
 
         <!-- assert that the rule isn't present on the Product page -->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct1.custom_attributes[url_key]$$)}}" stepKey="goToStorefrontProductPage1"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
         <dontSee selector="{{StorefrontProductInfoMainSection.oldPriceTag}}" userInput="Regular Price" stepKey="dontSeeRegularPriceText2"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct1.price$$" stepKey="seeTrueProductPrice1"/>
 
         <!-- assert that the rule isn't present in the Shopping Cart -->
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="option1" stepKey="selectOption1"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added $$createConfigProduct1.name$ to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniShoppingCart1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
         <see selector="{{StorefrontMinicartSection.productPriceByName($$createConfigProduct1.name$$)}}" userInput="$$createConfigProduct1.price$$" stepKey="seeCorrectProductPrice1"/>
     </test>
 </tests>
