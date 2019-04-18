@@ -10,6 +10,7 @@ use Magento\Store\Model\StoreManager;
 
 /**
  * Class CachePlugin
+ *
  * Should add design exceptions o identifier for built-in cache
  */
 class CacheIdentifierPlugin

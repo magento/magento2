@@ -11,6 +11,7 @@ use Magento\Store\Model\StoreManager;
 
 /**
  * Class CacheIdentifierPluginTest
+ *
  * Test for plugin to identifier to work with design exceptions
  */
 class CacheIdentifierPluginTest extends \PHPUnit\Framework\TestCase
@@ -97,7 +98,8 @@ class CacheIdentifierPluginTest extends \PHPUnit\Framework\TestCase
             'Built-in + PageCache enabled' => [Config::BUILT_IN, true, null, false, false],
             'Built-in, PageCache enabled, no user-agent exceptions' =>
                 [Config::BUILT_IN, true, 'aa123aa', false, 'aa123aa'],
-            'Built-in, PageCache enabled, with design exception' => [Config::BUILT_IN, true, 'aa123aa', '7', 'DESIGN=7|aa123aa']
+            'Built-in, PageCache enabled, with design exception' =>
+                [Config::BUILT_IN, true, 'aa123aa', '7', 'DESIGN=7|aa123aa']
         ];
     }
 
