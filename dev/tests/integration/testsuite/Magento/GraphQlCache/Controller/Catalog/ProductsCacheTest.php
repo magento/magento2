@@ -43,7 +43,6 @@ class ProductsCacheTest extends AbstractGraphqlCacheTest
     /**
      * Test request is dispatched and response is checked for debug headers and cache tags
      *
-     * @magentoCache all enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
      */
     public function testToCheckRequestCacheTagsForProducts(): void

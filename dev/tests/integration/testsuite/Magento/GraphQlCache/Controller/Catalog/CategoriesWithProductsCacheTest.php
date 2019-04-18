@@ -44,16 +44,14 @@ class CategoriesWithProductsCacheTest extends AbstractGraphqlCacheTest
     /**
      * Test cache tags and debug header for category with products querying for products and category
      *
-     * @magentoCache all enabled
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
-     *
      */
     public function testToCheckRequestCacheTagsForCategoryWithProducts(): void
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         /** @var ProductInterface $product */
-        $product= $productRepository->get('simple333');
+        $product = $productRepository->get('simple333');
         $categoryId ='333';
         $query
             = <<<QUERY

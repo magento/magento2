@@ -42,9 +42,7 @@ class CategoryCacheTest extends AbstractGraphqlCacheTest
     /**
      * Test cache tags and debug header for category and querying only for category
      *
-     * @magentoCache all enabled
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
-     *
      */
     public function testToCheckRequestCacheTagsForForCategory(): void
     {
