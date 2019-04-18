@@ -494,6 +494,24 @@ QUERY;
     }
 
     /**
+     * @return array
+     */
+    public function dataProviderSetWithoutRequiredParameters(): array
+    {
+        return [
+            'missed_billing_address' => [
+                'cart_id: "cart_id_value"',
+                'Field SetBillingAddressOnCartInput.billing_address of required type BillingAddressInput!'
+                . ' was not provided.',
+            ],
+            'missed_cart_id' => [
+                'billing_address: {}',
+                'Required parameter "cart_id" is missing'
+            ]
+        ];
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
@@ -534,24 +552,6 @@ mutation {
 QUERY;
         self::expectExceptionMessage('"Street Address" cannot contain more than 2 lines.');
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderSetWithoutRequiredParameters(): array
-    {
-        return [
-            'missed_billing_address' => [
-                'cart_id: "cart_id_value"',
-                'Field SetBillingAddressOnCartInput.billing_address of required type BillingAddressInput!'
-                . ' was not provided.',
-            ],
-            'missed_cart_id' => [
-                'billing_address: {}',
-                'Required parameter "cart_id" is missing'
-            ]
-        ];
     }
 
     /**
