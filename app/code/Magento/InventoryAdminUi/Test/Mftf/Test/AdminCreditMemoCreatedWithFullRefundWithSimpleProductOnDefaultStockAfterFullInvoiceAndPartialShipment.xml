@@ -131,7 +131,7 @@
             <argument name="value" value="$$simpleProduct.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="97" stepKey="checkProductSourceQtyAfterPartialShipment"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="90" stepKey="checkSalableQtyAfterPartialShipment"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="95" stepKey="checkSalableQtyAfterPartialShipment"/>
 
         <!--Admin Area Create Full Credit Memo-->
         <comment userInput="Admin - Create credit memo for full order" stepKey="AdminCreateCreditMemoFullOrder"/>
