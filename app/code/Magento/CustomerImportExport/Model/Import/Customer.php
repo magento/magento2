@@ -423,6 +423,9 @@ class Customer extends AbstractCustomer
             $attributeParameters = $this->_attributes[$attributeCode];
             if (in_array($attributeParameters['type'], ['select', 'boolean'])) {
                 $value = $this->getSelectAttrIdByValue($attributeParameters, $value);
+                if ($attributeCode === CustomerInterface::GENDER && $value === 0) {
+                    $value = null;
+                }
             } elseif ('multiselect' == $attributeParameters['type']) {
                 $ids = [];
                 foreach (explode($multiSeparator, mb_strtolower($value)) as $subValue) {
