@@ -9,72 +9,44 @@ namespace Magento\GraphQlCache\Controller\Catalog;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\GraphQl\Controller\GraphQl;
+use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 
 /**
  * Tests cache debug headers and cache tag validation for a simple product query
  *
  * @magentoAppArea graphql
+ * @magentoCache full_page enabled
  * @magentoDbIsolation disabled
- * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductsDispatchTest extends \Magento\TestFramework\Indexer\TestCase
+class ProductsCacheTest extends AbstractGraphqlCacheTest
 {
-    const CONTENT_TYPE = 'application/json';
-
-    /** @var \Magento\Framework\ObjectManagerInterface */
-    private $objectManager;
-
-    /** @var GraphQl */
-    private $graphql;
-
-    /** @var SerializerInterface */
-    private $jsonSerializer;
-
-    /** @var MetadataPool */
-    private $metadataPool;
-
-    /** @var Http */
-    private $request;
+    /**
+     * @var GraphQl
+     */
+    private $graphqlController;
 
     /**
-     * @inheritdoc
+     * @var Http
      */
-    public static function setUpBeforeClass()
-    {
-        $db = Bootstrap::getInstance()->getBootstrap()
-            ->getApplication()
-            ->getDbInstance();
-        if (!$db->isDbDumpExists()) {
-            throw new \LogicException('DB dump does not exist.');
-        }
-        $db->restoreFromDbDump();
-
-        parent::setUpBeforeClass();
-    }
+    private $request;
 
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-        $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
-        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
-        $this->request = $this->objectManager->get(Http::class);
+        parent::setUp();
+        $this->graphqlController = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
+        $this->request = $this->objectManager->create(Http::class);
     }
-
     /**
      * Test request is dispatched and response is checked for debug headers and cache tags
      *
      * @magentoCache all enabled
-     * @return void
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
      */
-    public function testDispatchWithGetForCacheDebugHeadersAndCacheTagsForProducts(): void
+    public function testToCheckRequestCacheTagsForProducts(): void
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -103,12 +75,10 @@ QUERY;
         $this->request->setMethod('GET');
         $this->request->setQueryValue('query', $query);
         /** @var \Magento\Framework\Controller\Result\Json $result */
-        $result = $this->graphql->dispatch($this->request);
+        $result = $this->graphqlController->dispatch($this->request);
         /** @var \Magento\Framework\App\Response\Http $response */
         $response = $this->objectManager->get(\Magento\Framework\App\Response\Http::class);
         /** @var  $registry \Magento\Framework\Registry */
-        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
-        $registry->register('use_page_cache_plugin', true, true);
         $result->renderResult($response);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
