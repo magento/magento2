@@ -145,11 +145,9 @@ class Full extends AbstractAction
     }
 
     /**
-     * Refresh entities index
-     *
-     * @return $this
+     * @inheritdoc
      */
-    public function execute(): self
+    public function execute()
     {
         $this->createTables();
         $this->clearReplicaTables();

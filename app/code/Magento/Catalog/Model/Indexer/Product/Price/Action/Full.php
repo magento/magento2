@@ -267,7 +267,6 @@ class Full extends AbstractAction
      * @param string $typeId
      *
      * @return BatchIterator
-     * @throws \Exception
      */
     private function getBatchesForIndexer(string $typeId): BatchIterator
     {
@@ -278,7 +277,7 @@ class Full extends AbstractAction
         $select->from(['e' => $entityMetadata->getEntityTable()], $entityMetadata->getIdentifierField());
 
         return $this->batchQueryGenerator->generate(
-            $this->getProductMetaData()->getIdentifierField(),
+            $entityMetadata->getIdentifierField(),
             $select,
             $this->batchSizeCalculator->estimateBatchSize(
                 $connection,
@@ -372,7 +371,6 @@ class Full extends AbstractAction
      *
      * @param Select $batch
      * @return array
-     * @throws \Exception
      */
     private function getEntityIdsFromBatch(Select $batch): array
     {
@@ -385,7 +383,6 @@ class Full extends AbstractAction
      * Get product meta data
      *
      * @return EntityMetadataInterface
-     * @throws \Exception
      */
     private function getProductMetaData(): EntityMetadataInterface
     {
@@ -400,7 +397,6 @@ class Full extends AbstractAction
      * Get replica table
      *
      * @return string
-     * @throws \Exception
      */
     private function getReplicaTable(): string
     {
@@ -413,7 +409,6 @@ class Full extends AbstractAction
      * Replacement of tables from replica to main
      *
      * @return void
-     * @throws \Zend_Db_Statement_Exception
      */
     private function switchTables()
     {
@@ -442,7 +437,6 @@ class Full extends AbstractAction
      *
      * @param array $dimensions
      * @return void
-     * @throws \Zend_Db_Statement_Exception
      */
     private function moveDataFromReplicaTableToReplicaTables(array $dimensions)
     {
