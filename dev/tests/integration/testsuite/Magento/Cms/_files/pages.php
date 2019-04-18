@@ -14,7 +14,7 @@ $page->setTitle('Cms Page 100')
     ->setContentHeading('<h2>Cms Page 100 Title</h2>')
     ->setMetaTitle('Cms Meta title for page100')
     ->setMetaKeywords('Cms Meta Keywords for page100')
-    ->setsetMetaDescription('Cms Meta Description for page100')
+    ->setMetaDescription('Cms Meta Description for page100')
     ->setPageLayout('1column')
     ->save();
 
@@ -27,7 +27,7 @@ $page->setTitle('Cms Page Design Blank')
     ->setContentHeading('<h2>Cms Page Blank Title</h2>')
     ->setMetaTitle('Cms Meta title for Blank page')
     ->setMetaKeywords('Cms Meta Keywords for Blank page')
-    ->setsetMetaDescription('Cms Meta Description for Blank page')
+    ->setMetaDescription('Cms Meta Description for Blank page')
     ->setPageLayout('1column')
     ->setCustomTheme('Magento/blank')
     ->save();

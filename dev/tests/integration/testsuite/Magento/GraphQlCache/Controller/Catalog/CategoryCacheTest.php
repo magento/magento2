@@ -71,8 +71,7 @@ QUERY;
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['cat_c','cat_c_' . $categoryId,'FPC'];
-        foreach (array_keys($actualCacheTags) as $key) {
-            $this->assertEquals($expectedCacheTags[$key], $actualCacheTags[$key]);
-        }
+        $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 }
+

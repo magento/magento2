@@ -18,7 +18,6 @@ use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
  *
  * @magentoAppArea graphql
  * @magentoCache full_page enabled
- * @magentoDbIsolation disabled
  */
 class CategoriesWithProductsCacheTest extends AbstractGraphqlCacheTest
 {
@@ -81,7 +80,7 @@ query GetCategoryWithProducts(\$id: Int!, \$pageSize: Int!, \$currentPage: Int!)
     }
 QUERY;
         $variables =[
-            'id' => 333,
+            'id' => $categoryId,
             'pageSize'=> 10,
             'currentPage' => 1
         ];
@@ -105,3 +104,4 @@ QUERY;
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 }
+
