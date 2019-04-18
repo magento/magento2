@@ -103,7 +103,7 @@ class TableCleaner extends ConfigValue
      */
     public function afterSave()
     {
-        if (!$this->getValue() !== self::AUTO_GENERATED_ROW_FLAG) {
+        if ($this->getValue() == self::URL_REWRITE_GENERATION_OFF_FLAG) {
             $this->clearOldData();
         }
         return parent::afterSave();

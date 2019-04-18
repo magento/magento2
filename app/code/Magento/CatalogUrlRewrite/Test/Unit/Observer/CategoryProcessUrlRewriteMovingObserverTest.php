@@ -111,6 +111,7 @@ class CategoryProcessUrlRewriteMovingObserverTest extends \PHPUnit\Framework\Tes
         $observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $this->scopeConfigMock->expects($this->once())->method('isSetFlag')
             ->with(UrlKeyRenderer::XML_PATH_SEO_SAVE_HISTORY)->willReturn(true);
+        $this->scopeConfigMock->method('getValue')->willReturn(true);
         $this->categoryUrlRewriteGeneratorMock->expects($this->once())->method('generate')
             ->with($categoryMock, true)->willReturn(['category-url-rewrite']);
         $this->urlRewriteHandlerMock->expects($this->once())->method('generateProductUrlRewrites')
