@@ -20,7 +20,7 @@ interface DependentPatchInterface
     /**
      * Get array of patches that have to be executed prior to this.
      *
-     * example of implementation:
+     * Example of implementation:
      *
      * [
      *      \Vendor_Name\Module_Name\Setup\Patch\Patch1::class,
