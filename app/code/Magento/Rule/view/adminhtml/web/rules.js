@@ -126,7 +126,7 @@ define([
                 var values = this.updateElement.value.split(','),
  s = '';
 
-                for (i = 0; i < values.length; i++) {
+                for (var i = 0; i < values.length; i++) {
                     s = values[i].strip();
 
                     if (s != '') {
@@ -255,7 +255,7 @@ define([
                 if (elem && elem.options) {
                     var selectedOptions = [];
 
-                    for (i = 0; i < elem.options.length; i++) {
+                    for (var i = 0; i < elem.options.length; i++) {
                         if (elem.options[i].selected) {
                             selectedOptions.push(elem.options[i].text);
                         }
