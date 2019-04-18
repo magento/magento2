@@ -11,14 +11,12 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
-use Magento\TestFramework\ObjectManager;
 
 /**
  * Tests cache debug headers and cache tag validation for a deep nested category and product query
  *
  * @magentoAppArea graphql
  * @magentoDbIsolation disabled
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeepNestedCategoriesAndProductsTest extends AbstractGraphqlCacheTest
 {
@@ -47,11 +45,11 @@ class DeepNestedCategoriesAndProductsTest extends AbstractGraphqlCacheTest
      */
     public function testDispatchForCacheHeadersOnDeepNestedQueries(): void
     {
-        $categoryId ='333';
+        $baseCategoryId ='333';
         $query
             = <<<QUERY
         {
-  category(id: $categoryId) {
+  category(id: $baseCategoryId) {
     products {
       items {
         attribute_set_id
@@ -80,19 +78,23 @@ class DeepNestedCategoriesAndProductsTest extends AbstractGraphqlCacheTest
 }
 QUERY;
         /** @var CategoryRepositoryInterface $categoryRepository */
-        $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
+        $categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
         /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $categoryIds = [];
-        $category = $categoryRepository->get('333');
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+
+        $resolvedCategoryIds = [];
+        $category = $categoryRepository->get($baseCategoryId);
 
         $productIdsFromCategory = $category->getProductCollection()->getAllIds();
         foreach ($productIdsFromCategory as $productId) {
-            $categoryIds = array_merge($categoryIds, $productRepository->getById($productId)->getCategoryIds());
+            $resolvedCategoryIds = array_merge(
+                $resolvedCategoryIds,
+                $productRepository->getById($productId)->getCategoryIds()
+            );
         }
 
-        $categoryIds = array_merge($categoryIds, ['333']);
-        foreach ($categoryIds as $categoryId) {
+        $resolvedCategoryIds = array_merge($resolvedCategoryIds, [$baseCategoryId]);
+        foreach ($resolvedCategoryIds as $categoryId) {
             $category = $categoryRepository->get($categoryId);
             $productIdsFromCategory= array_merge(
                 $productIdsFromCategory,
@@ -101,13 +103,13 @@ QUERY;
         }
 
         $uniqueProductIds = array_unique($productIdsFromCategory);
-        $uniqueCategoryIds = array_unique($categoryIds);
+        $uniqueCategoryIds = array_unique($resolvedCategoryIds);
         $expectedCacheTags = ['cat_c', 'cat_p', 'FPC'];
-        foreach ($uniqueProductIds as $productId) {
-            $expectedCacheTags = array_merge($expectedCacheTags, ['cat_p_'.$productId]);
+        foreach ($uniqueProductIds as $uniqueProductId) {
+            $expectedCacheTags = array_merge($expectedCacheTags, ['cat_p_'.$uniqueProductId]);
         }
-        foreach ($uniqueCategoryIds as $categoryId) {
-            $expectedCacheTags = array_merge($expectedCacheTags, ['cat_c_'.$categoryId]);
+        foreach ($uniqueCategoryIds as $uniqueCategoryId) {
+            $expectedCacheTags = array_merge($expectedCacheTags, ['cat_c_'.$uniqueCategoryId]);
         }
 
         $this->request->setPathInfo('/graphql');
