@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Abstract test class for Graphql cache tests
  */
-class AbstractGraphqlCacheTest extends TestCase
+abstract class AbstractGraphqlCacheTest extends TestCase
 {
     /**
      * @var ObjectManager
