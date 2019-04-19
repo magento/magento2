@@ -94,7 +94,7 @@ return [
                                                         'value' => 'by_percent',
                                                     ],
                                                     [
-                                                        'label' => __('Fixed amount discount'),
+                                                        'label' => __('Fixed amount per product discount'),
                                                         'value' => 'by_fixed',
                                                     ],
                                                     [

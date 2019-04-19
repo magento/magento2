@@ -109,7 +109,7 @@ is,is
 "is not one of","is not one of"
 "If %1 %2 %3 for a subselection of items in cart matching %4 of these conditions:","If %1 %2 %3 for a subselection of items in cart matching %4 of these conditions:"
 "Percent of product price discount","Percent of product price discount"
-"Fixed amount discount","Fixed amount discount"
+"Fixed amount per product discount","Fixed amount per product discount"
 "Fixed amount discount for whole cart","Fixed amount discount for whole cart"
 "Buy X get Y free (discount amount is Y)","Buy X get Y free (discount amount is Y)"
 Active,Active
