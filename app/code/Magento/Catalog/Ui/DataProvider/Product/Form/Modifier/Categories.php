@@ -398,7 +398,7 @@ class Categories extends AbstractModifier
      * @return array|null
      * @throws LocalizedException
      */
-    private function retrieveCategoriesTree(int $storeId, array $shownCategoriesIds) : ?array
+    private function retrieveCategoriesTree(int $storeId, array $shownCategoriesIds)
     {
         /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
         $collection = $this->categoryCollectionFactory->create();
