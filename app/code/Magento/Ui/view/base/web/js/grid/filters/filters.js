@@ -272,14 +272,21 @@ define([
             }
 
             filter = utils.extend({}, filters.base, filter);
+            //Accepting labels as is.
+            filter.__disableTmpl = {
+                label: 1
+            };
+
+            filter = utils.template(filter, {
+                filters: this,
+                column: column
+            }, true, true);
+
             filter.__disableTmpl = {
                 label: true
             };
 
-            return utils.template(filter, {
-                filters: this,
-                column: column
-            }, true, true);
+            return filter;
         },
 
         /**
