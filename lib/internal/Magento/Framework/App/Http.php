@@ -277,7 +277,7 @@ class Http implements \Magento\Framework\AppInterface
      * Handler for bootstrap errors
      *
      * @param Bootstrap $bootstrap
-     * @param \Exception &$exception
+     * @param \Exception $exception
      * @return bool
      */
     private function handleBootstrapErrors(Bootstrap $bootstrap, \Exception &$exception)

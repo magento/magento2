@@ -115,7 +115,7 @@ class TableBuilder
     /**
      * Create empty temporary table with given columns list
      *
-     * @param string $tableName  Table name
+     * @param string $tableName Table name
      * @param array $columns array('columnName' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute, ...)
      * @param string $valueFieldSuffix
      *
