@@ -4,7 +4,11 @@
     "require": {
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
-        "magento/module-sales": "*"
+        "magento/module-sales": "*",
+        "magento/module-inventory-api": "*",
+        "magento/module-inventory-reservations-api": "*",
+        "magento/module-inventory-sales-api": "*",
+        "magento/module-inventory-configuration-api": "*"
     },
     "type": "magento2-module",
     "license": [
