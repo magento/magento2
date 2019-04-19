@@ -30,6 +30,9 @@
             <waitForPageLoad stepKey="waitForDashboardLoad"/>
         </before>
         <after>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableThirdCreatedSource">
+                <argument name="sourceCode" value="$$createSource.source[source_code]$$"/>
+            </actionGroup>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
