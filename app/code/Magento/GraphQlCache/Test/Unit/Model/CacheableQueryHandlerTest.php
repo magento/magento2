@@ -9,9 +9,9 @@ namespace Magento\GraphQlCache\Test\Unit\Model;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\IdentityResolverInterface;
+use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 use Magento\GraphQlCache\Model\CacheableQueryHandler;
-use Magento\GraphQlCache\Model\IdentityResolverPool;
+use Magento\GraphQlCache\Model\Resolver\IdentityPool;
 use Magento\GraphQlCache\Model\CacheableQuery;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -28,50 +28,50 @@ class CacheableQueryHandlerTest extends TestCase
 
     private $requestMock;
 
-    private $identityResolverPoolMock;
+    private $identityPoolMock;
 
     protected function setup(): void
     {
         $objectManager = new ObjectManager($this);
         $this->cacheableQueryMock = $this->createMock(CacheableQuery::class);
         $this->requestMock = $this->createMock(Http::class);
-        $this->identityResolverPoolMock = $this->createMock(IdentityResolverPool::class);
+        $this->identityPoolMock = $this->createMock(IdentityPool::class);
         $this->cacheableQueryHandler = $objectManager->getObject(
             CacheableQueryHandler::class,
             [
                 'cacheableQuery' => $this->cacheableQueryMock,
                 'request' => $this->requestMock,
-                'identityResolverPool' => $this->identityResolverPoolMock
+                'identityPool' => $this->identityPoolMock
             ]
         );
     }
 
     /**
      * @param array $resolvedData
-     * @param array $resolvedIdentities
+     * @param array $identities
      * @dataProvider resolvedDataProvider
      */
     public function testhandleCacheFromResolverResponse(
         array $resolvedData,
-        array $resolvedIdentities,
+        array $identities,
         array $expectedCacheTags
     ): void {
         $cacheData = [
-            'cacheIdentityResolver' => IdentityResolverInterface::class,
+            'cacheIdentity' => IdentityInterface::class,
             'cacheTag' => 'cat_p'
         ];
         $fieldMock = $this->createMock(Field::class);
-        $mockIdentityResolver = $this->getMockBuilder($cacheData['cacheIdentityResolver'])
-            ->setMethods(['getIdentifiers'])
+        $mockIdentity = $this->getMockBuilder($cacheData['cacheIdentity'])
+            ->setMethods(['getIdentities'])
             ->getMockForAbstractClass();
 
         $this->requestMock->expects($this->once())->method('isGet')->willReturn(true);
-        $this->identityResolverPoolMock->expects($this->once())->method('get')->willReturn($mockIdentityResolver);
+        $this->identityPoolMock->expects($this->once())->method('get')->willReturn($mockIdentity);
         $fieldMock->expects($this->once())->method('getCache')->willReturn($cacheData);
-        $mockIdentityResolver->expects($this->once())
-            ->method('getIdentifiers')
+        $mockIdentity->expects($this->once())
+            ->method('getIdentities')
             ->with($resolvedData)
-            ->willReturn($resolvedIdentities);
+            ->willReturn($identities);
         $this->cacheableQueryMock->expects($this->once())->method('addCacheTags')->with($expectedCacheTags);
         $this->cacheableQueryMock->expects($this->once())->method('isCacheable')->willReturn(true);
         $this->cacheableQueryMock->expects($this->once())->method('setCacheValidity')->with(true);
@@ -91,7 +91,7 @@ class CacheableQueryHandlerTest extends TestCase
                     "name" => "TesName",
                     "sku" => "TestSku"
                 ],
-                "resolvedIdentities" => [10],
+                "identities" => [10],
                 "expectedCacheTags" => ["cat_p", "cat_p_10"]
             ]
         ];

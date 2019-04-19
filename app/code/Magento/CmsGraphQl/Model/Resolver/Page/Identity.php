@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\CmsGraphQl\Model\Resolver\Page;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Framework\GraphQl\Query\IdentityResolverInterface;
+use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 
 /**
  * Identity for resolved CMS page
  */
-class IdentityResolver implements IdentityResolverInterface
+class Identity implements IdentityInterface
 {
     /**
      * Get page ID from resolved data
@@ -21,7 +21,7 @@ class IdentityResolver implements IdentityResolverInterface
      * @param array $resolvedData
      * @return array
      */
-    public function getIdentifiers(array $resolvedData): array
+    public function getIdentities(array $resolvedData): array
     {
         return empty($resolvedData[PageInterface::PAGE_ID]) ? [] : [$resolvedData[PageInterface::PAGE_ID]];
     }

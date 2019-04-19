@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
-use Magento\Framework\GraphQl\Query\IdentityResolverInterface;
+use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 
 /**
  * Identity for resolved products
  */
-class IdentityResolver implements IdentityResolverInterface
+class Identity implements IdentityInterface
 {
     /**
      * Get product ids for cache tag
@@ -20,7 +20,7 @@ class IdentityResolver implements IdentityResolverInterface
      * @param array $resolvedData
      * @return array
      */
-    public function getIdentifiers(array $resolvedData): array
+    public function getIdentities(array $resolvedData): array
     {
         $ids = [];
         $items = $resolvedData['items'] ?? [];

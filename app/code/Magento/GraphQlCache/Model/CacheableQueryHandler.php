@@ -9,6 +9,7 @@ namespace Magento\GraphQlCache\Model;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\App\RequestInterface;
+use Magento\GraphQlCache\Model\Resolver\IdentityPool;
 
 /**
  * Handler of collecting tagging on cache.
@@ -29,23 +30,23 @@ class CacheableQueryHandler
     private $request;
 
     /**
-     * @var IdentityResolverPool
+     * @var IdentityPool
      */
-    private $identityResolverPool;
+    private $identityPool;
 
     /**
      * @param CacheableQuery $cacheableQuery
      * @param RequestInterface $request
-     * @param IdentityResolverPool $identityResolverPool
+     * @param IdentityPool $identityPool
      */
     public function __construct(
         CacheableQuery $cacheableQuery,
         RequestInterface $request,
-        IdentityResolverPool $identityResolverPool
+        IdentityPool $identityPool
     ) {
         $this->cacheableQuery = $cacheableQuery;
         $this->request = $request;
-        $this->identityResolverPool = $identityResolverPool;
+        $this->identityPool = $identityPool;
     }
 
     /**
@@ -58,15 +59,15 @@ class CacheableQueryHandler
     public function handleCacheFromResolverResponse(array $resolvedValue, Field $field) : void
     {
         $cache = $field->getCache();
-        $cacheIdentityResolverClass = $cache['cacheIdentityResolver'] ?? '';
+        $cacheIdentityClass = $cache['cacheIdentity'] ?? '';
         $cacheable = $cache['cacheable'] ?? true;
         $cacheTag = $cache['cacheTag'] ?? null;
 
         $cacheTags = [];
         if ($cacheTag && $this->request->isGet()) {
-            if (!empty($cacheIdentityResolverClass)) {
-                $cacheIdentityResolver = $this->identityResolverPool->get($cacheIdentityResolverClass);
-                $cacheTagIds = $cacheIdentityResolver->getIdentifiers($resolvedValue);
+            if (!empty($cacheIdentityClass)) {
+                $cacheIdentity = $this->identityPool->get($cacheIdentityClass);
+                $cacheTagIds = $cacheIdentity->getIdentities($resolvedValue);
                 if (!empty($cacheTagIds)) {
                     $cacheTags[] = $cacheTag;
                     foreach ($cacheTagIds as $cacheTagId) {
