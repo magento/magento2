@@ -21,4 +21,16 @@
     <entity name="GlobalCustomerAccountSharing" type="account_share_scope_value">
         <data key="value">0</data>
     </entity>
+    <entity name="EnableCustomerRedirectToDashboardConfigData">
+        <data key="path">customer/startup/redirect_dashboard</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableCustomerRedirectToDashboardConfigData">
+        <data key="path">customer/startup/redirect_dashboard</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

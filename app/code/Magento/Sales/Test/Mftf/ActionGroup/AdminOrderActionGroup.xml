@@ -281,6 +281,15 @@
         <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.country_id}}" stepKey="seeShippingAddressCountry"/>
         <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.postcode}}" stepKey="seeShippingAddressPostcode"/>
     </actionGroup>
+    <actionGroup name="AssertOrderAddressInformationActionGroup" extends="verifyBasicOrderInformation">
+        <remove keyForRemoval="seeCustomerName"/>
+        <remove keyForRemoval="seeCustomerEmail"/>
+        <remove keyForRemoval="seeCustomerGroup"/>
+        <remove keyForRemoval="seeBillingAddressCountry"/>
+        <remove keyForRemoval="seeShippingAddressCountry"/>
+        <see selector="{{AdminOrderAddressInformationSection.billingAddress}}" userInput="{{billingAddress.country}}" stepKey="seeBillingCountry" after="seeBillingAddressCity"/>
+        <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.country}}" stepKey="seeAddressCountry" after="seeShippingAddressCity"/>
+    </actionGroup>
 
     <!--Verify order information-->
     <actionGroup name="verifyCreatedOrderInformation">
