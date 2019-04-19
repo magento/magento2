@@ -1798,7 +1798,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 $uploadedImages[$columnImage] = $uploadedFile;
                             } else {
                                 unset($rowData[$column]);
-                                $this->skipRow($rowNum, ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE);
+                                $this->addRowError(
+                                    ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
+                                    $rowNum,
+                                    null,
+                                    null,
+                                    ProcessingError::ERROR_LEVEL_NOT_CRITICAL
+                                );
                             }
                         } else {
                             $uploadedFile = $uploadedImages[$columnImage];
