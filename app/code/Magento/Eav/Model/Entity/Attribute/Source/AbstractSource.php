@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 /**
@@ -65,7 +66,7 @@ abstract class AbstractSource implements
     {
         $options = $this->getAllOptions();
         // Fixed for tax_class_id and custom_design
-        if (sizeof($options) > 0) {
+        if (count($options) > 0) {
             foreach ($options as $option) {
                 if (isset($option['value']) && $option['value'] == $value) {
                     return isset($option['label']) ? $option['label'] : $option['value'];
@@ -168,10 +169,11 @@ abstract class AbstractSource implements
     }
 
     /**
-     * Multibyte support strcasecmp function version
+     * Multibyte support strcasecmp function version.
+     *
      * @param string $str1
      * @param string $str2
-     * @return int|\\lt
+     * @return int
      */
     private function mbStrcasecmp($str1, $str2)
     {
