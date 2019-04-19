@@ -61,4 +61,12 @@
             <argument name="resolver" xsi:type="object">Magento\Braintree\Model\LocaleResolver</argument>
         </arguments>
     </type>
+    <type name="Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderPool">
+        <arguments>
+            <argument name="services" xsi:type="array">
+                <item name="braintree" xsi:type="string">Magento\Braintree\Model\Multishipping\PlaceOrder</item>
+                <item name="braintree_paypal" xsi:type="string">Magento\Braintree\Model\Multishipping\PlaceOrder</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
