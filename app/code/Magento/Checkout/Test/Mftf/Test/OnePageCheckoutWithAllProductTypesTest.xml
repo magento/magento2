@@ -113,6 +113,7 @@
 
         <!-- Add Simple Product to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
@@ -127,18 +128,21 @@
 
         <!-- Add Virtual Product to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToVirtualProductPage"/>
+        <waitForPageLoad stepKey="waitForVirtualProductPageLoad"/>
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartVirtualProductFromStorefrontProductPage">
             <argument name="productName" value="$$createVirtualProduct.name$$"/>
         </actionGroup>
 
         <!-- Add Downloadable Product to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createDownloadableProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToDownloadableProductPage"/>
+        <waitForPageLoad stepKey="waitForDownloadableProductPageLoad"/>
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartDownloadableProductFromStorefrontProductPage">
             <argument name="productName" value="$$createDownloadableProduct.name$$"/>
         </actionGroup>
 
         <!-- Add Grouped Product to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createGroupedProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToGroupedProductPage"/>
+        <waitForPageLoad stepKey="waitForGroupedProductPageLoad"/>
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1" stepKey="fillFieldQtyInput"/>
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartGroupedProductFromStorefrontProductPage">
             <argument name="productName" value="$$createGroupedProduct.name$$"/>
@@ -146,6 +150,7 @@
 
         <!-- Add Bundle Product to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createFixedBundleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToBundleProductPage"/>
+        <waitForPageLoad stepKey="waitForFixedBundleProductPageLoad"/>
         <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFixedBundleProductFromStorefrontProductPage">
             <argument name="productName" value="$$createFixedBundleProduct.name$$"/>
@@ -158,6 +163,7 @@
         </actionGroup>
 
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
         <actionGroup ref="FillCustomerSignInPopupFormActionGroup" stepKey="fillCustomerSignInPopupForm">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>

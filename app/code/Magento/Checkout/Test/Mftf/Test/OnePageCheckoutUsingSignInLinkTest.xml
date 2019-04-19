@@ -12,7 +12,7 @@
         <annotations>
             <features value="OnePageCheckout"/>
             <stories value="OnePageCheckout within Offline Payment Methods"/>
-            <title value="OnePageCheckout using sing in link test"/>
+            <title value="OnePageCheckout using sign in link test"/>
             <description value="Checkout using 'Sign In' link"/>
             <severity value="CRITICAl"/>
             <testCaseId value="MC-14738"/>
@@ -44,6 +44,7 @@
 
         <!-- Add Simple Product to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
@@ -54,9 +55,10 @@
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
 
         <!-- Login using Sign In link from checkout page -->
-        <actionGroup ref="LoginAsCustomerUsingSingInLinkActionGroup" stepKey="customerLogin">
+        <actionGroup ref="LoginAsCustomerUsingSignInLinkActionGroup" stepKey="customerLogin">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 
