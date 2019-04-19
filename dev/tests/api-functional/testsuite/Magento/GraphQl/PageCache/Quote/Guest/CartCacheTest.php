@@ -109,6 +109,7 @@ QUERY;
     }
 
     /**
+     * Get Check Cart query
      *
      * @param string $maskedQuoteId
      * @return string
