@@ -122,29 +122,33 @@ class Client
     }
 
     /**
-     * Process the header information from response
+     * Perform HTTP GET request, return response data and headers
      *
      * @param string $query
      * @param array $variables
      * @param string $operationName
      * @param array $headers
-     * @return mixed
+     * @return array
      */
-    public function getQueryResponseHeaders(
+    public function getWithResponseHeaders(
         string $query,
         array $variables = [],
         string $operationName = '',
         array $headers = []
-    ) {
+    ): array {
         $url = $this->getEndpointUrl();
         $requestArray = [
             'query' => $query,
             'variables' => $variables ? $this->json->jsonEncode($variables) : null,
             'operationName' => !empty($operationName) ? $operationName : null
         ];
+        array_filter($requestArray);
 
-        $responseHeader = $this->curlClient->getHttpHeaders($url, $requestArray, $headers);
-        return $responseHeader;
+        $response = $this->curlClient->getWithFullResponse($url, $requestArray, $headers);
+        $responseBody = $this->processResponse($response['body']);
+        $responseHeaders = !empty($response['header']) ? $this->processResponseHeaders($response['header']) : [];
+
+        return ['headers' => $responseHeaders, 'body' => $responseBody];
     }
 
     /**
@@ -190,5 +194,28 @@ class Client
     public function getEndpointUrl()
     {
         return rtrim(TESTS_BASE_URL, '/') . '/graphql';
+    }
+
+    /**
+     * Parse response headers into associative array
+     *
+     * @param string $headers
+     * @return array
+     */
+    private function processResponseHeaders(string $headers): array
+    {
+        $headersArray = [];
+
+        $headerLines = preg_split('/((\r?\n)|(\r\n?))/', $headers);
+        foreach ($headerLines as $headerLine) {
+            $headerParts = preg_split('/:/', $headerLine);
+            if (count($headerParts) == 2) {
+                $headersArray[trim($headerParts[0])] = trim($headerParts[1]);
+            } elseif (preg_match('/HTTP\/[\.0-9]+/', $headerLine)) {
+                $headersArray[trim('Status-Line')] = trim($headerLine);
+            }
+        }
+
+        return $headersArray;
     }
 }

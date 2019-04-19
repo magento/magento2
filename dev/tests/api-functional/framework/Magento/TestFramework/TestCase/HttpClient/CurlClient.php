@@ -33,14 +33,14 @@ class CurlClient
     }
 
     /**
-     * Perform a HTTP GET request and returns just the response headers
+     * Perform a HTTP GET request and return the full response
      *
      * @param string $url
      * @param array $data
      * @param array $headers
-     * @return mixed
+     * @return array
      */
-    public function getHttpHeaders($url, $data = [], $headers = [])
+    public function getWithFullResponse($url, $data = [], $headers = []): array
     {
         if (!empty($data)) {
             $url .= '?' . http_build_query($data);
@@ -48,8 +48,7 @@ class CurlClient
 
         $curlOpts = [];
         $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET;
-        $resp = $this->invokeApi($url, $curlOpts, $headers);
-        return $resp["header"];
+        return $this->invokeApi($url, $curlOpts, $headers);
     }
 
     /**
