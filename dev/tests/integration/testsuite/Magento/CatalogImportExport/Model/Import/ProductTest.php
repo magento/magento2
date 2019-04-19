@@ -34,6 +34,7 @@ use Psr\Log\LoggerInterface;
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * phpcs:disable Generic.PHP.NoSilencedErrors, Generic.Metrics.NestingLevel, Magento2.Functions.StaticFunction
  */
 class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 {
@@ -1820,6 +1821,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 if ($product->getId()) {
                     $productRepository->delete($product);
                 }
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 //Product already removed
             }
