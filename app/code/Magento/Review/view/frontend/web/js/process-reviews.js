@@ -20,7 +20,7 @@ define([
             showLoader: false,
             loaderContext: $('.product.data.items')
         }).done(function (data) {
-            $('#product-review-container').html(data);
+            $('#product-review-container').html(data).trigger('contentUpdated');
             $('[data-role="product-review"] .pages a').each(function (index, element) {
                 $(element).click(function (event) { //eslint-disable-line max-nested-callbacks
                     processReviews($(element).attr('href'), true);

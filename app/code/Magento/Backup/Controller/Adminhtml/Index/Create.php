@@ -1,15 +1,18 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
-class Create extends \Magento\Backup\Controller\Adminhtml\Index
+/**
+ * Create backup controller
+ */
+class Create extends \Magento\Backup\Controller\Adminhtml\Index implements HttpPostActionInterface
 {
     /**
      * Create backup action.

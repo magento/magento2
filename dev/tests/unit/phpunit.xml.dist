@@ -12,8 +12,10 @@
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
         >
-    <testsuite name="Magento Unit Tests">
+    <testsuite name="Magento_Unit_Tests_App_Code">
         <directory suffix="Test.php">../../../app/code/*/*/Test/Unit</directory>
+    </testsuite>
+    <testsuite name="Magento_Unit_Tests_Other">
         <directory suffix="Test.php">../../../lib/internal/*/*/Test/Unit</directory>
         <directory suffix="Test.php">../../../lib/internal/*/*/*/Test/Unit</directory>
         <directory suffix="Test.php">../../../setup/src/*/*/Test/Unit</directory>

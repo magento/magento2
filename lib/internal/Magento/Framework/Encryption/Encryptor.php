@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Encryption;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Adapter\EncryptionAdapterInterface;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Math\Random;
@@ -116,19 +117,27 @@ class Encryptor implements EncryptorInterface
     private $random;
 
     /**
+     * @var KeyValidator
+     */
+    private $keyValidator;
+
+    /**
      * Encryptor constructor.
      * @param Random $random
      * @param DeploymentConfig $deploymentConfig
+     * @param KeyValidator|null $keyValidator
      */
     public function __construct(
         Random $random,
-        DeploymentConfig $deploymentConfig
+        DeploymentConfig $deploymentConfig,
+        KeyValidator $keyValidator = null
     ) {
         $this->random = $random;
 
         // load all possible keys
         $this->keys = preg_split('/\s+/s', trim((string)$deploymentConfig->get(self::PARAM_CRYPT_KEY)));
         $this->keyVersion = count($this->keys) - 1;
+        $this->keyValidator = $keyValidator ?: ObjectManager::getInstance()->get(KeyValidator::class);
     }
 
     /**
@@ -374,8 +383,12 @@ class Encryptor implements EncryptorInterface
      */
     public function validateKey($key)
     {
-        if (preg_match('/\s/s', $key)) {
-            throw new \Exception((string)new \Magento\Framework\Phrase('The encryption key format is invalid.'));
+        if (!$this->keyValidator->isValid($key)) {
+            throw new \Exception(
+                (string)new \Magento\Framework\Phrase(
+                    'Encryption key must be 32 character string without any white space.'
+                )
+            );
         }
     }
 
