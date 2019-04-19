@@ -32,7 +32,11 @@ return [
                                 'required' => false,
                                 'isList' => false,
                                 'resolver' => 'Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata',
-                                'description' => 'Returns the attribute type, given an attribute code and entity type'
+                                'description' => 'Returns the attribute type, given an attribute code and entity type',
+                                'cache' => [
+                                    'cacheTag' => 'cat_test',
+                                    'cacheIdentityResolver' => 'Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata'
+                                ]
                         ],
                         'products' => [
                         'name' => 'products',
