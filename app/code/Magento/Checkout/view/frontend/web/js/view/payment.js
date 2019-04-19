@@ -66,7 +66,7 @@ define([
         navigate: function () {
             var self = this;
 
-            if(!self.hasShippingMethod()) {
+            if (!self.hasShippingMethod()) {
                 this.isVisible(false);
                 stepNavigator.setHash('shipping');
             } else {
