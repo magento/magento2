@@ -105,4 +105,3 @@ QUERY;
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 }
-
