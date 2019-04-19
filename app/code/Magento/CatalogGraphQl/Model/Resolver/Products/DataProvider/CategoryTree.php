@@ -85,6 +85,9 @@ class CategoryTree
     {
         $categoryQuery = $resolveInfo->fieldNodes[0];
         $collection = $this->collectionFactory->create();
+        if ($this->isRootCategoryActive($collection, $rootCategoryId) == false) {
+            throw new \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
+        }
         $this->joinAttributesRecursively($collection, $categoryQuery);
         $depth = $this->depthCalculator->calculate($categoryQuery);
         $level = $this->levelCalculator->calculate($rootCategoryId);
@@ -143,5 +146,30 @@ class CategoryTree
 
             $this->joinAttributesRecursively($collection, $node);
         }
+    }
+
+    /**
+     * @param Collection $collection
+     * @param int $rootCategoryId
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    private function isRootCategoryActive(Collection $collection, int $rootCategoryId) : bool
+    {
+        if ($rootCategoryId == Category::TREE_ROOT_ID) {
+            return true;
+        }
+        $collection->addAttributeToFilter(Category::KEY_IS_ACTIVE, ['eq' => 1])
+            ->getSelect()
+            ->where(
+                $collection->getSelect()
+                               ->getConnection()
+                               ->quoteIdentifier(
+                                   'e.' . $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField()
+                               ) . ' = ?',
+                    $rootCategoryId
+            );
+        return (bool) $collection->count();
     }
 }
