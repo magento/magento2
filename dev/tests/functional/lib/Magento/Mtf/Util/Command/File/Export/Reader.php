@@ -74,7 +74,7 @@ class Reader implements ReaderInterface
         $serializedFiles = $this->transport->read();
         $this->transport->close();
         // phpcs:ignore Magento2.Security.InsecureFunction
-        return unserialize($serializedFiles);
+        return unserialize($serializedFiles, ['allowed_classes' => false]);
     }
 
     /**
