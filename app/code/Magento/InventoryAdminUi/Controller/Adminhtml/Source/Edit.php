@@ -56,7 +56,7 @@ class Edit extends Action implements HttpGetActionInterface
 
             /** @var Page $result */
             $result = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-            $result->setActiveMenu('Magento_InventoryApi::source')
+            $result->setActiveMenu('Magento_InventoryAdminUi::source')
                 ->addBreadcrumb(__('Edit Source'), __('Edit Source'));
             $result->getConfig()
                 ->getTitle()

@@ -13,6 +13,9 @@ use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 
+/**
+ * Add simple product to cart tests
+ */
 class AddSimpleProductToCartTest extends GraphQlAbstract
 {
     /**
@@ -52,11 +55,27 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteId();
 
         $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
 
         self::assertEquals($qty, $response['addSimpleProductsToCart']['cart']['items'][0]['qty']);
         self::assertEquals($sku, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Please enter a number greater than 0 in this field.
+     */
+    public function testAddSimpleProductToCartWithNegativeQty()
+    {
+        $sku = 'simple';
+        $qty = -2;
+        $maskedQuoteId = $this->getMaskedQuoteId();
+
+        $query = $this->getAddSimpleProductQuery($maskedQuoteId, $sku, $qty);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -104,5 +123,44 @@ mutation {
   }
 }
 QUERY;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "wrong_cart_hash"
+     */
+    public function testAddProductWithWrongCartHash()
+    {
+        $sku = 'simple';
+        $qty = 1;
+
+        $maskedQuoteId = 'wrong_cart_hash';
+
+        $query = <<<QUERY
+mutation {  
+  addSimpleProductsToCart(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+      cartItems: [
+        {
+          data: {
+            qty: $qty
+            sku: "$sku"
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      items {
+        qty
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query);
     }
 }

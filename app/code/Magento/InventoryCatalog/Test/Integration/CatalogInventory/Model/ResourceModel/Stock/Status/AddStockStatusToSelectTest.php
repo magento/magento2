@@ -9,7 +9,6 @@ namespace Magento\InventoryCatalog\Test\Integration\CatalogInventory\Model\Resou
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;

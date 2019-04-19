@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Authorizenet\Model\Directpost;
 
 use Magento\Authorizenet\Model\Request as AuthorizenetRequest;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Intl\DateTimeFactory;
 
 /**
  * Authorize.net request model for DirectPost model
@@ -21,9 +23,34 @@ class Request extends AuthorizenetRequest
     protected $_transKey = null;
 
     /**
+     * Hexadecimal signature key.
+     *
+     * @var string
+     */
+    private $signatureKey = '';
+
+    /**
+     * @var DateTimeFactory
+     */
+    private $dateTimeFactory;
+
+    /**
+     * @param array $data
+     * @param DateTimeFactory $dateTimeFactory
+     */
+    public function __construct(
+        array $data = [],
+        DateTimeFactory $dateTimeFactory = null
+    ) {
+        $this->dateTimeFactory = $dateTimeFactory ?? ObjectManager::getInstance()
+                ->get(DateTimeFactory::class);
+        parent::__construct($data);
+    }
+
+    /**
      * Return merchant transaction key.
      *
-     * Needed to generate sign.
+     * Needed to generate MD5 sign.
      *
      * @return string
      */
@@ -35,7 +62,7 @@ class Request extends AuthorizenetRequest
     /**
      * Set merchant transaction key.
      *
-     * Needed to generate sign.
+     * Needed to generate MD5 sign.
      *
      * @param string $transKey
      * @return $this
@@ -47,7 +74,7 @@ class Request extends AuthorizenetRequest
     }
 
     /**
-     * Generates the fingerprint for request.
+     * Generates the MD5 fingerprint for request.
      *
      * @param string $merchantApiLoginId
      * @param string $merchantTransactionKey
@@ -67,7 +94,7 @@ class Request extends AuthorizenetRequest
     ) {
         return hash_hmac(
             "md5",
-            $merchantApiLoginId . "^" . $fpSequence . "^" . $fpTimestamp . "^" . $amount . "^" . $currencyCode,
+            $merchantApiLoginId . '^' . $fpSequence . '^' . $fpTimestamp . '^' . $amount . '^' . $currencyCode,
             $merchantTransactionKey
         );
     }
@@ -82,7 +109,7 @@ class Request extends AuthorizenetRequest
     {
         $this->setXVersion('3.1')->setXDelimData('FALSE')->setXRelayResponse('TRUE');
 
-        $this->setXTestRequest($paymentMethod->getConfigData('test') ? 'TRUE' : 'FALSE');
+        $this->setSignatureKey($paymentMethod->getConfigData('signature_key'));
 
         $this->setXLogin($paymentMethod->getConfigData('login'))
             ->setXMethod(\Magento\Authorizenet\Model\Authorizenet::REQUEST_METHOD_CC)
@@ -167,23 +194,87 @@ class Request extends AuthorizenetRequest
     /**
      * Set sign hash into the request object.
      *
-     * All needed fields should be placed in the object fist.
+     * All needed fields should be placed in the object first.
      *
      * @return $this
      */
     public function signRequestData()
     {
-        $fpTimestamp = time();
-        $hash = $this->generateRequestSign(
-            $this->getXLogin(),
-            $this->_getTransactionKey(),
-            $this->getXAmount(),
-            $this->getXCurrencyCode(),
-            $this->getXFpSequence(),
-            $fpTimestamp
-        );
+        $fpDate = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
+        $fpTimestamp = $fpDate->getTimestamp();
+
+        if (!empty($this->getSignatureKey())) {
+            $hash = $this->generateSha2RequestSign(
+                (string)$this->getXLogin(),
+                (string)$this->getSignatureKey(),
+                (string)$this->getXAmount(),
+                (string)$this->getXCurrencyCode(),
+                (string)$this->getXFpSequence(),
+                $fpTimestamp
+            );
+        } else {
+            $hash = $this->generateRequestSign(
+                $this->getXLogin(),
+                $this->_getTransactionKey(),
+                $this->getXAmount(),
+                $this->getXCurrencyCode(),
+                $this->getXFpSequence(),
+                $fpTimestamp
+            );
+        }
+
         $this->setXFpTimestamp($fpTimestamp);
         $this->setXFpHash($hash);
+
         return $this;
+    }
+
+    /**
+     * Generates the SHA2 fingerprint for request.
+     *
+     * @param string $merchantApiLoginId
+     * @param string $merchantSignatureKey
+     * @param string $amount
+     * @param string $currencyCode
+     * @param string $fpSequence An invoice number or random number.
+     * @param int $fpTimestamp
+     * @return string The fingerprint.
+     */
+    private function generateSha2RequestSign(
+        string $merchantApiLoginId,
+        string $merchantSignatureKey,
+        string $amount,
+        string $currencyCode,
+        string $fpSequence,
+        int $fpTimestamp
+    ): string {
+        $message = $merchantApiLoginId . '^' . $fpSequence . '^' . $fpTimestamp . '^' . $amount . '^' . $currencyCode;
+
+        return strtoupper(hash_hmac('sha512', $message, pack('H*', $merchantSignatureKey)));
+    }
+
+    /**
+     * Return merchant hexadecimal signature key.
+     *
+     * Needed to generate SHA2 sign.
+     *
+     * @return string
+     */
+    private function getSignatureKey(): string
+    {
+        return $this->signatureKey;
+    }
+
+    /**
+     * Set merchant hexadecimal signature key.
+     *
+     * Needed to generate SHA2 sign.
+     *
+     * @param string $signatureKey
+     * @return void
+     */
+    private function setSignatureKey(string $signatureKey)
+    {
+        $this->signatureKey = $signatureKey;
     }
 }

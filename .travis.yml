@@ -20,7 +20,7 @@ php:
 env:
   global:
     - COMPOSER_BIN_DIR=~/bin
-    - INTEGRATION_SETS=4
+    - INTEGRATION_SETS=6
     - NODE_JS_VERSION=8
     - MAGENTO_HOST_NAME="magento2.travis"
   matrix:
@@ -32,6 +32,8 @@ env:
     - TEST_SUITE=integration INTEGRATION_INDEX=2
     - TEST_SUITE=integration INTEGRATION_INDEX=3
     - TEST_SUITE=integration INTEGRATION_INDEX=4
+    - TEST_SUITE=integration INTEGRATION_INDEX=5
+    - TEST_SUITE=integration INTEGRATION_INDEX=6
     - TEST_SUITE=functional
     - TEST_SUITE=msi-api-functional
     - TEST_SUITE=graphql-api-functional
@@ -43,7 +45,6 @@ cache:
     - $HOME/node_modules
     - $HOME/yarn.lock
 before_install:
-  - curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.0/elasticsearch-2.3.0.deb && sudo dpkg -i --force-confnew elasticsearch-2.3.0.deb && sudo service elasticsearch restart
   - ./dev/travis/before_install.sh
 install: composer install --no-interaction
 before_script: ./dev/travis/before_script.sh

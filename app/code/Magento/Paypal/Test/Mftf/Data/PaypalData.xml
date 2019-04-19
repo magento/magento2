@@ -38,6 +38,9 @@
     <entity name="SampleUseProxy" type="use_proxy">
         <data key="value">0</data>
     </entity>
+    <entity name="SampleMerchantID" type="use_proxy">
+        <data key="value">someMerchantId</data>
+    </entity>
 
     <!-- default configuration used to restore Magento config -->
     <entity name="DefaultPayPalConfig" type="paypal_config_state">
@@ -88,5 +91,12 @@
         <data key="blue">blue</data>
         <data key="silver">silver</data>
         <data key="black">black</data>
+    </entity>
+    <entity name="SamplePaypalExpressConfig" type="paypal_express_config">
+        <data key="paypal_express_email">myBusinessAccount@magento.com</data>
+        <data key="paypal_express_api_username">myApiUsername.magento.com</data>
+        <data key="paypal_express_api_password">somePassword</data>
+        <data key="paypal_express_api_signature">someApiSignature</data>
+        <data key="paypal_express_merchantID">someMerchantId</data>
     </entity>
 </entities>
