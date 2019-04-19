@@ -95,17 +95,9 @@ class PublisherConsumerController
             $this->amqpHelper->deleteConnection($connectionName);
         }
         $this->amqpHelper->clearQueue("async.operations.all");
-        foreach ($this->consumers as $consumer) {
-            foreach ($this->getConsumerProcessIds($consumer) as $consumerProcessId) {
-                exec("kill {$consumerProcessId}");
-            }
-        }
-        foreach ($this->consumers as $consumer) {
-            if (!$this->getConsumerProcessIds($consumer)) {
-                exec("{$this->getConsumerStartCommand($consumer, true)} > /dev/null &");
-            }
-            sleep(5);
-        }
+
+        $this->stopConsumers();
+        $this->startConsumers();
 
         if (file_exists($this->logFilePath)) {
             // try to remove before failing the test
@@ -229,5 +221,20 @@ class PublisherConsumerController
     public function getPublisher()
     {
         return $this->publisher;
+    }
+
+    /**
+     * Start consumers
+     *
+     * @return void
+     */
+    public function startConsumers(): void
+    {
+        foreach ($this->consumers as $consumer) {
+            if (!$this->getConsumerProcessIds($consumer)) {
+                exec("{$this->getConsumerStartCommand($consumer, true)} > /dev/null &");
+            }
+            sleep(5);
+        }
     }
 }
