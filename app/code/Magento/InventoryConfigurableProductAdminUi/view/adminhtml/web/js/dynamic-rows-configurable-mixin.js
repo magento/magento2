@@ -1,22 +1,20 @@
-define(
-    [
-        'jquery',
-        'underscore',
-        'ko',
-        'uiComponent',
-        'uiRegistry',
-    ],
-    function (
-        $,
-        _,
-        ko,
-        Component,
-        registry,
-    ) {
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+define([], function () {
         'use strict';
 
         var mixin = {
-            processingInsertDataFromGrid: function(data) {
+
+            /**
+             * Parsed data
+             *
+             * @param {Array} data - array with data
+             * about selected records
+             */
+            processingInsertDataFromGrid: function (data) {
                 var changes,
                     tmpArray;
 
@@ -30,7 +28,8 @@ define(
                 this.cacheGridData = data;
 
                 changes.each(function (changedObject) {
-                    var mappedData = this.mappingValue(changedObject);
+                    var mappedData = this.mappingValue(changedObject),
+                        sources = [];
 
                     mappedData[this.canEditField] = 0;
                     mappedData[this.newProductField] = 0;
@@ -38,13 +37,12 @@ define(
                     mappedData['configurable_attribute'] = this._getConfigurableAttribute(changedObject);
 
                     if ('quantity_per_source' in changedObject) {
-                        var sources = [];
                         changedObject['quantity_per_source'].each(function (source) {
                             sources.push({
-                                quantity_per_source: source['qty'],
-                                source: source['source_name'],
-                                source_code: source['source_code'],
-                            })
+                                'quantity_per_source': source.qty,
+                                'source': source['source_name'],
+                                'source_code': source['source_code']
+                            });
                         });
                         mappedData['quantity_per_source'] = sources;
                     }
@@ -57,12 +55,11 @@ define(
                     this.source.set('data.attributes', this.attributesTmp);
                 }
                 this.unionInsertData(tmpArray);
-            },
+            }
         };
 
         return function (target) {
             return target.extend(mixin);
         };
-
     }
 );
