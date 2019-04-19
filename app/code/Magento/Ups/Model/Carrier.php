@@ -488,7 +488,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
                 }
                 $client = new \Zend_Http_Client();
                 $client->setUri($url);
-                $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
+                $client->setConfig(['maxredirects' => 2, 'timeout' => 30]);
                 $client->setParameterGet($params);
                 $response = $client->request();
                 $responseBody = $response->getBody();
