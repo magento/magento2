@@ -126,6 +126,7 @@ class QuantityPerSource extends AbstractModifier
                 $qty = (float)$sourceItem->getQuantity();
                 $dataItems[$itemsBySkus[$sku]]['quantity_per_source'][] = [
                     'source_name' => $source->getName(),
+                    'source_code' => $source->getSourceCode(),
                     'qty' => $qty,
                 ];
             }
