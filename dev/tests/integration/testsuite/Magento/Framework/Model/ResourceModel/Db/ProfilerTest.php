@@ -23,7 +23,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$_testResourceName = 'testtest_' . mt_rand(1000, 9999) . '_setup';
+        self::$_testResourceName = 'testtest_' . random_int(1000, 9999) . '_setup';
 
         \Magento\Framework\Profiler::enable();
     }

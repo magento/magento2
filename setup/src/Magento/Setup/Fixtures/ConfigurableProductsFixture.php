@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2018 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -195,7 +195,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD)
      */
     public function execute()
@@ -288,6 +289,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
+     * Get the closure to return the website IDs.
+     *
      * @return \Closure
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -391,7 +394,7 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -399,7 +402,7 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {
@@ -407,7 +410,10 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param OutputInterface $output
+     * @return void
      * @throws ValidatorException
      */
     public function printInfo(OutputInterface $output)
@@ -425,7 +431,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * Gen default attribute sets with attributes
+     * Get default attribute sets with attributes
+     *
      * @see config/attributeSets.xml
      *
      * @return array
@@ -552,7 +559,9 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * Prepare configuration. If amount of configurable products set in profile then return predefined attribute sets
+     * Prepare configuration.
+     *
+     * If amount of configurable products set in profile then return predefined attribute sets
      * else return configuration from profile
      *
      * @param array $defaultAttributeSets
@@ -590,6 +599,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
+     * Get closure to return configurable category.
+     *
      * @param array $config
      * @return \Closure
      */
@@ -613,6 +624,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
+     * Get sku pattern.
+     *
      * @param array $config
      * @param string $attributeSetName
      * @return string
@@ -683,6 +696,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
+     * Get search configuration.
+     *
      * @return array
      */
     private function getSearchConfig()
@@ -694,6 +709,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
+     * Get value of search configuration property.
+     *
      * @param string $name
      * @return int|mixed
      */
@@ -704,6 +721,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
+     * Get search terms.
+     *
      * @return array
      */
     private function getSearchTerms()
@@ -759,6 +778,7 @@ class ConfigurableProductsFixture extends Fixture
 
     /**
      * Generates matrix of all possible variations.
+     *
      * @param int $attributesPerSet
      * @param int $optionsPerAttribute
      * @return array
@@ -774,6 +794,7 @@ class ConfigurableProductsFixture extends Fixture
 
     /**
      * Build all possible variations based on attributes and options count.
+     *
      * @param array|null $variationsMatrix
      * @return array
      */
@@ -806,6 +827,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
+     * Get description closure.
+     *
      * @param array|null $searchTerms
      * @param int $simpleProductsCount
      * @param int $configurableProductsCount
