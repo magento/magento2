@@ -420,6 +420,7 @@ class CreateHandler implements ExtensionInterface
             $destinationFile = $this->getUniqueFileName($file);
 
             if (!$this->mediaDirectory->isFile($this->mediaConfig->getMediaPath($file))) {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception();
             }
 
@@ -437,6 +438,7 @@ class CreateHandler implements ExtensionInterface
             }
 
             return str_replace('\\', '/', $destinationFile);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             $file = $this->mediaConfig->getMediaPath($file);
             throw new \Magento\Framework\Exception\LocalizedException(
