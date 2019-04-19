@@ -248,8 +248,12 @@ class Config implements \Magento\Framework\Interception\ExtendableConfigInterfac
         if ($intercepted !== null) {
             $this->_intercepted = $intercepted;
         } else {
-            foreach (array_keys($classDefinitions) as $class) {
+            foreach ($classDefinitions as $class => $typeConfig) {
                 $this->_inheritInterception($class, true);
+                // _inheritInterception() can set base class to 'false', force set it to 'true'
+                if (!empty($typeConfig['plugins'])) {
+                    $this->_intercepted[ltrim($class, '\\')] = true;
+                }
             }
 
             $this->cacheManager->save($cacheId, $this->_intercepted);
