@@ -6,13 +6,16 @@
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
 /**
+ * Backup rollback controller.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
+class Rollback extends \Magento\Backup\Controller\Adminhtml\Index implements HttpPostActionInterface
 {
     /**
      * Rollback Action
@@ -124,6 +127,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
             $adminSession->destroy();
 
             $response->setRedirectUrl($this->getUrl('*'));
+            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Backup\Exception\CantLoadSnapshot $e) {
             $errorMsg = __('We can\'t find the backup file.');
         } catch (\Magento\Framework\Backup\Exception\FtpConnectionFailed $e) {
