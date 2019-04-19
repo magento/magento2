@@ -139,12 +139,18 @@ class PageRepository implements PageRepositoryInterface
                     $page->setPageLayout(null);
                     $page->setCustomTheme(null);
                     $page->setCustomLayoutUpdateXml(null);
+                    $page->setCustomRootTemplate(null);
+                    $page->setCustomThemeFrom(null);
+                    $page->setCustomThemeTo(null);
                 } else {
                     $savedPage = $this->getById($page->getId());
                     $page->setLayoutUpdateXml($savedPage->getLayoutUpdateXml());
                     $page->setPageLayout($savedPage->getPageLayout());
                     $page->setCustomTheme($savedPage->getCustomTheme());
                     $page->setCustomLayoutUpdateXml($savedPage->getCustomLayoutUpdateXml());
+                    $page->setCustomRootTemplate($savedPage->getCustomRootTemplate());
+                    $page->setCustomThemeFrom($savedPage->getCustomThemeFrom());
+                    $page->setCustomThemeTo($savedPage->getCustomThemeTo());
                 }
             }
 

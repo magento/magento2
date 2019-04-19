@@ -11,6 +11,7 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
@@ -116,7 +117,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * @var AuthorizationInterface
      */
-    private $auth;
+    private $authorization;
 
     /**
      * DataProvider constructor
@@ -133,7 +134,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param CategoryFactory $categoryFactory
      * @param array $meta
      * @param array $data
-     * @param AuthorizationInterface|null $auth
+     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -149,7 +150,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         CategoryFactory $categoryFactory,
         array $meta = [],
         array $data = [],
-        AuthorizationInterface $auth = null
+        AuthorizationInterface $authorization = null
     ) {
         $this->eavValidationRules = $eavValidationRules;
         $this->collection = $categoryCollectionFactory->create();
@@ -159,7 +160,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->storeManager = $storeManager;
         $this->request = $request;
         $this->categoryFactory = $categoryFactory;
-        $this->auth = $auth ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
 
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta = $this->prepareMeta($this->meta);
@@ -190,7 +191,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     private function prepareFieldsMeta($fieldsMap, $fieldsMeta)
     {
-        $canEditDesign = $this->auth->isAllowed('Magento_Catalog::edit_category_design');
+        $canEditDesign = $this->authorization->isAllowed('Magento_Catalog::edit_category_design');
 
         $result = [];
         foreach ($fieldsMap as $fieldSet => $fields) {

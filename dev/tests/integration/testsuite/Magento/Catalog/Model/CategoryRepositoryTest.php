@@ -27,7 +27,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Auth
      */
-    private $auth;
+    private $authorization;
 
     /**
      * @var Builder
@@ -42,7 +42,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->repository = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
-        $this->auth = Bootstrap::getObjectManager()->get(Auth::class);
+        $this->authorization = Bootstrap::getObjectManager()->get(Auth::class);
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
     }
 
@@ -53,7 +53,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         parent::tearDown();
 
-        $this->auth->logout();
+        $this->authorization->logout();
     }
 
     /**
@@ -67,7 +67,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveDesign()
     {
         $category = $this->repository->get(333);
-        $this->auth->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
+        $this->authorization->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
 
         //Admin doesn't have access to category's design.
         $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_category_design');

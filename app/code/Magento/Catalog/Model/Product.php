@@ -881,6 +881,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             $this->setData('page_layout', $this->getOrigData('page_layout'));
             $this->setData('options_container', $this->getOrigData('options_container'));
             $this->setData('custom_layout_update', $this->getOrigData('custom_layout_update'));
+            $this->setData('custom_design_from', $this->getOrigData('custom_design_from'));
+            $this->setData('custom_design_to', $this->getOrigData('custom_design_to'));
+            $this->setData('custom_layout', $this->getOrigData('custom_layout'));
         }
 
         $hasOptions = false;

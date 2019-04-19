@@ -29,7 +29,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Auth
      */
-    private $auth;
+    private $authorization;
 
     /**
      * @var SearchCriteriaBuilder
@@ -54,7 +54,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->repository = Bootstrap::getObjectManager()->create(PageRepositoryInterface::class);
-        $this->auth = Bootstrap::getObjectManager()->get(Auth::class);
+        $this->authorization = Bootstrap::getObjectManager()->get(Auth::class);
         $this->criteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
         $this->pageCollectionFactory = Bootstrap::getObjectManager()->get(PageCollectionFactory::class);
@@ -67,7 +67,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         parent::tearDown();
 
-        $this->auth->logout();
+        $this->authorization->logout();
     }
 
     /**
@@ -84,7 +84,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $pagesCollection->addFieldToFilter('identifier', ['eq' => 'page_design_blank']);
         $page = $pagesCollection->getFirstItem();
 
-        $this->auth->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
+        $this->authorization->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
 
         //Admin doesn't have access to page's design.
         $this->aclBuilder->getAcl()->deny(null, 'Magento_Cms::save_design');

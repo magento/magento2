@@ -172,7 +172,22 @@ class Eav extends AbstractModifier
     /**
      * @var AuthorizationInterface
      */
-    private $auth;
+    private $authorization;
+
+    /**
+     * Product design attribute codes.
+     *
+     * @var array
+     */
+    private $designAttributeCodes = [
+        'custom_design',
+        'page_layout',
+        'options_container',
+        'custom_layout_update',
+        'custom_design_from',
+        'custom_design_to',
+        'custom_layout',
+    ];
 
     /**
      * @param LocatorInterface $locator
@@ -194,7 +209,7 @@ class Eav extends AbstractModifier
      * @param DataPersistorInterface $dataPersistor
      * @param array $attributesToDisable
      * @param array $attributesToEliminate
-     * @param AuthorizationInterface|null $auth
+     * @param AuthorizationInterface|null $authorization
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -218,7 +233,7 @@ class Eav extends AbstractModifier
         DataPersistorInterface $dataPersistor,
         $attributesToDisable = [],
         $attributesToEliminate = [],
-        AuthorizationInterface $auth = null
+        AuthorizationInterface $authorization = null
     ) {
         $this->locator = $locator;
         $this->catalogEavValidationRules = $catalogEavValidationRules;
@@ -239,7 +254,7 @@ class Eav extends AbstractModifier
         $this->dataPersistor = $dataPersistor;
         $this->attributesToDisable = $attributesToDisable;
         $this->attributesToEliminate = $attributesToEliminate;
-        $this->auth = $auth ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**
@@ -636,9 +651,8 @@ class Eav extends AbstractModifier
         }
 
         //Checking access to design config.
-        $designAttributeCodes = ['custom_design', 'page_layout', 'options_container', 'custom_layout_update'];
-        if (in_array($attributeCode, $designAttributeCodes, true)) {
-            if (!$this->auth->isAllowed('Magento_Catalog::edit_product_design')) {
+        if (in_array($attributeCode, $this->designAttributeCodes, true)) {
+            if (!$this->authorization->isAllowed('Magento_Catalog::edit_product_design')) {
                 $meta = $this->arrayManager->merge(
                     $configPath,
                     $meta,

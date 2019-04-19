@@ -30,7 +30,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Auth
      */
-    private $auth;
+    private $authorization;
 
     /**
      * @var Builder
@@ -43,7 +43,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
-        $this->auth = Bootstrap::getObjectManager()->get(Auth::class);
+        $this->authorization = Bootstrap::getObjectManager()->get(Auth::class);
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
     }
 
@@ -54,7 +54,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         parent::tearDown();
 
-        $this->auth->logout();
+        $this->authorization->logout();
     }
 
     /**
@@ -66,7 +66,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveDesign()
     {
         $product = $this->productRepository->get('simple');
-        $this->auth->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
+        $this->authorization->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
 
         //Admin doesn't have access to product's design.
         $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_product_design');

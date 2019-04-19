@@ -946,12 +946,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 || $userType === UserContextInterface::USER_TYPE_INTEGRATION)
             && !$this->authorization->isAllowed('Magento_Catalog::edit_category_design')
         ) {
-            $this->setData('custom_design', $this->getOrigData('custom_design'));
-            $this->setData('custom_design_from', $this->getOrigData('custom_design_from'));
-            $this->setData('custom_design_to', $this->getOrigData('custom_design_to'));
-            $this->setData('page_layout', $this->getOrigData('page_layout'));
-            $this->setData('custom_layout_update', $this->getOrigData('custom_layout_update'));
-            $this->setData('custom_apply_to_products', $this->getOrigData('custom_apply_to_products'));
+            foreach ($this->_designAttributes as $attributeCode) {
+                $this->setData($attributeCode, $this->getOrigData($attributeCode));
+            }
         }
 
         return parent::beforeSave();
