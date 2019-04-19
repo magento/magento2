@@ -103,7 +103,7 @@ class DbStorage extends BaseDbStorage
         if (!empty($filterResults)) {
             return reset($filterResults);
         } else {
-            return parent::doFindOneByData($data);
+            return null;
         }
     }
 
