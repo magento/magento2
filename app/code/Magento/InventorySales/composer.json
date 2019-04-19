@@ -13,6 +13,7 @@
         "magento/module-inventory-reservations-api": "*",
         "magento/module-inventory-sales-api": "*",
         "magento/module-inventory-source-deduction-api": "*",
+        "magento/module-inventory-source-selection-api": "*",
         "magento/module-sales-inventory": "*",
         "magento/module-store": "*",
         "magento/module-sales": "*"

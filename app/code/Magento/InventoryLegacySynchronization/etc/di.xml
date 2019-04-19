@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <type name="Magento\InventoryLegacySynchronization\Model\Synchronize">
+        <arguments>
+            <argument name="batchSize" xsi:type="number">100</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface">
+        <plugin name="update_source_item_at_legacy_qty_counter"
+                type="Magento\InventoryLegacySynchronization\Plugin\UpdateSourceItemAtLegacyQtyCounterPlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
+        <plugin name="update_source_item_at_legacy_stock_item_save"
+                type="Magento\InventoryLegacySynchronization\Plugin\UpdateSourceItemAtLegacyStockItemSavePlugin"/>
+        <plugin name="priceIndexUpdater" disabled="true"/>
+    </type>
+    <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
+        <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save"
+                type="Magento\InventoryLegacySynchronization\Plugin\SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin"/>
+    </type>
+    <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
+        <plugin name="set_to_zero_legacy_catalog_inventory_at_source_items_delete"
+                type="Magento\InventoryLegacySynchronization\Plugin\SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin"/>
+    </type>
+
+    <type name="Magento\InventoryCatalogApi\Api\BulkSourceUnassignInterface">
+        <plugin name="set_zero_quantity_to_legacy_at_bulk_unassign"
+                type="Magento\InventoryLegacySynchronization\Plugin\SetZeroQuantityToLegacyAtBulkUnassign"/>
+    </type>
+    <type name="Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface">
+        <plugin name="set_data_to_legacy_catalog_inventory_at_bulk_unassign"
+                type="Magento\InventoryLegacySynchronization\Plugin\SetDataToLegacyCatalogInventoryAtBulkTransfer"/>
+    </type>
+    <type name="Magento\InventoryCatalog\Model\ResourceModel\TransferInventoryPartially">
+        <plugin name="set_data_to_legacy_catalog_inventory_at_transfer_inventory_partial"
+                type="Magento\InventoryLegacySynchronization\Plugin\SetDataToLegacyCatalogInventoryAtTransferInventoryPartial"/>
+    </type>
+</config>
