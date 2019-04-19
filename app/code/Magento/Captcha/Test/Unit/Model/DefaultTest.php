@@ -376,4 +376,41 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
             [false, 'guest_checkout']
         ];
     }
+
+    /**
+     * @param string $string
+     * @dataProvider generateWordProvider
+     * @throws \ReflectionException
+     */
+    public function testGenerateWord($string)
+    {
+        $randomMock = $this->getMock('Magento\Framework\Math\Random');
+        $randomMock->expects($this->once())
+            ->method('getRandomString')
+            ->will($this->returnValue($string));
+
+        $captcha = new \Magento\Captcha\Model\DefaultModel(
+            $this->session,
+            $this->_getHelperStub(),
+            $this->_resLogFactory,
+            'user_create',
+            $randomMock
+        );
+
+        $method = new \ReflectionMethod($captcha, '_generateWord');
+        $method->setAccessible(true);
+        $this->assertEquals($string, $method->invoke($captcha));
+    }
+
+    /**
+     * @return array
+     */
+    public function generateWordProvider()
+    {
+        return [
+            ['ABC123'],
+            ['1234567890'],
+            ['The quick brown fox jumps over the lazy dog.']
+        ];
+    }
 }
