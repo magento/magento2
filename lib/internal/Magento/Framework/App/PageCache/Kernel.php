@@ -6,6 +6,7 @@
 namespace Magento\Framework\App\PageCache;
 
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Builtin cache processor
@@ -82,43 +83,17 @@ class Kernel
         $this->cache = $cache;
         $this->identifier = $identifier;
         $this->request = $request;
-
-        if ($context) {
-            $this->context = $context;
-        } else {
-            $this->context = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\App\Http\Context::class
-            );
-        }
-        if ($contextFactory) {
-            $this->contextFactory = $contextFactory;
-        } else {
-            $this->contextFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\App\Http\ContextFactory::class
-            );
-        }
-        if ($httpFactory) {
-            $this->httpFactory = $httpFactory;
-        } else {
-            $this->httpFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\App\Response\HttpFactory::class
-            );
-        }
-        if ($serializer) {
-            $this->serializer = $serializer;
-        } else {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Serialize\SerializerInterface::class
-            );
-        }
-
-        if ($state) {
-            $this->state = $state;
-        } else {
-            $this->state = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                AppState::class
-            );
-        }
+        $this->context = $context ?? ObjectManager::getInstance()->get(\Magento\Framework\App\Http\Context::class);
+        $this->contextFactory = $contextFactory ?? ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Http\ContextFactory::class
+        );
+        $this->httpFactory = $httpFactory ?? ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Response\HttpFactory::class
+        );
+        $this->serializer = $serializer ?? ObjectManager::getInstance()->get(
+            \Magento\Framework\Serialize\SerializerInterface::class
+        );
+        $this->state = $state ?? ObjectManager::getInstance()->get(AppState::class);
     }
 
     /**
@@ -231,7 +206,7 @@ class Kernel
     private function getCache()
     {
         if (!$this->fullPageCache) {
-            $this->fullPageCache = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            $this->fullPageCache = ObjectManager::getInstance()->get(
                 \Magento\PageCache\Model\Cache\Type::class
             );
         }
