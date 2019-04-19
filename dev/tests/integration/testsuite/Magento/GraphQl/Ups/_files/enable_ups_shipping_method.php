@@ -16,6 +16,7 @@ $objectManager = Bootstrap::getObjectManager();
 $configWriter = $objectManager->get(WriterInterface::class);
 
 $configWriter->save('carriers/ups/active', 1);
+$configWriter->save('carriers/ups/type', "UPS");
 
 $scopeConfig = $objectManager->get(ScopeConfigInterface::class);
 $scopeConfig->clean();
