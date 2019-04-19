@@ -2838,7 +2838,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function getUrlKey($rowData)
     {
         if (!empty($rowData[self::URL_KEY])) {
-            return $this->productUrl->formatUrlKey($rowData[self::URL_KEY]);
+            $urlKey = (string) $rowData[self::URL_KEY];
+            return trim(strtolower($urlKey));
         }
 
         if (!empty($rowData[self::COL_NAME])) {
