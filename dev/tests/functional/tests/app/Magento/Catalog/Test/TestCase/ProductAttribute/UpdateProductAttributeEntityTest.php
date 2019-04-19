@@ -34,7 +34,6 @@ use Magento\Mtf\TestCase\Injectable;
 class UpdateProductAttributeEntityTest extends Injectable
 {
     /* tags */
-    const MVP = 'yes';
     /* end tags */
 
     /**
