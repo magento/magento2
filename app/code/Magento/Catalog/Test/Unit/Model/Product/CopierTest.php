@@ -6,10 +6,12 @@
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use \Magento\Catalog\Model\Product\Copier;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Copier;
 
 /**
+ * Test for Magento\Catalog\Model\Product\Copier class.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CopierTest extends \PHPUnit\Framework\TestCase
@@ -76,6 +78,9 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testCopy()
     {
         $stockItem = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockItemInterface::class)
@@ -104,27 +109,27 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $entityMock = $this->getMockForAbstractClass(
-                \Magento\Eav\Model\Entity\AbstractEntity::class,
-                [],
-                '',
-                false,
-                true,
-                true,
-                ['checkAttributeUniqueValue']
-            );
+            \Magento\Eav\Model\Entity\AbstractEntity::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['checkAttributeUniqueValue']
+        );
         $entityMock->expects($this->any())
             ->method('checkAttributeUniqueValue')
             ->willReturn(true);
 
         $attributeMock = $this->getMockForAbstractClass(
-                \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-                [],
-                '',
-                false,
-                true,
-                true,
-                ['getEntity']
-            );
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getEntity']
+        );
         $attributeMock->expects($this->any())
             ->method('getEntity')
             ->willReturn($entityMock);

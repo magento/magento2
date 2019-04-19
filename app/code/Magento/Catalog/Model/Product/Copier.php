@@ -1,7 +1,5 @@
 <?php
 /**
- * Catalog product copier. Creates product duplicate
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,7 +9,11 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 
 /**
- * The copier creates product duplicates.
+ * Catalog product copier.
+ *
+ * Creates product duplicate.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Copier
 {
@@ -120,10 +122,10 @@ class Copier
         $productId = $product->getId();
         $productResource = $product->getResource();
         $defaultUrlKey = $productResource->getAttributeRawValue(
-                $productId,
-                'url_key',
-                \Magento\Store\Model\Store::DEFAULT_STORE_ID
-            );
+            $productId,
+            'url_key',
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
+        );
         $duplicate->setData('save_rewrites_history', false);
         foreach ($storeIds as $storeId) {
             $isDuplicateSaved = false;
@@ -139,6 +141,7 @@ class Copier
                 try {
                     $duplicate->save();
                     $isDuplicateSaved = true;
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
                 }
             } while (!$isDuplicateSaved);
