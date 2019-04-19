@@ -8,9 +8,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontClickOnHeaderLogoActionGroup">
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="gotToHomePage"/>
-        <waitForPageLoad stepKey="waitForHomePageLoaded1"/>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
+        <waitForPageLoad stepKey="waitForHomePageLoaded"/>
         <click selector="{{StorefrontHeaderSection.logoLink}}" stepKey="clickOnLogo"/>
-        <waitForPageLoad stepKey="waitForHomePageLoaded2"/>
+        <waitForPageLoad stepKey="waitForHomePageLoadedAfterClickOnLogo"/>
     </actionGroup>
 </actionGroups>

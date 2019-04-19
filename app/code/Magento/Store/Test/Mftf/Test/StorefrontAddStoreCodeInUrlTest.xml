@@ -13,6 +13,7 @@
             <features value="Backend"/>
             <title value="Store code should be added to storefront URL if the corresponding configuration is enabled"/>
             <description value="Store code should be added to storefront URL if the corresponding configuration is enabled"/>
+            <testCaseId value="MC-15944" />
             <group value="store"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -24,6 +25,6 @@
         </after>
 
         <actionGroup ref="StorefrontClickOnHeaderLogoActionGroup" stepKey="clickOnStorefrontHeaderLogo"/>
-        <actionGroup ref="StorefrontAssertStoreCodeInUrlActionGroup" stepKey="seeStoreCodeInUrl"/>
+        <actionGroup ref="AssertStorefrontStoreCodeInUrlActionGroup" stepKey="seeStoreCodeInUrl"/>
     </test>
 </tests>

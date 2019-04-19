@@ -7,7 +7,10 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontAssertStoreCodeInUrlActionGroup">
-        <seeInCurrentUrl url="{{StorefrontHomePage.url}}{{_defaultStore.code}}" stepKey="seeStoreCodeInURL"/>
+    <actionGroup name="AssertStorefrontStoreCodeInUrlActionGroup">
+        <arguments>
+            <argument name="storeCode" type="string" defaultValue="{{_defaultStore.code}}" />
+        </arguments>
+        <seeInCurrentUrl url="{{StorefrontHomePage.url}}{{storeCode}}" stepKey="seeStoreCodeInURL"/>
     </actionGroup>
 </actionGroups>
