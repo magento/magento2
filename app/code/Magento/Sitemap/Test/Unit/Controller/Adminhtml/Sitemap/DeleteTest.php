@@ -49,7 +49,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['isPost'])
             ->getMockForAbstractClass();
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
             ->disableOriginalConstructor()
@@ -81,6 +81,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->filesystemMock->expects($this->any())->method('getDirectoryWrite')->willReturn($writeDirectoryMock);
         $this->requestMock->expects($this->any())->method('getParam')->with('sitemap_id')->willReturn(0);
+        $this->requestMock->expects($this->any())->method('isPost')->willReturn(true);
         $this->responseMock->expects($this->once())->method('setRedirect');
         $this->messageManagerMock->expects($this->any())
             ->method('addError')
@@ -97,6 +98,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->filesystemMock->expects($this->any())->method('getDirectoryWrite')->willReturn($writeDirectoryMock);
         $this->requestMock->expects($this->any())->method('getParam')->with('sitemap_id')->willReturn($id);
+        $this->requestMock->expects($this->any())->method('isPost')->willReturn(true);
 
         $sitemapMock = $this->getMockBuilder(\Magento\Sitemap\Model\Sitemap::class)
             ->disableOriginalConstructor()
@@ -123,6 +125,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->filesystemMock->expects($this->any())->method('getDirectoryWrite')->willReturn($writeDirectoryMock);
         $this->requestMock->expects($this->any())->method('getParam')->with('sitemap_id')->willReturn($id);
+        $this->requestMock->expects($this->any())->method('isPost')->willReturn(true);
 
         $sitemapMock = $this->getMockBuilder(\Magento\Sitemap\Model\Sitemap::class)
             ->disableOriginalConstructor()
@@ -135,7 +138,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->sitemapFactoryMock->expects($this->once())->method('create')->willReturn($sitemapMock);
         $writeDirectoryMock->expects($this->any())
             ->method('getRelativePath')
-            ->with($sitemapPath . $sitemapFilename)
+            ->with($sitemapFilename)
             ->willReturn($relativePath);
         $writeDirectoryMock->expects($this->once())->method('isFile')->with($relativePath)->willReturn(true);
         $writeDirectoryMock->expects($this->once())->method('delete')->with($relativePath)->willReturn(true);

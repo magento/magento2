@@ -216,7 +216,7 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
         $bind = [':currency_from' => $code];
         $select = $connection->select()->from(
-            $this->getTable('directory_currency_rate'),
+            $this->_currencyRateTable,
             ['currency_to', 'rate']
         )->where(
             'currency_from = :currency_from'

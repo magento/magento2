@@ -11,9 +11,36 @@
     <section name="AttributePropertiesSection">
         <element name="AdvancedProperties" type="button" selector="#advanced_fieldset-wrapper"/>
         <element name="Save" type="button" selector="#save"/>
+        <element name="defaultLabel" type="input" selector="#attribute_label"/>
+        <element name="inputType" type="select" selector="#frontend_input"/>
+        <element name="deleteAttribute" type="button" selector="#delete" timeout="30"/>
+    </section>
+    <section name="StorefrontPropertiesSection">
+        <element name="pageTitle" type="text" selector="//span[text()='Storefront Properties']" />
+        <element name="storeFrontPropertiesTab" selector="#product_attribute_tabs_front" type="button"/>
+        <element name="enableWYSIWYG" type="select" selector="#enabled"/>
+        <element name="useForPromoRuleConditions" type="select" selector="#is_used_for_promo_rules"/>
+    </section>
+    <section name="AdvancedAttributePropertiesSection">
+        <element name="advancedAttributePropertiesSectionToggle"
+                 type="button" selector="#advanced_fieldset-wrapper"/>
+        <element name="attributeCode" type="text" selector="#attribute_code"/>
+        <element name="scope" type="select" selector="#is_global"/>
+        <element name="addToColumnOptions" type="select" selector="#is_used_in_grid"/>
+        <element name="useInFilterOptions" type="select" selector="#is_filterable_in_grid"/>
+        <element name="addSwatch" type="button" selector="#add_new_swatch_text_option_button"/>
+    </section>
+    <section name="AdminAttributeOptionsSection">
+        <element name="addOption" type="button" selector="#add_new_option_button"/>
+        <element name="nthOptionAdminLabel" type="input"
+                 selector="(//*[@id='manage-options-panel']//tr[{{var}}]//input[contains(@name, 'option[value]')])[1]" parameterized="true"/>
     </section>
     <section name="StorefrontPropertiesSection">
         <element name="storefrontPropertiesTab" selector="#product_attribute_tabs_front" type="button" timeout="30"/>
         <element name="useForPromoRuleConditions" type="select" selector="#is_used_for_promo_rules"/>
+    </section>
+    <section name="AttributeManageSwatchSection">
+        <element name="swatchField" type="input" selector="input[name='swatchtext[value][option_{{option_index}}][{{index}}]'][placeholder='Swatch']" parameterized="true"/>
+        <element name="descriptionField" type="input" selector="input[name='optiontext[value][option_{{option_index}}][{{index}}]'][placeholder='Description']" parameterized="true"/>
     </section>
 </sections>

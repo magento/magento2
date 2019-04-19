@@ -11,6 +11,9 @@
     <page name="AdminInvoiceNewPage" url="/sales/order_invoice/new/order_id/" area="admin" module="Magento_Sales">
         <section name="AdminInvoiceNewSection"/>
         <section name="AdminInvoiceMainActionsSection"/>
+        <section name="AdminInvoiceOrderAndAccountInformationSection"/>
+        <section name="AdminInvoiceAddressInformationSection"/>
         <section name="AdminInvoiceTotalSection"/>
+        <section name="AdminInvoiceItemsSection"/>
     </page>
 </pages>

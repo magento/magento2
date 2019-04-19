@@ -281,7 +281,7 @@ class Calculator implements BundleCalculatorInterface
      * @param float $basePriceValue
      * @param Product $bundleProduct
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
-     * @param null|bool|string|arrayy $exclude
+     * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     protected function calculateFixedBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude)

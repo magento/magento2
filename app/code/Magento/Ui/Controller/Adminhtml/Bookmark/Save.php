@@ -7,6 +7,7 @@ namespace Magento\Ui\Controller\Adminhtml\Bookmark;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Json\DecoderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Api\BookmarkManagementInterface;
@@ -86,11 +87,16 @@ class Save extends AbstractAction
      * Action for AJAX request
      *
      * @return void
+     * @throws NotFoundException
+     * @throws \InvalidArgumentException
      */
     public function execute()
     {
         $bookmark = $this->bookmarkFactory->create();
         $jsonData = $this->_request->getParam('data');
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found.'));
+        }
         if (!$jsonData) {
             throw new \InvalidArgumentException('Invalid parameter "data"');
         }

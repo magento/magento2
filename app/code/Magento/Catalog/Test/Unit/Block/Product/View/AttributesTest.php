@@ -125,17 +125,28 @@ class AttributesTest extends TestCase
     }
 
     /**
+     * Get attribute with no value phrase
+     *
+     * @param string $phrase
      * @return void
+     * @dataProvider noValueProvider
      */
-    public function testGetAttributeNoValue()
+    public function testGetAttributeNoValue(string $phrase)
     {
-        $this->phrase = '';
-        $this->frontendAttribute
-            ->expects($this->any())
-            ->method('getValue')
-            ->willReturn($this->phrase);
+        $this->frontendAttribute->method('getValue')
+            ->willReturn($phrase);
         $attributes = $this->attributesBlock->getAdditionalData();
-        $this->assertTrue(empty($attributes['phrase']));
+        $this->assertArrayNotHasKey('phrase', $attributes);
+    }
+
+    /**
+     * No value data provider
+     *
+     * @return array
+     */
+    public function noValueProvider(): array
+    {
+        return [[' '], ['']];
     }
 
     /**

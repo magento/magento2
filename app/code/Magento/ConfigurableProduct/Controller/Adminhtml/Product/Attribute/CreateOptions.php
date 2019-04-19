@@ -50,7 +50,11 @@ class CreateOptions extends Action
      */
     public function execute()
     {
-        $this->getResponse()->representJson($this->jsonHelper->jsonEncode($this->saveAttributeOptions()));
+        $result = [];
+        if ($this->getRequest()->isPost()) {
+            $result = $this->saveAttributeOptions();
+        }
+        $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
     }
 
     /**

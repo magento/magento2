@@ -47,7 +47,11 @@ class RemoveItemTest extends \PHPUnit\Framework\TestCase
         $this->sidebarMock = $this->createMock(\Magento\Checkout\Model\Sidebar::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->jsonHelperMock = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isPost'])
+            ->getMockForAbstractClass();
+        $this->requestMock->expects($this->any())->method('isPost')->willReturn(true);
         $this->responseMock = $this->getMockForAbstractClass(
             \Magento\Framework\App\ResponseInterface::class,
             [],

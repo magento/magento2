@@ -70,6 +70,11 @@ class DeploymentConfig
         if ($key === null) {
             return $this->flatData;
         }
+
+        if (array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
+            return '';
+        }
+
         return $this->flatData[$key] ?? $defaultValue;
     }
 

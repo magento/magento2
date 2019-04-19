@@ -66,7 +66,7 @@ class Edit extends \Magento\Backend\Block\Widget
                     'label' => __('Delete'),
                     'onclick' => 'deleteConfirm(\'' . __(
                         'Are you sure?'
-                    ) . '\', \'' . $this->getDeleteUrl() . '\')',
+                    ) . '\', \'' . $this->getDeleteUrl() . '\', {data: {}})',
                     'class' => 'delete'
                 ]
             );

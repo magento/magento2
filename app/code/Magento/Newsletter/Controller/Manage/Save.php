@@ -8,8 +8,12 @@
 namespace Magento\Newsletter\Controller\Manage;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
+use Magento\Customer\Model\Data\Customer;
 use Magento\Newsletter\Model\Subscriber;
 
+/**
+ * Controller for customer newsletter subscription save.
+ */
 class Save extends \Magento\Newsletter\Controller\Manage
 {
     /**
@@ -58,7 +62,7 @@ class Save extends \Magento\Newsletter\Controller\Manage
     }
 
     /**
-     * Save newsletter subscription preference action
+     * Save newsletter subscription preference action.
      *
      * @return void|null
      */
@@ -81,6 +85,8 @@ class Save extends \Magento\Newsletter\Controller\Manage
                 $isSubscribedParam = (boolean)$this->getRequest()
                     ->getParam('is_subscribed', false);
                 if ($isSubscribedParam !== $isSubscribedState) {
+                    // No need to validate customer and customer address while saving subscription preferences
+                    $this->setIgnoreValidationFlag($customer);
                     $this->customerRepository->save($customer);
                     if ($isSubscribedParam) {
                         $subscribeModel = $this->subscriberFactory->create()
@@ -104,5 +110,16 @@ class Save extends \Magento\Newsletter\Controller\Manage
             }
         }
         $this->_redirect('customer/account/');
+    }
+
+    /**
+     * Set ignore_validation_flag to skip unnecessary address and customer validation.
+     *
+     * @param Customer $customer
+     * @return void
+     */
+    private function setIgnoreValidationFlag(Customer $customer)
+    {
+        $customer->setData('ignore_validation_flag', true);
     }
 }

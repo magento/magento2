@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontBraintreePaymentConfigurationSection">
+        <element name="creditCardBraintreePaymentMethod" type="radio" selector="#braintree" timeout="30"/>
+        <element name="cardFrame" type="iframe" selector="braintree-hosted-field-number"/>
+        <element name="monthFrame" type="iframe" selector="braintree-hosted-field-expirationMonth"/>
+        <element name="yearFrame" type="iframe" selector="braintree-hosted-field-expirationYear"/>
+        <element name="codeFrame" type="iframe" selector="braintree-hosted-field-cvv"/>
+        <element name="cardNumber" type="input" selector="#credit-card-number"/>
+        <element name="month" type="input" selector="#expiration-month"/>
+        <element name="year" type="input" selector="#expiration-year"/>
+        <element name="verificationNumber" type="input" selector="#cvv"/>
+    </section>
+</sections>

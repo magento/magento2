@@ -12,6 +12,7 @@ use Magento\Framework\Session\Config\ConfigInterface;
 /**
  * Session Manager
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class SessionManager implements SessionManagerInterface
 {
@@ -93,6 +94,11 @@ class SessionManager implements SessionManagerInterface
     private $appState;
 
     /**
+     * @var SessionStartChecker
+     */
+    private $sessionStartChecker;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param SidResolverInterface $sidResolver
      * @param ConfigInterface $sessionConfig
@@ -102,7 +108,10 @@ class SessionManager implements SessionManagerInterface
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\State $appState
+     * @param SessionStartChecker|null $sessionStartChecker
      * @throws \Magento\Framework\Exception\SessionException
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -113,7 +122,8 @@ class SessionManager implements SessionManagerInterface
         StorageInterface $storage,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Framework\App\State $appState
+        \Magento\Framework\App\State $appState,
+        SessionStartChecker $sessionStartChecker = null
     ) {
         $this->request = $request;
         $this->sidResolver = $sidResolver;
@@ -124,6 +134,9 @@ class SessionManager implements SessionManagerInterface
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->appState = $appState;
+        $this->sessionStartChecker = $sessionStartChecker ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            SessionStartChecker::class
+        );
 
         // Enable session.use_only_cookies
         ini_set('session.use_only_cookies', '1');
@@ -131,7 +144,8 @@ class SessionManager implements SessionManagerInterface
     }
 
     /**
-     * This method needs to support sessions with APC enabled
+     * This method needs to support sessions with APC enabled.
+     *
      * @return void
      */
     public function writeClose()
@@ -166,47 +180,50 @@ class SessionManager implements SessionManagerInterface
      */
     public function start()
     {
-        if (!$this->isSessionExists()) {
-            \Magento\Framework\Profiler::start('session_start');
+        if ($this->sessionStartChecker->check()) {
+            if (!$this->isSessionExists()) {
+                \Magento\Framework\Profiler::start('session_start');
 
-            try {
-                $this->appState->getAreaCode();
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                throw new \Magento\Framework\Exception\SessionException(
-                    new \Magento\Framework\Phrase(
-                        'Area code not set: Area code must be set before starting a session.'
-                    ),
-                    $e
-                );
+                try {
+                    $this->appState->getAreaCode();
+                } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                    throw new \Magento\Framework\Exception\SessionException(
+                        new \Magento\Framework\Phrase(
+                            'Area code not set: Area code must be set before starting a session.'
+                        ),
+                        $e
+                    );
+                }
+
+                // Need to apply the config options so they can be ready by session_start
+                $this->initIniOptions();
+                $this->registerSaveHandler();
+                if (isset($_SESSION['new_session_id'])) {
+                    // Not fully expired yet. Could be lost cookie by unstable network.
+                    session_commit();
+                    session_id($_SESSION['new_session_id']);
+                }
+                $sid = $this->sidResolver->getSid($this);
+                // potential custom logic for session id (ex. switching between hosts)
+                $this->setSessionId($sid);
+                session_start();
+                if (isset($_SESSION['destroyed'])
+                    && $_SESSION['destroyed'] < time() - $this->sessionConfig->getCookieLifetime()
+                ) {
+                    $this->destroy(['clear_storage' => true]);
+                }
+
+                $this->validator->validate($this);
+                $this->renewCookie($sid);
+
+                register_shutdown_function([$this, 'writeClose']);
+
+                $this->_addHost();
+                \Magento\Framework\Profiler::stop('session_start');
             }
-
-            // Need to apply the config options so they can be ready by session_start
-            $this->initIniOptions();
-            $this->registerSaveHandler();
-            if (isset($_SESSION['new_session_id'])) {
-                // Not fully expired yet. Could be lost cookie by unstable network.
-                session_commit();
-                session_id($_SESSION['new_session_id']);
-            }
-            $sid = $this->sidResolver->getSid($this);
-            // potential custom logic for session id (ex. switching between hosts)
-            $this->setSessionId($sid);
-            session_start();
-            if (isset($_SESSION['destroyed'])
-                && $_SESSION['destroyed'] < time() - $this->sessionConfig->getCookieLifetime()
-            ) {
-                $this->destroy(['clear_storage' => true]);
-            }
-
-            $this->validator->validate($this);
-            $this->renewCookie($sid);
-
-            register_shutdown_function([$this, 'writeClose']);
-
-            $this->_addHost();
-            \Magento\Framework\Profiler::stop('session_start');
+            $this->storage->init(isset($_SESSION) ? $_SESSION : []);
         }
-        $this->storage->init(isset($_SESSION) ? $_SESSION : []);
+
         return $this;
     }
 

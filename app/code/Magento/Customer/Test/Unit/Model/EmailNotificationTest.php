@@ -603,23 +603,35 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider emailDataProvider
+     * @param string $emailType
+     * @param string $template
+     * @param string $templateIdentifier
+     * @param string|null $sendemailStoreId
+     * @param array $extensions
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testNewAccount()
-    {
+    public function testNewAccount(
+        string $emailType,
+        string $template,
+        string $templateIdentifier,
+        $sendemailStoreId,
+        array $extensions
+    ) {
         $customerId = 1;
         $customerStoreId = 2;
+        $customerName = 'Customer Name';
         $customerEmail = 'email@email.com';
         $customerData = ['key' => 'value'];
-        $customerName = 'Customer Name';
-        $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
-        $senderValues = ['name' => $sender, 'email' => $sender];
+        $senderEmail = 'sender@sender.com';
+        $senderValues = ['name' => $sender, 'email' => $senderEmail];
 
         $this->senderResolverMock
             ->expects($this->once())
             ->method('resolve')
-            ->with($sender, $customerStoreId)
             ->willReturn($senderValues);
 
         /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $customer */
@@ -669,12 +681,29 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
 
         $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')
-            ->with(EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE, ScopeInterface::SCOPE_STORE, $customerStoreId)
+            ->with($template, ScopeInterface::SCOPE_STORE, $customerStoreId)
             ->willReturn($templateIdentifier);
+
         $this->scopeConfigMock->expects($this->at(1))
             ->method('getValue')
             ->with(EmailNotification::XML_PATH_REGISTER_EMAIL_IDENTITY, ScopeInterface::SCOPE_STORE, $customerStoreId)
             ->willReturn($sender);
+
+        $templateVars = [
+            'customer' => $this->customerSecureMock,
+            'back_url' => '',
+            'store' => $this->storeMock,
+        ];
+
+        if ($template === EmailNotification::XML_PATH_CONFIRM_EMAIL_TEMPLATE) {
+            if (!empty($extensions)) {
+                $templateVars['url'] = $extensions['url'];
+                $templateVars['extensions'] = $extensions['extension_info'];
+            } else {
+                $templateVars['url'] = EmailNotification::CUSTOMER_CONFIRM_URL;
+                $templateVars['extensions'] = $extensions;
+            }
+        }
 
         $this->mockDefaultTransportBuilder(
             $templateIdentifier,
@@ -682,10 +711,46 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             $senderValues,
             $customerEmail,
             $customerName,
-            ['customer' => $this->customerSecureMock, 'back_url' => '', 'store' => $this->storeMock]
+            $templateVars
         );
 
-        $this->model->newAccount($customer, EmailNotification::NEW_ACCOUNT_EMAIL_REGISTERED, '', $customerStoreId);
+        $this->model->newAccount($customer, $emailType, '', $customerStoreId, $sendemailStoreId, $extensions);
+    }
+
+    /**
+     * @return array
+     */
+    public function emailDataProvider(): array
+    {
+        return
+        [
+            [
+                EmailNotification::NEW_ACCOUNT_EMAIL_REGISTERED,
+                EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE,
+                'Register',
+                null,
+                [],
+            ],
+            [
+                EmailNotification::NEW_ACCOUNT_EMAIL_CONFIRMATION,
+                EmailNotification::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
+                'Confirm',
+                null,
+                [],
+            ],
+            [
+                EmailNotification::NEW_ACCOUNT_EMAIL_CONFIRMATION,
+                EmailNotification::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
+                'Confirm',
+                null,
+                [
+                    'url' => "customer/account/confirm",
+                    'extension_info' => [
+                        'test_extension' => "NTowU0Q5amZneEtSZnRDajRFZFVDVmZCbnhRWnZ0cFFkOA,,",
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**

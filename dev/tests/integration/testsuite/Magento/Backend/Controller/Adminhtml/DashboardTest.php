@@ -21,6 +21,8 @@ class DashboardTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
 
     public function testTunnelAction()
     {
+        $this->markTestSkipped('MAGETWO-98803');
+
         $testUrl = \Magento\Backend\Block\Dashboard\Graph::API_URL . '?cht=p3&chd=t:60,40&chs=250x100&chl=Hello|World';
         $handle = curl_init();
         curl_setopt($handle, CURLOPT_URL, $testUrl);

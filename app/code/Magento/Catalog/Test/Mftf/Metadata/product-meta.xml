@@ -121,4 +121,7 @@
     <operation name="deleteProduct2" dataType="product2" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
         <contentType>application/json</contentType>
     </operation>
+    <operation name="GetProduct2" dataType="product2" type="get" auth="adminOauth" url="/V1/products/{sku}" method="GET">
+        <contentType>application/json</contentType>
+    </operation>
 </operations>

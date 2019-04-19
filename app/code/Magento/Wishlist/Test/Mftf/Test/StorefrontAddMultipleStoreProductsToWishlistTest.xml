@@ -12,7 +12,6 @@
             <title value="Add products to wishlist from different stores"/>
             <description value="All products added to wishlist should be visible on any store. Even if product visibility was set to 'Not Visible Individually' for this store"/>
             <group value="wishlist"/>
-            <group value="skip" /><!-- Skipped; see MAGETWO-94100 -->
         </annotations>
         <before>
             <getData entity="DefaultRootCategoryGetter" stepKey="getDefaultRootCategory"/>

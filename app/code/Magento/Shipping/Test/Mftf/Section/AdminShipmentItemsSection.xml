@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminShipmentItemsSection">
+        <element name="itemQty" type="text" selector=".order-shipment-table tbody:nth-of-type({{var1}}) .col-ordered-qty .qty-table" parameterized="true"/>
+        <element name="itemQtyToShip" type="input" selector=".order-shipment-table tbody:nth-of-type({{row}}) .col-qty input.qty-item" parameterized="true"/>
+        <element name="productColumn" type="text" selector="//*[contains(@class,'order-shipment-table')]//td[@class = 'col-product']//div[contains(text(),'{{productName}}')]" parameterized="true"/>
+    </section>
+</sections>

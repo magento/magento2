@@ -149,7 +149,8 @@ class Quote extends \Magento\Framework\Session\SessionManager
             $this->_quote = $this->quoteFactory->create();
             if ($this->getStoreId()) {
                 if (!$this->getQuoteId()) {
-                    $this->_quote->setCustomerGroupId($this->groupManagement->getDefaultGroup()->getId());
+                    $customerGroupId = $this->groupManagement->getDefaultGroup($this->getStoreId())->getId();
+                    $this->_quote->setCustomerGroupId($customerGroupId);
                     $this->_quote->setIsActive(false);
                     $this->_quote->setStoreId($this->getStoreId());
                     

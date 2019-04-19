@@ -56,7 +56,7 @@
                 <field id="grid_per_page_values" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on Grid Allowed Values</label>
                     <comment>Comma-separated.</comment>
-                    <validate>validate-per-page-value-list</validate>
+                    <validate>validate-per-page-value-list required-entry</validate>
                 </field>
                 <field id="grid_per_page" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on Grid Default Value</label>
@@ -66,7 +66,7 @@
                 <field id="list_per_page_values" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on List Allowed Values</label>
                     <comment>Comma-separated.</comment>
-                    <validate>validate-per-page-value-list</validate>
+                    <validate>validate-per-page-value-list required-entry</validate>
                 </field>
                 <field id="list_per_page" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on List Default Value</label>
@@ -83,8 +83,9 @@
                     <backend_model>Magento\Catalog\Model\Indexer\Product\Flat\System\Config\Mode</backend_model>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="default_sort_by" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="default_sort_by" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Product Listing Sort by</label>
+                    <comment>Applies to category pages</comment>
                     <source_model>Magento\Catalog\Model\Config\Source\ListSort</source_model>
                 </field>
                 <field id="list_allow_all" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -95,6 +96,11 @@
                 <field id="parse_url_directives" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Allow Dynamic Media URLs in Products and Categories</label>
                     <comment>E.g. {{media url="path/to/image.jpg"}} {{skin url="path/to/picture.gif"}}. Dynamic directives parsing impacts catalog performance.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="remember_pagination" translate="label comment" type="select" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Remember Category Pagination</label>
+                    <comment>Changing may affect SEO and cache storage consumption.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>

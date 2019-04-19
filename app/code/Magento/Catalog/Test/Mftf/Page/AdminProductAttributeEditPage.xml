@@ -12,5 +12,7 @@
         <section name="AdminProductAttributeEditSection"/>
         <section name="AdminConfirmationModalSection"/>
         <section name="AdminEditAttributeStorefrontPropertiesSection"/>
+        <section name="AdminMainActionsSection"/>
+        <section name="AdminMessagesSection"/>
     </page>
 </pages>

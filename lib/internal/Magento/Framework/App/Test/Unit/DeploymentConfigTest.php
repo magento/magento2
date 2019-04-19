@@ -140,4 +140,43 @@ class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
             ]
         ];
     }
+
+    /**
+     * @param string $key
+     * @param string|null $expectedFlattenData
+     * @return void
+     * @dataProvider getDataProvider
+     */
+    public function testGet(string $key, $expectedFlattenData)
+    {
+        $flatData = [
+            'key1' => 'value',
+            'key2' => null,
+        ];
+
+        $this->reader->expects($this->once())->method('load')->willReturn($flatData);
+
+        $this->assertEquals($expectedFlattenData, $this->_deploymentConfig->get($key));
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataProvider(): array
+    {
+        return [
+            [
+                'key' => 'key1',
+                'expectedFlattenData' => 'value',
+            ],
+            [
+                'key' => 'key2',
+                'expectedFlattenData' => '',
+            ],
+            [
+                'key' => 'key3',
+                'expectedFlattenData' => null,
+            ],
+        ];
+    }
 }

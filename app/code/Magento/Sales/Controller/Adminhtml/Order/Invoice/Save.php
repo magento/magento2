@@ -190,13 +190,7 @@ class Save extends \Magento\Backend\App\Action
                 }
             }
             $transactionSave->save();
-
-            if (!empty($data['do_shipment'])) {
-                $this->messageManager->addSuccess(__('You created the invoice and shipment.'));
-            } else {
-                $this->messageManager->addSuccess(__('The invoice has been created.'));
-            }
-
+            
             // send invoice/shipment emails
             try {
                 if (!empty($data['send_email'])) {
@@ -206,6 +200,7 @@ class Save extends \Magento\Backend\App\Action
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->messageManager->addError(__('We can\'t send the invoice email right now.'));
             }
+            
             if ($shipment) {
                 try {
                     if (!empty($data['send_email'])) {
@@ -216,6 +211,13 @@ class Save extends \Magento\Backend\App\Action
                     $this->messageManager->addError(__('We can\'t send the shipment right now.'));
                 }
             }
+            
+            if (!empty($data['do_shipment'])) {
+                $this->messageManager->addSuccess(__('You created the invoice and shipment.'));
+            } else {
+                $this->messageManager->addSuccess(__('The invoice has been created.'));
+            }
+
             $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getCommentText(true);
             return $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
         } catch (LocalizedException $e) {

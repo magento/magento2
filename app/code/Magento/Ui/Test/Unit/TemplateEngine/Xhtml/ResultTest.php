@@ -6,6 +6,7 @@
 
 namespace Magento\Ui\Test\Unit\TemplateEngine\Xhtml;
 
+use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -58,6 +59,11 @@ class ResultTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    /**
+     * @var JsonHexTag|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->template = $this->createPartialMock(Template::class, ['append']);
@@ -65,6 +71,9 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $this->component = $this->createMock(UiComponentInterface::class);
         $this->structure = $this->createPartialMock(Structure::class, ['generate']);
         $this->logger = $this->createMock(LoggerInterface::class);
+        $this->serializer = $this->getMockBuilder(JsonHexTag::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManager = new ObjectManager($this);
         $this->testModel = $this->objectManager->getObject(Result::class, [
@@ -73,6 +82,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
             'component' => $this->component,
             'structure' => $this->structure,
             'logger' => $this->logger,
+            'jsonSerializer' => $this->serializer
         ]);
     }
 
@@ -82,6 +92,10 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     public function testAppendLayoutConfiguration()
     {
         $configWithCdata = 'text before <![CDATA[cdata text]]>';
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->with([$configWithCdata])
+            ->willReturn('["text before \u003C![CDATA[cdata text]]\u003E"]');
         $this->structure->expects($this->once())
             ->method('generate')
             ->with($this->component)

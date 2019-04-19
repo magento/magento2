@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCatalogProductListWidgetOperatorsTest">
+        <annotations>
+            <features value="CatalogWidget"/>
+            <stories value="MAGETWO-90930: Problems with operator more/less in the 'catalog Products List' widget"/>
+            <title value="Checking operator more/less in the 'catalog Products List' widget"/>
+            <description value="Check 'less than', 'equals or greater than', 'equals or less than' operators"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96479"/>
+            <group value="catalogWidget"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createSimpleCategory"/>
+            <createData entity="SimpleProduct" stepKey="createFirstProduct">
+                <requiredEntity createDataKey="createSimpleCategory"/>
+                <field key="price">10</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSecondProduct">
+                <requiredEntity createDataKey="createSimpleCategory"/>
+                <field key="price">50</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createThirdProduct">
+                <requiredEntity createDataKey="createSimpleCategory"/>
+                <field key="price">100</field>
+            </createData>
+            <createData entity="DefaultCmsBlock" stepKey="createPreReqBlock"/>
+            <!--User log in on back-end as admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
+            <deleteData createDataKey="createSimpleCategory" stepKey="deleteSimpleCategory"/>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createThirdProduct" stepKey="deleteThirdProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Open block with widget-->
+        <actionGroup ref="NavigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage1">
+            <argument name="cmsBlock" value="$$createPreReqBlock$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminCreateCmsBlockWithCatalogProductListWidget" stepKey="adminCreateBlockWithWidget">
+            <argument name="conditionAttribute" value="Price"/>
+            <argument name="conditionOperator" value="greater than"/>
+            <argument name="conditionValue" value="20"/>
+        </actionGroup>
+
+        <!--Go to Catalog > Categories (choose category where created products)-->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="onCategoryIndexPage"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickExpandAll"/>
+        <waitForElementVisible selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="waitForCategoryVisible"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="clickCategoryLink"/>
+
+        <!--Categories > Content > Add CMS Block: name saved block-->
+        <waitForElementVisible selector="{{AdminCategoryContentSection.sectionHeader}}" stepKey="waitForContentSection"/>
+        <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.addCMSBlock}}" visible="false" stepKey="openContentSection"/>
+
+        <selectOption selector="{{AdminCategoryContentSection.addCMSBlock}}" userInput="{{DefaultCmsBlock.title}}" stepKey="selectSavedBlock"/>
+
+        <!--Display Settings > Display Mode: Static block only-->
+        <waitForElementVisible selector="{{AdminCategoryDisplaySettingsSection.settingsHeader}}" stepKey="waitForDisplaySettingsSection"/>
+        <conditionalClick selector="{{AdminCategoryDisplaySettingsSection.settingsHeader}}" dependentSelector="{{AdminCategoryDisplaySettingsSection.displayMode}}" visible="false" stepKey="openDisplaySettingsSection"/>
+        <selectOption userInput="Static block only" selector="{{AdminCategoryDisplaySettingsSection.displayMode}}" stepKey="selectStaticBlockOnlyOption"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCategoryWithProducts"/>
+        <see userInput="You saved the category." stepKey="seeSuccessMessage"/>
+
+        <!--Go to Storefront > category-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSimpleCategory.name$$)}}" stepKey="goToStorefrontCategoryPage1"/>
+
+        <!--Check operators Greater than-->
+        <dontSeeElement selector="{{StorefrontWidgetsSection.checkElementStorefrontByPrice('10')}}" stepKey="dontSeeElementByPrice10"/>
+        <seeElement selector="{{StorefrontWidgetsSection.checkElementStorefrontByPrice('50')}}" stepKey="seeElementByPrice50"/>
+        <seeElement selector="{{StorefrontWidgetsSection.checkElementStorefrontByPrice('100')}}" stepKey="seeElementByPrice100"/>
+
+        <!--Open block with widget.-->
+        <actionGroup ref="NavigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage2">
+            <argument name="cmsBlock" value="$$createPreReqBlock$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminCreateCmsBlockWithCatalogProductListWidget" stepKey="adminCreateBlockWithWidgetLessThan">
+            <argument name="conditionAttribute" value="Price"/>
+            <argument name="conditionOperator" value="less than"/>
+            <argument name="conditionValue" value="20"/>
+        </actionGroup>
+
+        <!--Go to Storefront > category-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSimpleCategory.name$$)}}" stepKey="goToStorefrontCategoryPage2"/>
+
+        <!--Check operators Greater than-->
+        <seeElement selector="{{StorefrontWidgetsSection.checkElementStorefrontByPrice('10')}}" stepKey="seeElementByPrice10"/>
+        <dontSeeElement selector="{{StorefrontWidgetsSection.checkElementStorefrontByPrice('50')}}" stepKey="dontSeeElementByPrice50"/>
+        <dontSeeElement selector="{{StorefrontWidgetsSection.checkElementStorefrontByPrice('100')}}" stepKey="dontSeeElementByPrice100"/>
+
+        <!--Open block with widget-->
+        <actionGroup ref="NavigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage3">
+            <argument name="cmsBlock" value="$$createPreReqBlock$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminCreateCmsBlockWithCatalogProductListWidget" stepKey="adminCreateBlockWithWidgetEqualsOrGreaterThan">
+            <argument name="conditionAttribute" value="Price"/>
+            <argument name="conditionOperator" value="equals or greater than"/>
+            <argument name="conditionValue" value="50"/>
+        </actionGroup>
+
+        <!--Go to Storefront > category-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSimpleCategory.name$$)}}" stepKey="goToStorefrontCategoryPage3"/>
+
+        <!--Check operators Greater than-->
+        <dontSeeElement selector="{{StorefrontWidgetsSection.checkElementStorefrontByPrice('10')}}" stepKey="dontSeeElementByPrice10a"/>
+        <seeElement selector="{{StorefrontWidgetsSection.checkElementStorefrontByPrice('50')}}" stepKey="seeElementByPrice50a"/>
+        <seeElement selector="{{StorefrontWidgetsSection.checkElementStorefrontByPrice('100')}}" stepKey="seeElementByPrice100a"/>
+
+        <!--Open block with widget-->
+        <actionGroup ref="NavigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage4">
+            <argument name="cmsBlock" value="$$createPreReqBlock$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminCreateCmsBlockWithCatalogProductListWidget" stepKey="adminCreateBlockWithWidgetEqualsOrLessThan">
+            <argument name="conditionAttribute" value="Price"/>
+            <argument name="conditionOperator" value="equals or less than"/>
+            <argument name="conditionValue" value="50"/>
+        </actionGroup>
+
+        <!--Go to Storefront > category-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSimpleCategory.name$$)}}" stepKey="goToStorefrontCategoryPage4"/>
+
+        <!--Check operators Greater than-->
+        <seeElement selector="{{StorefrontWidgetsSection.checkElementStorefrontByPrice('10')}}" stepKey="seeElementByPrice10b"/>
+        <seeElement selector="{{StorefrontWidgetsSection.checkElementStorefrontByPrice('50')}}" stepKey="seeElementByPrice50b"/>
+        <dontSeeElement selector="{{StorefrontWidgetsSection.checkElementStorefrontByPrice('100')}}" stepKey="dontSeeElementByPrice100b"/>
+    </test>
+</tests>

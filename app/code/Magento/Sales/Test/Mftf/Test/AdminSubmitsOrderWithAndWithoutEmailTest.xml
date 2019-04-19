@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminSubmitsOrderWithAndWithoutEmailTest">
         <annotations>
             <title value="Email is required to create an order from Admin Panel"/>
@@ -69,7 +69,8 @@
 
         <!--Submit Order and verify information-->
         <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="clickSubmitOrder" after="seeCorrectGrandTotal"/>
-        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" after="clickSubmitOrder" stepKey="seeViewOrderPage"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url('$grabOrderId')}}" after="grabOrderId" stepKey="seeViewOrderPage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." after="seeViewOrderPage" stepKey="seeSuccessMessage"/>
     </test>
 </tests>

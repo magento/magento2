@@ -9,6 +9,9 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\Manager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
@@ -17,11 +20,12 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
 {
     public function testSaveActionWithDangerRequest()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(['product' => ['entity_id' => 15]]);
         $this->dispatch('backend/catalog/product/save');
         $this->assertSessionMessages(
             $this->equalTo(['Unable to save product']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+            MessageInterface::TYPE_ERROR
         );
         $this->assertRedirect($this->stringContains('/backend/catalog/product/new'));
     }
@@ -34,11 +38,12 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->getRequest()->setPostValue(['back' => 'new']);
         $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get('simple');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/new/'));
         $this->assertSessionMessages(
             $this->contains('You saved the product.'),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+            MessageInterface::TYPE_SUCCESS
         );
     }
 
@@ -50,6 +55,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->getRequest()->setPostValue(['back' => 'duplicate']);
         $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get('simple');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/'));
         $this->assertRedirect(
@@ -61,11 +67,11 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         );
         $this->assertSessionMessages(
             $this->contains('You saved the product.'),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+            MessageInterface::TYPE_SUCCESS
         );
         $this->assertSessionMessages(
             $this->contains('You duplicated the product.'),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+            MessageInterface::TYPE_SUCCESS
         );
     }
 
@@ -159,11 +165,13 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionWithAlreadyExistingUrlKey(array $postData)
     {
         $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save');
         /** @var Manager $messageManager */
         $messageManager = $this->_objectManager->get(Manager::class);
         $messages = $messageManager->getMessages();
         $errors = $messages->getItemsByType('error');
+        $this->assertNotEmpty($errors);
         $message = array_shift($errors);
         $this->assertSame('URL key for specified store already exists.', $message->getText());
         $this->assertRedirect($this->stringContains('/backend/catalog/product/new'));
@@ -231,9 +239,109 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
                             'thumbnail' => '/m/a//magento_image.jpg.tmp',
                             'swatch_image' => '/m/a//magento_image.jpg.tmp',
                         ],
-                    'form_key' => Bootstrap::getObjectManager()->get(FormKey::class)->getFormKey(),
                 ]
             ]
         ];
+    }
+
+    /**
+     * Test product save with selected tier price
+     *
+     * @dataProvider saveActionTierPriceDataProvider
+     * @param array $postData
+     * @param array $tierPrice
+     * @magentoDataFixture Magento/Catalog/_files/product_has_tier_price_show_as_low_as.php
+     * @magentoConfigFixture current_store catalog/price/scope 1
+     */
+    public function testSaveActionTierPrice(array $postData, array $tierPrice)
+    {
+        $postData['product'] = $this->getProductData($tierPrice);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($postData);
+        $this->dispatch('backend/catalog/product/save/id/' . $postData['id']);
+        $this->assertSessionMessages(
+            $this->contains('You saved the product.'),
+            MessageInterface::TYPE_SUCCESS
+        );
+    }
+
+    /**
+     * Provide test data for testSaveActionWithAlreadyExistingUrlKey().
+     *
+     * @return array
+     */
+    public function saveActionTierPriceDataProvider()
+    {
+        return [
+            [
+                'post_data' => [
+                    'id' => '1',
+                    'type' => 'simple',
+                    'store' => '0',
+                    'set' => '4',
+                    'back' => 'edit',
+                    'product' => [],
+                    'is_downloadable' => '0',
+                    'affect_configurable_product_attributes' => '1',
+                    'new_variation_attribute_set_id' => '4',
+                    'use_default' => [
+                        'gift_message_available' => '0',
+                        'gift_wrapping_available' => '0'
+                    ],
+                    'configurable_matrix_serialized' => '[]',
+                    'associated_product_ids_serialized' => '[]'
+                ],
+                'tier_price_for_request' => [
+                    [
+                        'price_id' => '1',
+                        'website_id' => '0',
+                        'cust_group' => '32000',
+                        'price' => '111.00',
+                        'price_qty' => '100',
+                        'website_price' => '111.0000',
+                        'initialize' => 'true',
+                        'record_id' => '1',
+                        'value_type' => 'fixed'
+                    ],
+                    [
+                        'price_id' => '2',
+                        'website_id' => '1',
+                        'cust_group' => '32000',
+                        'price' => '222.00',
+                        'price_qty' => '200',
+                        'website_price' => '111.0000',
+                        'initialize' => 'true',
+                        'record_id' => '2',
+                        'value_type' => 'fixed'
+                    ],
+                    [
+                        'price_id' => '3',
+                        'website_id' => '1',
+                        'cust_group' => '32000',
+                        'price' => '333.00',
+                        'price_qty' => '300',
+                        'website_price' => '111.0000',
+                        'initialize' => 'true',
+                        'record_id' => '3',
+                        'value_type' => 'fixed'
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Return product data for test without entity_id for further save
+     *
+     * @param array $tierPrice
+     * @return array
+     */
+    private function getProductData(array $tierPrice)
+    {
+        $productRepositoryInterface = $this->_objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepositoryInterface->get('tier_prices')->getData();
+        $product['tier_price'] = $tierPrice;
+        unset($product['entity_id']);
+        return $product;
     }
 }

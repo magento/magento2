@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRestrictedUserOnlyAccessCmsBlockTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Check access for restricted admin user"/>
+            <title value="Check: restricted admin with access only to CMS Block"/>
+            <description value="Check that the system shows information only in Blocks"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-13814"/>
+            <useCaseId value="MAGETWO-88612"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <createData entity="restrictedWebUser" stepKey="createRestrictedAdmin"/>
+            <actionGroup ref="LoginToAdminActionGroup" stepKey="loginToBackend"/>
+            <actionGroup ref="AdminCreateUserRoleActionGroup" stepKey="createRestrictedAdminRole">
+                <argument name="roleName" value="{{RoleTest.roleName}}"/>
+                <argument name="resourceAccess" value="Custom"/>
+                <argument name="resource" value="Magento_Cms::block"/>
+            </actionGroup>
+            <actionGroup ref="AdminAssignUserRoleActionGroup" stepKey="assignAdminRole">
+                <argument name="user_restricted" value="$$createRestrictedAdmin$$"/>
+                <argument name="roleName" value="{{RoleTest.roleName}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logOut"/>
+        </before>
+        <after>
+            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdminWithAllAccess"/>
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteRestrictedRole">
+                <argument name="roleName" value="{{RoleTest.roleName}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="deleteRestrictedUser">
+                <argument name="user_restricted" value="$$createRestrictedAdmin$$"/>
+            </actionGroup>
+            <!--Log Out-->
+            <actionGroup ref="logout" stepKey="logOut"/>
+        </after>
+
+        <!--login as restricted user-->
+        <actionGroup ref="AdminLoginAsAnyUser" stepKey="logAsNewUser">
+            <argument name="login" value="$$createRestrictedAdmin.username$$"/>
+            <argument name="password" value="$$createRestrictedAdmin.password$$"/>
+        </actionGroup>
+
+        <!--Verify that The system shows information included in "Blocks"-->
+        <see userInput="Blocks" stepKey="seeBlocksPage"/>
+        <seeInCurrentUrl url="{{AdminCmsBlockGridPage.url}}" stepKey="assertUrl"/>
+        <!--Log Out-->
+        <actionGroup ref="logout" stepKey="logOut"/>
+    </test>
+</tests>

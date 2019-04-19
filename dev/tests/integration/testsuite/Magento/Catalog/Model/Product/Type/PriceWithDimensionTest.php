@@ -17,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoDbIsolation disabled
- * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
+ * @--magentoIndexerDimensionMode catalog_product_price website_and_customer_group
  * @group indexer_dimension
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  */
@@ -37,6 +37,9 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPriceFromIndexer()
     {
+        $this->markTestSkipped(
+            'Skipped because of MAGETWO-99136'
+        );
         /** @var PriceTableResolver $tableResolver */
         $tableResolver = Bootstrap::getObjectManager()->create(PriceTableResolver::class);
 
@@ -66,11 +69,17 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPrice()
     {
+        $this->markTestSkipped(
+            'Skipped because of MAGETWO-99136'
+        );
         $this->assertEquals('test', $this->_model->getPrice(new DataObject(['price' => 'test'])));
     }
 
     public function testGetFinalPrice()
     {
+        $this->markTestSkipped(
+            'Skipped because of MAGETWO-99136'
+        );
         $repository = Bootstrap::getObjectManager()->create(
             ProductRepository::class
         );
@@ -95,6 +104,9 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFormatedPrice()
     {
+        $this->markTestSkipped(
+            'Skipped because of MAGETWO-99136'
+        );
         $repository = Bootstrap::getObjectManager()->create(
             ProductRepository::class
         );
@@ -105,12 +117,18 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
 
     public function testCalculatePrice()
     {
+        $this->markTestSkipped(
+            'Skipped because of MAGETWO-99136'
+        );
         $this->assertEquals(10, $this->_model->calculatePrice(10, 8, '1970-12-12 23:59:59', '1971-01-01 01:01:01'));
         $this->assertEquals(8, $this->_model->calculatePrice(10, 8, '1970-12-12 23:59:59', '2034-01-01 01:01:01'));
     }
 
     public function testCalculateSpecialPrice()
     {
+        $this->markTestSkipped(
+            'Skipped because of MAGETWO-99136'
+        );
         $this->assertEquals(
             10,
             $this->_model->calculateSpecialPrice(10, 8, '1970-12-12 23:59:59', '1971-01-01 01:01:01')
@@ -123,6 +141,9 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
 
     public function testIsTierPriceFixed()
     {
+        $this->markTestSkipped(
+            'Skipped because of MAGETWO-99136'
+        );
         $this->assertTrue($this->_model->isTierPriceFixed());
     }
 
@@ -134,6 +155,9 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
      */
     private function prepareBuyRequest(Product $product)
     {
+        $this->markTestSkipped(
+            'Skipped because of MAGETWO-99136'
+        );
         $options = [];
         /** @var $option \Magento\Catalog\Model\Product\Option */
         foreach ($product->getOptions() as $option) {

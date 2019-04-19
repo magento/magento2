@@ -81,7 +81,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update(
             'reset',
             'onclick',
-            'deleteConfirm(\'' . $confirm . '\', \'' . $this->getCancelUrl() . '\')'
+            'deleteConfirm(\'' . $confirm . '\', \'' . $this->getCancelUrl() . '\', {data: {}})'
         );
     }
 

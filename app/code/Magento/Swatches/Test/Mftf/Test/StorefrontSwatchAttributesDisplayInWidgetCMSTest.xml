@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSwatchAttributesDisplayInWidgetCMSTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Create/configure swatches product attribute"/>
+            <title value="Swatch Attribute is not displayed in the Widget CMS"/>
+            <description value="Swatch Attribute is not displayed in the Widget CMS"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14844"/>
+            <useCaseId value="MAGETWO-94147"/>
+            <group value="configurableProduct"/>
+            <group value="swatches"/>
+            <group value="cms"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+
+        <before>
+            <!--create category-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!--Login-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin"/>
+            <!--Create a configurable swatch product via the UI -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
+            <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+                <argument name="product" value="BaseConfigurableProduct"/>
+            </actionGroup>
+            <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+                <argument name="product" value="BaseConfigurableProduct"/>
+            </actionGroup>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="searchAndSelectCategory"/>
+            <!--Add swatch attribute to configurable product-->
+            <actionGroup ref="CreateConfigurationsWithVisualSwatchVisibleOnStorefront" stepKey="addSwatchToProduct"/>
+            <!--Create CMS page-->
+            <actionGroup ref="CreateNewPageWithWidgetWithCategoryCondition" stepKey="createCMSPageWithWidget">
+                <argument name="categoryId" value="$$createCategory.id$$"/>
+                <argument name="conditionOperator" value="contains"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--delete created category-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!--delete created configurable product-->
+            <actionGroup ref="DeleteAllProductsOnProductsGridPageFilteredByName" stepKey="deleteAllCreatedProducts">
+                <argument name="product" value="BaseConfigurableProduct"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
+            <!--delete created attribute product-->
+            <actionGroup ref="DeleteProductAttribute" stepKey="deleteAttribute">
+                <argument name="productAttribute" value="VisualSwatchAttribute"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter1"/>
+            <!--delete created page product-->
+            <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deletePage">
+                <argument name="urlKey" value="{{_defaultCmsPage.identifier}}"/>
+            </actionGroup>
+            <!--logout-->
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Open Storefront page for the new created page-->
+        <amOnPage url="{{StorefrontCmsPage.url(_defaultCmsPage.identifier)}}" stepKey="goToCreatedCmsPage"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(VisualSwatchOption1.default_label)}}" stepKey="waitForSwatchOptionsAppear"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(VisualSwatchOption1.default_label)}}" stepKey="assertAddedWidgetS"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(VisualSwatchOption2.default_label)}}" stepKey="assertAddedWidgetM"/>
+    </test>
+</tests>

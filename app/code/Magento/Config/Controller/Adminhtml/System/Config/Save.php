@@ -6,6 +6,7 @@
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * System Configuration Save Controller
@@ -140,9 +141,14 @@ class Save extends AbstractConfig
      * Save configuration
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         try {
             // custom save logic
             $this->_saveSection();

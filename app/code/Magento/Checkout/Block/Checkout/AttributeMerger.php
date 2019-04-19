@@ -6,10 +6,14 @@
 namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Customer\Model\Session;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 
+/**
+ * Fields attribute merger.
+ */
 class AttributeMerger
 {
     /**
@@ -46,6 +50,7 @@ class AttributeMerger
         'alpha' => 'validate-alpha',
         'numeric' => 'validate-number',
         'alphanumeric' => 'validate-alphanum',
+        'alphanum-with-spaces' => 'validate-alphanum-with-spaces',
         'url' => 'validate-url',
         'email' => 'email2',
         'length' => 'validate-length',
@@ -67,7 +72,7 @@ class AttributeMerger
     private $customerRepository;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterface
+     * @var CustomerInterface
      */
     private $customer;
 
@@ -269,6 +274,7 @@ class AttributeMerger
         for ($lineIndex = 0; $lineIndex < (int)$attributeConfig['size']; $lineIndex++) {
             $isFirstLine = $lineIndex === 0;
             $line = [
+                'label' => __("%1: Line %2", $attributeConfig['label'], $lineIndex + 1),
                 'component' => 'Magento_Ui/js/form/element/abstract',
                 'config' => [
                     // customScope is used to group elements within a single form e.g. they can be validated separately
@@ -309,6 +315,8 @@ class AttributeMerger
     }
 
     /**
+     * Returns default attribute value.
+     *
      * @param string $attributeCode
      * @return null|string
      */
@@ -346,7 +354,9 @@ class AttributeMerger
     }
 
     /**
-     * @return \Magento\Customer\Api\Data\CustomerInterface|null
+     * Returns logged customer.
+     *
+     * @return CustomerInterface|null
      */
     protected function getCustomer()
     {

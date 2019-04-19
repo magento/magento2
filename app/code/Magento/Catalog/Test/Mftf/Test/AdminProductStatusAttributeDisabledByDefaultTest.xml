@@ -28,7 +28,7 @@
             <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="clickOnAttributeRow1"/>
             <waitForPageLoad stepKey="wait2"/>
             <click selector="{{AdminNewAttributePanelSection.isDefault('1')}}" stepKey="resetOptionForStatusAttribute"/>
-            <click selector="{{AttributePropertiesSection.save}}" stepKey="saveAttribute1"/>
+            <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute1"/>
             <waitForPageLoad stepKey="waitForSaveAttribute1"/>
             <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache1"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
@@ -42,7 +42,7 @@
         <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="clickOnAttributeRow"/>
         <waitForPageLoad stepKey="wait2"/>
         <click selector="{{AdminNewAttributePanelSection.isDefault('2')}}" stepKey="chooseDisabledOptionForStatus"/>
-        <click selector="{{AttributePropertiesSection.save}}" stepKey="saveAttribute"/>
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
         <waitForPageLoad stepKey="waitForAttributeToSave"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>

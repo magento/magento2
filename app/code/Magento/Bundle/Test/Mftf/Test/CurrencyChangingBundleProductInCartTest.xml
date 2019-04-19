@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CurrencyChangingBundleProductInCartTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="MAGETWO-90381: Bundle product price doubled when switching currency"/>
+            <title value="Work of currency changing with a bundle product added to the cart"/>
+            <description value="User should be able change the currency and add one more product in cart and get right price in previous currency"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96305"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="login" />
+            <createData entity="CurrencySettingWithEuroAndUSD" stepKey="configureCurrencyOptions"/>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="SimpleProduct" stepKey="createPreReqSimpleProduct1">
+                <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createPreReqSimpleProduct2">
+                <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="createPreReqSimpleProduct1" stepKey="deletePreReqSimpleProduct1"/>
+            <deleteData createDataKey="createPreReqSimpleProduct2" stepKey="deletePreReqSimpleProduct2"/>
+            <createData entity="DefaultCurrencySetting" stepKey="restoreCurrencyOptions"/>
+            <!-- Delete the bundled product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProductOnProductsGridPageByName">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <!--Clear Configs-->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- Navigate to the Products>Inventory>Catalog -->
+        <!-- Click on "+" dropdown and select Bundle Product type -->
+        <actionGroup ref="OpenNewBundleProductPage" stepKey="openNewBundleProductPage"/>
+        <!-- Add Option, a "Radio Buttons" type option -->
+        <actionGroup ref="CreateBundleProductForTwoSimpleProductsWithRadioTypeOptions" stepKey="addBundleOptionWithTwoProducts2">
+            <argument name="bundleProduct" value="BundleProduct"/>
+            <argument name="simpleProductFirst" value="$$createPreReqSimpleProduct1$$"/>
+            <argument name="simpleProductSecond" value="$$createPreReqSimpleProduct2$$"/>
+        </actionGroup>
+        <!-- Save product -->
+        <actionGroup ref="SaveProductOnProductPageOnAdmin" stepKey="saveProductOnProductPageOnAdmin"/>
+        <!-- Go to storefront BundleProduct -->
+        <amOnPage url="{{StorefrontProductPage.url(BundleProduct.name)}}" stepKey="goToStorefrontProductPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontProductPage"/>
+        <actionGroup ref="StoreFrontAddProductToCartFromBundleWithCurrencyActionGroup" stepKey="addProduct1ToCartAndChangeCurrencyToEuro">
+            <argument name="product" value="$$createPreReqSimpleProduct1$$"/>
+            <argument name="currency" value="EUR - Euro"/>
+        </actionGroup>
+        <actionGroup ref="StoreFrontAddProductToCartFromBundleWithCurrencyActionGroup" stepKey="addProduct2ToCartAndChangeCurrencyToUSD">
+            <argument name="product" value="$$createPreReqSimpleProduct1$$"/>
+            <argument name="currency" value="USD - US Dollar"/>
+        </actionGroup>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniCart"/>
+        <waitForPageLoad stepKey="waitForMiniCart"/>
+        <see selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" userInput="$4,000.00" stepKey="seeCartSubtotal"/>
+    </test>
+</tests>

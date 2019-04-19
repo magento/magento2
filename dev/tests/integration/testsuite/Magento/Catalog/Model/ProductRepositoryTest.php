@@ -198,4 +198,52 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->assertGreaterThanOrEqual(1, $count);
     }
+
+    /**
+     * Test save product with gallery image
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_image.php
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    public function testSaveProductWithGalleryImage()
+    {
+        /** @var $mediaConfig \Magento\Catalog\Model\Product\Media\Config */
+        $mediaConfig = Bootstrap::getObjectManager()
+            ->get(\Magento\Catalog\Model\Product\Media\Config::class);
+
+        /** @var $mediaDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
+        $mediaDirectory = Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Filesystem::class)
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
+
+        $product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+        $product->load(1);
+
+        $path = $mediaConfig->getBaseMediaPath() . '/magento_image.jpg';
+        $absolutePath = $mediaDirectory->getAbsolutePath() . $path;
+        $product->addImageToMediaGallery($absolutePath, [
+            'image',
+            'small_image',
+        ], false, false);
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository->save($product);
+
+        $gallery = $product->getData('media_gallery');
+        $this->assertArrayHasKey('images', $gallery);
+        $images = array_values($gallery['images']);
+
+        $this->assertNotEmpty($gallery);
+        $this->assertTrue(isset($images[0]['file']));
+        $this->assertStringStartsWith('/m/a/magento_image', $images[0]['file']);
+        $this->assertArrayHasKey('media_type', $images[0]);
+        $this->assertEquals('image', $images[0]['media_type']);
+        $this->assertStringStartsWith('/m/a/magento_image', $product->getData('image'));
+        $this->assertStringStartsWith('/m/a/magento_image', $product->getData('small_image'));
+    }
 }

@@ -133,7 +133,7 @@ class Grouped extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -143,12 +143,17 @@ class Grouped extends AbstractModifier
         if ($modelId) {
             $storeId = $this->locator->getStore()->getId();
             $data[$product->getId()]['links'][self::LINK_TYPE] = [];
-            foreach ($this->productLinkRepository->getList($product) as $linkItem) {
+            $linkedItems = $this->productLinkRepository->getList($product);
+            usort($linkedItems, function ($a, $b) {
+                return $a->getPosition() <=> $b->getPosition();
+            });
+            foreach ($linkedItems as $index => $linkItem) {
                 if ($linkItem->getLinkType() !== self::LINK_TYPE) {
                     continue;
                 }
                 /** @var \Magento\Catalog\Api\Data\ProductInterface $linkedProduct */
                 $linkedProduct = $this->productRepository->get($linkItem->getLinkedProductSku(), false, $storeId);
+                $linkItem->setPosition($index);
                 $data[$modelId]['links'][self::LINK_TYPE][] = $this->fillData($linkedProduct, $linkItem);
             }
             $data[$modelId][self::DATA_SOURCE_DEFAULT]['current_store_id'] = $storeId;
@@ -175,6 +180,7 @@ class Grouped extends AbstractModifier
             'price' => $currency->toCurrency(sprintf("%f", $linkedProduct->getPrice())),
             'qty' => $linkItem->getExtensionAttributes()->getQty(),
             'position' => $linkItem->getPosition(),
+            'positionCalculated' => $linkItem->getPosition(),
             'thumbnail' => $this->imageHelper->init($linkedProduct, 'product_listing_thumbnail')->getUrl(),
             'type_id' => $linkedProduct->getTypeId(),
             'status' => $this->status->getOptionText($linkedProduct->getStatus()),
@@ -185,7 +191,7 @@ class Grouped extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -454,7 +460,7 @@ class Grouped extends AbstractModifier
                         'label' => null,
                         'renderDefaultRecord' => false,
                         'template' => 'ui/dynamic-rows/templates/grid',
-                        'component' => 'Magento_Ui/js/dynamic-rows/dynamic-rows-grid',
+                        'component' => 'Magento_GroupedProduct/js/grouped-product-grid',
                         'addButton' => false,
                         'itemTemplate' => 'record',
                         'dataScope' => 'data.links',
@@ -555,6 +561,22 @@ class Grouped extends AbstractModifier
                     ],
                 ],
             ],
+            'positionCalculated' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'label' => __('Position'),
+                            'dataType' => Form\Element\DataType\Number::NAME,
+                            'formElement' => Form\Element\Input::NAME,
+                            'componentType' => Form\Field::NAME,
+                            'elementTmpl' => 'Magento_GroupedProduct/components/position',
+                            'sortOrder' => 90,
+                            'fit' => true,
+                            'dataScope' => 'positionCalculated'
+                        ],
+                    ],
+                ],
+            ],
             'actionDelete' => [
                 'arguments' => [
                     'data' => [
@@ -563,7 +585,7 @@ class Grouped extends AbstractModifier
                             'componentType' => 'actionDelete',
                             'dataType' => Form\Element\DataType\Text::NAME,
                             'label' => __('Actions'),
-                            'sortOrder' => 90,
+                            'sortOrder' => 100,
                             'fit' => true,
                         ],
                     ],
@@ -577,7 +599,7 @@ class Grouped extends AbstractModifier
                             'formElement' => Form\Element\Input::NAME,
                             'componentType' => Form\Field::NAME,
                             'dataScope' => 'position',
-                            'sortOrder' => 100,
+                            'sortOrder' => 110,
                             'visible' => false,
                         ],
                     ],

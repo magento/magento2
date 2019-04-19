@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
         <element name="attributeSet" type="select" selector="div[data-index='attribute_set_id'] .admin__field-control"/>
         <element name="attributeSetFilter" type="input" selector="div[data-index='attribute_set_id'] .admin__field-control input"/>
@@ -15,12 +15,13 @@
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
         <element name="productNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
-        <element name="enableProductAttributeLabel" type="text" selector="[data-index='status'] .admin__field-label label"/>
-        <element name="enableProductAttributeLabelWrapper" type="text" selector="[data-index='status'] .admin__field-label"/>
+        <element name="enableProductAttributeLabel" type="text" selector="//span[text()='Enable Product']/parent::label"/>
+        <element name="enableProductAttributeLabelWrapper" type="text" selector="//span[text()='Enable Product']/parent::label/parent::div"/>
         <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
         <element name="productStatusUseDefault" type="checkbox" selector="input[name='use_default[status]']"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
         <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']"/>
+        <element name="productTaxClass" type="select" selector="select[name='product[tax_class_id]']"/>
         <element name="productTaxClassUseDefault" type="checkbox" selector="input[name='use_default[tax_class_id]']"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
@@ -33,8 +34,14 @@
         <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
         <element name="divByDataIndex" type="input" selector="div[data-index='{{var}}']" parameterized="true"/>
         <element name="attributeSetSearchCount" type="text" selector="div[data-index='attribute_set_id'] .admin__action-multiselect-search-count"/>
-        <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//label[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
         <element name="addAttributeBtn" type="button" selector="#addAttribute"/>
+        <element name="attributeSetFilterResultByName" type="text" selector="//label/span[text() = '{{var}}']" timeout="30" parameterized="true"/>
+        <element name="attributeSetDropDown" type="select" selector="div[data-index='attribute_set_id'] .action-select.admin__action-multiselect"/>
+        <element name="requiredNameIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
+        <element name="requiredSkuIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=sku]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
+        <element name="customAttributeDropdownField" type="select" selector="select[name='product[{{attributeCode}}]']" parameterized="true"/>
+        <element name="customAttributeInputField" type="select" selector="input[name='product[{{attributeCode}}]']" parameterized="true"/>
     </section>
     <section name="ProductInWebsitesSection">
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
@@ -172,6 +179,10 @@
 
         <element name="applySingleQuantityToEachSkus" type="radio" selector=".admin__field-label[for='apply-single-inventory-radio']" timeout="30"/>
         <element name="quantity" type="input" selector="#apply-single-inventory-input"/>
+        <element name="applySinglePriceToAllSkus" type="radio" selector=".admin__field-label[for='apply-single-price-radio']"/>
+        <element name="singlePrice" type="input" selector="#apply-single-price-input"/>
+        <element name="attributeByName" type="input" selector="//label[text()='{{var}}']/preceding-sibling::input" parameterized="true"/>
+        <element name="checkboxByName" type="input" selector="//div[text()='{{var}}']//ancestor::tr//input" parameterized="true"/>
     </section>
     <section name="AdminNewAttributePanel">
         <element name="saveAttribute" type="button" selector="#save" timeout="30"/>
@@ -180,5 +191,6 @@
     </section>
     <section name="AdminChooseAffectedAttributeSetPopup">
         <element name="confirm" type="button" selector="button[data-index='confirm_button']" timeout="30"/>
+        <element name="closePopUp" type="button" selector=".modal-popup._show [data-role='closeBtn']" timeout="30"/>
     </section>
 </sections>

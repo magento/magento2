@@ -740,7 +740,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $collection->expects($this->at(7))
             ->method('joinAttribute')
-            ->with('company', 'customer_address/company', 'default_billing', null, 'left')
+            ->with('billing_company', 'customer_address/company', 'default_billing', null, 'left')
             ->willReturnSelf();
         $this->collectionProcessorMock->expects($this->once())
             ->method('process')

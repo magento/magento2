@@ -13,9 +13,14 @@ class MassVisibleIn extends ProductController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new \Magento\Framework\Exception\NotFoundException(__('Page not found.'));
+        }
+
         $reviewsIds = $this->getRequest()->getParam('reviews');
         if (!is_array($reviewsIds)) {
             $this->messageManager->addError(__('Please select review(s).'));

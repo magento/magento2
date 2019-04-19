@@ -7,11 +7,28 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Checkout select Check/Money Order payment -->
     <actionGroup name="CheckoutSelectCheckMoneyOrderPaymentActionGroup">
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" visible="true" stepKey="clickCheckMoneyOrderPayment"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{PaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" dependentSelector="{{PaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+    </actionGroup>
+
+    <!-- Checkout select Flat Rate shipping method -->
+    <actionGroup name="CheckoutSelectFlatRateShippingMethodActionGroup">
+        <conditionalClick selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" dependentSelector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" visible="true" stepKey="selectFlatRateShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForNextButton"/>
+    </actionGroup>
+
+    <!-- Go to checkout from cart -->
+    <actionGroup name="GoToCheckoutFromCartActionGroup">
+        <waitForElementNotVisible selector="{{StorefrontMinicartSection.emptyCart}}" stepKey="waitUpdateQuantity" />
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertCheckoutCartUrl"/>
+        <click selector="{{StorefrontCheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
     </actionGroup>
 
     <!-- Checkout place order -->
@@ -20,7 +37,7 @@
             <argument name="orderNumberMessage"/>
             <argument name="emailYouMessage"/>
         </arguments>
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{orderNumberMessage}}" stepKey="seeOrderNumber"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{emailYouMessage}}" stepKey="seeEmailYou"/>
@@ -29,8 +46,8 @@
     <!-- Logged in user checkout filling shipping section -->
     <actionGroup name="LoggedInUserCheckoutFillingShippingSectionActionGroup">
         <arguments>
-            <argument name="customerVar"/>
-            <argument name="customerAddressVar"/>
+            <argument name="customerVar" defaultValue="CustomerEntityOne"/>
+            <argument name="customerAddressVar" defaultValue="CustomerAddressSimple"/>
         </arguments>
         <waitForElementVisible selector="{{CheckoutShippingSection.firstName}}" stepKey="waitForFirstNameFieldAppears" time="30"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
@@ -65,5 +82,50 @@
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+    </actionGroup>
+
+    <!-- Place order with logged the user -->
+    <actionGroup name="PlaceOrderWithLoggedUserActionGroup">
+        <arguments>
+            <!--First available shipping method will be selected if value is not passed for shippingMethod-->
+            <argument name="shippingMethod" defaultValue="" type="string"/>
+            <!--First available payment method will be selected if value is not passed for paymentMethod-->
+            <argument name="paymentMethod" defaultValue="" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontCheckoutCartSummarySection.proceedToCheckout}}" stepKey="waitProceedToCheckout"/>
+        <click selector="{{StorefrontCheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('shippingMethod')}}" stepKey="selectShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForPageLoad stepKey="waitForPaymentPageLoad"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.checkPaymentMethodByName('paymentMethod')}}" dependentSelector="{{CheckoutPaymentSection.checkPaymentMethodByName('paymentMethod')}}"
+                          visible="true" stepKey="checkPaymentMethodIfExist"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+    </actionGroup>
+
+    <actionGroup name="CheckoutSelectShippingMethodActionGroup">
+        <arguments>
+            <!-- First available shipping method will be selected if value is not passed for shippingMethod -->
+            <argument name="shippingMethod" defaultValue="" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName(shippingMethod)}}" dependentSelector="{{CheckoutShippingMethodsSection.checkShippingMethodByName(shippingMethod)}}" visible="true" stepKey="selectShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <waitForPageLoad stepKey="waitForPaymentMethod"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+    </actionGroup>
+
+    <actionGroup name="AssertStorefrontErrorMessageOnOrderSubmit">
+        <arguments>
+            <argument name="errorMessage" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrderNoWait}}" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrderNoWait}}" stepKey="clickPlaceOrder"/>
+        <waitForText selector="{{StorefrontMessagesSection.errorMessage}}" userInput="{{errorMessage}}" time="30" stepKey="seeShippingMethodError"/>
     </actionGroup>
 </actionGroups>

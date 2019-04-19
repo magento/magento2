@@ -165,7 +165,7 @@
 
     //  Checkout address (create shipping address)
     .field.street {
-        .field.additional {
+        .field {
             .label {
                 &:extend(.abs-visually-hidden all);
             }
@@ -367,8 +367,8 @@
     }
 
     .account {
-        .page.messages {
-            margin-bottom: @indent__xl;
+        .messages {
+            margin-bottom: 0;
         }
 
         .toolbar {
@@ -421,7 +421,7 @@
 
             > .field {
                 > .control {
-                    width: 55%;
+                    width: 80%;
                 }
             }
         }
@@ -451,7 +451,8 @@
     .form.password.reset,
     .form.send.confirmation,
     .form.password.forget,
-    .form.create.account {
+    .form.create.account,
+    .form.form-orders-search {
         min-width: 600px;
         width: 50%;
     }

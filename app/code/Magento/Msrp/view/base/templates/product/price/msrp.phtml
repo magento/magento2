@@ -20,61 +20,79 @@ $priceType = $block->getPrice();
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $block->getSaleableItem();
 $productId = $product->getId();
+$amount = 0;
+
+if ($product->getMsrp()) {
+    $amount = $product->getMsrp();
+} elseif ($product->getTypeId() === \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
+    $amount = $product->getTypeInstance()->getChildrenMsrp($product);
+} elseif ($product->getTypeId() === \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
+    foreach ($product->getTypeInstance()->getUsedProducts($product) as $item) {
+        if ($item->getMsrp() !== null) {
+            $prices[] = $item->getMsrp();
+        }
+    }
+    $amount = $prices ? max($prices) : 0;
+}
+
 $msrpPrice = $block->renderAmount(
-    $priceType->getCustomAmount($product->getMsrp() ?: $product->getTypeInstance()->getChildrenMsrp($product)),
+    $priceType->getCustomAmount($amount),
     [
         'price_id' => $block->getPriceId() ? $block->getPriceId() : 'old-price-' . $productId,
         'include_container' => false,
-        'skip_adjustments' => true
+        'skip_adjustments' => true,
     ]
 );
 $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElementIdPrefix() : 'product-price-';
-
-$addToCartUrl = '';
-if ($product->isSaleable()) {
-    /** @var Magento\Catalog\Block\Product\AbstractProduct $addToCartUrlGenerator */
-    $addToCartUrlGenerator = $block->getLayout()->getBlockSingleton('Magento\Catalog\Block\Product\AbstractProduct');
-    $addToCartUrl = $addToCartUrlGenerator->getAddToCartUrl(
-        $product,
-        ['_query' => [
-            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED =>
-                $this->helper('Magento\Framework\Url\Helper\Data')->getEncodedUrl(
-                    $addToCartUrlGenerator->getAddToCartUrl($product)
-                ),
-        ]]
-    );
-}
 ?>
-<?php if ($product->getMsrp()): ?>
+
+<?php if ($amount): ?>
     <span class="old-price map-old-price"><?= /* @escapeNotVerified */ $msrpPrice ?></span>
+    <span class="map-fallback-price normal-price"><?= /* @escapeNotVerified */ $msrpPrice ?></span>
 <?php endif; ?>
 
 <?php if ($priceType->isShowPriceOnGesture()): ?>
     <?php
-        $priceElementId = $priceElementIdPrefix . $productId . $block->getIdSuffix();
-        $popupId = 'msrp-popup-' . $productId . $block->getRandomString(20);
-        $data = ['addToCart' => [
-            'origin'=> 'msrp',
-            'popupId' => '#' . $popupId,
-            'productName' => $block->escapeJs($block->escapeHtml($product->getName())),
-            'productId' => $productId,
-            'productIdInput' => 'input[type="hidden"][name="product"]',
-            'realPrice' => $block->getRealPriceHtml(),
-            'isSaleable' => $product->isSaleable(),
-            'msrpPrice' => $msrpPrice,
-            'priceElementId' => $priceElementId,
-            'closeButtonId' => '#map-popup-close',
-            'addToCartUrl' => $addToCartUrl,
-            'paymentButtons' => '[data-label=or]'
-        ]];
-        if ($block->getRequest()->getFullActionName() === 'catalog_product_view') {
-            $data['addToCart']['addToCartButton'] = '#product_addtocart_form [type=submit]';
-        } else {
-            $data['addToCart']['addToCartButton'] = sprintf(
-                'form:has(input[type="hidden"][name="product"][value="%s"]) button[type="submit"]',
-                (int) $productId
-            );
-        }
+
+    $addToCartUrl = '';
+    if ($product->isSaleable()) {
+        /** @var Magento\Catalog\Block\Product\AbstractProduct $addToCartUrlGenerator */
+        $addToCartUrlGenerator = $block->getLayout()->getBlockSingleton('Magento\Catalog\Block\Product\AbstractProduct');
+        $addToCartUrl = $addToCartUrlGenerator->getAddToCartUrl(
+            $product,
+            ['_query' => [
+                \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED =>
+                    $this->helper('Magento\Framework\Url\Helper\Data')->getEncodedUrl(
+                        $addToCartUrlGenerator->getAddToCartUrl($product)
+                    ),
+            ]]
+        );
+    }
+
+    $priceElementId = $priceElementIdPrefix . $productId . $block->getIdSuffix();
+    $popupId = 'msrp-popup-' . $productId . $block->getRandomString(20);
+    $data = ['addToCart' => [
+        'origin' => 'msrp',
+        'popupId' => '#' . $popupId,
+        'productName' => $block->escapeJs($block->escapeHtml($product->getName())),
+        'productId' => $productId,
+        'productIdInput' => 'input[type="hidden"][name="product"]',
+        'realPrice' => $block->getRealPriceHtml(),
+        'isSaleable' => $product->isSaleable(),
+        'msrpPrice' => $msrpPrice,
+        'priceElementId' => $priceElementId,
+        'closeButtonId' => '#map-popup-close',
+        'addToCartUrl' => $addToCartUrl,
+        'paymentButtons' => '[data-label=or]'
+    ]];
+    if ($block->getRequest()->getFullActionName() === 'catalog_product_view') {
+        $data['addToCart']['addToCartButton'] = '#product_addtocart_form [type=submit]';
+    } else {
+        $data['addToCart']['addToCartButton'] = sprintf(
+            'form:has(input[type="hidden"][name="product"][value="%s"]) button[type="submit"]',
+            (int) $productId
+        );
+    }
     ?>
     <span id="<?= /* @escapeNotVerified */ $block->getPriceId() ? $block->getPriceId() : $priceElementId ?>" style="display:none"></span>
     <a href="javascript:void(0);"

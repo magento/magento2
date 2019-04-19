@@ -245,10 +245,14 @@ class Name extends AbstractWidget
      */
     public function getAttributeValidationClass($attributeCode)
     {
-        return $this->_addressHelper->getAttributeValidationClass($attributeCode);
+        $attributeMetadata = $this->_getAttribute($attributeCode);
+
+        return $attributeMetadata ? $attributeMetadata->getFrontendClass() : '';
     }
 
     /**
+     * Check if attribute is required
+     *
      * @param string $attributeCode
      * @return bool
      */
@@ -259,6 +263,8 @@ class Name extends AbstractWidget
     }
 
     /**
+     * Check if attribute is visible
+     *
      * @param string $attributeCode
      * @return bool
      */

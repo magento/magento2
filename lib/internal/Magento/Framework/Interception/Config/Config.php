@@ -125,7 +125,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      */
     public function initialize($classDefinitions = [])
     {
-        $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$this->_cacheId]);
+        $this->_cache->remove($this->_cacheId);
         $config = [];
         foreach ($this->_scopeList->getAllScopes() as $scope) {
             $config = array_replace_recursive($config, $this->_reader->read($scope));

@@ -38,19 +38,14 @@
 
         <amOnPage stepKey="openAdminSystemStorePage" url="{{AdminSystemStorePage.url}}"/>
 
-        <click stepKey="clickResetButton" selector="{{AdminStoresGridSection.resetButton}}"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterReset" time="10"/>
+        <actionGroup ref="filterStoresGridByStore" stepKey="enterStoreGroup1Name">
+            <argument name="store" value="$$createCustomStoreGroup1.group[name]$$"/>
+        </actionGroup>
+        <see stepKey="seeStoreGroup1NameAfterSearch" selector="{{AdminStoresGridSection.storeInFirstRow}}" userInput="$$createCustomStoreGroup1.group[name]$$"/>
 
-        <fillField stepKey="enterStoreGroup1Name" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="$$createCustomStoreGroup1.group[name]$$"/>
-        <click stepKey="searchStoreGroup1Name" selector="{{AdminStoresGridSection.searchButton}}"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterSearch" time="10"/>
-        <see stepKey="seeStoreGroup1NameAfterSearch" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="$$createCustomStoreGroup1.group[name]$$"/>
-
-        <click stepKey="clickResetButton2" selector="{{AdminStoresGridSection.resetButton}}"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterReset2" time="10"/>
-        <fillField stepKey="enterStoreGroup2Name2" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="$$createCustomStoreGroup2.group[name]$$"/>
-        <click stepKey="searchStoreGroup2Name" selector="{{AdminStoresGridSection.searchButton}}"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterSearch2" time="10"/>
-        <see stepKey="seeStoreGroup1NameAfterSearch2" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="$$createCustomStoreGroup2.group[name]$$"/>
+        <actionGroup ref="filterStoresGridByStore" stepKey="enterStoreGroup2Name">
+            <argument name="store" value="$$createCustomStoreGroup2.group[name]$$"/>
+        </actionGroup>
+        <see stepKey="seeStoreGroup1NameAfterSearch2" selector="{{AdminStoresGridSection.storeInFirstRow}}" userInput="$$createCustomStoreGroup2.group[name]$$"/>
     </test>
 </tests>

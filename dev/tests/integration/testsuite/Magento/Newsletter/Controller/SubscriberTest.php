@@ -53,11 +53,10 @@ class SubscriberTest extends AbstractController
         $this->getRequest()->setPostValue([
             'email' => 'customer@example.com',
         ]);
-
         $this->dispatch('newsletter/subscriber/new');
 
         $this->assertSessionMessages($this->equalTo([
-                'There was a problem with the subscription: This email address is already assigned to another user.',
+                'Thank you for your subscription.',
             ]));
         $this->assertRedirect($this->anything());
     }

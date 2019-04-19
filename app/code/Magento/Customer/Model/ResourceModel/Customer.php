@@ -11,7 +11,7 @@ use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Exception\AlreadyExistsException;
 
 /**
- * Customer entity resource model
+ * Customer entity resource model.
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -92,7 +92,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * Check customer scope, email and confirmation key before saving
+     * Check customer scope, email and confirmation key before saving.
      *
      * @param \Magento\Framework\DataObject $customer
      * @return $this
@@ -150,7 +150,9 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             $customer->setConfirmation(null);
         }
 
-        $this->_validate($customer);
+        if (!$customer->getData('ignore_validation_flag')) {
+            $this->_validate($customer);
+        }
 
         return $this;
     }

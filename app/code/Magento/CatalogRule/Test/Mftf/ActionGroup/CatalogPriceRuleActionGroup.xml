@@ -68,4 +68,30 @@
         <fillField selector="{{AdminCatalogPriceRuleConditionsSection.targetInput('1', '1')}}" userInput="{{productSku}}" after="clickEllipsis" stepKey="fillProductSku"/>
         <click selector="{{AdminCatalogPriceRuleConditionsSection.applyButton('1', '1')}}" after="fillProductSku" stepKey="clickApply"/>
     </actionGroup>
+    <!--Add Catalog Rule Condition With Category-->
+    <actionGroup name="newCatalogPriceRuleByUIWithConditionIsCategory" extends="CreateCatalogPriceRule">
+	    <arguments>
+	        <argument name="categoryId" type="string"/>
+ 	    </arguments>
+        <click selector="{{AdminCatalogPriceRuleSection.conditionsTab}}" after="discardSubsequentRules" stepKey="openConditionsTab"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.newCondition}}" after="openConditionsTab" stepKey="addNewCondition"/>
+        <selectOption selector="{{AdminCatalogPriceRuleConditionsSection.conditionSelect('1')}}" userInput="Magento\CatalogRule\Model\Rule\Condition\Product|category_ids" after="addNewCondition" stepKey="selectTypeCondition"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.targetEllipsis('1')}}" after="selectTypeCondition" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminCatalogPriceRuleConditionsSection.targetInput('1', '1')}}" userInput="{{categoryId}}" after="clickEllipsis" stepKey="fillCategoryId"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.applyButton('1', '1')}}" after="fillCategoryId" stepKey="clickApply"/>
+    </actionGroup>
+
+    <!-- Open rule for Edit -->
+    <actionGroup name="OpenCatalogPriceRule">
+        <arguments>
+            <argument name="ruleName" type="string" defaultValue="CustomCatalogRule.name"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <fillField selector="{{AdminCatalogPriceRuleGridSection.filterByRuleName}}" userInput="{{ruleName}}" stepKey="filterByRuleName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
+        <click selector="{{AdminGridTableSection.row('1')}}" stepKey="clickEdit"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
 </actionGroups>

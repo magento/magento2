@@ -63,10 +63,11 @@ require([
     "jquery",
     "tinymce",
     "Magento_Ui/js/modal/alert",
+    "mage/dataPost",
     "mage/mage",
     "Magento_Variable/variables",
     "prototype"
-], function(jQuery, tinyMCE, alert){
+], function(jQuery, tinyMCE, alert, dataPost){
 
 //<![CDATA[
     jQuery('#email_template_edit_form').mage('form').mage('validation');
@@ -167,7 +168,10 @@ require([
 
         deleteTemplate: function() {
             if(window.confirm("<?= $block->escapeJs($block->escapeHtml(__('Are you sure you want to delete this template?'))) ?>")) {
-                   window.location.href = '<?= $block->escapeJs($block->escapeUrl($block->getDeleteUrl())) ?>';
+                dataPost().postData({
+                    action: '<?= $block->escapeJs($block->escapeUrl($block->getDeleteUrl())) ?>',
+                    data: {}
+                });
             }
         },
 
