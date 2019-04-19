@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+// TODO: Should be removed in scope of https://github.com/magento/graphql-ce/issues/167
 declare(strict_types=1);
 
 use Magento\Framework\App\Config\Storage\Writer;
@@ -14,3 +15,4 @@ $objectManager = Bootstrap::getObjectManager();
 $configWriter = $objectManager->create(WriterInterface::class);
 
 $configWriter->delete('carriers/ups/active');
+$configWriter->delete('carriers/ups/type');
