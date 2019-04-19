@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\GraphQl\Query;
+namespace Magento\Framework\GraphQl\Query\Resolver;
 
-interface IdentityResolverInterface
+interface IdentityInterface
 {
 
     /**
-     * Get identifiers from resolved data
+     * Get identities from resolved data
      *
      * @param array $resolvedData
      * @return array
      */
-    public function getIdentifiers(array $resolvedData) : array;
+    public function getIdentities(array $resolvedData) : array;
 }

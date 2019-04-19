@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
-use Magento\Framework\GraphQl\Query\IdentityResolverInterface;
+use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 
 /**
  * Identity for resolved category
  */
-class CategoryTreeIdentityResolver implements IdentityResolverInterface
+class CategoryTreeIdentity implements IdentityInterface
 {
     /**
      * Get category ID from resolved data
@@ -20,7 +20,7 @@ class CategoryTreeIdentityResolver implements IdentityResolverInterface
      * @param array $resolvedData
      * @return array
      */
-    public function getIdentifiers(array $resolvedData): array
+    public function getIdentities(array $resolvedData): array
     {
         return empty($resolvedData['id']) ? [] : [$resolvedData['id']];
     }
