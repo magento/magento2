@@ -181,6 +181,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             ->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store);
 
         if (!empty($allowedCountries)) {
+            $this->getSelect()->reset(\Magento\Framework\DB\Select::WHERE);
             $this->addFieldToFilter("country_id", ['in' => $allowedCountries]);
         }
 
