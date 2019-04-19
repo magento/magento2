@@ -17,6 +17,7 @@ use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
  *
  * @magentoAppArea graphql
  * @magentoCache full_page enabled
+ * @magentoDbIsolation disabled
  */
 class ProductsCacheTest extends AbstractGraphqlCacheTest
 {
@@ -39,6 +40,7 @@ class ProductsCacheTest extends AbstractGraphqlCacheTest
         $this->graphqlController = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
         $this->request = $this->objectManager->create(Http::class);
     }
+
     /**
      * Test request is dispatched and response is checked for debug headers and cache tags
      *
@@ -81,6 +83,43 @@ QUERY;
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['cat_p', 'cat_p_' . $product->getId(), 'FPC'];
+        $this->assertEquals($expectedCacheTags, $actualCacheTags);
+    }
+
+    /**
+     * Test request is checked for debug headers and no cache tags for not existing product
+     */
+    public function testToCheckRequestNoTagsForProducts(): void
+    {
+        $query
+            = <<<QUERY
+            {
+           products(filter: {sku: {eq: "simple10"}})
+           {
+               items {
+                   id
+                   name
+                   sku
+                   description {
+                   html
+                   }
+               }
+           }
+       }
+
+QUERY;
+        $this->request->setPathInfo('/graphql');
+        $this->request->setMethod('GET');
+        $this->request->setQueryValue('query', $query);
+        /** @var \Magento\Framework\Controller\Result\Json $result */
+        $result = $this->graphqlController->dispatch($this->request);
+        /** @var \Magento\Framework\App\Response\Http $response */
+        $response = $this->objectManager->get(\Magento\Framework\App\Response\Http::class);
+        /** @var  $registry \Magento\Framework\Registry */
+        $result->renderResult($response);
+        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
+        $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
+        $expectedCacheTags = [ 'FPC'];
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 }

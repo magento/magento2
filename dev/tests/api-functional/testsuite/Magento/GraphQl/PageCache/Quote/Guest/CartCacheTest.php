@@ -38,7 +38,7 @@ class CartCacheTest extends GraphQlAbstract
         $this->assertArrayHasKey('cart', $responseMiss['body']);
         $this->assertArrayHasKey('items', $responseMiss['body']['cart']);
         $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
-        
+
         /** Cache debug header value is still a MISS for any subsequent request */
         $responseMissNext = $this->graphQlQueryWithResponseHeaders($getCartQuery);
         $this->assertEquals('MISS', $responseMissNext['headers']['X-Magento-Cache-Debug']);
@@ -105,7 +105,7 @@ QUERY;
     }
 
     /**
-     * Get Check Cart query
+     * Get cart query string
      *
      * @param string $maskedQuoteId
      * @return string
