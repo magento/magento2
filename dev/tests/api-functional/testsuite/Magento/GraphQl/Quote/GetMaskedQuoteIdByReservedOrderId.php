@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\QuoteFactory;
@@ -49,14 +50,14 @@ class GetMaskedQuoteIdByReservedOrderId
     /**
      * Get masked quote id by reserved order id
      *
-     * @param string $reversedOrderId
+     * @param string $reservedOrderId
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
-    public function execute(string $reversedOrderId): string
+    public function execute(string $reservedOrderId): string
     {
         $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reversedOrderId, 'reserved_order_id');
+        $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
 
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
