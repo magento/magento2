@@ -90,5 +90,4 @@
         </arguments>
     </type>
     <preference for="Magento\InventoryApi\Model\IsProductAssignedToStockInterface" type="Magento\Inventory\Model\ResourceModel\IsProductAssignedToStock"/>
-    <preference for="Magento\InventoryApi\Api\GetAvailableSourceItemsBySkusAndSortedSourceInterface" type="Magento\Inventory\Model\GetAvailableSourceItemsBySkusAndSortedSource" />
 </config>

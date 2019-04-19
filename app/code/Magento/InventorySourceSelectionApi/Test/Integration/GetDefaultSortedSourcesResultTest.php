@@ -103,6 +103,23 @@ class GetDefaultSortedSourcesResultTest extends TestCase
                 false
             ],
             [
+                10,
+                [
+                    ['sku' => 'SKU-1', 'qty' => 5],
+                    ['sku' => 'SKU-2', 'qty' => 3],
+                ],
+                [
+                    'eu-3',
+                    'eu-2',
+                    'eu-1',
+                ],
+                [
+                    'eu-1/SKU-1' => ['deduct' => 2, 'avail' => 5.5],
+                    'eu-2/SKU-1' => ['deduct' => 3, 'avail' => 3],
+                ],
+                false
+            ],
+            [
                 20,
                 [
                     ['sku' => 'SKU-2', 'qty' => 3],

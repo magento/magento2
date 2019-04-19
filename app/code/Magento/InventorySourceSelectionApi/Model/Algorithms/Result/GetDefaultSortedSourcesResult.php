@@ -9,14 +9,11 @@ namespace Magento\InventorySourceSelectionApi\Model\Algorithms\Result;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\GetAvailableSourceItemsBySkusAndSortedSourceInterface;
-use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventorySourceSelectionApi\Model\GetAvailableSourceItemsBySkusAndSortedSource;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterfaceFactory;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Return a default response for sorted source algorithms
@@ -34,31 +31,29 @@ class GetDefaultSortedSourcesResult
     private $sourceSelectionResultFactory;
 
     /**
-     * @var GetAvailableSourceItemsBySkusAndSortedSourceInterface
+     * @var GetAvailableSourceItemsBySkusAndSortedSource
      */
     private $getAvailableSourceItemsBySkusAndSortedSource;
 
     /**
-     * GetDefaultSortedSourcesResult constructor.
-     *
      * @param SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory
      * @param SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder @deprecated
-     * @param SourceItemRepositoryInterface $sourceItemRepository @deprecated
-     * @param GetAvailableSourceItemsBySkusAndSortedSourceInterface $getAvailableSourceItemsBySkusAndSortedSource = null
+     * @param null $searchCriteriaBuilder @deprecated
+     * @param null $sourceItemRepository @deprecated
+     * @param GetAvailableSourceItemsBySkusAndSortedSource $getAvailableSourceItemsBySkusAndSortedSource = null
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory,
         SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        SourceItemRepositoryInterface $sourceItemRepository,
-        GetAvailableSourceItemsBySkusAndSortedSourceInterface $getAvailableSourceItemsBySkusAndSortedSource = null
+        $searchCriteriaBuilder,
+        $sourceItemRepository,
+        GetAvailableSourceItemsBySkusAndSortedSource $getAvailableSourceItemsBySkusAndSortedSource = null
     ) {
         $this->sourceSelectionItemFactory = $sourceSelectionItemFactory;
         $this->sourceSelectionResultFactory = $sourceSelectionResultFactory;
         $this->getAvailableSourceItemsBySkusAndSortedSource = $getAvailableSourceItemsBySkusAndSortedSource ?:
-            ObjectManager::getInstance()->get(GetAvailableSourceItemsBySkusAndSortedSourceInterface::class);
+            ObjectManager::getInstance()->get(GetAvailableSourceItemsBySkusAndSortedSource::class);
     }
 
     /**
@@ -84,12 +79,11 @@ class GetDefaultSortedSourcesResult
         InventoryRequestInterface $inventoryRequest,
         array $sortedSources
     ): SourceSelectionResultInterface {
-        $isShippable = true;
         $sourceItemSelections = [];
 
         $itemsTdDeliver = [];
         foreach ($inventoryRequest->getItems() as $item) {
-            $itemsTdDeliver[$item->getSku()] = (float) $item->getQty();
+            $itemsTdDeliver[$item->getSku()] = $item->getQty();
         }
 
         $sortedSourceCodes = [];
