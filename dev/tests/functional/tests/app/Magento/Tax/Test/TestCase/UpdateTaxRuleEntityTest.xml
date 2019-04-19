@@ -48,7 +48,6 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsApplied" />
         </variation>
         <variation name="UpdateTaxRuleEntityTestVariation4">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="initialTaxRule/dataset" xsi:type="string">tax_rule_with_custom_tax_classes</data>
             <data name="address/data/country_id" xsi:type="string">United States</data>
             <data name="address/data/region_id" xsi:type="string">Idaho</data>
