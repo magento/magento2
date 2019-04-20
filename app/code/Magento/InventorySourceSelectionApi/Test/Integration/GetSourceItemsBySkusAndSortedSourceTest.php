@@ -5,17 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Test\Integration;
+namespace Magento\InventorySourceSelectionApi\Test\Integration;
 
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\GetAvailableSourceItemsBySkusAndSortedSourceInterface;
+use Magento\InventorySourceSelectionApi\Model\GetAvailableSourceItemsBySkusAndSortedSource;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 class GetSourceItemsBySkusAndSortedSourceTest extends TestCase
 {
     /**
-     * @var GetAvailableSourceItemsBySkusAndSortedSourceInterface
+     * @var GetAvailableSourceItemsBySkusAndSortedSource
      */
     private $subject;
 
@@ -23,7 +23,7 @@ class GetSourceItemsBySkusAndSortedSourceTest extends TestCase
     {
         parent::setUp();
 
-        $this->subject = Bootstrap::getObjectManager()->get(GetAvailableSourceItemsBySkusAndSortedSourceInterface::class);
+        $this->subject = Bootstrap::getObjectManager()->get(GetAvailableSourceItemsBySkusAndSortedSource::class);
     }
 
     /**
