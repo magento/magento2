@@ -1,0 +1,7 @@
+Set cache id prefix on installation
+
+# Conflicts:
+#	setup/src/Magento/Setup/Model/ConfigOptionsList/Cache.php
+#	setup/src/Magento/Setup/Model/ConfigOptionsList/PageCache.php
+#	setup/src/Magento/Setup/Test/Unit/Model/ConfigOptionsList/CacheTest.php
+#	setup/src/Magento/Setup/Test/Unit/Model/ConfigOptionsList/PageCacheTest.php

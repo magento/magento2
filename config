@@ -1,0 +1,28 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[submodule]
+	active = .
+[remote "origin"]
+	url = https://github.com/Ctucker9233/magento2/tree/Ctucker9233-issue-18641
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "2.3-develop"]
+	remote = origin
+	merge = refs/heads/2.3-develop
+[remote "upstream"]
+	url = https://github.com/magento/magento2.git
+	fetch = +refs/heads/*:refs/remotes/upstream/*
+[atomGithub]
+	currentRemote = origin
+[branch "2.2-develop"]
+	remote = origin
+	merge = refs/heads/2.2-develop
+[branch "Ctucker9233-issue-18641"]
+	remote = origin
+	merge = refs/heads/Ctucker9233-issue-18641
+[merge]
+	renamelimit = 999999
