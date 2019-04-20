@@ -305,24 +305,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             ['product_collection' => $productCollection]
         );
 
-        $checkInStock = $this->_productInStock && !$this->stockConfiguration->isShowOutOfStock();
-
-        /** @var \Magento\Wishlist\Model\Item $item */
-        foreach ($this as $item) {
-            $product = $productCollection->getItemById($item->getProductId());
-            if ($product) {
-                if ($checkInStock && !$product->isInStock()) {
-                    $this->removeItemByKey($item->getId());
-                } else {
-                    $product->setCustomOptions([]);
-                    $item->setProduct($product);
-                    $item->setProductName($product->getName());
-                    $item->setName($product->getName());
-                    $item->setPrice($product->getPrice());
-                }
-            }
-        }
-
         \Magento\Framework\Profiler::stop('WISHLIST:' . __METHOD__);
 
         return $this;
