@@ -51,13 +51,11 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $carrierCode = 'flatrate';
         $methodCode = 'flatrate';
-        $quoteAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute('test_quote');
 
         $query = $this->getQuery(
             $maskedQuoteId,
             $methodCode,
-            $carrierCode,
-            $quoteAddressId
+            $carrierCode
         );
         $response = $this->graphQlMutation($query);
 
@@ -425,7 +423,6 @@ mutation {
     {
       cart_id: "$maskedQuoteId", 
       shipping_methods: [{
-        cart_address_id: $shippingAddressId
         carrier_code: "$shippingCarrierCode"
         method_code: "$shippingMethodCode"
       }]

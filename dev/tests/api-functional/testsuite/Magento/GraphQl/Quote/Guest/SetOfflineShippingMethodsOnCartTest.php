@@ -56,13 +56,11 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
     public function testSetOfflineShippingMethod(string $carrierCode, string $methodCode, float $amount, string $label)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $quoteAddressId = $this->getQuoteShippingAddressIdByReservedQuoteId->execute('test_quote');
 
         $query = $this->getQuery(
             $maskedQuoteId,
             $methodCode,
-            $carrierCode,
-            $quoteAddressId
+            $carrierCode
         );
         $response = $this->graphQlMutation($query);
 
@@ -103,14 +101,12 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $maskedQuoteId
      * @param string $shippingMethodCode
      * @param string $shippingCarrierCode
-     * @param int $shippingAddressId
      * @return string
      */
     private function getQuery(
         string $maskedQuoteId,
         string $shippingMethodCode,
-        string $shippingCarrierCode,
-        int $shippingAddressId
+        string $shippingCarrierCode
     ): string {
         return <<<QUERY
 mutation {
@@ -118,7 +114,6 @@ mutation {
     {
       cart_id: "$maskedQuoteId", 
       shipping_methods: [{
-        cart_address_id: $shippingAddressId
         carrier_code: "$shippingCarrierCode"
         method_code: "$shippingMethodCode"
       }]
