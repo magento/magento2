@@ -107,6 +107,7 @@ class TableCleaner extends ConfigValue
     }
 
     /**
+     * @inheritDoc
      * @return ConfigValue
      * @throws LocalizedException
      */
@@ -118,16 +119,9 @@ class TableCleaner extends ConfigValue
         return parent::afterSave();
     }
 
-    public function dispatch()
-    {
-        return $this;
-    }
-
-    public function getValue()
-    {
-        return parent::getValue();
-    }
-
+    /**
+     * Clear urlrewrites for products in categories
+     */
     private function clearOldData(): void
     {
         $tableName = $this->urlRewrite->getMainTable();
@@ -140,6 +134,7 @@ class TableCleaner extends ConfigValue
     }
 
     /**
+     * Get store ids from website or store
      * @return array|null
      * @throws LocalizedException
      */

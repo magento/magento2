@@ -88,6 +88,7 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
     }
 
     /**
+     * Execute observer functional
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
@@ -128,7 +129,6 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
             $this->databaseMapPool->resetMap($className, $category->getEntityId());
         }
     }
-
 
     /**
      * Check config value of generate_rewrites_on_save
