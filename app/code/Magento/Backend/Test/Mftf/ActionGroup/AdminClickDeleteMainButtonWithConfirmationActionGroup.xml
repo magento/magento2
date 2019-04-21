@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClickDeleteMainButtonWithConfirmationActionGroup">
+        <waitForElementVisible selector="{{AdminMainActionsSection.delete}}" stepKey="waitForDeleteButton"/>
+        <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickDeleteButton"/>
+        <waitForText userInput="Are you sure you want to do this?" stepKey="waitForText"/>
+        <click selector="{{AdminMainActionsSection.confirmDelete}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+    </actionGroup>
+</actionGroups>
