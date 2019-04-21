@@ -395,7 +395,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
         if (!empty($conditionSql)) {
             $this->getSelect()->where($conditionSql, null, \Magento\Framework\DB\Select::TYPE_CONDITION);
-            $this->invalidateSize();
+            $this->_totalRecords = null;
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Invalid attribute identifier for filter (%1)', get_class($attribute))
@@ -1718,17 +1718,5 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     public function removeAllFieldsFromSelect()
     {
         return $this->removeAttributeToSelect();
-    }
-
-    /**
-     * Invalidates "Total Records Count".
-     * Invalidates saved "Total Records Count" attribute with last counting,
-     * so a next calling of method getSize() will query new total records count.
-     *
-     * @return void
-     */
-    private function invalidateSize(): void
-    {
-        $this->_totalRecords = null;
     }
 }
