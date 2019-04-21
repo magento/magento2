@@ -8,93 +8,48 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="DeleteCustomerGroup">
+    <test name="DeleteCustomerGroupTest">
         <annotations>
-            <title value="Delete customer group group"/>
+            <title value="Delete customer group entity test"/>
             <description value="Delete a customer group"/>
             <stories value="Delete Customer Group"/>
+            <testCaseId value="MC-14590" />
             <group value="customers"/>
             <group value="mtf_migrated"/>
         </annotations>
 
         <before>
-            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="CustomCustomerGroup" stepKey="customerGroup" />
+            <createData entity="UsCustomerAssignedToNewCustomerGroup" stepKey="customer">
+                <requiredEntity createDataKey="customerGroup" />
+            </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="AdminCreateCustomerGroupActionGroup" stepKey="createCustomerGroup">
-            <argument name="groupName" value="{{CustomerGroupChange.code}}"/>
-            <argument name="taxClass" value="{{CustomerGroupChange.tax_class_name}}"/>
-        </actionGroup>
-        <actionGroup ref="NavigateToAllCustomerPage" stepKey="navToCustomersCreate"/>
-        <actionGroup ref="AdminFilterCustomerByName" stepKey="filterCustomer">
-            <argument name="customerName" value="{{Simple_US_Customer.fullname}}"/>
-        </actionGroup>
-        <actionGroup ref="AdminSelectCustomerByEmail" stepKey="selectCustomer">
-            <argument name="customerEmail" value="$$createCustomer.email$$"/>
-        </actionGroup>
-        <actionGroup ref="SetCustomerGroupForSelectedCustomersViaGrid" stepKey="setCustomerGroup">
-            <argument name="groupName" value="{{CustomerGroupChange.code}}"/>
-        </actionGroup>
-        <actionGroup ref="AdminFilterCustomerByName" stepKey="filterCustomerAfterGroupChange">
-            <argument name="customerName" value="{{Simple_US_Customer.fullname}}"/>
-        </actionGroup>
-        <actionGroup ref="VerifyCustomerGroupForCustomer" stepKey="verifyCustomerGroupSet">
-            <argument name="customerEmail" value="$$createCustomer.email$$"/>
-            <argument name="groupName" value="{{CustomerGroupChange.code}}"/>
-        </actionGroup>
         <!--Customer Group success delete message-->
         <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
-            <argument name="customerGroupName" value="{{CustomerGroupChange.code}}"/>
+            <argument name="customerGroupName" value="$$customerGroup.code$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertCustomerGroupNotInGridActionGroup" stepKey="assertCustomerGroupNotInGrid">
+            <argument name="customerGroup" value="$$customerGroup$$" />
         </actionGroup>
 
-        <!--Customer Group is not in grid-->
-        <actionGroup ref="NavigateToCustomerGroupPage" stepKey="navToCustomerGroupPage"/>
-
-        <!--Customer Group changed to "General" on customer form-->
-        <actionGroup ref="NavigateToAllCustomerPage" stepKey="navToCustomers"/>
-        <actionGroup ref="AdminFilterCustomerByName" stepKey="filterCustomerAfterGroupDelete">
-            <argument name="customerName" value="{{Simple_US_Customer.fullname}}"/>
-        </actionGroup>
-        <actionGroup ref="AdminSelectCustomerByEmail" stepKey="selectCustomerAfterGroupDelete">
-            <argument name="customerEmail" value="$$createCustomer.email$$"/>
-        </actionGroup>
-        <actionGroup ref="VerifyCustomerGroupForCustomer" stepKey="verifyGeneralGroupSet">
-            <argument name="customerEmail" value="$$createCustomer.email$$"/>
-            <argument name="groupName" value="{{GeneralCustomerGroup.code}}"/>
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$$customer.id$$" />
         </actionGroup>
 
-        <!--Go to New Product page, add check custom customer group values-->
-        <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
-        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}"
-                        stepKey="waitForCustomerGroupPriceAddButton"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}"
-               stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}"
-                        stepKey="waitForSelectCustomerGroupNameAttribute2"/>
-        <dontSee selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}"
-                 userInput="{{CustomerGroupChange.code}}"
-                 stepKey="seeProductTierPriceCustomerGroupInput"/>
-
-        <!--Go to Catalog price rule page, add check custom customer group values-->
-        <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
-        <waitForPageLoad stepKey="waitForPriceRulePage"/>
-        <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>
-        <dontSee selector="{{AdminNewCatalogPriceRule.customerGroups}}"
-                 userInput="{{CustomerGroupChange.code}}"
-                 stepKey="dontSeeCatalogPriceRuleCustomerGroups"/>
-
-        <!--Go to Cart price rule page, add check custom customer group values-->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForRulesPage"/>
-        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
-        <dontSee selector="{{AdminCartPriceRulesFormSection.customerGroups}}"
-                 userInput="{{CustomerGroupChange.code}}"
-                 stepKey="dontSeeCartPriceRuleCustomerGroups"/>
+        <actionGroup ref="AssertCustomerGroupOnCustomerFormActionGroup" stepKey="assertCustomerGroupOnCustomerForm">
+            <argument name="customerGroup" value="GeneralCustomerGroup" />
+        </actionGroup>
+        
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openNewProductForm" />
+        
+        <actionGroup ref="AssertCustomerGroupNotOnProductFormActionGroup" stepKey="assertCustomerGroupNotOnProductForm">
+            <argument name="customerGroup" value="$$customerGroup$$" />
+        </actionGroup>
     </test>
 </tests>
