@@ -8,7 +8,6 @@ namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Directory\Model\AllowedCountriesFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
@@ -27,7 +26,7 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
     private $storeManager;
 
     /**
-     * @var AllowedCountriesFactory
+     * @var AllowedCountries
      */
     private $allowedCountries;
 
