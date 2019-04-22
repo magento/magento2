@@ -83,11 +83,21 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
                 if ($website instanceof \Magento\Store\Model\Website) {
                     $websiteIds[$index] = $website->getId();
                 }
+                $websiteIds[$index] = (int) $websiteIds[$index];
             }
+
+            $websiteSelect = $this->getConnection()->select();
+            $websiteSelect->from(
+                $this->getTable($entityInfo['associations_table']),
+                [$entityInfo['rule_id_field']]
+            )->distinct(
+                true
+            )->where(
+                $this->getConnection()->quoteInto($entityInfo['entity_id_field'] . ' IN (?)', $websiteIds)
+            );
             $this->getSelect()->join(
-                ['website' => $this->getTable($entityInfo['associations_table'])],
-                $this->getConnection()->quoteInto('website.' . $entityInfo['entity_id_field'] . ' IN (?)', $websiteIds)
-                . ' AND main_table.' . $entityInfo['rule_id_field'] . ' = website.' . $entityInfo['rule_id_field'],
+                ['website' => $websiteSelect],
+                'main_table.' . $entityInfo['rule_id_field'] . ' = website.' . $entityInfo['rule_id_field'],
                 []
             );
         }
