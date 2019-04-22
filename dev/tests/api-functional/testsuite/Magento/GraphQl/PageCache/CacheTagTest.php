@@ -151,7 +151,7 @@ QUERY;
     /**
      * Get Product query
      *
-     * @param  string $productSku
+     * @param string $productSku
      * @return string
      */
     private function getProductQuery(string $productSku): string

@@ -52,9 +52,7 @@ class PageCacheTest extends GraphQlAbstract
         $this->assertArrayHasKey('X-Magento-Tags', $response['headers']);
         $actualTags = explode(',', $response['headers']['X-Magento-Tags']);
         $expectedTags = ["cms_p", "cms_p_{$pageId}", "FPC"];
-        foreach ($expectedTags as $expectedTag) {
-            $this->assertContains($expectedTag, $actualTags);
-        }
+        $this->assertEquals($expectedTags, $actualTags);
     }
 
     /**

@@ -10,7 +10,7 @@ namespace Magento\GraphQl\PageCache\Quote\Guest;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- *  Test cart queries are note cached
+ * Test cart queries are not cached
  *
  * @magentoApiDataFixture Magento/Catalog/_files/products.php
  */
@@ -67,11 +67,11 @@ QUERY;
     /**
      * Add simple product to the cart using the maskedQuoteId
      *
-     * @param $maskedCartId
-     * @param $qty
-     * @param $sku
+     * @param string $maskedCartId
+     * @param int $qty
+     * @param string $sku
      */
-    private function addSimpleProductToCart($maskedCartId, $qty, $sku)
+    private function addSimpleProductToCart(string $maskedCartId, int $qty, string $sku): void
     {
         $addProductToCartQuery =
             <<<QUERY
