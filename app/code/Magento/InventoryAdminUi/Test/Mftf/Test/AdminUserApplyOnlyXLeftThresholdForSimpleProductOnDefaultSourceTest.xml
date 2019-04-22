@@ -28,7 +28,7 @@
             <magentoCLI command="cache:flush" stepKey="cleanCacheAfterFillThresholdConfig"/>
 
             <createData entity="_minimalSource" stepKey="createSource"/>
-            <createData entity="BasicMsiStock1" stepKey="createStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock"/>
 
             <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
                 <requiredEntity createDataKey="createStock"/>
