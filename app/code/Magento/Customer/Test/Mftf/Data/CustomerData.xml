@@ -203,4 +203,14 @@
         <data key="store_id">0</data>
         <data key="website_id">0</data>
     </entity>
+    <entity name="John_Smith_Customer" type="customer">
+        <data key="group_id">1</data>
+        <data key="email" unique="prefix">john.smith@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Smith</data>
+        <data key="fullname">John Smith</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+    </entity>
 </entities>

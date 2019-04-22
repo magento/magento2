@@ -12,6 +12,7 @@
         <arguments>
             <argument name="customerFullName" type="string" />
         </arguments>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <see userInput="Welcome, {{customerFullName}}!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyMessage" />
     </actionGroup>
 </actionGroups>
