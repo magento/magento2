@@ -7,14 +7,14 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEmailTemplateEditSection">
         <element name="templateDropDown" type="select" selector="#template_select"/>
-        <element name="loadTemplateButton" type="button" selector="#load"/>
-        <element name="templateNameField" type="input" selector="#template_code"/>
-        <element name="templateSubjectField" type="input" selector="#template_subject"/>
-        <element name="previewTemplateButton" type="button" selector="#preview"/>
-        <!--Do not add time to this element. It call alert when clicking, so adding time will brake test-->
-        <element name="delete" type="button" selector="#delete"/>
+        <element name="loadTemplateButton" type="button" selector="#load" timeout="30"/>
+        <element name="deleteTemplateButton" type="button" selector="#delete"/>
+        <element name="previewTemplateButton" type="button" selector="#preview" timeout="30"/>
+        <element name="templateCode" type="input" selector="#template_code"/>
+        <element name="templateSubject" type="input" selector="#template_subject"/>
+        <element name="templateText" type="input" selector="#template_text"/>
     </section>
 </sections>
