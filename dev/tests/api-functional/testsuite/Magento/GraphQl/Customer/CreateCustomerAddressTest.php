@@ -120,7 +120,7 @@ MUTATION;
         $userName = 'customer@example.com';
         $password = 'password';
 
-        $response = $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('createCustomerAddress', $response);
         $this->assertArrayHasKey('customer_id', $response['createCustomerAddress']);
         $this->assertEquals($customerId, $response['createCustomerAddress']['customer_id']);
@@ -161,7 +161,7 @@ mutation{
   }
 }
 MUTATION;
-        $this->graphQlQuery($mutation);
+        $this->graphQlMutation($mutation);
     }
 
     /**
@@ -198,7 +198,7 @@ MUTATION;
 
         $userName = 'customer@example.com';
         $password = 'password';
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**
@@ -264,7 +264,7 @@ MUTATION;
         $password = 'password';
 
         self::expectExceptionMessage('"Street Address" cannot contain more than 2 lines.');
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**
