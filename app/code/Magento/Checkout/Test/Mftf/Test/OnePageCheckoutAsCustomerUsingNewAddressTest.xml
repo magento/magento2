@@ -78,6 +78,7 @@
 
         <!-- Change the address -->
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution"/>
+        <waitForElementVisible stepKey="waitForAddressDropDownToBeVisible"/>
         <selectOption selector="{{CheckoutShippingSection.addressDropdown}}" userInput="New Address" stepKey="addAddress"/>
         <waitForPageLoad stepKey="waitForNewAddressForm"/>
         <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="changeBillingAddress">
