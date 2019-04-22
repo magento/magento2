@@ -84,15 +84,15 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @param array $variables
      * @param string $operationName
      * @param array $headers
-     * @return mixed
+     * @return array
      */
-    public function graphQlQueryForHttpHeaders(
+    public function graphQlQueryWithResponseHeaders(
         string $query,
         array $variables = [],
         string $operationName = '',
         array $headers = []
-    ) {
-        return $this->getGraphQlClient()->getQueryResponseHeaders(
+    ): array {
+        return $this->getGraphQlClient()->getWithResponseHeaders(
             $query,
             $variables,
             $operationName,

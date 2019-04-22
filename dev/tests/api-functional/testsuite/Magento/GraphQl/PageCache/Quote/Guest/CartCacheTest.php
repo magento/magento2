@@ -7,54 +7,49 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\PageCache\Quote\Guest;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- *  End to end test which creates an empty cart and add product to the cart and load the cart.
- *  Validates that the cache-debug header is a MISS for any subsequent cart requests
+ * Test cart queries are not cached
  *
  * @magentoApiDataFixture Magento/Catalog/_files/products.php
  */
 class CartCacheTest extends GraphQlAbstract
 {
-    /** @var  string */
-    private $maskedQuoteId;
-
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->markTestSkipped(
             'This test will stay skipped until DEVOPS-4924 is resolved'
         );
     }
-    /**
-     * Tests that X-Magento-Tags are correct
-     */
+
     public function testCartIsNotCached()
     {
         $qty = 2;
         $sku = 'simple';
         $cartId = $this->createEmptyCart();
         $this->addSimpleProductToCart($cartId, $qty, $sku);
-        $getCartQuery = $this->checkCart($cartId);
-        $response = $this->graphQlQuery($getCartQuery);
-        self::assertArrayHasKey('cart', $response);
-        self::assertArrayHasKey('items', $response['cart']);
 
-        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($getCartQuery);
-        $this->assertContains('X-Magento-Cache-Debug: MISS', $responseMissHeaders);
-        
+        $getCartQuery = $this->getCartQuery($cartId);
+        $responseMiss = $this->graphQlQueryWithResponseHeaders($getCartQuery);
+        $this->assertArrayHasKey('cart', $responseMiss['body']);
+        $this->assertArrayHasKey('items', $responseMiss['body']['cart']);
+        $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
+
         /** Cache debug header value is still a MISS for any subsequent request */
-        $responseMissHeadersNext = $this->graphQlQueryForHttpHeaders($getCartQuery);
-        $this->assertContains('X-Magento-Cache-Debug: MISS', $responseMissHeadersNext);
+        $responseMissNext = $this->graphQlQueryWithResponseHeaders($getCartQuery);
+        $this->assertEquals('MISS', $responseMissNext['headers']['X-Magento-Cache-Debug']);
     }
 
     /**
      * Create a guest cart which generates a maskedQuoteId
      *
-     * @return mixed
+     * @return string
      */
-    private function createEmptyCart()
+    private function createEmptyCart(): string
     {
         $query =
             <<<QUERY
@@ -65,17 +60,18 @@ class CartCacheTest extends GraphQlAbstract
 QUERY;
 
         $response = $this->graphQlMutation($query);
-        $this->maskedQuoteId = $response['createEmptyCart'];
-        return $this->maskedQuoteId;
+        $maskedQuoteId = $response['createEmptyCart'];
+        return $maskedQuoteId;
     }
 
     /**
      * Add simple product to the cart using the maskedQuoteId
-     * @param $maskedCartId
-     * @param $qty
-     * @param $sku
+     *
+     * @param string $maskedCartId
+     * @param int $qty
+     * @param string $sku
      */
-    private function addSimpleProductToCart($maskedCartId, $qty, $sku)
+    private function addSimpleProductToCart(string $maskedCartId, int $qty, string $sku): void
     {
         $addProductToCartQuery =
             <<<QUERY
@@ -109,11 +105,12 @@ QUERY;
     }
 
     /**
+     * Get cart query string
      *
      * @param string $maskedQuoteId
      * @return string
      */
-    private function checkCart(string $maskedQuoteId): string
+    private function getCartQuery(string $maskedQuoteId): string
     {
         return <<<QUERY
 {

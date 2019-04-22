@@ -8,20 +8,20 @@ declare(strict_types=1);
 namespace Magento\CmsGraphQl\Model\Resolver\Block;
 
 use Magento\Cms\Api\Data\BlockInterface;
-use Magento\Framework\GraphQl\Query\IdentityResolverInterface;
+use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 
 /**
  * Identity for resolved CMS block
  */
-class IdentityResolver implements IdentityResolverInterface
+class Identity implements IdentityInterface
 {
     /**
-     * Get block identifiers from resolved data
+     * Get block identities from resolved data
      *
      * @param array $resolvedData
      * @return array
      */
-    public function getIdentifiers(array $resolvedData): array
+    public function getIdentities(array $resolvedData): array
     {
         $ids = [];
         $items = $resolvedData['items'] ?? [];

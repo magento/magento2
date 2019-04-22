@@ -17,6 +17,7 @@ use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
  *
  * @magentoAppArea graphql
  * @magentoCache full_page enabled
+ * @magentoDbIsolation disabled
  */
 class BlockCacheTest extends AbstractGraphqlCacheTest
 {
@@ -76,8 +77,6 @@ QUERY;
         $expectedCacheTags = ['cms_b', 'cms_b_' . $block->getId(), 'cms_b_' . $block->getIdentifier(), 'FPC'];
         $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
         $actualCacheTags = explode(',', $rawActualCacheTags);
-        foreach ($expectedCacheTags as $expectedCacheTag) {
-            $this->assertContains($expectedCacheTag, $actualCacheTags);
-        }
+        $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 }

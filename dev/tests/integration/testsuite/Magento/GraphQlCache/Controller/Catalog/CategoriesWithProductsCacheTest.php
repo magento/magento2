@@ -18,6 +18,7 @@ use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
  *
  * @magentoAppArea graphql
  * @magentoCache full_page enabled
+ * @magentoDbIsolation disabled
  */
 class CategoriesWithProductsCacheTest extends AbstractGraphqlCacheTest
 {
@@ -104,4 +105,3 @@ QUERY;
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 }
-

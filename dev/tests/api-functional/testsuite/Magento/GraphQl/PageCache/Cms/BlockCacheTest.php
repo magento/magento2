@@ -41,14 +41,12 @@ class BlockCacheTest extends GraphQlAbstract
         $query = $this->getBlockQuery([$blockIdentifier]);
 
         //cache-debug should be a MISS on first request
-        $responseHeaders = $this->graphQlQueryForHttpHeaders($query);
-        preg_match('/X-Magento-Tags: (.*)/', $responseHeaders, $matches);
-        $this->assertNotEmpty($matches[1]);
-        $actualTags = explode(',', $matches[1]);
-        $expectedTags = ["cms_b_{$blockIdentifier}", "cms_b_{$blockId}"];
-        foreach ($expectedTags as $expectedTag) {
-            $this->assertContains($expectedTag, $actualTags);
-        }
+        $response = $this->graphQlQueryWithResponseHeaders($query);
+
+        $this->assertArrayHasKey('X-Magento-Tags', $response['headers']);
+        $actualTags = explode(',', $response['headers']['X-Magento-Tags']);
+        $expectedTags = ["cms_b", "cms_b_{$blockId}", "cms_b_{$blockIdentifier}", "FPC"];
+        $this->assertEquals($expectedTags, $actualTags);
     }
 
     /**
@@ -62,17 +60,18 @@ class BlockCacheTest extends GraphQlAbstract
         $query = $this->getBlockQuery([$blockIdentifier]);
 
         //cache-debug should be a MISS on first request
-        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($query);
-        $this->assertContains('X-Magento-Cache-Debug: MISS', $responseMissHeaders);
+        $responseMiss = $this->graphQlQueryWithResponseHeaders($query);
+        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseMiss['headers']);
+        $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
 
         //cache-debug should be a HIT on second request
-        $responseHitHeaders = $this->graphQlQueryForHttpHeaders($query);
-        $this->assertContains('X-Magento-Cache-Debug: HIT', $responseHitHeaders);
-
+        $responseHit = $this->graphQlQueryWithResponseHeaders($query);
+        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseHit['headers']);
+        $this->assertEquals('HIT', $responseHit['headers']['X-Magento-Cache-Debug']);
         //cached data should be correct
-        $blockQueryData = $this->graphQlQuery($query);
-        $blocks = $blockQueryData['cmsBlocks']['items'];
-        $this->assertArrayNotHasKey('errors', $blockQueryData);
+        $this->assertNotEmpty($responseHit['body']);
+        $this->assertArrayNotHasKey('errors', $responseHit['body']);
+        $blocks = $responseHit['body']['cmsBlocks']['items'];
         $this->assertEquals($blockIdentifier, $blocks[0]['identifier']);
         $this->assertEquals('CMS Block Title', $blocks[0]['title']);
     }
@@ -91,30 +90,29 @@ class BlockCacheTest extends GraphQlAbstract
         $enabledBlockQuery = $this->getBlockQuery([$enabledBlockIdentifier]);
 
         //cache-debug should be a MISS on first request
-        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($fixtureBlockQuery);
-        $this->assertContains('X-Magento-Cache-Debug: MISS', $responseMissHeaders);
-        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($enabledBlockQuery);
-        $this->assertContains('X-Magento-Cache-Debug: MISS', $responseMissHeaders);
+        $fixtureBlockMiss = $this->graphQlQueryWithResponseHeaders($fixtureBlockQuery);
+        $this->assertEquals('MISS', $fixtureBlockMiss['headers']['X-Magento-Cache-Debug']);
+        $enabledBlockMiss = $this->graphQlQueryWithResponseHeaders($enabledBlockQuery);
+        $this->assertEquals('MISS', $enabledBlockMiss['headers']['X-Magento-Cache-Debug']);
 
         //cache-debug should be a HIT on second request
-        $responseHitHeaders = $this->graphQlQueryForHttpHeaders($fixtureBlockQuery);
-        $this->assertContains('X-Magento-Cache-Debug: HIT', $responseHitHeaders);
-        $responseHitHeaders = $this->graphQlQueryForHttpHeaders($enabledBlockQuery);
-        $this->assertContains('X-Magento-Cache-Debug: HIT', $responseHitHeaders);
+        $fixtureBlockHit = $this->graphQlQueryWithResponseHeaders($fixtureBlockQuery);
+        $this->assertEquals('HIT', $fixtureBlockHit['headers']['X-Magento-Cache-Debug']);
+        $enabledBlockHit = $this->graphQlQueryWithResponseHeaders($enabledBlockQuery);
+        $this->assertEquals('HIT', $enabledBlockHit['headers']['X-Magento-Cache-Debug']);
 
         $newBlockContent = 'New block content!!!';
         $this->updateBlockContent($fixtureBlockIdentifier, $newBlockContent);
 
         //cache-debug should be a MISS after update the block
-        $responseMissHeaders = $this->graphQlQueryForHttpHeaders($fixtureBlockQuery);
-        $this->assertContains('X-Magento-Cache-Debug: MISS', $responseMissHeaders);
-        $responseHitHeaders = $this->graphQlQueryForHttpHeaders($enabledBlockQuery);
-        $this->assertContains('X-Magento-Cache-Debug: MISS', $responseHitHeaders);
-
+        $fixtureBlockMiss = $this->graphQlQueryWithResponseHeaders($fixtureBlockQuery);
+        $this->assertEquals('MISS', $fixtureBlockMiss['headers']['X-Magento-Cache-Debug']);
+        $enabledBlockHit = $this->graphQlQueryWithResponseHeaders($enabledBlockQuery);
+        $this->assertEquals('HIT', $enabledBlockHit['headers']['X-Magento-Cache-Debug']);
         //updated block data should be correct
-        $blockQueryData = $this->graphQlQuery($fixtureBlockQuery);
-        $blocks = $blockQueryData['cmsBlocks']['items'];
-        $this->assertArrayNotHasKey('errors', $blockQueryData);
+        $this->assertNotEmpty($fixtureBlockMiss['body']);
+        $blocks = $fixtureBlockMiss['body']['cmsBlocks']['items'];
+        $this->assertArrayNotHasKey('errors', $fixtureBlockMiss['body']);
         $this->assertEquals($fixtureBlockIdentifier, $blocks[0]['identifier']);
         $this->assertEquals('CMS Block Title', $blocks[0]['title']);
         $this->assertEquals($newBlockContent, $blocks[0]['content']);

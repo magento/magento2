@@ -36,10 +36,10 @@ class CacheTagReader
                             ["cacheable" => $directiveArgument->value->value]
                         );
                     }
-                    if ($directiveArgument->name->value == 'cacheIdentityResolver') {
+                    if ($directiveArgument->name->value == 'cacheIdentity') {
                         $argMap = array_merge(
                             $argMap,
-                            ["cacheIdentityResolver" => $directiveArgument->value->value]
+                            ["cacheIdentity" => $directiveArgument->value->value]
                         );
                     }
                 }
