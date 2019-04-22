@@ -11,6 +11,13 @@ namespace Magento\Email\Controller\Adminhtml\Email\Template;
 class Popup extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Email::template';
+
+    /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
     private $resultPageFactory;
@@ -37,13 +44,5 @@ class Popup extends \Magento\Backend\App\Action
     public function execute()
     {
         return $this->resultPageFactory->create();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Email::template');
     }
 }
