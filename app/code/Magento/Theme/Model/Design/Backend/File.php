@@ -235,7 +235,7 @@ class File extends BackendFile
      */
     private function getRelativeMediaPath(string $path): string
     {
-        return str_replace('/pub/media/', '', $path);
+        return preg_replace('/\/(pub\/)?media\//', '', $path);
     }
 
     /**
