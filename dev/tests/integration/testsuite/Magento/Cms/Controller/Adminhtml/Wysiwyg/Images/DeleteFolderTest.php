@@ -55,7 +55,6 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
         $this->imagesHelper = $objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot();
         $this->responseFactory = $objectManager->get(ResponseFactory::class);
-        /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $this->model = $objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFolder::class);
     }
 
