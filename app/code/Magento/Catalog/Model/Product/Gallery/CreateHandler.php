@@ -230,6 +230,7 @@ class CreateHandler implements ExtensionInterface
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @since 101.0.0
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function processDeletedImages($product, array &$images)
     {
@@ -400,6 +401,7 @@ class CreateHandler implements ExtensionInterface
             $destinationFile = $forTmp
                 ? $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getTmpMediaPath($file))
                 : $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getMediaPath($file));
+            // phpcs:disable Magento2.Functions.DiscouragedFunction
             $destFile = dirname($file) . '/' . FileUploader::getNewFileName($destinationFile);
         }
 

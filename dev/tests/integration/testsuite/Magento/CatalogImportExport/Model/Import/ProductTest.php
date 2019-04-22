@@ -568,6 +568,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     protected function getExpectedOptionsData(string $pathToFile, string $storeCode = ''): array
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $productData = $this->csvToArray(file_get_contents($pathToFile));
         $expectedOptionId = 0;
         $expectedOptions = [];
