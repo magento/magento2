@@ -19,6 +19,11 @@ class Block extends AbstractBlock implements \Magento\Framework\DataObject\Ident
     protected $_filterProvider;
 
     /**
+     * Prefix for cache key of CMS block
+     */
+    const CACHE_KEY_PREFIX = 'CMS_BLOCK_';
+
+    /**
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
