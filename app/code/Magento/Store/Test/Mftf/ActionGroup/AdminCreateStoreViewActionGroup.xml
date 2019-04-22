@@ -35,6 +35,13 @@
         <remove keyForRemoval="seeSavedMessage"/>
     </actionGroup>
 
+    <!--Save the Store view-->
+    <actionGroup name="AdminCreateStoreViewActionSaveGroup">
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+        <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload2"/>
+        <see userInput="You saved the store view." stepKey="seeSavedMessage" />
+    </actionGroup>
+
     <actionGroup name="navigateToAdminContentManagementPage">
         <amOnPage url="{{AdminContentManagementPage.url}}" stepKey="navigateToConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
