@@ -115,11 +115,10 @@ QUERY;
         $result = $this->graphqlController->dispatch($this->request);
         /** @var \Magento\Framework\App\Response\Http $response */
         $response = $this->objectManager->get(\Magento\Framework\App\Response\Http::class);
-        /** @var  $registry \Magento\Framework\Registry */
         $result->renderResult($response);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
-        $expectedCacheTags = [ 'FPC'];
+        $expectedCacheTags = ['FPC'];
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 }
