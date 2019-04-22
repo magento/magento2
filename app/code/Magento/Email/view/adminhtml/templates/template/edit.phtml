@@ -184,7 +184,7 @@ require([
             this.variables = null;
 
             new Ajax.Request($('email_template_load_form').action, {
-               parameters: Form.serialize($('email_template_load_form'), true),
+               parameters: Form.serializeElements(Form.getElements($('email_template_load_form')), true),
                area: $('email_template_load_form'),
                onComplete: function (transport) {
                    if (transport.responseText.isJSON()) {
