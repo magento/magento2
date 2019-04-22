@@ -25,7 +25,7 @@
         <amOnPage url="{{CmsPageEditPage.url('2')}}" stepKey="navigateToEditHomePagePage"/>
         <waitForPageLoad stepKey="waitForCmsPageEditPage"/>
         <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CatalogWidgetSection.insertWidgetButton}}" visible="false" stepKey="clickShowHideEditorIfVisible"/>
-        <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="CMS homepage content goes here." stepKey="fillContentForCMSPage"/>
+        <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="CMS homepage content goes here." stepKey="resetCMSPageToDefaultContent"/>
         <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForSettingsApply"/>
     </actionGroup>
