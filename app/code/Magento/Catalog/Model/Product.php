@@ -512,6 +512,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected function _getResource()
     {
+        //phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod
         return parent::_getResource();
     }
 

@@ -519,6 +519,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                     $stat = $fileInfo->getStat($fileName);
                     $mime = $fileInfo->getMimeType($fileName);
 
+                    //phpcs:ignore Generic.PHP.ForbiddenFunctions
                     $categoryData[$attributeCode][0]['name'] = basename($fileName);
 
                     if ($fileInfo->isBeginsWithMediaDirectoryPath($fileName)) {
