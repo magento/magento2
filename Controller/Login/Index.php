@@ -13,6 +13,24 @@ namespace Magefan\LoginAsCustomer\Controller\Login;
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
+     * @var \Magefan\LoginAsCustomer\Model\Login
+     */
+    protected $login = null;
+
+    /**
+     * Index constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magefan\LoginAsCustomer\Model\Login|null $login
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magefan\LoginAsCustomer\Model\Login $login = null
+    ) {
+        parent::__construct($context);
+        $objectManager = $this->_objectManager;
+        $this->login = $login ?: $objectManager->get(\Magefan\LoginAsCustomer\Model\Login::class);
+    }
+    /**
      * Login as customer action
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -50,9 +68,7 @@ class Index extends \Magento\Framework\App\Action\Action
             return false;
         }
 
-        $login = $this->_objectManager
-            ->create(\Magefan\LoginAsCustomer\Model\Login::class)
-            ->loadNotUsed($secret);
+        $login = $this->login->loadNotUsed($secret);
 
         if ($login->getId()) {
             return $login;
