@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="LockAdminUserWhenCreatingNewUserTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Runs Lock admin user when creating new user test."/>
+            <title value="Lock admin user when creating new user"/>
+            <description value="Runs Lock admin user when creating new user test."/>
+            <severity value="MAJOR"/>
+            <group value="security"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Log in to Admin Panel -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Unlock Admin user -->
+            <magentoCLI command="admin:user:unlock {{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="unlockAdminUser"/>
+        </after>
+
+        <!-- Open Admin New User Page -->
+        <amOnPage url="{{AdminAddNewUserPage.url}}" stepKey="amOnNewAdminUserPage"/>
+        <waitForPageLoad stepKey="waitForNewAdminUserPageLoad"/>
+
+        <!-- Perform add new admin user 6 specified number of times.
+        "The password entered for the current user is invalid. Verify the password and try again." appears after each attempt.-->
+        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserFirstAttempt">
+            <argument name="adminUser" value="{{AdminUserData.username}}" />
+            <argument name="adminFirstname" value="{{AdminUserData.firstname}}" />
+            <argument name="adminLastname" value="{{AdminUserData.lastname}}" />
+            <argument name="adminEmail" value="{{AdminUserData.email}}" />
+            <argument name="adminPassword" value="{{AdminUserData.password}}" />
+            <argument name="adminPasswordConfirmation" value="{{AdminUserData.password}}" />
+            <argument name="currentAdminPassword" value="{{AdminUserData.password}}INVALID" />
+            <argument name="adminUserRole" value="{{AdminNewUserSection.administratorRole('1')}}" />
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForSaveResultLoad"/>
+        <see selector="{{AdminMessagesSection.error}}" userInput="The password entered for the current user is invalid. Verify the password and try again."
+             stepKey="seeInvalidPasswordError"/>
+        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserSecondAttempt">
+            <argument name="adminUser" value="{{AdminUserData.username}}" />
+            <argument name="adminFirstname" value="{{AdminUserData.firstname}}" />
+            <argument name="adminLastname" value="{{AdminUserData.lastname}}" />
+            <argument name="adminEmail" value="{{AdminUserData.email}}" />
+            <argument name="adminPassword" value="{{AdminUserData.password}}" />
+            <argument name="adminPasswordConfirmation" value="{{AdminUserData.password}}" />
+            <argument name="currentAdminPassword" value="{{AdminUserData.password}}INVALID" />
+            <argument name="adminUserRole" value="{{AdminNewUserSection.administratorRole('1')}}" />
+        </actionGroup>
+        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserThirdAttempt">
+            <argument name="adminUser" value="{{AdminUserData.username}}" />
+            <argument name="adminFirstname" value="{{AdminUserData.firstname}}" />
+            <argument name="adminLastname" value="{{AdminUserData.lastname}}" />
+            <argument name="adminEmail" value="{{AdminUserData.email}}" />
+            <argument name="adminPassword" value="{{AdminUserData.password}}" />
+            <argument name="adminPasswordConfirmation" value="{{AdminUserData.password}}" />
+            <argument name="currentAdminPassword" value="{{AdminUserData.password}}INVALID" />
+            <argument name="adminUserRole" value="{{AdminNewUserSection.administratorRole('1')}}" />
+        </actionGroup>
+        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserFourthAttempt">
+            <argument name="adminUser" value="{{AdminUserData.username}}" />
+            <argument name="adminFirstname" value="{{AdminUserData.firstname}}" />
+            <argument name="adminLastname" value="{{AdminUserData.lastname}}" />
+            <argument name="adminEmail" value="{{AdminUserData.email}}" />
+            <argument name="adminPassword" value="{{AdminUserData.password}}" />
+            <argument name="adminPasswordConfirmation" value="{{AdminUserData.password}}" />
+            <argument name="currentAdminPassword" value="{{AdminUserData.password}}INVALID" />
+            <argument name="adminUserRole" value="{{AdminNewUserSection.administratorRole('1')}}" />
+        </actionGroup>
+        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserFifthAttempt">
+            <argument name="adminUser" value="{{AdminUserData.username}}" />
+            <argument name="adminFirstname" value="{{AdminUserData.firstname}}" />
+            <argument name="adminLastname" value="{{AdminUserData.lastname}}" />
+            <argument name="adminEmail" value="{{AdminUserData.email}}" />
+            <argument name="adminPassword" value="{{AdminUserData.password}}" />
+            <argument name="adminPasswordConfirmation" value="{{AdminUserData.password}}" />
+            <argument name="currentAdminPassword" value="{{AdminUserData.password}}INVALID" />
+            <argument name="adminUserRole" value="{{AdminNewUserSection.administratorRole('1')}}" />
+        </actionGroup>
+        <actionGroup ref="AdminNewUserInvalidCurrentUserPasswordActionGroup" stepKey="failedSaveUserSixthAttempt">
+            <argument name="adminUser" value="{{AdminUserData.username}}" />
+            <argument name="adminFirstname" value="{{AdminUserData.firstname}}" />
+            <argument name="adminLastname" value="{{AdminUserData.lastname}}" />
+            <argument name="adminEmail" value="{{AdminUserData.email}}" />
+            <argument name="adminPassword" value="{{AdminUserData.password}}" />
+            <argument name="adminPasswordConfirmation" value="{{AdminUserData.password}}" />
+            <argument name="currentAdminPassword" value="{{AdminUserData.password}}INVALID" />
+            <argument name="adminUserRole" value="{{AdminNewUserSection.administratorRole('1')}}" />
+        </actionGroup>
+
+        <!-- Check Error that account has been locked -->
+        <waitForPageLoad stepKey="wailtForSaveResultLoad"/>
+        <see selector="{{AdminLoginFormSection.error}}" userInput="Your account is temporarily disabled. Please try again later." stepKey="seeLockUserError"/>
+
+        <!-- Try to login as admin and check error -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsLockedAdmin"/>
+        <waitForPageLoad stepKey="waitForError"/>
+        <see selector="{{AdminLoginFormSection.error}}" userInput="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later"
+             stepKey="seeLoginUserError"/>
+    </test>
+</tests>
