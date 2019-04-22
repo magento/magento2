@@ -71,7 +71,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -80,7 +80,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {
@@ -182,6 +182,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Get add root button html
+     *
      * @return string
      */
     public function getAddRootButtonHtml()
@@ -190,6 +192,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Get add sub button html
+     *
      * @return string
      */
     public function getAddSubButtonHtml()
@@ -198,6 +202,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Get expand button html
+     *
      * @return string
      */
     public function getExpandButtonHtml()
@@ -206,6 +212,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Get collapse button html
+     *
      * @return string
      */
     public function getCollapseButtonHtml()
@@ -214,6 +222,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Get store switcher
+     *
      * @return string
      */
     public function getStoreSwitcherHtml()
@@ -222,6 +232,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Get loader tree url
+     *
      * @param bool|null $expanded
      * @return string
      */
@@ -235,6 +247,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Get nodes url
+     *
      * @return string
      */
     public function getNodesUrl()
@@ -243,6 +257,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Get switcher tree url
+     *
      * @return string
      */
     public function getSwitchTreeUrl()
@@ -254,6 +270,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Get is was expanded
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
@@ -263,6 +281,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Get move url
+     *
      * @return string
      */
     public function getMoveUrl()
@@ -271,6 +291,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Get tree
+     *
      * @param mixed|null $parenNodeCategory
      * @return array
      */
@@ -282,6 +304,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Get tree json
+     *
      * @param mixed|null $parenNodeCategory
      * @return string
      */
@@ -367,7 +391,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             }
         }
 
-        if ($isParent || $node->getLevel() < 2) {
+        if ($isParent || $node->getLevel() < 1) {
             $item['expanded'] = true;
         }
 
@@ -390,6 +414,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Is category movable
+     *
      * @param Node|array $node
      * @return bool
      */
@@ -403,6 +429,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
+     * Is parent selected category
+     *
      * @param Node|array $node
      * @return bool
      */

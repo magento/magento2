@@ -264,7 +264,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $this->_entity = $this->_eavEntityFactory->create()->setType($entity);
         } else {
             throw new LocalizedException(
-                __('The "%1" entity supplied is invalid. Verify the entity and try again.', print_r($entity, 1))
+                __('The entity supplied to collection is invalid. Verify the entity and try again.')
             );
         }
         return $this;
@@ -1061,6 +1061,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 $this->_items[$entityId]->addData($row);
             }
         }
+        $this->_setIsLoaded();
         return $this;
     }
 
@@ -1164,7 +1165,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
-     * @throws LocalizedException
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)

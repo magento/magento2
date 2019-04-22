@@ -139,7 +139,7 @@
         </assertEquals>
 
         <!--Verify we see customizable options are Required -->
-        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomInput(virtualProductCustomizableOption1.title)}}" stepKey="verifyFistCustomOptionIsRequired" />
+        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomInput(virtualProductCustomizableOption1.title)}}" stepKey="verifyFirstCustomOptionIsRequired" />
         <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomInput(virtualProductCustomizableOption2.title)}}" stepKey="verifySecondCustomOptionIsRequired" />
         <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(virtualProductCustomizableOption3.title)}}" stepKey="verifyThirdCustomOptionIsRequired" />
         <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(virtualProductCustomizableOption4.title)}}" stepKey="verifyFourthCustomOptionIsRequired" />
