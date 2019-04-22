@@ -9,6 +9,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Sales\Model\Order\Payment;
 
+// phpcs:ignore Magento2.Security.IncludeFile
 require 'order.php';
 /** @var Order $order */
 /** @var  Order\Payment $payment */
@@ -24,8 +25,7 @@ $orders = [
         'subtotal' => 120.00,
         'base_grand_total' => 120.00,
         'store_id' => 1,
-        'website_id' => 1,
-        'payment' => $payment
+        'website_id' => 1
     ],
     [
         'increment_id' => '100000003',
@@ -35,8 +35,7 @@ $orders = [
         'base_grand_total' => 140.00,
         'subtotal' => 140.00,
         'store_id' => 0,
-        'website_id' => 0,
-        'payment' => $payment
+        'website_id' => 0
     ],
     [
         'increment_id' => '100000004',
@@ -46,8 +45,7 @@ $orders = [
         'base_grand_total' => 140.00,
         'subtotal' => 140.00,
         'store_id' => 1,
-        'website_id' => 1,
-        'payment' => $payment
+        'website_id' => 1
     ],
 ];
 
