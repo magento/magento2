@@ -117,7 +117,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
         if (!$this->authorization->isAllowed('Magento_Cms::save_design')) {
             $designMeta = [];
-            foreach($this->designFieldSets as $fieldSet) {
+            foreach ($this->designFieldSets as $fieldSet) {
                 $designMeta[$fieldSet] = [
                     'arguments' => [
                         'data' => [
