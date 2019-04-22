@@ -18,6 +18,7 @@
         "magento/module-quote": "101.0.*",
         "magento/module-paypal": "100.2.*",
         "magento/module-ui": "101.0.*",
+        "magento/module-multishipping": "100.2.*",
         "braintree/braintree_php": "3.28.0"
     },
     "suggest": {
