@@ -48,7 +48,7 @@ class StoreValidator implements HttpRequestValidatorInterface
                 if (strtolower($storeCode) !== 'default') {
                     $this->storeManager->setCurrentStore(null);
                     throw new GraphQlInputException(
-                        __("The store that was requested wasn't found. Verify the store and try again.")
+                        __("Requested store is not found")
                     );
                 }
             }

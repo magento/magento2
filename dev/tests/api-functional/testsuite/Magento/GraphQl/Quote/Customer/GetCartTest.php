@@ -163,7 +163,7 @@ class GetCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote_customer_not_default_store.php
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage The store that was requested wasn't found. Verify the store and try again.
+     * @expectedExceptionMessage Requested store is not found
      */
     public function testGetCartWithNotExistingStore()
     {

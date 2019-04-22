@@ -48,14 +48,14 @@ class CurrencyValidator implements HttpRequestValidatorInterface
                 $currentStore = $this->storeManager->getStore();
                 if (!in_array($headerCurrency, $currentStore->getAvailableCurrencyCodes(true))) {
                     throw new GraphQlInputException(
-                        __('Currency not allowed for store %1', [$currentStore->getCode()])
+                        __('Please correct the target currency')
                     );
                 }
             }
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $this->storeManager->setCurrentStore(null);
             throw new GraphQlInputException(
-                __("The store that was requested wasn't found. Verify the store and try again.")
+                __("Requested store is not found")
             );
         }
     }

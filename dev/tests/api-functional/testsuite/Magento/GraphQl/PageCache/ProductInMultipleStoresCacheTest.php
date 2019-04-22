@@ -118,7 +118,7 @@ QUERY;
 
         //test non existing currency
         $headerMap = ['Store' => 'default', 'Content-Currency' => 'someNonExistentCurrency'];
-        $this->expectExceptionMessage('GraphQL response contains errors: Currency not allowed for store default');
+        $this->expectExceptionMessage('GraphQL response contains errors: Please correct the target currency');
         $this->graphQlQuery($query, [], '', $headerMap);
     }
 
@@ -166,7 +166,7 @@ QUERY;
         //test not allowed existing currency
         $headerMap = ['Store' => $storeCodeFromFixture, 'Content-Currency' => 'CAD'];
         $this->expectExceptionMessage(
-            "GraphQL response contains errors: Currency not allowed for store {$storeCodeFromFixture}"
+            'GraphQL response contains errors: Please correct the target currency'
         );
         $this->graphQlQuery($query, [], '', $headerMap);
     }
@@ -315,7 +315,7 @@ QUERY;
         // test cached response store + currency header with non existing currency, and no valid response, no cache
         $headerMap = ['Store' => $storeCodeFromFixture, 'Content-Currency' => 'SOMECURRENCY'];
         $this->expectExceptionMessage(
-            "GraphQL response contains errors: Currency not allowed for store {$storeCodeFromFixture}"
+            'GraphQL response contains errors: Please correct the target currency'
         );
         $this->graphQlQuery($query, [], '', $headerMap);
     }
