@@ -46,7 +46,17 @@
         <element name="conditionSelect" type="select" selector="select[name='rule[conditions][1][new_child]']"/>
         <element name="targetEllipsis" type="input" selector="//ul[contains(@id, 'conditions')]//a[.='...']"/>
         <element name="ruleFieldByIndex" type="input" selector="[id='conditions__{{index}}__value']" parameterized="true"/>
+        <element name="addNewCondition" type="button" selector="//ul[@id = 'conditions__{{nestedIndex}}__children']/li/span[contains(@class, 'rule-param-new-child')]" parameterized="true" timeout="30"/>
+        <element name="conditionSelectDropdown" type="select" selector="select[name='rule[conditions][{{nestedIndex}}][new_child]']" parameterized="true"/>
         <element name="selectCountryDropdown" type="select" selector="(//*[contains(@value,'country_id')]/..//select)[last()]"/>
+
+        <!--Conditions checker -->
+        <element name="openList" type="button" selector="a.rule-chooser-trigger>img.v-middle.rule-chooser-trigger"/>
+        <element name="searchSegmentName" type="input" selector="//div[@class='rule-chooser']//input[@name='grid_segment_name']"/>
+        <element name="searchButton" type="button" selector="div.admin__filter-actions>button.action-default.scalable.action-secondary" timeout="10" />
+        <element name="selectAll" type="checkbox" selector="//*[@class='rule-chooser']//input[contains(@class, 'admin__control-checkbox')]" timeout="10"/>
+        <element name="resetSearchFilter" type="button" selector="//div[@class='admin__filter-actions']//button[@title='Reset Filter']"/>
+        <element name="setSegment" type="button" selector="//*[@class='rule-tree-wrapper']//a[@class='rule-param-apply']"/>
 
         <!-- Actions sub-form -->
         <element name="actionsTab" type="text" selector="//div[@data-index='actions']//span[contains(.,'Actions')][1]"/>

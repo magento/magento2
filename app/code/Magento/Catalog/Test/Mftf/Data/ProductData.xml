@@ -167,6 +167,28 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+    <entity name="SimpleProductDisabled" type="product">
+        <data key="sku" unique="suffix">simple_product_disabled</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">Simple Product Disabled</data>
+        <data key="price">123.00</data>
+        <data key="visibility">4</data>
+        <data key="status">2</data>
+        <data key="quantity">1001</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
+    <entity name="SimpleProductNotVisibleIndividually" type="product">
+        <data key="sku" unique="suffix">simple_product_not_visible_individually</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">Simple Product Not Visible Individually</data>
+        <data key="price">123.00</data>
+        <data key="visibility">1</data>
+        <data key="status">1</data>
+        <data key="quantity">1000</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
     <entity name="NewSimpleProduct" type="product">
         <data key="price">321.00</data>
     </entity>
@@ -445,6 +467,10 @@
     <entity name="productWithOptions2" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
+    </entity>
+    <entity name="productWithDropdownOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionValueDropdown</requiredEntity>
     </entity>
     <entity name="ProductWithTextFieldAndAreaOptions" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
@@ -1000,6 +1026,19 @@
         <data key="tax_class_id">2</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
+    <entity name="defaultSimpleProductWeight200" type="product">
+        <data key="name" unique="suffix">Testp</data>
+        <data key="sku" unique="suffix">testsku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">560.00</data>
+        <data key="urlKey" unique="suffix">testurl-</data>
+        <data key="status">1</data>
+        <data key="quantity">25</data>
+        <data key="weight">200</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+    </entity>
     <entity name="SimpleProductWithTwoOption" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionMultiSelect</requiredEntity>
@@ -1020,5 +1059,35 @@
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithSpecialPrice" type="product">
+        <data key="sku" unique="suffix">SimpleProductWithSpecialPrice</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">100.00</data>
+        <data key="special_price">90.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">86</data>
+        <data key="urlKey" unique="suffix">simpleproduct</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithSpecialPriceSecond" type="product">
+        <data key="sku" unique="suffix">SimpleProductWithSpecialPriceSecond</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">150.00</data>
+        <data key="special_price">110.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">86</data>
+        <data key="urlKey" unique="suffix">simpleproduct</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
 </entities>
