@@ -8,14 +8,14 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="EnableCatalogInventoryConfigData">
+    <entity name="CatalogInventoryOptionsCanSubtractEnable">
         <!--Default Value -->
         <data key="path">cataloginventory/options/can_subtract</data>
         <data key="scope_id">0</data>
         <data key="label">Yes</data>
         <data key="value">1</data>
     </entity>
-    <entity name="DisableCatalogInventoryConfigData">
+    <entity name="CatalogInventoryOptionsCanSubtractDisable">
         <data key="path">cataloginventory/options/can_subtract</data>
         <data key="scope_id">0</data>
         <data key="label">No</data>

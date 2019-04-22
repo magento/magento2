@@ -10,11 +10,11 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontRegisterCustomerAfterCheckoutActionGroup">
         <arguments>
-            <argument name="customerPassword" defaultValue="UKCustomer"/>
+            <argument name="customerPassword" defaultValue="UKCustomer.password" type="string"/>
         </arguments>
         <click selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="clickOnCreateAnAccountButton"/>
-        <fillField selector="{{StorefrontCustomerAccountInformationSection.newPassword}}" userInput="{{customerPassword.password}}" stepKey="fillPassword"/>
-        <fillField selector="{{StorefrontCustomerAccountInformationSection.confirmNewPassword}}" userInput="{{customerPassword.password}}" stepKey="reconfirmPassword"/>
+        <fillField selector="{{StorefrontCustomerAccountInformationSection.newPassword}}" userInput="{{customerPassword}}" stepKey="fillPassword"/>
+        <fillField selector="{{StorefrontCustomerAccountInformationSection.confirmNewPassword}}" userInput="{{customerPassword}}" stepKey="reconfirmPassword"/>
         <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickOnCreateAnAccount"/>
         <seeElement selector="{{StorefrontCustomerMessagesSection.successMessage}}" stepKey="seeSuccessMessage1"/>
     </actionGroup>

@@ -24,6 +24,9 @@
             </createData>
         </before>
         <after>
+            <!-- Sign out Customer from storefront -->
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
+            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="UKCustomer.email"/>
@@ -94,9 +97,5 @@
 
         <!-- Assert order buttons -->
         <actionGroup ref="AdminAssertOrderAvailableButtonsActionGroup" stepKey="assertOrderButtons"/>
-
-        <!-- Sign out Customer from storefront -->
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
     </test>
 </tests>

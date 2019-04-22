@@ -27,10 +27,14 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
-            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set {{EnableGuestCheckoutConfigData.path}} {{EnableGuestCheckoutConfigData.value}}" stepKey="enableGuestCheckout"/>
             <magentoCLI command="config:set {{EnableCustomerRedirectToDashboardConfigData.path}} {{EnableCustomerRedirectToDashboardConfigData.value}}" stepKey="enableCustomerRedirect"/>
+
+            <!-- Sign out Customer from storefront -->
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
+            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -56,6 +60,8 @@
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
             <argument name="customerPwd" value="$$createCustomer.password$$"/>
         </actionGroup>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout1"/>
+        <waitForPageLoad stepKey="waitForShippingMethodSectionToLoad"/>
         <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
 
@@ -84,9 +90,5 @@
 
         <!-- Ship the order and assert the shipping status -->
         <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="shipTheOrder"/>
-
-        <!-- Sign out Customer from storefront -->
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
     </test>
 </tests>

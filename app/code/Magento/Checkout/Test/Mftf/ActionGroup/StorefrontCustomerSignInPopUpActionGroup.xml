@@ -17,7 +17,6 @@
         <fillField  stepKey="fillEmail" userInput="{{customerEmail}}" selector="{{StorefrontCustomerSignInPopupFormSection.email}}"/>
         <fillField  stepKey="fillPassword" userInput="{{customerPwd}}" selector="{{StorefrontCustomerSignInPopupFormSection.password}}"/>
         <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInPopupFormSection.signIn}}"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
     </actionGroup>
 </actionGroups>
