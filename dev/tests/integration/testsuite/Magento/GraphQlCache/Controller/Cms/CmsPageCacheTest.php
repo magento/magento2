@@ -10,7 +10,6 @@ namespace Magento\GraphQlCache\Controller\Cms;
 use Magento\Cms\Model\GetPageByIdentifier;
 use Magento\Framework\App\Request\Http;
 use Magento\GraphQl\Controller\GraphQl;
-use Magento\Framework\App\ResponseInterface;
 use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 
 /**
@@ -76,7 +75,6 @@ QUERY;
         $result = $this->graphqlController->dispatch($this->request);
         /** @var \Magento\Framework\App\Response\Http $response */
         $response = $this->objectManager->get(\Magento\Framework\App\Response\Http::class);
-        /** @var  $registry \Magento\Framework\Registry */
         $result->renderResult($response);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $requestedCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
