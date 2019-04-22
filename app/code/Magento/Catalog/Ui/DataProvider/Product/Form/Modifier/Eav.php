@@ -743,8 +743,8 @@ class Eav extends AbstractModifier
         }
 
         //Checking access to design config.
-        $designAttributeCodes = ['custom_design', 'page_layout', 'options_container', 'custom_layout_update'];
-        if (in_array($attributeCode, $designAttributeCodes, true)) {
+        $designDesignGroups = ['design', 'schedule-design-update'];
+        if (in_array($groupCode, $designDesignGroups, true)) {
             if (!$this->auth->isAllowed('Magento_Catalog::edit_product_design')) {
                 $meta = $this->arrayManager->merge(
                     $configPath,

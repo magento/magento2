@@ -120,6 +120,15 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                             ]
                         ]
                     ]
+                ],
+                'custom_design_update' => [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'disabled' => true
+                            ]
+                        ]
+                    ]
                 ]
             ];
             $meta = array_merge_recursive($meta, $designMeta);
