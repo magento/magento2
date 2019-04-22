@@ -47,6 +47,9 @@ class CreateEmptyCartForCustomer
     }
 
     /**
+     * Create empty cart for customer
+     *
+     * @param int $customerId
      * @param string|null $predefinedMaskedQuoteId
      * @return string
      */

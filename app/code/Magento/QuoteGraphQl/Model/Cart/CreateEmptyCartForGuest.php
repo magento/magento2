@@ -47,6 +47,8 @@ class CreateEmptyCartForGuest
     }
 
     /**
+     * Create empty cart for guest
+     *
      * @param string|null $predefinedMaskedQuoteId
      * @return string
      */

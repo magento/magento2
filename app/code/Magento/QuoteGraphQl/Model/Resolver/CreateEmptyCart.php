@@ -72,6 +72,8 @@ class CreateEmptyCart implements ResolverInterface
     }
 
     /**
+     * Validate masked id
+     *
      * @param string $maskedId
      * @throws GraphQlAlreadyExistsException
      * @throws GraphQlInputException
@@ -88,6 +90,8 @@ class CreateEmptyCart implements ResolverInterface
     }
 
     /**
+     * Check is quote with such maskedId already exists
+     *
      * @param string $maskedId
      * @return bool
      */
