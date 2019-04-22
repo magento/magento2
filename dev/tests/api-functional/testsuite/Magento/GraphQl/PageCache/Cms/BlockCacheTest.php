@@ -45,10 +45,8 @@ class BlockCacheTest extends GraphQlAbstract
 
         $this->assertArrayHasKey('X-Magento-Tags', $response['headers']);
         $actualTags = explode(',', $response['headers']['X-Magento-Tags']);
-        $expectedTags = ["cms_b", "cms_b_{$blockIdentifier}", "cms_b_{$blockId}", "FPC"];
-        foreach ($expectedTags as $expectedTag) {
-            $this->assertContains($expectedTag, $actualTags);
-        }
+        $expectedTags = ["cms_b", "cms_b_{$blockId}", "cms_b_{$blockIdentifier}", "FPC"];
+        $this->assertEquals($expectedTags, $actualTags);
     }
 
     /**
