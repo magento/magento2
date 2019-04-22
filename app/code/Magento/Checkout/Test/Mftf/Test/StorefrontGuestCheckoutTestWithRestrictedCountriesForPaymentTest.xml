@@ -23,6 +23,7 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCLI command="config:set checkout/options/display_billing_address_on 1"  stepKey="setShowBillingAddressOnPaymentPage" />
             <magentoCLI command="config:set payment/checkmo/allowspecific" arguments="1" stepKey="setAllowSpecificCountiesValue" />
             <magentoCLI command="config:set payment/checkmo/specificcountry" arguments="GB" stepKey="setSpecificCountryValue" />
         </before>
@@ -31,6 +32,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <magentoCLI command="config:set payment/checkmo/allowspecific 0" stepKey="unsetAllowSpecificCountiesValue"/>
             <magentoCLI command="config:set payment/checkmo/specificcountry ''" stepKey="unsetSpecificCountryValue" />
+            <magentoCLI command="config:set checkout/options/display_billing_address_on 0" stepKey="setDisplayBillingAddressOnPaymentMethod" />
         </after>
 
         <!-- Add product to cart -->
@@ -53,14 +55,13 @@
         <see userInput="No Payment method available." stepKey="checkMessage"/>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->
-        <click selector="{{CheckoutHeaderSection.shippingMethodStep}}" stepKey="goToShipping" />
-        <waitForElementVisible selector="{{CheckoutShippingSection.isShippingStep}}" stepKey="shippingStepIsOpened1"/>
-
-        <actionGroup ref="GuestCheckoutFillingShippingSectionWithoutRegionActionGroup" stepKey="guestCheckoutFillingShippingSectionUK">
-            <argument name="customerVar" value="Simple_US_Customer" />
+        <uncheckOption selector="{{CheckoutPaymentSection.billingAddressSameAsShippingShared}}" stepKey="uncheckBillingAddressSameAsShippingCheckCheckBox"/>
+        <waitForPageLoad stepKey="waitNewAddressBillingForm"/>
+        <actionGroup ref="GuestCheckoutFillNewBillingAddressWithoutEmailActionGroup" stepKey="guestCheckoutFillingShippingAddress">
+            <argument name="customerVar" value="CustomerEntityOne" />
             <argument name="customerAddressVar" value="UK_Default_Address" />
-            <argument name="shippingMethod" value="Flat Rate" type="string"/>
         </actionGroup>
+        <click selector="{{CheckoutPaymentSection.addressAction('Update')}}" stepKey="clickUpdateBillingAddressButton" />
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment" />
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceOrder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
