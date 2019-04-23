@@ -47,38 +47,6 @@ class CustomerAddressDataFormatter
     }
 
     /**
-     * Prepare list of addressed that was selected by customer on checkout page.
-     *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
-     * @param \Magento\Quote\Model\Quote $quote
-     * @param array $prepareAddressList
-     * @return array
-     */
-    public function prepareSelectedAddresses(
-        \Magento\Customer\Api\Data\CustomerInterface $customer,
-        \Magento\Quote\Model\Quote $quote,
-        array $prepareAddressList
-    ): array {
-        /** @var AddressInterface $billingAddress */
-        $billingAddress = $quote->getBillingAddress();
-        $billingAddressId = $billingAddress->getOrigData('customer_address_id');
-        $prepareAddressList = $this->prepareSelectedAddress($customer, $prepareAddressList, $billingAddressId);
-
-        $shippingAddressId = null;
-        $shippingAssignments = $quote->getExtensionAttributes()->getShippingAssignments();
-        if (isset($shippingAssignments[0])) {
-            $shipping = current($shippingAssignments)->getData('shipping');
-            /** @var AddressInterface $shippingAddress */
-            $shippingAddress = $shipping->getAddress();
-            $shippingAddressId = $shippingAddress->getOrigData('customer_address_id');
-        }
-
-        $prepareAddressList = $this->prepareSelectedAddress($customer, $prepareAddressList, $shippingAddressId);
-
-        return $prepareAddressList;
-    }
-
-    /**
      * Prepare customer address data.
      *
      * @param AddressInterface $customerAddress
@@ -123,29 +91,6 @@ class CustomerAddressDataFormatter
         }
 
         return $resultAddress;
-    }
-
-    /**
-     * Prepared address by for given customer with given address id.
-     *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
-     * @param array $addressList
-     * @param int|null $addressId
-     * @return array
-     */
-    private function prepareSelectedAddress(
-        \Magento\Customer\Api\Data\CustomerInterface $customer,
-        array $addressList,
-        $addressId = null
-    ): array {
-        if (null !== $addressId && !isset($addressList[$addressId])) {
-            $selectedAddress = $this->prepareAddress($customer->getAddresses()[$addressId]);
-            if (isset($selectedAddress['id'])) {
-                $addressList[$selectedAddress['id']] = $selectedAddress;
-            }
-        }
-
-        return $addressList;
     }
 
     /**
