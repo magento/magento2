@@ -18,8 +18,8 @@
                 comment="Mark current bookmark per user and identifier"/>
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Bookmark title"/>
         <column xsi:type="longtext" name="config" nullable="true" comment="Bookmark config"/>
-        <column xsi:type="datetime" name="created_at" on_update="false" nullable="false" comment="Bookmark created at"/>
-        <column xsi:type="datetime" name="updated_at" on_update="false" nullable="false" comment="Bookmark updated at"/>
+        <column xsi:type="datetime" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Bookmark created at"/>
+        <column xsi:type="datetime" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Bookmark updated at"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="bookmark_id"/>
         </constraint>

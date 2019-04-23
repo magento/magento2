@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\GraphQl\Config;
 
 use Magento\Framework\App\Cache;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\GraphQl\Config;
 use Magento\Framework\GraphQl\Schema\SchemaGenerator;
 use Magento\Framework\ObjectManagerInterface;
@@ -175,8 +176,9 @@ QUERY;
             'operationName' => 'IntrospectionQuery'
         ];
         /** @var Http $request */
-        $request = $this->objectManager->get(\Magento\Framework\App\Request\Http::class);
+        $request = $this->objectManager->get(Http::class);
         $request->setPathInfo('/graphql');
+        $request->setMethod('POST');
         $request->setContent(json_encode($postData));
         $headers = $this->objectManager->create(\Zend\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
