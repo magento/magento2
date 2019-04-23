@@ -65,7 +65,7 @@ class RendererProxy extends SelectRenderer
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        throw new \RuntimeException('tst');//trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         return ['_subject', '_isShared'];
     }
@@ -80,7 +80,7 @@ class RendererProxy extends SelectRenderer
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        throw new \RuntimeException('tst');//trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         $this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     }
