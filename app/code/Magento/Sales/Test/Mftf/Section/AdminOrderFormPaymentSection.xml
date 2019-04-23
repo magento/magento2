@@ -15,6 +15,10 @@
         <element name="shippingError" type="text" selector="#order[has_shipping]-error"/>
         <element name="freeShippingOption" type="radio" selector="#s_method_freeshipping_freeshipping" timeout="30"/>
         <element name="checkMoneyOption" type="radio" selector="#p_method_checkmo" timeout="30"/>
+        <element name="bankTransferOption" type="radio" selector="#p_method_banktransfer" timeout="30"/>
+        <element name="cashOnDelivery" type="radio" selector="#p_method_cashondelivery" timeout="30"/>
+        <element name="purchaseOrder" type="radio" selector="#p_method_purchaseorder"/>
+        <element name="purchaseOrderNumber" type="input" selector="#po_number" timeout="30"/>
         <element name="paymentBlock" type="text" selector="#order-billing_method" />
         <element name="paymentError" type="text" selector="#payment[method]-error"/>
     </section>
