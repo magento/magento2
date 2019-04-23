@@ -503,6 +503,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_init(\Magento\Catalog\Model\ResourceModel\Product::class);
     }
 
+    // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
     /**
      * Get resource instance
      *
@@ -512,9 +513,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected function _getResource()
     {
-        //phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod
         return parent::_getResource();
     }
+    // phpcs:enable
 
     /**
      * Get a list of custom attribute codes that belongs to product attribute set.
