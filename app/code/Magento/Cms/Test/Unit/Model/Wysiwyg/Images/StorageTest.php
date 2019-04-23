@@ -418,6 +418,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->with(false)
             ->willReturnSelf();
         $storageCollectionMock->expects($this->once())
+            ->method('setOrder')
+            ->with('basename', \Magento\Framework\Data\Collection\Filesystem::SORT_ORDER_ASC)
+            ->willReturnSelf();
+        $storageCollectionMock->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($collectionArray));
         $storageCollectionInvMock = $storageCollectionMock->expects($this->exactly(sizeof($expectedRemoveKeys)))
