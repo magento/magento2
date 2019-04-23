@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservationCli\Command;
 
-use Magento\InventoryReservationCli\Model\GetSalableQuantityInconsistencies\Proxy as GetSalableQuantityInconsistencies;
+use Magento\InventoryReservationCli\Model\GetSalableQuantityInconsistencies;
 use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
-use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterCompleteOrders\Proxy as FilterCompleteOrders;
-use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterIncompleteOrders\Proxy as FilterIncompleteOrders;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterCompleteOrders;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterIncompleteOrders;
 use Magento\Sales\Model\Order;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

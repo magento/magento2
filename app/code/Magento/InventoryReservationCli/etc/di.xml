@@ -18,4 +18,17 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\InventoryReservationCli\Command\ShowInconsistencies">
+        <arguments>
+            <argument name="getSaleableQuantityInconsistencies" xsi:type="object">
+                Magento\InventoryReservationCli\Model\GetSalableQuantityInconsistencies\Proxy
+            </argument>
+            <argument name="filterCompleteOrders" xsi:type="object">
+                Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterCompleteOrders\Proxy
+            </argument>
+            <argument name="filterIncompleteOrders" xsi:type="object">
+                Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterIncompleteOrders\Proxy
+            </argument>
+        </arguments>
+    </type>
 </config>

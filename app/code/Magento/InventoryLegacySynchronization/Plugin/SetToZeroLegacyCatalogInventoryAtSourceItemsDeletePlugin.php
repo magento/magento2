@@ -5,17 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\InventoryApi;
+namespace Magento\InventoryLegacySynchronization\Plugin;
 
-use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
-use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
-use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
+use Magento\InventoryLegacySynchronization\Model\Synchronize;
 
 /**
  * Set to zero Qty and status to ‘Out of Stock’ for legacy CatalogInventory Stock Status and Stock Item DB tables,
@@ -29,21 +26,6 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
     private $defaultSourceProvider;
 
     /**
-     * @var SetDataToLegacyStockItem
-     */
-    private $setDataToLegacyStockItem;
-
-    /**
-     * @var GetProductIdsBySkusInterface
-     */
-    private $getProductIdsBySkus;
-
-    /**
-     * @var Processor
-     */
-    private $indexerProcessor;
-
-    /**
      * @var IsSourceItemManagementAllowedForProductTypeInterface
      */
     private $isSourceItemsAllowedForProductType;
@@ -54,27 +36,27 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
     private $getProductTypeBySku;
 
     /**
+     * @var Synchronize
+     */
+    private $synchronize;
+
+    /**
      * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param SetDataToLegacyStockItem $setDataToLegacyStockItem
-     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
-     * @param Processor $indexerProcessor
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypeBySku
+     * @param Synchronize $synchronize
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         DefaultSourceProviderInterface $defaultSourceProvider,
-        SetDataToLegacyStockItem $setDataToLegacyStockItem,
-        GetProductIdsBySkusInterface $getProductIdsBySkus,
-        Processor $indexerProcessor,
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
-        GetProductTypesBySkusInterface $getProductTypeBySku
+        GetProductTypesBySkusInterface $getProductTypeBySku,
+        Synchronize $synchronize
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->setDataToLegacyStockItem = $setDataToLegacyStockItem;
-        $this->getProductIdsBySkus = $getProductIdsBySkus;
-        $this->indexerProcessor = $indexerProcessor;
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->getProductTypeBySku = $getProductTypeBySku;
+        $this->synchronize = $synchronize;
     }
 
     /**
@@ -82,11 +64,12 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
      * @param void $result
      * @param SourceItemInterface[] $sourceItems
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(SourceItemsDeleteInterface $subject, $result, array $sourceItems)
     {
-        $productIds = [];
+        $sourceItemsData = [];
         foreach ($sourceItems as $sourceItem) {
             if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
                 continue;
@@ -94,24 +77,20 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
 
             $sku = $sourceItem->getSku();
 
-            try {
-                $productId = (int)$this->getProductIdsBySkus->execute([$sku])[$sku];
-            } catch (NoSuchEntityException $e) {
-                // Delete source item data for not existed product
-                continue;
-            }
-
             $typeId = $this->getProductTypeBySku->execute([$sku])[$sku];
             if (false === $this->isSourceItemsAllowedForProductType->execute($typeId)) {
                 continue;
             }
 
-            $this->setDataToLegacyStockItem->execute($sourceItem->getSku(), 0, 0);
-            $productIds[] = $productId;
+            $sourceItemData = $sourceItem->getData();
+            $sourceItemData[SourceItemInterface::STATUS] = SourceItemInterface::STATUS_OUT_OF_STOCK;
+            $sourceItemData[SourceItemInterface::QUANTITY] = 0;
+
+            $sourceItemsData[] = $sourceItemData;
         }
 
-        if ($productIds) {
-            $this->indexerProcessor->reindexList($productIds);
+        if (!empty($sourceItemsData)) {
+            $this->synchronize->execute(Synchronize::MSI_TO_LEGACY, $sourceItemsData);
         }
     }
 }

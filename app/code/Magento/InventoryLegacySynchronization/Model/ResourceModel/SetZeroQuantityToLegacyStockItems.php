@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\ResourceModel;
+namespace Magento\InventoryLegacySynchronization\Model\ResourceModel;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
@@ -14,7 +14,7 @@ use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 /**
  * Set quantity=0 to legacy cataloginventory_stock_item table for a set of skus via plain MySql query
  */
-class BulkZeroLegacyStockItem
+class SetZeroQuantityToLegacyStockItems
 {
     /**
      * @var ResourceConnection
@@ -43,7 +43,7 @@ class BulkZeroLegacyStockItem
      * @return void
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function execute(array $skus)
+    public function execute(array $skus): void
     {
         $productIds = array_values($this->getProductIdsBySkus->execute($skus));
 
