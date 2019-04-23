@@ -14,7 +14,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryExportStock\Model\GetQtyForNotManageStock;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
-use Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\ManageStockCondition;
+use Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\ManageStockCondition as NotManageStockCondition;
 use Psr\Log\LoggerInterface;
 use Zend_Db_Expr;
 
@@ -34,9 +34,9 @@ class StockIndexDumpProcessor
     private $resourceConnection;
 
     /**
-     * @var ManageStockCondition
+     * @var NotManageStockCondition
      */
-    private $manageStockCondition;
+    private $notManageStockCondition;
 
     /**
      * @var AdapterInterface
@@ -47,16 +47,23 @@ class StockIndexDumpProcessor
      * @var GetQtyForNotManageStock
      */
     private $getQtyForNotManageStock;
+
     /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
+     * @var ManageStockCondition
+     */
+    private $manageStockCondition;
+
+    /**
      * GetStockIndexDump constructor
      *
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      * @param ResourceConnection $resourceConnection
+     * @param NotManageStockCondition $notManageStockCondition
      * @param ManageStockCondition $manageStockCondition
      * @param GetQtyForNotManageStock $getQtyForNotManageStock
      * @param LoggerInterface $logger
@@ -64,12 +71,14 @@ class StockIndexDumpProcessor
     public function __construct(
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
         ResourceConnection $resourceConnection,
+        NotManageStockCondition $notManageStockCondition,
         ManageStockCondition $manageStockCondition,
         GetQtyForNotManageStock $getQtyForNotManageStock,
         LoggerInterface $logger
     ) {
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->resourceConnection = $resourceConnection;
+        $this->notManageStockCondition = $notManageStockCondition;
         $this->manageStockCondition = $manageStockCondition;
         $this->getQtyForNotManageStock = $getQtyForNotManageStock;
         $this->logger = $logger;
@@ -78,18 +87,18 @@ class StockIndexDumpProcessor
     /**
      * Provides sku and qty of products dumping them from stock index table
      *
-     * @param int $stockId
+     * @param int $websiteId
      * @return array
      * @throws LocalizedException
      */
-    public function execute(int $stockId): array
+    public function execute(int $websiteId): array
     {
         $this->connection = $this->resourceConnection->getConnection();
         $select = $this->connection->select();
         try {
             $select->union([
-                $this->getStockItemSelect($stockId),
-                $this->getStockIndexSelect($stockId)
+                $this->getStockItemSelect($websiteId),
+                $this->getStockIndexSelect($websiteId)
             ]);
         } catch (Exception $e) {
             $this->logger->critical($e->getMessage(), $e->getTrace());
@@ -102,52 +111,85 @@ class StockIndexDumpProcessor
     /**
      * Provides stock select
      *
-     * @param int $stockId
+     * @param int $websiteId
      * @return Select
      */
-    private function getStockIndexSelect(int $stockId): Select
+    private function getStockIndexSelect(int $websiteId): Select
     {
         $stockIndexTableName = $this->resourceConnection
-            ->getTableName($this->stockIndexTableNameResolver->execute($stockId));
+            ->getTableName($this->stockIndexTableNameResolver->execute($websiteId));
 
-        return $this->connection->select()
-            ->from(
-                $stockIndexTableName,
-                [
-                    'qty' => 'quantity',
-                    'is_salable' => 'is_salable',
-                    'sku' => 'sku'
-                ]
-            );
+        $legacyStockItemTable = $this->resourceConnection
+            ->getTableName('cataloginventory_stock_item');
+        $productEntityTable = $this->resourceConnection
+            ->getTableName('catalog_product_entity');
+        $productWebsiteTable = $this->resourceConnection
+            ->getTableName('catalog_product_website');
+
+        $select = $this->connection->select();
+        $select->from(
+            ['stock_index' => $stockIndexTableName],
+            [
+                'qty' => 'quantity',
+                'is_salable' => 'is_salable',
+                'sku' => 'sku'
+            ]
+        )->join(
+            ['product_entity' => $productEntityTable],
+            'product_entity.sku=stock_index.sku',
+            ''
+        )->join(
+            ['legacy_stock_item' => $legacyStockItemTable],
+            'legacy_stock_item.product_id = product_entity.entity_id',
+            ''
+        )->join(
+            ['prod_website' => $productWebsiteTable],
+            'legacy_stock_item.product_id = prod_website.product_id',
+            ''
+        )->where(
+            $this->manageStockCondition->execute($select)
+        )->where(
+            'prod_website.website_id = ?',
+            $websiteId
+        );
+
+        return $select;
     }
 
     /**
      * Provides stock item select
      *
-     * @param int $stockId
+     * @param int $websiteId
      * @return Select
      */
-    private function getStockItemSelect(int $stockId): Select
+    private function getStockItemSelect(int $websiteId): Select
     {
         $legacyStockItemTable = $this->resourceConnection
             ->getTableName('cataloginventory_stock_item');
         $productEntityTable = $this->resourceConnection
             ->getTableName('catalog_product_entity');
         $select = $this->connection->select();
-
+        $getQtyForNotManageStock = $this->getQtyForNotManageStock->execute();
+        if ($getQtyForNotManageStock === null) {
+            $getQtyForNotManageStock = 'NULL';
+        }
         $select->from(
             ['legacy_stock_item' => $legacyStockItemTable],
-            [new Zend_Db_Expr($this->getQtyForNotManageStock->execute() . ' as qty'),
-            new Zend_Db_Expr('1 as is_salable')]
+            [new Zend_Db_Expr($getQtyForNotManageStock . ' as qty'),
+                new Zend_Db_Expr('"1" as is_salable')]
         )->join(
             ['product_entity' => $productEntityTable],
             'legacy_stock_item.product_id = product_entity.entity_id',
             ['sku']
+        )->join(
+            ['pr_web' => 'catalog_product_website'],
+            'legacy_stock_item.product_id = pr_web.product_id',
+            ''
         )->where(
-            $this->manageStockCondition->execute($select)
+            $this->notManageStockCondition->execute($select)
         )->where(
-            'legacy_stock_item.stock_id = ?',
-            $stockId
+            'pr_web.website_id = ?',
+            $websiteId
         );
 
         return $select;

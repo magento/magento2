@@ -11,8 +11,7 @@ use Exception;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryExportStock\Model\ResourceModel\StockIndexDumpProcessor;
 use Magento\InventoryExportStockApi\Api\ExportStockIndexDataInterface;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
-use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\InventorySales\Model\ResourceModel\GetWebsiteIdByWebsiteCode;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -31,25 +30,25 @@ class ExportStockIndexData implements ExportStockIndexDataInterface
     private $logger;
 
     /**
-     * @var StockResolverInterface
+     * @var GetWebsiteIdByWebsiteCode
      */
-    private $stockResolver;
+    private $getWebsiteIdByWebsiteCode;
 
     /**
      * ExportStockIndexData constructor
      *
      * @param StockIndexDumpProcessor $stockIndexDumpProcessor
-     * @param StockResolverInterface $stockResolver
      * @param LoggerInterface $logger
+     * @param GetWebsiteIdByWebsiteCode $getWebsiteIdByWebsiteCode
      */
     public function __construct(
         StockIndexDumpProcessor $stockIndexDumpProcessor,
-        StockResolverInterface $stockResolver,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        GetWebsiteIdByWebsiteCode $getWebsiteIdByWebsiteCode
     ) {
         $this->stockIndexDumpProcessor = $stockIndexDumpProcessor;
-        $this->stockResolver = $stockResolver;
         $this->logger = $logger;
+        $this->getWebsiteIdByWebsiteCode = $getWebsiteIdByWebsiteCode;
     }
 
     /**
@@ -63,9 +62,8 @@ class ExportStockIndexData implements ExportStockIndexDataInterface
         string $websiteCode
     ): array {
         try {
-            $stockId = $this->stockResolver
-                ->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
-            $items = $this->stockIndexDumpProcessor->execute($stockId);
+            $websiteId = $this->getWebsiteIdByWebsiteCode->execute($websiteCode);
+            $items = $this->stockIndexDumpProcessor->execute($websiteId);
         } catch (Exception $e) {
             $this->logger->critical($e->getMessage(), $e->getTrace());
             throw new LocalizedException(__('Something went wrong. Export couldn\'t be executed, See log files for error details'));
