@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\SalesSequence\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\Context as DatabaseContext;
@@ -79,6 +80,7 @@ class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Get profile ids by metadata ids
+     *
      * @param int[] $metadataIds
      * @return int[]
      * @throws \Magento\Framework\Exception\LocalizedException

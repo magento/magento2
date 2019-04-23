@@ -31,6 +31,8 @@ class SequenceRemovalObserver implements ObserverInterface
     }
 
     /**
+     * Deletes all sequence linked entities.
+     *
      * @param EventObserver $observer
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
