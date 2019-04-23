@@ -115,7 +115,6 @@ input SetShippingMethodsOnCartInput {
 }
 
 input ShippingMethodInput {
-    cart_address_id: Int!
     carrier_code: String!
     method_code: String!
 }
@@ -188,7 +187,6 @@ type Cart {
 }
 
 type CartAddress {
-    address_id: Int
     firstname: String
     lastname: String
     company: String
