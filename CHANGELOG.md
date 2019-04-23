@@ -4335,7 +4335,7 @@ Tests:
   * Fixed order placing with virtual product using Express Checkout
   * Fixed the error during order placement with Recurring profile payment
   * Fixed wrong redirect after customer registration during multishipping checkout
-  * Fixed inability to crate shipping labels
+  * Fixed inability to create shipping labels
   * Fixed inability to switch language, if the default language is English
   * Fixed an issue with incorrect XML appearing in cache after some actions on the frontend
   * Fixed product export
