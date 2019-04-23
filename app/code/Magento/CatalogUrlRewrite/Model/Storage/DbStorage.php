@@ -97,8 +97,8 @@ class DbStorage extends BaseDbStorage
     {
         if (isset($data[UrlRewrite::REQUEST_PATH])
             && isset($data[UrlRewrite::STORE_ID])
-            && is_string($data[UrlRewrite::REQUEST_PATH]))
-        {
+            && is_string($data[UrlRewrite::REQUEST_PATH])
+        ) {
             return $this->findProductRewriteByRequestPath($data);
         }
 

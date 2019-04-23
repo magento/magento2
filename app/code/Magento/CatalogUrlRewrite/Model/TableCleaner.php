@@ -7,18 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Model;
 
-use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value as ConfigValue;
-use Magento\Framework\Bulk\BulkManagementInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewrite;
 use Magento\Store\Model\ScopeInterface;
@@ -31,26 +27,6 @@ class TableCleaner extends ConfigValue
     const GENERATE_REWRITES_ON_SAVE_PATH = 'catalog/seo/generate_rewrites_on_save';
     const AUTO_GENERATED_ROW_FLAG = 1;
     const URL_REWRITE_GENERATION_OFF_FLAG = 0;
-
-    /**
-     * @var BulkManagementInterface
-     */
-    private $bulkManagement;
-
-    /**
-     * @var OperationInterfaceFactory
-     */
-    private $operationFactory;
-
-    /**
-     * @var IdentityGeneratorInterface
-     */
-    private $identityService;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
 
     /**
      * @var UrlRewrite
@@ -73,10 +49,6 @@ class TableCleaner extends ConfigValue
      * @param Registry $registry
      * @param ScopeConfigInterface $config
      * @param TypeListInterface $cacheTypeList
-     * @param BulkManagementInterface $bulkManagement
-     * @param OperationInterfaceFactory $operartionFactory
-     * @param IdentityGeneratorInterface $identityService
-     * @param SerializerInterface $serializer
      * @param StoreManagerInterface $storeManager
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
@@ -88,20 +60,12 @@ class TableCleaner extends ConfigValue
         Registry $registry,
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
-        BulkManagementInterface $bulkManagement,
-        OperationInterfaceFactory $operartionFactory,
-        IdentityGeneratorInterface $identityService,
-        SerializerInterface $serializer,
         StoreManagerInterface $storeManager,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
-        $this->bulkManagement = $bulkManagement;
-        $this->operationFactory = $operartionFactory;
-        $this->identityService = $identityService;
-        $this->serializer = $serializer;
         $this->urlRewrite = $urlRewrite;
         $this->storeManager = $storeManager;
     }
@@ -135,6 +99,7 @@ class TableCleaner extends ConfigValue
 
     /**
      * Get store ids from website or store
+     *
      * @return array|null
      * @throws LocalizedException
      */

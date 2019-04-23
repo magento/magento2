@@ -89,6 +89,7 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
 
     /**
      * Execute observer functional
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
