@@ -67,7 +67,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $qty = 2;
 
         $query = $this->getQuery($maskedQuoteId, $itemId, $qty);
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         $this->assertArrayHasKey('updateCartItems', $response);
         $this->assertArrayHasKey('cart', $response['updateCartItems']);
@@ -112,7 +112,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $qty = 0;
 
         $query = $this->getQuery($maskedQuoteId, $itemId, $qty);
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         $this->assertArrayHasKey('updateCartItems', $response);
         $this->assertArrayHasKey('cart', $response['updateCartItems']);
@@ -129,7 +129,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
     public function testUpdateItemInNonExistentCart()
     {
         $query = $this->getQuery('non_existent_masked_id', 1, 2);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -145,7 +145,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->expectExceptionMessage("Could not find cart item with id: {$notExistentItemId}.");
 
         $query = $this->getQuery($maskedQuoteId, $notExistentItemId, 2);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -173,7 +173,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->expectExceptionMessage("Could not find cart item with id: {$secondQuoteItemId}.");
 
         $query = $this->getQuery($firstQuoteMaskedId, $secondQuoteItemId, 2);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -198,7 +198,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         );
 
         $query = $this->getQuery($guestQuoteMaskedId, $guestQuoteItemId, 2);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -227,7 +227,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         );
 
         $query = $this->getQuery($anotherCustomerQuoteMaskedId, $anotherCustomerQuoteItemId, 2);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -256,7 +256,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -287,7 +287,7 @@ mutation {
 }
 QUERY;
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
