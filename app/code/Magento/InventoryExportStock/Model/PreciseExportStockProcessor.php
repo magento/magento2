@@ -92,12 +92,13 @@ class PreciseExportStockProcessor
                 $qty = $this->getProductSalableQtyByStock($sku, $stockId);
                 $isSalable = $this->isProductSalable->execute($sku, $stockId);
             } catch (SkuIsNotAssignedToStockException $e) {
-                continue;
+                $qty = 0.0000;
+                $isSalable = false;
             }
 
             $items[] = [
                 'sku' => $sku,
-                'qty' => $qty,
+                'qty' => (float)$qty,
                 'is_salable' => $isSalable
             ];
         }
@@ -134,11 +135,11 @@ class PreciseExportStockProcessor
      */
     private function getProductSalableQtyByStock(string $sku, int $stockId): ?float
     {
+        if (!$this->getStockItemConfiguration->execute($sku, $stockId)->isManageStock()) {
+            return $this->getQtyForNotManageStock->execute();
+        }
         if (!$this->isProductAssignedToStock->execute($sku, $stockId)) {
             throw new SkuIsNotAssignedToStockException(__('The requested sku is not assigned to given stock.'));
-        }
-        if (!$this->getStockItemConfiguration->execute($sku, $stockId)->isManageStock()) {
-            return (float)$this->getQtyForNotManageStock->execute();
         }
         if (!$this->isSourceItemManagementAllowedForSku->execute($sku)) {
             return null;
