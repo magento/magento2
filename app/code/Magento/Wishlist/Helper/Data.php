@@ -13,6 +13,7 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
  * @api
  * @since 100.0.2

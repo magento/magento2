@@ -35,6 +35,7 @@ use Magento\Ui\Component\Form\Element\Multiline;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class DefaultConfigProvider implements ConfigProviderInterface
 {
