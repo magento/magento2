@@ -82,15 +82,15 @@ class AddProductToCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/products.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      */
     public function testAddProductIfQuantityIsDecimal()
     {
-        $sku = 'simple';
+        $sku = 'simple_product';
         $qty = 0.2;
 
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $sku, $qty);
 
         $this->expectExceptionMessage(
@@ -102,10 +102,10 @@ class AddProductToCartTest extends GraphQlAbstract
     /**
      * @param string $maskedQuoteId
      * @param string $sku
-     * @param int $qty
+     * @param float $qty
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, string $sku, int $qty) : string
+    private function getQuery(string $maskedQuoteId, string $sku, float $qty) : string
     {
         return <<<QUERY
 mutation {  

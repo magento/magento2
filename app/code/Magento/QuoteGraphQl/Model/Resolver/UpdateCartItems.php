@@ -115,9 +115,7 @@ class UpdateCartItems implements ResolverInterface
                 if ($cartItem->getHasError()) {
                     $errors = [];
                     foreach ($cartItem->getMessage(false) as $message) {
-                        if (!in_array($message, $errors)) {
-                            $errors[] = $message;
-                        }
+                        $errors[] = $message;
                     }
 
                     if (!empty($errors)) {

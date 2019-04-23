@@ -75,27 +75,6 @@ class UpdateCartItemsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
-    public function testUpdateCartItemDecimalQty()
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
-        $product = $this->productRepository->get('simple');
-
-        $itemId = (int)$quote->getItemByProduct($product)->getId();
-        $qty = 0.5;
-
-        $this->expectExceptionMessage(
-            "Could not update the product with SKU " . $product->getSku() . ": The fewest you may purchase is 1."
-        );
-
-        $query = $this->getQuery($maskedQuoteId, $itemId, $qty);
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     */
     public function testRemoveCartItemIfQuantityIsZero()
     {
         $quote = $this->quoteFactory->create();
