@@ -165,9 +165,6 @@ class SessionManager implements SessionManagerInterface
                 sprintf('Invalid method %s::%s(%s)', get_class($this), $method, print_r($args, 1))
             );
         }
-        if (!($this->storage instanceof StorageInterface)) {
-            throw new \RuntimeException('Not storage');
-        }
         $return = call_user_func_array([$this->storage, $method], $args);
         return $return === $this->storage ? $this : $return;
     }
