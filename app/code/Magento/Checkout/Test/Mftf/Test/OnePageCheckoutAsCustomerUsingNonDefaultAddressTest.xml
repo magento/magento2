@@ -18,7 +18,6 @@
             <testCaseId value="MC-14739"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>
-            <group value="banana"/>
         </annotations>
         <before>
             <!-- Create Simple Product -->
@@ -70,7 +69,7 @@
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution"/>
 
         <!-- Change the address -->
-        <waitForLoadingMaskToDisappear stepKey="waitForLaodingMaskToDisappear"/>
+        <click selector="{{CheckoutPaymentSection.editAddress}}" stepKey="editAddress"/>
         <waitForElementVisible selector="{{CheckoutShippingSection.addressDropdown}}" stepKey="waitForDropDownToBeVisible"/>
         <selectOption selector="{{CheckoutShippingSection.addressDropdown}}" userInput="{{UK_Not_Default_Address.street[0]}}" stepKey="addAddress"/>
 
