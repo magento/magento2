@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryExportStock\Model\ResourceModel;
 
-use Exception;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
@@ -100,7 +99,7 @@ class StockIndexDumpProcessor
                 $this->getStockItemSelect($websiteId),
                 $this->getStockIndexSelect($websiteId)
             ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->critical($e->getMessage(), $e->getTrace());
             throw new LocalizedException(__('Something went wrong. Export couldn\'t be executed, See log files for error details'));
         }

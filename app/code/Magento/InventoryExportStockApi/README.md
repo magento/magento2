@@ -1,6 +1,6 @@
 # InventoryExportStockApi module
 
-The `InventoryExportStockApi` module provides stock export functionality api.
+The `InventoryExportStockApi` module provides provides aggregated stock export functionality api.
 
 This module is part of the new inventory infrastructure. The
 [Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html)

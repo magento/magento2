@@ -19,7 +19,5 @@ interface ExportStockIndexDataInterface
      * @param string $websiteCode
      * @return array
      */
-    public function execute(
-        string $websiteCode
-    ): array;
+    public function execute(string $websiteCode): array;
 }

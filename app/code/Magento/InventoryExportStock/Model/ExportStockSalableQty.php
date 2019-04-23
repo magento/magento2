@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryExportStock\Model;
 
-use Exception;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterface;
 use Magento\InventoryExportStockApi\Api\Data\ExportStockSalableQtySearchResultInterfaceFactory;
 use Magento\InventoryExportStockApi\Api\ExportStockSalableQtyInterface;
@@ -36,6 +36,7 @@ class ExportStockSalableQty implements ExportStockSalableQtyInterface
      * @var PreciseExportStockProcessor
      */
     private $preciseExportStockProcessor;
+
     /**
      * @var StockResolverInterface
      */
@@ -64,7 +65,7 @@ class ExportStockSalableQty implements ExportStockSalableQtyInterface
     /**
      * @inheritDoc
      *
-     * @throws Exception
+     * @throws LocalizedException
      */
     public function execute(
         SearchCriteriaInterface $searchCriteria,
