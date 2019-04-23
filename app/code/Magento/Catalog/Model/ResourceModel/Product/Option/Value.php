@@ -139,8 +139,7 @@ class Value extends AbstractDb
             $optionTypeId = $this->getConnection()->fetchOne($select);
 
             if ($optionTypeId) {
-                if ($object->getStoreId() == '0' //|| $this->dataHelper->isPriceGlobal()
-                ) {
+                if ($object->getStoreId() == '0' || $this->dataHelper->isPriceGlobal()) {
                     $bind = ['price' => $price, 'price_type' => $priceType];
                     $where = [
                         'option_type_id = ?' => $optionTypeId,
