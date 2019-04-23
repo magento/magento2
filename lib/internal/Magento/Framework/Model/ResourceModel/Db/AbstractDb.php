@@ -162,7 +162,7 @@ abstract class AbstractDb extends AbstractResource
      */
     public function __sleep()
     {
-        throw new \RuntimeException('tst');//trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         $properties = array_keys(get_object_vars($this));
         $properties = array_diff($properties, ['_resources', '_connections']);
@@ -179,7 +179,7 @@ abstract class AbstractDb extends AbstractResource
      */
     public function __wakeup()
     {
-        throw new \RuntimeException('tst');//trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         $this->_resources = \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\App\ResourceConnection::class);

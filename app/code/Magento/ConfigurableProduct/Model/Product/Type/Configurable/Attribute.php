@@ -271,7 +271,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function __sleep()
     {
-        throw new \RuntimeException('tst');//trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         return array_diff(
             parent::__sleep(),
@@ -287,7 +287,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function __wakeup()
     {
-        throw new \RuntimeException('tst');//trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();

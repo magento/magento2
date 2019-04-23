@@ -1410,7 +1410,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function __sleep()
     {
-        throw new \RuntimeException('tst');//trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         return array_diff(
             parent::__sleep(),
@@ -1440,7 +1440,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function __wakeup()
     {
-        throw new \RuntimeException('tst');//trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();

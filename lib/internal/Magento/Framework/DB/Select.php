@@ -519,7 +519,7 @@ class Select extends \Zend_Db_Select
      */
     public function __sleep()
     {
-        throw new \RuntimeException('tst');//trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         $properties = array_keys(get_object_vars($this));
         $properties = array_diff(
@@ -543,7 +543,7 @@ class Select extends \Zend_Db_Select
      */
     public function __wakeup()
     {
-        throw new \RuntimeException('tst');//trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_adapter = $objectManager->get(ResourceConnection::class)->getConnection();

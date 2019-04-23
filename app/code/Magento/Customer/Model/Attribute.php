@@ -208,7 +208,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      */
     public function __sleep()
     {
-        throw new \RuntimeException('tst');//trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         $this->unsetData('entity_type');
         return array_diff(
@@ -225,7 +225,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      */
     public function __wakeup()
     {
-        throw new \RuntimeException('tst');//trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
