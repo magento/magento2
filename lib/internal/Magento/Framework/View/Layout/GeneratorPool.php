@@ -35,9 +35,9 @@ class GeneratorPool
 
     /**
      * @param ScheduledStructure\Helper $helper
-     * @param ConditionFactory $conditionFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param array $generators
+     * @param ConditionFactory          $conditionFactory
+     * @param \Psr\Log\LoggerInterface  $logger
+     * @param array                     $generators
      */
     public function __construct(
         ScheduledStructure\Helper $helper,
@@ -69,8 +69,9 @@ class GeneratorPool
     /**
      * Traverse through all generators and generate all scheduled elements
      *
-     * @param Reader\Context $readerContext
+     * @param Reader\Context    $readerContext
      * @param Generator\Context $generatorContext
+     *
      * @return $this
      */
     public function process(Reader\Context $readerContext, Generator\Context $generatorContext)
@@ -86,11 +87,17 @@ class GeneratorPool
      * Add generators to pool
      *
      * @param GeneratorInterface[] $generators
+     *
      * @return void
      */
     protected function addGenerators(array $generators)
     {
         foreach ($generators as $generator) {
+            if (!$generator instanceof GeneratorInterface) {
+                throw new \InvalidArgumentException(
+                    sprintf('Generator class must be an instance of %s', GeneratorInterface::class)
+                );
+            }
             $this->generators[$generator->getType()] = $generator;
         }
     }
