@@ -196,7 +196,8 @@ class Timezone implements TimezoneInterface
     public function scopeDate($scope = null, $date = null, $includeTime = false)
     {
         $timezone = $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType, $scope);
-        $date = new \DateTime(is_numeric($date) ? '@' . $date : $date, new \DateTimeZone($timezone));
+        $date = new \DateTime(is_numeric($date) ? '@' . $date : $date);
+        $date->setTimezone(new \DateTimeZone($timezone));
         if (!$includeTime) {
             $date->setTime(0, 0, 0);
         }
