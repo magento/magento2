@@ -12,9 +12,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Add simple product to cart testcases
+ * Add virtual product to cart testcases
  */
-class AddSimpleProductToCartTest extends GraphQlAbstract
+class AddVirtualProductToCartTest extends GraphQlAbstract
 {
     /**
      * @var GetMaskedQuoteIdByReservedOrderId
@@ -31,32 +31,32 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      */
-    public function testAddSimpleProductToCart()
+    public function testAddVirtualProductToCart()
     {
-        $sku = 'simple_product';
+        $sku = 'virtual_product';
         $qty = 2;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = $this->getQuery($maskedQuoteId, $sku, $qty);
         $response = $this->graphQlMutation($query);
-        self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
 
-        self::assertEquals($qty, $response['addSimpleProductsToCart']['cart']['items'][0]['qty']);
-        self::assertEquals($sku, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
+        self::assertArrayHasKey('cart', $response['addVirtualProductsToCart']);
+        self::assertEquals($qty, $response['addVirtualProductsToCart']['cart']['items'][0]['qty']);
+        self::assertEquals($sku, $response['addVirtualProductsToCart']['cart']['items'][0]['product']['sku']);
     }
 
     /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
      *
      * @expectedException \Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
-    public function testAddProductToNonExistentCart()
+    public function testAddVirtualToNonExistentCart()
     {
-        $sku = 'simple_product';
+        $sku = 'virtual_product';
         $qty = 1;
         $maskedQuoteId = 'non_existent_masked_id';
 
@@ -68,11 +68,11 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a product with SKU "simple_product"
+     * @expectedExceptionMessage Could not find a product with SKU "virtual_product"
      */
     public function testNonExistentProductToCart()
     {
-        $sku = 'simple_product';
+        $sku = 'virtual_product';
         $qty = 1;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -81,13 +81,14 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * _security
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      */
-    public function testAddSimpleProductToCustomerCart()
+    public function testAddVirtualProductToCustomerCart()
     {
-        $sku = 'simple_product';
+        $sku = 'virtual_product';
         $qty = 2;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $sku, $qty);
@@ -109,14 +110,14 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     {
         return <<<QUERY
 mutation {  
-  addSimpleProductsToCart(
+  addVirtualProductsToCart(
     input: {
       cart_id: "{$maskedQuoteId}"
       cartItems: [
         {
           data: {
-            qty: $qty
-            sku: "$sku"
+            qty: {$qty}
+            sku: "{$sku}"
           }
         }
       ]
