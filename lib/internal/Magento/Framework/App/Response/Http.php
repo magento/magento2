@@ -189,7 +189,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        //trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         return ['content', 'isRedirect', 'statusCode', 'context', 'headers'];
     }
@@ -205,7 +205,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        //trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         $objectManager = ObjectManager::getInstance();
         $this->cookieManager = $objectManager->create(\Magento\Framework\Stdlib\CookieManagerInterface::class);
