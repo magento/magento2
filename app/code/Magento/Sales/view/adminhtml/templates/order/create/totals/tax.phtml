@@ -33,7 +33,6 @@ $taxAmount = $block->getTotal()->getValue();
                 <?php $percent = $info['percent']; ?>
                 <?php $amount = $info['amount']; ?>
                 <?php $rates = $info['rates']; ?>
-                <?php $isFirst = 1; ?>
 
                 <?php foreach ($rates as $rate): ?>
                 <tr class="summary-details-<?= /* @escapeNotVerified */ $taxIter ?> summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
@@ -44,13 +43,10 @@ $taxAmount = $block->getTotal()->getValue();
                         <?php endif; ?>
                         <br />
                     </td>
-                    <?php if ($isFirst): ?>
-                        <td style="<?= /* @escapeNotVerified */ $block->getTotal()->getStyle() ?>" class="admin__total-amount" rowspan="<?= count($rates) ?>">
-                            <?= /* @escapeNotVerified */ $block->formatPrice($amount) ?>
-                        </td>
-                    <?php endif; ?>
+                    <td style="<?= /* @escapeNotVerified */ $block->getTotal()->getStyle() ?>" class="admin__total-amount">
+                        <?= /* @escapeNotVerified */ $block->formatPrice(($amount*(float)$rate['percent'])/$percent) ?>
+                    </td>
                 </tr>
-                <?php $isFirst = 0; ?>
                 <?php $isTop = 0; ?>
                 <?php endforeach; ?>
         <?php endforeach; ?>
