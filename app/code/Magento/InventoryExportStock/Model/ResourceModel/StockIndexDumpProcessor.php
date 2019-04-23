@@ -87,17 +87,18 @@ class StockIndexDumpProcessor
      * Provides sku and qty of products dumping them from stock index table
      *
      * @param int $websiteId
+     * @param int $stockId
      * @return array
      * @throws LocalizedException
      */
-    public function execute(int $websiteId): array
+    public function execute(int $websiteId, int $stockId): array
     {
         $this->connection = $this->resourceConnection->getConnection();
         $select = $this->connection->select();
         try {
             $select->union([
                 $this->getStockItemSelect($websiteId),
-                $this->getStockIndexSelect($websiteId)
+                $this->getStockIndexSelect($websiteId, $stockId)
             ]);
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage(), $e->getTrace());
@@ -111,12 +112,13 @@ class StockIndexDumpProcessor
      * Provides stock select
      *
      * @param int $websiteId
+     * @param int $stockId
      * @return Select
      */
-    private function getStockIndexSelect(int $websiteId): Select
+    private function getStockIndexSelect(int $websiteId, int $stockId): Select
     {
         $stockIndexTableName = $this->resourceConnection
-            ->getTableName($this->stockIndexTableNameResolver->execute($websiteId));
+            ->getTableName($this->stockIndexTableNameResolver->execute($stockId));
 
         $legacyStockItemTable = $this->resourceConnection
             ->getTableName('cataloginventory_stock_item');

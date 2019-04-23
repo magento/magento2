@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Model\IsProductAssignedToStockInterface;
-use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForSkuInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
@@ -33,7 +32,7 @@ class PreciseExportStockProcessor
     private $getProductSalableQty;
 
     /**
-     * @var GetStockItemConfigurationInterface
+     * @var GetStockItemConfiguration
      */
     private $getStockItemConfiguration;
 
@@ -41,37 +40,38 @@ class PreciseExportStockProcessor
      * @var GetQtyForNotManageStock
      */
     private $getQtyForNotManageStock;
-    /**
-     * @var IsProductAssignedToStockInterface
-     */
-    private $isProductAssignedToStock;
+
     /**
      * @var IsProductSalableInterface
      */
     private $isProductSalable;
+    /**
+     * @var IsProductAssignedToStockInterface
+     */
+    private $isProductAssignedToStock;
 
     /**
      * @param IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku
      * @param GetProductSalableQtyInterface $getProductSalableQty
-     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      * @param GetQtyForNotManageStock $getQtyForNotManageStock
-     * @param IsProductAssignedToStockInterface $isProductAssignedToStock
      * @param IsProductSalableInterface $isProductSalable
+     * @param GetStockItemConfiguration $getStockItemConfiguration
+     * @param IsProductAssignedToStockInterface $isProductAssignedToStock
      */
     public function __construct(
         IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku,
         GetProductSalableQtyInterface $getProductSalableQty,
-        GetStockItemConfigurationInterface $getStockItemConfiguration,
         GetQtyForNotManageStock $getQtyForNotManageStock,
-        IsProductAssignedToStockInterface $isProductAssignedToStock,
-        IsProductSalableInterface $isProductSalable
+        IsProductSalableInterface $isProductSalable,
+        GetStockItemConfiguration $getStockItemConfiguration,
+        IsProductAssignedToStockInterface $isProductAssignedToStock
     ) {
         $this->isSourceItemManagementAllowedForSku = $isSourceItemManagementAllowedForSku;
         $this->getProductSalableQty = $getProductSalableQty;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->getQtyForNotManageStock = $getQtyForNotManageStock;
-        $this->isProductAssignedToStock = $isProductAssignedToStock;
         $this->isProductSalable = $isProductSalable;
+        $this->isProductAssignedToStock = $isProductAssignedToStock;
     }
 
     /**
@@ -89,18 +89,11 @@ class PreciseExportStockProcessor
         $items = [];
         foreach ($skus as $sku) {
             try {
-                $qty = $this->getProductSalableQtyByStock($sku, $stockId);
-                $isSalable = $this->isProductSalable->execute($sku, $stockId);
+                $items[] = $this->getItem($sku, $stockId);
             } catch (SkuIsNotAssignedToStockException $e) {
-                $qty = 0.0000;
-                $isSalable = false;
+                continue;
             }
 
-            $items[] = [
-                'sku' => $sku,
-                'qty' => (float)$qty,
-                'is_salable' => $isSalable
-            ];
         }
 
         return $items;
@@ -124,27 +117,38 @@ class PreciseExportStockProcessor
     }
 
     /**
-     * Provides qty by stock and sku
+     * Provides is product salable, and is salable by sku
      *
      * @param string $sku
      * @param int $stockId
-     * @return float|null
-     * @throws InputException
-     * @throws LocalizedException
+     * @return array
      * @throws SkuIsNotAssignedToStockException
+     * @throws LocalizedException
      */
-    private function getProductSalableQtyByStock(string $sku, int $stockId): ?float
+    private function getItem(string $sku, int $stockId): array
     {
-        if (!$this->getStockItemConfiguration->execute($sku, $stockId)->isManageStock()) {
-            return $this->getQtyForNotManageStock->execute();
+        if (!$this->getStockItemConfiguration->execute($sku)->isManageStock()) {
+            return [
+                'sku' => $sku,
+                'qty' => $this->getQtyForNotManageStock->execute(),
+                'is_salable' => true
+            ];
         }
         if (!$this->isProductAssignedToStock->execute($sku, $stockId)) {
             throw new SkuIsNotAssignedToStockException(__('The requested sku is not assigned to given stock.'));
         }
         if (!$this->isSourceItemManagementAllowedForSku->execute($sku)) {
-            return null;
+            return [
+                'sku' => $sku,
+                'qty' => null,
+                'is_salable' => $this->isProductSalable->execute($sku, $stockId)
+            ];
         }
 
-        return $this->getProductSalableQty->execute($sku, $stockId);
+        return [
+            'sku' => $sku,
+            'qty' => $this->getProductSalableQty->execute($sku, $stockId),
+            'is_salable' => $this->isProductSalable->execute($sku, $stockId)
+        ];
     }
 }
