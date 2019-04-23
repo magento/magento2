@@ -269,4 +269,12 @@
         <waitForElementVisible selector="{{AdminProductFormSection.attributeSetFilterResultByName(attributeSet.attribute_set_name)}}" stepKey="waitForNewAttributeSetIsShown"/>
         <click selector="{{AdminProductFormSection.attributeSetFilterResultByName(attributeSet.attribute_set_name)}}" stepKey="selectAttributeSet"/>
     </actionGroup>
+
+    <!--Navigate to created product page directly via ID-->
+    <actionGroup name="goToProductPageViaID">
+        <arguments>
+            <argument name="productId" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="goToProduct"/>
+    </actionGroup>
 </actionGroups>
