@@ -10,7 +10,6 @@ namespace Magento\QuoteGraphQl\Model\Resolver\ShippingAddress;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
@@ -66,18 +65,12 @@ class AvailableShippingMethods implements ResolverInterface
         $shippingRates = $address->getGroupedAllShippingRates();
         foreach ($shippingRates as $carrierRates) {
             foreach ($carrierRates as $rate) {
-                $method = $this->dataObjectConverter->toFlatArray(
+                $methods[] = $this->dataObjectConverter->toFlatArray(
                     $this->shippingMethodConverter->modelToDataObject($rate, $cart->getQuoteCurrencyCode()),
                     [],
                     ShippingMethodInterface::class
                 );
-                if ($method['available'] && $method['error_message'] === "") {
-                    $methods[] = $method;
-                }
             }
-        }
-        if (count($methods) === 0) {
-            throw new GraphQlNoSuchEntityException(__(' This shipping method is not available. To use this shipping method, please contact us.'));
         }
         return $methods;
     }

@@ -231,13 +231,14 @@ type SelectedShippingMethod {
 type AvailableShippingMethod {
     carrier_code: String!
     carrier_title: String!
-    method_code: String!
-    method_title: String!
+    method_code: String @doc(description: "Could be null if method is not available")
+    method_title: String @doc(description: "Could be null if method is not available")
     error_message: String
     amount: Float!
-    base_amount: Float!
+    base_amount: Float @doc(description: "Could be null if method is not available")
     price_excl_tax: Float!
     price_incl_tax: Float!
+    available: Boolean!
 }
 
 type AvailablePaymentMethod {
