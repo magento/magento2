@@ -28,7 +28,7 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
@@ -76,7 +76,7 @@ mutation {
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
@@ -86,7 +86,7 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
@@ -149,7 +149,7 @@ mutation {
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
@@ -203,12 +203,12 @@ QUERY;
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
      * _security
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
@@ -237,7 +237,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -276,11 +276,11 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
@@ -310,7 +310,7 @@ mutation {
 }
 QUERY;
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -329,6 +329,49 @@ QUERY;
                 'Required parameter "cart_id" is missing'
             ]
         ];
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetNewBillingAddressRedundantStreetLine()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+        address: {
+          firstname: "test firstname"
+          lastname: "test lastname"
+          company: "test company"
+          street: ["test street 1", "test street 2", "test street 3"]
+          city: "test city"
+          region: "test region"
+          postcode: "887766"
+          country_code: "US"
+          telephone: "88776655"
+          save_in_address_book: false
+        }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+      }
+    }
+  }
+}
+QUERY;
+
+        self::expectExceptionMessage('"Street Address" cannot contain more than 2 lines.');
+        $this->graphQlMutation($query);
     }
 
     /**
