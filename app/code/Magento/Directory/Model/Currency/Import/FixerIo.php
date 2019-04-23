@@ -5,6 +5,7 @@
  */
 namespace Magento\Directory\Model\Currency\Import;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -87,9 +88,9 @@ class FixerIo extends AbstractImport
     {
         $accessKey = $this->scopeConfig->getValue('currency/fixerio/api_key', ScopeInterface::SCOPE_STORE);
         if (empty($accessKey)) {
-            $this->_messages[] = __('No API Key was specified or an invalid API Key was specified.');
-            $data[$currencyFrom] = $this->makeEmptyResponse($currenciesTo);
-            return $data;
+            throw new LocalizedException(
+                __('No API Key was specified or an invalid API Key was specified.')
+            );
         }
 
         $currenciesStr = implode(',', $currenciesTo);

@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Directory\Model\Currency\Import;
 
+use Magento\Framework\Exception\LocalizedException;
+
 class CurrencyConverterApi extends AbstractImport
 {
     /**
      * @var string
      */
-    const CURRENCY_CONVERTER_URL = 'http://free.currencyconverterapi.com/api/v3/convert?q={{CURRENCY_FROM}}_{{CURRENCY_TO}}&compact=ultra'; //@codingStandardsIgnoreLine
+    const CURRENCY_CONVERTER_URL = 'http://free.currencyconverterapi.com/api/v6/convert?q={{CURRENCY_FROM}}_{{CURRENCY_TO}}&compact=ultra&apiKey={{API_KEY}}'; //@codingStandardsIgnoreLine
 
     /**
      * Http Client Factory
@@ -74,11 +76,22 @@ class CurrencyConverterApi extends AbstractImport
      */
     private function convertBatch($data, $currencyFrom, $currenciesTo)
     {
+        $apiKey = $this->scopeConfig->getValue(
+            'currency/currencyconverterapi/api_key',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        if (empty($apiKey)) {
+            throw new LocalizedException(
+                __('No API Key was specified or an invalid API Key was specified.')
+            );
+        }
+
         foreach ($currenciesTo as $to) {
             set_time_limit(0);
             try {
                 $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
                 $url = str_replace('{{CURRENCY_TO}}', $to, $url);
+                $url = str_replace('{{API_KEY}}', $apiKey, $url);
                 $response = $this->getServiceResponse($url);
                 if ($currencyFrom == $to) {
                     $data[$currencyFrom][$to] = $this->_numberFormat(1);
