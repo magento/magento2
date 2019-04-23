@@ -23,4 +23,13 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\InventorySourceSelectionApi\Model\Algorithms\Result\GetDefaultSortedSourcesResult">
+        <arguments>
+            <!-- Argument searchCriteriaBuilder is deprecated and it should not be used anymore -->
+            <argument name="searchCriteriaBuilder" xsi:type="null" />
+            <!-- Argument sourceItemRepository is deprecated and it should not be used anymore -->
+            <argument name="sourceItemRepository" xsi:type="null" />
+        </arguments>
+    </type>
 </config>
