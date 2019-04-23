@@ -14,7 +14,7 @@
             <stories value="OnePageCheckout within Offline Payment Methods"/>
             <title value="OnePageCheckout as customer using default address test"/>
             <description value="Checkout as customer using default address"/>
-            <severity value="CRITICAl"/>
+            <severity value="CRITICAL"/>
             <testCaseId value="MC-14741"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>
@@ -62,7 +62,8 @@
         <waitForElementVisible selector="{{CheckoutShippingSection.password}}" stepKey="waitForElementVisible"/>
         <fillField selector="{{CheckoutShippingSection.password}}" userInput="$$createCustomer.password$$" stepKey="fillPasswordField"/>
         <click selector="{{CheckoutShippingSection.loginButton}}" stepKey="clickLoginBtn"/>
-
+        <waitForPageLoad stepKey="waitForShippingPageLoad"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.shipHereButton(UK_Not_Default_Address.street[0])}}" stepKey="waitForShipHereVisible"/>
         <!-- Change address -->
         <click selector="{{CheckoutShippingSection.shipHereButton(UK_Not_Default_Address.street[0])}}" stepKey="clickShipHere"/>
 
