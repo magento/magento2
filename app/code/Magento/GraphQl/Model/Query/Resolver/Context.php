@@ -138,10 +138,10 @@ class Context extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     public function getStoreId(): int
     {
-        if (!$this->getData(self::STORE_ID)) {
-            $this->setStoreId($this->storeManager->getStore()->getId());
+        if (null !== $this->getData(self::STORE_ID)) {
+            $this->setStoreId((int)$this->storeManager->getStore()->getId());
         }
-        return (int) $this->getData(self::STORE_ID);
+        return $this->getData(self::STORE_ID);
     }
 
     /**
