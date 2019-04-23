@@ -153,4 +153,22 @@ class SelectVersion extends Form
         }
         return $this->otherComponentGrid;
     }
+
+    /**
+     * Choose sample-data versions in the component grid.
+     *
+     * @param string $sampleDataVersion
+     * @throws \Exception
+     */
+    public function chooseSampleDataModulesVersions(string $sampleDataVersion)
+    {
+        $this->_rootElement->find("[for=yesUpdateComponents]")->click();
+        $this->waitForElementNotVisible("[ng-show=\"!componentsProcessed\"");
+
+        if (!$this->isComponentsEmpty()) {
+            $otherComponentGrid = $this->getOtherComponentsGrid();
+            $otherComponentGrid->setItemsPerPage(200);
+            $otherComponentGrid->chooseSampleDataVersions($sampleDataVersion);
+        }
+    }
 }
