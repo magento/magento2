@@ -62,9 +62,19 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @inheritdoc
+     */
+    public function setUp()
+    {
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
+        $this->storage = $this->objectManager->create(\Magento\Cms\Model\Wysiwyg\Images\Storage::class);
+    }
+
+    /**
      * @return void
      */
-    public function testDeleteDirectory(): void
+    public function testDeleteDirectory()
     {
         $path = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath();
         $dir = 'testDeleteDirectory';
@@ -80,20 +90,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage We cannot delete directory /downloadable.
      */
-    public function testDeleteDirectoryWithExcludedDirPath(): void
+    public function testDeleteDirectoryWithExcludedDirPath()
     {
         $dir = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath() . 'downloadable';
         $this->storage->deleteDirectory($dir);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setUp()
-    {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
-        $this->storage = $this->objectManager->create(\Magento\Cms\Model\Wysiwyg\Images\Storage::class);
     }
 
     /**
@@ -152,7 +152,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage We can't upload the file to current folder right now. Please try another folder.
      */
-    public function testUploadFileWithExcludedDirPath(): void
+    public function testUploadFileWithExcludedDirPath()
     {
         $fileName = 'magento_small_image.jpg';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
