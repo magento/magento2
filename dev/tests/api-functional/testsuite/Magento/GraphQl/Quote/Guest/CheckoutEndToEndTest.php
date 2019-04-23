@@ -266,7 +266,6 @@ mutation {
   ) {
     cart {
       shipping_addresses {
-        address_id
         available_shipping_methods {
           carrier_code
           method_code
@@ -284,8 +283,6 @@ QUERY;
         self::assertCount(1, $response['setShippingAddressesOnCart']['cart']['shipping_addresses']);
 
         $shippingAddress = current($response['setShippingAddressesOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('address_id', $shippingAddress);
-        self::assertNotEmpty($shippingAddress['address_id']);
         self::assertArrayHasKey('available_shipping_methods', $shippingAddress);
         self::assertCount(1, $shippingAddress['available_shipping_methods']);
 
