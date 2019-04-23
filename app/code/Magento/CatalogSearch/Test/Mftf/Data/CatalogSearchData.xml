@@ -8,13 +8,13 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="SetMinQueryLengthToDefault" type="catalog_search_config_def">
+    <entity name="SetMinQueryLengthToDefault" type="catalog_search_config">
         <requiredEntity type="length_config">DefaultMinQueryLength</requiredEntity>
     </entity>
-    <entity name="SetMinQueryLength" type="catalog_search_config_def">
+    <entity name="SetMinQueryLength" type="catalog_search_config">
         <requiredEntity type="length_config">SetMinQueryLengthToOne</requiredEntity>
     </entity>
-    <entity name="SetMinQueryLength2" type="catalog_search_config_def">
+    <entity name="SetMinQueryLength2" type="catalog_search_config">
         <requiredEntity type="length_config">SetMinQueryLengthToTwo</requiredEntity>
     </entity>
 
@@ -31,6 +31,6 @@
     </entity>
 
     <entity name="MinMaxQueryLength" type="constant">
-        <data key="Hint">This value must be compatible with the corresponding setting in the configured search engine</data>
+        <data key="hint">This value must be compatible with the corresponding setting in the configured search engine</data>
     </entity>
 </entities>

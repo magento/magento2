@@ -23,6 +23,6 @@
         <element name="categoryPageProductImage" type="text" selector=".products-grid img[src*='/{{var1}}']" parameterized="true"/>
         <element name="categoryPageProductName" type="text" selector=".products.list.items.product-items li:nth-of-type({{line}}) .product-item-link" timeout="30" parameterized="true"/>
         <element name="categoryEmptyMessage" type="text" selector=".column.main .message.info.empty"/>
-        <element name="productName" type="text" selector=".product-item-name"/>
+        <element name="productNameInGrid" type="text" selector="//div[contains(@class,'products-grid')]//strong[contains(@class,'product-item-name')]//a[normalize-space(text())='{{var}}']" parameterized="true"/>
     </section>
 </sections>

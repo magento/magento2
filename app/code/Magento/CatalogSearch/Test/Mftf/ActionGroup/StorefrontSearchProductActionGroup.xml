@@ -8,14 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontSearchProductActionGroup">
+    <actionGroup name="StorefrontSearchProductActionGroup" extends="StorefrontQuickSearchActionGroup">
         <arguments>
             <argument name="product"/>
-            <argument name="textForSearch" type="string"/>
         </arguments>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
-        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="{{textForSearch}}" stepKey="fillSearchField"/>
-        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{product.name}}" stepKey="seeProductNameInCatalogSearchPage"/>
+        <see selector="{{StorefrontCategoryMainSection.productNameInGrid(product.name)}}" userInput="{{product.name}}" after="clickSearchButton" stepKey="seeProductNameInCatalogSearchPage"/>
     </actionGroup>
 </actionGroups>
