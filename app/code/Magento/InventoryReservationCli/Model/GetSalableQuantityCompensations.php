@@ -15,7 +15,7 @@ use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 /**
  * Returns compensation reservations for given inconsistencies
  */
-class GetSaleableQuantityCompensations
+class GetSalableQuantityCompensations
 {
     /**
      * @var ReservationBuilderInterface
@@ -50,7 +50,7 @@ class GetSaleableQuantityCompensations
     /**
      * Returns compensation reservations for given inconsistencies
      *
-     * @param SaleableQuantityInconsistency[] $inconsistencies
+     * @param SalableQuantityInconsistency[] $inconsistencies
      * @return ReservationInterface[]
      * @throws \Magento\Framework\Validation\ValidationException
      */

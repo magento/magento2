@@ -7,20 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservationCli\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationException;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\AddCompletedOrdersToForUnresolvedReservations;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\AddExistingReservations;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\AddExpectedReservations;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\Collector;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\CollectorFactory;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterExistingOrders;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterManagedStockProducts;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterUnresolvedReservations;
+use Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\AddCompletedOrdersToForUnresolvedReservations;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\AddExistingReservations;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\AddExpectedReservations;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\Collector;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\CollectorFactory;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterExistingOrders;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterManagedStockProducts;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterUnresolvedReservations;
 
 /**
  * Filter orders for missing initial reservation
  */
-class GetSaleableQuantityInconsistencies
+class GetSalableQuantityInconsistencies
 {
     /**
      * @var CollectorFactory
@@ -86,8 +88,10 @@ class GetSaleableQuantityInconsistencies
 
     /**
      * Filter orders for missing initial reservation
-     * @return SaleableQuantityInconsistency[]
+     * @return SalableQuantityInconsistency[]
      * @throws ValidationException
+     * @throws LocalizedException
+     * @throws SkuIsNotAssignedToStockException
      */
     public function execute(): array
     {

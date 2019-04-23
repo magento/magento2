@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
+namespace Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistencyFactory;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistencyFactory;
 use Magento\InventoryReservationsApi\Model\ReservationInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -20,14 +20,14 @@ use Magento\Sales\Api\Data\OrderInterface;
 class Collector
 {
     /**
-     * @var SaleableQuantityInconsistency[]
+     * @var SalableQuantityInconsistency[]
      */
     private $items = [];
 
     /**
-     * @var \Magento\InventoryReservationCli\Model\SaleableQuantityInconsistencyFactory
+     * @var \Magento\InventoryReservationCli\Model\SalableQuantityInconsistencyFactory
      */
-    private $saleableQuantityInconsistencyFactory;
+    private $salableQuantityInconsistencyFactory;
 
     /**
      * @var SerializerInterface
@@ -40,16 +40,16 @@ class Collector
     private $stockByWebsiteIdResolver;
 
     /**
-     * @param SaleableQuantityInconsistencyFactory $saleableQuantityInconsistencyFactory
+     * @param SalableQuantityInconsistencyFactory $salableQuantityInconsistencyFactory
      * @param SerializerInterface $serializer
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      */
     public function __construct(
-        SaleableQuantityInconsistencyFactory $saleableQuantityInconsistencyFactory,
+        SalableQuantityInconsistencyFactory $salableQuantityInconsistencyFactory,
         SerializerInterface $serializer,
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
     ) {
-        $this->saleableQuantityInconsistencyFactory = $saleableQuantityInconsistencyFactory;
+        $this->salableQuantityInconsistencyFactory = $salableQuantityInconsistencyFactory;
         $this->serializer = $serializer;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
     }
@@ -65,7 +65,7 @@ class Collector
         $key = $objectId . '-' . $stockId;
 
         if (!isset($this->items[$key])) {
-            $this->items[$key] = $this->saleableQuantityInconsistencyFactory->create();
+            $this->items[$key] = $this->salableQuantityInconsistencyFactory->create();
         }
 
         $this->items[$key]->setObjectId((int)$objectId);
@@ -84,14 +84,14 @@ class Collector
         $key = $objectId . '-' . $stockId;
 
         if (!isset($this->items[$key])) {
-            $this->items[$key] = $this->saleableQuantityInconsistencyFactory->create();
+            $this->items[$key] = $this->salableQuantityInconsistencyFactory->create();
         }
 
         $this->items[$key]->setOrder($order);
     }
 
     /**
-     * @return SaleableQuantityInconsistency[]
+     * @return SalableQuantityInconsistency[]
      */
     public function getItems(): array
     {
@@ -99,7 +99,7 @@ class Collector
     }
 
     /**
-     * @param SaleableQuantityInconsistency[] $items
+     * @param SalableQuantityInconsistency[] $items
      */
     public function setItems(array $items): void
     {

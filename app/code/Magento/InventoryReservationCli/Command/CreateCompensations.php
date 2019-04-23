@@ -10,14 +10,15 @@ namespace Magento\InventoryReservationCli\Command;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Validation\ValidationException;
-use Magento\InventoryReservationCli\Model\GetSaleableQuantityCompensations\Proxy as GetSaleableQuantityCompensations;
-use Magento\InventoryReservationCli\Model\GetSaleableQuantityInconsistencies\Proxy as GetSaleableQuantityInconsistencies;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterCompleteOrders\Proxy as FilterCompleteOrders;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterIncompleteOrders\Proxy as FilterIncompleteOrders;
+use Magento\InventoryReservationCli\Model\GetSalableQuantityCompensations\Proxy as GetSalableQuantityCompensations;
+use Magento\InventoryReservationCli\Model\GetSalableQuantityInconsistencies\Proxy as GetSalableQuantityInconsistencies;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterCompleteOrders\Proxy as FilterCompleteOrders;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterIncompleteOrders\Proxy as FilterIncompleteOrders;
 use Magento\InventoryReservationsApi\Model\AppendReservationsInterface\Proxy as AppendReservationsInterface;
 use Magento\InventoryReservationsApi\Model\ReservationInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -31,9 +32,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CreateCompensations extends Command
 {
     /**
-     * @var GetSaleableQuantityInconsistencies
+     * @var GetSalableQuantityInconsistencies
      */
-    private $getSaleableQuantityInconsistencies;
+    private $getSalableQuantityInconsistencies;
 
     /**
      * @var FilterCompleteOrders
@@ -46,9 +47,9 @@ class CreateCompensations extends Command
     private $filterIncompleteOrders;
 
     /**
-     * @var GetSaleableQuantityCompensations
+     * @var GetSalableQuantityCompensations
      */
-    private $getSaleableQuantityCompensations;
+    private $getSalableQuantityCompensations;
 
     /**
      * @var AppendReservationsInterface
@@ -56,24 +57,24 @@ class CreateCompensations extends Command
     private $appendReservations;
 
     /**
-     * @param GetSaleableQuantityInconsistencies $getSaleableQuantityInconsistencies
-     * @param GetSaleableQuantityCompensations $getSaleableQuantityCompensations
+     * @param GetSalableQuantityInconsistencies $getSalableQuantityInconsistencies
+     * @param GetSalableQuantityCompensations $getSalableQuantityCompensations
      * @param AppendReservationsInterface $appendReservations
      * @param FilterCompleteOrders $filterCompleteOrders
      * @param FilterIncompleteOrders $filterIncompleteOrders
      */
     public function __construct(
-        GetSaleableQuantityInconsistencies $getSaleableQuantityInconsistencies,
-        GetSaleableQuantityCompensations $getSaleableQuantityCompensations,
+        GetSalableQuantityInconsistencies $getSalableQuantityInconsistencies,
+        GetSalableQuantityCompensations $getSalableQuantityCompensations,
         AppendReservationsInterface $appendReservations,
         FilterCompleteOrders $filterCompleteOrders,
         FilterIncompleteOrders $filterIncompleteOrders
     ) {
         parent::__construct();
-        $this->getSaleableQuantityInconsistencies = $getSaleableQuantityInconsistencies;
+        $this->getSalableQuantityInconsistencies = $getSalableQuantityInconsistencies;
         $this->filterCompleteOrders = $filterCompleteOrders;
         $this->filterIncompleteOrders = $filterIncompleteOrders;
-        $this->getSaleableQuantityCompensations = $getSaleableQuantityCompensations;
+        $this->getSalableQuantityCompensations = $getSalableQuantityCompensations;
         $this->appendReservations = $appendReservations;
     }
 
@@ -85,23 +86,10 @@ class CreateCompensations extends Command
         $this
             ->setName('inventory:reservation:create-compensations')
             ->setDescription('Create compensation reservations for detected inconsistencies')
-            ->addOption(
-                'complete-orders',
-                'c',
-                InputOption::VALUE_NONE,
-                'Compensate only inconsistencies for completed orders'
-            )
-            ->addOption(
-                'incomplete-orders',
-                'i',
-                InputOption::VALUE_NONE,
-                'Compensate only inconsistencies for incomplete orders'
-            )
-            ->addOption(
-                'dry-run',
-                'd',
-                InputOption::VALUE_NONE,
-                'Display result without applying reservations'
+            ->addArgument(
+                'compensations',
+                InputArgument::IS_ARRAY,
+                'List of compensation arguments in format '
             )
             ->addOption(
                 'raw',
@@ -157,12 +145,12 @@ class CreateCompensations extends Command
 
     /**
      * @param InputInterface $input
-     * @return SaleableQuantityInconsistency[]
+     * @return SalableQuantityInconsistency[]
      * @throws ValidationException
      */
     private function getFilteredInconsistencies(InputInterface $input): array
     {
-        $inconsistencies = $this->getSaleableQuantityInconsistencies->execute();
+        $inconsistencies = $this->getSalableQuantityInconsistencies->execute();
 
         if ($input->getOption('complete-orders')) {
             $inconsistencies = $this->filterCompleteOrders->execute($inconsistencies);
@@ -186,7 +174,7 @@ class CreateCompensations extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $inconsistencies = $this->getFilteredInconsistencies($input);
-        $compensations = $this->getSaleableQuantityCompensations->execute($inconsistencies);
+        $compensations = $this->getSalableQuantityCompensations->execute($inconsistencies);
 
         if (empty($compensations)) {
             $output->writeln('<info>No required compensations calculated.</info>');

@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
+namespace Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
 
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
 
 /**
  * Remove all reservations without matching order
@@ -17,14 +17,14 @@ class FilterExistingOrders
     /**
      * Remove all reservations without matching order
      *
-     * @param SaleableQuantityInconsistency[] $inconsistencies
-     * @return SaleableQuantityInconsistency[]
+     * @param SalableQuantityInconsistency[] $inconsistencies
+     * @return SalableQuantityInconsistency[]
      */
     public function execute(array $inconsistencies): array
     {
         return array_filter(
             $inconsistencies,
-            function (SaleableQuantityInconsistency $inconsistency) {
+            function (SalableQuantityInconsistency $inconsistency) {
                 return (bool)$inconsistency->getOrder();
             }
         );

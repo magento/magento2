@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\InventoryReservationCli\Command;
 
 use Magento\Framework\Validation\ValidationException;
-use Magento\InventoryReservationCli\Model\GetSaleableQuantityInconsistencies\Proxy as GetSaleableQuantityInconsistencies;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterCompleteOrders\Proxy as FilterCompleteOrders;
-use Magento\InventoryReservationCli\Model\SaleableQuantityInconsistency\FilterIncompleteOrders\Proxy as FilterIncompleteOrders;
+use Magento\InventoryReservationCli\Model\GetSalableQuantityInconsistencies\Proxy as GetSalableQuantityInconsistencies;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterCompleteOrders\Proxy as FilterCompleteOrders;
+use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterIncompleteOrders\Proxy as FilterIncompleteOrders;
 use Magento\Sales\Model\Order;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,9 +27,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ShowInconsistencies extends Command
 {
     /**
-     * @var GetSaleableQuantityInconsistencies
+     * @var GetSalableQuantityInconsistencies
      */
-    private $getSaleableQuantityInconsistencies;
+    private $getSalableQuantityInconsistencies;
 
     /**
      * @var FilterCompleteOrders
@@ -42,17 +42,17 @@ class ShowInconsistencies extends Command
     private $filterIncompleteOrders;
 
     /**
-     * @param GetSaleableQuantityInconsistencies $getSaleableQuantityInconsistencies
+     * @param GetSalableQuantityInconsistencies $getSalableQuantityInconsistencies
      * @param FilterCompleteOrders $filterCompleteOrders
      * @param FilterIncompleteOrders $filterIncompleteOrders
      */
     public function __construct(
-        GetSaleableQuantityInconsistencies $getSaleableQuantityInconsistencies,
+        GetSalableQuantityInconsistencies $getSalableQuantityInconsistencies,
         FilterCompleteOrders $filterCompleteOrders,
         FilterIncompleteOrders $filterIncompleteOrders
     ) {
         parent::__construct();
-        $this->getSaleableQuantityInconsistencies = $getSaleableQuantityInconsistencies;
+        $this->getSalableQuantityInconsistencies = $getSalableQuantityInconsistencies;
         $this->filterCompleteOrders = $filterCompleteOrders;
         $this->filterIncompleteOrders = $filterIncompleteOrders;
     }
@@ -64,7 +64,7 @@ class ShowInconsistencies extends Command
     {
         $this
             ->setName('inventory:reservation:list-inconsistencies')
-            ->setDescription('Show all orders and products with saleable quantity inconsistencies')
+            ->setDescription('Show all orders and products with salable quantity inconsistencies')
             ->addOption(
                 'complete-orders',
                 'c',
@@ -91,7 +91,7 @@ class ShowInconsistencies extends Command
      * Format output
      *
      * @param OutputInterface $output
-     * @param SaleableQuantityInconsistency[] $inconsistencies
+     * @param SalableQuantityInconsistency[] $inconsistencies
      */
     private function prettyOutput(OutputInterface $output, array $inconsistencies): void
     {
@@ -109,9 +109,11 @@ class ShowInconsistencies extends Command
             foreach ($inconsistentItems as $sku => $qty) {
                 $output->writeln(
                     sprintf(
-                        '  - Product <comment>%s</comment> should be compensated by <comment>%+f</comment>',
+                        '  - Product <comment>%s</comment> should be compensated by '
+                        . '<comment>%+f</comment> for stock <comment>%s</comment>',
                         $sku,
-                        -$qty
+                        -$qty,
+                        $inconsistency->getStockId()
                     )
                 );
             }
@@ -122,7 +124,7 @@ class ShowInconsistencies extends Command
      * Output without formatting
      *
      * @param OutputInterface $output
-     * @param SaleableQuantityInconsistency[] $inconsistencies
+     * @param SalableQuantityInconsistency[] $inconsistencies
      */
     private function rawOutput(OutputInterface $output, array $inconsistencies): void
     {
@@ -132,7 +134,13 @@ class ShowInconsistencies extends Command
 
             foreach ($inconsistentItems as $sku => $qty) {
                 $output->writeln(
-                    sprintf('%s:%s:%f', $inconsistency->getOrder()->getIncrementId(), $sku, -$qty)
+                    sprintf(
+                        '%s:%s:%f:%s',
+                        $inconsistency->getOrder()->getIncrementId(),
+                        $sku,
+                        -$qty,
+                        $inconsistency->getStockId()
+                    )
                 );
             }
         }
@@ -148,7 +156,7 @@ class ShowInconsistencies extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $inconsistencies = $this->getSaleableQuantityInconsistencies->execute();
+        $inconsistencies = $this->getSalableQuantityInconsistencies->execute();
 
         if ($input->getOption('complete-orders')) {
             $inconsistencies = $this->filterCompleteOrders->execute($inconsistencies);

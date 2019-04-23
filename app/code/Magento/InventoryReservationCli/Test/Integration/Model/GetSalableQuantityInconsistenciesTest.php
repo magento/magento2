@@ -7,24 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservationCli\Test\Integration\Model;
 
-use Magento\InventoryReservationCli\Model\GetSaleableQuantityInconsistencies;
+use Magento\InventoryReservationCli\Model\GetSalableQuantityInconsistencies;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class GetSaleableQuantityInconsistenciesTest extends TestCase
+class GetSalableQuantityInconsistenciesTest extends TestCase
 {
     /**
-     * @var GetSaleableQuantityInconsistencies
+     * @var GetSalableQuantityInconsistencies
      */
-    private $getSaleableQuantityInconsistencies;
+    private $getSalableQuantityInconsistencies;
 
     /**
      * Initialize test dependencies
      */
     protected function setUp()
     {
-        $this->getSaleableQuantityInconsistencies
-            = Bootstrap::getObjectManager()->get(GetSaleableQuantityInconsistencies::class);
+        $this->getSalableQuantityInconsistencies
+            = Bootstrap::getObjectManager()->get(GetSalableQuantityInconsistencies::class);
     }
 
     /**
@@ -33,7 +33,7 @@ class GetSaleableQuantityInconsistenciesTest extends TestCase
      */
     public function testIncompleteOrderWithExistingReservation(): void
     {
-        $inconsistencies = $this->getSaleableQuantityInconsistencies->execute();
+        $inconsistencies = $this->getSalableQuantityInconsistencies->execute();
         self::assertSame([], $inconsistencies);
     }
 
@@ -43,7 +43,7 @@ class GetSaleableQuantityInconsistenciesTest extends TestCase
      */
     public function testIncompleteOrderWithoutReservation(): void
     {
-        $inconsistencies = $this->getSaleableQuantityInconsistencies->execute();
+        $inconsistencies = $this->getSalableQuantityInconsistencies->execute();
         self::assertCount(1, $inconsistencies);
     }
 
@@ -53,7 +53,7 @@ class GetSaleableQuantityInconsistenciesTest extends TestCase
      */
     public function testCompletedOrderWithReservations(): void
     {
-        $inconsistencies = $this->getSaleableQuantityInconsistencies->execute();
+        $inconsistencies = $this->getSalableQuantityInconsistencies->execute();
         self::assertSame([], $inconsistencies);
     }
 
@@ -64,7 +64,7 @@ class GetSaleableQuantityInconsistenciesTest extends TestCase
      */
     public function testCompletedOrderWithMissingReservations(): void
     {
-        $inconsistencies = $this->getSaleableQuantityInconsistencies->execute();
+        $inconsistencies = $this->getSalableQuantityInconsistencies->execute();
         self::assertCount(1, $inconsistencies);
     }
 }
