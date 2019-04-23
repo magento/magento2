@@ -837,7 +837,7 @@ class Filter extends \Magento\Framework\Filter\Template
             return $css;
         } else {
             // Return CSS comment for debugging purposes
-            return '/* ' . sprintf(__('Contents of %s could not be loaded or is empty'), $file) . ' */';
+            return '/* ' . __('Contents of the specified CSS file could not be loaded or is empty') . ' */';
         }
     }
 
