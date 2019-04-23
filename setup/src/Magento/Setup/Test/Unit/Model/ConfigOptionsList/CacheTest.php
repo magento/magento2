@@ -28,6 +28,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     private $deploymentConfigMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->validatorMock = $this->createMock(RedisConnectionValidator::class);
@@ -122,11 +125,6 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
-<<<<<<< HEAD
-=======
-    /**
-     * testCreateConfigCacheRedis
-     */
     public function testCreateConfigWithFileCache()
     {
         $this->deploymentConfigMock->method('get')->willReturn('');
@@ -146,9 +144,6 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
-    /**
-     * testCreateConfigCacheRedis
-     */
     public function testCreateConfigWithIdPrefix()
     {
         $this->deploymentConfigMock->method('get')->willReturn('');
@@ -172,10 +167,6 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
-    /**
-     * testValidateWithValidInput
-     */
->>>>>>> 12b7e08c2f26... Set cache id prefix on installation
     public function testValidateWithValidInput()
     {
         $options = [

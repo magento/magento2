@@ -28,6 +28,9 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
      */
     private $deploymentConfigMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->validatorMock = $this->createMock(RedisConnectionValidator::class, [], [], '', false);
@@ -130,11 +133,6 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
-<<<<<<< HEAD
-=======
-    /**
-     * testCreateConfigWithRedis
-     */
     public function testCreateConfigWithFileCache()
     {
         $this->deploymentConfigMock->method('get')->willReturn('');
@@ -154,10 +152,6 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
-
-    /**
-     * testCreateConfigCacheRedis
-     */
     public function testCreateConfigWithIdPrefix()
     {
         $this->deploymentConfigMock->method('get')->willReturn('');
@@ -181,10 +175,6 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
-    /**
-     * testValidationWithValidData
-     */
->>>>>>> 12b7e08c2f26... Set cache id prefix on installation
     public function testValidationWithValidData()
     {
         $this->validatorMock->expects($this->once())
