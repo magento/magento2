@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\InventorySourceSelectionApi\Test\Integration;
 
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventorySourceSelectionApi\Model\GetAvailableSourceItemsBySkusAndSortedSource;
+use Magento\InventorySourceSelectionApi\Model\GetInStockSourceItemsBySkusAndSortedSource;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 class GetSourceItemsBySkusAndSortedSourceTest extends TestCase
 {
     /**
-     * @var GetAvailableSourceItemsBySkusAndSortedSource
+     * @var GetInStockSourceItemsBySkusAndSortedSource
      */
     private $subject;
 
@@ -23,7 +23,7 @@ class GetSourceItemsBySkusAndSortedSourceTest extends TestCase
     {
         parent::setUp();
 
-        $this->subject = Bootstrap::getObjectManager()->get(GetAvailableSourceItemsBySkusAndSortedSource::class);
+        $this->subject = Bootstrap::getObjectManager()->get(GetInStockSourceItemsBySkusAndSortedSource::class);
     }
 
     /**
@@ -46,6 +46,15 @@ class GetSourceItemsBySkusAndSortedSourceTest extends TestCase
                 [
                     'eu-2/SKU-1' => 3.0,
                     'eu-1/SKU-1' => 5.5,
+                ]
+            ],
+            [
+                ['SKU-1', 'SKU-2', 'SKU-3', 'SKU-6'],
+                ['eu-3', 'eu-2', 'eu-1'],
+                [
+                    'eu-2/SKU-1' => 3.0,
+                    'eu-1/SKU-1' => 5.5,
+                    'eu-1/SKU-6' => 0.0
                 ]
             ]
         ];

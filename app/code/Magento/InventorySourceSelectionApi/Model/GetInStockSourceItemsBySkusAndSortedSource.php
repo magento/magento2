@@ -14,9 +14,11 @@ use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 /**
  * Retrieve source items for a defined set of skus and sorted source codes
  *
- * Useful for determining availability and source selection
+ * Useful for determining presence in stock and source selection
+ *
+ * @api
  */
-class GetAvailableSourceItemsBySkusAndSortedSource
+class GetInStockSourceItemsBySkusAndSortedSource
 {
     /**
      * @var SourceItemRepositoryInterface
@@ -42,14 +44,15 @@ class GetAvailableSourceItemsBySkusAndSortedSource
     }
 
     /**
-     * @inheritdoc
+     * @param array $skus
+     * @param array $sortedSourceCodes
+     * @return SourceItemInterface[]
      */
     public function execute(array $skus, array $sortedSourceCodes): array
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceItemInterface::SKU, $skus, 'in')
             ->addFilter(SourceItemInterface::SOURCE_CODE, $sortedSourceCodes, 'in')
-            ->addFilter(SourceItemInterface::QUANTITY, 0, 'gt')
             ->addFilter(SourceItemInterface::STATUS, SourceItemInterface::STATUS_IN_STOCK)
             ->create();
 

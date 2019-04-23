@@ -9,7 +9,7 @@ namespace Magento\InventorySourceSelectionApi\Model\Algorithms\Result;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventorySourceSelectionApi\Model\GetAvailableSourceItemsBySkusAndSortedSource;
+use Magento\InventorySourceSelectionApi\Model\GetInStockSourceItemsBySkusAndSortedSource;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterfaceFactory;
@@ -31,16 +31,16 @@ class GetDefaultSortedSourcesResult
     private $sourceSelectionResultFactory;
 
     /**
-     * @var GetAvailableSourceItemsBySkusAndSortedSource
+     * @var GetInStockSourceItemsBySkusAndSortedSource
      */
-    private $getAvailableSourceItemsBySkusAndSortedSource;
+    private $getInStockSourceItemsBySkusAndSortedSource;
 
     /**
      * @param SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory
      * @param SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory
      * @param null $searchCriteriaBuilder @deprecated
      * @param null $sourceItemRepository @deprecated
-     * @param GetAvailableSourceItemsBySkusAndSortedSource $getAvailableSourceItemsBySkusAndSortedSource = null
+     * @param GetInStockSourceItemsBySkusAndSortedSource $getInStockSourceItemsBySkusAndSortedSource = null
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
@@ -48,12 +48,12 @@ class GetDefaultSortedSourcesResult
         SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory,
         $searchCriteriaBuilder,
         $sourceItemRepository,
-        GetAvailableSourceItemsBySkusAndSortedSource $getAvailableSourceItemsBySkusAndSortedSource = null
+        GetInStockSourceItemsBySkusAndSortedSource $getInStockSourceItemsBySkusAndSortedSource = null
     ) {
         $this->sourceSelectionItemFactory = $sourceSelectionItemFactory;
         $this->sourceSelectionResultFactory = $sourceSelectionResultFactory;
-        $this->getAvailableSourceItemsBySkusAndSortedSource = $getAvailableSourceItemsBySkusAndSortedSource ?:
-            ObjectManager::getInstance()->get(GetAvailableSourceItemsBySkusAndSortedSource::class);
+        $this->getInStockSourceItemsBySkusAndSortedSource = $getInStockSourceItemsBySkusAndSortedSource ?:
+            ObjectManager::getInstance()->get(GetInStockSourceItemsBySkusAndSortedSource::class);
     }
 
     /**
@@ -92,7 +92,7 @@ class GetDefaultSortedSourcesResult
         }
 
         $sourceItems =
-            $this->getAvailableSourceItemsBySkusAndSortedSource->execute(
+            $this->getInStockSourceItemsBySkusAndSortedSource->execute(
                 array_keys($itemsTdDeliver),
                 $sortedSourceCodes
             );
