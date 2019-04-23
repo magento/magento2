@@ -75,6 +75,7 @@ class MethodAnnotationStructureSniff implements Sniff
                 $emptyTypeTokens
             );
             $this->annotationFormatValidator->validateTagGroupingFormat($phpcsFile, $commentStartPtr);
+            $this->annotationFormatValidator->validateTagAligningFormat($phpcsFile, $commentStartPtr);
         }
     }
 }
