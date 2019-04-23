@@ -139,9 +139,17 @@ class CustomerAddressDataFormatter
         $addressId = null
     ): array {
         if (null !== $addressId && !isset($addressList[$addressId])) {
-            $selectedAddress = $this->prepareAddress($customer->getAddresses()[$addressId]);
-            if (isset($selectedAddress['id'])) {
-                $addressList[$selectedAddress['id']] = $selectedAddress;
+            $filteredDefaultAddress = array_filter(
+                $customer->getAddresses(),
+                function ($address) use ($addressId) {
+                    return $address->getId() === $addressId;
+                }
+            );
+            if (!empty ($filteredDefaultAddress)) {
+                $selectedAddress = $this->prepareAddress(current($filteredDefaultAddress));
+                if (isset($selectedAddress['id'])) {
+                    $addressList[$selectedAddress['id']] = $selectedAddress;
+                }
             }
         }
 
