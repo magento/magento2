@@ -14,9 +14,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for setting offline payment methods on cart by guest
+ * Test for setting Purchase Order payment method on cart by guest
  */
-class SetOfflinePaymentMethodOnCartTest extends GraphQlAbstract
+class SetPurchaseOrderPaymentMethodOnCartTest extends GraphQlAbstract
 {
     /**
      * @var GetMaskedQuoteIdByReservedOrderId
@@ -69,7 +69,10 @@ QUERY;
         self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
         self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
         self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
-        self::assertEquals($purchaseOrderNumber, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['purchase_order_number']);
+        self::assertEquals(
+            $purchaseOrderNumber,
+            $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['purchase_order_number']
+        );
     }
 
     /**
