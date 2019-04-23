@@ -13,6 +13,7 @@ use Magento\Framework\Acl\Builder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\TestFramework\Bootstrap as TestBootstrap;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Acl\CacheInterface;
 
 /**
  * Test class for page repository.
@@ -47,6 +48,11 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
     private $pageCollectionFactory;
 
     /**
+     * @var CacheInterface
+     */
+    private $aclCache;
+
+    /**
      * Sets up common objects.
      *
      * @inheritDoc
@@ -58,6 +64,8 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->criteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
         $this->pageCollectionFactory = Bootstrap::getObjectManager()->get(PageCollectionFactory::class);
+        $this->aclCache = Bootstrap::getObjectManager()->get(CacheInterface::class);
+        $this->aclCache->clean();
     }
 
     /**

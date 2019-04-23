@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Bootstrap as TestBootstrap;
 use Magento\Framework\Acl\Builder;
+use Magento\Framework\Acl\CacheInterface;
 
 /**
  * Provide tests for ProductRepository model.
@@ -38,6 +39,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     private $aclBuilder;
 
     /**
+     * @var CacheInterface
+     */
+    private $aclCache;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -45,6 +51,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->authorization = Bootstrap::getObjectManager()->get(Auth::class);
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
+        $this->aclCache = Bootstrap::getObjectManager()->get(CacheInterface::class);
     }
 
     /**
@@ -55,6 +62,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         parent::tearDown();
 
         $this->authorization->logout();
+        $this->aclCache->clean();
     }
 
     /**

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model;
 use Magento\Backend\Model\Auth;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Acl\Builder;
+use Magento\Framework\Acl\CacheInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Bootstrap as TestBootstrap;
 
@@ -35,6 +36,11 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
     private $aclBuilder;
 
     /**
+     * @var CacheInterface
+     */
+    private $aclCache;
+
+    /**
      * Sets up common objects.
      *
      * @inheritDoc
@@ -44,6 +50,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
         $this->authorization = Bootstrap::getObjectManager()->get(Auth::class);
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
+        $this->aclCache = Bootstrap::getObjectManager()->get(CacheInterface::class);
     }
 
     /**
@@ -54,6 +61,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         parent::tearDown();
 
         $this->authorization->logout();
+        $this->aclCache->clean();
     }
 
     /**

@@ -651,19 +651,19 @@ class Eav extends AbstractModifier
         }
 
         //Checking access to design config.
-        if (in_array($attributeCode, $this->designAttributeCodes, true)) {
-            if (!$this->authorization->isAllowed('Magento_Catalog::edit_product_design')) {
-                $meta = $this->arrayManager->merge(
-                    $configPath,
-                    $meta,
-                    [
-                        'disabled' => true,
-                        'validation' => ['required' => false],
-                        'required' => false,
-                        'serviceDisabled' => true,
-                    ]
-                );
-            }
+        if (in_array($attributeCode, $this->designAttributeCodes, true)
+            && !$this->authorization->isAllowed('Magento_Catalog::edit_product_design')
+        ) {
+            $meta = $this->arrayManager->merge(
+                $configPath,
+                $meta,
+                [
+                    'disabled' => true,
+                    'validation' => ['required' => false],
+                    'required' => false,
+                    'serviceDisabled' => true,
+                ]
+            );
         }
 
         return $meta;
