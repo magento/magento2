@@ -17,24 +17,16 @@ use Magento\Quote\Api\Data\CartInterface;
 class SetShippingMethodsOnCart implements SetShippingMethodsOnCartInterface
 {
     /**
-     * @var GetQuoteAddress
-     */
-    private $getQuoteAddress;
-
-    /**
      * @var AssignShippingMethodToCart
      */
     private $assignShippingMethodToCart;
 
     /**
-     * @param GetQuoteAddress $getQuoteAddress
      * @param AssignShippingMethodToCart $assignShippingMethodToCart
      */
     public function __construct(
-        GetQuoteAddress $getQuoteAddress,
         AssignShippingMethodToCart $assignShippingMethodToCart
     ) {
-        $this->getQuoteAddress = $getQuoteAddress;
         $this->assignShippingMethodToCart = $assignShippingMethodToCart;
     }
 
@@ -60,8 +52,7 @@ class SetShippingMethodsOnCart implements SetShippingMethodsOnCartInterface
         }
         $methodCode = $shippingMethodInput['method_code'];
 
-        $cartAddressId = $cart->getBillingAddress()->getId();
-        $quoteAddress = $this->getQuoteAddress->execute($cart, $cartAddressId, $context->getUserId());
-        $this->assignShippingMethodToCart->execute($cart, $quoteAddress, $carrierCode, $methodCode);
+        $shippingAddress = $cart->getShippingAddress();
+        $this->assignShippingMethodToCart->execute($cart, $shippingAddress, $carrierCode, $methodCode);
     }
 }

@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Guest;
 
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
-use Magento\GraphQl\Quote\GetQuoteShippingAddressIdByReservedQuoteId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -23,20 +22,12 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
     private $getMaskedQuoteIdByReservedOrderId;
 
     /**
-     * @var GetQuoteShippingAddressIdByReservedQuoteId
-     */
-    private $getQuoteShippingAddressIdByReservedQuoteId;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->getQuoteShippingAddressIdByReservedQuoteId = $objectManager->get(
-            GetQuoteShippingAddressIdByReservedQuoteId::class
-        );
     }
 
     /**
