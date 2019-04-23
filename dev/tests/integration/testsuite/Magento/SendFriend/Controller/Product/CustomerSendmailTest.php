@@ -17,6 +17,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Captcha\Helper\Data as CaptchaHelper;
 
+/**
+ * Class CustomerSendmailTest
+ */
 class CustomerSendmailTest extends AbstractController
 {
     /**
