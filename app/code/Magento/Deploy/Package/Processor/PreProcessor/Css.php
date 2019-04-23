@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Package\Processor\PreProcessor;
 
 use Magento\Deploy\Console\DeployStaticOptions;
@@ -92,8 +93,7 @@ class Css implements ProcessorInterface
     }
 
     /**
-     * Checks if there are imports of CSS files or images within the given CSS file
-     * which exists in the current package
+     * Checks if there are imports of CSS files or images within the given CSS file which exists in the current package.
      *
      * @param PackageFile $parentFile
      * @param Package $package
