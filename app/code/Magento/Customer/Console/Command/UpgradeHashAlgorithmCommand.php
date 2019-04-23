@@ -65,8 +65,11 @@ class UpgradeHashAlgorithmCommand extends Command
             $customer->load($customer->getId());
             if (!$this->encryptor->validateHashVersion($customer->getPasswordHash())) {
                 list($hash, $salt, $version) = explode(Encryptor::DELIMITER, $customer->getPasswordHash(), 3);
-                $version .= Encryptor::DELIMITER . Encryptor::HASH_VERSION_LATEST;
-                $customer->setPasswordHash($this->encryptor->getHash($hash, $salt, $version));
+                $version .= Encryptor::DELIMITER . $this->encryptor->getLatestHashVersion();
+                $hash = $this->encryptor->getHash($hash, $salt, $this->encryptor->getLatestHashVersion());
+                list($hash, $salt) = explode(Encryptor::DELIMITER, $hash, 3);
+                $hash = implode(Encryptor::DELIMITER, [$hash, $salt, $version]);
+                $customer->setPasswordHash($hash);
                 $customer->save();
                 $output->write(".");
             }
