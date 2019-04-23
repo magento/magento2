@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SetMinQueryLengthToDefault" type="catalog_search_config_def">
+        <requiredEntity type="length_config">DefaultMinQueryLength</requiredEntity>
+    </entity>
+    <entity name="SetMinQueryLength" type="catalog_search_config_def">
+        <requiredEntity type="length_config">SetMinQueryLengthToOne</requiredEntity>
+    </entity>
+    <entity name="SetMinQueryLength2" type="catalog_search_config_def">
+        <requiredEntity type="length_config">SetMinQueryLengthToTwo</requiredEntity>
+    </entity>
+
+    <entity name="SetMinQueryLengthToOne" type="length_config">
+        <data key="value">1</data>
+        <data key="inherit">false</data>
+    </entity>
+    <entity name="SetMinQueryLengthToTwo" type="length_config">
+        <data key="value">2</data>
+        <data key="inherit">false</data>
+    </entity>
+    <entity name="DefaultMinQueryLength" type="length_config">
+        <data key="inherit">true</data>
+    </entity>
+
+    <entity name="MinMaxQueryLength" type="constant">
+        <data key="Hint">This value must be compatible with the corresponding setting in the configured search engine</data>
+    </entity>
+</entities>

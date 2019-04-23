@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertQueryLengthHintsActionGroup">
+        <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="navigateToConfigurationPage"/>
+        <scrollTo selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" stepKey="scrollToCatalogSearchTab"/>
+        <conditionalClick selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" dependentSelector="{{AdminCatalogSearchConfigurationSection.minQueryLength}}" visible="false" stepKey="expandCatalogSearchTab"/>
+        <waitForElementVisible selector="{{AdminCatalogSearchConfigurationSection.minQueryLength}}" stepKey="waitForMinQueryLengthField"/>
+        <see userInput="{{MinMaxQueryLength.Hint}}" selector="{{AdminCatalogSearchConfigurationSection.minQueryLengthHint}}" stepKey="seeMinQueryLengthHint"/>
+        <see userInput="{{MinMaxQueryLength.Hint}}" selector="{{AdminCatalogSearchConfigurationSection.maxQueryLengthHint}}" stepKey="seeMaxQueryLengthHint"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontMinimalQueryLengthForCatalogSearchTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <title value="Minimal query length for catalog search"/>
+            <description value="Minimal query length for catalog search"/>
+            <stories value="Catalog search"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-15905"/>
+            <useCaseId value="MAGETWO-73989"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SetMinQueryLength" stepKey="setMinQueryLength"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <createData entity="SetMinQueryLengthToDefault" stepKey="setMinimumQueryLengthToDefault"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminAssertQueryLengthHintsActionGroup" stepKey="assertQueryLengthHints"/>
+        <actionGroup ref="StorefrontSearchProductActionGroup" stepKey="searchForProducts">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="textForSearch" value="s"/>
+        </actionGroup>
+        <createData entity="SetMinQueryLength2" stepKey="setMinQueryLengthToTwo"/>
+        <actionGroup ref="StorefrontSearchProductActionGroup" stepKey="searchForProductsAgain">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="textForSearch" value="si"/>
+        </actionGroup>
+    </test>
+</tests>
