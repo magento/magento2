@@ -14,6 +14,13 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 class ConfigurableObject implements InterpreterInterface
 {
     /**
+     * @var array
+     */
+    private $classBlacklist = [
+        \Zend\Code\Reflection\FileReflection::class
+    ];
+
+    /**
      * @var ObjectManagerInterface
      */
     protected $objectManager;
@@ -53,6 +60,14 @@ class ConfigurableObject implements InterpreterInterface
             if (!isset($arguments['class'])) {
                 throw new \InvalidArgumentException('Node "argument" with name "class" is required for this type.');
             }
+
+            if (in_array(ltrim($arguments['class'], '\\'), $this->classBlacklist)) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Class argument is invalid: %s',
+                    $arguments['class']
+                ));
+            }
+
             $className = $arguments['class'];
             unset($arguments['class']);
         }
