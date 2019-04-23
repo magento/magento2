@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservationCli\Command;
 
-use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryReservationCli\Model\GetSalableQuantityInconsistencies\Proxy as GetSalableQuantityInconsistencies;
 use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency;
 use Magento\InventoryReservationCli\Model\SalableQuantityInconsistency\FilterCompleteOrders\Proxy as FilterCompleteOrders;
@@ -152,7 +151,6 @@ class ShowInconsistencies extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
-     * @throws ValidationException
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
