@@ -51,11 +51,13 @@ class ProductRepositoryTest extends WebapiAbstract
                 'link_type' => 'file',
                 'link_file_content' => [
                     'name' => 'link1_content.jpg',
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                 ],
                 'sample_type' => 'file',
                 'sample_file_content' => [
                     'name' => 'link1_sample.jpg',
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                 ],
             ],
@@ -114,6 +116,7 @@ class ProductRepositoryTest extends WebapiAbstract
                 'sample_type' => 'file',
                 'sample_file_content' => [
                     'name' => 'sample2.jpg',
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                 ],
             ],
@@ -146,7 +149,9 @@ class ProductRepositoryTest extends WebapiAbstract
             "price" => 10,
             'attribute_set_id' => 4,
             "extension_attributes" => [
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 "downloadable_product_links" => array_values($this->getLinkData()),
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 "downloadable_product_samples" => array_values($this->getSampleData()),
             ],
         ];
@@ -301,11 +306,13 @@ class ProductRepositoryTest extends WebapiAbstract
             'link_type' => 'file',
             'link_file_content' => [
                 'name' => $linkFile . $extension,
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
             'sample_type' => 'file',
             'sample_file_content' => [
                 'name' => $sampleFile . $extension,
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
         ];
@@ -319,11 +326,13 @@ class ProductRepositoryTest extends WebapiAbstract
             'link_type' => 'file',
             'link_file_content' => [
                 'name' => 'link2_content.jpg',
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
             'sample_type' => 'file',
             'sample_file_content' => [
                 'name' => 'link2_sample.jpg',
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
         ];
@@ -463,6 +472,7 @@ class ProductRepositoryTest extends WebapiAbstract
             'sample_type' => 'file',
             'sample_file_content' => [
                 'name' => 'sample1.jpg',
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
         ];
@@ -474,6 +484,7 @@ class ProductRepositoryTest extends WebapiAbstract
             'sample_type' => 'file',
             'sample_file_content' => [
                 'name' => 'sample2.jpg',
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
         ];
