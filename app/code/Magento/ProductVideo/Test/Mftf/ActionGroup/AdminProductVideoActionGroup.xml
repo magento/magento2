@@ -24,7 +24,7 @@
         <fillField selector="{{AdminProductNewVideoSection.videoUrlTextField}}" userInput="{{video.videoUrl}}" stepKey="fillFieldVideoUrl"/>
         <fillField selector="{{AdminProductNewVideoSection.videoTitleTextField}}" userInput="{{video.videoTitle}}" stepKey="fillFieldVideoTitle"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <waitForElementNotVisible selector="{{AdminProductNewVideoSection.saveButtonDisabled}}" wait="30" stepKey="waitForSaveButtonVisible"/>
+        <waitForElementNotVisible selector="{{AdminProductNewVideoSection.saveButtonDisabled}}" time="30" stepKey="waitForSaveButtonVisible"/>
         <click selector="{{AdminProductNewVideoSection.saveButton}}" stepKey="saveVideo"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
