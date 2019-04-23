@@ -8,12 +8,14 @@ namespace Magento\Webapi\Controller\Soap\Request;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\MetadataObjectInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Request as SoapRequest;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Model\Soap\Config as SoapConfig;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Webapi\Model\ServiceMetadata;
@@ -54,6 +56,11 @@ class Handler
     protected $methodsMapProcessor;
 
     /**
+     * @var ParamsOverrider
+     */
+    private $paramsOverrider;
+
+    /**
      * Initialize dependencies.
      *
      * @param SoapRequest $request
@@ -64,6 +71,7 @@ class Handler
      * @param ServiceInputProcessor $serviceInputProcessor
      * @param DataObjectProcessor $dataObjectProcessor
      * @param MethodsMap $methodsMapProcessor
+     * @param ParamsOverrider|null $paramsOverrider
      */
     public function __construct(
         SoapRequest $request,
@@ -73,7 +81,8 @@ class Handler
         SimpleDataObjectConverter $dataObjectConverter,
         ServiceInputProcessor $serviceInputProcessor,
         DataObjectProcessor $dataObjectProcessor,
-        MethodsMap $methodsMapProcessor
+        MethodsMap $methodsMapProcessor,
+        ParamsOverrider $paramsOverrider = null
     ) {
         $this->_request = $request;
         $this->_objectManager = $objectManager;
@@ -83,6 +92,7 @@ class Handler
         $this->serviceInputProcessor = $serviceInputProcessor;
         $this->_dataObjectProcessor = $dataObjectProcessor;
         $this->methodsMapProcessor = $methodsMapProcessor;
+        $this->paramsOverrider = $paramsOverrider ?: ObjectManager::getInstance()->get(ParamsOverrider::class);
     }
 
     /**
@@ -116,9 +126,33 @@ class Handler
             );
         }
         $service = $this->_objectManager->get($serviceClass);
-        $inputData = $this->_prepareRequestData($serviceClass, $serviceMethod, $arguments);
+        $inputData = $this->prepareOperationInput($serviceClass, $serviceMethodInfo, $arguments);
         $outputData = call_user_func_array([$service, $serviceMethod], $inputData);
         return $this->_prepareResponseData($outputData, $serviceClass, $serviceMethod);
+    }
+
+    /**
+     * Convert arguments received from SOAP server to arguments to pass to a service.
+     *
+     * @param string $serviceClass
+     * @param array $methodMetadata
+     * @param array $arguments
+     * @return array
+     * @throws WebapiException
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    private function prepareOperationInput($serviceClass, array $methodMetadata, array $arguments)
+    {
+        /** SoapServer wraps parameters into array. Thus this wrapping should be removed to get access to parameters. */
+        $arguments = reset($arguments);
+        $arguments = $this->_dataObjectConverter->convertStdObjectToArray($arguments, true);
+        $arguments = $this->paramsOverrider->override($arguments, $methodMetadata[ServiceMetadata::KEY_ROUTE_PARAMS]);
+
+        return $this->serviceInputProcessor->process(
+            $serviceClass,
+            $methodMetadata[ServiceMetadata::KEY_METHOD],
+            $arguments
+        );
     }
 
     /**
@@ -128,13 +162,16 @@ class Handler
      * @param string $serviceMethod
      * @param array $arguments
      * @return array
+     * @deprecated
+     * @see Handler::prepareOperationInput()
      */
     protected function _prepareRequestData($serviceClass, $serviceMethod, $arguments)
     {
-        /** SoapServer wraps parameters into array. Thus this wrapping should be removed to get access to parameters. */
-        $arguments = reset($arguments);
-        $arguments = $this->_dataObjectConverter->convertStdObjectToArray($arguments, true);
-        return $this->serviceInputProcessor->process($serviceClass, $serviceMethod, $arguments);
+        return $this->prepareOperationInput(
+            $serviceClass,
+            [ServiceMetadata::KEY_METHOD => $serviceMethod, ServiceMetadata::KEY_ROUTE_PARAMS => []],
+            $arguments
+        );
     }
 
     /**

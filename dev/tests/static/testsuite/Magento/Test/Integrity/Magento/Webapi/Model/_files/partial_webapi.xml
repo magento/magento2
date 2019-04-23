@@ -16,16 +16,7 @@
             <parameter name="id" force="true">null</parameter>
         </data>
     </route>
-    <route url="/V1/customers/me/session" method="GET">
-        <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="getById" />
-        <resources>
-            <resource ref="Magento_Customer::customer_self" />
-        </resources>
-        <data>
-            <parameter name="id" force="true">%customer_id%</parameter>
-        </data>
-    </route>
-    <route url="/V1/customers/me" method="PUT" secure="true" soapOperation="saveSelf">
+    <route url="/V1/customers/me" method="PUT" secure="true">
         <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="save" />
         <resources>
             <resource ref="Magento_Customer::customer_self" />
@@ -41,16 +32,8 @@
         </resources>
     </route>
     <route url="/V1/customers/:id" method="GET">
-        <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="getById" />
         <resources>
             <resource ref="Magento_Customer::read" />
-        </resources>
-    </route>
-    <route url="/V1/customers/:id" method="DELETE">
-        <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="deleteById" />
-        <resources>
-            <resource ref="Magento_Customer::manage" />
-            <resource ref="Magento_Customer::delete" />
         </resources>
     </route>
 </routes>
