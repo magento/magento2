@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\PaymentException;
 
 class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
@@ -13,11 +14,16 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * Saving quote and create order
      *
      * @return \Magento\Backend\Model\View\Result\Forward|\Magento\Backend\Model\View\Result\Redirect
+     * @throws NotFoundException
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         try {
@@ -49,7 +55,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
                 ->createOrder();
 
             $this->_getSession()->clearStorage();
-            $this->messageManager->addSuccess(__('You created the order.'));
+            $this->messageManager->addSuccessMessage(__('You created the order.'));
             if ($this->_authorization->isAllowed('Magento_Sales::actions_view')) {
                 $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getId()]);
             } else {
@@ -59,19 +65,20 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
             $this->_getOrderCreateModel()->saveQuote();
             $message = $e->getMessage();
             if (!empty($message)) {
-                $this->messageManager->addError($message);
+                $this->messageManager->addErrorMessage($message);
             }
             $resultRedirect->setPath('sales/*/');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $message = $e->getMessage();
             if (!empty($message)) {
-                $this->messageManager->addError($message);
+                $this->messageManager->addErrorMessage($message);
             }
             $resultRedirect->setPath('sales/*/');
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Order saving error: %1', $e->getMessage()));
+            $this->messageManager->addExceptionMessage($e, __('Order saving error: %1', $e->getMessage()));
             $resultRedirect->setPath('sales/*/');
         }
+
         return $resultRedirect;
     }
 }

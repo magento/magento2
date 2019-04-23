@@ -27,9 +27,14 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Category
      * Delete category action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new \Magento\Framework\Exception\NotFoundException(__('Page not found.'));
+        }
+
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
@@ -42,12 +47,12 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Category
                 $this->_eventManager->dispatch('catalog_controller_category_delete', ['category' => $category]);
                 $this->_auth->getAuthStorage()->setDeletedPath($category->getPath());
                 $this->categoryRepository->delete($category);
-                $this->messageManager->addSuccess(__('You deleted the category.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the category.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 return $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while trying to delete the category.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while trying to delete the category.'));
                 return $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
             }
         }

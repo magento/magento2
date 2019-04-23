@@ -16,19 +16,19 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
         // Create Mocks and SUT
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \PHPUnit_Framework_MockObject_MockObject $urlBuilderMock */
-        $urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
 
         /** @var \Magento\Cms\Ui\Component\Listing\Column\PageActions $model */
         $model = $objectManager->getObject(
-            'Magento\Cms\Ui\Component\Listing\Column\PageActions',
+            \Magento\Cms\Ui\Component\Listing\Column\PageActions::class,
             [
                 'urlBuilder' => $urlBuilderMock,
                 'context' => $contextMock,
@@ -69,7 +69,9 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
                         'confirm' => [
                             'title' => __('Delete %1', $title),
                             'message' => __('Are you sure you wan\'t to delete a %1 record?', $title),
+                            '__disableTmpl' => true,
                         ],
+                        'post' => true,
                     ],
                 ],
             ],

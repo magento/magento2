@@ -56,6 +56,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _construct()
     {
@@ -168,7 +169,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 ) . '\' ' . '\'' . $this->getUrl(
                     '*/*/delete',
                     [$this->_objectId => $this->getRequest()->getParam($this->_objectId), 'ret' => 'pending']
-                ) . '\'' . ')'
+                ) . '\'' . ', {data: {}})'
             );
             $this->_coreRegistry->register('ret', 'pending');
         }

@@ -12,9 +12,14 @@ class CouponsMassDelete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Qu
      * Coupons mass delete action
      *
      * @return void
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new \Magento\Framework\Exception\NotFoundException(__('Page not found.'));
+        }
+
         $this->_initRule();
         $rule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
@@ -26,7 +31,7 @@ class CouponsMassDelete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Qu
 
         if (is_array($codesIds)) {
             $couponsCollection = $this->_objectManager->create(
-                'Magento\SalesRule\Model\ResourceModel\Coupon\Collection'
+                \Magento\SalesRule\Model\ResourceModel\Coupon\Collection::class
             )->addFieldToFilter(
                 'coupon_id',
                 ['in' => $codesIds]

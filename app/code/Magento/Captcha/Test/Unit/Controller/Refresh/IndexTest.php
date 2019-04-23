@@ -52,22 +52,25 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->captchaHelperMock = $this->getMock('Magento\Captcha\Helper\Data', [], [], '', false);
-        $this->captchaMock = $this->getMock('Magento\Captcha\Model\DefaultModel', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->contextMock = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
-        $this->viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
-        $this->layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface');
-        $this->flagMock = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
+        $this->captchaHelperMock = $this->getMock(\Magento\Captcha\Helper\Data::class, [], [], '', false);
+        $this->captchaMock = $this->getMock(\Magento\Captcha\Model\DefaultModel::class, [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Framework\App\Action\Context::class, [], [], '', false);
+        $this->viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class);
+        $this->layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $this->flagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
 
-        $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $this->contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
-        $this->contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $this->contextMock->expects($this->any())->method('getActionFlag')->will($this->returnValue($this->flagMock));
-        $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->layoutMock));
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $this->contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
+        $this->contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $this->contextMock->expects($this->any())->method('getActionFlag')->willReturn($this->flagMock);
+        $this->viewMock->expects($this->any())->method('getLayout')->willReturn($this->layoutMock);
 
         $this->model = new \Magento\Captcha\Controller\Refresh\Index($this->contextMock, $this->captchaHelperMock);
     }
@@ -82,18 +85,19 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $content = ['formId' => $formId];
 
         $blockMethods = ['setFormId', 'setIsAjax', 'toHtml'];
-        $blockMock = $this->getMock('Magento\Captcha\Block\Captcha', $blockMethods, [], '', false);
+        $blockMock = $this->getMock(\Magento\Captcha\Block\Captcha::class, $blockMethods, [], '', false);
 
-        $this->requestMock->expects($this->any())->method('getPost')->with('formId')->will($this->returnValue($formId));
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn(true);
+        $this->requestMock->expects($this->any())->method('getPost')->with('formId')->willReturn($formId);
         $this->requestMock->expects($this->exactly($callsNumber))->method('getContent')
-            ->will($this->returnValue(json_encode($content)));
+            ->willReturn(json_encode($content));
         $this->captchaHelperMock->expects($this->any())->method('getCaptcha')->with($formId)
-            ->will($this->returnValue($this->captchaMock));
+            ->willReturn($this->captchaMock);
         $this->captchaMock->expects($this->once())->method('generate');
-        $this->captchaMock->expects($this->once())->method('getBlockName')->will($this->returnValue('block'));
-        $this->captchaMock->expects($this->once())->method('getImgSrc')->will($this->returnValue('source'));
+        $this->captchaMock->expects($this->once())->method('getBlockName')->willReturn('block');
+        $this->captchaMock->expects($this->once())->method('getImgSrc')->willReturn('source');
         $this->layoutMock->expects($this->once())->method('createBlock')->with('block')
-            ->will($this->returnValue($blockMock));
+            ->willReturn($blockMock);
         $blockMock->expects($this->any())->method('setFormId')->with($formId)->will($this->returnValue($blockMock));
         $blockMock->expects($this->any())->method('setIsAjax')->with(true)->will($this->returnValue($blockMock));
         $blockMock->expects($this->once())->method('toHtml');

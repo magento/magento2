@@ -6,6 +6,7 @@
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * System Configuration Save Controller
@@ -140,9 +141,14 @@ class Save extends AbstractConfig
      * Save configuration
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         try {
             // custom save logic
             $this->_saveSection();
@@ -156,6 +162,8 @@ class Save extends AbstractConfig
                 'store' => $store,
                 'groups' => $this->_getGroupsForSave(),
             ];
+            $configData = $this->filterNodes($configData);
+
             /** @var \Magento\Config\Model\Config $configModel  */
             $configModel = $this->_configFactory->create(['data' => $configData]);
             $configModel->save();
@@ -183,5 +191,86 @@ class Save extends AbstractConfig
                 '_nosid' => true
             ]
         );
+    }
+
+    /**
+     * Filter paths that are not defined.
+     *
+     * @param string $prefix Path prefix
+     * @param array $groups Groups data.
+     * @param string[] $systemXmlConfig Defined paths.
+     * @return array Filtered groups.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function filterPaths($prefix, array $groups, array $systemXmlConfig)
+    {
+        $flippedXmlConfig = array_flip($systemXmlConfig);
+        $filtered = [];
+        foreach ($groups as $groupName => $childPaths) {
+            //When group accepts arbitrary fields and clones them we allow it
+            $group = $this->_configStructure->getElement($prefix . '/' . $groupName);
+            if (array_key_exists('clone_fields', $group->getData()) && $group->getData()['clone_fields']) {
+                $filtered[$groupName] = $childPaths;
+                continue;
+            }
+
+            $filtered[$groupName] = ['fields' => [], 'groups' => []];
+            //Processing fields
+            if (array_key_exists('fields', $childPaths)) {
+                foreach ($childPaths['fields'] as $field => $fieldData) {
+                    //Constructing config path for the $field
+                    $path = $prefix . '/' . $groupName . '/' . $field;
+                    $element = $this->_configStructure->getElement($path);
+                    if ($element
+                        && ($elementData = $element->getData())
+                        && array_key_exists('config_path', $elementData)
+                    ) {
+                        $path = $elementData['config_path'];
+                    }
+                    //Checking whether it exists in system.xml
+                    if (array_key_exists($path, $flippedXmlConfig)) {
+                        $filtered[$groupName]['fields'][$field] = $fieldData;
+                    }
+                }
+            }
+            //Recursively filtering this group's groups.
+            if (array_key_exists('groups', $childPaths) && $childPaths['groups']) {
+                $filteredGroups = $this->filterPaths(
+                    $prefix . '/' . $groupName,
+                    $childPaths['groups'],
+                    $systemXmlConfig
+                );
+                if ($filteredGroups) {
+                    $filtered[$groupName]['groups'] = $filteredGroups;
+                }
+            }
+
+            $filtered[$groupName] = array_filter($filtered[$groupName]);
+        }
+
+        return array_filter($filtered);
+    }
+
+    /**
+     * Filters nodes by checking whether they exist in system.xml.
+     *
+     * @param array $configData
+     * @return array
+     */
+    private function filterNodes(array $configData)
+    {
+        if (!empty($configData['groups'])) {
+            $systemXmlPathsFromKeys = array_keys($this->_configStructure->getFieldPaths());
+            $systemXmlPathsFromValues = array_reduce(
+                array_values($this->_configStructure->getFieldPaths()),
+                'array_merge',
+                []
+            );
+            //Full list of paths defined in system.xml
+            $systemXmlConfig = array_merge($systemXmlPathsFromKeys, $systemXmlPathsFromValues);
+            $configData['groups'] = $this->filterPaths($configData['section'], $configData['groups'], $systemXmlConfig);
+        }
+
+        return $configData;
     }
 }

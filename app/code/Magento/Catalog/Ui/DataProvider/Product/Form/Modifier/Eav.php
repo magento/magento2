@@ -568,8 +568,12 @@ class Eav extends AbstractModifier
         // TODO: Refactor to $attribute->getOptions() when MAGETWO-48289 is done
         $attributeModel = $this->getAttributeModel($attribute);
         if ($attributeModel->usesSource()) {
+            $options = $attributeModel->getSource()->getAllOptions();
+            foreach ($options as &$option) {
+                $option['__disableTmpl'] = true;
+            }
             $meta = $this->arrayManager->merge($configPath, $meta, [
-                'options' => $attributeModel->getSource()->getAllOptions(),
+                'options' => $this->convertOptionsValueToString($options),
             ]);
         }
 
@@ -620,6 +624,23 @@ class Eav extends AbstractModifier
         }
 
         return $meta;
+    }
+
+    /**
+     * Convert options value to string.
+     *
+     * @param array $options
+     * @return array
+     */
+    private function convertOptionsValueToString(array $options)
+    {
+        array_walk($options, function (&$value) {
+            if (isset($value['value']) && is_scalar($value['value'])) {
+                $value['value'] = (string)$value['value'];
+            }
+        });
+
+        return $options;
     }
 
     /**

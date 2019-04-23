@@ -70,7 +70,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     protected function _getSession()
     {
         if ($this->_adminSession === null) {
-            $this->_adminSession = $this->_objectManager->get('Magento\Backend\Model\Auth\Session');
+            $this->_adminSession = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class);
         }
         return $this->_adminSession;
     }
@@ -100,7 +100,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         }
 
         $requestData = $this->_objectManager->get(
-            'Magento\Backend\Helper\Data'
+            \Magento\Backend\Helper\Data::class
         )->prepareFilterString(
             $this->getRequest()->getParam('filter')
         );
@@ -138,10 +138,12 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      */
     protected function _showLastExecutionTime($flagCode, $refreshCode)
     {
-        $flag = $this->_objectManager->create('Magento\Reports\Model\Flag')->setReportFlagCode($flagCode)->loadSelf();
+        $flag = $this->_objectManager->create(\Magento\Reports\Model\Flag::class)
+            ->setReportFlagCode($flagCode)
+            ->loadSelf();
         $updatedAt = 'undefined';
         if ($flag->hasData()) {
-            $updatedAt =  $this->timezone->formatDate(
+            $updatedAt = $this->timezone->formatDate(
                 $flag->getLastUpdate(),
                 \IntlDateFormatter::MEDIUM,
                 true
@@ -149,15 +151,19 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         }
 
         $refreshStatsLink = $this->getUrl('reports/report_statistics');
-        $directRefreshLink = $this->getUrl('reports/report_statistics/refreshRecent', ['code' => $refreshCode]);
+        $directRefreshLink = $this->getUrl('reports/report_statistics/refreshRecent');
 
         $this->messageManager->addNotice(
             __(
                 'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, ' .
-                'click <a href="%3">here</a>.',
+                'click <a href="#" data-post="%3">here</a>.',
                 $updatedAt,
                 $refreshStatsLink,
-                $directRefreshLink
+                str_replace(
+                    '"',
+                    '&quot;',
+                    json_encode(['action' => $directRefreshLink, 'data' => ['code' => $refreshCode]])
+                )
             )
         );
         return $this;

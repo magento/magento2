@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Ui\Component\Listing\Column\Status\Options;
 
 /**
- * Class OptionsTest
+ * Class OptionsTest for Magento\Sales\Ui\Component\Listing\Column\Status\Options.
  */
 class OptionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,27 +24,54 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
      */
     protected $collectionFactoryMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->collectionFactoryMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory',
+            \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->model = $objectManager->getObject(
-            'Magento\Sales\Ui\Component\Listing\Column\Status\Options',
+            \Magento\Sales\Ui\Component\Listing\Column\Status\Options::class,
             ['collectionFactory' => $this->collectionFactoryMock]
         );
     }
 
+    /**
+     * Unit test for toOptionArray method.
+     *
+     * @return void
+     */
     public function testToOptionArray()
     {
-        $collectionMock =
-            $this->getMock('Magento\Sales\Model\ResourceModel\Order\Status\Collection', [], [], '', false);
-        $options = ['options'];
+        $collectionMock = $this->getMock(
+            \Magento\Sales\Model\ResourceModel\Order\Status\Collection::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        $options = [
+            [
+                'value' => '1',
+                'label' => 'Label',
+            ],
+        ];
+
+        $expectedOptions = [
+            [
+                'value' => '1',
+                'label' => 'Label',
+                '__disableTmpl' => true,
+            ],
+        ];
 
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')
@@ -52,7 +79,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $collectionMock->expects($this->once())
             ->method('toOptionArray')
             ->willReturn($options);
-        $this->assertEquals($options, $this->model->toOptionArray());
-        $this->assertEquals($options, $this->model->toOptionArray());
+
+        $this->assertEquals($expectedOptions, $this->model->toOptionArray());
     }
 }

@@ -5,7 +5,9 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Backend\Model\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\MessageInterface;
@@ -29,23 +31,29 @@ class MassAssignGroupTest extends AbstractBackendController
      */
     protected $customerRepository;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         parent::setUp();
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown()
     {
         /**
          * Unset customer data
          */
-        Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->setCustomerData(null);
+        Bootstrap::getObjectManager()->get(Session::class)->setCustomerData(null);
 
         /**
          * Unset messages
          */
-        Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->getMessages(true);
+        Bootstrap::getObjectManager()->get(Session::class)->getMessages(true);
     }
 
     /**
@@ -76,7 +84,7 @@ class MassAssignGroupTest extends AbstractBackendController
 
             $this->getRequest()
                 ->setParams($params)
-                ->setMethod('POST');
+                ->setMethod(HttpRequest::METHOD_POST);
             $this->dispatch('backend/customer/index/massAssignGroup');
             $this->assertSessionMessages(
                 self::equalTo(['A total of 1 record(s) were updated.']),
@@ -125,8 +133,7 @@ class MassAssignGroupTest extends AbstractBackendController
 
         $this->getRequest()
             ->setParams($params)
-            ->setMethod('POST');
-
+            ->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             self::equalTo(['A total of 5 record(s) were updated.']),
@@ -152,18 +159,14 @@ class MassAssignGroupTest extends AbstractBackendController
     public function testMassAssignGroupActionNoCustomerIds()
     {
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
-        $formKey = $this->_objectManager->get(
-            \Magento\Framework\Data\Form\FormKey::class
-        );
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
 
         $params = [
             'group' => 0,
             'namespace' => 'customer_listing',
             'form_key' => $formKey->getFormKey()
         ];
-        $this->getRequest()
-            ->setParams($params)
-            ->setMethod('POST');
+        $this->getRequest()->setParams($params)->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             $this->equalTo(['Please select item(s).']),

@@ -155,6 +155,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductGridFilterCorrect" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation13" summary="Custom options must be displayed correctly on a store view level" ticketId="MAGETWO-61706">
+            <data name="issue" xsi:type="string">MAGETWO-98360: [FT] Magento\Catalog\Test\TestCase\Product\UpdateSimpleProductEntityTest.test with data set "UpdateSimpleProductEntityTestVariation13" fails</data>
             <data name="initialProduct/dataset" xsi:type="string">with_one_custom_option</data>
             <data name="store/dataset" xsi:type="string">custom</data>
             <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_percent_price_updated</data>

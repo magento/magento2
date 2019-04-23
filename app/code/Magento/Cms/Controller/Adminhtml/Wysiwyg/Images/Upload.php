@@ -28,7 +28,6 @@ class Upload extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\App\Filesystem\DirectoryResolver|null $directoryResolver
-     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -52,6 +51,10 @@ class Upload extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     public function execute()
     {
         try {
+            if (!$this->getRequest()->isPost()) {
+                throw new \Exception('Wrong request.');
+            }
+
             $this->_initAction();
             $path = $this->getStorage()->getSession()->getCurrentPath();
             if (!$this->directoryResolver->validatePath($path, DirectoryList::MEDIA)) {
@@ -65,6 +68,7 @@ class Upload extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
+
         return $resultJson->setData($result);
     }
 }

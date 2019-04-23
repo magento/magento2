@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Controller\Adminhtml;
 
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
@@ -14,6 +15,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
 {
     public function testSaveActionWithDangerRequest()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(['product' => ['entity_id' => 15]]);
         $this->dispatch('backend/catalog/product/save');
         $this->assertSessionMessages(
@@ -31,6 +33,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->getRequest()->setPostValue(['back' => 'new']);
         $repository = $this->_objectManager->create(ProductRepository::class);
         $product = $repository->get('simple');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/new/'));
         $this->assertSessionMessages(
@@ -47,6 +50,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->getRequest()->setPostValue(['back' => 'duplicate']);
         $repository = $this->_objectManager->create(ProductRepository::class);
         $product = $repository->get('simple');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/'));
         $this->assertRedirect(

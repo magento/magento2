@@ -6,17 +6,26 @@
 
 namespace Magento\Framework\Filter\Test\Unit;
 
+use Magento\Framework\Filter\Template;
+use Magento\Store\Model\Store;
+
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Filter\Template
+     * @var Template
      */
     private $templateFilter;
+
+    /**
+     * @var Store
+     */
+    private $store;
 
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->templateFilter = $objectManager->getObject('Magento\Framework\Filter\Template');
+        $this->templateFilter = $objectManager->getObject(Template::class);
+        $this->store = $objectManager->getObject(Store::class);
     }
 
     public function testFilter()
@@ -189,6 +198,39 @@ EXPECTED_RESULT;
                     ],
                 ]),
             ],
+        ];
+    }
+
+    /**
+     * Test filtering disallowed methods calls.
+     *
+     * @param string $method
+     * @dataProvider disallowedMethods
+     * @expectedException \InvalidArgumentException
+     *
+     * @return void
+     */
+    public function testDisallowedMethods($method)
+    {
+        $this->templateFilter->setVariables(['store' => $this->store]);
+        $this->templateFilter->filter('{{var store.' . $method . '()}}');
+    }
+
+    /**
+     * Data for testDisallowedMethods method.
+     *
+     * @return array
+     */
+    public function disallowedMethods()
+    {
+        return [
+            ['getResourceCollection'],
+            ['load'],
+            ['save'],
+            ['getCollection'],
+            ['getResource'],
+            ['getConfig'],
+            ['delete'],
         ];
     }
 }

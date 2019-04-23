@@ -6,11 +6,13 @@
 namespace Magento\Checkout\Test\Unit\Controller\Cart;
 
 use Magento\Checkout\Controller\Cart\Index;
+use Magento\Framework\Data\Form\FormKey\Validator;
 
 /**
  * Test for \Magento\Checkout\Controller\Cart\CouponPost
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CouponPostTest extends \PHPUnit_Framework_TestCase
 {
@@ -85,6 +87,11 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
     private $redirectFactory;
 
     /**
+     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $formKeyValidatorMock;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $coupon;
@@ -95,6 +102,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->request->expects($this->any())->method('isPost')->willReturn(true);
         $this->response = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
         $this->quote = $this->getMock(
             \Magento\Quote\Model\Quote::class,
@@ -165,6 +173,8 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->quoteRepository = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
         $this->shippingAddress = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $this->formKeyValidatorMock = $this->getMock(Validator::class, [], [], '', false);
+        $this->formKeyValidatorMock->expects($this->once())->method('validate')->willReturn(true);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -175,22 +185,20 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
                 'checkoutSession' => $this->checkoutSession,
                 'cart' => $this->cart,
                 'couponFactory' => $this->couponFactory,
-                'quoteRepository' => $this->quoteRepository
+                'quoteRepository' => $this->quoteRepository,
+                'formKeyValidator' => $this->formKeyValidatorMock,
             ]
         );
     }
 
     public function testExecuteWithEmptyCoupon()
     {
-        $this->request->expects($this->at(0))
-            ->method('getParam')
-            ->with('remove')
-            ->willReturn(0);
-
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('coupon_code')
-            ->willReturn('');
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                ['remove', null, 0],
+                ['coupon_code', null, ''],
+            ]
+        );
 
         $this->cart->expects($this->once())
             ->method('getQuote')
@@ -201,15 +209,12 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteWithGoodCouponAndItems()
     {
-        $this->request->expects($this->at(0))
-            ->method('getParam')
-            ->with('remove')
-            ->willReturn(0);
-
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('coupon_code')
-            ->willReturn('CODE');
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                ['remove', null, 0],
+                ['coupon_code', null, 'CODE'],
+            ]
+        );
 
         $this->cart->expects($this->any())
             ->method('getQuote')
@@ -251,7 +256,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->willReturn('CODE');
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->willReturnSelf();
 
         $this->objectManagerMock->expects($this->once())
@@ -263,15 +268,12 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteWithGoodCouponAndNoItems()
     {
-        $this->request->expects($this->at(0))
-            ->method('getParam')
-            ->with('remove')
-            ->willReturn(0);
-
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('coupon_code')
-            ->willReturn('CODE');
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                ['remove', null, 0],
+                ['coupon_code', null, 'CODE'],
+            ]
+        );
 
         $this->cart->expects($this->any())
             ->method('getQuote')
@@ -303,7 +305,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->willReturnSelf();
 
         $this->objectManagerMock->expects($this->once())
@@ -315,15 +317,12 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteWithBadCouponAndItems()
     {
-        $this->request->expects($this->at(0))
-            ->method('getParam')
-            ->with('remove')
-            ->willReturn(0);
-
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('coupon_code')
-            ->willReturn('CODE');
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                ['remove', null, 0],
+                ['coupon_code', null, 'CODE'],
+            ]
+        );
 
         $this->cart->expects($this->any())
             ->method('getQuote')
@@ -359,7 +358,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->coupon);
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->willReturnSelf();
 
         $this->objectManagerMock->expects($this->once())
@@ -371,15 +370,12 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteWithBadCouponAndNoItems()
     {
-        $this->request->expects($this->at(0))
-            ->method('getParam')
-            ->with('remove')
-            ->willReturn(0);
-
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('coupon_code')
-            ->willReturn('CODE');
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                ['remove', null, 0],
+                ['coupon_code', null, 'CODE'],
+            ]
+        );
 
         $this->cart->expects($this->any())
             ->method('getQuote')
@@ -402,7 +398,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->coupon);
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->willReturnSelf();
 
         $this->objectManagerMock->expects($this->once())
@@ -414,15 +410,12 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
 
     public function testCancelCoupon()
     {
-        $this->request->expects($this->at(0))
-            ->method('getParam')
-            ->with('remove')
-            ->willReturn(0);
-
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('coupon_code')
-            ->willReturn('');
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                ['remove', null, 0],
+                ['coupon_code', null, ''],
+            ]
+        );
 
         $this->quote->expects($this->at(0))
             ->method('getCouponCode')
@@ -433,7 +426,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->quote);
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You canceled the coupon code.');
 
         $this->controller->execute();

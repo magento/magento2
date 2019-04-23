@@ -136,7 +136,7 @@ class Main extends \Magento\Backend\Block\Template
                     ) . '\', \'' . $this->getUrl(
                         'catalog/*/delete',
                         ['id' => $setId]
-                    ) . '\')',
+                    ) . '\', {data: {}})',
                     'class' => 'delete'
                 ]
             );

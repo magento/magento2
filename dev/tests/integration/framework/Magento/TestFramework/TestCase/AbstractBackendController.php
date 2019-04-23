@@ -5,10 +5,12 @@
  */
 namespace Magento\TestFramework\TestCase;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+
 /**
- * A parent class for backend controllers - contains directives for admin user creation and authentication
+ * A parent class for backend controllers - contains directives for admin user creation and authentication.
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @SuppressWarnings(PHPMD.numberOfChildren)
  */
 abstract class AbstractBackendController extends \Magento\TestFramework\TestCase\AbstractController
 {
@@ -36,17 +38,27 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
      */
     protected $uri = null;
 
+    /**
+     * @var string|null
+     */
+    protected $httpMethod;
+
+    /**
+     * @inheritDoc
+     *
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
     protected function setUp()
     {
         parent::setUp();
 
-        $this->_objectManager->get('Magento\Backend\Model\UrlInterface')->turnOffSecretKey();
+        $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
 
-        $this->_auth = $this->_objectManager->get('Magento\Backend\Model\Auth');
+        $this->_auth = $this->_objectManager->get(\Magento\Backend\Model\Auth::class);
         $this->_session = $this->_auth->getAuthStorage();
         $credentials = $this->_getAdminCredentials();
         $this->_auth->login($credentials['user'], $credentials['password']);
-        $this->_objectManager->get('Magento\Security\Model\Plugin\Auth')->afterLogin($this->_auth);
+        $this->_objectManager->get(\Magento\Security\Model\Plugin\Auth::class)->afterLogin($this->_auth);
     }
 
     /**
@@ -62,12 +74,15 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         ];
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown()
     {
         $this->_auth->getAuthStorage()->destroy(['send_expire_cookie' => false]);
         $this->_auth = null;
         $this->_session = null;
-        $this->_objectManager->get('Magento\Backend\Model\UrlInterface')->turnOnSecretKey();
+        $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOnSecretKey();
         parent::tearDown();
     }
 
@@ -81,28 +96,39 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
     public function assertSessionMessages(
         \PHPUnit_Framework_Constraint $constraint,
         $messageType = null,
-        $messageManagerClass = 'Magento\Framework\Message\Manager'
+        $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
         parent::assertSessionMessages($constraint, $messageType, $messageManagerClass);
     }
 
-
+    /**
+     * Test ACL configuration for action working.
+     */
     public function testAclHasAccess()
     {
         if ($this->uri === null) {
             $this->markTestIncomplete('AclHasAccess test is not complete');
+        }
+        if ($this->httpMethod) {
+            $this->getRequest()->setMethod($this->httpMethod);
         }
         $this->dispatch($this->uri);
         $this->assertNotSame(403, $this->getResponse()->getHttpResponseCode());
         $this->assertNotSame(404, $this->getResponse()->getHttpResponseCode());
     }
 
+    /**
+     * Test ACL actually denying access.
+     */
     public function testAclNoAccess()
     {
-        if ($this->resource === null) {
+        if ($this->resource === null || $this->uri === null) {
             $this->markTestIncomplete('Acl test is not complete');
         }
-        $this->_objectManager->get('Magento\Framework\Acl\Builder')
+        if ($this->httpMethod) {
+            $this->getRequest()->setMethod($this->httpMethod);
+        }
+        $this->_objectManager->get(\Magento\Framework\Acl\Builder::class)
             ->getAcl()
             ->deny(null, $this->resource);
         $this->dispatch($this->uri);

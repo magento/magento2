@@ -6,15 +6,22 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 
+use Magento\Framework\Exception\NotFoundException;
+
 class Delete extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
 {
     /**
      * @return void
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         $id = (int)$this->getRequest()->getParam('id');
-        $model = $this->_objectManager->get('Magento\CheckoutAgreements\Model\Agreement')->load($id);
+        $model = $this->_objectManager->get(\Magento\CheckoutAgreements\Model\Agreement::class)->load($id);
         if (!$model->getId()) {
             $this->messageManager->addError(__('This condition no longer exists.'));
             $this->_redirect('checkout/*/');
