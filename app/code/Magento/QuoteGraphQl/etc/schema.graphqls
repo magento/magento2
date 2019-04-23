@@ -6,7 +6,7 @@ type Query {
 }
 
 type Mutation {
-    createEmptyCart: String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CreateEmptyCart") @doc(description:"Creates an empty shopping cart for a guest or logged in user")
+    createEmptyCart(input: createEmptyCartInput): String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CreateEmptyCart") @doc(description:"Creates an empty shopping cart for a guest or logged in user")
     addSimpleProductsToCart(input: AddSimpleProductsToCartInput): AddSimpleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
     addVirtualProductsToCart(input: AddVirtualProductsToCartInput): AddVirtualProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
     applyCouponToCart(input: ApplyCouponToCartInput): ApplyCouponToCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ApplyCouponToCart")
@@ -19,6 +19,10 @@ type Mutation {
     setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart")
     setGuestEmailOnCart(input: SetGuestEmailOnCartInput): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart")
     placeOrder(input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder")
+}
+
+input createEmptyCartInput {
+    cart_id: String
 }
 
 input AddSimpleProductsToCartInput {
