@@ -598,16 +598,18 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
                     'label' => __('Template Variables'),
                     'value' => [
                         [
-                            'value' => '{{store url=""}}',
-                            'label' => __('%1', 'Store Url'),
-                        ],
-                        [
-                            'value' => '{{var logo_url}}',
-                            'label' => __('%1', 'Email Logo Image Url'),
-                        ],
-                        [
-                            'value' => '{{var customer.name}}',
-                            'label' => __('%1', 'Customer Name'),
+                            [
+                                'value' => '{{store url=""}}',
+                                'label' => __('%1', 'Store Url'),
+                            ],
+                            [
+                                'value' => '{{var logo_url}}',
+                                'label' => __('%1', 'Email Logo Image Url'),
+                            ],
+                            [
+                                'value' => '{{var customer.name}}',
+                                'label' => __('%1', 'Customer Name'),
+                            ],
                         ],
                     ],
                 ],
