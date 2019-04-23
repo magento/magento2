@@ -13,7 +13,7 @@
             <argument name="customer" type="entity"/>
         </arguments>
         <waitForPageLoad stepKey="waitForCheckoutShippingSectionToLoad"/>
-        <fillField selector="{{CheckoutShippingSection.checkoutEmail}}" userInput="{{customer.email}}" stepKey="fillEmailField"/>
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customer.email}}" stepKey="fillEmailField"/>
         <waitForElementVisible selector="{{CheckoutShippingSection.password}}" stepKey="waitForElementVisible"/>
         <fillField selector="{{CheckoutShippingSection.password}}" userInput="{{customer.password}}" stepKey="fillPasswordField"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
