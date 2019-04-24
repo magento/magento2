@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventoryExportStock\Model\ResourceModel;
 
+use Magento\Catalog\Model\Product\Type;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use Magento\InventoryExportStock\Model\GetQtyForNotManageStock;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 use Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\ManageStockCondition as NotManageStockCondition;
@@ -128,10 +131,19 @@ class StockIndexDumpProcessor
             ->getTableName('catalog_product_website');
 
         $select = $this->connection->select();
+        $ifExpression = '
+        IF(
+            `product_entity`.`type_id` IN (
+                \'' . Configurable::TYPE_CODE . '\',
+                \'' . Type::TYPE_BUNDLE . '\',
+                \'' . Grouped::TYPE_CODE . '\'),
+            NULL,
+            `quantity`
+        )';
         $select->from(
             ['stock_index' => $stockIndexTableName],
             [
-                'qty' => new \Zend_Db_Expr('IF(product_entity.type_id = \'simple\', quantity, NULL)'),
+                'qty' => new \Zend_Db_Expr($ifExpression),
                 'is_salable' => 'is_salable',
                 'sku' => 'sku'
             ]
