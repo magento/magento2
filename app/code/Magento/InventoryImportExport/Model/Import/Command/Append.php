@@ -42,29 +42,7 @@ class Append implements CommandInterface
      */
     public function execute(array $bunch)
     {
-        \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Psr\Log\LoggerInterface::class)->debug('time start ' . time());
-        \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Psr\Log\LoggerInterface::class)->debug('bunch-size ' . count($bunch));
-
         $sourceItems = $this->sourceItemConvert->convert($bunch);
         $this->sourceItemsSave->execute($sourceItems);
-        \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Psr\Log\LoggerInterface::class)->debug('memory ' . $this->getNiceFileSize(memory_get_usage()));
-
-        \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Psr\Log\LoggerInterface::class)->debug('time end ' . time());
-    }
-
-    function getNiceFileSize($bytes, $binaryPrefix=true) {
-        if ($binaryPrefix) {
-            $unit=array('B','KiB','MiB','GiB','TiB','PiB');
-            if ($bytes==0) return '0 ' . $unit[0];
-            return @round($bytes/pow(1024,($i=floor(log($bytes,1024)))),2) .' '. (isset($unit[$i]) ? $unit[$i] : 'B');
-        } else {
-            $unit=array('B','KB','MB','GB','TB','PB');
-            if ($bytes==0) return '0 ' . $unit[0];
-            return @round($bytes/pow(1000,($i=floor(log($bytes,1000)))),2) .' '. (isset($unit[$i]) ? $unit[$i] : 'B');
-        }
     }
 }
