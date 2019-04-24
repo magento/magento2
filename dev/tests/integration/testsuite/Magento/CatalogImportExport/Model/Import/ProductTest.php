@@ -1595,7 +1595,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Make sure the non existing image in the csv file won't erase the qty key of the existing products.
      *
-     * @magentoDataFixture Magento/CatalogImportExport/Model/Import/_files/products_to_import_with_non_existing_image.csv
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
@@ -1604,24 +1603,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $products = [
             'simple_new' => 100,
         ];
-        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
-            [
-                'file' => __DIR__ . '/_files/products_to_import_with_non_existing_image.csv',
-                'directory' => $directory
-            ]
-        );
 
-        $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
-        )
-            ->setSource($source)
-            ->validateData();
-
-        $this->assertTrue($errors->getErrorsCount() == 0);
-        $this->_model->importData();
+        $this->importFile('products_to_import_with_non_existing_image.csv');
 
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         foreach ($products as $productSku => $productQty) {
