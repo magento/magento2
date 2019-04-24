@@ -14,7 +14,7 @@ use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterfaceFactory;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 
 /**
- * @inheritDoc
+ * @inheritdoc
  */
 class IsAnySourceItemInStockCondition implements IsProductSalableForRequestedQtyInterface
 {
@@ -55,16 +55,15 @@ class IsAnySourceItemInStockCondition implements IsProductSalableForRequestedQty
      */
     public function execute(string $sku, int $stockId, float $requestedQty): ProductSalableResultInterface
     {
-        $isValid = $this->isAnySourceInStockCondition->execute($sku, $stockId);
-        if ($isValid) {
-            return $this->productSalableResultFactory->create(['errors' => []]);
-        }
-        $errors = [
-            $this->productSalabilityErrorFactory->create([
+        $errors = [];
+
+        if (!$this->isAnySourceInStockCondition->execute($sku, $stockId)) {
+            $data = [
                 'code' => 'is_any_source_item_in_stock-no_source_items_in_stock',
                 'message' => __('There are no source items with the in stock status')
-            ])
-        ];
+            ];
+            $errors[] = $this->productSalabilityErrorFactory->create($data);
+        }
 
         return $this->productSalableResultFactory->create(['errors' => $errors]);
     }

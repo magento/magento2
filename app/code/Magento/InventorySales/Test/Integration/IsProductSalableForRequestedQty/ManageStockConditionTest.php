@@ -65,9 +65,9 @@ class ManageStockConditionTest extends TestCase
             ['SKU-2', 10, 1, false],
             ['SKU-2', 20, 1, true],
             ['SKU-2', 30, 1, true],
-            ['SKU-3', 10, 1, true],
+            ['SKU-3', 10, 1, false],
             ['SKU-3', 20, 1, false],
-            ['SKU-3', 30, 1, true],
+            ['SKU-3', 30, 1, false],
         ];
     }
 }

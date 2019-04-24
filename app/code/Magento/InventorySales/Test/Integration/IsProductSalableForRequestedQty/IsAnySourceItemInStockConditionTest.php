@@ -53,13 +53,23 @@ class IsAnySourceItemInStockConditionTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items_out_of_stock.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     *
+     * @dataProvider sourceItemsStockData
      *
      * @magentoDbIsolation disabled
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param bool $expected
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testSourceItemsAreOutOfStock()
+    public function testSourceItemsAreOutOfStock(string $sku, int $stockId, bool $expected): void
     {
-        $product = $this->productRepository->get('SKU-1');
+        $product = $this->productRepository->get($sku);
         $stockItemSearchCriteria = $this->stockItemCriteriaFactory->create();
         $stockItemSearchCriteria->setProductsFilter($product->getId());
         $stockItemsCollection = $this->stockItemRepository->getList($stockItemSearchCriteria);
@@ -69,6 +79,24 @@ class IsAnySourceItemInStockConditionTest extends TestCase
         $legacyStockItem->setBackorders(1);
         $legacyStockItem->setUseConfigBackorders(0);
         $this->stockItemRepository->save($legacyStockItem);
-        $this->assertFalse($this->isProductSalable->execute('SKU-1', 10, 1)->isSalable());
+        $this->assertEquals($expected, $this->isProductSalable->execute($sku, $stockId, 1)->isSalable());
+    }
+
+    /**
+     * @return array
+     */
+    public function sourceItemsStockData(): array
+    {
+        return [
+            ['SKU-1', 10, true],
+            ['SKU-1', 20, false],
+            ['SKU-1', 30, true],
+            ['SKU-2', 10, false],
+            ['SKU-2', 20, true],
+            ['SKU-2', 30, true],
+            ['SKU-3', 10, false],
+            ['SKU-3', 20, false],
+            ['SKU-3', 30, false],
+        ];
     }
 }
