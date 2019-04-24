@@ -15,6 +15,9 @@ use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Tests for the transaction response validator
+ */
 class TransactionResponseValidatorTest extends TestCase
 {
     private const RESPONSE_CODE_APPROVED = 1;
