@@ -45,6 +45,7 @@ class PreciseExportStockProcessor
      * @var IsProductSalableInterface
      */
     private $isProductSalable;
+
     /**
      * @var IsProductAssignedToStockInterface
      */
@@ -127,6 +128,13 @@ class PreciseExportStockProcessor
      */
     private function getItem(string $sku, int $stockId): array
     {
+        if (!$this->isSourceItemManagementAllowedForSku->execute($sku)) {
+            return [
+                'sku' => $sku,
+                'qty' => null,
+                'is_salable' => $this->isProductSalable->execute($sku, $stockId)
+            ];
+        }
         if (!$this->getStockItemConfiguration->execute($sku)->isManageStock()) {
             return [
                 'sku' => $sku,
@@ -136,13 +144,6 @@ class PreciseExportStockProcessor
         }
         if (!$this->isProductAssignedToStock->execute($sku, $stockId)) {
             throw new SkuIsNotAssignedToStockException(__('The requested sku is not assigned to given stock.'));
-        }
-        if (!$this->isSourceItemManagementAllowedForSku->execute($sku)) {
-            return [
-                'sku' => $sku,
-                'qty' => null,
-                'is_salable' => $this->isProductSalable->execute($sku, $stockId)
-            ];
         }
 
         return [
