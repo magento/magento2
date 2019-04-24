@@ -36,4 +36,30 @@
         <click selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="clickEditExistingWebsite"/>
         <grabFromCurrentUrl regex="~(\d+)/~" stepKey="grabFromCurrentUrl"/>
     </actionGroup>
+
+    <actionGroup name="AssertWebsiteInGrid">
+        <arguments>
+            <argument name="websiteName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillWebsiteField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <seeElement selector="{{AdminStoresGridSection.websiteName(websiteName)}}" stepKey="seeAssertWebsiteInGrid"/>
+    </actionGroup>
+
+    <actionGroup name="AssertWebsiteForm">
+        <arguments>
+            <argument name="websiteName" type="string"/>
+            <argument name="websiteCode" type="string"/>
+        </arguments>
+        <click selector="{{AdminStoresGridSection.websiteName(websiteName)}}" stepKey="clickWebsiteFirstRowInGrid"/>
+        <waitForPageLoad stepKey="waitTillWebsiteFormPageIsOpened"/>
+        <grabFromCurrentUrl regex="~(\d+)/~" stepKey="grabWebsiteIdFromCurrentUrl"/>
+        <seeInCurrentUrl url="/system_store/editWebsite/website_id/{$grabWebsiteIdFromCurrentUrl}" stepKey="seeWebsiteId"/>
+        <seeInField selector="{{AdminNewWebsiteSection.name}}" userInput="{{websiteName}}" stepKey="seeAssertWebsiteName"/>
+        <seeInField selector="{{AdminNewWebsiteSection.code}}" userInput="{{websiteCode}}" stepKey="seeAssertWebsiteCode"/>
+    </actionGroup>
 </actionGroups>

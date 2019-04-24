@@ -662,10 +662,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->delete($product);
         } catch (ValidatorException $e) {
-            throw new CouldNotSaveException(__($e->getMessage()));
+            throw new CouldNotSaveException(__($e->getMessage()), $e);
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\StateException(
-                __('The "%1" product couldn\'t be removed.', $sku)
+                __('The "%1" product couldn\'t be removed.', $sku),
+                $e
             );
         }
         $this->removeProductFromLocalCache($sku);

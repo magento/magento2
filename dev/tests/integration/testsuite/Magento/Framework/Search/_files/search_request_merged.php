@@ -35,6 +35,7 @@ return [
             'match_query' => [
                 'value' => '$match_term_override$',
                 'name' => 'match_query',
+                'boost' => '1',
                 'match' => [
                     0 => [
                         'field' => 'match_field',
@@ -50,6 +51,7 @@ return [
             ],
             'must_query' => [
                 'name' => 'must_query',
+                'boost' => '1',
                 'filterReference' =>  [
                     0 => [
                         'clause' => 'must',
@@ -60,6 +62,7 @@ return [
             ],
             'should_query' => [
                 'name' => 'should_query',
+                'boost' => '1',
                 'filterReference' => [
                     0 => [
                         'clause' => 'should',
@@ -70,6 +73,7 @@ return [
             ],
             'not_query' => [
                 'name' => 'not_query',
+                'boost' => '1',
                 'filterReference' => [
                     0 => [
                         'clause' => 'not',
@@ -80,6 +84,7 @@ return [
             ],
             'match_query_2' => [
                 'value' => '$match_term_override$',
+                'boost' => '1',
                 'name' => 'match_query_2',
                 'match' => [
                     0 => [
@@ -163,6 +168,7 @@ return [
         'queries' => [
             'filter_query' => [
                 'name' => 'filter_query',
+                'boost' => '1',
                 'filterReference' => [
                     0 =>
                         [
@@ -230,6 +236,7 @@ return [
             'new_match_query' => [
                 'value' => '$match_term$',
                 'name' => 'new_match_query',
+                'boost' => '1',
                 'match' => [
                     0 =>
                         [

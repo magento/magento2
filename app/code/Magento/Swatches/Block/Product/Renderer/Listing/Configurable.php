@@ -8,7 +8,8 @@ namespace Magento\Swatches\Block\Product\Renderer\Listing;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Product as CatalogProduct;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\Layer\Category as CategoryLayer;
 use Magento\ConfigurableProduct\Helper\Data;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
@@ -40,6 +41,11 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
     private $variationPrices;
 
     /**
+     * @var \Magento\Catalog\Model\Layer\Resolver
+     */
+    private $layerResolver;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @param Context $context
      * @param ArrayUtils $arrayUtils
@@ -55,6 +61,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * @param SwatchAttributesProvider|null $swatchAttributesProvider
      * @param \Magento\Framework\Locale\Format|null $localeFormat
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices|null $variationPrices
+     * @param Resolver $layerResolver
      */
     public function __construct(
         Context $context,
@@ -70,7 +77,8 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
         array $data = [],
         SwatchAttributesProvider $swatchAttributesProvider = null,
         \Magento\Framework\Locale\Format $localeFormat = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
+        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null,
+        Resolver $layerResolver = null
     ) {
         parent::__construct(
             $context,
@@ -92,10 +100,11 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
         $this->variationPrices = $variationPrices ?: ObjectManager::getInstance()->get(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
         );
+        $this->layerResolver = $layerResolver ?: ObjectManager::getInstance()->get(Resolver::class);
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     protected function getRendererTemplate()
     {
@@ -121,7 +130,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     protected function getSwatchAttributesData()
     {
@@ -183,6 +192,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Add images to result json config in case of Layered Navigation is used
      *
      * @return array
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      * @since 100.2.0
      */
     protected function _getAdditionalConfig()
@@ -246,5 +256,17 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
         }
 
         return $layeredAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCacheKeyInfo()
+    {
+        $cacheKeyInfo = parent::getCacheKeyInfo();
+        /** @var CategoryLayer $catalogLayer */
+        $catalogLayer = $this->layerResolver->get();
+        $cacheKeyInfo[] = $catalogLayer->getStateKey();
+        return $cacheKeyInfo;
     }
 }

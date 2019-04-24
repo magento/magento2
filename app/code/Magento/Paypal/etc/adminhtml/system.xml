@@ -106,12 +106,23 @@
                         <field id="enable_express_checkout">
                             <config_path>payment/wps_express/active</config_path>
                         </field>
-                        <field id="enable_express_checkout_bml">
+                        <field id="enable_express_checkout_bml" showInDefault="1" showInWebsite="1">
                             <config_path>payment/wps_express_bml/active</config_path>
                         </field>
+                        <field id="express_checkout_bml_sort_order" showInDefault="1" showInWebsite="1"/>
                     </group>
                     <group id="settings_ec" translate="label">
                         <label>Basic Settings - PayPal Website Payments Standard</label>
+                        <group id="settings_ec_advanced">
+                            <group id="express_checkout_frontend">
+                                <field id="checkout_display" showInDefault="0" showInWebsite="0" showInStore="0"/>
+                                <group id="checkout_page_button" showInDefault="0" showInWebsite="0" showInStore="0"/>
+                                <group id="product_page_button" showInDefault="0" showInWebsite="0" showInStore="0"/>
+                                <group id="cart_page_button" showInDefault="0" showInWebsite="0" showInStore="0"/>
+                                <group id="mini_cart_page_button" showInDefault="0" showInWebsite="0" showInStore="0"/>
+                                <group id="features" showInDefault="0" showInWebsite="0" showInStore="0"/>
+                            </group>
+                        </group>
                     </group>
                 </group>
             </group>

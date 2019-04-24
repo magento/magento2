@@ -33,6 +33,7 @@ use Zend\Uri\UriFactory;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Store extends AbstractExtensibleModel implements
@@ -326,6 +327,11 @@ class Store extends AbstractExtensibleModel implements
     private $eventManager;
 
     /**
+     * @var \Magento\MessageQueue\Api\PoisonPillPutInterface
+     */
+    private $pillPut;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -351,6 +357,7 @@ class Store extends AbstractExtensibleModel implements
      * @param bool $isCustomEntryPoint
      * @param array $data optional generic object data
      * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
+     * @param \Magento\MessageQueue\Api\PoisonPillPutInterface|null $pillPut
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -379,7 +386,8 @@ class Store extends AbstractExtensibleModel implements
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $isCustomEntryPoint = false,
         array $data = [],
-        \Magento\Framework\Event\ManagerInterface $eventManager = null
+        \Magento\Framework\Event\ManagerInterface $eventManager = null,
+        \Magento\MessageQueue\Api\PoisonPillPutInterface $pillPut = null
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_config = $config;
@@ -400,6 +408,8 @@ class Store extends AbstractExtensibleModel implements
         $this->websiteRepository = $websiteRepository;
         $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Event\ManagerInterface::class);
+        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\MessageQueue\Api\PoisonPillPutInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -706,7 +716,8 @@ class Store extends AbstractExtensibleModel implements
             if ($this->_isCustomEntryPoint()) {
                 $indexFileName = 'index.php';
             } else {
-                $indexFileName = basename($_SERVER['SCRIPT_FILENAME']);
+                $scriptFilename = $this->_request->getServer('SCRIPT_FILENAME');
+                $indexFileName = basename($scriptFilename);
             }
             $url .= $indexFileName . '/';
         }
@@ -897,7 +908,10 @@ class Store extends AbstractExtensibleModel implements
         if (in_array($code, $this->getAvailableCurrencyCodes())) {
             $this->_getSession()->setCurrencyCode($code);
 
-            $defaultCode = $this->_storeManager->getWebsite()->getDefaultStore()->getDefaultCurrency()->getCode();
+            $defaultCode = ($this->_storeManager->getStore() !== null)
+                ? $this->_storeManager->getStore()->getDefaultCurrency()->getCode()
+                : $this->_storeManager->getWebsite()->getDefaultStore()->getDefaultCurrency()->getCode();
+            
             $this->_httpContext->setValue(Context::CONTEXT_CURRENCY, $code, $defaultCode);
         }
         return $this;
@@ -1073,6 +1087,7 @@ class Store extends AbstractExtensibleModel implements
         $this->getResource()->addCommitCallback(function () use ($event, $store) {
             $this->eventManager->dispatch($event, ['store' => $store]);
         });
+        $this->pillPut->put();
         return parent::afterSave();
     }
 

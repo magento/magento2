@@ -14,6 +14,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 
+/**
+ * Update customer address tests
+ */
 class UpdateCustomerAddressTest extends GraphQlAbstract
 {
     /**
@@ -128,7 +131,7 @@ mutation {
 }
 MUTATION;
 
-        $response = $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('updateCustomerAddress', $response);
         $this->assertArrayHasKey('customer_id', $response['updateCustomerAddress']);
         $this->assertEquals($customerId, $response['updateCustomerAddress']['customer_id']);
@@ -158,7 +161,7 @@ mutation {
   }
 }
 MUTATION;
-        $this->graphQlQuery($mutation);
+        $this->graphQlMutation($mutation);
     }
 
     /**
@@ -187,7 +190,7 @@ mutation {
   }
 }
 MUTATION;
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**
@@ -218,13 +221,12 @@ MUTATION;
         ];
         $this->assertResponseFields($actualResponse, $assertionMap);
         $this->assertTrue(is_array([$actualResponse['region']]), "region field must be of an array type.");
-        // https://github.com/magento/graphql-ce/issues/270
-//        $assertionRegionMap = [
-//            ['response_field' => 'region', 'expected_value' => $address->getRegion()->getRegion()],
-//            ['response_field' => 'region_code', 'expected_value' => $address->getRegion()->getRegionCode()],
-//            ['response_field' => 'region_id', 'expected_value' => $address->getRegion()->getRegionId()]
-//        ];
-//        $this->assertResponseFields($actualResponse['region'], $assertionRegionMap);
+        $assertionRegionMap = [
+            ['response_field' => 'region', 'expected_value' => $address->getRegion()->getRegion()],
+            ['response_field' => 'region_code', 'expected_value' => $address->getRegion()->getRegionCode()],
+            ['response_field' => 'region_id', 'expected_value' => $address->getRegion()->getRegionId()]
+        ];
+        $this->assertResponseFields($actualResponse['region'], $assertionRegionMap);
     }
 
     /**

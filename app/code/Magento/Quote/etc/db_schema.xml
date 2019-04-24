@@ -202,6 +202,8 @@
         <column xsi:type="text" name="vat_request_date" nullable="true" comment="Vat Request Date"/>
         <column xsi:type="smallint" name="vat_request_success" padding="6" unsigned="false" nullable="true"
                 identity="false" comment="Vat Request Success"/>
+        <column xsi:type="text" name="validated_country_code" nullable="true" comment="Validated Country Code"/>
+        <column xsi:type="text" name="validated_vat_number" nullable="true" comment="Validated Vat Number"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="address_id"/>
         </constraint>
@@ -352,6 +354,8 @@
                 comment="Super Product Id"/>
         <column xsi:type="int" name="parent_product_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Parent Product Id"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+                comment="Store Id"/>
         <column xsi:type="varchar" name="sku" nullable="true" length="255" comment="Sku"/>
         <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Image"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
@@ -402,6 +406,9 @@
         </index>
         <index referenceId="QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID" indexType="btree">
             <column name="quote_item_id"/>
+        </index>
+        <index referenceId="QUOTE_ADDRESS_ITEM_STORE_ID" indexType="btree">
+            <column name="store_id"/>
         </index>
     </table>
     <table name="quote_item_option" resource="checkout" engine="innodb" comment="Sales Flat Quote Item Option">

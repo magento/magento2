@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product\ProductImage;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\ImageFactory;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Image\Placeholder as PlaceholderProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -23,14 +24,21 @@ class Url implements ResolverInterface
      * @var ImageFactory
      */
     private $productImageFactory;
+    /**
+     * @var PlaceholderProvider
+     */
+    private $placeholderProvider;
 
     /**
      * @param ImageFactory $productImageFactory
+     * @param PlaceholderProvider $placeholderProvider
      */
     public function __construct(
-        ImageFactory $productImageFactory
+        ImageFactory $productImageFactory,
+        PlaceholderProvider $placeholderProvider
     ) {
         $this->productImageFactory = $productImageFactory;
+        $this->placeholderProvider = $placeholderProvider;
     }
 
     /**
@@ -55,23 +63,27 @@ class Url implements ResolverInterface
         $product = $value['model'];
         $imagePath = $product->getData($value['image_type']);
 
-        $imageUrl = $this->getImageUrl($value['image_type'], $imagePath);
-        return $imageUrl;
+        return $this->getImageUrl($value['image_type'], $imagePath);
     }
 
     /**
-     * Get image url
+     * Get image URL
      *
      * @param string $imageType
-     * @param string|null $imagePath Null if image is not set
+     * @param string|null $imagePath
      * @return string
+     * @throws \Exception
      */
     private function getImageUrl(string $imageType, ?string $imagePath): string
     {
         $image = $this->productImageFactory->create();
         $image->setDestinationSubdir($imageType)
             ->setBaseFile($imagePath);
-        $imageUrl = $image->getUrl();
-        return $imageUrl;
+
+        if ($image->isBaseFilePlaceholder()) {
+            return $this->placeholderProvider->getPlaceholder($imageType);
+        }
+
+        return $image->getUrl();
     }
 }

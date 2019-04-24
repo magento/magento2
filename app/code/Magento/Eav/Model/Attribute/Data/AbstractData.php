@@ -312,9 +312,13 @@ abstract class AbstractData
 
         if (!empty($validateRules['input_validation'])) {
             $label = $this->getAttribute()->getStoreLabel();
+            $allowWhiteSpace = false;
             switch ($validateRules['input_validation']) {
+                case 'alphanum-with-spaces':
+                    $allowWhiteSpace = true;
+                    // Continue to alphanumeric validation
                 case 'alphanumeric':
-                    $validator = new \Zend_Validate_Alnum(true);
+                    $validator = new \Zend_Validate_Alnum($allowWhiteSpace);
                     $validator->setMessage(__('"%1" invalid type entered.', $label), \Zend_Validate_Alnum::INVALID);
                     $validator->setMessage(
                         __('"%1" contains non-alphabetic or non-numeric characters.', $label),

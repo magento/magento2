@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResourceModel;
 use Magento\Wishlist\Model\Wishlist;
 use Magento\Wishlist\Model\WishlistFactory;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 
 /**
  * Fetches the Wishlist data according to the GraphQL schema
@@ -51,6 +52,10 @@ class WishlistResolver implements ResolverInterface
     ) {
         $customerId = $context->getUserId();
 
+        /* Guest checking */
+        if (!$customerId && 0 === $customerId) {
+            throw new GraphQlAuthorizationException(__('The current user cannot perform operations on wishlist'));
+        }
         /** @var Wishlist $wishlist */
         $wishlist = $this->wishlistFactory->create();
         $this->wishlistResource->load($wishlist, $customerId, 'customer_id');

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateInactiveFlatCategoryTest">
+        <annotations>
+            <stories value="Create category"/>
+            <title value="Flat Catalog - Create Category as Inactive, Should Not be Visible on Storefront"/>
+            <description value="Login as admin and create flat Inactive category and verify category is not visible in store front"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-11007"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!--Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <!--Create category-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!-- Create First StoreView  -->
+            <actionGroup ref="CreateStoreView" stepKey="createCustomStoreViewEn">
+                <argument name="storeView" value="customStoreEN"/>
+            </actionGroup>
+            <!-- Create Second StoreView -->
+            <actionGroup ref="CreateStoreView" stepKey="createCustomStoreViewFr">
+                <argument name="storeView" value="customStoreFR"/>
+            </actionGroup>
+            <!--Run full reindex and clear caches -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <!--Enable Flat Catalog Category -->
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1"/>
+            <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
+            <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="schedule" />
+            <!-- Run cron twice -->
+            <magentoCLI command="cron:run" stepKey="runCron1"/>
+            <magentoCLI command="cron:run" stepKey="runCron2"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
+            <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="realtime" />
+            <magentoCLI stepKey="indexerReindex" command="indexer:reindex" />
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewFr">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- Select created category and make category inactive-->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="selectCreatedCategory"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="disableActiveCategory"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
+        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{SimpleSubCategory.name}}" stepKey="seeUpdatedCategoryTitle"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"  stepKey="verifyInactiveIncludeInMenu"/>
+        <!--Run full reindex and clear caches -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <!--Open Index Management Page -->
+        <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="openIndexManagementPage"/>
+        <waitForPageLoad stepKey="waitForIndexPageToBeLoaded"/>
+        <see stepKey="seeIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="Ready"/>
+        <!--Verify Category In Store Front-->
+        <amOnPage url="/$$createCategory.name$$.html"  stepKey="openCategoryPage1"/>
+        <waitForPageLoad stepKey="waitForCategoryStoreFrontPageToLoad"/>
+        <!--Verify category is not visible in First Store View -->
+        <click stepKey="selectStoreSwitcher" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>
+        <click stepKey="selectForstStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreEN.name)}}"/>
+        <waitForPageLoad stepKey="waitForFirstStoreView"/>
+        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="dontSeeCategoryOnNavigation"/>
+        <seeElement selector="{{StorefrontBundledSection.pageNotFound}}" stepKey="seeWhoopsOurBadMessage"/>
+        <!--Verify category is not visible in Second Store View -->
+        <click stepKey="selectStoreSwitcher1" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>
+        <click stepKey="selectSecondStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreFR.name)}}"/>
+        <waitForPageLoad stepKey="waitForSecondstoreView"/>
+        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="dontSeeCategoryOnNavigation1"/>
+        <seeElement selector="{{StorefrontBundledSection.pageNotFound}}" stepKey="seeWhoopsOurBadMessage1"/>
+    </test>
+</tests>

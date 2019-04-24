@@ -72,11 +72,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     const CACHE_TAG = 'cat_c';
 
-    /**
-     * Category Store Id
-     */
-    const STORE_ID = 'store_id';
-
     /**#@-*/
     protected $_eventPrefix = 'catalog_category';
 
@@ -573,8 +568,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getStoreId()
     {
-        if ($this->hasData(self::STORE_ID)) {
-            return (int)$this->_getData(self::STORE_ID);
+        if ($this->hasData('store_id')) {
+            return (int)$this->_getData('store_id');
         }
         return (int)$this->_storeManager->getStore()->getId();
     }
@@ -590,7 +585,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         if (!is_numeric($storeId)) {
             $storeId = $this->_storeManager->getStore($storeId)->getId();
         }
-        $this->setData(self::STORE_ID, $storeId);
+        $this->setData('store_id', $storeId);
         $this->getResource()->setStoreId($storeId);
         return $this;
     }
@@ -1124,10 +1119,15 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             }
         }
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);
-        if (!$productIndexer->isScheduled()
-            && (!empty($this->getAffectedProductIds()) || $this->dataHasChangedFor('is_anchor'))
-        ) {
-            $productIndexer->reindexList($this->getPathIds());
+
+        if (!empty($this->getAffectedProductIds())
+                || $this->dataHasChangedFor('is_anchor')
+                || $this->dataHasChangedFor('is_active')) {
+            if (!$productIndexer->isScheduled()) {
+                $productIndexer->reindexList($this->getPathIds());
+            } else {
+                $productIndexer->invalidate();
+            }
         }
     }
 
@@ -1152,9 +1152,17 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $identities = [
             self::CACHE_TAG . '_' . $this->getId(),
         ];
+
         if ($this->hasDataChanges()) {
             $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
         }
+
+        if ($this->dataHasChangedFor('is_anchor') || $this->dataHasChangedFor('is_active')) {
+            foreach ($this->getPathIds() as $id) {
+                $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $id;
+            }
+        }
+
         if (!$this->getId() || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)) {
             $identities[] = self::CACHE_TAG;
             $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();

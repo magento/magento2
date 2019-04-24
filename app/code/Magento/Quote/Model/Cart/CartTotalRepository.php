@@ -79,7 +79,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      *
      * @param int $cartId The cart ID.
      * @return Totals Quote totals data.
