@@ -14,7 +14,7 @@
             <title value="Сheck that current category is highlighted and all products displayed for it"/>
             <description value="Сheck that current category is highlighted and all products displayed for it"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-98028"/>
+            <testCaseId value="MAGETWO-99028"/>
             <useCaseId value="MAGETWO-98748"/>
             <group value="Catalog"/>
         </annotations>
