@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Upgrade users  passwords to the new algorithm
+ * Upgrade users passwords to the new algorithm
  */
 class UpgradeHashAlgorithmCommand extends Command
 {

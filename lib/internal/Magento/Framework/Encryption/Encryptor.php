@@ -32,7 +32,7 @@ class Encryptor implements EncryptorInterface
     const HASH_VERSION_SHA256 = 1;
 
     /**
-     * Key of sha256 algorithm
+     * Key of Argon2ID13 algorithm
      */
     public const HASH_VERSION_ARGON2ID13 = 2;
 
