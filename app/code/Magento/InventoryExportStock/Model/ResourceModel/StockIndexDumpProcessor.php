@@ -131,7 +131,7 @@ class StockIndexDumpProcessor
         $select->from(
             ['stock_index' => $stockIndexTableName],
             [
-                'qty' => 'quantity',
+                'qty' => new \Zend_Db_Expr('IF(product_entity.type_id = \'simple\', quantity, NULL)'),
                 'is_salable' => 'is_salable',
                 'sku' => 'sku'
             ]
