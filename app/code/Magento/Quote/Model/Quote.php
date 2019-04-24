@@ -934,6 +934,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             } else {
                 try {
                     $defaultBillingAddress = $this->addressRepository->getById($customer->getDefaultBilling());
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                     //
                 }
@@ -948,6 +949,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             if (null === $shippingAddress) {
                 try {
                     $defaultShippingAddress = $this->addressRepository->getById($customer->getDefaultShipping());
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                     //
                 }
@@ -1374,7 +1376,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Retrieve quote items collection
      *
      * @param bool $useCache
-     * @return  \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getItemsCollection($useCache = true)
@@ -1430,7 +1432,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function hasItems()
     {
-        return sizeof($this->getAllItems()) > 0;
+        return count($this->getAllItems()) > 0;
     }
 
     /**
@@ -1489,7 +1491,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Delete quote item. If it does not have identifier then it will be only removed from collection
      *
-     * @param   \Magento\Quote\Model\Quote\Item $item
+     * @param \Magento\Quote\Model\Quote\Item $item
      * @return $this
      */
     public function deleteItem(\Magento\Quote\Model\Quote\Item $item)
@@ -1519,7 +1521,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Remove quote item by item identifier
      *
-     * @param   int $itemId
+     * @param int $itemId
      * @return $this
      */
     public function removeItem($itemId)
@@ -1570,7 +1572,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Adding new item to quote
      *
-     * @param   \Magento\Quote\Model\Quote\Item $item
+     * @param \Magento\Quote\Model\Quote\Item $item
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -2356,7 +2358,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Merge quotes
      *
-     * @param   Quote $quote
+     * @param Quote $quote
      * @return $this
      */
     public function merge(Quote $quote)
