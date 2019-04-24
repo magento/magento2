@@ -119,6 +119,8 @@ class UpdateCartItems implements ResolverInterface
     }
 
     /**
+     * Validate cart item
+     *
      * @param Item $cartItem
      * @return void
      * @throws GraphQlInputException
