@@ -540,7 +540,7 @@
                     <dataType>string</dataType>
                     <label translate="true">Schedule Update From</label>
                     <imports>
-                        <link name="disabled">ns = ${ $.ns }, index = custom_use_parent_settings :checked</link>
+                        <link name="serviceDisabled">ns = ${ $.ns }, index = custom_use_parent_settings :checked || $.data.serviceDisabled</link>
                     </imports>
                 </settings>
             </field>
@@ -553,7 +553,7 @@
                     <dataType>string</dataType>
                     <label translate="true">To</label>
                     <imports>
-                        <link name="disabled">ns = ${ $.ns }, index = custom_use_parent_settings :checked</link>
+                        <link name="serviceDisabled">ns = ${ $.ns }, index = custom_use_parent_settings :checked || $.data.serviceDisabled</link>
                     </imports>
                 </settings>
             </field>
