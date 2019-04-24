@@ -15,14 +15,26 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartItemRepositoryInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\QuoteGraphQl\Model\Cart\UpdateCartItem;
 
 /**
  * @inheritdoc
  */
 class UpdateCartItems implements ResolverInterface
 {
+    /**
+     * @var CartRepositoryInterface
+     */
+    private $quoteRepository;
+
+    /**
+     * @var UpdateCartItem
+     */
+    private $updateCartItem;
+
     /**
      * @var GetCartForUser
      */
@@ -36,13 +48,19 @@ class UpdateCartItems implements ResolverInterface
     /**
      * @param GetCartForUser $getCartForUser
      * @param CartItemRepositoryInterface $cartItemRepository
+     * @param UpdateCartItem $updateCartItem
+     * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        CartItemRepositoryInterface $cartItemRepository
+        CartItemRepositoryInterface $cartItemRepository,
+        UpdateCartItem $updateCartItem,
+        CartRepositoryInterface $quoteRepository
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartItemRepository = $cartItemRepository;
+        $this->updateCartItem = $updateCartItem;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -93,26 +111,47 @@ class UpdateCartItems implements ResolverInterface
             if (!isset($item['cart_item_id']) || empty($item['cart_item_id'])) {
                 throw new GraphQlInputException(__('Required parameter "cart_item_id" for "cart_items" is missing.'));
             }
-            $itemId = $item['cart_item_id'];
+            $itemId = (int)$item['cart_item_id'];
 
             if (!isset($item['quantity'])) {
                 throw new GraphQlInputException(__('Required parameter "quantity" for "cart_items" is missing.'));
             }
             $qty = (float)$item['quantity'];
 
-            $cartItem = $cart->getItemById($itemId);
-            if ($cartItem === false) {
-                throw new GraphQlNoSuchEntityException(
-                    __('Could not find cart item with id: %1.', $item['cart_item_id'])
-                );
-            }
-
             if ($qty <= 0.0) {
                 $this->cartItemRepository->deleteById((int)$cart->getId(), $itemId);
             } else {
-                $cartItem->setQty($qty);
-                $this->cartItemRepository->save($cartItem);
+                $customizableOptions = $item['customizable_options'] ?? null;
+
+                if ($customizableOptions === null) { // Update only item's qty
+                    $this->updateItemQty($itemId, $cart, $qty);
+                } else { // Update customizable options (and QTY if changed)
+                    $this->updateCartItem->execute($cart, $itemId, $qty, $customizableOptions);
+                    $this->quoteRepository->save($cart);
+                }
             }
         }
+    }
+
+    /**
+     * Updates item qty for the specified cart
+     *
+     * @param int $itemId
+     * @param Quote $cart
+     * @param float $qty
+     * @throws GraphQlNoSuchEntityException
+     * @throws NoSuchEntityException
+     * @throws GraphQlNoSuchEntityException
+     */
+    private function updateItemQty(int $itemId, Quote $cart, float $qty)
+    {
+        $cartItem = $cart->getItemById($itemId);
+        if ($cartItem === false) {
+            throw new GraphQlNoSuchEntityException(
+                __('Could not find cart item with id: %1.', $itemId)
+            );
+        }
+        $cartItem->setQty($qty);
+        $this->cartItemRepository->save($cartItem);
     }
 }
