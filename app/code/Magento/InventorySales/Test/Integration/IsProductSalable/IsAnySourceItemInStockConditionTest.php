@@ -1,7 +1,7 @@
 <?php
 /**
- *  Copyright © Magento, Inc. All rights reserved.
- *  See COPYING.txt for license details.
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
@@ -11,16 +11,16 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\InventorySales\Model\IsProductSalableCondition\IsAnySourceItemInStockCondition;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 class IsAnySourceItemInStockConditionTest extends TestCase
 {
     /**
-     * @var IsAnySourceItemInStockCondition
+     * @var IsProductSalableInterface
      */
-    private $isAnySourceInStockCondition;
+    private $isProductSalable;
 
     /**
      * @var ProductRepositoryInterface
@@ -40,8 +40,8 @@ class IsAnySourceItemInStockConditionTest extends TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->isAnySourceInStockCondition = $objectManager->get(
-            IsAnySourceItemInStockCondition::class
+        $this->isProductSalable = $objectManager->get(
+            IsProductSalableInterface::class
         );
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
         $this->stockItemCriteriaFactory = $objectManager->get(StockItemCriteriaInterfaceFactory::class);
@@ -69,6 +69,6 @@ class IsAnySourceItemInStockConditionTest extends TestCase
         $legacyStockItem->setBackorders(1);
         $legacyStockItem->setUseConfigBackorders(0);
         $this->stockItemRepository->save($legacyStockItem);
-        $this->assertFalse($this->isAnySourceInStockCondition->execute('SKU-1', 10));
+        $this->assertFalse($this->isProductSalable->execute('SKU-1', 10));
     }
 }
