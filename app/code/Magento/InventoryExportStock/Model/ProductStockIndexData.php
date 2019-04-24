@@ -26,15 +26,13 @@ class ProductStockIndexData extends AbstractExtensibleModel implements ProductSt
     /**
      * @inheritDoc
      */
-    public function getQty(): ?float
+    public function getQty(): float
     {
         return $this->getData(self::QTY);
     }
 
     /**
-     * Provides product is salable flag
-     *
-     * @return int
+     * @inheritDoc
      */
     public function getIsSalable(): bool
     {
@@ -52,7 +50,7 @@ class ProductStockIndexData extends AbstractExtensibleModel implements ProductSt
     /**
      * @inheritDoc
      */
-    public function setQty(?float $qty): void
+    public function setQty(float $qty): void
     {
         $this->setData(self::QTY, $qty);
     }

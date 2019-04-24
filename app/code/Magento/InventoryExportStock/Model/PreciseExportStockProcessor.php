@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryExportStock\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Model\IsProductAssignedToStockInterface;
 use Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException;
@@ -81,7 +80,6 @@ class PreciseExportStockProcessor
      * @param array $products
      * @param int $stockId
      * @return array
-     * @throws InputException
      * @throws LocalizedException
      */
     public function execute(array $products, int $stockId): array
@@ -131,14 +129,14 @@ class PreciseExportStockProcessor
         if (!$this->isSourceItemManagementAllowedForSku->execute($sku)) {
             return [
                 'sku' => $sku,
-                'qty' => null,
+                'qty' => 0.0000,
                 'is_salable' => $this->isProductSalable->execute($sku, $stockId)
             ];
         }
         if (!$this->getStockItemConfiguration->execute($sku)->isManageStock()) {
             return [
                 'sku' => $sku,
-                'qty' => $this->getQtyForNotManageStock->execute(),
+                'qty' => (float)$this->getQtyForNotManageStock->execute(),
                 'is_salable' => true
             ];
         }

@@ -26,9 +26,9 @@ interface ProductStockIndexDataInterface
     /**
      * Provides product QTY
      *
-     * @return float|null
+     * @return float
      */
-    public function getQty(): ?float;
+    public function getQty(): float;
 
     /**
      * Provides product is salable flag
@@ -48,10 +48,10 @@ interface ProductStockIndexDataInterface
     /**
      * Sets QTY
      *
-     * @param float|null $qty
+     * @param float $qty
      * @return void
      */
-    public function setQty(?float $qty): void;
+    public function setQty(float $qty): void;
 
     /**
      * Sets is salable flag

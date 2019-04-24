@@ -40,11 +40,7 @@ class ProductStockIndexDataMapper
         $productStockDataObject = $this->productStockIndexDataFactory->create();
         $productStockDataObject->setSku($item[ProductStockIndexDataInterface::SKU]);
         $productStockDataObject->setIsSalable((bool)$item[ProductStockIndexDataInterface::IS_SALABLE]);
-        $qty = $item[ProductStockIndexDataInterface::QTY];
-        if ($qty !== null) {
-            $qty = (float)$qty;
-        }
-        $productStockDataObject->setQty($qty);
+        $productStockDataObject->setQty((float)$item[ProductStockIndexDataInterface::QTY]);
 
         return $productStockDataObject;
     }
