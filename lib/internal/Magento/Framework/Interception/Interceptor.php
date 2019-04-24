@@ -68,7 +68,7 @@ trait Interceptor
      */
     public function __sleep()
     {
-        //trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         if (method_exists(get_parent_class($this), '__sleep')) {
             $properties = parent::__sleep();
@@ -89,7 +89,7 @@ trait Interceptor
      */
     public function __wakeup()
     {
-        //trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         if (method_exists(get_parent_class($this), '__wakeup')) {
             parent::__wakeup();

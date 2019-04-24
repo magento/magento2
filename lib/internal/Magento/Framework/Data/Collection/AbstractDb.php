@@ -896,7 +896,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      */
     public function __sleep()
     {
-        //trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         return array_diff(
             parent::__sleep(),
@@ -913,7 +913,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      */
     public function __wakeup()
     {
-        //trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();

@@ -64,7 +64,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      */
     public function __sleep()
     {
-        //trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         return ['subject', 'isShared'];
     }
@@ -79,7 +79,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      */
     public function __wakeup()
     {
-        //trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         $this->objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     }
