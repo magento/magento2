@@ -94,7 +94,7 @@ class Encryptor implements EncryptorInterface
     private $passwordHashMap = [
         self::PASSWORD_HASH => '',
         self::PASSWORD_SALT => '',
-        self::PASSWORD_VERSION => self::HASH_VERSION_LATEST
+        self::PASSWORD_VERSION => self::HASH_VERSION_SHA256
     ];
 
     /**
@@ -149,6 +149,7 @@ class Encryptor implements EncryptorInterface
         $latestHashVersion = $this->getLatestHashVersion();
         if ($latestHashVersion === self::HASH_VERSION_ARGON2ID13) {
             $this->hashVersionMap[self::HASH_VERSION_ARGON2ID13] = SODIUM_CRYPTO_PWHASH_ALG_ARGON2ID13;
+            $this->passwordHashMap[self::PASSWORD_VERSION] = self::HASH_VERSION_ARGON2ID13;
         }
     }
 
@@ -531,7 +532,7 @@ class Encryptor implements EncryptorInterface
     /**
      * Generate Argon2ID13 hash.
      *
-     * @param $data
+     * @param string $data
      * @param string $salt
      * @return string
      * @throws \SodiumException

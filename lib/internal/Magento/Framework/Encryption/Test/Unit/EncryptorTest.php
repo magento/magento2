@@ -16,6 +16,9 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Test case for \Magento\Framework\Encryption\Encryptor
+ */
 class EncryptorTest extends \PHPUnit\Framework\TestCase
 {
     private const CRYPT_KEY_1 = 'g9mY9KLrcuAVJfsmVUSRkKFLDdUPVkaZ';
